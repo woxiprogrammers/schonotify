@@ -14,7 +14,7 @@ class UserGroupModuleRelation extends Migration
     {
         Schema::create('user_group_module_relation', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('master_module__id');
+            $table->integer('master_module_id');
             $table->integer('user_group_id');
 
             $table->timestamps();
