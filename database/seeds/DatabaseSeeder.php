@@ -14,7 +14,20 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call(UserTableSeeder::class);
+        $this->call('OrganizationSeeder');
+        $this->call('BodyOrganizationRelationSeeder');
+        $this->call('BodyOrgModuleRelationSeeder');
+        $this->call('BodyOrgUserRoleRelationSeeder');
+        $this->call('MasterBodyTypeSeeder');
+        $this->call('MasterModulesSeeder');
+        $this->call('OrganizationModuleRelationSeeder');
+        $this->call('OrganizationUserRoleRelationSeeder');
+        $this->call('OrganizationUsersSeeder');
+        $this->call('UserGroupModuleRelationSeeder');
+        $this->call('UserGroupsSeeder');
+        $this->call('UserRolesSeeder');
+        $this->call('SuperadminSeeder');
+
 
         Model::reguard();
     }
