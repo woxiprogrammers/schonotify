@@ -20,6 +20,7 @@ class UserGroupModuleRelation extends Migration
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.
