@@ -14,7 +14,7 @@ class BodyOrganizationRelation extends Migration
     {
         Schema::create('body_org_relation', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('org__id');
+            $table->integer('org_id');
             $table->integer('body_type_id');
             $table->string('name');
             $table->string('slug');
