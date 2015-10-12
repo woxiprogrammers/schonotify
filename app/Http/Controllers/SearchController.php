@@ -71,10 +71,9 @@ class SearchController extends Controller
                 $str.="<td>";
                 if($row->is_active == 1)
                 {
-                    $str.="<span class='label label-success'>Active</span>";
+                    $str.='<input type="checkbox" class="js-switch" checked />';
                 }else{
-                    $str.="<span class='label label-inverse'>inActive</span>";
-
+                    $str.='<input type="checkbox" class="js-switch" />';
 
                 }
                 $str.="</td>";
