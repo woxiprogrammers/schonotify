@@ -44,8 +44,8 @@
                             <div class="checkbox clip-check check-primary">
                                 <input type="checkbox" id="checkbox checkbox-inline is_active" class="is_active" name="is_active">
                                 <label for="checkbox">isActive</label>
-                            </div>
 
+                            </div>
                         </div>
                 </div>
             </div>
@@ -76,9 +76,10 @@
 <script>
 
     jQuery(document).ready(function() {
+
         $('#popup_valid').click(function(event){
             event.preventDefault();
-            Main.init();
+
             Login.init();
         });
 

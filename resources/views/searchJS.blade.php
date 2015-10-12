@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        Main.init();
+
         tabUserSelect(3);
 
     });
@@ -26,6 +26,7 @@
     $('#role-select').change(function(){
 
         var par=this.value;
+
         tabUserSelect(par);
 
     });
@@ -44,7 +45,10 @@
 
             TableData.init();
 
+            Main.init();
+
         });
+
     }
 
 

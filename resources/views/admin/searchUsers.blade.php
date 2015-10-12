@@ -49,6 +49,7 @@
                         <!-- start: DYNAMIC TABLE -->
                         <div class="container-fluid container-fullw bg-white">
                         <div class="row">
+
                         <div class="col-md-12" id="tableContent">
 
                         </div>
@@ -56,6 +57,8 @@
                         </div>
 
                         </div>
+
+
 
 
                         <!-- end: DYNAMIC TABLE -->
