@@ -41,7 +41,46 @@
                 </section>
                 <!-- end: DASHBOARD TITLE -->
 
+                <div class="container-fluid container-fullw bg-white">
+                    <div class="row">
 
+                        <div class="col-md-12" id="tableContent2">
+
+                            <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
+                                <thead>
+                                <tr>
+                                    <th>Division</th>
+                                    <th>Class</th>
+                                    <th>Batch</th>
+                                    @foreach(session('functionArr') as $row)
+                                    @if($row == 'update_class')
+                                    <th>Action</th>
+                                    @endif
+                                    @endforeach
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($results as $rows)
+                                        <tr>
+                                            <td>{!! $rows->div_name !!}</td>
+                                            <td>{!! $rows->class_name !!}</td>
+                                            <td>{!! $rows->batch_name !!}</td>
+                                            @foreach(session('functionArr') as $row)
+                                            @if($row == 'update_class')
+                                                <td><a>Edit</a></td>
+                                            @endif
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
 
                 <!-- start: FOURTH SECTION -->
@@ -53,7 +92,7 @@
 
     @include('footer')
 
-    @include('searchJS')
+    @include('searchClassJS')
 
 </div>
 @stop
