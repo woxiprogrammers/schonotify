@@ -219,6 +219,24 @@ class UsersController extends Controller
         }
     }
 
+    public function activeUser($id)
+    {
+        $user=User::find($id);
+        $user->is_active=1;
+        $user->save();
+
+        return response()->json(['status'=>'record has been activated.']);
+    }
+
+    public function deactiveUser($id)
+    {
+        $user=User::find($id);
+        $user->is_active=0;
+        $user->save();
+
+        return response()->json(['status'=>'record has been deactivated.']);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -229,4 +247,6 @@ class UsersController extends Controller
     {
         //
     }
+
+
 }

@@ -16,12 +16,17 @@
 <script src="assets/js/table-data.js"></script>
 
 
+
 <script type="text/javascript">
     $(document).ready(function(){
 
         tabUserSelect(3);
 
+        Main.init();
+
     });
+
+
 
     $('#role-select').change(function(){
 
@@ -45,9 +50,47 @@
 
             TableData.init();
 
-            Main.init();
+            var switcheryHandler = function() {
+                var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                elems.forEach(function(html) {
+                    var switchery = new Switchery(html);
+                });
+            };
+
+            switcheryHandler();
 
         });
+
+    }
+
+    function statusUser(status,id)
+    {
+        console.log(status+''+id);
+
+        if(status==false)
+        {
+            if(confirm('Do you want to deactive this user.')== true)
+            {
+                var route='deactive/'+id;
+
+                $.get(route,function(res){
+                    console.log(res);
+                });
+            }else{
+                $('#status'+id).prop('checked', true);
+            }
+        }else
+        if(confirm('Do you want to active this user.')== true)
+        {
+            var route='active/'+id;
+
+            $.get(route,function(res){
+                console.log(res);
+            });
+        }else{
+            $('#status'+id).prop('checked', false);
+        }
 
     }
 

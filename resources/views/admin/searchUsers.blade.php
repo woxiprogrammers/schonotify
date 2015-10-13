@@ -60,7 +60,6 @@
 
 
 
-
                         <!-- end: DYNAMIC TABLE -->
 
 						<!-- start: FOURTH SECTION -->
@@ -74,6 +73,8 @@
 		</div>
 
         @include('searchJS')
+
+
 
         @include('admin.linkModalUser')
 

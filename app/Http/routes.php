@@ -72,3 +72,9 @@ Route::get('searchClasses','SearchController@searchClasses');
 
 Route::get('searchSubjects','SearchController@searchSubjects');
 
+Route::get('{id}/selectClass','SearchController@selectClass');
+
+Route::get('active/{id}','UsersController@activeUser');
+
+Route::get('deactive/{id}','UsersController@deactiveUser');
+
