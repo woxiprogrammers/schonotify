@@ -40,7 +40,7 @@
     function tabUserSelect(par)
     {
 
-        var route='/'+par+'/selectUser';
+        var route='/selectUser'+'/'+par;
 
         $.get(route,function(res){
 

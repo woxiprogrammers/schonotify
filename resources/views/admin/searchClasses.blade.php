@@ -27,9 +27,9 @@
                                 @if($row == 'create_class')
                                 <li>
                                     <div class="values">
-                                        <button type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                        <a href="/createClass" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
                                             Create New Class <i class="fa fa-angle-right"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </li>
                                 @endif
@@ -56,6 +56,9 @@
                                     @if($row == 'update_class')
                                     <th>Action</th>
                                     @endif
+                                    @if($row == 'delete_class')
+                                    <th>Delete</th>
+                                    @endif
                                     @endforeach
                                 </tr>
                                 </thead>
@@ -67,7 +70,14 @@
                                             <td>{!! $rows->batch_name !!}</td>
                                             @foreach(session('functionArr') as $row)
                                             @if($row == 'update_class')
-                                                <td><a>Edit</a></td>
+                                                <td><a href="#" class="edit-row">Edit</a></td>
+                                            @endif
+                                            @if($row == 'delete_class')
+                                            <td>
+                                                <a href="#" class="delete-row">
+                                                    Delete
+                                                </a>
+                                            </td>
                                             @endif
                                             @endforeach
                                         </tr>

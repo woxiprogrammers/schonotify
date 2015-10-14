@@ -16,12 +16,16 @@
 <script src="assets/js/table-data.js"></script>
 
 
+
+
 <script type="text/javascript">
     $(document).ready(function(){
 
         TableData.init();
 
         Main.init();
+
+
 
     });
 

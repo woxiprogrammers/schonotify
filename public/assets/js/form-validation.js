@@ -1,4 +1,5 @@
 var FormValidator = function () {
+
 	"use strict";
 	var validateCheckRadio = function (val) {
         $("input[type='radio'], input[type='checkbox']").on('ifChecked', function(event) {
@@ -68,7 +69,11 @@ var FormValidator = function () {
                 },
                 newsletter: {
                     required: true
+                },
+                batch:{
+                    required:true
                 }
+
             },
             messages: {
                 firstname: "Please specify your first name",
@@ -77,10 +82,11 @@ var FormValidator = function () {
                     required: "We need your email address to contact you",
                     email: "Your email address must be in the format of name@domain.com"
                 },
-                gender: "Please check a gender!"
+                gender: "Please check a gender!",
+                batch:"please enter batch name"
             },
             groups: {
-                DateofBirth: "dd mm yyyy",
+                DateofBirth: "dd mm yyyy"
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler1.hide();
@@ -179,6 +185,10 @@ var FormValidator = function () {
                 editor1: "getEditorValue",
                 editor2: {
                     required: true
+                },
+                class: {
+                    minlength: 2,
+                    required: true
                 }
             },
             messages: {
@@ -186,11 +196,13 @@ var FormValidator = function () {
                 lastname: "Please specify your last name",
                 email: {
                     required: "We need your email address to contact you",
-                    email: "Your email address must be in the format of name@domain.com"
+                    email: "Your email address must be in the format of name@domain.com",
+                    class: "Please enter class name"
                 },
                 services: {
                     minlength: jQuery.validator.format("Please select  at least {0} types of Service")
                 }
+
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler2.hide();

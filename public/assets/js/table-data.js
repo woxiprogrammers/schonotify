@@ -59,8 +59,9 @@ var TableData = function() {
 			jqTds[1].innerHTML = '<input type="text" class="form-control" value="' + aData[1] + '">';
 			jqTds[2].innerHTML = '<input type="text" class="form-control" value="' + aData[2] + '">';
 
-			jqTds[3].innerHTML = '<a class="save-row" href="">Save</a>';
-			jqTds[4].innerHTML = '<a class="cancel-row" href="">Cancel</a>';
+			jqTds[3].innerHTML = '<a class="save-row" href="">Save</a> <a class="cancel-row" href="">Cancel</a>';
+
+            //jqTds[4].innerHTML = '<a class="cancel-row" href="">Cancel</a>';
 
 		}
 
