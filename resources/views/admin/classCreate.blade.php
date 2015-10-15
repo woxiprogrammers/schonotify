@@ -105,7 +105,7 @@
                                                                 <button type="button" class="btn btn-primary" id="addBatch"><i class="ti-plus"></i></button>
                                                                 <button type="button" class="btn btn-primary btn-red pull-right hideDelete" id="removeBatch"><i class="glyphicon glyphicon-trash"></i></button>
                                                             </div>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-8" id="checkHeight">
                                                             <div id="batchDiv"></div>
                                                         </div>
 
@@ -137,10 +137,9 @@
                 </div>
         </div>
     </div>
-
-</div>
 @include('footer')
 </div>
+
 
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -214,6 +213,14 @@
                 $('.hideDelete').hide();
             }else{
                 $('.hideDelete').show();
+
+            }
+
+            if(i<6)
+            {
+                $('#checkHeight').removeClass('flexcroll1');
+            }else{
+                $('#checkHeight').addClass('flexcroll1');
             }
 
         });
@@ -226,6 +233,11 @@
                 if(i<=2)
                 {
                     $('.hideDelete').hide();
+                }
+
+                if(i<6)
+                {
+                    $('#checkHeight').removeClass('flexcroll1');
                 }
 
             }
@@ -265,6 +277,9 @@
         });
 
     });
+
+
+
 
 </script>
 

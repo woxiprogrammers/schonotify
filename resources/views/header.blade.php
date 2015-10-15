@@ -21,16 +21,21 @@
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-right">
             <!-- start: MESSAGES DROPDOWN -->
+            <li>
+                <a href="#">
+                    <span class="badge partition-red">12</span> <i class="ti-bell"></i> <span>Notifications</span>
+                </a>
+            </li>
             <li class="dropdown">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="dot-badge partition-red"></span> <i class="ti-comment"></i> <span>MESSAGES</span>
+                    <span class="badge partition-red">22</span> <i class="ti-comment"></i> <span>MESSAGES</span>
                 </a>
                 <ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large">
                     <li>
                         <span class="dropdown-header"> Unread messages</span>
                     </li>
                     <li>
-                        <div class="drop-down-wrapper ps-container">
+                        <div class="drop-down-wrapper ps-container flexcroll">
                             <ul>
                                 <li class="unread">
                                     <a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar">

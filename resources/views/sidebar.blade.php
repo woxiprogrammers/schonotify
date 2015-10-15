@@ -54,8 +54,55 @@
         @endif
         @endforeach
     </ul>
+
 </li>
 
+    @foreach(session('functionArr') as $row)
+    @if($row == 'create_class')
+    <li>
+    <a href="createClass">
+        <div class="item-content">
+            <div class="item-media">
+                <i class="fa fa-th-list"></i>
+            </div>
+            <div class="item-inner">
+                <span class="title"> Create Class </span>
+            </div>
+        </div>
+    </a>
+    </li>
+    @endif
+    @endforeach
+
+    @foreach(session('functionArr') as $row)
+    @if($row == 'create_division')
+    <li>
+        <a href="javascript:void(0);">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-th-list"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title"> Create Division </span>
+                </div>
+            </div>
+        </a>
+    </li>
+    @endif
+    @endforeach
+    <li>
+        <a href="event">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-th-list"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title"> Events </span>
+                    <span class="badge pull-right">12</span>
+                </div>
+            </div>
+        </a>
+    </li>
 </ul>
 </nav>
 </div>

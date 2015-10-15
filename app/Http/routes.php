@@ -78,3 +78,4 @@ Route::get('deactive/{id}','UsersController@deactiveUser');
 
 Route::get('createClass','ClassController@create');
 
+Route::get('event','EventController@index');

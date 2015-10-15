@@ -33,7 +33,12 @@
     <!-- end: CLIP-TWO CSS -->
     <!-- start: CSS REQUIRED FOR THIS PAGE ONLY -->
     <!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
+    <link href="vendor/sweetalert/sweet-alert.css" rel="stylesheet" media="screen">
+    <link href="vendor/sweetalert/ie9.css" rel="stylesheet" media="screen">
+    <link href="vendor/toastr/toastr.min.css" rel="stylesheet" media="screen">
 
+    <link href="vendor/fullcalendar/fullcalendar.min.css" rel="stylesheet" media="screen">
+    <link href="vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 
 </head>
 <!-- end: HEAD -->
