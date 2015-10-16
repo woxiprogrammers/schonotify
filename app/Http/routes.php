@@ -60,9 +60,9 @@ Route::get('myProfile','UsersController@usersProfile');
 
 Route::get('searchUsers','SearchController@searchUsers');
 
-Route::get('{id}/edit','UsersController@edit');
+Route::get('edit/{id}','UsersController@edit');
 
-Route::get('{id}/selectUser','SearchController@selectRole');
+Route::get('selectUser/{id}','SearchController@selectRole');
 
 Route::post('searchUsers','SearchController@searchUsers');
 
@@ -72,9 +72,10 @@ Route::get('searchClasses','SearchController@searchClasses');
 
 Route::get('searchSubjects','SearchController@searchSubjects');
 
-Route::get('{id}/selectClass','SearchController@selectClass');
-
 Route::get('active/{id}','UsersController@activeUser');
 
 Route::get('deactive/{id}','UsersController@deactiveUser');
 
+Route::get('createClass','ClassController@create');
+
+Route::get('event','EventController@index');

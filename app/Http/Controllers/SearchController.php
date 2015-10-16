@@ -76,7 +76,6 @@ class SearchController extends Controller
                     $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
                 }else{
                     $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
-
                 }
                 $str.="</td>";
             }

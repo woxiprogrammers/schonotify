@@ -53,35 +53,35 @@
                                     <th>Class</th>
                                     <th>Batch</th>
                                     @foreach(session('functionArr') as $row)
-                                    @if($row == 'update_class')
+                                    @if($row == 'update_division')
                                     <th>Action</th>
                                     @endif
-                                    @if($row == 'delete_class')
+                                    @if($row == 'delete_division')
                                     <th>Delete</th>
                                     @endif
                                     @endforeach
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($results as $rows)
-                                        <tr>
-                                            <td>{!! $rows->div_name !!}</td>
-                                            <td>{!! $rows->class_name !!}</td>
-                                            <td>{!! $rows->batch_name !!}</td>
-                                            @foreach(session('functionArr') as $row)
-                                            @if($row == 'update_class')
-                                                <td><a href="#" class="edit-row">Edit</a></td>
-                                            @endif
-                                            @if($row == 'delete_class')
-                                            <td>
-                                                <a href="#" class="delete-row">
-                                                    Delete
-                                                </a>
-                                            </td>
-                                            @endif
-                                            @endforeach
-                                        </tr>
+                                @foreach($results as $rows)
+                                <tr>
+                                    <td>{!! $rows->div_name !!}</td>
+                                    <td>{!! $rows->class_name !!}</td>
+                                    <td>{!! $rows->batch_name !!}</td>
+                                    @foreach(session('functionArr') as $row)
+                                    @if($row == 'update_division')
+                                    <td><a href="#" class="edit-row">Edit</a></td>
+                                    @endif
+                                    @if($row == 'delete_division')
+                                    <td>
+                                        <a href="#" class="delete-row">
+                                            Delete
+                                        </a>
+                                    </td>
+                                    @endif
                                     @endforeach
+                                </tr>
+                                @endforeach
                                 </tbody>
 
                             </table>

@@ -1,7 +1,7 @@
 <script type="text/javascript">
     function userEdit(val)
     {
-        var route='/'+val+'/edit';
+        var route='/edit/'+val;
         //debugger;
         $.get(route,function(res){
 

@@ -10,6 +10,10 @@
 <script src="vendor/select2/select2.min.js"></script>
 <script src="vendor/DataTables/jquery.dataTables.min.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script src="vendor/sweetalert/sweet-alert.min.js"></script>
+<script src="vendor/toastr/toastr.min.js"></script>
+<script src="assets/js/ui-notifications.js"></script>
+
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
@@ -40,7 +44,7 @@
     function tabUserSelect(par)
     {
 
-        var route='/'+par+'/selectUser';
+        var route='/selectUser'+'/'+par;
 
         $.get(route,function(res){
 
@@ -64,35 +68,7 @@
 
     }
 
-    function statusUser(status,id)
-    {
-        console.log(status+''+id);
 
-        if(status==false)
-        {
-            if(confirm('Do you want to deactive this user.')== true)
-            {
-                var route='deactive/'+id;
-
-                $.get(route,function(res){
-                    console.log(res);
-                });
-            }else{
-                $('#status'+id).prop('checked', true);
-            }
-        }else
-        if(confirm('Do you want to active this user.')== true)
-        {
-            var route='active/'+id;
-
-            $.get(route,function(res){
-                console.log(res);
-            });
-        }else{
-            $('#status'+id).prop('checked', false);
-        }
-
-    }
 
 
 </script>
