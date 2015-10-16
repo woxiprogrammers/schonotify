@@ -141,7 +141,7 @@ class UsersController extends Controller
 
         if($userRole[0]->role_slug == 'admin')
         {
-            $result1=User::select('users.id','users.name as user_name','users.email','body.name as body_name','user_roles.name as user_role','users.is_active')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active')
                 //$result1= \DB::table('users')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                 ->Join('body', 'users.body_id', '=', 'body.id')
@@ -150,7 +150,7 @@ class UsersController extends Controller
             return response()->json($result1->toArray());
         }elseif($userRole[0]->role_slug == 'teacher')
         {
-            $result1=User::select('users.id','users.name as user_name','users.email','body.name as body_name','user_roles.name as user_role','users.is_active','teacher_view.web_view','teacher_view.mobile_view')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active','teacher_view.web_view','teacher_view.mobile_view')
                 //$result1= \DB::table('users')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                 ->Join('body', 'users.body_id', '=', 'body.id')
@@ -161,7 +161,7 @@ class UsersController extends Controller
             return response()->json($result1->toArray());
         }elseif($userRole[0]->role_slug == 'student')
         {
-            $result1=User::select('users.id','users.name as user_name','users.email','body.name as body_name','user_roles.name as user_role','users.is_active','division.name as div_name','division.id as div_id','users.parent_id','division.class_id','class.name as class_name','class.batch_id')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active','division.name as div_name','division.id as div_id','users.parent_id','division.class_id','class.name as class_name','class.batch_id')
                 //$result1= \DB::table('users')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                 ->Join('body', 'users.body_id', '=', 'body.id')
@@ -180,7 +180,7 @@ class UsersController extends Controller
             return response()->json($arr1);
         }elseif($userRole[0]->role_slug == 'parent')
         {
-            $result1=User::select('users.id','users.name as user_name','users.email','user_roles.name as user_role','users.is_active')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','user_roles.name as user_role','users.is_active')
                 //$result1= \DB::table('users')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                 //->Join('body', 'users.body_id', '=', 'body.id')
@@ -191,7 +191,7 @@ class UsersController extends Controller
 
         }
         else{
-            $result1=User::select('users.id','users.name as user_name','users.email','body.name as body_name','user_roles.name as user_role','users.is_active')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active')
                 //$result1= \DB::table('users')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                 ->Join('body', 'users.body_id', '=', 'body.id')

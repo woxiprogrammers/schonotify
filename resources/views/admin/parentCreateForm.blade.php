@@ -316,8 +316,6 @@
         {
             var route= "/createUsers/"+par;
 
-            //console.log(route);
-            //debugger;
             window.location.replace(route);
 
 

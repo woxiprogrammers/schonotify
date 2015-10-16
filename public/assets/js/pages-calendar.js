@@ -176,11 +176,18 @@ var Calendar = function() {"use strict";
 				eventEndDate: {
 					required: true,
 					date: true
-				}
+				},
+                roles: {
+                    required: true,
+                    minlength: 1
+                }
 			},
 			messages: {
-				eventName: "* Please specify the event title"
+				eventName: "* Please specify the event title",
 
+                roles: {
+                    minlength: jQuery.validator.format("Please select at least {0} types of user role")
+                }
 			},
 			highlight: function(element) {
 				$(element).closest('.help-block').removeClass('valid');
