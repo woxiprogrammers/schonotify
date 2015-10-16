@@ -97,34 +97,34 @@
                                     </div>
                                     <div class="form-group">
                                         <label>
-                                            Category
+                                            Select Users Type
                                         </label>
                                         <div class="row">
                                         <div class="col-xs-6">
-                                            <div class="checkbox clip-check check-primary check-inline">
-                                                <input type="checkbox" id="checkbox1" >
-                                                <label for="cancelled">
-                                                    <span class="fa fa-circle text-yellow"></span> Admin
+                                            <div class="checkbox clip-check check-primary">
+                                                <input type="checkbox" id="checkbox1" name="roles">
+                                                <label for="checkbox1">
+                                                    Admin
                                                 </label>
                                             </div>
-                                            <div class="checkbox clip-check check-primary check-inline">
-                                                <input type="checkbox" id="checkbox2">
-                                                <label for="generic">
-                                                    <span class="fa fa-circle text-info"></span> Teacher
+                                            <div class="checkbox clip-check check-primary">
+                                                <input type="checkbox" id="checkbox2" name="roles">
+                                                <label for="checkbox2">
+                                                    Teacher
                                                 </label>
                                             </div>
                                         </div>
                                             <div class="col-xs-6">
-                                                <div class="checkbox clip-check check-primary check-inline">
-                                                    <input type="checkbox" id="checkbox3" >
-                                                    <label for="cancelled">
-                                                        <span class="fa fa-circle text-yellow"></span> Student
+                                                <div class="checkbox clip-check check-primary">
+                                                    <input type="checkbox" id="checkbox3" name="roles">
+                                                    <label for="checkbox3">
+                                                        Student
                                                     </label>
                                                 </div>
-                                                <div class="checkbox clip-check check-primary check-inline">
-                                                    <input type="checkbox" id="checkbox4" >
-                                                    <label for="generic">
-                                                        <span class="fa fa-circle text-info"></span> Parent
+                                                <div class="checkbox clip-check check-primary">
+                                                    <input type="checkbox" id="checkbox4" name="roles">
+                                                    <label for="checkbox4">
+                                                        Parent
                                                     </label>
                                                 </div>
 

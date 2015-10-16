@@ -68,7 +68,13 @@ Route::post('searchUsers','SearchController@searchUsers');
 
 Route::post('updateUser','UsersController@update');
 
-Route::get('searchClasses','SearchController@searchClasses');
+Route::get('searchClasses/{id}','SearchController@searchClasses');
+
+Route::get('searchClass','SearchController@searchClass');
+
+Route::get('searchBatch','SearchController@searchBatch');
+
+Route::get('searchDivision','SearchController@searchDivision');
 
 Route::get('searchSubjects','SearchController@searchSubjects');
 

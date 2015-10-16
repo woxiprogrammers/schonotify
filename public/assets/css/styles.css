@@ -949,9 +949,7 @@ h5.over-title {
 }
 .item-content .item-inner {
   align-items: center;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: #c8c7cc;
+
   display: table-cell;
   padding: 10px 15px 10px 0;
   width: 100%;
