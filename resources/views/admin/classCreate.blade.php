@@ -257,7 +257,6 @@
             }
         });
 
-// here's our click function for when the forms submitted
 
         $('.submit').click(function(){
 
@@ -269,8 +268,6 @@
             if(answers.length == 0) {
                 answers = "none";
             }
-
-            alert(answers);
 
             return false;
 

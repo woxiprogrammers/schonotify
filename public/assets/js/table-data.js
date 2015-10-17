@@ -37,7 +37,8 @@ var TableData = function() {
 			oTable.fnSetColumnVis(iCol, ( bVis ? false : true));
 		});
 	};
-	var runDataTable_example2 = function() {
+
+    var runDataTable_example2 = function() {
 		var newRow = false;
 		var actualEditingRow = null;
 
@@ -60,8 +61,6 @@ var TableData = function() {
 			jqTds[2].innerHTML = '<input type="text" class="form-control" value="' + aData[2] + '">';
 
 			jqTds[3].innerHTML = '<a class="save-row" href="">Save</a> <a class="cancel-row" href="">Cancel</a>';
-
-            //jqTds[4].innerHTML = '<a class="cancel-row" href="">Cancel</a>';
 
 		}
 
@@ -138,9 +137,7 @@ var TableData = function() {
 					
 				}
 			});
-			
 
-			
 		});
 		$('#sample_2').on('click', '.save-row', function(e) {
 			e.preventDefault();
@@ -215,6 +212,7 @@ var TableData = function() {
 			oTable.fnSetColumnVis(iCol, ( bVis ? false : true));
 		});
 	};
+
 	return {
 		//main function to initiate template pages
 		init : function() {

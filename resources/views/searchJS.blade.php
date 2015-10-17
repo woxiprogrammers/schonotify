@@ -48,16 +48,15 @@
 
         $.get(route,function(res){
 
-            //console.log(res);
-
             $("#tableContent").html(res);
 
             TableData.init();
 
             var switcheryHandler = function() {
-                var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
-                elems.forEach(function(html) {
+            var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                elements.forEach(function(html) {
                     var switchery = new Switchery(html);
                 });
             };
@@ -67,8 +66,6 @@
         });
 
     }
-
-
 
 
 </script>
