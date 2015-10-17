@@ -2,10 +2,8 @@
     function userEdit(val)
     {
         var route='/edit/'+val;
-        //debugger;
-        $.get(route,function(res){
 
-            console.log(res);
+        $.get(route,function(res){
 
             if(res[0]['user_role'] === 'admin'){
                 $('#user_id').val(res[0]['id']);

@@ -13,12 +13,11 @@
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
-<script src="assets/js/table-data-class.js"></script>
-
-
+<script src="assets/js/table-data-division.js"></script>
 
 
 <script type="text/javascript">
+
     $(document).ready(function(){
 
         TableData.init();
@@ -28,19 +27,19 @@
     });
 
 
-        $('#type-select').on('change',function(){
+    $('#type-select').on('change',function(){
 
-            var par=this.value;
+        var par=this.value;
 
-            if(isNaN(par)==false)
-            {
-                var route= "/searchClasses/"+par;
+        if(isNaN(par)==false)
+        {
+            var route= "/searchClasses/"+par;
 
-                window.location.replace(route);
+            window.location.replace(route);
 
-            }
+        }
 
-        });
+    });
 
 
 </script>

@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-sm-7">
                             <h1 class="mainTitle">Search</h1>
-                            <span class="mainDescription">Classes</span>
+                            <span class="mainDescription">Divisions</span>
                         </div>
                         <div class="col-sm-5">
                             <!-- start: MINI STATS WITH SPARKLINE -->
@@ -42,7 +42,6 @@
                 <!-- end: DASHBOARD TITLE -->
 
                 @include('selectClassDropdown')
-
                 <div class="container-fluid container-fullw bg-white">
                     <div class="row">
 
@@ -51,6 +50,7 @@
                             <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                                 <thead>
                                 <tr>
+                                    <th>Division</th>
                                     <th>Class</th>
                                     <th>Batch</th>
                                     @foreach(session('functionArr') as $row)
@@ -64,26 +64,25 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($results as $rows)
-                                        <tr>
-                                            <td>{!! $rows->class_name !!}</td>
-                                            <td>
-                                                {!! $rows->batch_name !!}
-                                            </td>
-                                            @foreach(session('functionArr') as $row)
-                                            @if($row == 'update_class')
-                                                <td><a href="#" class="edit-row">Edit</a></td>
-                                            @endif
-                                            @if($row == 'delete_class')
-                                            <td>
-                                                <a href="#" class="delete-row">
-                                                    Delete
-                                                </a>
-                                            </td>
-                                            @endif
-                                            @endforeach
-                                        </tr>
+                                @foreach($results as $rows)
+                                <tr>
+                                    <td>{!! $rows->div_name !!}</td>
+                                    <td>{!! $rows->class_name !!}</td>
+                                    <td>{!! $rows->batch_name !!}</td>
+                                    @foreach(session('functionArr') as $row)
+                                    @if($row == 'update_class')
+                                    <td><a href="#" class="edit-row">Edit</a></td>
+                                    @endif
+                                    @if($row == 'delete_class')
+                                    <td>
+                                        <a href="#" class="delete-row">
+                                            Delete
+                                        </a>
+                                    </td>
+                                    @endif
                                     @endforeach
+                                </tr>
+                                @endforeach
                                 </tbody>
 
                             </table>
@@ -94,6 +93,7 @@
 
                 </div>
 
+
                 <!-- start: FOURTH SECTION -->
                 @include('rightSidebar')
                 <!-- end: FOURTH SECTION -->
@@ -103,8 +103,10 @@
 
     @include('footer')
 
-    @include('searchClassJS')
+    @include('searchDivisionJS')
 
 </div>
 @stop
+
+
 
