@@ -161,11 +161,13 @@ class SearchController extends Controller
     {
         $result= \DB::table('class')
             ->Join('batch', 'batch.id', '=', 'class.batch_id')
-            ->select('class.id as class_id','class.name as class_name','class.batch_id','batch.name as batch_name')
+            ->select('class.id as class_id','class.name as class_name','class.batch_id as batch_id','batch.name as batch_name')
             ->where('class.body_id','=',Auth::User()->body_id)
             ->get();
 
-        return view('admin.searchClasses')->with('results',$result);
+        $batch=\DB::table('batch')->get();
+
+        return view('admin.searchClasses')->with('results',$result)->with('batches',$batch);
     }
 
     public function searchBatch()

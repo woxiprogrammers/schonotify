@@ -67,7 +67,9 @@
                                     @foreach($results as $rows)
                                         <tr>
                                             <td>{!! $rows->class_name !!}</td>
-                                            <td>{!! $rows->batch_name !!}</td>
+                                            <td>
+                                                {!! $rows->batch_name !!}
+                                            </td>
                                             @foreach(session('functionArr') as $row)
                                             @if($row == 'update_class')
                                                 <td><a href="#" class="edit-row">Edit</a></td>

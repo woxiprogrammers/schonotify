@@ -23,9 +23,9 @@ var TableData = function() {
         function editRow(oTable, nRow) {
             var aData = oTable.fnGetData(nRow);
             var jqTds = $('>td', nRow);
+
             jqTds[0].innerHTML = '<input type="text" class="form-control" value="' + aData[0] + '">';
-            jqTds[1].innerHTML = '<select class="form-control" style="-webkit-appearance: menulist;"><option value="' + aData[1] + '">'+aData[1]+'</option></select>';
-           // jqTds[2].innerHTML = '<input type="text" class="form-control" value="' + aData[2] + '">';
+            jqTds[1].innerHTML = aData[1];
 
             jqTds[2].innerHTML = '<a class="save-row" href="">Save</a> <a class="cancel-row" href="">Cancel</a>';
 
