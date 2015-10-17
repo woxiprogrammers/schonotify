@@ -26,10 +26,8 @@ var TableData = function() {
 
             jqTds[0].innerHTML = '<input type="text" class="form-control" value="' + aData[0] + '">';
             jqTds[1].innerHTML = aData[1];
-
             jqTds[2].innerHTML = '<a class="save-row" href="">Save</a> <a class="cancel-row" href="">Cancel</a>';
 
-            //jqTds[4].innerHTML = '<a class="cancel-row" href="">Cancel</a>';
         }
 
         function saveRow(oTable, nRow) {

@@ -26,7 +26,6 @@
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
 
-
 <div class="col-md-12">
     @include('admin.userRoleDropdown')
 </div>
@@ -85,7 +84,6 @@
                             <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
                         </div>
                     </div>
-
 
                 </div>
 
@@ -274,9 +272,6 @@
 </div>
 </form>
 
-
-
-
 <!-- end: DYNAMIC TABLE -->
 
 <!-- start: FOURTH SECTION -->
@@ -326,13 +321,10 @@
 
             window.location.replace(route);
 
-
         }
 
     });
 
-</script>
-<script>
     function clsTeacher(chk){
         if(chk==true)
         {
@@ -343,7 +335,4 @@
     }
 </script>
 
-
 @stop
-
-

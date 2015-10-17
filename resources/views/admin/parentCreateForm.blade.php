@@ -26,7 +26,6 @@
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
 
-
 <div class="col-md-12">
     @include('admin.userRoleDropdown')
 </div>
@@ -267,8 +266,6 @@
 </form>
 </div>
 
-
-
 <!-- end: DYNAMIC TABLE -->
 
 <!-- start: FOURTH SECTION -->
@@ -318,14 +315,11 @@
 
             window.location.replace(route);
 
-
         }
 
     });
 
 </script>
-
-
 
 @stop
 

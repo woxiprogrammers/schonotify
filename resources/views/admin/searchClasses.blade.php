@@ -94,7 +94,6 @@
 
                 </div>
 
-
                 <!-- start: FOURTH SECTION -->
                 @include('rightSidebar')
                 <!-- end: FOURTH SECTION -->
@@ -108,6 +107,4 @@
 
 </div>
 @stop
-
-
 

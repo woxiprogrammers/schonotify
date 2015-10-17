@@ -26,7 +26,6 @@
                 <!-- end: DASHBOARD TITLE -->
                 <!-- start: DYNAMIC TABLE -->
 
-
                 <div class="col-md-12">
                     @include('admin.userRoleDropdown')
                 </div>
@@ -258,9 +257,6 @@
                 </div>
                 </form>
 
-
-
-
                 <!-- end: DYNAMIC TABLE -->
 
                 <!-- start: FOURTH SECTION -->
@@ -299,7 +295,6 @@
 </script>
 <script type="text/javascript">
 
-
     $('#role-select').on('change',function(){
 
         var par=this.value;
@@ -316,7 +311,4 @@
 
 </script>
 
-
 @stop
-
-

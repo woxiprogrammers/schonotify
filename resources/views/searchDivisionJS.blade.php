@@ -16,9 +16,8 @@
 <script src="assets/js/table-data-division.js"></script>
 
 
-
-
 <script type="text/javascript">
+
     $(document).ready(function(){
 
         TableData.init();
