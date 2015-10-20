@@ -85,3 +85,7 @@ Route::get('deactive/{id}','UsersController@deactiveUser');
 Route::get('createClass','ClassController@create');
 
 Route::get('event','EventController@index');
+
+Route::get('timetable','TimetableController@index');
+
+Route::get('timetableShow/{id}','TimetableController@timetableShow');

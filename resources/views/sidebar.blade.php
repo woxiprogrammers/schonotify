@@ -107,6 +107,19 @@
     </li>
     @endif
     @endforeach
+
+    <li>
+        <a href="timetable">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title"> Timetable </span>
+                </div>
+            </div>
+        </a>
+    </li>
     <li>
         <a href="event">
             <div class="item-content">
