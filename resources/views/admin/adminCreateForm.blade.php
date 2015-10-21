@@ -166,29 +166,126 @@
         <div class="col-md-12">
             <fieldset>
                 <div class="panel-body">
-                    <div class="checkbox clip-check check-primary">
-                        <input type="checkbox" id="checkbox6" value="1">
-                        <label for="checkbox6">
-                            Checkbox 1
-                        </label>
+                    <div class="row" style="margin-bottom: 14px;">
+                        <div class="col-sm-3"><h4 class="center" style="margin:0px !important; color:#ccc;">Modules</h4></div>
+                        <div>
+
+                            <span class="label label-info" style="margin:6px;">View</span>
+
+                            <span class="label label-default" style="margin:6px;">Create</span>
+
+                            <span class="label label-warning" style="margin:6px;">Update</span>
+
+                            <span class="label label-danger" style="margin:6px;">Delete</span>
+
+                        </div>
                     </div>
-                    <div class="checkbox clip-check check-primary">
-                        <input type="checkbox" id="checkbox7" value="1">
-                        <label for="checkbox7">
-                            Checkbox 2
-                        </label>
+                    <div class="row" id="checkbox-acl">
+                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Users Management</h4></div>
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+
+                            <input type="checkbox" id="checkbox" value="1">
+                            <label for="checkbox"></label>
+
+                            <input type="checkbox" id="checkbox1" value="1">
+                            <label for="checkbox1"></label>
+
+                            <input type="checkbox" id="checkbox2" value="1">
+                            <label for="checkbox2"></label>
+
+                            <input type="checkbox" id="checkbox3" value="1">
+                            <label for="checkbox3"></label>
+                        </div>
                     </div>
-                    <div class="checkbox clip-check check-primary">
-                        <input type="checkbox" id="checkbox8" value="1">
-                        <label for="checkbox8">
-                            Checkbox 3
-                        </label>
+
+                    <div class="row" id="checkbox-acl">
+                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Event Management</h4></div>
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+
+                            <input type="checkbox" id="checkbox4" value="1">
+                            <label for="checkbox4"></label>
+
+                            <input type="checkbox" id="checkbox5" value="1">
+                            <label for="checkbox5"></label>
+
+                            <input type="checkbox" id="checkbox6" value="1">
+                            <label for="checkbox6"></label>
+
+                            <input type="checkbox" id="checkbox7" value="1">
+                            <label for="checkbox7"></label>
+                        </div>
                     </div>
-                    <div class="checkbox clip-check check-primary">
-                        <input type="checkbox" id="checkbox9" value="1" disabled="">
-                        <label for="checkbox9">
-                            Checkbox 4 (disabled)
-                        </label>
+
+                    <div class="row" id="checkbox-acl">
+                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Class Management</h4></div>
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+
+                            <input type="checkbox" id="checkbox8" value="1">
+                            <label for="checkbox8"></label>
+
+                            <input type="checkbox" id="checkbox9" value="1">
+                            <label for="checkbox9"></label>
+
+                            <input type="checkbox" id="checkbox10" value="1">
+                            <label for="checkbox10"></label>
+
+                            <input type="checkbox" id="checkbox11" value="1">
+                            <label for="checkbox11"></label>
+                        </div>
+                    </div>
+
+                    <div class="row" id="checkbox-acl">
+                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Subjects Management</h4></div>
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+
+                            <input type="checkbox" id="checkbox12" value="1">
+                            <label for="checkbox12"></label>
+
+                            <input type="checkbox" id="checkbox13" value="1">
+                            <label for="checkbox13"></label>
+
+                            <input type="checkbox" id="checkbox14" value="1">
+                            <label for="checkbox14"></label>
+
+                            <input type="checkbox" id="checkbox15" value="1">
+                            <label for="checkbox15"></label>
+                        </div>
+                    </div>
+
+                    <div class="row" id="checkbox-acl">
+                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Exams Management</h4></div>
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+
+                            <input type="checkbox" id="checkbox16" value="1">
+                            <label for="checkbox16"></label>
+
+                            <input type="checkbox" id="checkbox17" value="1">
+                            <label for="checkbox17"></label>
+
+                            <input type="checkbox" id="checkbox18" value="1">
+                            <label for="checkbox18"></label>
+
+                            <input type="checkbox" id="checkbox19" value="1">
+                            <label for="checkbox19"></label>
+                        </div>
+                    </div>
+
+                    <div class="row" id="checkbox-acl">
+                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Timetable Management</h4></div>
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+
+                            <input type="checkbox" id="checkbox20" value="1">
+                            <label for="checkbox20"></label>
+
+                            <input type="checkbox" id="checkbox21" value="1">
+                            <label for="checkbox21"></label>
+
+                            <input type="checkbox" id="checkbox22" value="1">
+                            <label for="checkbox22"></label>
+
+                            <input type="checkbox" id="checkbox23" value="1">
+                            <label for="checkbox23"></label>
+                        </div>
                     </div>
                 </div>
             </fieldset>
