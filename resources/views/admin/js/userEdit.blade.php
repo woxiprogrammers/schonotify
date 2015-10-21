@@ -14,13 +14,6 @@
                 $('#class_div').hide();
                 $('#division_div').hide();
 
-                if(res[0]['is_active']==1)
-                {
-                    $('.is_active').attr('checked',true);
-                }else{
-                    $('.is_active').attr('checked',false);
-                }
-
             }else
             if(res[0]['user_role'] === 'teacher'){
                 $('#user_id').val(res[0]['id']);
@@ -41,14 +34,6 @@
                     $('.web_view').attr('checked',true);
                 }else{
                     $('.web_view').attr('checked',false);
-                }
-
-
-                if(res[0]['is_active']==1)
-                {
-                    $('.is_active').attr('checked',true);
-                }else{
-                    $('.is_active').attr('checked',false);
                 }
 
             }else
@@ -95,13 +80,6 @@
 
                 });
 
-                if(res[0]['is_active']==1)
-                {
-                    $('.is_active').attr('checked',true);
-                }else{
-                    $('.is_active').attr('checked',false);
-                }
-
             }else
             if(res[0]['user_role'] === 'parent'){
                 $('#user_id').val(res[0]['id']);
@@ -112,13 +90,6 @@
                 $('#class_div').hide();
                 $('#division_div').hide();
 
-                if(res[0]['is_active']==1)
-                {
-                    $('.is_active').attr('checked',true);
-                }else{
-                    $('.is_active').attr('checked',false);
-                }
-
             }else
             if(res[0]['user_role'] === 'accountant'){
                 $('#user_id').val(res[0]['id']);
@@ -128,12 +99,7 @@
                 $('#teacher_view_div').hide();
                 $('#class_div').hide();
                 $('#division_div').hide();
-                if(res[0]['is_active']==1)
-                {
-                    $('.is_active').attr('checked',true);
-                }else{
-                    $('.is_active').attr('checked',false);
-                }
+
             }
 
         });

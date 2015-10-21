@@ -22,10 +22,55 @@ class TimetableController extends Controller
         if($div==1)
         {
             return $this::division1();
-        }else{
+        }elseif($div==2){
             return $this::division2();
+        }else{
+            return $this::division3();
         }
 
+    }
+
+
+    public function division1()
+    {
+        $str='{
+ "monday": [
+ { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"3" , "subject":"Geography","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"4" , "subject":"Lunch Break","is_break":"1","start_time":"3:00pm","end_time":"3:30pm"},
+ { "period":"5" , "subject":"Maths","is_break":"0","start_time":"3:30pm","end_time":"4:30pm"},
+ { "period":"6" , "subject":"English","is_break":"0","start_time":"4:30pm","end_time":"5:30pm"}
+ ],"tuesday": [
+ { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"3" , "subject":"Geography","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"4" , "subject":"Lunch Break","is_break":"1","start_time":"3:00pm","end_time":"3:30pm"},
+ { "period":"5" , "subject":"Maths","is_break":"0","start_time":"3:30pm","end_time":"4:30pm"},
+ { "period":"6" , "subject":"English","is_break":"0","start_time":"4:30pm","end_time":"5:30pm"}
+ ],"wednesday": [
+ { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"3:00pm","end_time":"3:30pm"},
+ { "period":"2" , "subject":"History","is_break":"0","start_time":"3:30pm","end_time":"4:00pm"},
+ { "period":"3" , "subject":"Geography","is_break":"0","start_time":"4:00pm","end_time":"5:45pm"},
+ { "period":"4" , "subject":"English","is_break":"0","start_time":"5:00pm","end_time":"6:00pm"}
+ ],"thursday": [
+ { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"3:00pm","end_time":"3:30pm"},
+ { "period":"2" , "subject":"History","is_break":"0","start_time":"3:30pm","end_time":"4:00pm"},
+ { "period":"3" , "subject":"Geography","is_break":"0","start_time":"4:00pm","end_time":"5:45pm"},
+ { "period":"4" , "subject":"English","is_break":"0","start_time":"5:00pm","end_time":"6:00pm"}
+ ],"friday": [
+ { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"}
+ ],"saturday": [
+ { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"3" , "subject":"Geography","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
+ { "period":"4" , "subject":"Hindi","is_break":"0","start_time":"8:00am","end_time":"8:45am"}
+ ],"sunday": [
+
+ ]}';
+
+        return $str;
     }
 
     public function division2(){
@@ -71,45 +116,16 @@ class TimetableController extends Controller
         return $str;
     }
 
-    public function division1()
-    {
-        $str='{
- "monday": [
- { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"3" , "subject":"Geography","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"4" , "subject":"Lunch Break","is_break":"1","start_time":"3:00pm","end_time":"3:30pm"},
- { "period":"5" , "subject":"Maths","is_break":"0","start_time":"3:30pm","end_time":"4:30pm"},
- { "period":"6" , "subject":"English","is_break":"0","start_time":"4:30pm","end_time":"5:30pm"}
- ],"tuesday": [
- { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"3" , "subject":"Geography","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"4" , "subject":"Lunch Break","is_break":"1","start_time":"3:00pm","end_time":"3:30pm"},
- { "period":"5" , "subject":"Maths","is_break":"0","start_time":"3:30pm","end_time":"4:30pm"},
- { "period":"6" , "subject":"English","is_break":"0","start_time":"4:30pm","end_time":"5:30pm"}
- ],"wednesday": [
- { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"3:00pm","end_time":"3:30pm"},
- { "period":"2" , "subject":"History","is_break":"0","start_time":"3:30pm","end_time":"4:00pm"},
- { "period":"3" , "subject":"Geography","is_break":"0","start_time":"4:00pm","end_time":"5:45pm"},
- { "period":"4" , "subject":"English","is_break":"0","start_time":"5:00pm","end_time":"6:00pm"}
- ],"thursday": [
- { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"3:00pm","end_time":"3:30pm"},
- { "period":"2" , "subject":"History","is_break":"0","start_time":"3:30pm","end_time":"4:00pm"},
- { "period":"3" , "subject":"Geography","is_break":"0","start_time":"4:00pm","end_time":"5:45pm"},
- { "period":"4" , "subject":"English","is_break":"0","start_time":"5:00pm","end_time":"6:00pm"}
- ],"friday": [
- { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"}
- ],"saturday": [
- { "period":"1" , "subject":"Marathi","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"2" , "subject":"History","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"3" , "subject":"Geography","is_break":"0","start_time":"8:00am","end_time":"8:45am"},
- { "period":"4" , "subject":"Hindi","is_break":"0","start_time":"8:00am","end_time":"8:45am"}
- ],"sunday": [
 
- ]}';
+    public function division3(){
+
+        $str='{"message":"unavailable"}';
 
         return $str;
+    }
+
+    public function create()
+    {
+        return view('createTimetable');
     }
 }

@@ -89,3 +89,5 @@ Route::get('event','EventController@index');
 Route::get('timetable','TimetableController@index');
 
 Route::get('timetableShow/{id}','TimetableController@timetableShow');
+
+Route::get('createTimetable','TimetableController@create');

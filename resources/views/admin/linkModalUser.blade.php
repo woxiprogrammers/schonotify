@@ -7,7 +7,7 @@
                 </button>
                 <h4 class="modal-title" id="myModalLabel">Edit User</h4>
             </div>
-            <form class="form-register" id="editForms" method="post" action="/updateUser" name="updateUser">
+            <form class="form-register" role="form" id="form" method="post" action="/updateUser" name="updateUser">
             <div class="modal-body">
                 <div class="form-group">
                     {!! csrf_field() !!}
@@ -23,12 +23,21 @@
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" name="email" id="email">
                             </div>
-                            <div class="checkbox clip-check check-primary" id="teacher_view_div">
-                                <input type="checkbox" id="checkbox checkbox-inline" class="mobile_view" name="mobile_view">
-                                <label for="checkbox">Mobile Access</label>
-                                <input type="checkbox" id="checkbox checkbox-inline" class="web_view" name="web_view">
-                                <label for="checkbox">Web Access</label>
+
+                            <div class="form-group">
+                                <div class="checkbox clip-check check-primary" id="teacher_view_div">
+                                    <input type="checkbox" value="" name="services" id="checkbox" class="web_view">
+                                    <label for="checkbox">
+                                        Web Access
+                                    </label>
+                                    <input type="checkbox" value="" name="services1" id="checkbox1" class="mobile_view">
+                                    <label for="checkbox1">
+                                        Mobile Access
+                                    </label>
+                                </div>
+
                             </div>
+
                             <div class="form-group" id="class_div">
                                 <label for="class_selection">class</label>
                                 <select class="form-control" name="class_selection" id="class_selection" >
@@ -41,19 +50,15 @@
 
                                 </select>
                             </div>
-                            <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" id="checkbox checkbox-inline is_active" class="is_active" name="is_active">
-                                <label for="checkbox">isActive</label>
 
-                            </div>
                         </div>
                 </div>
             </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-o" data-dismiss="modal" onclick="document.getElementById('editForms').reset()">
+                    <button type="button" class="btn btn-primary btn-o" data-dismiss="modal" onclick="$('#form')[0].reset();">
                         Close
                     </button>
-                    <button type="button" class="btn btn-primary" id="update_user">
+                    <button type="submit" class="btn btn-primary" id="update_user">
                         Save changes
                     </button>
 
@@ -73,19 +78,22 @@
 
 <script src="assets/js/form-elements.js"></script>
 
+<script src="assets/js/form-validation.js"></script>
+
 <script>
 
     jQuery(document).ready(function() {
 
         $('#popup_valid').click(function(event){
             event.preventDefault();
+            Main.init();
 
-            Login.init();
+            FormValidator.init();
         });
 
     });
 </script>
-</script>
+
 
 <script type="text/javascript">
 

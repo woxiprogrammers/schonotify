@@ -33,6 +33,9 @@
                 <div class="container-fluid container-fullw bg-white">
                     <div class="row">
                         @include('selectClassDivisionDropdown')
+                        <div class="col-sm-8 center" id="timetable-create-btn">
+                           <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a>Create New Timetable</a></p>
+                        </div>
                         <div class="row" id="timetable-div">
 
                             <table class="table table-hover timetable-div-table" id="sample-table-2">
@@ -94,8 +97,12 @@
         function showTimetable(val)
         {
             $('#division-body').html('');
+
             var route='timetableShow/'+val;
             $.get(route,function(res){
+
+
+                console.log(res);
 
                 var obj = $.parseJSON(res);
 
@@ -103,7 +110,10 @@
                     return [value]
                 });
 
-
+               if(arr[0]!=="unavailable")
+               {
+                $('#timetable-div').show();
+                $('#timetable-create-btn').hide();
                 var maxlength=0;
 
                 for(var i=0; i<arr.length; i++)
@@ -124,8 +134,6 @@
 
                         var tds = '<tr>';
                         tds+='<td>'+(j+1)+'</td>';
-
-                        console.log(arr);
 
                         if(arr[0].length > j)
                         {
@@ -218,7 +226,10 @@
                         }
                     });
                 }
-
+               }else{
+                   $('#timetable-create-btn').show();
+                   $('#timetable-div').hide();
+               }
             });
 
         }
@@ -226,7 +237,8 @@
         $('#division-select').change(function()
         {
 
-            showTimetable(1);
+            var val1=$(this).val();
+            showTimetable(val1);
 
         });
     </script>

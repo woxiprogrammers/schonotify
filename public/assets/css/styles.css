@@ -11438,3 +11438,8 @@ td.small-width {
     border-radius: 4px;
     border: 1px solid #ccc;
 }
+
+#checkbox-acl label{
+    padding: 15px !important;
+    margin-left: 12px !important;
+}
