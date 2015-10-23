@@ -24,7 +24,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-        tabUserSelect(3);
+        tabUserSelect(2);
 
         Main.init();
 

@@ -26,7 +26,7 @@
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
 <div class="col-md-12">
-    @include('admin.userRoleDropdown')
+    @include('admin.userRoleDropdownCreate')
 </div>
 
 <form action="#" role="form" class="smart-wizard" id="form">
@@ -178,7 +178,7 @@
                         </div>
                     </div>
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Users Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Users Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox" value="1">
@@ -196,7 +196,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Event Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Event Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox4" value="1">
@@ -214,7 +214,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Class Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Class Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox8" value="1">
@@ -232,7 +232,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Subjects Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Subjects Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox12" value="1">
@@ -250,7 +250,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Exams Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Exams Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox16" value="1">
@@ -268,7 +268,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Timetable Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Timetable Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox20" value="1">
@@ -309,7 +309,7 @@
                 <p class="text-small">
                     User will get the mail confirmation about his/her account. This mail includes link for login and his/her login credentials.
                 </p>
-                <a class="btn btn-primary btn-o go-first" href="javascript:void(0)">
+                <a class="btn btn-primary btn-o" href="searchUsers">
                     Back to first step
                 </a>
             </div>

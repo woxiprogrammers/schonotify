@@ -66,7 +66,7 @@
 											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-calendar-o fa-stack-1x fa-inverse"></i> </span>
 											<h2 class="StepTitle">Manage Events</h2>
 											<p class="text-small">
-												Create and manage events on calender and invite related users ...
+												Create and manage events on calender and send invitation to related users ...
 											</p>
 											<p class="links cl-effect-1">
 												<a href="event">
@@ -87,20 +87,9 @@
 				</div>
 			</div>
 			<!-- start: FOOTER -->
-			<footer>
-				<div class="footer-inner">
-					<div class="pull-left">
-						&copy; <span class="current-year"></span><span class="text-bold text-uppercase">ClipTheme</span>. <span>All rights reserved</span>
-					</div>
-					<div class="pull-right">
-						<span class="go-top"><i class="ti-angle-up"></i></span>
-					</div>
-				</div>
-			</footer>
+			@include('footer')
 			<!-- end: FOOTER -->
-			<!-- start: OFF-SIDEBAR -->
 
-			<!-- end: OFF-SIDEBAR -->
 
 		</div>
 

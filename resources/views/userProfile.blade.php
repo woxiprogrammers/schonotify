@@ -278,7 +278,7 @@
                         </div>
                     </div>
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Users Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Users Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox" value="1" checked disabled>
@@ -296,7 +296,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Event Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Event Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox4" value="1" checked disabled>
@@ -314,7 +314,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Class Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Class Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox8" value="1" checked disabled>
@@ -332,7 +332,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Subjects Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Subjects Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox12" value="1" disabled>
@@ -350,7 +350,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Exams Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Exams Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox16" value="1" disabled>
@@ -368,7 +368,7 @@
                     </div>
 
                     <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h4 style="margin:0px !important;">Timetable Management</h4></div>
+                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Timetable Management</h5></div>
                         <div class="checkbox clip-check check-primary checkbox-inline">
 
                             <input type="checkbox" id="checkbox20" value="1" disabled>
@@ -391,7 +391,7 @@
                 <div class="row">
                 <div class="form-group col-sm-6">
                     <label class="control-label">
-                        Password <span class="symbol required" aria-required="true"></span>
+                        New Password <span class="symbol required" aria-required="true"></span>
                     </label>
                     <input type="password" class="form-control" name="password" id="password">
                 </div>
@@ -399,7 +399,7 @@
                 <div class="row">
                 <div class="form-group col-sm-6">
                     <label class="control-label">
-                        Confirm Password <span class="symbol required" aria-required="true"></span>
+                        Confirm New Password <span class="symbol required" aria-required="true"></span>
                     </label>
                     <input type="password" class="form-control" id="password_again" name="password_again">
                 </div>

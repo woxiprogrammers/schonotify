@@ -60,7 +60,7 @@
                                             <div class="thread-content">
                                                 <span class="author">Mr.Vishnu Nimangare</span>
                                                 <span class="preview">then i will be there at meeting ...</span>
-                                                <span class="time">8 hrs</span>
+                                                <span class="time">8 hrs ago</span>
                                             </div>
                                         </div>
                                     </a>
@@ -74,7 +74,7 @@
                                             <div class="thread-content">
                                                 <span class="author">Mr.Debojit Boss</span>
                                                 <span class="preview">fine.. thank you!</span>
-                                                <span class="time">14 hrs</span>
+                                                <span class="time">14 hrs ago</span>
                                             </div>
                                         </div>
                                     </a>

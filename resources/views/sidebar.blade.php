@@ -46,7 +46,6 @@
         </li>
         @endif
 
-        
         @endforeach
     </ul>
 
@@ -132,7 +131,7 @@
         <a href="javascript:void(0);">
             <div class="item-content">
                 <div class="item-media">
-                    <i class="fa fa-heart"></i>
+                    <i class="fa fa-bullhorn"></i>
                 </div>
                 <div class="item-inner">
                     <span class="title"> Notifications </span>
