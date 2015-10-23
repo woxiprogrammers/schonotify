@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>
-                                            Select Users Type
+                                            Share Event With
                                         </label>
                                         <div class="row">
                                         <div class="col-xs-6">

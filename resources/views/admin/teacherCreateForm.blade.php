@@ -31,7 +31,7 @@
 </div>
 
 <form action="#" role="form" class="smart-wizard" id="form">
-<div id="wizard" class="swMain">
+<div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <ul>
     <li>
@@ -179,14 +179,40 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group" id="clstchr" style="display:none;">
+                        <div class="form-group" id="clstchr_batch" style="display:none;">
                             <label>
-                                Select class
+                                Select Batch
+                            </label>
+                            <select class="form-control" name="country" style="-webkit-appearance: menulist;">
+                                <option value=""></option>
+                                <option value="morning">Morning</option>
+                                <option value="evening">Evening</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="clstchr_class" style="display:none;">
+                            <label>
+                                Select Class
                             </label>
                             <select class="form-control" name="country" style="-webkit-appearance: menulist;">
                                 <option value=""></option>
                                 <option value="first">First</option>
                                 <option value="second">Second</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="clstchr_div" style="display:none;">
+                            <label>
+                                Select Division
+                            </label>
+                            <select class="form-control" name="country" style="-webkit-appearance: menulist;">
+                                <option value=""></option>
+                                <option value="a">A</option>
+                                <option value="b">B</option>
+                                <option value="c">C</option>
+                                <option value="d">D</option>
                             </select>
                         </div>
                     </div>
@@ -421,9 +447,13 @@
     function clsTeacher(chk){
         if(chk==true)
         {
-            $('#clstchr').show();
+            $('#clstchr_batch').show();
+            $('#clstchr_class').show();
+            $('#clstchr_div').show();
         }else{
-            $('#clstchr').hide();
+            $('#clstchr_batch').hide();
+            $('#clstchr_class').hide();
+            $('#clstchr_div').hide();
         }
     }
 </script>

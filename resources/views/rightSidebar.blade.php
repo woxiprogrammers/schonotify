@@ -20,8 +20,8 @@
                     <i class="fa fa-circle status-online"></i>
                     <img alt="..." src="assets/images/avatar-2.jpg" class="media-object">
                     <div class="media-body">
-                        <h4 class="media-heading">Nicole Bell</h4>
-                        <span> Content Designer </span>
+                        <h4 class="media-heading">Mrs.Rossy Sharma</h4>
+                        <span> Parent </span>
                     </div>
                 </a>
             </li>
@@ -33,8 +33,8 @@
                     <i class="fa fa-circle status-online"></i>
                     <img alt="..." src="assets/images/avatar-3.jpg" class="media-object">
                     <div class="media-body">
-                        <h4 class="media-heading">Steven Thompson</h4>
-                        <span> Visual Designer </span>
+                        <h4 class="media-heading">Mr.Soham Shah</h4>
+                        <span> Teacher </span>
                     </div>
                 </a>
             </li>
@@ -43,8 +43,8 @@
                     <i class="fa fa-circle status-online"></i>
                     <img alt="..." src="assets/images/avatar-4.jpg" class="media-object">
                     <div class="media-body">
-                        <h4 class="media-heading">Ella Patterson</h4>
-                        <span> Web Editor </span>
+                        <h4 class="media-heading">Mrs.Surabhi Borikar</h4>
+                        <span> Teacher </span>
                     </div>
                 </a>
             </li>
@@ -53,8 +53,8 @@
                     <i class="fa fa-circle status-online"></i>
                     <img alt="..." src="assets/images/avatar-5.jpg" class="media-object">
                     <div class="media-body">
-                        <h4 class="media-heading">Kenneth Ross</h4>
-                        <span> Senior Designer </span>
+                        <h4 class="media-heading">Mr.Ayan Sinha</h4>
+                        <span> Parent </span>
                     </div>
                 </a>
             </li>
@@ -65,8 +65,8 @@
                 <a data-toggle-class="chat-open" data-toggle-target="#users" href="#">
                     <img alt="..." src="assets/images/avatar-6.jpg" class="media-object">
                     <div class="media-body">
-                        <h4 class="media-heading">Nicole Bell</h4>
-                        <span> Content Designer </span>
+                        <h4 class="media-heading">Mr.Vishnu Nimangare</h4>
+                        <span> Parent </span>
                     </div>
                 </a>
             </li>
@@ -77,8 +77,8 @@
                     </div>
                     <img alt="..." src="assets/images/avatar-7.jpg" class="media-object">
                     <div class="media-body">
-                        <h4 class="media-heading">Steven Thompson</h4>
-                        <span> Visual Designer </span>
+                        <h4 class="media-heading">Mrs.Radhika Jadhav</h4>
+                        <span> Teacher </span>
                     </div>
                 </a>
             </li>
@@ -86,38 +86,12 @@
                 <a data-toggle-class="chat-open" data-toggle-target="#users" href="#">
                     <img alt="..." src="assets/images/avatar-8.jpg" class="media-object">
                     <div class="media-body">
-                        <h4 class="media-heading">Ella Patterson</h4>
-                        <span> Web Editor </span>
+                        <h4 class="media-heading">Mrs.Swapna Sharma</h4>
+                        <span> Parent </span>
                     </div>
                 </a>
             </li>
-            <li class="media">
-                <a data-toggle-class="chat-open" data-toggle-target="#users" href="#">
-                    <img alt="..." src="assets/images/avatar-9.jpg" class="media-object">
-                    <div class="media-body">
-                        <h4 class="media-heading">Kenneth Ross</h4>
-                        <span> Senior Designer </span>
-                    </div>
-                </a>
-            </li>
-            <li class="media">
-                <a data-toggle-class="chat-open" data-toggle-target="#users" href="#">
-                    <img alt="..." src="assets/images/avatar-10.jpg" class="media-object">
-                    <div class="media-body">
-                        <h4 class="media-heading">Ella Patterson</h4>
-                        <span> Web Editor </span>
-                    </div>
-                </a>
-            </li>
-            <li class="media">
-                <a data-toggle-class="chat-open" data-toggle-target="#users" href="#">
-                    <img alt="..." src="assets/images/avatar-5.jpg" class="media-object">
-                    <div class="media-body">
-                        <h4 class="media-heading">Kenneth Ross</h4>
-                        <span> Senior Designer </span>
-                    </div>
-                </a>
-            </li>
+
         </ul>
     </div>
 </div>
