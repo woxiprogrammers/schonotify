@@ -27,7 +27,7 @@
                 <!-- start: DYNAMIC TABLE -->
 
                 <div class="col-md-12">
-                    @include('admin.userRoleDropdown')
+                    @include('admin.userRoleDropdownCreate')
                 </div>
 
                 <form action="#" role="form" class="smart-wizard" id="form">
@@ -243,7 +243,7 @@
                                 <p class="text-small">
                                     Thank you for your registration. Your transaction has been completed, and a receipt for your purchase has been emailed to you.  You may log into your account to view details of this transaction.
                                 </p>
-                                <a class="btn btn-primary btn-o go-first" href="javascript:void(0)">
+                                <a class="btn btn-primary btn-o" href="createUsers/1">
                                     Back to first step
                                 </a>
                             </div>

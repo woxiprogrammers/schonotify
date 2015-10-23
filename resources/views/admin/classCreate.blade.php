@@ -43,12 +43,11 @@
                                                 <label class="control-label">
                                                     Batch <span class="symbol required"></span>
                                                 </label>
-                                                <select class="form-control" id="dropdown" name="dropdown">
+                                                <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
                                                     <option value="">Select Batch</option>
-                                                    <option value="Category 1">Category 1</option>
-                                                    <option value="Category 2">Category 2</option>
-                                                    <option value="Category 3">Category 5</option>
-                                                    <option value="Category 4">Category 4</option>
+                                                    <option value="Category 1">Morning</option>
+                                                    <option value="Category 2">Evening</option>
+
                                                 </select>
                                             </div>
 
