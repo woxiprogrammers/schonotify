@@ -34,7 +34,7 @@
                     <div class="row">
                         @include('selectClassDivisionDropdown')
                         <div class="col-sm-8 center" id="timetable-create-btn">
-                           <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a>Create New Timetable</a></p>
+                           <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
                         </div>
                         <div class="row" id="timetable-div">
 
@@ -101,8 +101,6 @@
             var route='timetableShow/'+val;
             $.get(route,function(res){
 
-
-                console.log(res);
 
                 var obj = $.parseJSON(res);
 

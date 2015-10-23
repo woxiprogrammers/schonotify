@@ -1,21 +1,12 @@
 <div id="off-sidebar" class="sidebar">
 <div class="sidebar-wrapper">
 <ul class="nav nav-tabs nav-justified">
-    <li class="active">
+    <li>
         <a href="#off-users" aria-controls="off-users" role="tab" data-toggle="tab">
             <i class="ti-comments"></i>
         </a>
     </li>
-    <li>
-        <a href="#off-favorites" aria-controls="off-favorites" role="tab" data-toggle="tab">
-            <i class="ti-heart"></i>
-        </a>
-    </li>
-    <li>
-        <a href="#off-settings" aria-controls="off-settings" role="tab" data-toggle="tab">
-            <i class="ti-settings"></i>
-        </a>
-    </li>
+
 </ul>
 <div class="tab-content">
 <div role="tabpanel" class="tab-pane active" id="off-users">

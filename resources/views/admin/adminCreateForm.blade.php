@@ -115,20 +115,22 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="block">
-                                Gender
-                            </label>
-                            <div class="clip-radio radio-primary">
-                                <input type="radio" id="wz-female" name="gender" value="female">
-                                <label for="wz-female">
-                                    Female
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="block">
+                                    Gender
                                 </label>
-                                <input type="radio" id="wz-male" name="gender" value="male" checked>
-                                <label for="wz-male">
-                                    Male
-                                </label>
+                                <div class="clip-radio radio-primary">
+                                    <input type="radio" id="wz-female" name="gender" value="female">
+                                    <label for="wz-female">
+                                        Female
+                                    </label>
+                                    <input type="radio" id="wz-male" name="gender" value="male" checked>
+                                    <label for="wz-male">
+                                        Male
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -146,11 +148,6 @@
                     </div>
                 </div>
 
-                <p>
-                    <a href="javascript:void(0)" data-content="Your personal information is not required for unlawful purposes, but only in order to proceed in this tutorial" data-title="Don't worry!" data-placement="top" data-toggle="popover">
-                        Why do you need my personal information?
-                    </a>
-                </p>
             </fieldset>
 
             <div class="form-group">

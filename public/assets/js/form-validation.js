@@ -189,18 +189,30 @@ var FormValidator = function () {
                 class: {
                     minlength: 2,
                     required: true
+                },
+                periods:{
+                    required:true,
+                    number: true,
+                    maxlength: 2,
+                    min:1,
+                    max:15
+
                 }
+
             },
             messages: {
                 firstname: "Please specify your first name",
                 lastname: "Please specify your last name",
                 email: {
                     required: "We need your email address to contact you",
-                    email: "Your email address must be in the format of name@domain.com",
-                    class: "Please enter class name"
+                    email: "Your email address must be in the format of name@domain.com"
                 },
                 services: {
                     minlength: jQuery.validator.format("Please select  at least {0} types of Service")
+                },
+                periods:{
+                    maxlength: "You can not enter more than 2 digits",
+                    max: "Your number of period should not be exceed than 15"
                 }
 
             },
