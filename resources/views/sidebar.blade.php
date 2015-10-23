@@ -45,13 +45,8 @@
             </a>
         </li>
         @endif
-        @if($row == 'view_subject')
-        <li>
-            <a href="searchSubjects">
-                <span class="title"> Subjects </span>
-            </a>
-        </li>
-        @endif
+
+        
         @endforeach
     </ul>
 

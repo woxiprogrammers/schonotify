@@ -139,7 +139,7 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>email:</td>
+                                <td>Email:</td>
                                 <td>
                                     <a href="">
                                         {!! Auth::User()->email !!}
@@ -147,12 +147,12 @@
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
                             <tr>
-                                <td>phone:</td>
+                                <td>Phone:</td>
                                 <td>{!! Auth::User()->mobile !!}</td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
                             <tr>
-                                <td>phone:</td>
+                                <td>Address:</td>
                                 <td>{!! Auth::User()->address !!}</td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>

@@ -41,7 +41,7 @@
                             <table class="table table-hover timetable-div-table" id="sample-table-2">
                                 <thead>
                                 <tr>
-                                    <th class="center">#</th>
+                                    <th class="center">Periods</th>
 
                                     <th class="center">Monday</th>
                                     <th class="center">Tuesday</th>
@@ -131,7 +131,7 @@
                     $(".timetable-div-table").each(function () {
 
                         var tds = '<tr>';
-                        tds+='<td>'+(j+1)+'</td>';
+                        tds+='<td class="center">'+(j+1)+'</td>';
 
                         if(arr[0].length > j)
                         {

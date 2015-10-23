@@ -44,8 +44,8 @@
                                                 <img src="./assets/images/avatar-2.jpg" alt="">
                                             </div>
                                             <div class="thread-content">
-                                                <span class="author">Nicole Bell</span>
-                                                <span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula...</span>
+                                                <span class="author">Mrs.Rossy Sharma</span>
+                                                <span class="preview">document verifications completed waiting for admission...</span>
                                                 <span class="time"> Just Now</span>
                                             </div>
                                         </div>
@@ -58,8 +58,8 @@
                                                 <img src="./assets/images/avatar-3.jpg" alt="">
                                             </div>
                                             <div class="thread-content">
-                                                <span class="author">Steven Thompson</span>
-                                                <span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula...</span>
+                                                <span class="author">Mr.Vishnu Nimangare</span>
+                                                <span class="preview">then i will be there at meeting ...</span>
                                                 <span class="time">8 hrs</span>
                                             </div>
                                         </div>
@@ -72,8 +72,8 @@
                                                 <img src="./assets/images/avatar-5.jpg" alt="">
                                             </div>
                                             <div class="thread-content">
-                                                <span class="author">Kenneth Ross</span>
-                                                <span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula...</span>
+                                                <span class="author">Mr.Debojit Boss</span>
+                                                <span class="preview">fine.. thank you!</span>
                                                 <span class="time">14 hrs</span>
                                             </div>
                                         </div>
@@ -102,11 +102,11 @@
                             My Profile
                         </a>
                     </li>
-                    <li>
+                    <!--<li>
                         <a href="/lockScreen">
                             Lock Screen
                         </a>
-                    </li>
+                    </li>-->
                     <li>
                         <a href="logout">
                             Log Out

@@ -31,7 +31,7 @@
 </div>
 
 <form action="#" role="form" class="smart-wizard" id="form">
-<div id="wizard" class="swMain">
+<div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <ul>
     <li>
