@@ -186,11 +186,6 @@
                     </div>
                 </div>
 
-                <p>
-                    <a href="javascript:void(0)" data-content="Your personal information is not required for unlawful purposes, but only in order to proceed in this tutorial" data-title="Don't worry!" data-placement="top" data-toggle="popover">
-                        Why do you need my personal information?
-                    </a>
-                </p>
             </fieldset>
 
             <div class="form-group">

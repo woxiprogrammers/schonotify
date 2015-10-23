@@ -37,7 +37,7 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <form action="#" role="form" id="form2">
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -47,12 +47,13 @@
                                             <i class="fa fa-ok"></i> Your form validation is successful!
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
+                                    <form action="#" role="form" id="form2">
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-4">
                                             <label class="control-label">
                                                 Batch <span class="symbol required"></span>
                                             </label>
-                                            <select class="form-control" id="dropdown" name="dropdown">
+                                            <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
                                                 <option value="">Select Days</option>
                                                 <option value="monday">Monday</option>
                                                 <option value="tuesday">Tuesday</option>
@@ -64,20 +65,65 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group col-md-4">
                                             <label class="control-label">
-                                                Enter class name <span class="symbol required"></span>
+                                                Number of periods: <span class="symbol required"></span>
                                             </label>
-                                            <input type="text" placeholder="Insert new class name" class="form-control" id="class" name="class">
+                                            <input type="number" min="0" max="55" class="form-control" id="periods" name="periods">
                                         </div>
-                                        <div class="form-group">
-                                            <button class="btn btn-primary btn-wide pull-right" type="submit">
+
+                                        <div class="col-md-3">
+                                            <button class="btn" style="margin:22px 0px 0px 0px;" type="submit" id="structure-create">
                                                 Create <i class="fa fa-arrow-circle-right"></i>
                                             </button>
                                         </div>
+
+
                                     </div>
 
-                            </form>
+                                    </form>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="errorHandler alert alert-danger no-display">
+                                        <i class="fa fa-times-sign"></i> You have some form errors. Please check below.
+                                    </div>
+                                    <div class="successHandler alert alert-success no-display">
+                                        <i class="fa fa-ok"></i> Your form validation is successful!
+                                    </div>
+                                    <div class="col-md-12">
+
+                                        <div class="col-md-12" id="main-div-periods">
+                                            <form>
+                                                <div class="form-group col-sm-2">
+                                                        <h4>Periods</h4>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                        <h4>Subjects</h4>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                        <h4>Description</h4>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                        <h4>Start time</h4>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <h4>End time</h4>
+                                                </div>
+                                                <div id="periods-rows"></div>
+                                                <div class="col-md-3" id="periods-structure-save-btn">
+                                                    <button class="btn btn-primary" style="margin:22px 0px 0px 0px;" type="button">
+                                                        Create <i class="fa fa-arrow-circle-right"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
 
                     </div>
@@ -119,7 +165,59 @@
         Main.init();
         FormValidator.init();
 
-    });
+        $('#dropdown').change(function(){
+            if(confirm('do you want to create structure for '+$(this).val()) == true)
+            {
+                $(this).prop('disabled',true);
+            }
+
+        });
+
+        $('#form2').on('submit',function(){
+
+            if($('#dropdown').val() !== "")
+            {
+            if($('#periods').val() !== "")
+            {
+                $('#periods').prop('disabled',true);
+                $('#structure-create').prop('disabled',true);
+                $('#periods-structure-save-btn').show();
+                $('#main-div-periods').show();
+
+                for(i=0; i< $('#periods').val(); i++)
+                {
+                    var str='<div class="form-group col-sm-2"><input type="text" class="form-control center" value="Period '+(i+1)+'" disabled>' +
+                            '</div>' +
+                            '<div class="form-group col-sm-2">' +
+                                '<select class="form-control" name="subjects" style="-webkit-appearance: menulist;">' +
+                                    '<option value="marathi">Marathi</option>' +
+                                    '<option value="hindi">Hindi</option>' +
+                                    '<option value="english">English</option>' +
+                                    '<option value="history">History</option>' +
+                                '</select>' +
+                             '</div>' +
+                             '<div class="form-group col-sm-4">' +
+                                '<input type="text" class="form-control" name="desc[]" />' +
+                             '</div>'+
+                            '<div class="form-group col-sm-2">' +
+                            '<input type="time" class="form-control" name="start"/>' +
+                            '</div>'+
+                            '<div class="form-group col-sm-2">' +
+                                '<input type="time" class="form-control" name="end"/>' +
+                            '</div>';
+                    $(str).fadeIn('slow').appendTo('#periods-rows');
+                }
+            }
+            }
+
+        });
+
+        $('#periods-structure-save-btn').hide();
+
+        $('#main-div-periods').hide();
+
+
+        });
 
     $('#batch-select').attr('disabled',true);
 

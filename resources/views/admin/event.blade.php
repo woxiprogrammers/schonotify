@@ -27,38 +27,10 @@
                         <div class="col-sm-12 space20">
                             <a href="#newFullEvent" class="btn btn-primary btn-o add-event"><i class="fa fa-plus"></i> Add New Event</a>
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                             <div id='full-calendar'></div>
                         </div>
-                        <div class="col-sm-3">
-                            <h4 class="space20">Draggable categories</h4>
-                            <div id="event-categories">
-                                <div class="event-category event-generic" data-class="generic">
-                                    Generic
-                                </div>
-                                <div class="event-category event-home" data-class="home">
-                                    Home
-                                </div>
-                                <div class="event-category event-job" data-class="job">
-                                    Job
-                                </div>
-                                <div class="event-category event-off-site-work" data-class="off-site-work">
-                                    Off-site work
-                                </div>
-                                <div class="event-category event-to-do" data-class="to-do">
-                                    To Do
-                                </div>
-                                <div class="event-category event-cancelled" data-class="cancelled">
-                                    Cancelled
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" class="grey" id="drop-remove" />
-                                        Remove after drop
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
@@ -77,14 +49,14 @@
                                         <label>
                                             Event Title
                                         </label>
-                                        <input type="text" id="event-name" placeholder="Enter title" class="form-control underline text-large" name="eventName">
+                                        <input type="text" id="event-name" style="background-color: #fff !important;" placeholder="Enter title" class="form-control underline text-large" name="eventName">
                                     </div>
                                     <div class="form-group">
                                         <label>
                                             Start
                                         </label>
 												<span class="input-icon">
-													<input type="text" id="start-date-time" class="form-control underline" name="eventStartDate"/>
+													<input type="text" id="start-date-time" style="background-color: #fff !important;"  class="form-control underline" name="eventStartDate"/>
 													<i class="ti-calendar"></i> </span>
                                     </div>
                                     <div class="form-group">
@@ -92,7 +64,7 @@
                                             End
                                         </label>
 												<span class="input-icon">
-													<input type="text" id="end-date-time" class="form-control underline" name="eventEndDate" />
+													<input type="text" id="end-date-time" style="background-color: #fff !important;"  class="form-control underline" name="eventEndDate" />
 													<i class="ti-calendar"></i> </span>
                                     </div>
                                     <div class="form-group">
