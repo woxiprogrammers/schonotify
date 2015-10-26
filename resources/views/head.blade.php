@@ -3,7 +3,7 @@
 <!-- start: HEAD -->
 <!-- start: HEAD -->
 <head>
-    <title>Clip-Two - Responsive Admin Template</title>
+    <title>VEZA</title>
     <!-- start: META -->
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
     <meta charset="utf-8" />
