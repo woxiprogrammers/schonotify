@@ -99,7 +99,7 @@ class LogController extends Controller
                 }
             }else{
                 Auth::logout();
-                Session::flash('message-error','Sorry ... Your account has been not activated');
+                Session::flash('message-error','Sorry ... Your account is not activated');
                 return Redirect::to('/');
             }
         }
