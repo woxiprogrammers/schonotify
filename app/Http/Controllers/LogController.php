@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\TeacherView;
+use App\User;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Session;
@@ -11,6 +13,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
+
+
+
 
 class LogController extends Controller
 {
@@ -62,51 +67,39 @@ class LogController extends Controller
     public function store(LoginRequest $request)
     {
 
-        if(Auth::attempt(['email'=>$request['email'],'password'=>$request['password']]))
+        $user=User::select()->where('email','=',$request['email'])->first();
+
+        if($user == NULL || !(\Hash::check($request['password'],$user->password)))
         {
-            $role_id=Auth::user()->role_id;
-
-            $id=Auth::user()->id;
-
-            if(Auth::user()->is_active == 1)
+            Session::flash('message-error','Wrong email or password');
+            return Redirect::to('/');
+        }elseif($user->is_active == 0)
+        {
+            Session::flash('message-error','Sorry ... Your account is not activated');
+            return Redirect::to('/');
+        }elseif($user->role_id == 2)
+        {
+            $view= TeacherView::select()->where('teacher_id','=',$user->id)->get();
+            foreach($view as $val)
             {
-                if($role_id == 1)
+                $web_view=$val['web_view'];
+            }
+            if($web_view == 0)
+            {
+                Session::flash('message-error','Sorry...You don`t have web access. Kindly contact to your admin.');
+                return Redirect::to('/');
+            }elseif(Auth::attempt(['email'=>$request['email'],'password'=>$request['password']]))
                 {
                     return Redirect::to('/');
-
-                }elseif($role_id == 2){
-
-                    $view= TeacherView::select()->where('teacher_id','=',$id)->get();
-
-                    foreach($view as $val)
-                    {
-                        $web_view=$val['web_view'];
-                    }
-
-                    if($web_view == 1)
-                    {
-                        return Redirect::to('/');
-                    }else{
-                        Auth::logout();
-                        Session::flash('message-error','Sorry...You don`t have web access. Kindly contact to your admin.');
-                        return Redirect::to('/');
-                    }
-
-                }else{
-                    Auth::logout();
-                    Session::flash('message-error','You are not valid user');
-                    return Redirect::to('/');
                 }
-            }else{
-                Auth::logout();
-                Session::flash('message-error','Sorry ... Your account is not activated');
-                return Redirect::to('/');
-            }
+
+        }elseif(Auth::attempt(['email'=>$request['email'],'password'=>$request['password']]))
+        {
+            return Redirect::to('/');
+        }else{
+            Session::flash('message-error','Wrong email or password');
+            return Redirect::to('/');
         }
-
-        Session::flash('message-error','Wrong email or password');
-
-        return Redirect::to('/');
 
     }
 
@@ -131,7 +124,6 @@ class LogController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -143,7 +135,6 @@ class LogController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *
