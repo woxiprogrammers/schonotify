@@ -11,6 +11,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Session;
 
 
 class UsersController extends Controller
@@ -45,6 +46,8 @@ class UsersController extends Controller
     {
 
       $role1=UserRoles::find($id);
+
+      Session::put('user_create_role',$role1->name);
         if($role1->name=='admin')
         {
             return Redirect::to('adminCreate');
