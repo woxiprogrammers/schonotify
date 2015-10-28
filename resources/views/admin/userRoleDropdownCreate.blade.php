@@ -13,13 +13,13 @@
                     @if(Auth::user()->role_id == 1)
                     @foreach($userRoles as $roles)
 
-                    <option value="{!! $roles->id !!}"  data-class="fa fa-user">{!! ucfirst($roles->name) !!}</option>
+                    <option value="{!! $roles->id !!}"  data-class="fa fa-user" @if(Session::get('user_create_role') == $roles->name) selected @endif >{!! ucfirst($roles->name) !!}</option>
 
                     @endforeach
                     @else
                     @foreach($userRoles as $roles)
                     @if($roles->name != 'admin' && $roles->name != 'teacher')
-                    <option value="{!! $roles->id !!}"  data-class="fa fa-user">{!! ucfirst($roles->name) !!}</option>
+                    <option value="{!! $roles->id !!}"  data-class="fa fa-user" @if(Session::get('user_create_role') == $roles->name) selected @endif>{!! ucfirst($roles->name) !!}</option>
                     @endif
                     @endforeach
                     @endif
