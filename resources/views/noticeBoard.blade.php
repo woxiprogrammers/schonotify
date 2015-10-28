@@ -14,7 +14,7 @@
 <div class="main-content" >
     <div class="wrap-content container" id="container">
         <!-- start: DASHBOARD TITLE -->
-        <<section id="page-title" class="padding-top-15 padding-bottom-15">
+        <section id="page-title" class="padding-top-15 padding-bottom-15">
             <div class="row">
                 <div class="col-sm-7">
                     <h1 class="mainTitle">Notice Board</h1>
