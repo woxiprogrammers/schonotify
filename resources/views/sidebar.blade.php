@@ -128,13 +128,13 @@
         </a>
     </li>
     <li>
-        <a href="javascript:void(0);">
+        <a href="noticeBoard">
             <div class="item-content">
                 <div class="item-media">
                     <i class="fa fa-bullhorn"></i>
                 </div>
                 <div class="item-inner">
-                    <span class="title"> Notifications </span>
+                    <span class="title"> Notice Board </span>
                     <span class="badge pull-right">9</span>
                 </div>
             </div>
