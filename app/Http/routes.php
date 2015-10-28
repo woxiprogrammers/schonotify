@@ -91,3 +91,5 @@ Route::get('timetable','TimetableController@index');
 Route::get('timetableShow/{id}','TimetableController@timetableShow');
 
 Route::get('createTimetable','TimetableController@create');
+
+Route::get('noticeBoard','NoticeBoardController@show');
