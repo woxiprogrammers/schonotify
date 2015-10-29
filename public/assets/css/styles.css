@@ -11443,3 +11443,8 @@ td.small-width {
     padding: 15px !important;
     margin-left: 12px !important;
 }
+
+.partition-gray{
+    background-color:#666;
+    color:#fff;
+}
