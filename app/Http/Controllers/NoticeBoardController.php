@@ -30,4 +30,8 @@ class NoticeBoardController extends Controller
 
         return $str;
     }
+    public function createNoticeBoard()
+    {
+        return view('createNoticeBoard');
+    }
 }

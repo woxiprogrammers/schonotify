@@ -95,3 +95,5 @@ Route::get('createTimetable','TimetableController@create');
 Route::get('noticeBoard','NoticeBoardController@show');
 
 Route::get('loadMore','NoticeBoardController@loadMore');
+
+Route::get('createNoticeBoard','NoticeBoardController@createNoticeBoard');
