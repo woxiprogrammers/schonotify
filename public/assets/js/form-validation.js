@@ -72,6 +72,16 @@ var FormValidator = function () {
                 },
                 batch:{
                     required:true
+                },
+
+                title: {
+                    minlength: 2,
+                    required: true
+                },
+
+                achievement:{
+                    minlength:15,
+                    required:true
                 }
 
             },
@@ -83,7 +93,10 @@ var FormValidator = function () {
                     email: "Your email address must be in the format of name@domain.com"
                 },
                 gender: "Please check a gender!",
-                batch:"please enter batch name"
+                batch:"please enter batch name",
+                achievement:{
+                    minlength:"Please enter more words."
+                }
             },
             groups: {
                 DateofBirth: "dd mm yyyy"
@@ -197,6 +210,18 @@ var FormValidator = function () {
                     min:1,
                     max:15
 
+                },
+                title: {
+                    minlength: 2,
+                    required: true
+                },
+                announcement:{
+                    minlength:15,
+                    required:true
+                },
+                userrole:{
+                    required: true,
+                    minlength: 1
                 }
 
             },
@@ -213,6 +238,13 @@ var FormValidator = function () {
                 periods:{
                     maxlength: "You can not enter more than 2 digits",
                     max: "Your number of period should not be exceed than 15"
+                },
+                announcement:{
+                    minlength:"Please enter more words."
+                },
+                userrole: {
+                    minlength: jQuery.validator.format("Please select  at least {0} user role"),
+                    required: "Please select at least one User Role"
                 }
 
             },

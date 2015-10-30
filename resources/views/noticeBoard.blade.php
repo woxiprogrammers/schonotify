@@ -19,23 +19,33 @@
                 <div class="col-sm-7">
                     <h1 class="mainTitle">Notice Board</h1>
                 </div>
-                <div class="col-sm-5">
-                    <!-- start: MINI STATS WITH SPARKLINE -->
-                    <ul class="mini-stats pull-right">
-                        <li>
-                            <div style="width:20px;height: 20px; background: #fff; border: 1px solid #ccc; float:left;"></div><label style="padding:4px;">Announcement</label>
-                        </li>
-                        <li>
-                            <div style="width:20px;height: 20px; background: #666; border: 1px solid #ccc; float: left;"></div> <label style="padding:4px;">Achievement</label>
-                        </li>
+                <ul class="mini-stats pull-right">
 
-                    </ul>
-                    <!-- end: MINI STATS WITH SPARKLINE -->
-                </div>
+                    <li>
+                        <div class="values">
+                            <a href="/createNoticeBoard" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
+                        </div>
+                    </li>
+
+                </ul>
+
             </div>
         </section>
         <!-- end: DASHBOARD TITLE -->
         <div class="container-fluid container-fullw bg-white">
+            <div class="col-sm-12">
+                <!-- start: MINI STATS WITH SPARKLINE -->
+                <ul class="mini-stats pull-right">
+                    <li>
+                        <div style="width:20px;height: 20px; background: #fff; border: 1px solid #ccc; float:left;"></div><label style="padding:4px;">Announcement</label>
+                    </li>
+                    <li>
+                        <div style="width:20px;height: 20px; background: #666; border: 1px solid #ccc; float: left;"></div> <label style="padding:4px;">Achievement</label>
+                    </li>
+
+                </ul>
+                <!-- end: MINI STATS WITH SPARKLINE -->
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div id="timeline">

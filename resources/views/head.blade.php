@@ -39,7 +39,7 @@
 
     <link href="vendor/fullcalendar/fullcalendar.min.css" rel="stylesheet" media="screen">
     <link href="vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-
+    <link rel="stylesheet" href="vendor/jquery-file-upload/css/jquery.fileupload-ui.css">
 </head>
 <!-- end: HEAD -->
 <!-- start: BODY -->
