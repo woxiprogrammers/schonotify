@@ -76,7 +76,7 @@
                                             <b>Parent Meet</b> for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
                                         </div>
                                         <div class="readmore">
-                                            <a href="#" class="btn btn-primary btn-o btn-wide">
+                                            <a href="detailAnnouncement" class="btn btn-primary btn-o btn-wide">
                                                 Read More <i class="fa fa-arrow-circle-right"></i>
                                             </a>
                                         </div>
@@ -109,7 +109,7 @@
                                             </div>
                                         </div>
                                         <div class="readmore">
-                                            <a href="#" class="btn btn-transparent-white">
+                                            <a href="detailAchievement" class="btn btn-transparent-white">
                                                 Read More <i class="fa fa-arrow-circle-right"></i>
                                             </a>
                                         </div>

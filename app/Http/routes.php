@@ -97,3 +97,7 @@ Route::get('noticeBoard','NoticeBoardController@show');
 Route::get('loadMore','NoticeBoardController@loadMore');
 
 Route::get('createNoticeBoard','NoticeBoardController@createNoticeBoard');
+
+Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
+
+Route::get('detailAchievement','NoticeBoardController@detailAchievement');
