@@ -34,4 +34,13 @@ class NoticeBoardController extends Controller
     {
         return view('createNoticeBoard');
     }
+
+    public function detailAnnouncement()
+    {
+        return view('detailAnnouncement');
+    }
+    public function detailAchievement()
+    {
+        return view('detailAchievement');
+    }
 }

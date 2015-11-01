@@ -283,12 +283,6 @@
 
 
 
-
-
-
-
-
-
 <script id="template-upload" type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-upload fade">
