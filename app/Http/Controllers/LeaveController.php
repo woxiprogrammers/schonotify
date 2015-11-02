@@ -8,6 +8,11 @@ use App\Http\Controllers\Controller;
 
 class LeaveController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function leaveListing()
     {
         return view('leaveListing');
