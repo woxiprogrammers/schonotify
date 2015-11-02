@@ -101,3 +101,7 @@ Route::get('createNoticeBoard','NoticeBoardController@createNoticeBoard');
 Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
 
 Route::get('detailAchievement','NoticeBoardController@detailAchievement');
+
+Route::get('leaveListing','LeaveController@leaveListing');
+
+Route::get('detailedLeave','LeaveController@detailedLeave');
