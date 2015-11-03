@@ -19,7 +19,7 @@
                     <div class="col-sm-7">
                         <h1 class="mainTitle">Notice Board</h1>
                     </div>
-                    <ul class="mini-stats pull-right">
+                    <ul class="mini-stats col-sm-2 pull-right">
 
                         <li>
                             <div class="values">

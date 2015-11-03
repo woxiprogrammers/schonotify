@@ -74,42 +74,11 @@
                                         </div>
                                      </div>
 
-                                    <div class="col-sm-12">
-                                        <div class="form-group col-sm-4">
-                                            <label for="form-field-select-2">
-                                                Select Batch
-                                            </label>
-                                            <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
-                                                <option value="1">morning</option>
-                                                <option value="2">evening</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-sm-4" id="class-select-div">
-                                            <label for="form-field-select-2">
-                                                Select Class
-                                            </label>
-                                            <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
-                                                <option value="1">first</option>
-                                                <option value="2">second</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-sm-4" id="division-select-div">
-                                            <label for="form-field-select-2">
-                                                Select Division
-                                            </label>
-                                            <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
-                                                <option value="1">A</option>
-                                                <option value="2">B</option>
-                                                <option value="3">C</option>
-                                                <option value="4">D</option>
-                                                <option value="5">E</option>
-                                            </select>
-                                        </div>
-                                    </div>
+
 
                                     <div class="col-md-12">
 
-                                        <div class="form-group">
+                                        <div class="form-group col-sm-4">
                                             <label class="control-label">
                                                 User Roles <em>(select at least one)</em> <span class="symbol required"></span>
                                             </label>
@@ -120,17 +89,12 @@
                                                 </label>
                                             </div>
                                             <div class="checkbox clip-check check-primary">
-                                                <input type="checkbox" value="" name="userrole" id="service2">
+                                                <input type="checkbox" value="" name="userrole" class="parentChk" id="service2">
                                                 <label for="service2">
                                                     Parent
                                                 </label>
                                             </div>
-                                            <div class="checkbox clip-check check-primary">
-                                                <input type="checkbox" value="" name="userrole" id="service3">
-                                                <label for="service3">
-                                                    Student
-                                                </label>
-                                            </div>
+
                                             <div class="checkbox clip-check check-primary">
                                                 <input type="checkbox" value="" name="userrole" id="service4">
                                                 <label for="service4">
@@ -138,11 +102,88 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="col-sm-6" id="parentClass">
+                                            <div class="form-group">
+                                                <label for="form-field-select-2">
+                                                    Select Batch
+                                                </label>
+                                                <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                                                    <option value="1">morning</option>
+                                                    <option value="2">evening</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Class <em>(select at least one)</em> <span class="symbol required"></span>
+                                                </label>
+
+                                                <div class="checkbox clip-check check-primary">
+                                                    <input type="checkbox" value="" class="classFirst" id="service5">
+                                                    <label for="service5">
+                                                        First
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                                    <input type="checkbox" value="" class="FirstDiv" id="service6" >
+                                                    <label for="service6">
+                                                        A
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                                    <input type="checkbox" value="" class="FirstDiv" id="service7" >
+                                                    <label for="service7">
+                                                        B
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                                    <input type="checkbox" value="" class="FirstDiv" id="service8">
+                                                    <label for="service8">
+                                                        C
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="checkbox clip-check check-primary">
+                                                    <input type="checkbox" value="" class="classSecond" id="service9">
+                                                    <label for="service9">
+                                                        Second
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                                    <input type="checkbox" value="" class="SecondDiv" id="service10" >
+                                                    <label for="service10">
+                                                        A
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                                    <input type="checkbox" value="" class="SecondDiv"  id="service11" >
+                                                    <label for="service11">
+                                                        B
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                                    <input type="checkbox" value="" class="SecondDiv"  id="service12">
+                                                    <label for="service12">
+                                                        C
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                                    <input type="checkbox" value="" class="SecondDiv"  id="service13">
+                                                    <label for="service13">
+                                                        D
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                         <div class="col-md-12">
                                         <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                            Register <i class="fa fa-arrow-circle-right"></i>
+                                            Create <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
                                  </div>
@@ -228,7 +269,7 @@
 
                                     <div class="col-md-12">
                                         <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                            Register <i class="fa fa-arrow-circle-right"></i>
+                                            Create <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
 
@@ -404,7 +445,52 @@
     jQuery(document).ready(function() {
         Main.init();
         FormValidator.init();
+
+        $('#parentClass').hide();
+
+        if($('.parentChk').prop('checked') == true)
+        {
+            $('#parentClass').show();
+        }
     });
+
+
+    $('.parentChk').change(function(){
+        if($(this).prop('checked') == true)
+        {
+            $('#parentClass').show();
+        }else{
+            $('#parentClass').hide();
+        }
+    });
+
+    $('.classFirst').change(function(){
+        if($(this).prop('checked') == true)
+        {
+            $('.FirstDiv').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"
+            });
+        }else{
+            $('.FirstDiv').each(function() { //loop through each checkbox
+                this.checked = false;  //select all checkboxes with class "checkbox1"
+            });
+        }
+    });
+
+    $('.classSecond').change(function(){
+        if($(this).prop('checked') == true)
+        {
+            $('.SecondDiv').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"
+            });
+        }else{
+            $('.SecondDiv').each(function() { //loop through each checkbox
+                this.checked = false;  //select all checkboxes with class "checkbox1"
+            });
+        }
+    });
+
+
 </script>
 
 
