@@ -19,15 +19,7 @@
                     <div class="col-sm-7">
                         <h1 class="mainTitle">Leave</h1>
                     </div>
-                    <ul class="mini-stats pull-right">
 
-                        <li>
-                            <div class="values">
-                                <a href="/createNoticeBoard" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
-                            </div>
-                        </li>
-
-                    </ul>
 
                 </div>
             </section>
@@ -42,12 +34,12 @@
                                     <div class="panel-heading">
 
                                         <div class="timeline_title">
-                                            <i class="fa fa-motorcycle fa-2x pull-left fa-border"></i>
+                                            <i class="fa fa-pencil-square-o fa-2x pull-left fa-border"></i>
                                             <h4 class="panel-title no-margin text-primary" style="padding: 14px;">Applying leave for two days</h4>
                                             <h5 style=" background-color: rgb(0, 122, 255);color: #fff;padding: 10px;">
                                                 <strong>Student Name:</strong>
                                                     <i> Aadarsh Varma</i>
-                                                <small class="label label-sm label-inverse">Roll No. : 202</small>
+                                                <small class="label label-sm label-white">Roll No. : 202</small>
 
                                                     <p class="pull-right">
                                                         <strong>Batch :</strong> <i>Morning</i>
