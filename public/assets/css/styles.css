@@ -11459,3 +11459,9 @@ td.small-width {
     position: absolute;
     width: 52px;
 }
+
+.label-white
+{
+    background-color:#fff;
+    color:#666;
+}

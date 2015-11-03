@@ -144,11 +144,24 @@
         <a href="leaveListing">
             <div class="item-content">
                 <div class="item-media">
-                    <i class="fa fa-motorcycle"></i>
+                    <i class="fa fa-pencil-square-o"></i>
                 </div>
                 <div class="item-inner">
                     <span class="title"> Leaves </span>
                     <span class="badge pull-right">9</span>
+                </div>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="homeworkListing">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-pencil-square-o"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title"> Homework </span>
+                    <span class="badge pull-right">7</span>
                 </div>
             </div>
         </a>
