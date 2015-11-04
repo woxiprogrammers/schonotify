@@ -105,3 +105,9 @@ Route::get('detailAchievement','NoticeBoardController@detailAchievement');
 Route::get('leaveListing','LeaveController@leaveListing');
 
 Route::get('detailedLeave','LeaveController@detailedLeave');
+
+Route::get('homeworkListing','HomeworkController@homeworkListing');
+
+Route::get('detailedHomework','HomeworkController@detailedHomework');
+
+Route::get('createHomework','HomeworkController@createHomework');
