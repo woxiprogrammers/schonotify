@@ -61,13 +61,14 @@
                     </label>
                     <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px; margin-bottom: 8px;"></textarea>
                 </div>
-                <div class="form-group">
+                <div>
                     <label class="control-label">
                         Upload Document
                     </label>
                     <div id="wrapper">
                         <input id="input" size="1" type="file" />
                     </div>
+                    <br>
                 </div>
 
                 <div class="form-group">
