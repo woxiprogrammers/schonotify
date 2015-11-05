@@ -126,12 +126,13 @@
 
                 }
 
-                for(var j=0; j<maxlength; j++)
+                for(var j=0; j<=maxlength; j++)
                 {
                     $(".timetable-div-table").each(function () {
 
                         var tds = '<tr>';
                         tds+='<td class="center">'+(j+1)+'</td>';
+
 
                         if(arr[0].length > j)
                         {
@@ -142,7 +143,12 @@
                                 tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[0][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
-                            tds+='<td></td>';
+                            if(arr[0].length==j)
+                            {
+                                tds+='<td style="text-align: center;"><a href="" class="btn btn-default" style="border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td></td>';
+                            }
                         }
                         if(arr[1].length > j)
                         {
@@ -153,7 +159,12 @@
                                 tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[1][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
-                            tds+='<td></td>';
+                            if(arr[1].length==j)
+                            {
+                                tds+='<td style="text-align: center;"><a href="" class="btn btn-default" style="border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td></td>';
+                            }
                         }
 
                         if(arr[2].length > j)
@@ -165,7 +176,12 @@
                                 tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[2][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
-                            tds+='<td></td>';
+                            if(arr[2].length==j)
+                            {
+                                tds+='<td style="text-align: center;"><a href="" class="btn btn-default" style="border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td></td>';
+                            }
                         }
 
                         if(arr[3].length > j)
@@ -177,7 +193,12 @@
                                 tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[3][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
-                            tds+='<td></td>';
+                            if(arr[3].length==j)
+                            {
+                                tds+='<td style="text-align: center;"><a href="" class="btn btn-default" style="border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td></td>';
+                            }
                         }
 
                         if(arr[4].length > j)
@@ -189,7 +210,12 @@
                                 tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[4][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
-                            tds+='<td></td>';
+                            if(arr[4].length==j)
+                            {
+                                tds+='<td style="text-align: center;"><a href="" class="btn btn-default" style="border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td></td>';
+                            }
                         }
                         if(arr[5].length > j)
                         {
@@ -201,7 +227,12 @@
                                 tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[5][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
-                            tds+='<td></td>';
+                            if(arr[5].length==j)
+                            {
+                                tds+='<td style="text-align: center;"><a href="" class="btn btn-default" style="border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td></td>';
+                            }
                         }
 
                         if(arr[6].length > j)
@@ -214,15 +245,25 @@
                                 tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[6][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
-                            tds+='<td></td>';
+                            if(arr[6].length==j)
+                            {
+                                tds+='<td style="text-align: center;"><a href="" class="btn btn-default" style="border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td></td>';
+                            }
                         }
+
+
+
                         tds += '</tr>';
+
                         if ($('tbody', this).length > 0) {
                             $('tbody', this).append(tds);
                         } else {
                             $(this).append(tds);
                         }
                     });
+
                 }
                }else{
                    $('#timetable-create-btn').show();
