@@ -45,8 +45,12 @@
             </a>
         </li>
         @endif
-
         @endforeach
+        <li>
+            <a href="searchSubjects">
+                <span class="title"> Subjects  </span>
+            </a>
+        </li>
     </ul>
 
 </li>
