@@ -157,7 +157,7 @@
         <a href="homeworkListing">
             <div class="item-content">
                 <div class="item-media">
-                    <i class="fa fa-pencil-square-o"></i>
+                    <i class="fa fa-book"></i>
                 </div>
                 <div class="item-inner">
                     <span class="title"> Homework </span>
