@@ -149,7 +149,14 @@
 <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
-
+    <script src="vendor/maskedinput/jquery.maskedinput.min.js"></script>
+    <script src="vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="vendor/autosize/autosize.min.js"></script>
+    <script src="vendor/selectFx/classie.js"></script>
+    <script src="vendor/selectFx/selectFx.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
@@ -159,11 +166,15 @@
     <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 
     <script src="assets/js/form-validation.js"></script>
+    <script src="assets/js/form-elements.js"></script>
+
+
 
 <script>
     $(document).ready(function(){
         Main.init();
         FormValidator.init();
+
 
         $('#dropdown').change(function(){
             if(confirm('do you want to create structure for '+$(this).val()) == true)
@@ -184,6 +195,7 @@
                 $('#periods-structure-save-btn').show();
                 $('#main-div-periods').show();
 
+
                 for(i=0; i< $('#periods').val(); i++)
                 {
                     var str='<div class="form-group col-sm-2"><input type="text" class="form-control center" value="Period '+(i+1)+'" disabled>' +
@@ -200,14 +212,17 @@
                                 '<input type="text" class="form-control" name="desc[]" />' +
                              '</div>'+
                             '<div class="form-group col-sm-2">' +
-                            '<input type="time" class="form-control" name="start"/>' +
+                            '<input type="time" class="form-control" />' +
                             '</div>'+
                             '<div class="form-group col-sm-2">' +
-                                '<input type="time" class="form-control" name="end"/>' +
+                                '<input type="time" class="form-control" />' +
                             '</div>';
                     $(str).fadeIn('slow').appendTo('#periods-rows');
+
                 }
+
             }
+
             }
 
         });
