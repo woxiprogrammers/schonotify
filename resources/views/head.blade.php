@@ -40,6 +40,11 @@
     <link href="vendor/fullcalendar/fullcalendar.min.css" rel="stylesheet" media="screen">
     <link href="vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="vendor/jquery-file-upload/css/jquery.fileupload-ui.css">
+
+    <link href="vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" media="screen">
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="screen">
+    <link href="vendor/bootstrap-datepicker/bootstrap-datepicker3.standalone.min.css" rel="stylesheet" media="screen">
+    <link href="vendor/bootstrap-timepicker/bootstrap-timepicker.min.css" rel="stylesheet" media="screen">
 </head>
 <!-- end: HEAD -->
 <!-- start: BODY -->
