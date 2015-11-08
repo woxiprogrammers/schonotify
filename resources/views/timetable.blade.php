@@ -76,46 +76,102 @@
             <div class="modal-content">
                 <form class="form-full-event">
                     <div class="modal-body">
-                        <div class="form-group hidden">
-                            <label>
-                                ID
-                            </label>
-                            <input type="text" id="event-id">
-                        </div>
+                        <div id="createper">
                         <div class="form-group">
-                            <label>
-                                Event Title
-                            </label>
-                            <input type="text" id="event-name" placeholder="Enter title" class="form-control underline text-large" name="eventName">
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                Start
-                            </label>
-												<span class="input-icon">
-													<input type="text" id="start-date-time" class="form-control underline" name="eventStartDate"/>
-													<i class="ti-calendar"></i> </span>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                End
-                            </label>
-												<span class="input-icon">
-													<input type="text" id="end-date-time" class="form-control underline" name="eventEndDate" />
-													<i class="ti-calendar"></i> </span>
+
+                            <h4>Do you want <a id="copyStructure" class="btn btn-primary">Copy Structure</a></h4>
+                            <p class="center">OR</p>
+                            <h4>Create Period</h4>
                         </div>
                         <div class="form-group">
 
+                            <label>
+                                Enter Period Number
+                            </label>
+                            <input class="form-control" type="number" name="quantity" min="1" max="7">
                         </div>
+
+                        <div class="form-group">
+                            <label>
+                                Select Subject
+                            </label>
+                            <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
+                                <option value="1">Marathi</option>
+                                <option value="2">History</option>
+                                <option value="3">Hindi</option>
+                                <option value="4">Maths</option>
+                                <option value="5">English</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                               Select Teacher
+                            </label>
+                            <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
+                                <option value="1">Mr. Sharma</option>
+                                <option value="2">Mr. Patil</option>
+                                <option value="3">Mrs. Sali</option>
+                                <option value="4">Mrs. Gupta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Start Time
+                            </label>
+
+                            <input type="time" class="form-control"/>
+
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                End Time
+                            </label>
+                            <input type="time" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Resses
+                            </label>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="checkbox8">
+                                <label for="checkbox8">
+                                    Is A Break
+                                </label>
+
+                            </div>
+                        </div>
+                        </div>
+
+                        <div id="copystr">
+                            <div class="form-group">
+                                <h4>Do you want <a id="createPeriod" class="btn btn-primary pull-right">Create Period</a></h4>
+                                <p class="center">OR</p>
+                                <h4>Copy Structure</h4>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    Select Available Day Structure
+                                </label>
+                                <select class="form-control" id="day-select" style="-webkit-appearance: menulist;" onchange="confirm('Do you want to create structure same as '+this.value)">
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-danger btn-o delete-event">
-                            Delete
+                            Cancel
                         </button>
                         <button class="btn btn-primary btn-o save-event" type="submit">
-                            Save
+                            Create
                         </button>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -182,6 +238,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button class="btn btn-danger btn-o btn-danger pull-left" data-dismiss="modal" onclick="confirm('Are you sure to delete this period?')">
+                            Delete
+                        </button>
                         <button class="btn btn-danger btn-o " data-dismiss="modal">
                             Cancel
                         </button>
@@ -217,6 +276,18 @@
         $(document).ready(function(){
             Main.init();
             showTimetable(1);
+
+            $('#copystr').hide();
+        });
+
+        $('#createPeriod').click(function(){
+            $('#createper').show();
+            $('#copystr').hide();
+        });
+
+        $('#copyStructure').click(function(){
+            $('#createper').hide();
+            $('#copystr').show();
         });
 
         function showTimetable(val)
@@ -265,7 +336,7 @@
                             {
                                 tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[0][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-info">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
                             }else{
-                                tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[0][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
+                                tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
                             if(arr[0].length==j)
@@ -281,7 +352,7 @@
                             {
                                 tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                             }else{
-                                tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[1][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
+                                tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
                             if(arr[1].length==j)
@@ -298,7 +369,7 @@
                             {
                                 tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[2][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[2][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
                             }else{
-                                tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[2][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
+                                tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[2][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
                             if(arr[2].length==j)
@@ -315,7 +386,7 @@
                             {
                                 tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[3][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[3][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
                             }else{
-                                tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[3][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
+                                tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[3][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
                             if(arr[3].length==j)
@@ -332,7 +403,7 @@
                             {
                                 tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[4][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[4][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
                             }else{
-                                tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[4][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
+                                tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[4][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
                             if(arr[4].length==j)
@@ -349,7 +420,7 @@
                             {
                                 tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[5][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[5][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
                             }else{
-                                tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[5][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
+                                tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[5][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
                             if(arr[5].length==j)
@@ -367,7 +438,7 @@
                             {
                                 tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[6][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
                             }else{
-                                tds+='<td><div class="outer-div-tm lunch"><h4 class="center">'+ arr[6][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
+                                tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right" style="margin-right: 5px; color: #666;"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
                             }
                         }else{
                             if(arr[6].length==j)
@@ -377,7 +448,6 @@
                                 tds+='<td></td>';
                             }
                         }
-
 
                         tds += '</tr>';
 

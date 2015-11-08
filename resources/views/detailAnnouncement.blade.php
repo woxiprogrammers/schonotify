@@ -107,7 +107,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">
-                                    Type Description <span class="symbol required"></span>
+                                    Description <span class="symbol required"></span>
                                 </label>
                                 <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px;">Parent Meet for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
                                     Venue:
@@ -120,7 +120,7 @@
                         </div>
 
 
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="margin-top: 8px;">
 
                             <div class="form-group col-sm-4">
                                 <label class="control-label">
@@ -146,7 +146,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-sm-6" id="parentClass">
+                            <div class="col-sm-6" id="parentClass" style="border: 1px solid #ccc;">
                                 <div class="form-group">
                                     <label for="form-field-select-2">
                                         Select Batch

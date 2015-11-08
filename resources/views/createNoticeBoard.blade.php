@@ -102,7 +102,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6" id="parentClass">
+                                        <div class="col-sm-6" id="parentClass" style="border: 1px solid #ccc;">
                                             <div class="form-group">
                                                 <label for="form-field-select-2">
                                                     Select Batch
