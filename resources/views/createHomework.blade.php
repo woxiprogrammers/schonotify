@@ -51,13 +51,24 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">
+                        Homework Type <span class="symbol required"></span>
+                    </label>
+                    <select class="form-control" style="-webkit-appearance: menulist;">
+                        <option value="1">Assignment</option>
+                        <option value="2">Quiz</option>
+                        <option value="3">Class Test</option>
+                        <option value="4">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
                         Title <span class="symbol required"></span>
                     </label>
                     <input type="text" placeholder="Insert Title" class="form-control" id="title" name="title">
                 </div>
                 <div class="form-group">
                     <label class="control-label">
-                        Type Description <span class="symbol required"></span>
+                        Description <span class="symbol required"></span>
                     </label>
                     <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px; margin-bottom: 8px;"></textarea>
                 </div>
@@ -71,7 +82,7 @@
                     <br>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group col-sm-5">
                     <label class="control-label">
                         Due Date <span class="symbol required"></span>
                     </label>
@@ -96,15 +107,16 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">
-                            Class <em>(select at least one)</em> <span class="symbol required"></span>
+                            Class <span class="symbol required"></span>
                         </label>
-
-                        <div class="checkbox clip-check check-primary">
-                            <input type="checkbox" value="" class="classFirst" id="service5" >
-                            <label for="service5">
-                                First
-                            </label>
-                        </div>
+                        <select class="form-control" style="-webkit-appearance: menulist;">
+                            <option value="1">First</option>
+                            <option value="2">Second</option>
+                            <option value="3">Third</option>
+                            <option value="4">Fourth</option>
+                            <option value="5">Fifth</option>
+                            <option value="6">Sixth</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <div class="checkbox clip-check check-primary checkbox-inline">
@@ -126,43 +138,10 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="checkbox clip-check check-primary">
-                            <input type="checkbox" value="" class="classSecond" id="service9">
-                            <label for="service9">
-                                Second
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv" id="service10" >
-                            <label for="service10">
-                                A
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv"  id="service11" >
-                            <label for="service11">
-                                B
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv"  id="service12">
-                            <label for="service12">
-                                C
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv"  id="service13">
-                            <label for="service13">
-                                D
-                            </label>
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
-
 
 
             <div class="col-md-12 form-group" id="tableContent2">
@@ -173,7 +152,7 @@
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
                     <tr>
-                        <th><input type="checkbox" class="allCheckedStud"/></th>
+                        <th><input type="checkbox" class="allCheckedStud" checked/></th>
                         <th>Roll No.</th>
                         <th>Name</th>
                     </tr>
@@ -215,10 +194,15 @@
                 </table>
 
             </div>
+
                 <div class="col-md-12 form-group">
 
-                <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit">
-                    Create <i class="fa fa-arrow-circle-right"></i>
+                        <button class="btn btn-wide btn-primary ladda-button" data-style="expand-left" type="button">
+                            <span class="ladda-label">Save</span>
+                            <span class="ladda-spinner"></span><span class="ladda-spinner"></span></button>
+
+                <button class="btn btn-primary btn-wide pull-right" type="button" id="btnSubmit">
+                    Publish
                 </button>
 
                 </div>
@@ -265,6 +249,9 @@
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 <script src="assets/js/form-elements.js"></script>
+<script src="vendor/ladda-bootstrap/spin.min.js"></script>
+<script src="vendor/ladda-bootstrap/ladda.min.js"></script>
+<script src="assets/js/ui-buttons.js"></script>
 
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
@@ -272,6 +259,14 @@
         Main.init();
         TableData.init();
         FormElements.init();
+        UIButtons.init();
+
+        if($('.allCheckedStud').prop('checked') == true)
+        {
+            $('.checkedStud').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"
+            });
+        }
 
     });
 

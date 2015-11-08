@@ -49,6 +49,7 @@
                                             </h5>
                                         </div>
                                         <div class="panel-tools">
+                                            <i class="fa fa-clock-o"></i> Wednesday 12 Nov, 2015 12:00 PM
                                             <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="ti-reload"></i></a>
                                         </div>
                                     </div>
@@ -73,7 +74,7 @@
                                     </div>
                                     <div class="panel-footer col-sm-12">
 
-                                        Applicant :<h4>Mr. Naveen Sharma <small class="pull-right"><i class="fa fa-clock-o"></i> Wednesday 2 Oct, 2015 1:00 PM</small></h4>
+                                        Applicant :<h4>Mr. Naveen Sharma </h4>
 
                                         <div class="col-md-12">
                                             <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">

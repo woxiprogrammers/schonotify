@@ -58,6 +58,7 @@
                     </h5>
                 </div>
                 <div class="panel-tools">
+                    <i class="fa fa-clock-o"></i> Wednesday 12 Nov, 2015 12:00 PM
                     <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="ti-reload"></i></a>
                 </div>
             </div>
@@ -73,8 +74,7 @@
                     <br>
                     <br>
                     <address>
-                    Date : 12 Nov, 2015 12:00 PM
-                        <br>
+
                     Due Date:
                          14 Nov, 2015 6:00 PM
                     </address>
@@ -83,7 +83,7 @@
             </div>
             <div class="panel-footer col-sm-12">
 
-                <h4><small>Created By: </small> Mrs. Archana Singh <small class="pull-right"><i class="fa fa-clock-o"></i> Wednesday 2 Oct, 2015 1:00 PM</small></h4>
+                <h4><small>Created By: </small> Mrs. Archana Singh </h4>
 
                 <div class="col-md-12" id="btnDiv">
                     <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
@@ -125,13 +125,25 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">
+                        Homework Type <span class="symbol required"></span>
+                    </label>
+                    <select class="form-control" style="-webkit-appearance: menulist;">
+                        <option value="1">Assignment</option>
+                        <option value="2">Quiz</option>
+                        <option value="3">Class Test</option>
+                        <option value="4">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
                         Title <span class="symbol required"></span>
                     </label>
                     <input type="text" placeholder="Insert Title" class="form-control" id="title" name="title" value="Complete the all questions mentioned in file">
                 </div>
+
                 <div class="form-group">
                     <label class="control-label">
-                        Type Description <span class="symbol required"></span>
+                        Description <span class="symbol required"></span>
                     </label>
                     <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px; margin-bottom: 8px;">This file contains few multiple choice question on chapter 1 & 3.</textarea>
                 </div>
@@ -144,7 +156,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group col-sm-5">
                     <label class="control-label">
                         Due Date <span class="symbol required"></span>
                     </label>
@@ -170,15 +182,16 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">
-                            Class <em>(select at least one)</em> <span class="symbol required"></span>
+                            Class <span class="symbol required"></span>
                         </label>
-
-                        <div class="checkbox clip-check check-primary">
-                            <input type="checkbox" value="" class="classFirst" id="service5" checked>
-                            <label for="service5">
-                                First
-                            </label>
-                        </div>
+                        <select class="form-control" style="-webkit-appearance: menulist;">
+                            <option value="1">First</option>
+                            <option value="2">Second</option>
+                            <option value="3">Third</option>
+                            <option value="4">Fourth</option>
+                            <option value="5">Fifth</option>
+                            <option value="6">Sixth</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <div class="checkbox clip-check check-primary checkbox-inline">
@@ -187,7 +200,7 @@
                                 A
                             </label>
                         </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
+                        <div class="checkbox clip-check check-primary checkbox-inline" >
                             <input type="checkbox" value="" class="FirstDiv" id="service7" >
                             <label for="service7">
                                 B
@@ -197,40 +210,6 @@
                             <input type="checkbox" value="" class="FirstDiv" id="service8">
                             <label for="service8">
                                 C
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox clip-check check-primary">
-                            <input type="checkbox" value="" class="classSecond" id="service9">
-                            <label for="service9">
-                                Second
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv" id="service10" >
-                            <label for="service10">
-                                A
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv"  id="service11" >
-                            <label for="service11">
-                                B
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv"  id="service12">
-                            <label for="service12">
-                                C
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="SecondDiv"  id="service13">
-                            <label for="service13">
-                                D
                             </label>
                         </div>
                     </div>
