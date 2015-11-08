@@ -48,6 +48,7 @@ var Calendar = function() {"use strict";
 			eventInputDateHandler();
 			$(".form-full-event #event-id").val("");
 			$('.events-modal').modal();
+            $('#delBtn').hide();
 		});
 		$('.events-modal').on('hide.bs.modal', function(event) {
 			$(".form-full-event #event-id").val("");
@@ -127,7 +128,9 @@ var Calendar = function() {"use strict";
 				$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
 				$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
 				$(".event-categories[value='job']").prop('checked', true);
+                $('#delBtn').show();
 				$('.events-modal').modal();
+
 			},
 			eventClick: function(calEvent, jsEvent, view) {
 				eventInputDateHandler();
@@ -144,6 +147,7 @@ var Calendar = function() {"use strict";
 						} else {
 							eventCategory = demoCalendar[i].category;
 						}
+                        $('#delBtn').show();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
 

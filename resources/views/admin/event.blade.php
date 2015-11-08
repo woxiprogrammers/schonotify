@@ -53,7 +53,7 @@
                                         <label>
                                             Event Details
                                         </label>
-                                        <input type="text" id="event-name" style="background-color: #fff !important;" placeholder="Enter Description" class="form-control underline text-large" name="eventName">
+                                        <textarea class="form-control" id="event-name" name="eventName"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>
@@ -108,16 +108,7 @@
                                                         <span class="fileupload-loading"></span>
                                                     </div>
                                                     <!-- The global progress information -->
-                                                    <div class="col-lg-5 fileupload-progress fade">
-                                                        <!-- The global progress bar -->
-                                                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                                                            <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-                                                        </div>
-                                                        <!-- The extended global progress information -->
-                                                        <div class="progress-extended">
-                                                            &nbsp;
-                                                        </div>
-                                                    </div>
+
                                                 </div>
 
                                             </div>
@@ -129,7 +120,11 @@
                                         Publish
                                     </button>
 
-                                    <button class="btn btn-danger btn-o delete-event">
+                                    <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
+                                        Cancel
+                                    </button>
+
+                                    <button class="btn btn-danger btn-o delete-event" id="delBtn">
                                         Delete
                                     </button>
                                     <button class="btn btn-primary btn-o save-event" type="submit">
@@ -295,6 +290,7 @@
         jQuery(document).ready(function() {
             Main.init();
             Calendar.init();
+
         });
 
 </script>
