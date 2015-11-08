@@ -44,7 +44,7 @@
 
                                 <div class="timeline_title">
                                     <i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>
-                                    <h4 class="panel-title no-margin text-primary" style="padding: 14px;">PARENT MEET FOR THIS MONTH</h4>
+                                    <h4 class="panel-title no-margin text-primary padding-15">PARENT MEET FOR THIS MONTH</h4>
                                 </div>
                                 <div class="panel-tools">
                                     <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="ti-reload"></i></a>
@@ -120,7 +120,7 @@
                         </div>
 
 
-                        <div class="col-md-12" style="margin-top: 8px;">
+                        <div class="col-md-12 margin-top-10">
 
                             <div class="form-group col-sm-4">
                                 <label class="control-label">
@@ -146,7 +146,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-sm-6" id="parentClass" style="border: 1px solid #ccc;">
+                            <div class="col-sm-6 panel panel-white" id="parentClass">
                                 <div class="form-group">
                                     <label for="form-field-select-2">
                                         Select Batch
