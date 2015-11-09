@@ -144,7 +144,7 @@
 
                         <div id="copystr">
                             <div class="form-group">
-                                <h4>Do you want <a id="createPeriod" class="btn btn-primary pull-right">Create Period</a></h4>
+                                <h4>Do you want <a id="createPeriod" class="btn btn-primary">Create Period</a></h4>
                                 <p class="center">OR</p>
                                 <h4>Copy Structure</h4>
                             </div>
@@ -226,7 +226,7 @@
                         </div>
                         <div class="form-group">
                             <label>
-                                Resses
+                                Recess
                             </label>
                             <div class="checkbox clip-check check-primary">
                                 <input type="checkbox" id="checkbox8">

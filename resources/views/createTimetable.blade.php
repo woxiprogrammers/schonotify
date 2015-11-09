@@ -51,7 +51,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group col-md-4">
                                             <label class="control-label">
-                                                Batch <span class="symbol required"></span>
+                                                Day <span class="symbol required"></span>
                                             </label>
                                             <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
                                                 <option value="">Select Days</option>
@@ -116,6 +116,8 @@
                                                         Create <i class="fa fa-arrow-circle-right"></i>
                                                     </button>
                                                 </div>
+
+
                                             </form>
                                         </div>
 
@@ -169,12 +171,10 @@
     <script src="assets/js/form-elements.js"></script>
 
 
-
 <script>
     $(document).ready(function(){
         Main.init();
         FormValidator.init();
-
 
         $('#dropdown').change(function(){
             if(confirm('do you want to create structure for '+$(this).val()) == true)
@@ -212,14 +212,25 @@
                                 '<input type="text" class="form-control" name="desc[]" />' +
                              '</div>'+
                             '<div class="form-group col-sm-2">' +
-                            '<input type="time" class="form-control" />' +
+
+                            '<div class="input-group bootstrap-timepicker timepicker">'+
+                                '<input id="timepicker1" type="text" class="form-control input-small timepicker1">'+
+                                    '<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>'+
+                             '</div>'+
+
                             '</div>'+
                             '<div class="form-group col-sm-2">' +
-                                '<input type="time" class="form-control" />' +
+                                '<div class="input-group bootstrap-timepicker timepicker">'+
+                                '<input id="timepicker1" type="text" class="form-control input-small timepicker1">'+
+                                '<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>'+
+                            '</div>'+
                             '</div>';
                     $(str).fadeIn('slow').appendTo('#periods-rows');
 
+
                 }
+
+                $('.timepicker').each($('.timepicker1').timepicker());
 
             }
 
@@ -231,8 +242,9 @@
 
         $('#main-div-periods').hide();
 
-
         });
+
+
 
     $('#batch-select').attr('disabled',true);
 
