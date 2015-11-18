@@ -128,9 +128,8 @@ var Calendar = function() {"use strict";
 				$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
 				$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
 				$(".event-categories[value='job']").prop('checked', true);
-                $('#delBtn').show();
+                $('#delBtn').hide();
 				$('.events-modal').modal();
-
 			},
 			eventClick: function(calEvent, jsEvent, view) {
 				eventInputDateHandler();

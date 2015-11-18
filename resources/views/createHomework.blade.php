@@ -81,20 +81,15 @@
                     </div>
                     <br>
                 </div>
-
-                <div class="form-group col-sm-5">
-                    <label class="control-label">
-                        Due Date <span class="symbol required"></span>
-                    </label>
-                    <input class="form-control datepicker" type="text">
-
-                </div>
             </div>
-
-
-            <div class="col-md-12">
-
+            <div class="form-group">
                 <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Due Date <span class="symbol required"></span>
+                        </label>
+                        <input class="form-control datepicker" type="text">
+                    </div>
                     <h4>Assign Homework to: </h4>
                     <div class="form-group">
                         <label for="form-field-select-2">
@@ -138,17 +133,12 @@
                             </label>
                         </div>
                     </div>
-
-
                 </div>
             </div>
-
-
             <div class="col-md-12 form-group" id="tableContent2">
                 <div class="row" style="margin-bottom: 4px;">
                     <label>Select Students to assign homework</label>
                 </div>
-
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
                     <tr>
@@ -192,30 +182,21 @@
                     </tbody>
 
                 </table>
-
             </div>
-
                 <div class="col-md-12 form-group">
 
                         <button class="btn btn-wide btn-primary ladda-button" data-style="expand-left" type="button">
                             <span class="ladda-label">Save</span>
                             <span class="ladda-spinner"></span><span class="ladda-spinner"></span></button>
-
-                <button class="btn btn-primary btn-wide pull-right" type="button" id="btnSubmit">
-                    Publish
-                </button>
-
+                        <button class="btn btn-primary btn-wide pull-right" type="button" id="btnSubmit">
+                            Publish
+                        </button>
                 </div>
-
-
         </div>
     </form>
 </div>
 </div>
 </div>
-
-
-
 </div>
 </div>
 

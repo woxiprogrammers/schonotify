@@ -20,36 +20,28 @@
             <h1 class="mainTitle">Homework</h1>
         </div>
         <ul class="mini-stats col-sm-2 pull-right">
-
             <li>
                 <div class="values">
                     <a href="/createHomework" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
                 </div>
             </li>
-
         </ul>
-
     </div>
 </section>
 <!-- end: DASHBOARD TITLE -->
 <div class="container-fluid container-fullw bg-white">
-
 <div class="row">
-<div class="col-md-12">
+<div class="col-md-11 col-md-offset-1">
 <div id="detail">
-
     <div class="col-sm-12">
         <div class="panel panel-white load1" id="panel6">
             <div class="panel-heading">
-
                 <div class="timeline_title">
                     <i class="fa fa-book fa-2x pull-left fa-border"></i>
                     <h4 class="panel-title no-margin text-primary" style="padding: 14px;">Assignment</h4>
                     <h5 style=" background-color: rgb(0, 122, 255);color: #fff;padding: 10px;">
                         <strong>Subject: </strong>
-
                         <small class="label label-sm label-white">Marathi</small>
-
                         <p class="pull-right">
                             <strong>Batch :</strong> <i>Morning</i>
                             <strong>Class :</strong> <i>Fourth </i>
@@ -65,8 +57,6 @@
             <div class="panel-body">
                 <div class="panel-scroll height-280 ps-container ps-active-y">
                     <h4>Complete the all questions mentioned in file. <a href="javascript:void(0);"> Download <i class="fa fa-cloud-download"></i></a></h4>
-
-
                     <br>
                     <p>
                         This file contains few multiple choice question on chapter 1 & 3.
@@ -78,6 +68,57 @@
                     Due Date:
                          14 Nov, 2015 6:00 PM
                     </address>
+
+                    <div class="col-md-12 form-group" id="tableContent2">
+                        <div class="row" style="margin-bottom: 4px;">
+                            <label>This Homework assigned to following students:</label>
+                        </div>
+
+                        <table class='table table-striped table-bordered table-hover table-full-width' id='sample_1'>
+                            <thead>
+                            <tr>
+
+                                <th>Roll No.</th>
+                                <th>Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+
+                                <td>102</td>
+                                <td>Vinit Singh</td>
+                            </tr>
+                            <tr>
+
+                                <td>103</td>
+                                <td>Arjun Kale</td>
+                            </tr>
+                            <tr>
+
+                                <td>104</td>
+                                <td>Yash Patil</td>
+                            </tr>
+                            <tr>
+
+                                <td>105</td>
+                                <td>N Yadav</td>
+                            </tr>
+                            <tr>
+
+                                <td>106</td>
+                                <td>Sunny Rao</td>
+                            </tr>
+                            <tr>
+
+                                <td>107</td>
+                                <td>Karan Sharma</td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                     <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
             </div>
@@ -99,7 +140,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <div id="update">
     <form action="#" role="form" id="form2">
@@ -155,21 +195,15 @@
                         <input id="input" size="1" type="file" />
                     </div>
                 </div>
-
-                <div class="form-group col-sm-5">
-                    <label class="control-label">
-                        Due Date <span class="symbol required"></span>
-                    </label>
-                    <input class="form-control datepicker" type="text" value="2/11/2015">
-
-
-                </div>
             </div>
-
-
-            <div class="col-md-12">
-
+            <div class="form-group">
                 <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Due Date <span class="symbol required"></span>
+                        </label>
+                        <input class="form-control datepicker" type="text" value="2/11/2015">
+                    </div>
                     <h4>Assign Homework to: </h4>
                     <div class="form-group">
                         <label for="form-field-select-2">
@@ -215,11 +249,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 form-group" id="tableContent2">
-                <div class="row" style="margin-bottom: 4px;">
-                    <label>Select Students to assign homework</label>
-                </div>
-
+            <div class="col-md-10 form-group" id="tableContent2">
+                <label>Select Students to assign homework</label>
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
                     <tr>
@@ -259,13 +290,9 @@
                         <td>107</td>
                         <td>Karan Sharma</td>
                     </tr>
-
                     </tbody>
-
                 </table>
-
             </div>
-
             <div class="col-md-12">
                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnCancel">
                     Cancel <i class="fa fa-times-circle-o"></i>
@@ -274,17 +301,12 @@
                     Update <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
-
         </div>
     </form>
-
-
 </div>
 </div>
 </div>
 </div>
-
-
 
 </div>
 </div>
