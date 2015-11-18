@@ -119,14 +119,21 @@
                                 Start Time
                             </label>
 
-                            <input type="time" class="form-control"/>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="timepicker1" type="text" class="form-control input-small timepicker1">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            </div>
 
                         </div>
                         <div class="form-group">
                             <label>
                                 End Time
                             </label>
-                            <input type="time" class="form-control"/>
+
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="timepicker2" type="text" class="form-control input-small timepicker1">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>
@@ -215,14 +222,21 @@
                                 Start Time
                             </label>
 
-                            <input type="time" class="form-control" value="12:30"/>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="timepicker3" type="text" class="form-control input-small" value="12:30">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            </div>
 
                         </div>
                         <div class="form-group">
                             <label>
                                 End Time
                             </label>
-                            <input type="time" class="form-control" value="13:30"/>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <input id="timepicker4" type="text" class="form-control input-small" value="13:30">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            </div>
+
                         </div>
                         <div class="form-group">
                             <label>
@@ -265,17 +279,33 @@
     <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="vendor/switchery/switchery.min.js"></script>
     <!-- end: MAIN JAVASCRIPTS -->
-
+    <script src="vendor/maskedinput/jquery.maskedinput.min.js"></script>
+    <script src="vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="vendor/autosize/autosize.min.js"></script>
+    <script src="vendor/selectFx/classie.js"></script>
+    <script src="vendor/selectFx/selectFx.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="assets/js/main.js"></script>
     <!-- start: JavaScript Event Handlers for this page -->
 
+    <script src="vendor/ckeditor/ckeditor.js"></script>
+    <script src="vendor/ckeditor/adapters/jquery.js"></script>
+
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+
+    <script src="assets/js/form-validation.js"></script>
+    <script src="assets/js/form-elements.js"></script>
 
 
     <script>
         $(document).ready(function(){
             Main.init();
+            FormValidator.init();
             showTimetable(1);
+
 
             $('#copystr').hide();
         });
@@ -474,6 +504,12 @@
             showTimetable(val1);
 
         });
+
+        $('#timepicker1').timepicker();
+        $('#timepicker2').timepicker();
+        $('#timepicker3').timepicker();
+        $('#timepicker4').timepicker();
+
     </script>
 
 </div>

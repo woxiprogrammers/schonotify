@@ -82,19 +82,22 @@
                     <br>
                 </div>
 
-                <div class="form-group col-sm-5">
-                    <label class="control-label">
-                        Due Date <span class="symbol required"></span>
-                    </label>
-                    <input class="form-control datepicker" type="text">
 
-                </div>
             </div>
 
 
-            <div class="col-md-12">
+
+                <div class="form-group">
+
 
                 <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Due Date <span class="symbol required"></span>
+                        </label>
+                        <input class="form-control datepicker" type="text">
+
+                    </div>
                     <h4>Assign Homework to: </h4>
                     <div class="form-group">
                         <label for="form-field-select-2">

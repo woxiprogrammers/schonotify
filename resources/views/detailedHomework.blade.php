@@ -35,7 +35,7 @@
 <div class="container-fluid container-fullw bg-white">
 
 <div class="row">
-<div class="col-md-12">
+<div class="col-md-11 col-md-offset-1">
 <div id="detail">
 
     <div class="col-sm-12">
@@ -78,6 +78,57 @@
                     Due Date:
                          14 Nov, 2015 6:00 PM
                     </address>
+
+                    <div class="col-md-12 form-group" id="tableContent2">
+                        <div class="row" style="margin-bottom: 4px;">
+                            <label>This Homework assigned to following students:</label>
+                        </div>
+
+                        <table class='table table-striped table-bordered table-hover table-full-width' id='sample_1'>
+                            <thead>
+                            <tr>
+
+                                <th>Roll No.</th>
+                                <th>Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+
+                                <td>102</td>
+                                <td>Vinit Singh</td>
+                            </tr>
+                            <tr>
+
+                                <td>103</td>
+                                <td>Arjun Kale</td>
+                            </tr>
+                            <tr>
+
+                                <td>104</td>
+                                <td>Yash Patil</td>
+                            </tr>
+                            <tr>
+
+                                <td>105</td>
+                                <td>N Yadav</td>
+                            </tr>
+                            <tr>
+
+                                <td>106</td>
+                                <td>Sunny Rao</td>
+                            </tr>
+                            <tr>
+
+                                <td>107</td>
+                                <td>Karan Sharma</td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                     <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
             </div>
@@ -156,20 +207,20 @@
                     </div>
                 </div>
 
-                <div class="form-group col-sm-5">
-                    <label class="control-label">
-                        Due Date <span class="symbol required"></span>
-                    </label>
-                    <input class="form-control datepicker" type="text" value="2/11/2015">
 
-
-                </div>
             </div>
 
 
-            <div class="col-md-12">
+            <div class="form-group">
 
                 <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Due Date <span class="symbol required"></span>
+                        </label>
+                        <input class="form-control datepicker" type="text" value="2/11/2015">
+
+                    </div>
                     <h4>Assign Homework to: </h4>
                     <div class="form-group">
                         <label for="form-field-select-2">
@@ -215,10 +266,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 form-group" id="tableContent2">
-                <div class="row" style="margin-bottom: 4px;">
-                    <label>Select Students to assign homework</label>
-                </div>
+
+            <div class="col-md-10 form-group" id="tableContent2">
+                <label>Select Students to assign homework</label>
 
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
