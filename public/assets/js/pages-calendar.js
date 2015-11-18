@@ -56,7 +56,6 @@ var Calendar = function() {"use strict";
 			$(".form-full-event #start-date-time").val("").data("DateTimePicker").destroy();
 			$(".form-full-event #end-date-time").val("").data("DateTimePicker").destroy();
 			$(".event-categories[value='job']").prop('checked', true);
-
 		});
 
 		$('#event-categories div.event-category').each(function() {
@@ -119,8 +118,6 @@ var Calendar = function() {"use strict";
 					// if so, remove the element from the "Draggable Events" list
 					$(this).remove();
 				}
-
-
 			},
 			selectable: true,
 			selectHelper: true,
@@ -133,8 +130,6 @@ var Calendar = function() {"use strict";
 				$(".event-categories[value='job']").prop('checked', true);
                 $('#delBtn').hide();
 				$('.events-modal').modal();
-
-
 			},
 			eventClick: function(calEvent, jsEvent, view) {
 				eventInputDateHandler();
