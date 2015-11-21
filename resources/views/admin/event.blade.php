@@ -17,7 +17,7 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
-                            <h1 class="mainTitle">Search</h1>
+                            <h1 class="mainTitle">Events</h1>
                         </div>
                     </div>
                 </section>
