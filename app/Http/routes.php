@@ -111,3 +111,7 @@ Route::get('homeworkListing','HomeworkController@homeworkListing');
 Route::get('detailedHomework','HomeworkController@detailedHomework');
 
 Route::get('createHomework','HomeworkController@createHomework');
+
+Route::get('results','ResultController@showResults');
+
+Route::get('exams/{id}','ResultController@examResults');

@@ -462,12 +462,12 @@ var Charts = function() {"use strict";
 	return {
 		//main function to initiate template pages
 		init: function() {
-			lineChartHandler();
-			barChartHandler();
-			doughnutChartHandler();
+			//lineChartHandler();
+			//barChartHandler();
+			//doughnutChartHandler();
 			pieChartHandler();
-			polarChartHandler();
-			radarChartHandler();
+			//polarChartHandler();
+			//radarChartHandler();
 		}
 	};
 }();
