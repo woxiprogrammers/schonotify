@@ -187,7 +187,7 @@
                     </label>
                     <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px; margin-bottom: 8px;">This file contains few multiple choice question on chapter 1 & 3.</textarea>
                 </div>
-                <div class="form-group">
+                <div>
                     <label class="control-label">
                         Upload Document
                     </label>
