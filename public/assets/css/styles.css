@@ -11526,6 +11526,34 @@ td.small-width {
     line-height: 300px;
 }
 
+
+#slider1 {
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto 0 auto;
+    border-radius: 4px;
+}
+
+#slider1 ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 200px;
+    list-style: none;
+}
+
+#slider1 ul li {
+    position: relative;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    line-height: 300px;
+}
+
 a.control_prev, a.control_next {
     position: absolute;
     top: 1px;
@@ -11562,4 +11590,14 @@ a.control_next {
     margin: 10px auto;
     width: 160px;
     font-size: 18px;
+}
+
+.autocomplete-suggestion{
+    background: #EFEFEF;
+    color: #666;
+    padding: 8px;
+}
+
+.autocomplete-suggestion:hover{
+    background: #CCCCCC;
 }
