@@ -31,7 +31,6 @@ Route::group(['domain' => '{account}.schnotify.com'], function () {
     });
 });*/
 
-
 Route::get('/','FrontController@index');
 
 Route::get('forgot','LogController@forgot');
@@ -121,3 +120,9 @@ Route::get('subjects/{id}','ResultController@subjectResults');
 Route::get('getStudents/{id}','ResultController@getStudents');
 
 Route::get('markAttendance','AttendanceController@markAttendance');
+
+
+/* API Routes */
+Route::group(['prefix' => 'api/v1/user/'], function () {
+    Route::post('auth','api\UserController@login');
+});
