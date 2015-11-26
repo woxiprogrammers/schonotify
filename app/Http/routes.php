@@ -111,6 +111,15 @@ Route::get('detailedHomework','HomeworkController@detailedHomework');
 
 Route::get('createHomework','HomeworkController@createHomework');
 
+Route::get('results','ResultController@showResults');
+
+Route::get('exams/{id}','ResultController@examResults');
+
+Route::get('subjects/{id}','ResultController@subjectResults');
+
+Route::get('getStudents/{id}','ResultController@getStudents');
+
+Route::get('markAttendance','AttendanceController@markAttendance');
 
 
 /* API Routes */
