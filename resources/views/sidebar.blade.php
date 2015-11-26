@@ -158,7 +158,7 @@
         </a>
         <ul class="sub-menu">
             <li>
-                <a href="#">
+                <a href="markAttendance">
                     <span class="title"> Mark Attendance </span>
                 </a>
             </li>

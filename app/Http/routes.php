@@ -119,3 +119,5 @@ Route::get('exams/{id}','ResultController@examResults');
 Route::get('subjects/{id}','ResultController@subjectResults');
 
 Route::get('getStudents/{id}','ResultController@getStudents');
+
+Route::get('markAttendance','AttendanceController@markAttendance');
