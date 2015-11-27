@@ -11591,3 +11591,17 @@ a.control_next {
 .autocomplete-suggestion:hover{
     background: #CCCCCC;
 }
+
+.checkbox-img{
+    border: 1px solid #fff;
+    background-color: #ccc;
+    box-shadow: 1px 1px 1px inset;
+    border-radius: 4px;
+    padding: 2px;
+    cursor: pointer;
+    width:18px;
+}
+
+.allCheckedStud,.checkedStud{
+    -webkit-appearance:none;
+}
