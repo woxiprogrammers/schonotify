@@ -65,12 +65,12 @@
                                         <tr>
                                             <td><input type="checkbox" class="checkedStud" id="1"/><label for="1"><img id="checkedStud1" class="checkbox-img" for="1"/></label></td>
                                             <td>102</td>
-                                            <td>Vinit Singh &nbsp; <span class="label label-orange">Leave Approve</span> </td>
+                                            <td>Vinit Singh &nbsp; <span class="label label-orange">Leave Approved</span> </td>
                                         </tr>
                                         <tr>
                                             <td><input type="checkbox" class="checkedStud" id="2"/><label for="2"><img id="checkedStud2" class="checkbox-img"/></label></td>
                                             <td>103</td>
-                                            <td>Arjun Kale  &nbsp; <span class="label label-orange">Leave Approvedd</span></td>
+                                            <td>Arjun Kale  &nbsp; <span class="label label-orange">Leave Approved</span></td>
                                         </tr>
                                         <tr>
                                             <td><input type="checkbox" class="checkedStud" id="3"/><label for="3"><img id="checkedStud3" class="checkbox-img"/></label></td>
