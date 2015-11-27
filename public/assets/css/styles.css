@@ -11603,5 +11603,15 @@ a.control_next {
 }
 
 .allCheckedStud,.checkedStud{
-    -webkit-appearance:none;
+        visibility:hidden;
+}
+
+.label-yellow
+{
+    background-color:yellow;
+}
+
+.label-orange
+{
+    background-color:orange;
 }
