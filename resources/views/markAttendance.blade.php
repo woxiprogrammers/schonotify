@@ -202,8 +202,6 @@
     $('.datepicker').datepicker()
         .on('changeDate', function(ev){
 
-            console.log(ev);
-
             //write psudo code here for fetching data from controller using ajax
 
             $('#tableContent2').fadeOut(1000);
