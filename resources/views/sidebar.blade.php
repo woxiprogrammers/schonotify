@@ -164,7 +164,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a href="view-attendance">
                     <span class="title"> View Attendance  </span>
                 </a>
             </li>

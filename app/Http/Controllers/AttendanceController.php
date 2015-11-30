@@ -16,4 +16,8 @@ class AttendanceController extends Controller
     {
         return view('markAttendance');
     }
+    public function viewAttendance()
+    {
+        return view('viewAttendance');
+    }
 }

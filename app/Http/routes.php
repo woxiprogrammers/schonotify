@@ -121,6 +121,8 @@ Route::get('getStudents/{id}','ResultController@getStudents');
 
 Route::get('markAttendance','AttendanceController@markAttendance');
 
+Route::get('view-attendance','AttendanceController@viewAttendance');
+
 
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
