@@ -11615,3 +11615,44 @@ a.control_next {
 {
     background-color:orange;
 }
+
+.tmln-h2
+{
+    border-radius: 50px;
+    border-style: solid;
+    border-width: 1px;
+    bottom: 45px;
+    /* content: ""; */
+    height: 52px;
+    left: 0;
+    margin-left: -27px;
+    position: absolute;
+    width: 52px;
+    text-align: center;
+    padding-top: 6px;
+    color:#fff;
+}
+.tmln-h2-homework{
+    border-color: #007AFF;
+    background-color: #007AFF;
+}
+.tmln-h2-leave{
+    border-color:rgb(242, 107, 107);
+    background-color: rgb(242, 107, 107);
+}
+.tmln-h2-event{
+    border-color:rgb(242, 180, 20);
+    background-color: rgb(242, 180, 20);
+}
+.tmln-h2-noticeboard{
+    border-color:rgb(213, 0, 0);
+    background-color: rgb(213, 0, 0);
+}
+.notificationSection{
+    margin-left: 70px !important;
+    min-height: 112px !important;
+    padding: 12px;
+    background-color: #fff;
+    box-shadow: 0px 0px 1px 0px #CCC;
+    margin-bottom: 4px;
+}
