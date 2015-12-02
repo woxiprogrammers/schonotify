@@ -63,7 +63,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12">
+                        <div class="col-sm-8 col-sm-offset-2">
                             <div id='full-calendar'></div>
                         </div>
 

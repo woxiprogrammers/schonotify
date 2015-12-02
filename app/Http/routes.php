@@ -123,6 +123,8 @@ Route::get('markAttendance','AttendanceController@markAttendance');
 
 Route::get('view-attendance','AttendanceController@viewAttendance');
 
+Route::get('auto-notification','NotificationController@listNotifications');
+
 
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
