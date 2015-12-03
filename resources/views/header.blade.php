@@ -5,8 +5,9 @@
             <i class="ti-align-justify"></i>
         </a>
         <a class="navbar-brand" href="#">
-            <!--<img src="assets/images/logo.png" alt="Clip-Two"/>-->
-            <h1><span style="color:red;">VE</span>ZA</h1>
+
+            <img src="assets/images/logo.png" alt="VEZA"/>
+
         </a>
         <a href="#" class="sidebar-toggler pull-right visible-md visible-lg" data-toggle-class="app-sidebar-closed" data-toggle-target="#app">
             <i class="ti-align-justify"></i>
