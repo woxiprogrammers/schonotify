@@ -125,7 +125,13 @@ Route::get('view-attendance','AttendanceController@viewAttendance');
 
 Route::get('auto-notification','NotificationController@listNotifications');
 
+Route::get('students-attendance-history','HistoryController@showAttendance');
 
+Route::get('students/{id}','HistoryController@getStudents');
+
+Route::get('get-attendance/{name?}','HistoryController@getAttendance');
+
+//getAttendance()
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');

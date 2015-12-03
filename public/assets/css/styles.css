@@ -11656,3 +11656,7 @@ a.control_next {
     box-shadow: 0px 0px 1px 0px #CCC;
     margin-bottom: 4px;
 }
+
+.def-height{
+    height: 500px;
+}

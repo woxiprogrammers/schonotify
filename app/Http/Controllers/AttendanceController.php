@@ -20,4 +20,5 @@ class AttendanceController extends Controller
     {
         return view('viewAttendance');
     }
+
 }
