@@ -88,8 +88,7 @@
 
                         </div>
 
-                        <div id="attendance-content" class="col-sm-10">
-
+                        <div id="attendance-content" class="col-sm-12">
                             <div class="col-sm-4 form-group">
                             <label>Select Year:</label>
                             <select class="form-control" style="-webkit-appearance: menulist;" id="hist-attendance">
@@ -136,7 +135,6 @@
         getStudents(1);
     });
 
-
     function getStudents(div)
     {
 
@@ -153,7 +151,7 @@
                             var thehtml = '<strong>Showing result for:</strong> ' + suggestion.value;
                             $('#outputcontent').html(thehtml);
                             $('#attendance-content').show();
-                            chart('2014-15');
+                            getAttendance('2014-15');
                         }
                     });
 
@@ -166,78 +164,87 @@
 
     $('#hist-attendance').change(function(){
         var year= this.value;
+        getAttendance(year);
+        return false;
+        e.preventDefault();
+    });
+
+    function getAttendance(year)
+    {
         $.ajax({
             url: '/get-attendance/'+year,
             type:'get',
             dataType:'json',
             success: function(res){
-                chart(res);
+                console.log(res);
+                var months=res[0]['months'];
+                var present=res[0]['present'];
+                var absent=res[0]['absent'];
+
+                $('#container-charts').highcharts({
+                    title: {
+                        text: 'Attendance History chart'
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Days'
+                        },
+                        labels: {
+                            format: '{value} '
+                        },
+                        maxPadding: 1
+                    },
+                    xAxis: {
+                        title: {
+                            text: 'Months'
+                        },
+                        categories: months
+                    },
+                    labels: {
+                        items: [{
+                            html: 'Attendance for year '+year,
+                            style: {
+                                left: '50px',
+                                top: '18px',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+
+                            }
+                        }]
+                    },
+                    series: [{
+                        type: 'column',
+                        name: 'Present',
+                        data: present,
+                        color:'green'
+                    }, {
+                        type: 'column',
+                        name: 'Absent',
+                        data: absent,
+                        color:'red'
+                    }, {
+                        type: 'pie',
+                        name: 'Percentage',
+                        data: [{
+                            name: 'Present',
+                            y: 82,
+                            color: Highcharts.getOptions().colors[2]
+                        }, {
+                            name: 'Absent',
+                            y: 18,
+                            color: Highcharts.getOptions().colors[8]
+                        }],
+                        center: [300,40],
+                        size: 120,
+                        showInLegend: false,
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }]
+                });
+
             }
         });
-        return false;
-        e.preventDefault();
-    });
-
-    function chart(year)
-    {
-        $('#container-charts').highcharts({
-            title: {
-                text: 'Combination chart'
-            },
-            yAxis: {
-                title: {
-                    text: 'Marks'
-                },
-                labels: {
-                    format: '{value} %'
-                }
-            },
-            xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'April', 'May', 'Jun','Jul','Aug','Sept','Oct','Nov','Dec']
-            },
-            labels: {
-                items: [{
-                    html: 'Attendance for year '+year,
-                    style: {
-                        left: '50px',
-                        top: '18px',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-
-                    }
-                }]
-            },
-            series: [{
-                type: 'column',
-                name: 'Present',
-                data: [30,20, 10, 30, 40,70,56,12,23,12,85,70],
-                color:'green'
-            }, {
-                type: 'column',
-                name: 'Absent',
-                data: [20, 3, 5, 7, 6, 7, 2, 3, 1, 10, 10, 0],
-                color:'red'
-            }, {
-                type: 'pie',
-                name: 'Percentage',
-                data: [{
-                    name: 'Present',
-                    y: 82,
-                    color: Highcharts.getOptions().colors[2] // Jane's color
-                }, {
-                    name: 'Absent',
-                    y: 18,
-                    color: Highcharts.getOptions().colors[8] // John's color
-                }],
-                center: [100, 80],
-                size: 100,
-                showInLegend: false,
-                dataLabels: {
-                    enabled: false
-                }
-            }]
-        });
     }
-
 
 </script>
 

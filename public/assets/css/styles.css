@@ -11658,5 +11658,5 @@ a.control_next {
 }
 
 .def-height{
-    height: 500px;
+    min-height: 500px;
 }
