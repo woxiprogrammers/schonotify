@@ -102,4 +102,9 @@ class HistoryController extends Controller
 
         return $results;
     }
+
+    public function showResults()
+    {
+        return view('resultsHistory');
+    }
 }

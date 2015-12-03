@@ -27,7 +27,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large">
                     <li>
-                        <span class="dropdown-header"> Unread notifications</span>
+                        <span class="dropdown-header"></span>
                     </li>
                     <li>
                         <div class="drop-down-wrapper ps-container flexcroll">
