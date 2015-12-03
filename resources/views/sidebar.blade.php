@@ -224,7 +224,7 @@
         </li>
 
         <li>
-            <a href="#">
+            <a href="students-results-history">
                 <span class="title"> Results  </span>
             </a>
         </li>

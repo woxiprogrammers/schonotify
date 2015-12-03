@@ -131,6 +131,8 @@ Route::get('students/{id}','HistoryController@getStudents');
 
 Route::get('get-attendance/{name?}','HistoryController@getAttendance');
 
+Route::get('students-results-history','HistoryController@showResults');
+
 //getAttendance()
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
