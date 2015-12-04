@@ -11673,21 +11673,18 @@ a.control_next {
     width: 10px;
     height: 10px;
     background-color: red;
-    border-radius: 15px;
     margin: 4px;
 }
 .leave-approved-tag{
     width: 10px;
     height: 10px;
     background-color: orange;
-    border-radius: 15px;
     margin: 4px;
 }
 .leave-applied-tag{
     width: 10px;
     height: 10px;
     background-color: yellow;
-    border-radius: 15px;
     margin: 4px;
 }
 
