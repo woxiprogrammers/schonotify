@@ -68,11 +68,7 @@ var Calendar = function() {"use strict";
 
                 $(".form-full-event #today").html(days[date.getDay()]+' '+date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear());
 
-                $(".form-full-event #Absent").html('<ul class="list-group"><li class="list-group-item">101 Suraj Bande</li><li class="list-group-item">102 Shantanu Acharya</li><li class="list-group-item">107 Manoj Jadhav</li></ul>');
-
-                $(".form-full-event #LeaveApplied").html('<ul class="list-group"><li class="list-group-item">101 Suraj Bande</li><li class="list-group-item">102 Shantanu Acharya</li></ul>');
-
-                $(".form-full-event #LeaveApproved").html('<ul class="list-group"><li class="list-group-item">101 Suraj Bande</li><li class="list-group-item">102 Shantanu Acharya</li></ul>');
+                $(".form-full-event #stud-list").html('<ul class="list-group"><li class="list-group-item">101 Suraj Bande <div class="pull-right leave-applied-tag"></div> <div class="pull-right leave-approved-tag"></div><div class="pull-right absent-tag"></div></li><li class="list-group-item">102 Shantanu Acharya <div class="pull-right absent-tag"></div></li><li class="list-group-item">107 Manoj Jadhav <div class="pull-right absent-tag"></div></li></ul>');
 
                 $(".event-categories[value='job']").prop('checked', true);
                 $('#delBtn').hide();

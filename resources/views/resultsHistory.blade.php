@@ -18,6 +18,7 @@
                     <div class="row">
                         <div class="col-sm-7">
                             <h1 class="mainTitle">History</h1>
+                            <span class="mainDescription">Results</span>
                         </div>
                     </div>
                 </section>
