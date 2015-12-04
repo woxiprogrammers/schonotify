@@ -39,7 +39,7 @@
 
                         <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
                         <p>Leave Application for next 2 days...  <a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Date:<i> 2 Nov, 2015 - 4 Nov, 2015</i></p>
+                        <p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p>
                     </div>
                     <div class="col-sm-2">
                         <small class="label label-sm label-danger pull-right">Pending</small>
@@ -61,7 +61,7 @@
                         <h5><small class="label label-sm label-info">Mrs. Sharma</small> Seek Leave for two days</h5>
 
                         <p>This is to applying for seek leave. ...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Date:<i> 2 Nov, 2015 - 4 Nov, 2015</i></p>
+                        <p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p>
                     </div>
                     <div class="col-sm-2">
                         <small class="label label-sm label-danger pull-right">Pending</small>
@@ -81,7 +81,7 @@
                         <h5><small class="label label-sm label-info">Mr. Aanand</small> Seek Leave for two days</h5>
 
                         <p>This is to applying for seek leave. ...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Date:<i> 1 Nov, 2015 - 4 Nov, 2015</i></p>
+                        <p>Leave From:<i> 1 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p>
                     </div>
                     <div class="col-sm-2">
                         <small class="label label-sm label-inverse pull-right">Approved</small>
@@ -100,7 +100,7 @@
                         <h5><small class="label label-sm label-info">Mr. Yadav</small> Half day leave</h5>
 
                         <p>Due to official work  i have to ove my native....<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Date:<i> 2 Nov, 2015 - 4 Nov, 2015</i></p>
+                        <p>Leave From:<i> 2 Nov, 2015</i><br> Leave To<i> 4 Nov, 2015</i></p>
 
                     </div>
                     <div class="col-sm-2">
@@ -122,7 +122,7 @@
 
                         <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
 
-                        <p>Date:<i> 21 Jun, 2015 - 22 Jun, 2015</i></p>
+                        <p>Leave From: <i> 21 Jun, 2015 </i><br>Leave To: <i> 22 Jun, 2015</i></p>
 
                     </div>
                     <div class="col-sm-2">
@@ -144,7 +144,7 @@
                         <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
 
                         <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Date:<i> 20 Apr, 2015 - 22 Apr, 2015</i></p>
+                        <p>Leave From: <i> 20 Apr, 2015</i><br><i>Leave To: 22 Apr, 2015</i></p>
                     </div>
                     <div class="col-sm-2">
                         <small class="label label-sm label-inverse pull-right">Approved</small>
@@ -165,7 +165,7 @@
                         <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
 
                         <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Date:<i> 2 Apr, 2015 - 4 Apr, 2015</i></p>
+                        <p>Leave From: <i> 2 Apr, 2015</i><br><i>Leave To: 4 Apr, 2015</i></p>
                     </div>
                     <div class="col-sm-2">
                         <small class="label label-sm label-inverse pull-right">Approved</small>
@@ -186,7 +186,7 @@
                         <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
 
                         <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Date:<i> 2 Nov, 2015 - 4 Nov, 2015</i></p>
+                        <p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To: <i> 4 Nov, 2015</i></p>
                     </div>
                     <div class="col-sm-2">
                         <small class="label label-sm label-inverse pull-right">Approved</small>
@@ -264,7 +264,7 @@
 
                         "<p>Leave Application for next 2 days..."+
                     '<a class="text-info" href="">More</a></p>'+
-                    '<p>Date:<i> 2 Nov, 2015 - 4 Nov, 2015</i></p></div>'+
+                    '<p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To: <i> 4 Nov, 2015</i></p></div>'+
                 '<div class="col-sm-2">'+
                     '<small class="label label-sm label-inverse pull-right">Approved</small>'+
                 '</div>'+
@@ -283,7 +283,7 @@
 
                     "<p>Leave Application for next 2 days..."+
                     '<a class="text-info" href="">More</a></p>'+
-                    '<p>Date:<i> 2 Nov, 2015 - 4 Nov, 2015</i></p></div>'+
+                    '<p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p></div>'+
                     '<div class="col-sm-2">'+
                     '<small class="label label-sm label-inverse pull-right">Approved</small>'+
                     '</div>'+

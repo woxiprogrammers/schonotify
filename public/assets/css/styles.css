@@ -11443,6 +11443,7 @@ td.small-width {
     padding: 12px;
     background-color: aliceblue;
     margin-bottom: 4px;
+    overflow: auto;
 }
 
 .tmln-img {

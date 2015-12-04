@@ -63,11 +63,10 @@
                                             <br>
                                             <br>
 
-                                            Date :
                                             <address>
-                                                From: 12 Nov, 2015 12:00 PM
-                                                -
-                                                To: 14 Nov, 2015 6:00 PM
+                                                Leave From: 12 Nov, 2015 12:00 PM
+                                                <br>
+                                                Leave To: 14 Nov, 2015 6:00 PM
                                             </address>
 
                                             <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
