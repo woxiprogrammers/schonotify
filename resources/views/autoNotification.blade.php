@@ -42,10 +42,10 @@
                                         <p>Due Date:<i> 8 Nov, 2015 </i></p>
                                     </div>
                                     <div class="col-sm-4">
-                                        <h5>Created By:
-                                        <small class="label label-sm label-info">Mr. Vishnu</small></h5>
+                                        <p>Created By:
+                                        <small class="label label-sm label-info">Mr. Vishnu</small></p>
 
-                                        <h5>On : 5 Nov, 2015 12:00 PM</h5>
+                                        <p>On : 5 Nov, 2015 12:00 PM</p>
                                     </div>
 
                                 </div>
@@ -60,15 +60,13 @@
                                     </div>
                                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                                        <h5>Seek Leave for 2 days</h5>
+                                        <h5 class="text-bold">Seek Leave for 2 days</h5>
                                         <p>Applying leave for 2 days ...</p>
-                                        <p>Due Date:<i> 2 Nov, 2015 </i></p>
                                     </div>
                                     <div class="col-sm-4">
-                                        <h5>Created By:
-                                            <small class="label label-sm label-info">Mr.Sali</small></h5>
-
-                                        <h5>On : 2 Nov, 2015 12:00 PM</h5>
+                                        <p>Created By:
+                                            <small class="label label-sm label-info">Mr.Sali</small></p>
+                                        <p>On : 2 Nov, 2015 12:00 PM</p>
                                     </div>
 
                                 </div>
@@ -83,15 +81,13 @@
                                     </div>
                                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                                        <h5>Event Created </h5>
+                                        <h5 class="text-bold">Event Created </h5>
                                         <p>Meeting for annual sport planning.</p>
-                                        <p>Due Date:<i> 2 Nov, 2015 </i></p>
                                     </div>
                                     <div class="col-sm-4">
-                                        <h5>Created By:
-                                            <small class="label label-sm label-info">Mrs. Jadhav</small></h5>
-
-                                        <h5>On : 1 Nov, 2015 12:00 PM</h5>
+                                        <p>Created By:
+                                            <small class="label label-sm label-info">Mrs. Jadhav</small></p>
+                                        <p>On : 1 Nov, 2015 12:00 PM</p>
                                     </div>
 
                                 </div>
@@ -106,15 +102,13 @@
                                     </div>
                                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                                        <h5>25 th Anniversary of organization</h5>
+                                        <h5 class="text-bold">25 th Anniversary of organization</h5>
                                         <p>On upcoming sunday we are completing 25 years.</p>
-                                        <p>Due Date:<i> 28 oct, 2015 </i></p>
                                     </div>
                                     <div class="col-sm-4">
-                                        <h5>Created By:
-                                            <small class="label label-sm label-info">Mr. Vishnu</small></h5>
-
-                                        <h5>On : 28 oct, 2015 12:00 PM</h5>
+                                        <p>Created By:
+                                            <small class="label label-sm label-info">Mr. Vishnu</small></p>
+                                        <p>On : 28 oct, 2015 12:00 PM</p>
                                     </div>
 
                                 </div>
@@ -177,15 +171,14 @@
                 '</div>'+
                 '<div class="col-sm-8" style="margin-top: 4px;">'+
 
-                    '<h5>Homework have been created for Class Fifth. </h5>'+
+                    '<h5 class="text-bold">Homework have been created for Class Fifth. </h5>'+
                     '<p>Assignment for class fifth on chapter no. 5 & 6</p>'+
                     '<p>Due Date:<i> 8 Nov, 2015 </i></p>'+
                 '</div>'+
                 '<div class="col-sm-4">'+
-                    '<h5>Created By:'+
-                    '<small class="label label-sm label-info">Mr. Vishnu</small></h5>'+
-
-                    '<h5>On : 5 Nov, 2015 12:00 PM</h5>'+
+                    '<p>Created By:'+
+                    '<small class="label label-sm label-info">Mr. Vishnu</small></p>'+
+                    '<p>On : 5 Nov, 2015 12:00 PM</p>'+
                 '</div>'+
 
                 '</div>'+
@@ -199,16 +192,14 @@
                     '2 minutes ago'+
                 '</div>'+
                 '<div class="col-sm-8" style="margin-top: 4px;">'+
-
-                    '<h5>Seek Leave for 2 days</h5>'+
+                    '<h5 class="text-bold">Seek Leave for 2 days</h5>'+
                     '<p>Applying leave for 2 days ...</p>'+
-                    '<p>Due Date:<i> 2 Nov, 2015 </i></p>'+
                 '</div>'+
                 '<div class="col-sm-4">'+
-                    '<h5>Created By:'+
-                    '<small class="label label-sm label-info">Mr.Sali</small></h5>'+
+                    '<p>Created By:'+
+                    '<small class="label label-sm label-info">Mr.Sali</small></p>'+
 
-                    '<h5>On : 2 Nov, 2015 12:00 PM</h5>'+
+                    '<p>On : 2 Nov, 2015 12:00 PM</p>'+
                 '</div>'+
 
                 '</div>'+
@@ -223,16 +214,15 @@
                 '</div>'+
                 '<div class="col-sm-8" style="margin-top: 4px;">'+
 
-                    '<h5>Event Created </h5>'+
+                    '<h5 class="text-bold">Event Created </h5>'+
                     '<p>Meeting for annual sport planning.</p>'+
-                    '<p>Due Date:<i> 2 Nov, 2015 </i></p>'+
                 '</div>'+
                 '<div class="col-sm-4">'+
-                    '<h5>Created By:'+
+                    '<p>Created By:'+
 
-                    '<small class="label label-sm label-info">Mrs. Jadhav</small></h5>'+
+                    '<small class="label label-sm label-info">Mrs. Jadhav</small></p>'+
 
-                    '<h5>On : 1 Nov, 2015 12:00 PM</h5>'+
+                    '<p>On : 1 Nov, 2015 12:00 PM</p>'+
 
                 '</div>'+
 
@@ -248,16 +238,15 @@
                 '</div>'+
                 '<div class="col-sm-8" style="margin-top: 4px;">'+
 
-                    '<h5>25 th Anniversary of organization</h5>'+
+                    '<h5 class="text-bold">25 th Anniversary of organization</h5>'+
 
                     '<p>On upcoming sunday we are completing 25 years.</p>'+
-                    '<p>Due Date:<i> 28 oct, 2015 </i></p>'+
                 '</div>'+
                 '<div class="col-sm-4">'+
-                    '<h5>Created By:'+
-                    '<small class="label label-sm label-info">Mr. Vishnu</small></h5>'+
+                    '<p>Created By:'+
+                    '<small class="label label-sm label-info">Mr. Vishnu</small></p>'+
 
-                    '<h5>On : 28 oct, 2015 12:00 PM</h5>'+
+                    '<p>On : 28 oct, 2015 12:00 PM</p>'+
 
                 '</div>'+
 

@@ -11633,21 +11633,63 @@ a.control_next {
     color:#fff;
 }
 .tmln-h2-homework{
-    border-color: #007AFF;
-    background-color: #007AFF;
+    border-color: #6F4088;
+    background-color: #6F4088;
 }
 .tmln-h2-leave{
     border-color:rgb(242, 107, 107);
     background-color: rgb(242, 107, 107);
 }
 .tmln-h2-event{
-    border-color:rgb(242, 180, 20);
-    background-color: rgb(242, 180, 20);
+    border-color:#EF3A2F;
+    background-color: #EF3A2F;
 }
 .tmln-h2-noticeboard{
-    border-color:rgb(213, 0, 0);
-    background-color: rgb(213, 0, 0);
+    border-color:#6A6B6F;
+    background-color: #6A6B6F;
 }
+.tmln-h2-attendance{
+    border-color:#F6911B;
+    background-color: #F6911B;
+}
+.tmln-h2-events{
+    border-color:#EF3A2F;
+    background-color: #EF3A2F;
+}
+.tmln-h2-results{
+    border-color:#FFDF01;
+    background-color: #FFDF01;
+}
+.tmln-h2-student-history{
+    border-color:#1456AA;
+    background-color: #1456AA;
+}
+.tmln-h2-about{
+    border-color:#D763A2;
+    background-color: #D763A2;
+}
+.absent-tag{
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 15px;
+    margin: 4px;
+}
+.leave-approved-tag{
+    width: 10px;
+    height: 10px;
+    background-color: orange;
+    border-radius: 15px;
+    margin: 4px;
+}
+.leave-applied-tag{
+    width: 10px;
+    height: 10px;
+    background-color: yellow;
+    border-radius: 15px;
+    margin: 4px;
+}
+
 .notificationSection{
     margin-left: 70px !important;
     min-height: 112px !important;
@@ -11660,3 +11702,4 @@ a.control_next {
 .def-height{
     min-height: 500px;
 }
+

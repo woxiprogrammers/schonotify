@@ -86,21 +86,22 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="text-bold">
-                                            Absent Students
+                                            Students
                                         </label>
-                                        <div id="Absent"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="text-bold">
-                                            Leave Applied
-                                        </label>
-                                        <div id="LeaveApplied"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="text-bold">
-                                            Leave Approved
-                                        </label>
-                                        <div id="LeaveApproved"></div>
+                                        <div id="stud-list"></div>
+                                        <div>
+                                            <table class="table">
+                                                <tr>
+                                                    <td><div class="col-sm-10"><label class="padding-left-5">Absent Students</label></div><div class=" absent-tag"></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><div class="col-sm-10"><label class="padding-left-5">Leave Applied</label></div><div class=" leave-applied-tag"></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><div class="col-sm-10"><label class="padding-left-5">Leave Approved</label></div><div class=" leave-approved-tag"></div></td>
+                                                </tr>
+                                            </table>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -144,6 +145,8 @@
     jQuery(document).ready(function() {
         Main.init();
         Calendar.init();
+        $('.fc-agendaWeek-button').hide();
+        $('.fc-agendaDay-button ').hide();
     });
 
 </script>

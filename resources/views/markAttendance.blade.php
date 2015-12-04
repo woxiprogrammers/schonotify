@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-md-12 form-group" id="tableContent2">
                                     <div class="row" style="margin-bottom: 4px;">
-                                        <label>Unmark Students Who Are Ubsent:</label>
+                                        <label>Unmark Students Who Are absent:</label>
                                     </div>
                                     <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                                         <thead>
