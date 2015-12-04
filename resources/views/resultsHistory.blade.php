@@ -58,17 +58,17 @@
                                     <ul id="myTab2" class="nav nav-tabs nav-justified panel-title">
                                         <li class="active">
                                             <a href="#myTab2_example1" data-toggle="tab" aria-expanded="true">
-                                                Exam
+                                                Exams Wise
                                             </a>
                                         </li>
                                         <li class="">
                                             <a href="#myTab2_example2" data-toggle="tab" aria-expanded="false">
-                                                Academic
+                                                Academic Wise
                                             </a>
                                         </li>
                                         <li class="">
                                             <a href="#myTab2_example3" data-toggle="tab" aria-expanded="false">
-                                                Subjects
+                                                Subjects Wise
                                             </a>
                                         </li>
                                     </ul>

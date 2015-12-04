@@ -184,7 +184,7 @@
 
                 $('#container-charts').highcharts({
                     title: {
-                        text: 'Attendance History chart'
+                        text: 'Attendance History Chart for Suraj Bande '
                     },
                     yAxis: {
                         title: {
