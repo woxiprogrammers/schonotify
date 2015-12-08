@@ -17,7 +17,7 @@ class CreateHomeTeacherTable extends Migration
             $table->integer('student_id')->unsigned();
             $table->integer('homework_id')->unsigned();
             $table->integer('teacher_id')->unsigned();
-            $table->integer('div_id')->unsigned();
+            $table->integer('division_id')->unsigned();
         });
     }
 
