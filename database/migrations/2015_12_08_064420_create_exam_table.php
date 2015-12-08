@@ -21,6 +21,7 @@ class CreateExamTable extends Migration
             $table->float('duration',24);
             $table->float('pass_criteria',3);
             $table->text('venue');
+            $table->string('slug',255);
             $table->timestamps();
         });
     }
