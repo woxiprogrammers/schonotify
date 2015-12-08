@@ -12,7 +12,7 @@ class CreateExamTable extends Migration
      */
     public function up()
     {
-        Schema::create('exam', function (Blueprint $table) {
+        Schema::create('exams', function (Blueprint $table) {
             $table->increments('id');
             $table->string('exam_name',255);
             $table->string('exam_type',255);
@@ -33,6 +33,6 @@ class CreateExamTable extends Migration
      */
     public function down()
     {
-        Schema::drop('exam');
+        Schema::drop('exams');
     }
 }

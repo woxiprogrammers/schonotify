@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateModuleAclTable extends Migration
+class CreateClassTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateModuleAclTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_acls', function (Blueprint $table) {
+        Schema::create('classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('module_id')->unsigned();
-            $table->integer('acl_id')->unsigned();
+            $table->string('class_name',255);
+            $table->integer('body_id')->unsigned();
+            $table->integer('batch_id')->unsigned();
+            $table->string('slug',255);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateModuleAclTable extends Migration
      */
     public function down()
     {
-        Schema::drop('module_acls');
+        Schema::drop('classes');
     }
 }

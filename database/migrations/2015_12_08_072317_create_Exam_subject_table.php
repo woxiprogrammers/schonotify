@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateModuleAclTable extends Migration
+class CreateExamSubjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,13 @@ class CreateModuleAclTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_acls', function (Blueprint $table) {
+        Schema::create('exam_subjects', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('module_id')->unsigned();
-            $table->integer('acl_id')->unsigned();
+            $table->integer('exam_id')->unsigned();
+            $table->integer('subject_id')->unsigned();
+            $table->dateTime('date');
+            $table->float('marks');
+            $table->boolean('publish_status');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateModuleAclTable extends Migration
      */
     public function down()
     {
-        Schema::drop('module_acls');
+        Schema::drop('exam_subjects');
     }
 }

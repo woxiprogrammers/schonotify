@@ -12,7 +12,7 @@ class CreateModuleTable extends Migration
      */
     public function up()
     {
-        Schema::create('module', function (Blueprint $table) {
+        Schema::create('modules', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title',255);
             $table->string('slug',255);
@@ -27,6 +27,6 @@ class CreateModuleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('module');
+        Schema::drop('modules');
     }
 }
