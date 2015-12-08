@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Batch extends Migration
+class CreateHomeTeacherTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,12 @@ class Batch extends Migration
      */
     public function up()
     {
-        Schema::create('batch', function (Blueprint $table) {
+        Schema::create('home_teacher', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->integer('student_id')->unsigned();
+            $table->integer('homework_id')->unsigned();
+            $table->integer('teacher_id')->unsigned();
+            $table->integer('div_id')->unsigned();
         });
     }
 
@@ -25,6 +28,6 @@ class Batch extends Migration
      */
     public function down()
     {
-        Schema::drop('batch');
+        Schema::drop('home_teacher');
     }
 }

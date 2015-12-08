@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Modules extends Migration
+class CreateBodyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,9 @@ class Modules extends Migration
      */
     public function up()
     {
-        Schema::create('modules', function (Blueprint $table) {
+        Schema::create('body', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-
+            $table->string('name',255);
         });
     }
 
@@ -27,6 +25,6 @@ class Modules extends Migration
      */
     public function down()
     {
-        Schema::drop('modules');
+        Schema::drop('body');
     }
 }

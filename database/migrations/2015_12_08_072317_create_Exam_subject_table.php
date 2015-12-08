@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClass extends Migration
+class CreateExamSubjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,13 @@ class CreateClass extends Migration
      */
     public function up()
     {
-        Schema::create('class', function (Blueprint $table) {
+        Schema::create('exam_subject', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->integer('body_id');
-            $table->integer('batch_id');
+            $table->integer('exam_id')->unsigned();
+            $table->integer('subject_id')->unsigned();
+            $table->dateTime('date');
+            $table->float('marks');
+            $table->boolean('publish_status');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateClass extends Migration
      */
     public function down()
     {
-        Schema::drop('class');
+        Schema::drop('exam_subject');
     }
 }

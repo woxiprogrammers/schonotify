@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Leaves extends Migration
+class CreateDivSubjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class Leaves extends Migration
      */
     public function up()
     {
-        Schema::create('leaves', function (Blueprint $table) {
+        Schema::create('div_subject', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('student_id');
-            $table->date('from_date');
-            $table->date('to_date');
-            $table->date('date');
-
+            $table->integer('div_id')->unsigned();
+            $table->integer('teacher_id')->unsigned();
+            $table->integer('subject_id')->unsigned();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +28,6 @@ class Leaves extends Migration
      */
     public function down()
     {
-        Schema::drop('leaves');
+        Schema::drop('div_subject');
     }
 }
