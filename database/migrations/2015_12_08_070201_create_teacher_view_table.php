@@ -12,7 +12,7 @@ class CreateTeacherViewTable extends Migration
      */
     public function up()
     {
-        Schema::create('teacher_view', function (Blueprint $table) {
+        Schema::create('teacher_views', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->boolean('mobile_view');
@@ -28,6 +28,6 @@ class CreateTeacherViewTable extends Migration
      */
     public function down()
     {
-        Schema::drop('teacher_view');
+        Schema::drop('teacher_views');
     }
 }

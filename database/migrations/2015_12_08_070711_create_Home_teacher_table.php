@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateModuleAclTable extends Migration
+class CreateHomeTeacherTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateModuleAclTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_acls', function (Blueprint $table) {
+        Schema::create('homework_teacher', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('module_id')->unsigned();
-            $table->integer('acl_id')->unsigned();
+            $table->integer('student_id')->unsigned();
+            $table->integer('homework_id')->unsigned();
+            $table->integer('teacher_id')->unsigned();
+            $table->integer('division_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateModuleAclTable extends Migration
      */
     public function down()
     {
-        Schema::drop('module_acls');
+        Schema::drop('homework_teacher');
     }
 }

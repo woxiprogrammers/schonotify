@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+/bootstrap/compiled.php
+.env.*.php
+.env.php
+.env
+=======
 /vendor
 /node_modules
 Homestead.yaml
@@ -6,3 +12,4 @@ Homestead.json
 .idea/
 storage/
 bootstrap/cache/
+>>>>>>> f80b5e37e74bc761b61435f3bb771fc414126d9a
