@@ -22,12 +22,12 @@ class CreateUsersTable extends Migration
             $table->string('email',255);
             $table->string('gender',10);
             $table->dateTime('birth_date');
-            $table->integer('mobile',10);
+            $table->integer('mobile')->nullable();
             $table->string('password',255);
             $table->text('address');
-            $table->integer('alternate_number',10);
-            $table->integer('parent_id',50);
-            $table->integer('roll_number',50);
+            $table->integer('alternate_number');
+            $table->integer('parent_id');
+            $table->integer('roll_number');
             $table->string('emp_type',255);
             $table->integer('division_id')->unsigned();
             $table->boolean('is_active');

@@ -12,7 +12,7 @@ class AddFkToModuleAclTable extends Migration
      */
     public function up()
     {
-        Schema::table('module_acl', function (Blueprint $table) {
+        Schema::table('module_acls', function (Blueprint $table) {
 
             $table->foreign('user_id')
                 ->references('id')
@@ -42,10 +42,10 @@ class AddFkToModuleAclTable extends Migration
      */
     public function down()
     {
-        Schema::table('module_acl', function (Blueprint $table) {
-            $table->dropForeign('module_acl_user_id_foreign');
-            $table->dropForeign('module_acl_module_id_foreign');
-            $table->dropForeign('module_acl_acl_id_foreign');
+        Schema::table('module_acls', function (Blueprint $table) {
+            $table->dropForeign('module_acls_user_id_foreign');
+            $table->dropForeign('module_acls_module_id_foreign');
+            $table->dropForeign('module_acls_acl_id_foreign');
         });
     }
 
