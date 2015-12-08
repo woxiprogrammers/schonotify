@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ModuleAclRelation extends Migration
+class CreateUserRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,11 @@ class ModuleAclRelation extends Migration
      */
     public function up()
     {
-        Schema::create('module_acl', function (Blueprint $table) {
+        Schema::create('user_role', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('module_id');
-            $table->integer('acl_id');
-
+            $table->string('name',255);
+            $table->string('slug',255);
+            $table->timestamps();
         });
     }
 
@@ -28,6 +27,6 @@ class ModuleAclRelation extends Migration
      */
     public function down()
     {
-        Schema::drop('module_acl');
+        Schema::drop('user_role');
     }
 }

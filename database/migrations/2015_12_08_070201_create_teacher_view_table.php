@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Batch extends Migration
+class CreateTeacherViewTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,12 @@ class Batch extends Migration
      */
     public function up()
     {
-        Schema::create('batch', function (Blueprint $table) {
+        Schema::create('teacher_view', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->integer('user_id')->unsigned();
+            $table->boolean('mobile_view');
+            $table->boolean('web_view');
+            $table->timestamps();
         });
     }
 
@@ -25,6 +28,6 @@ class Batch extends Migration
      */
     public function down()
     {
-        Schema::drop('batch');
+        Schema::drop('teacher_view');
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DivSubjectRelation extends Migration
+class CreateModuleAclTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class DivSubjectRelation extends Migration
      */
     public function up()
     {
-        Schema::create('div_subject', function (Blueprint $table) {
+        Schema::create('module_acl', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('div_id');
-            $table->integer('teacher_id');
-            $table->integer('subject_id');
-
+            $table->integer('user_id')->unsigned();
+            $table->integer('module_id')->unsigned();
+            $table->integer('acl_id')->unsigned();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class DivSubjectRelation extends Migration
      */
     public function down()
     {
-        Schema::drop('div_subject');
+        Schema::drop('module_acl');
     }
 }
