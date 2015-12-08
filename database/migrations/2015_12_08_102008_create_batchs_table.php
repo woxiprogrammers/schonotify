@@ -12,7 +12,7 @@ class CreateBatchsTable extends Migration
      */
     public function up()
     {
-        Schema::create('batchs', function (Blueprint $table) {
+        Schema::create('batches', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',255);
             $table->text('description');
@@ -29,6 +29,6 @@ class CreateBatchsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('batchs');
+        Schema::drop('batches');
     }
 }
