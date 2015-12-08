@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMessageTable extends Migration
+class CreateResultsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,11 @@ class CreateMessageTable extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('results', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('description');
-            $table->integer('from_id')->unsigned();
-            $table->integer('to_id')->unsigned();
-            $table->dateTime('timestamp');
-            $table->boolean('read_status');
+            $table->integer('exam_subject_id')->unsigned();
+            $table->float('student_marks');
+            $table->integer('student_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateMessageTable extends Migration
      */
     public function down()
     {
-        Schema::drop('messages');
+        Schema::drop('results');
     }
 }
