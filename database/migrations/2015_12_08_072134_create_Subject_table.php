@@ -16,6 +16,7 @@ class CreateSubjectTable extends Migration
             $table->increments('id');
             $table->integer('class_id')->unsigned();
             $table->string('subject_name');
+            $table->string('slug',255);
             $table->timestamps();
         });
     }

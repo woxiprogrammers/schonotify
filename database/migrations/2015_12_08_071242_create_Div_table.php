@@ -18,6 +18,7 @@ class CreateDivTable extends Migration
             $table->integer('class_id')->unsigned();
             $table->integer('class_teacher_id')->unsigned();
             $table->integer('operational_days');
+            $table->string('slug',255);
             $table->timestamps();
 
         });
