@@ -16,8 +16,8 @@ class CreateDivTable extends Migration
             $table->increments('id');
             $table->string('div_name',255);
             $table->integer('class_id')->unsigned();
-            $table->integer('operational_days',50);
             $table->integer('class_teacher_id')->unsigned();
+            $table->integer('operational_days');
             $table->timestamps();
 
         });
