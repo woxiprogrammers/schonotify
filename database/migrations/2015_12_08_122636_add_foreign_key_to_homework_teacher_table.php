@@ -15,7 +15,7 @@ class AddForeignKeyToHomeworkTeacherTable extends Migration
         Schema::table('homework_teacher', function (Blueprint $table) {
             $table->foreign('student_id')
                 ->references('id')
-                ->on('students')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->foreign('homework_id')
