@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Leaves extends Migration
+class CreateModuleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,11 @@ class Leaves extends Migration
      */
     public function up()
     {
-        Schema::create('leaves', function (Blueprint $table) {
+        Schema::create('module', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('student_id');
-            $table->date('from_date');
-            $table->date('to_date');
-            $table->date('date');
-
+            $table->string('title',255);
+            $table->string('slug',255);
+            $table->timestamps();
         });
     }
 
@@ -29,6 +27,6 @@ class Leaves extends Migration
      */
     public function down()
     {
-        Schema::drop('leaves');
+        Schema::drop('module');
     }
 }
