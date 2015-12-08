@@ -144,19 +144,40 @@
             </div>
         </a>
     </li>
+
     <li>
-        <a href="leaveListing">
+        <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
                     <i class="fa fa-pencil-square-o"></i>
                 </div>
                 <div class="item-inner">
-                    <span class="title"> Leaves </span>
-                    <span class="badge pull-right">9</span>
+                    <span class="title"> Attendance </span><i class="icon-arrow"></i>
                 </div>
             </div>
         </a>
+        <ul class="sub-menu">
+            <li>
+                <a href="markAttendance">
+                    <span class="title"> Mark Attendance </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="view-attendance">
+                    <span class="title"> View Attendance  </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="leaveListing">
+                    <span class="title"> Leaves </span>
+                    <span class="badge pull-right">9</span>
+                </a>
+            </li>
+        </ul>
     </li>
+
     <li>
         <a href="homeworkListing">
             <div class="item-content">
@@ -170,6 +191,52 @@
             </div>
         </a>
     </li>
+
+    <li>
+        <a href="results">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-bar-chart"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title"> Results </span>
+                </div>
+            </div>
+        </a>
+    </li>
+
+<li>
+    <a href="javascript:void(0)">
+        <div class="item-content">
+            <div class="item-media">
+                <i class="fa fa-history"></i>
+            </div>
+            <div class="item-inner">
+                <span class="title"> Students History </span><i class="icon-arrow"></i>
+            </div>
+        </div>
+    </a>
+    <ul class="sub-menu">
+        <li>
+            <a href="students-attendance-history">
+                <span class="title"> Attendance </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="students-results-history">
+                <span class="title"> Results  </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <span class="title"> Fees </span>
+            </a>
+        </li>
+    </ul>
+</li>
+
 </ul>
 </nav>
 </div>

@@ -31,7 +31,6 @@ Route::group(['domain' => '{account}.schnotify.com'], function () {
     });
 });*/
 
-
 Route::get('/','FrontController@index');
 
 Route::get('forgot','LogController@forgot');
@@ -111,3 +110,31 @@ Route::get('homeworkListing','HomeworkController@homeworkListing');
 Route::get('detailedHomework','HomeworkController@detailedHomework');
 
 Route::get('createHomework','HomeworkController@createHomework');
+
+Route::get('results','ResultController@showResults');
+
+Route::get('exams/{id}','ResultController@examResults');
+
+Route::get('subjects/{id}','ResultController@subjectResults');
+
+Route::get('getStudents/{id}','ResultController@getStudents');
+
+Route::get('markAttendance','AttendanceController@markAttendance');
+
+Route::get('view-attendance','AttendanceController@viewAttendance');
+
+Route::get('auto-notification','NotificationController@listNotifications');
+
+Route::get('students-attendance-history','HistoryController@showAttendance');
+
+Route::get('students/{id}','HistoryController@getStudents');
+
+Route::get('get-attendance/{name?}','HistoryController@getAttendance');
+
+Route::get('students-results-history','HistoryController@showResults');
+
+//getAttendance()
+/* API Routes */
+Route::group(['prefix' => 'api/v1/user/'], function () {
+    Route::post('auth','api\UserController@login');
+});

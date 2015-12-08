@@ -11443,6 +11443,7 @@ td.small-width {
     padding: 12px;
     background-color: aliceblue;
     margin-bottom: 4px;
+    overflow: auto;
 }
 
 .tmln-img {
@@ -11487,3 +11488,216 @@ td.small-width {
 .btn-plus{
     border-radius: 24px; width: 40px;height: 40px;padding: 7px;font-size: 20px;
 }
+
+/*content slider*/
+#slider {
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto 0 auto;
+    border-radius: 4px;
+}
+
+#slider ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 200px;
+    list-style: none;
+}
+
+#slider ul li {
+    position: relative;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    line-height: 300px;
+}
+
+
+#slider1 {
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto 0 auto;
+    border-radius: 4px;
+}
+
+#slider1 ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 200px;
+    list-style: none;
+}
+
+#slider1 ul li {
+    position: relative;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+    height: 300px;
+    text-align: center;
+    line-height: 300px;
+}
+
+a.control_prev, a.control_next {
+    position: absolute;
+    top: 1px;
+    z-index: 999;
+    display: block;
+    padding: 4px;
+    width: auto;
+    height: auto;
+    background: #fff;
+    color: #666;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+a.control_prev:hover, a.control_next:hover {
+    opacity: 1;
+    -webkit-transition: all 0.2s ease;
+}
+
+a.control_prev {
+    border-radius: 0 2px 2px 0;
+}
+
+a.control_next {
+    right: 0;
+    border-radius: 2px 0 0 2px;
+}
+
+.slider_option {
+    position: relative;
+    margin: 10px auto;
+    width: 160px;
+    font-size: 18px;
+}
+
+.autocomplete-suggestion{
+    background: #EFEFEF;
+    color: #666;
+    padding: 8px;
+}
+
+.autocomplete-suggestion:hover{
+    background: #CCCCCC;
+}
+
+.checkbox-img{
+    border: 1px solid #fff;
+    background-color: #ccc;
+    box-shadow: 1px 1px 1px inset;
+    border-radius: 4px;
+    padding: 2px;
+    cursor: pointer;
+    width:18px;
+}
+
+.allCheckedStud,.checkedStud{
+        visibility:hidden;
+}
+
+.label-yellow
+{
+    background-color:yellow;
+}
+
+.label-orange
+{
+    background-color:orange;
+}
+
+.tmln-h2
+{
+    border-radius: 50px;
+    border-style: solid;
+    border-width: 1px;
+    bottom: 45px;
+    /* content: ""; */
+    height: 52px;
+    left: 0;
+    margin-left: -27px;
+    position: absolute;
+    width: 52px;
+    text-align: center;
+    padding-top: 6px;
+    color:#fff;
+}
+.tmln-h2-homework{
+    border-color: #6F4088;
+    background-color: #6F4088;
+}
+.tmln-h2-leave{
+    border-color:rgb(242, 107, 107);
+    background-color: rgb(242, 107, 107);
+}
+.tmln-h2-event{
+    border-color:#EF3A2F;
+    background-color: #EF3A2F;
+}
+.tmln-h2-noticeboard{
+    border-color:#6A6B6F;
+    background-color: #6A6B6F;
+}
+.tmln-h2-attendance{
+    border-color:#F6911B;
+    background-color: #F6911B;
+}
+.tmln-h2-events{
+    border-color:#EF3A2F;
+    background-color: #EF3A2F;
+}
+.tmln-h2-results{
+    border-color:#FFDF01;
+    background-color: #FFDF01;
+}
+.tmln-h2-student-history{
+    border-color:#1456AA;
+    background-color: #1456AA;
+}
+.tmln-h2-about{
+    border-color:#D763A2;
+    background-color: #D763A2;
+}
+.absent-tag{
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    margin: 4px;
+}
+.leave-approved-tag{
+    width: 10px;
+    height: 10px;
+    background-color: orange;
+    margin: 4px;
+}
+.leave-applied-tag{
+    width: 10px;
+    height: 10px;
+    background-color: yellow;
+    margin: 4px;
+}
+
+.notificationSection{
+    margin-left: 70px !important;
+    min-height: 112px !important;
+    padding: 12px;
+    background-color: #fff;
+    box-shadow: 0px 0px 1px 0px #CCC;
+    margin-bottom: 4px;
+}
+
+.def-height{
+    min-height: 500px;
+}
+
