@@ -27,7 +27,6 @@ class AddFkToEventsTable extends Migration
 
         });
     }
-
     /**
      * Reverse the migrations.
      *

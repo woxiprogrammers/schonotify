@@ -27,7 +27,6 @@ class AddFkToAnnouncementReadUnreadTable extends Migration
 
         });
     }
-
     /**
      * Reverse the migrations.
      *
