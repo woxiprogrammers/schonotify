@@ -12,7 +12,7 @@ class CreateHomeTeacherTable extends Migration
      */
     public function up()
     {
-        Schema::create('home_teacher', function (Blueprint $table) {
+        Schema::create('homework_teacher', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('student_id')->unsigned();
             $table->integer('homework_id')->unsigned();
@@ -28,6 +28,6 @@ class CreateHomeTeacherTable extends Migration
      */
     public function down()
     {
-        Schema::drop('home_teacher');
+        Schema::drop('homework_teacher');
     }
 }

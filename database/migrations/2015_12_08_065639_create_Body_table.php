@@ -12,10 +12,10 @@ class CreateBodyTable extends Migration
      */
     public function up()
     {
-        Schema::create('body', function (Blueprint $table) {
+        Schema::create('bodies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',255);
-            $table->string('logo');
+            $table->string('logo',255);
 
         });
     }
@@ -27,6 +27,6 @@ class CreateBodyTable extends Migration
      */
     public function down()
     {
-        Schema::drop('body');
+        Schema::drop('bodies');
     }
 }

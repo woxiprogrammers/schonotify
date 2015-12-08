@@ -12,9 +12,9 @@ class CreateDivTable extends Migration
      */
     public function up()
     {
-        Schema::create('div', function (Blueprint $table) {
+        Schema::create('divisions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('div_name',255);
+            $table->string('division_name',255);
             $table->integer('class_id')->unsigned();
             $table->integer('class_teacher_id')->unsigned();
             $table->integer('operational_days');
@@ -31,6 +31,6 @@ class CreateDivTable extends Migration
      */
     public function down()
     {
-        Schema::drop('div');
+        Schema::drop('divisions');
     }
 }

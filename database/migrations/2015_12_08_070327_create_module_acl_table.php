@@ -12,7 +12,7 @@ class CreateModuleAclTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_acl', function (Blueprint $table) {
+        Schema::create('module_acls', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('module_id')->unsigned();
@@ -28,6 +28,6 @@ class CreateModuleAclTable extends Migration
      */
     public function down()
     {
-        Schema::drop('module_acl');
+        Schema::drop('module_acls');
     }
 }
