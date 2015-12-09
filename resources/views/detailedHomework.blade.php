@@ -254,39 +254,39 @@
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
                     <tr>
-                        <th><input type="checkbox" class="allCheckedStud" checked/></th>
+                        <th><input type="checkbox" class="allCheckedStud1" checked/></th>
                         <th>Roll No.</th>
                         <th>Name</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td><input type="checkbox" class="checkedStud"/></td>
+                        <td><input type="checkbox" class="checkedStud1"/></td>
                         <td>102</td>
                         <td>Vinit Singh</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" class="checkedStud"/></td>
+                        <td><input type="checkbox" class="checkedStud1"/></td>
                         <td>103</td>
                         <td>Arjun Kale</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" class="checkedStud"/></td>
+                        <td><input type="checkbox" class="checkedStud1"/></td>
                         <td>104</td>
                         <td>Yash Patil</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" class="checkedStud"/></td>
+                        <td><input type="checkbox" class="checkedStud1"/></td>
                         <td>105</td>
                         <td>N Yadav</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" class="checkedStud"/></td>
+                        <td><input type="checkbox" class="checkedStud1"/></td>
                         <td>106</td>
                         <td>Sunny Rao</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" class="checkedStud"/></td>
+                        <td><input type="checkbox" class="checkedStud1"/></td>
                         <td>107</td>
                         <td>Karan Sharma</td>
                     </tr>
@@ -350,9 +350,9 @@
 
         $('#update').hide();
         $('#btnStatus').hide();
-        if($('.allCheckedStud').prop('checked') == true)
+        if($('.allCheckedStud1').prop('checked') == true)
         {
-            $('.checkedStud').each(function() { //loop through each checkbox
+            $('.checkedStud1').each(function() { //loop through each checkbox
                 this.checked = true;  //select all checkboxes with class "checkbox1"
             });
         }
@@ -404,14 +404,14 @@
         }
     });
 
-    $('.allCheckedStud').change(function(){
+    $('.allCheckedStud1').change(function(){
         if($(this).prop('checked') == true)
         {
-            $('.checkedStud').each(function() { //loop through each checkbox
+            $('.checkedStud1').each(function() { //loop through each checkbox
                 this.checked = true;  //select all checkboxes with class "checkbox1"
             });
         }else{
-            $('.checkedStud').each(function() { //loop through each checkbox
+            $('.checkedStud1').each(function() { //loop through each checkbox
                 this.checked = false;  //select all checkboxes with class "checkbox1"
             });
         }
