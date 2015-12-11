@@ -137,4 +137,7 @@ Route::get('students-results-history','HistoryController@showResults');
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
+    Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
+    Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
+    Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
 });
