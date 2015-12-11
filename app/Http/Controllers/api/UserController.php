@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\api;
 
+use App\AclMaster;
+use App\Message;
+use App\Module;
 use App\ModuleAcl;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-
 
 
 class UserController extends Controller
@@ -47,15 +50,30 @@ class UserController extends Controller
               'password' => $request->password
           ])) {
               $status = 200;
-              $modules = ModuleAcl::where('user_id' ,$user->id )->get();
-             //dd($modules);
+              $val1= \DB::table('users')
+                  ->Join('module_acls', 'users.id', '=', 'module_acls.user_id')
+                  ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+                  ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
+                  ->where('users.id','=',$user->id)
+                  ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
+                  ->get();
+              $resultArr=array();
+              foreach($val1 as $val)
+              {
+                  array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
+              }
+              $msgCount=Message::where('to_id',$user->id)
+                               ->where('read_status',0)
+                               ->count();
               $response = [
                           "token" => $user->remember_token,
-                          "modules" => $modules->module_id,
+                          "fname" => $user->first_name,
+                          "lname" => $user->last_name,
+                          "acl_module" => $resultArr,
+                          "unread message count" => $msgCount,
                           "message" => "login successfully",
                           ];
-
         }
        else   {
             $status = 404;
@@ -64,10 +82,16 @@ class UserController extends Controller
                 "user"=>"",
             ];
         }
+
+     }catch (\Exception $e) {
+         $status = 500;
+         $response = [
+         "message"=>"Something went wrong",
+         "user"=>"",
+         ];
+     }
         return response($response, $status);
-        }catch (\Exception $e) {
-            return false;
-        }
+
     }
 
 

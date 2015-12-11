@@ -11,6 +11,11 @@ class ModuleAcl extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+
+    }
+    public function Module()
+    {
+        return $this->hasMany('App\Module','module_id');
     }
 
 }
