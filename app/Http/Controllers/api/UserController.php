@@ -28,7 +28,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected function login(Request $request)
+    protected function login(Requests\LoginRequest $request)
     {
      try{
 
