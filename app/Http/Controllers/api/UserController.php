@@ -45,8 +45,7 @@ class UserController extends Controller
               'password' => $request->password
           ])) {
               $status = 200;
-              $val1= \DB::table('users')
-                  ->Join('module_acls', 'users.id', '=', 'module_acls.user_id')
+              $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
                   ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
                   ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
                   ->where('users.id','=',$user->id)
@@ -58,6 +57,7 @@ class UserController extends Controller
                   array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
               }
+
               $msgCount=Message::where('to_id',$user->id)
                                ->where('read_status',0)
                                ->count();
