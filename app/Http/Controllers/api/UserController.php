@@ -20,7 +20,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('db');
-        $this->middleware('RememberUserToken');
+        $this->middleware('remember.user.token');
     }
 
     /**
@@ -29,22 +29,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected function login(Requests\LoginRequest $request)
-    {
+    {   $data=array();
      try{
 
          $user = User::where('email', $request->email)->first();
           if ($user == NULL) {
             $status = 404;
-            $response = [
-                "message" => "Sorry!! Incorrect email or password",
-                "user"=>"",
-            ];
+            $message = "Sorry!! Incorrect email or password";
           } elseif ($user->is_active == 0) {
             $status = 401;
-            $response = [
-                "message" => "Please confirm your email id first",
-                "user"=>"",
-          ];
+            $message = "Please confirm your email id first";
+
           } elseif (Auth::attempt([
               'email' => $request->email,
               'password' => $request->password
@@ -66,30 +61,23 @@ class UserController extends Controller
               $msgCount=Message::where('to_id',$user->id)
                                ->where('read_status',0)
                                ->count();
-              $response = [
-                          "token" => $user->remember_token,
-                          "fname" => $user->first_name,
-                          "lname" => $user->last_name,
-                          "acl_module" => $resultArr,
-                          "unread message count" => $msgCount,
-                          "message" => "login successfully",
-                          ];
+              $data['token'] = $user->remember_token;
+              $data['fname'] = $user->first_name;
+              $data['lname'] = $user->last_name;
+              $data['acl_module'] = $resultArr;
+              $data['unread_messagees'] = $msgCount;
+              $message = 'login successfully';
         }
        else   {
             $status = 404;
-            $response = [
-                "message" => "Sorry!! Incorrect email or password",
-                "user"=>"",
-            ];
+            $message = "Sorry!! Incorrect email or password";
         }
-
      }catch (\Exception $e) {
          $status = 500;
-         $response = [
-         "message"=>"Something went wrong",
-         "user"=>"",
-         ];
+         $message = "Something went wrong";
      }
+        $response = ["message" => $message,"userData" =>$data];
+
         return response($response, $status);
 
     }
