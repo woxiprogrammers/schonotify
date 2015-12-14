@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
+use Auth;
 
 
 class UsersController extends Controller
@@ -34,7 +35,8 @@ class UsersController extends Controller
 
     public function usersProfile()
     {
-        return view('userProfile');
+        $user=Auth::user();
+        return view('userProfile')->with('user',$user);
     }
 
     /**
