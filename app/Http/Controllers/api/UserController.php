@@ -49,7 +49,7 @@ class UserController extends Controller
                   ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
                   ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
                   ->where('users.id','=',$user->id)
-                  ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
+                  ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
                   ->get();
               $resultArr=array();
               foreach($val1 as $val)
@@ -64,6 +64,7 @@ class UserController extends Controller
               $data['token'] = $user->remember_token;
               $data['fname'] = $user->first_name;
               $data['lname'] = $user->last_name;
+              $data['avatar'] = $user->avatar;
               $data['acl_module'] = $resultArr;
               $data['unread_messagees'] = $msgCount;
               $message = 'login successfully';

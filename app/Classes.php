@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Division extends Model
+class Classes extends Model
 {
-    protected $table = "divisions";
+    protected $table = "classes";
 }
