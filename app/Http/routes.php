@@ -137,4 +137,5 @@ Route::get('students-results-history','HistoryController@showResults');
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
+    Route::post('attendance','api\AttendanceController@markAttendance');
 });
