@@ -32,5 +32,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\Admin::class,
         'db' => \App\Http\Middleware\DbRoute::class,
         'authenticate.user' => \App\Http\Middleware\AuthenticateUser::class,
+        'remember.user.token'=>\App\Http\Middleware\RememberUserToken::class,
     ];
 }

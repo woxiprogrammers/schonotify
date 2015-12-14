@@ -40,4 +40,12 @@ class User extends Model implements AuthenticatableContract,
     public function teacher(){
         return $this->hasMany('App\SubjectClassDivision','teacher_id');
     }
+    public function moduleAcl()
+    {
+        return $this->hasMany('App\ModuleAcl','user_id');
+    }
+
+    public function Message(){
+        return $this->hasMany('App\Message','to_id');
+    }
 }

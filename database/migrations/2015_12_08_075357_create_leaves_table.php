@@ -16,7 +16,6 @@ class CreateLeavesTable extends Migration
             $table->increments('id');
             $table->integer('student_id')->unsigned();
             $table->boolean('status');
-            $table->dateTime('application_date');
             $table->text('reason');
             $table->dateTime('from date');
             $table->dateTime('end date');
