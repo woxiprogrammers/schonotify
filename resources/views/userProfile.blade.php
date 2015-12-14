@@ -58,10 +58,10 @@
             <div class="col-sm-5 col-md-4">
                 <div class="user-left">
                     <div class="center">
-                        <h4>{!! Auth::User()->name !!}</h4>
+                        <h4>{!! $user->name !!}</h4>
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="user-image">
-                                <div class="fileinput-new thumbnail"><img src="assets/images/{!! Auth::User()->avatar !!}" alt="">
+                                <div class="fileinput-new thumbnail"><img src="assets/images/{!! $user->avatar !!}" alt="">
                                 </div>
                                 <div class="fileinput-preview fileinput-exists thumbnail"></div>
                                 <div class="user-image-buttons">
@@ -112,17 +112,17 @@
                             <tbody>
                             <tr>
                                 <td>Name</td>
-                                <td>{!! Auth::User()->first_name !!} {!! Auth::User()->last_name !!}</td>
+                                <td>{!! $user->first_name !!} {!! $user->last_name !!}</td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
                             <tr>
                                 <td>Username</td>
-                                <td>{!! Auth::User()->username !!}</td>
+                                <td>{!! $user->username !!}</td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
                             <tr>
                                 <td>Gender</td>
-                                <td>{!! Auth::User()->gender !!}</td>
+                                <td>{!! $user->gender !!}</td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
 
@@ -142,18 +142,18 @@
                                 <td>Email:</td>
                                 <td>
                                     <a href="">
-                                        {!! Auth::User()->email !!}
+                                        {!! $user->email !!}
                                     </a></td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
                             <tr>
                                 <td>Phone:</td>
-                                <td>{!! Auth::User()->mobile !!}</td>
+                                <td>{!! $user->mobile !!}</td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
                             <tr>
                                 <td>Address:</td>
-                                <td>{!! Auth::User()->address !!}</td>
+                                <td>{!! $user->address !!}</td>
                                 <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                             </tr>
                             </tbody>
@@ -177,32 +177,32 @@
                                     <label class="control-label">
                                         Username
                                     </label>
-                                    <input type="text" value="{!! Auth::User()->username !!}" class="form-control" id="username" name="username">
+                                    <input type="text" value="{!! $user->username !!}" class="form-control" id="username" name="username">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">
                                         First name
                                     </label>
-                                    <input type="text" value="{!! Auth::User()->first_name !!}" class="form-control" id="firstname" name="firstname">
+                                    <input type="text" value="{!! $user->first_name !!}" class="form-control" id="firstname" name="firstname">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">
                                         Last name
                                     </label>
-                                    <input type="text" value="{!! Auth::User()->last_name !!}" class="form-control" id="lastname" name="lastname">
+                                    <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="control-label">
                                         Email Address
                                     </label>
-                                    <input type="email" placeholder="{!! Auth::User()->email !!}" value="{!! Auth::User()->email !!}" class="form-control" id="email" name="email">
+                                    <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">
                                         Phone
                                     </label>
-                                    <input type="text" placeholder="{!! Auth::User()->mobile !!}" value="{!! Auth::User()->mobile !!}" class="form-control" id="phone" name="email">
+                                    <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="phone" name="email">
                                 </div>
 
                             </div>
@@ -226,14 +226,14 @@
                                     <label class="control-label">
                                         Address
                                     </label>
-                                    <input type="text" value="{!! Auth::User()->address !!}" class="form-control" id="phone" name="email">
+                                    <input type="text" value="{!! $user->address !!}" class="form-control" id="phone" name="email">
                                 </div>
                                 <div class="form-group">
                                     <label>
                                         Image Upload
                                     </label>
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
-                                        <div class="fileinput-new thumbnail  col-sm-4"><img src="assets/images/{!! Auth::User()->avatar !!}" alt="">
+                                        <div class="fileinput-new thumbnail  col-sm-4"><img src="assets/images/{!! $user->avatar !!}" alt="">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
                                         <div class="user-edit-image-buttons pull-right col-sm-6">
