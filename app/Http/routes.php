@@ -141,4 +141,5 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
     Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
     Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
+    Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
 });
