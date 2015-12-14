@@ -26,11 +26,11 @@ class FrontController extends Controller
 
 
             $val1= \DB::table('users')
-                ->Join('module_acl', 'users.id', '=', 'module_acl.user_id')
-                ->Join('acl_master', 'module_acl.acl_id', '=', 'acl_master.id')
-                ->Join('modules', 'modules.id', '=', 'module_acl.module_id')
+                ->Join('module_acls', 'users.id', '=', 'module_acls.user_id')
+                ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+                ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
                 ->where('users.id','=',Auth::user()->id)
-                ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','acl_master.title as acl','modules.name as module','modules.slug as module_slug')
+                ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','acl_master.slug as acl','modules.title as module','modules.slug as module_slug')
                 ->get();
 
             $i=0;

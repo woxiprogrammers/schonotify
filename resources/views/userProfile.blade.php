@@ -61,7 +61,7 @@
                         <h4>{!! Auth::User()->name !!}</h4>
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="user-image">
-                                <div class="fileinput-new thumbnail"><img src="assets/images/{!! Auth::User()->image !!}" alt="">
+                                <div class="fileinput-new thumbnail"><img src="assets/images/{!! Auth::User()->avatar !!}" alt="">
                                 </div>
                                 <div class="fileinput-preview fileinput-exists thumbnail"></div>
                                 <div class="user-image-buttons">
@@ -233,7 +233,7 @@
                                         Image Upload
                                     </label>
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
-                                        <div class="fileinput-new thumbnail  col-sm-4"><img src="assets/images/{!! Auth::User()->image !!}" alt="">
+                                        <div class="fileinput-new thumbnail  col-sm-4"><img src="assets/images/{!! Auth::User()->avatar !!}" alt="">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
                                         <div class="user-edit-image-buttons pull-right col-sm-6">

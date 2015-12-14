@@ -156,7 +156,7 @@
             <!-- start: USER OPTIONS DROPDOWN -->
             <li class="dropdown current-user">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
-                    <img src="assets/images/{!! Auth::user()->image !!}" alt="Peter"> <span class="username">{!! Auth::user()->username !!}</span><i class="ti-angle-down"></i></i></span>
+                    <img src="assets/images/{!! Auth::user()->avatar !!}" alt="Peter"> <span class="username">{!! Auth::user()->username !!}</span><i class="ti-angle-down"></i></i></span>
                 </a>
                 <ul class="dropdown-menu dropdown-dark">
                     <li>
