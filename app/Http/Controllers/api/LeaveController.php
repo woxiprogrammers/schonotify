@@ -87,7 +87,7 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function approveLeave(Request $request){
+    public function approveLeave(Requests\Leave $request){
         try{
             $data = $request->all();
             if (isset($data['teacher'])){
