@@ -58,7 +58,6 @@ class AttendanceController extends Controller
                               ->where('is_active', '1')
                               ->where('')
                               ->get();
-            $this->rollno = array('User');
             foreach($student_list as $val)
             {
                 $resultArr[$val->roll_number] = $val->first_name.'_'.$val->last_name;
@@ -68,7 +67,7 @@ class AttendanceController extends Controller
             $status = 500;
             $message = "Something went wrong";
         }
-        $response = ["message" => $message,"Data" =>$resultArr];
+        $response = ["message" => $message,"data" =>$resultArr];
 
         return response($response, $status);
 
