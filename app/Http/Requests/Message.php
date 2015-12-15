@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class Leave extends Request
+class Message extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class Leave extends Request
     public function rules()
     {
         return [
-            'leave_id'=>'required|integer',
+            'token'=>'required',
+            'user_id' => 'required|integer'
         ];
     }
 }
