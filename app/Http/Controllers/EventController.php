@@ -16,4 +16,21 @@ class EventController extends Controller
     {
         return view('admin.event');
     }
+
+    public function saveEvent()
+    {
+        $tmp_file=$_FILES['image']['tmp_name'];
+        $filename=$_FILES['image']['name'];
+        $arr=array();
+        $arr['request']=$_REQUEST;
+
+        if(move_uploaded_file($tmp_file,'assets/images/events/'.$filename))
+        {
+            $arr['status']='uploaded';
+        }else{
+            $arr['status']='not uploaded';
+        }
+
+        return $arr;
+    }
 }
