@@ -27,6 +27,7 @@ class LogController extends Controller
     public function __construct()
     {
         $this->middleware('db');
+        $this->middleware('auth',['only'=>'logout']);
     }
 
     public function index()
