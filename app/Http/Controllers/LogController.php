@@ -26,7 +26,7 @@ class LogController extends Controller
      */
     public function __construct()
     {
-
+        $this->middleware('db');
     }
 
     public function index()
