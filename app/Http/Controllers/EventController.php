@@ -16,4 +16,9 @@ class EventController extends Controller
     {
         return view('admin.event');
     }
+
+    public function saveEvent()
+    {
+        
+    }
 }
