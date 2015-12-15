@@ -39,6 +39,8 @@ class DbRoute
             }else{ ////organization Not Found
                 if ($request->ajax()) {
                     return response('Unauthorized.', 401);
+                }else{
+                    return view('errors.404');
                 }
             }
         return $next($request);
