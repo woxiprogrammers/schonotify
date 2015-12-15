@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ClassData;
+use App\Classes;
 use App\Division;
 use App\User;
 use App\UserRoles;
@@ -50,17 +51,18 @@ class UsersController extends Controller
 
       $role1=UserRoles::find($id);
 
-      Session::put('user_create_role',$role1->name);
-        if($role1->name=='admin')
+      Session::put('user_create_role',$role1->slug);
+
+        if($role1->slug=='admin')
         {
             return Redirect::to('adminCreate');
-        }elseif($role1->name=='teacher')
+        }elseif($role1->slug=='teacher')
         {
             return Redirect::to('teacherCreate');
-        }elseif($role1->name=='student')
+        }elseif($role1->slug=='student')
         {
             return Redirect::to('studentCreate');
-        }elseif($role1->name=='parent')
+        }elseif($role1->slug=='parent')
         {
             return Redirect::to('parentCreate');
         }else
@@ -147,33 +149,33 @@ class UsersController extends Controller
 
         if($userRole[0]->role_slug == 'admin')
         {
-            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','bodies.name as body_name','user_roles.name as user_role','users.is_active')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                ->Join('body', 'users.body_id', '=', 'body.id')
+                ->Join('bodies', 'users.body_id', '=', 'bodies.id')
                 ->where('users.id','=',$id)
                 ->get();
             return response()->json($result1->toArray());
         }elseif($userRole[0]->role_slug == 'teacher')
         {
-            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active','teacher_view.web_view','teacher_view.mobile_view')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','bodies.name as body_name','user_roles.name as user_role','users.is_active','teacher_views.web_view','teacher_views.mobile_view')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                ->Join('body', 'users.body_id', '=', 'body.id')
-                ->Join('teacher_view', 'users.id', '=', 'teacher_view.teacher_id')
+                ->Join('bodies', 'users.body_id', '=', 'bodies.id')
+                ->Join('teacher_views', 'users.id', '=', 'teacher_views.user_id')
                 ->where('users.id','=',$id)
                 ->get();
 
             return response()->json($result1->toArray());
         }elseif($userRole[0]->role_slug == 'student')
         {
-            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active','division.name as div_name','division.id as div_id','users.parent_id','division.class_id','class.name as class_name','class.batch_id')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','bodies.name as body_name','user_roles.name as user_role','users.is_active','divisions.slug as div_name','divisions.id as div_id','users.parent_id','divisions.class_id','classes.slug as class_name','classes.batch_id')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                ->Join('body', 'users.body_id', '=', 'body.id')
-                ->Join('division', 'division.id', '=', 'users.div_id')
-                ->Join('class','class.id','=','division.class_id')
+                ->Join('bodies', 'users.body_id', '=', 'bodies.id')
+                ->Join('divisions', 'divisions.id', '=', 'users.div_id')
+                ->Join('classes','classes.id','=','divisions.class_id')
                 ->where('users.id','=',$id)
                 ->get();
 
-            $result2=ClassData::all();
+            $result2=Classes::all();
             $result3=Division::all();
             $arr1=json_decode($result1);
             $arr2=json_decode($result2);
@@ -192,9 +194,9 @@ class UsersController extends Controller
 
         }
         else{
-            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','body.name as body_name','user_roles.name as user_role','users.is_active')
+            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','bodies.name as body_name','user_roles.slug as user_role','users.is_active')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                ->Join('body', 'users.body_id', '=', 'body.id')
+                ->Join('bodies', 'users.body_id', '=', 'bodies.id')
                 ->where('users.id','=',$id)
                 ->get();
 

@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Batch;
+use App\Classes;
+use App\Division;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
@@ -16,6 +19,7 @@ class SearchController extends Controller
     {
         $this->middleware('db');
         $this->middleware('auth');
+
     }
 
     public function index()
@@ -32,22 +36,20 @@ class SearchController extends Controller
     }
     public function selectRole($role_id=1)
     {
-
-        if(Auth::user()->role_id == 1)
+        $user=Auth::user();
+        if($user->role_id == 1)
         {
-        $result= \DB::table('users')
-            ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-            ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.name as user_role','users.rollno as rollno','users.parent_id as parent_id','users.is_active')
+        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+            ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
             ->where('users.role_id','=',$role_id)
-            ->where('users.id','!=',Auth::User()->id)
+            ->where('users.id','!=',$user->id)
             ->get();
         }else{
-            $result= \DB::table('users')
-                ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.name as user_role','users.rollno as rollno','users.parent_id as parent_id','users.is_active')
+            $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
                 ->where('users.role_id','!=',1)
                 ->where('users.role_id','=',$role_id)
-                ->where('users.id','!=',Auth::User()->id)
+                ->where('users.id','!=',$user->id)
                 ->get();
 
         }
@@ -55,29 +57,26 @@ class SearchController extends Controller
 
         $str.="<thead><tr>";
 
-        foreach($result as $row)
-        {
-            if($row->user_role=='student')
+
+            if($result[0]['user_role']== 'student')
             {
                 $str.="<th>Role No.</th>";
             }
-        }
+
 
         $str.="<th>Name</th></th><th>Username</th><th>Email</th><th>Gender</th>";
 
-        foreach($result as $row)
+        if($result[0]['user_role']== 'student')
         {
-            if($row->user_role=='student')
-            {
                 $str.="<th>Parent Name</th>";
-            }
+
         }
 
         $str.="<th>Status</th>";
 
         foreach(session('functionArr') as $row)
         {
-            if($row == 'update_user')
+            if($row == 'edit_user')
             {
                 $str.="<th>Action</th>";
             }
@@ -104,7 +103,7 @@ class SearchController extends Controller
             {
                 $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
             }
-            if(Auth::user()->role_id == 1)
+            if($user->role_id == 1)
             {
                 $str.="<td>";
                 if($row->is_active == 1)
@@ -127,7 +126,7 @@ class SearchController extends Controller
 
             foreach(session('functionArr') as $row1)
             {
-                if($row1 == 'update_user')
+                if($row1 == 'edit_user')
                 {
                     $str.="<td><a data-toggle='modal' onclick='userEdit(".$row->id.")' id='popup_valid' data-target='.bs-example-modal-sm' value='$row->id'>Edit</a></td>";
                 }
@@ -160,23 +159,23 @@ class SearchController extends Controller
 
     public function searchClass()
     {
-        $result= \DB::table('class')
-            ->Join('batch', 'batch.id', '=', 'class.batch_id')
-            ->select('class.id as class_id','class.name as class_name','class.batch_id as batch_id','batch.name as batch_name')
-            ->where('class.body_id','=',Auth::User()->body_id)
+        $user=Auth::user();
+        $result= Classes::Join('batches', 'batches.id', '=', 'classes.batch_id')
+            ->select('classes.id as class_id','classes.class_name as class_name','classes.batch_id as batch_id','batches.name as batch_name')
+            ->where('classes.body_id','=',$user->body_id)
             ->get();
 
-        $batch=\DB::table('batch')->get();
+        $batch=Batch::all();
 
         return view('admin.searchClasses')->with('results',$result)->with('batches',$batch);
     }
 
     public function searchBatch()
     {
-        $result= \DB::table('batch')
-            ->join('class','class.batch_id','=','batch.id')
-            ->select('batch.id as batch_id','batch.name as batch_name','batch.description as batch_description')
-            ->where('class.body_id','=',Auth::User()->body_id)
+        $user=Auth::User();
+        $result= Batch::join('classes','classes.batch_id','=','batches.id')
+            ->select('batches.id as batch_id','batches.slug as batch_name','batches.description as batch_description')
+            ->where('classes.body_id','=',$user->body_id)
             ->get();
 
         return view('admin.searchBatch')->with('results',$result);
@@ -184,11 +183,11 @@ class SearchController extends Controller
 
     public function searchDivision()
     {
-        $result= \DB::table('division')
-            ->Join('class', 'division.class_id', '=', 'class.id')
-            ->join('batch','batch.id','=','class.batch_id')
-            ->select('class.id as class_id','class.name as class_name','division.name as div_name','division.id as div_id','batch.id as batch_id','batch.name as batch_name')
-            ->where('class.body_id','=',Auth::User()->body_id)
+        $user=Auth::User();
+        $result= Division::Join('classes', 'divisions.class_id', '=', 'class.id')
+            ->join('batches','batches.id','=','classes.batch_id')
+            ->select('classes.id as class_id','classes.slug as class_name','divisions.slug as div_name','divisions.id as div_id','batches.id as batch_id','batches.slug as batch_name')
+            ->where('classes.body_id','=',$user->body_id)
             ->get();
 
         return view('admin.searchDivision')->with('results',$result);
