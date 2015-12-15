@@ -43,7 +43,7 @@ class MessageController extends Controller
         return response($response, $status);
     }
 
-    public function deleteMessages(Request $request){
+    public function deleteMessages(Requests\Message $request){
         try {
             $data = $request->all();
             $sender = $data['teacher']['id'];
