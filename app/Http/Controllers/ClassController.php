@@ -11,6 +11,7 @@ class ClassController extends Controller
 
     public function __construct()
     {
+        $this->middleware('db');
         $this->middleware('auth');
     }
     public function create()

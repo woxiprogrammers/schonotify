@@ -10,6 +10,7 @@ class AttendanceController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('db');
         $this->middleware('auth');
     }
     public function markAttendance()
