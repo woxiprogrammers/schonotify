@@ -142,4 +142,13 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
     Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
+    Route::post('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
+    Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
+    Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
+    Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
+    Route::get('gettadmins',array('uses' => 'api\MessageController@getAdmins'));
+    Route::get('getbatches',array('uses' => 'api\UserController@getBatches'));
+    Route::get('getclasses',array('uses' => 'api\UserController@getClasses'));
+    Route::get('getdivisions',array('uses' => 'api\UserController@getDivisions'));
+    Route::post('gettstudents',array('uses' => 'api\MessageController@getStudentList'));
 });
