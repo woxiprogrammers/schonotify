@@ -37,7 +37,7 @@
                 <div class="modal fade modal-aside horizontal right events-modal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog modal-md">
                         <div class="modal-content">
-                            <form class="form-full-event">
+                            <form class="form-full-event" id="form">
                                 <div class="modal-body">
                                     <div class="form-group ">
                                         <h4>Event</h4>
@@ -74,44 +74,13 @@
                                     <div class="form-group">
 
                                         <div class="row">
-                                            <div id="fileupload" class="col-sm-10">
-                                                <!-- Redirect browsers with JavaScript disabled to the origin page -->
-                                                <noscript>
-                                                    <input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/">
-                                                </noscript>
-                                                <h3>Upload Images</h3>
-                                                <div style="overflow-y: scroll; height: 120px;">
-                                                <table role="presentation" class="table table-striped" id="checkHeight">
-                                                    <tbody class="files"></tbody>
-                                                </table>
-                                                 </div>
-                                                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-                                                <div class="row fileupload-buttonbar">
-                                                    <div class="col-lg-12">
-                                                        <!-- The fileinput-button span is used to style the file input field as button -->
-												<span class="btn btn-success fileinput-button"> <i class="glyphicon glyphicon-plus"></i> <span>Add files...</span>
-													<input type="file" name="files[]" multiple>
-												</span>
-                                                        <button type="submit" class="btn btn-primary start">
-                                                            <i class="glyphicon glyphicon-upload"></i>
-                                                            <span>Start upload</span>
-                                                        </button>
-                                                        <button type="reset" class="btn btn-warning cancel">
-                                                            <i class="glyphicon glyphicon-ban-circle"></i>
-                                                            <span>Cancel upload</span>
-                                                        </button>
-                                                        <button type="button" class="btn btn-danger delete">
-                                                            <i class="glyphicon glyphicon-trash"></i>
-                                                            <span>Delete</span>
-                                                        </button>
-                                                        <!-- The loading indicator is shown during file processing -->
-                                                        <span class="fileupload-loading"></span>
+                                                <div id="imageUploader">
+                                                    <input type="file" name="image" id="img-file">
+
+                                                    <div class="progress progress-striped active">
+                                                        <div class="progress-bar" style="width:90%;"></div>
                                                     </div>
-                                                    <!-- The global progress information -->
-
                                                 </div>
-
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -127,7 +96,7 @@
                                     <button class="btn btn-danger btn-o delete-event" id="delBtn">
                                         Delete
                                     </button>
-                                    <button class="btn btn-primary btn-o save-event" type="submit">
+                                    <button class="btn btn-primary btn-o save-event" type="submit" id="upload">
                                         Save
                                     </button>
                                 </div>
@@ -168,130 +137,33 @@
 
 
 
-<script id="template-upload" type="text/x-tmpl">
-			{% for (var i=0, file; file=o.files[i]; i++) { %}
-			<tr class="template-upload fade">
-			<td>
-			<span class="preview"></span>
-			</td>
-			<td>
-			<p class="name">{%=file.name%}</p>
-			{% if (file.error) { %}
-			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
-			{% } %}
-			</td>
-			<td>
-			<p class="size">{%=o.formatFileSize(file.size)%}</p>
-			{% if (!o.files.error) { %}
-			<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
-			{% } %}
-			</td>
-			<td>
-			{% if (!o.files.error && !i && !o.options.autoUpload) { %}
-			<button class="btn btn-primary start">
-			<i class="glyphicon glyphicon-upload"></i>
-			<span>Start</span>
-			</button>
-			{% } %}
-			{% if (!i) { %}
-			<button class="btn btn-warning cancel">
-			<i class="glyphicon glyphicon-ban-circle"></i>
-			<span>Cancel</span>
-			</button>
-			{% } %}
-			</td>
-			</tr>
-			{% } %}
-		</script>
-<!-- The template to display files available for download -->
-<script id="template-download" type="text/x-tmpl">
-			{% for (var i=0, file; file=o.files[i]; i++) { %}
-			<tr class="template-download fade">
-			<td>
-			<span class="preview">
-			{% if (file.thumbnailUrl) { %}
-			<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
-			{% } %}
-			</span>
-			</td>
-			<td>
-			<p class="name">
-			{% if (file.url) { %}
-
-			<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-			{% } else { %}
-			<span>{%=file.name%}</span>
-			{% } %}
-			</p>
-			{% if (file.error) { %}
-			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
-			{% } %}
-			</td>
-			<td>
-			<span class="size">{%=o.formatFileSize(file.size)%}</span>
-			</td>
-			<td>
-			{% if (file.deleteUrl) { %}
-			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-			<i class="glyphicon glyphicon-trash"></i>
-			<span>Delete</span>
-			</button>
-			<input type="checkbox" name="delete" value="1" class="toggle">
-			{% } else { %}
-			<button class="btn btn-warning cancel">
-			<i class="glyphicon glyphicon-ban-circle"></i>
-			<span>Cancel</span>
-			</button>
-			{% } %}
-			</td>
-			</tr>
-			{% } %}
-		</script>
-<script src="vendor/jquery-file-upload/vendor/jquery.ui.widget.js"></script>
-<!-- The Templates plugin is included to render the upload/download listings -->
-<script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
-<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="vendor/javascript-Load-Image/load-image.all.min.js"></script>
-<!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-<!-- blueimp Gallery script -->
-<script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
-<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="vendor/jquery-file-upload/jquery.iframe-transport.js"></script>
-<!-- The basic File Upload plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload.js"></script>
-<!-- The File Upload processing plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-process.js"></script>
-<!-- The File Upload image preview & resize plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-image.js"></script>
-<!-- The File Upload audio preview plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-audio.js"></script>
-<!-- The File Upload video preview plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-video.js"></script>
-<!-- The File Upload validation plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-validate.js"></script>
-<!-- The File Upload user interface plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-ui.js"></script>
-<!-- The main application script -->
-<script src="vendor/jquery-file-upload/main.js"></script>
-<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
-<!--[if (gte IE 8)&(lt IE 10)]>
-<script src="js/cors/jquery.xdr-transport.js"></script>
-<![endif]-->
-<!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-
-
-
-
-
-
-
 <script>
         jQuery(document).ready(function() {
             Main.init();
             Calendar.init();
 
         });
+
+    $('#form').on('submit',function(e){
+        e.preventDefault();
+
+        var file=$(this);
+
+        uploadImage(file);
+    });
+
+    function uploadImage(file)
+    {
+        var formData=new FormData(file[0]);
+        console.log(file[0]);
+
+        $.post('save-event',function(res){
+
+        });
+        var request=new XMLHttpRequest();
+        request.open('post','save-event');
+        request.send(formData);
+    }
 
 </script>
 
