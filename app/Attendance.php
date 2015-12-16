@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Attendance extends Model
 {
     protected $table = "attendance";
+
+    protected $fillable = array('student_id');
 }
