@@ -24,8 +24,10 @@ class MessageController extends Controller
             $data = $request->all();
             $sender = $data['teacher']['id'];
             $receiver = $data['user_id'];
+            $messageCount = $data['page_id'] * 2;
             $messages = Message::whereIn('to_id',[$sender,$receiver])
                                 ->whereIn('from_id',[$sender,$receiver])
+                                ->skip($messageCount)->take(2)
                                 ->get();
             $message = $messages->toArray();
             $responseData['messages']= $message;
@@ -50,7 +52,10 @@ class MessageController extends Controller
             $sender = $data['teacher']['id'];
             $receiver = $data['user_id'];
             Message::whereIn('to_id',[$sender,$receiver])->whereIn('from_id',[$sender,$receiver])->update(['is_delete' => 1]);
-            $messages = Message::orWhere('to_id',$data['teacher']['id'])->orWhere('from_id',$data['teacher']['id'])->where('is_delete','0')->get();
+            $messages = Message::where('is_delete',0)->Where(function ($query) use($sender) {
+                                                            $query->orwhere('to_id', $sender)->orwhere('from_id', $sender);
+                                                        })->get();
+
             $message = $messages->toArray();
             $responseData['messages']= $message;
             $status = 200;
