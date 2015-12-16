@@ -214,7 +214,6 @@ class AttendanceController extends Controller
     public function viewAttendance(Requests\SubmitAttendance $request)
     {
      try{
-
          $batch=Batch::where('id',$request->batch_id)->first();
          $class=Classes::where('id',$request->class_id)->first();
          $division=Division::where('id',$request->division_id)->first();
