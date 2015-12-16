@@ -142,7 +142,7 @@
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
                     <tr>
-                        <th><input type="checkbox" class="allCheckedStud1" checked/></th>
+                        <th><input type="checkbox" class="allCheckedStud1" checked/> <span class="position-absolute padding-left-5"><b>Select all</b></span></th>
                         <th>Roll No.</th>
                         <th>Name</th>
                     </tr>
