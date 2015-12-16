@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\User;
 use App\UserRoles;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -48,8 +49,8 @@ class MessageController extends Controller
             $data = $request->all();
             $sender = $data['teacher']['id'];
             $receiver = $data['user_id'];
-            Message::whereIn('to_id',[$sender,$receiver])->whereIn('from_id',[$sender,$receiver])->delete();
-            $messages = Message::orWhere('to_id',$data['teacher']['id'])->orWhere('from_id',$data['teacher']['id'])->get();
+            Message::whereIn('to_id',[$sender,$receiver])->whereIn('from_id',[$sender,$receiver])->update(['is_delete' => 1]);
+            $messages = Message::orWhere('to_id',$data['teacher']['id'])->orWhere('from_id',$data['teacher']['id'])->where('is_delete','0')->get();
             $message = $messages->toArray();
             $responseData['messages']= $message;
             $status = 200;
@@ -148,5 +149,32 @@ class MessageController extends Controller
             "data" => $responseData
         ];
         return response($response, $status);
+    }
+
+    public function sendMessage(Requests\Message $request){
+        try{
+            $data = $request->all();
+            $from_id = $data['teacher']['id'];
+            $to_id = $data['to_id'];
+            $status = 200;
+            $message = 'Message Successfully Sent';
+            $messageData['to_id'] = $to_id;
+            $messageData['from_id'] = $from_id;
+            $messageData['description'] = $data['description'];
+            $messageData['timestamp'] = Carbon::now();
+            $messageData['created_at'] = Carbon::now();
+            $messageData['updated_at'] = Carbon::now();
+            $newMessage = Message::insert($messageData);
+        }catch (\Exception $e){
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+        ];
+        return response($response, $status);
+
     }
 }
