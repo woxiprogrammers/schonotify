@@ -152,5 +152,6 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('getbatches',array('uses' => 'api\UserController@getBatches'));
     Route::get('getclasses',array('uses' => 'api\UserController@getClasses'));
     Route::get('getdivisions',array('uses' => 'api\UserController@getDivisions'));
-    Route::post('gettstudents',array('uses' => 'api\MessageController@getStudentList'));
+    Route::get('gettstudents/{token}/{division}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
 });
