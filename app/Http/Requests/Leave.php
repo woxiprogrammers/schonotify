@@ -24,7 +24,7 @@ class Leave extends Request
     public function rules()
     {
         return [
-            'leave_id'=>'required',
+            'leave_id'=>'required|integer',
         ];
     }
 }

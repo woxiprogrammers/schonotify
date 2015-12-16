@@ -10,10 +10,16 @@ class EventController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('db');
         $this->middleware('auth');
     }
     public function index()
     {
         return view('admin.event');
+    }
+
+    public function saveEvent()
+    {
+        
     }
 }

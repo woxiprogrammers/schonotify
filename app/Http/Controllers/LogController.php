@@ -26,7 +26,8 @@ class LogController extends Controller
      */
     public function __construct()
     {
-
+        $this->middleware('db');
+        $this->middleware('auth',['only'=>'logout']);
     }
 
     public function index()
@@ -79,7 +80,7 @@ class LogController extends Controller
             return Redirect::to('/');
         }elseif($user->role_id == 2)
         {
-            $view= TeacherView::select()->where('teacher_id','=',$user->id)->get();
+            $view= TeacherView::select()->where('user_id','=',$user->id)->get();
             foreach($view as $val)
             {
                 $web_view=$val['web_view'];

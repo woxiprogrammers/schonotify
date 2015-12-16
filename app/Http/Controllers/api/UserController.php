@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\AclMaster;
+use App\Batch;
+use App\ClassData;
+use App\Classes;
+use App\Division;
 use App\Message;
 use App\Module;
 use App\ModuleAcl;
@@ -21,6 +25,7 @@ class UserController extends Controller
     {
         $this->middleware('db');
         $this->middleware('remember.user.token');
+        $this->middleware('authenticate.user',['except' => ['login']]);
     }
 
     /**
@@ -83,6 +88,72 @@ class UserController extends Controller
 
     }
 
+    public function getBatches(Request $request){
+        try{
+            $data = $request->all();
+            $division = $request->teacher->teacher()->lists('division_id');
+            $class = Division::whereIn('id', $division)->distinct()->lists('class_id');
+            $batch = Classes::whereIn('id', $class)->distinct()->lists('batch_id');
+            $batchData = Batch::whereIn('id', $batch)->get();
+            $batchList = $batchData->toArray();
+            $status = 200;
+            $responseData['batchList']= $batchList;
+            $message = 'Successfully Listed';
+        }catch (\Exception $e){
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $responseData
+        ];
+        return response($response, $status);
+    }
 
+    public function getClasses(Request $request){
+        try{
+            $data = $request->all();
+            $division = $request->teacher->teacher()->lists('division_id');
+            $class = Division::whereIn('id', $division)->distinct()->lists('class_id');
+            $classData = Classes::whereIn('id', $class)->get();
+            $classList = $classData->toArray();
+            $status = 200;
+            $responseData['classList']= $classList;
+            $message = 'Successfully Listed';
+        }catch (\Exception $e){
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $responseData
+        ];
+        return response($response, $status);
+    }
 
+    public function getDivisions(Request $request){
+        try{
+            $data = $request->all();
+            $division = $request->teacher->teacher()->lists('division_id');
+            $divisionData = Division::whereIn('id', $division)->get();
+            $divisionList = $divisionData->toArray();
+            $status = 200;
+            $responseData['divisionList']= $divisionList;
+            $message = 'Successfully Listed';
+        }catch (\Exception $e){
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $responseData
+        ];
+        return response($response, $status);
+    }
 }

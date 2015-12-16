@@ -11701,3 +11701,6 @@ a.control_next {
     min-height: 500px;
 }
 
+.position-absolute{
+    position: absolute;
+}
