@@ -6,6 +6,7 @@ use App\Attendance;
 use App\Batch;
 use App\Classes;
 use App\Division;
+use App\Leave;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -209,4 +210,46 @@ class AttendanceController extends Controller
 
         return response($response, $status);
     }
+
+    public function viewAttendance(Requests\SubmitAttendance $request)
+    {
+     try{
+
+         $batch=Batch::where('id',$request->batch_id)->first();
+         $class=Classes::where('id',$request->class_id)->first();
+         $division=Division::where('id',$request->division_id)->first();
+                 $studentArray = User::where('division_id',$division->id)->lists('id');
+                 $absentList = Attendance::wherein('student_id',$studentArray)
+                                            ->where('date',$request->date)->lists('student_id');
+                 $absentStudentInfo = User::wherein('id',$absentList)->select('id','first_name','last_name','roll_number')->get();
+
+                 $leaveApplied= Leave::where('division_id',$division->id)->where('from date',$request->date)->lists('student_id');
+                 $leaveAppliedStudentInfo = User::wherein('id',$leaveApplied)->select('id','first_name','last_name','roll_number')->get();
+
+                 $leaveApproved= Leave::where('division_id',$division->id)
+                                      ->where('from date',$request->date)
+                                      ->where('status',1)
+                                      ->lists('student_id');
+                 $leaveApprovedStudentInfo = User::wherein('id',$leaveApproved)->select('id','first_name','last_name','roll_number')->get();
+
+         if($absentStudentInfo->toArray() != null || $leaveAppliedStudentInfo->toArray() != null || $leaveApprovedStudentInfo->toArray() != null)
+         {       $data['absent-list'] =$absentStudentInfo->toArray();
+                 $data['leaveApplied-list'] =$leaveAppliedStudentInfo->toArray();
+                 $data['leaveApproved-list'] =$leaveApprovedStudentInfo->toArray();
+                 $status = 200;
+                 $message = "successfully";
+         }
+         else{
+             $status = 404;
+             $message = "list not found";
+         }
+
+     }catch (\Exception $e) {
+        $status = 500;
+        $message = "Something went wrong";
+       }
+        $response = ["message" => $message,"data" =>$data];
+        return response($response, $status);
+    }
+
 }
