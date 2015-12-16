@@ -48,6 +48,10 @@ var Calendar = function() {"use strict";
 			eventInputDateHandler();
 			$(".form-full-event #event-id").val("");
 			$('.events-modal').modal();
+            $('#showEvent').hide();
+            $('#editEvent').show();
+            $('.save-event').show();
+            $('.edit-event').hide();
             $('#delBtn').hide();
 		});
 		$('.events-modal').on('hide.bs.modal', function(event) {
@@ -128,7 +132,11 @@ var Calendar = function() {"use strict";
 				$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
 				$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
 				$(".event-categories[value='job']").prop('checked', true);
+                $('#showEvent').hide();
+                $('#editEvent').show();
                 $('#delBtn').hide();
+                $('.save-event').show();
+                $('.edit-event').hide();
 				$('.events-modal').modal();
 			},
 			eventClick: function(calEvent, jsEvent, view) {
@@ -146,7 +154,24 @@ var Calendar = function() {"use strict";
 						} else {
 							eventCategory = demoCalendar[i].category;
 						}
-                        $('#delBtn').show();
+
+                        var date=new Date(demoCalendar[i].start._d);
+                        var date1=new Date(demoCalendar[i].end._d);
+                        var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+                        var start_date=days[date.getDay()]+' '+date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear();
+                        var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+date1.getMonth()+'/'+date1.getFullYear();
+
+                        $("#event-title").html(demoCalendar[i].title);
+                        $("#event-description").html('This event is organized in our school.');
+                        $("#event-start-time").html(start_date);
+                        $("#event-end-time").html(end_date);
+
+
+                        $('#showEvent').show();
+                        $('#editEvent').hide();
+                        $('.save-event').hide();
+                        $('.edit-event').show();
+                        $('#delBtn').hide();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
 
