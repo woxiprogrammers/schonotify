@@ -155,4 +155,5 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('getdivisions',array('uses' => 'api\UserController@getDivisions'));
     Route::get('gettstudents/{token}/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
+    Route::post('viewAttendance','api\AttendanceController@viewAttendance');
 });
