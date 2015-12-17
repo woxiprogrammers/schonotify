@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Batch;
+use App\Classes;
+use App\Division;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
@@ -182,4 +185,69 @@ class MessageController extends Controller
         return response($response, $status);
 
     }
+    public function getMessageList(Request $request){
+        try {
+            $data = $request->all();
+            $sender = $data['teacher']['id'];
+            $senderArray = array();
+            array_push($senderArray,$sender);
+            $tomessageList = Message::where('to_id',$sender)->orwhere('from_id',$sender)->lists('to_id');
+            $frommessageList = Message::where('to_id',$sender)->orwhere('from_id',$sender)->lists('from_id');
+            $toMessageData = array_unique(array_diff($tomessageList->toArray(),$senderArray));
+            $fromMessageData = array_unique(array_diff($frommessageList->toArray(),$senderArray));
+            $messagecontact = array_unique(array_merge($toMessageData,$fromMessageData));
+            $userInfo = User::whereIn('id',$messagecontact)->select('id','first_name','last_name','role_id',
+            'division_id')->get();
+            //dd($userInfo->toArray());
+            $data1=array();
+            $da=array();
+            foreach($userInfo as $user){
+                $messages = Message::Where(function ($query) use($sender) {
+                    $query->orwhere('to_id', $sender)->orwhere('from_id', $sender);
+                })->orderby('timestamp','desc')->first();
+                //dd($messages);
+
+                $data1['message']['description']=$messages->description;
+                $data1['message']['timestamp']=$messages->timestamp;
+                $data1['sender']['user_id']=$user['id'];
+                $data1['sender']['first_name']=$user['first_name'];
+                $data1['sender']['last_name']=$user['last_name'];
+                if($user['role_id'] == 3)
+                {
+
+                    $studentDivision = Division::where('id',$user['division_id'])->first();
+                    $studentClass = Classes::where('id',$studentDivision->class_id)->first();
+                    $studentBatch = Batch::where('id',$studentClass->batch_id)->first();
+
+                    $data1['studentInfo']['student-division']= $studentDivision->division_name;
+                    $data1['studentInfo']['student-class'] = $studentClass->class_name;
+                    $data1['studentInfo']['student-batch'] = $studentBatch->name;
+                }else{
+                    $data1['studentInfo']='';
+                    //dd($data1);
+
+                }
+                array_push($da,$data1);
+            }
+            //dd($userInfo->toArray());
+           // $message = $messages->toArray();
+            $responseData['data']= $da;
+            $status = 200;
+            $message = 'Successful';
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $responseData
+        ];
+        return response($response, $status);
+    }
+
+
+
+
 }
