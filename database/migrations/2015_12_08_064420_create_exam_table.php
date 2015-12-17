@@ -15,7 +15,7 @@ class CreateExamTable extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->increments('id');
             $table->string('exam_name',255);
-            $table->string('exam_type',255);
+            $table->integer('exam_type')->unsigned();
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->float('duration',24);

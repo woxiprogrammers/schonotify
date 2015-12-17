@@ -20,6 +20,12 @@ class DatabaseSeeder extends Seeder
         $this->call(batchesTableSeeder::class);
         $this->call(ModuleSeeder::class);
         $this->call(UserRoleSeeder::class);
+        $this->call(AttendanceTableSeeder::class);
+        $this->call(DivisionSubjectTableSeeder::class);
+        $this->call(ExamsTableSeeder::class);
+        $this->call(ExamSubjectsTableSeeder::class);
+        $this->call(ExamTypeTableSeeder::class);
+        $this->call(MessagesTableSeeder::class);
         Model::reguard();
     }
 }
