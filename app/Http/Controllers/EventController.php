@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Mockery\CountValidator\Exception;
 
 class EventController extends Controller
 {
@@ -23,22 +24,8 @@ class EventController extends Controller
         return view('admin.event');
     }
 
-    public function saveEvent(Request $request)
+    public function saveEvent(Requests\WebRequests\EventRequest $request)
     {
-        $data=Input::all();
-        $user=Auth::User();
-        $body=Body::find($user->body_id);
-        $time=time();
-        if(Input::hasFile('image'))
-        {
-            $fileName=Input::file('image')->getClientOriginalName();
-
-            if($fileName !="")
-            {
-                Input::file('image')->move('assets/images/'.$body->name.'/events/'.$fileName.'_'.$time);
-            }
-        }
-
-
+           return $request;
     }
 }

@@ -53,6 +53,7 @@ var Calendar = function() {"use strict";
             $('.save-event').show();
             $('.edit-event').hide();
             $('#delBtn').hide();
+            $('#error-div').html('');
 		});
 		$('.events-modal').on('hide.bs.modal', function(event) {
 			$(".form-full-event #event-id").val("");
@@ -137,6 +138,7 @@ var Calendar = function() {"use strict";
                 $('#delBtn').hide();
                 $('.save-event').show();
                 $('.edit-event').hide();
+                $('#error-div').html('');
 				$('.events-modal').modal();
 			},
 			eventClick: function(calEvent, jsEvent, view) {
@@ -171,6 +173,7 @@ var Calendar = function() {"use strict";
                         $('#editEvent').hide();
                         $('.save-event').hide();
                         $('.edit-event').show();
+                        $('#error-div').html('');
                         $('#delBtn').hide();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
@@ -197,6 +200,9 @@ var Calendar = function() {"use strict";
 					minlength: 2,
 					required: true
 				},
+                eventDescription: {
+                    required: true
+                },
 				eventStartDate: {
 					required: true,
 					date: true

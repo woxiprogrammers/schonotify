@@ -41,6 +41,7 @@
                                 <div class="modal-body">
                                     <div id="editEvent">
                                     <div class="form-group ">
+                                        <div id="error-div"></div>
                                         <h4>Event</h4>
 
                                     </div>
@@ -195,7 +196,22 @@
             type: 'POST',
             success: function(data){
                 console.log(data);
+            },
+            error: function(data){
+                // Error...
+                var errors = $.parseJSON(data.responseText);
+
+
+                errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                $.each( errors, function( key, value ) {
+                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                });
+                errorsHtml += '</ul></di>';
+
+                $('#error-div').html(errorsHtml);
             }
+
         });
 
     }
@@ -204,7 +220,6 @@
         $('.save-event').show();
         $('#delBtn').show();
         $('.edit-event').hide();
-
         $('#showEvent').hide();
         $('#editEvent').show();
     });
