@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use App\User;
 
-class AttendanceRequest extends Request
+class LeaveApproveRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,12 +32,10 @@ class AttendanceRequest extends Request
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
         }
-        if(in_array('Create_attendance',$resultArr) )
-
-        {return true;}
-        else{
+        if(in_array('Publish_leave',$resultArr)) {
+            return true;
+        } else {
             return false;
-
         }
     }
 
@@ -49,9 +47,8 @@ class AttendanceRequest extends Request
     public function rules()
     {
         return [
-            'batch_id'=>'required',
-            'class_id'=>'required',
-            'division_id'=>'required',
+            'leave_id' => 'required|integer',
+            'token' => 'required',
         ];
     }
 }
