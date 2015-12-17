@@ -3,7 +3,7 @@
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Database\Migrations\Migration;
 
-class AddLeaveTypeToLeaveField extends Migration
+class AddLeaveTypeToLeaveTable extends Migration
 {
     /**
      * Run the migrations.
