@@ -211,7 +211,7 @@ class AttendanceController extends Controller
         return response($response, $status);
     }
 
-    public function viewAttendance(Requests\SubmitAttendance $request)
+    public function viewAttendance(Requests\ViewRequest $request)
     {
      try{
          $batch=Batch::where('id',$request->batch_id)->first();

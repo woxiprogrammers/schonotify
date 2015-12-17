@@ -23,7 +23,7 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getApprovedLeaveList(Request $request)
+    public function getApprovedLeaveList(Requests\Leave $request)
     {
         try {
             if ($request->teacher != null) {
@@ -55,7 +55,7 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getPendingLeaveList(Request $request)
+    public function getPendingLeaveList(Requests\Leave $request)
     {
         try {
             if ($request->teacher != null){
@@ -87,7 +87,7 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function approveLeave(Requests\Leave $request){
+    public function approveLeave(Requests\LeaveApproveRequest $request){
         try{
             $data = $request->all();
             if (isset($data['teacher'])){
