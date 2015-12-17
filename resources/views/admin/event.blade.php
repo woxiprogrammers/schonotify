@@ -39,7 +39,9 @@
                         <div class="modal-content">
                             <form class="form-full-event" id="form">
                                 <div class="modal-body">
+                                    <div id="editEvent">
                                     <div class="form-group ">
+                                        <div id="error-div"></div>
                                         <h4>Event</h4>
 
                                     </div>
@@ -53,7 +55,7 @@
                                         <label>
                                             Event Details
                                         </label>
-                                        <textarea class="form-control" id="event-name" name="eventName"></textarea>
+                                        <textarea class="form-control" id="event-name" name="eventDescription"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>
@@ -73,17 +75,44 @@
                                     </div>
                                     <div class="form-group">
 
-                                        <div class="row">
+                                        <label>
+                                            Select Image
+                                        </label>
                                                 <div id="imageUploader">
-                                                    <input type="file" name="image" id="img-file">
-
-                                                    <div class="progress progress-striped active">
-                                                        <div class="progress-bar" style="width:90%;"></div>
-                                                    </div>
+                                                    <input class="form-control" type="file" name="image" id="img-file">
                                                 </div>
+                                    </div>
+                                    </div>
+                                    <div id="showEvent">
+
+                                        <div class="panel panel-white">
+                                            <div class="panel-heading">
+                                                <div class="timeline_title">
+
+                                                    <h4 class="panel-title no-margin text-primary" id="event-title"></h4>
+
+                                                </div>
+                                                <div class="panel-tools">
+                                                    <i class="fa fa-clock-o"></i> Wednesday 12 Nov, 2015 12:00 PM
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <p id="event-description">
+
+                                                </p>
+                                                <address>
+                                                    Event Start: <em class="text-bold" id="event-start-time"></em>
+                                                    <br>
+                                                    Event End: <em class="text-bold" id="event-end-time"></em>
+                                                </address>
+                                                <img class="thumbnail" src="assets/images/picture.svg" onerror="this.onerror=null;this.width='200';this.src='assets/images/picture.svg'; " width="200">
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div class="modal-footer">
                                     <button class="btn btn-info btn-o delete-event pull-left" onclick="confirm('Are you sure to publish this event?')">
                                         Publish
@@ -99,6 +128,9 @@
                                     <button class="btn btn-primary btn-o save-event" type="submit" id="upload">
                                         Save
                                     </button>
+                                    <a class="btn btn-primary btn-o edit-event" id="editEventBtn">
+                                        Edit
+                                    </a>
                                 </div>
                             </form>
                         </div>
@@ -141,7 +173,6 @@
         jQuery(document).ready(function() {
             Main.init();
             Calendar.init();
-
         });
 
     $('#form').on('submit',function(e){
@@ -157,13 +188,41 @@
         var formData=new FormData(file[0]);
         console.log(file[0]);
 
-        $.post('save-event',function(res){
+        $.ajax({
+            url:'save-event',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data){
+                console.log(data);
+            },
+            error: function(data){
+                // Error...
+                var errors = $.parseJSON(data.responseText);
+
+
+                errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                $.each( errors, function( key, value ) {
+                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                });
+                errorsHtml += '</ul></di>';
+
+                $('#error-div').html(errorsHtml);
+            }
 
         });
-        var request=new XMLHttpRequest();
-        request.open('post','save-event');
-        request.send(formData);
+
     }
+
+    $('#editEventBtn').click(function(){
+        $('.save-event').show();
+        $('#delBtn').show();
+        $('.edit-event').hide();
+        $('#showEvent').hide();
+        $('#editEvent').show();
+    });
 
 </script>
 
