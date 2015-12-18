@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ExamSubjectsTableSeeder::class);
         $this->call(ExamTypeTableSeeder::class);
         $this->call(MessagesTableSeeder::class);
+        $this->call(Day_Master_seeder::class);
         Model::reguard();
     }
 }
