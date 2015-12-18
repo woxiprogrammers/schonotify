@@ -198,14 +198,12 @@ class MessageController extends Controller
             $messagecontact = array_unique(array_merge($toMessageData,$fromMessageData));
             $userInfo = User::whereIn('id',$messagecontact)->select('id','first_name','last_name','role_id',
             'division_id')->get();
-            //dd($userInfo->toArray());
             $data1=array();
             $da=array();
             foreach($userInfo as $user){
                 $messages = Message::Where(function ($query) use($sender) {
                     $query->orwhere('to_id', $sender)->orwhere('from_id', $sender);
                 })->orderby('timestamp','desc')->first();
-                //dd($messages);
 
                 $data1['message']['description']=$messages->description;
                 $data1['message']['timestamp']=$messages->timestamp;
@@ -224,13 +222,10 @@ class MessageController extends Controller
                     $data1['studentInfo']['student-batch'] = $studentBatch->name;
                 }else{
                     $data1['studentInfo']='';
-                    //dd($data1);
 
                 }
                 array_push($da,$data1);
             }
-            //dd($userInfo->toArray());
-           // $message = $messages->toArray();
             $responseData['data']= $da;
             $status = 200;
             $message = 'Successful';

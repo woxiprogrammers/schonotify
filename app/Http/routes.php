@@ -145,7 +145,7 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
     Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
     Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
-
+    Route::post('deatil-leaveinformation',array('uses' => 'api\LeaveController@getDetailLeaveInformation'));
 
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
@@ -159,7 +159,7 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('getbatches',array('uses' => 'api\UserController@getBatches'));
     Route::get('getclasses',array('uses' => 'api\UserController@getClasses'));
     Route::get('getdivisions',array('uses' => 'api\UserController@getDivisions'));
-    Route::get('gettstudents/{token}/{division}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::get('gettstudents/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
 
 
