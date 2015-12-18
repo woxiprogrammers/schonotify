@@ -152,4 +152,36 @@ class LeaveController extends Controller
         ];
         return response($response, $status);
     }
+    /**
+     * get detail information about leave
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getDetailLeaveInformation(Requests\Leave $request){
+        try{
+            $data = $request->all();
+            $student = Leave::where('id', $data['leave_id'])->first();
+            $studentInfo = User::where('id',$student->student_id)->first();
+            $studentDivision = Division::where('id',$student->division_id)->first();
+            $studentClass = Classes::where('id',$studentDivision->class_id)->first();
+            $studentBatch = Batch::where('id',$studentClass->batch_id)->first();
+            $message = 'Leave Description Successfully';
+            $status = 200;
+            $responseData['LeaveInfo']= $student;
+            $responseData['studentInfo']['batch'] = $studentBatch->name;
+            $responseData['studentInfo']['class'] = $studentClass->class_name;
+            $responseData['studentInfo']['division'] = $studentDivision->division_name;
+            $responseData['studentInfo']['firstName'] = $studentInfo->first_name;
+            $responseData['studentInfo']['lastName'] = $studentInfo->last_name;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "data" => $responseData
+        ];
+        return response($response, $status);
+    }
 }
