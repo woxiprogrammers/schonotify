@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Batch;
+use App\Classes;
+use App\Division;
 use App\SubjectClassDivision;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -29,9 +32,24 @@ class LeaveController extends Controller
             if ($request->teacher != null) {
                 $division = $request->teacher->teacher()->lists('division_id');
                 $leaves = Leave::whereIn('division_id', $division)->where('status', '1')->orderBy('from date', 'asc')->get();
+                $approveList = array();
+                foreach($leaves as $leave){
+                    $studentDivision = Division::where('id',$leave['division_id'])->first();
+                    $studentClass = Classes::where('id',$studentDivision->class_id)->first();
+                    $studentBatch = Batch::where('id',$studentClass->batch_id)->first();
+                    $studentName = User::where('id',$leave['student_id'])->first();
+                    $leaveData['leave_id'] = $leave->id;
+                    $leaveData['title'] = $leave->title;
+                    $leaveData['created_at'] = $leave['created_at'];
+                    $leaveData['student-division']= $studentDivision->division_name;
+                    $leaveData['student-class'] = $studentClass->class_name;
+                    $leaveData['student-batch'] = $studentBatch->name;
+                    $leaveData['student-fname'] = $studentName->first_name;
+                    $leaveData['student-lname'] = $studentName->last_name;
+                    array_push($approveList,$leaveData);
+                }
                 $message = 'success';
                 $status = 200;
-                $approveList = $leaves->toArray();
                 $responseData['approveList']= $approveList;
             } else {
                 $status = 401;
@@ -61,6 +79,22 @@ class LeaveController extends Controller
             if ($request->teacher != null){
                 $division = $request->teacher->teacher()->lists('division_id');
                 $leaves = Leave::whereIn('division_id', $division)->where('status', '0')->orderBy('from date', 'desc')->get();
+                $pendingList = array();
+                foreach($leaves as $leave){
+                    $studentDivision = Division::where('id',$leave['division_id'])->first();
+                    $studentClass = Classes::where('id',$studentDivision->class_id)->first();
+                    $studentBatch = Batch::where('id',$studentClass->batch_id)->first();
+                    $studentName = User::where('id',$leave['student_id'])->first();
+                    $leaveData['leave_id'] = $leave->id;
+                    $leaveData['title'] = $leave->title;
+                    $leaveData['created_at'] = $leave['created_at'];
+                    $leaveData['student-division']= $studentDivision->division_name;
+                    $leaveData['student-class'] = $studentClass->class_name;
+                    $leaveData['student-batch'] = $studentBatch->name;
+                    $leaveData['student-fname'] = $studentName->first_name;
+                    $leaveData['student-lname'] = $studentName->last_name;
+                    array_push($pendingList,$leaveData);
+                }
                 $message = 'success';
                 $status = 200;
                 $pendingList = $leaves->toArray();
