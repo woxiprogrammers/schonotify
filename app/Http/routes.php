@@ -135,6 +135,8 @@ Route::get('students-results-history','HistoryController@showResults');
 
 Route::post('save-event','EventController@saveEvent');
 
+Route::get('user-module-acl','UsersController@userModuleAcls');
+
 //getAttendance()
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
