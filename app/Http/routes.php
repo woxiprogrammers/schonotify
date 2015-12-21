@@ -135,16 +135,24 @@ Route::get('students-results-history','HistoryController@showResults');
 
 Route::post('save-event','EventController@saveEvent');
 
+Route::get('user-module-acl','UsersController@userModuleAcls');
+
 //getAttendance()
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
     Route::post('attendance','api\AttendanceController@markAttendance');
+
+    //leave related
     Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
     Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
     Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
+    Route::post('deatil-leaveinformation',array('uses' => 'api\LeaveController@getDetailLeaveInformation'));
+
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
+
+
     Route::post('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
     Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
@@ -153,8 +161,16 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('getbatches',array('uses' => 'api\UserController@getBatches'));
     Route::get('getclasses',array('uses' => 'api\UserController@getClasses'));
     Route::get('getdivisions',array('uses' => 'api\UserController@getDivisions'));
-    Route::get('gettstudents/{token}/{division}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::get('gettstudents/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
+
+
+
+
+
+
+
+
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
     Route::get('getMessageList','api\MessageController@getMessageList');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\TeacherView;
 use App\User;
 use Closure;
 
@@ -16,11 +17,25 @@ class AuthenticateUser
      */
     public function handle($request, Closure $next)
     {
+
 	 if($request->has('token')){
 	      $teacher = User::where('remember_token',$request->token)->first();
             if (!empty($teacher)){
-            $request->merge(compact('teacher'));
-            return $next($request);
+                if($teacher->role_id == 2){
+                    $teacherView = TeacherView::where('user_id',$teacher->id)->where('mobile_view',1)->count();
+                    if($teacherView == 1){
+                        $request->merge(compact('teacher'));
+                        return $next($request);
+                    }else{
+                        $response = array();
+                        $response['status'] = 401;
+                        $response['message'] = "Don't Have mobile view permission";
+                        return $response;
+                    }
+                }else{
+                    $request->merge(compact('teacher'));
+                    return $next($request);
+                }
             } else {
                 $response = array();
                 $response['status'] = 500;

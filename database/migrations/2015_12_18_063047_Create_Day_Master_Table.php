@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExamTable extends Migration
+class CreateDayMasterTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,9 @@ class CreateExamTable extends Migration
      */
     public function up()
     {
-        Schema::create('exams', function (Blueprint $table) {
+        Schema::create('day_master', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('exam_name',255);
-            $table->integer('exam_type')->unsigned();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
-            $table->float('duration',24);
-            $table->float('pass_criteria',3);
-            $table->text('venue');
+            $table->string('name',255);
             $table->string('slug',255);
             $table->timestamps();
         });
@@ -33,6 +27,6 @@ class CreateExamTable extends Migration
      */
     public function down()
     {
-        Schema::drop('exams');
+        Schema::drop('day_master');
     }
 }
