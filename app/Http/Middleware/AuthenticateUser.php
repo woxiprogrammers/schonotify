@@ -16,8 +16,8 @@ class AuthenticateUser
      */
     public function handle($request, Closure $next)
     {
-        if(isset($request->token)){
-            $teacher = User::where('remember_token',$request->token)->first();
+	 if($request->has('token')){
+	      $teacher = User::where('remember_token',$request->token)->first();
             if (!empty($teacher)){
             $request->merge(compact('teacher'));
             return $next($request);
