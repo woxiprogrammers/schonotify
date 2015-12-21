@@ -112,25 +112,38 @@
                                     </div>
                                 </div>
 
-
                                 <div class="modal-footer">
+                                    @foreach(session('functionArr') as $row)
+                                    @if($row == 'publish_event')
                                     <button class="btn btn-info btn-o delete-event pull-left" onclick="confirm('Are you sure to publish this event?')">
                                         Publish
                                     </button>
-
+                                    @endif
+                                    @endforeach
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
                                         Cancel
                                     </button>
-
+                                    @foreach(session('functionArr') as $row)
+                                    @if($row == 'delete_event')
                                     <button class="btn btn-danger btn-o delete-event" id="delBtn">
                                         Delete
                                     </button>
+                                    @endif
+                                    @endforeach
+                                    @foreach(session('functionArr') as $row)
+                                    @if($row == 'create_event')
                                     <button class="btn btn-primary btn-o save-event" type="submit" id="upload">
                                         Save
                                     </button>
+                                    @endif
+                                    @endforeach
+                                    @foreach(session('functionArr') as $row)
+                                    @if($row == 'update_event')
                                     <a class="btn btn-primary btn-o edit-event" id="editEventBtn">
                                         Edit
                                     </a>
+                                    @endif
+                                    @endforeach
                                 </div>
                             </form>
                         </div>

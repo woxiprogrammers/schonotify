@@ -45,12 +45,14 @@
             </a>
         </li>
         @endif
-        @endforeach
+        @if($row == 'view_subject')
         <li>
             <a href="searchSubjects">
                 <span class="title"> Subjects  </span>
             </a>
         </li>
+        @endif
+        @endforeach
     </ul>
 
 </li>
@@ -105,7 +107,8 @@
     </li>
     @endif
     @endforeach
-
+    @foreach(session('functionArr') as $row)
+    @if($row == 'view_timetable')
     <li>
         <a href="timetable">
             <div class="item-content">
@@ -118,6 +121,10 @@
             </div>
         </a>
     </li>
+    @endif
+    @endforeach
+    @foreach(session('functionArr') as $row)
+    @if($row == 'view_event')
     <li>
         <a href="event">
             <div class="item-content">
@@ -131,6 +138,9 @@
             </div>
         </a>
     </li>
+    @endif
+    @endforeach
+
     <li>
         <a href="noticeBoard">
             <div class="item-content">
@@ -144,7 +154,6 @@
             </div>
         </a>
     </li>
-
     <li>
         <a href="javascript:void(0)">
             <div class="item-content">
@@ -157,27 +166,34 @@
             </div>
         </a>
         <ul class="sub-menu">
+            @foreach(session('functionArr') as $row)
+            @if($row == 'create_attendance')
             <li>
                 <a href="markAttendance">
                     <span class="title"> Mark Attendance </span>
                 </a>
             </li>
-
+            @endif
+            @if($row == 'view_attendance')
             <li>
                 <a href="view-attendance">
                     <span class="title"> View Attendance  </span>
                 </a>
             </li>
-
+            @endif
+            @if($row == 'view_leave')
             <li>
                 <a href="leaveListing">
                     <span class="title"> Leaves </span>
                     <span class="badge pull-right">9</span>
                 </a>
             </li>
+            @endif
+            @endforeach
         </ul>
     </li>
-
+    @foreach(session('functionArr') as $row)
+    @if($row == 'view_homework')
     <li>
         <a href="homeworkListing">
             <div class="item-content">
@@ -191,7 +207,10 @@
             </div>
         </a>
     </li>
-
+    @endif
+    @endforeach
+    @foreach(session('functionArr') as $row)
+    @if($row == 'view_result')
     <li>
         <a href="results">
             <div class="item-content">
@@ -204,7 +223,8 @@
             </div>
         </a>
     </li>
-
+    @endif
+    @endforeach
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">

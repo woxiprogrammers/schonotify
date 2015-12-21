@@ -261,128 +261,14 @@
                 </form>
             </div>
 
-            <div id="panel_module_assigned" class="tab-pane fade">
+            <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
                 <div class="panel-body">
-                    <div class="row" style="margin-bottom: 14px;">
-                        <div class="col-sm-3"><h4 class="center" style="margin:0px !important; color:#ccc;">Modules</h4></div>
-                        <div>
+                    <div class="col-sm-10">
 
-                            <span class="label label-info" style="margin:6px;">View</span>
+                    <table class="table table-responsive" id="aclMod">
 
-                            <span class="label label-default" style="margin:6px;">Create</span>
+                    </table>
 
-                            <span class="label label-warning" style="margin:6px;">Update</span>
-
-                            <span class="label label-danger" style="margin:6px;">Delete</span>
-
-                        </div>
-                    </div>
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Users Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox" value="1" checked disabled>
-                            <label for="checkbox"></label>
-
-                            <input type="checkbox" id="checkbox1" value="1" checked disabled>
-                            <label for="checkbox1"></label>
-
-                            <input type="checkbox" id="checkbox2" value="1" checked disabled>
-                            <label for="checkbox2"></label>
-
-                            <input type="checkbox" id="checkbox3" value="1" checked disabled>
-                            <label for="checkbox3"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Event Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox4" value="1" checked disabled>
-                            <label for="checkbox4"></label>
-
-                            <input type="checkbox" id="checkbox5" value="1" checked disabled>
-                            <label for="checkbox5"></label>
-
-                            <input type="checkbox" id="checkbox6" value="1" checked disabled>
-                            <label for="checkbox6"></label>
-
-                            <input type="checkbox" id="checkbox7" value="1" checked disabled>
-                            <label for="checkbox7"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Class Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox8" value="1" checked disabled>
-                            <label for="checkbox8"></label>
-
-                            <input type="checkbox" id="checkbox9" value="1" disabled>
-                            <label for="checkbox9"></label>
-
-                            <input type="checkbox" id="checkbox10" value="1" disabled>
-                            <label for="checkbox10"></label>
-
-                            <input type="checkbox" id="checkbox11" value="1" disabled>
-                            <label for="checkbox11"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Subjects Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox12" value="1" disabled>
-                            <label for="checkbox12"></label>
-
-                            <input type="checkbox" id="checkbox13" value="1" disabled>
-                            <label for="checkbox13"></label>
-
-                            <input type="checkbox" id="checkbox14" value="1" disabled>
-                            <label for="checkbox14"></label>
-
-                            <input type="checkbox" id="checkbox15" value="1" disabled>
-                            <label for="checkbox15"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Exams Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox16" value="1" disabled>
-                            <label for="checkbox16"></label>
-
-                            <input type="checkbox" id="checkbox17" value="1" disabled>
-                            <label for="checkbox17"></label>
-
-                            <input type="checkbox" id="checkbox18" value="1" disabled>
-                            <label for="checkbox18"></label>
-
-                            <input type="checkbox" id="checkbox19" value="1" disabled>
-                            <label for="checkbox19"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Timetable Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox20" value="1" disabled>
-                            <label for="checkbox20"></label>
-
-                            <input type="checkbox" id="checkbox21" value="1" disabled>
-                            <label for="checkbox21"></label>
-
-                            <input type="checkbox" id="checkbox22" value="1" disabled>
-                            <label for="checkbox22"></label>
-
-                            <input type="checkbox" id="checkbox23" value="1" disabled>
-                            <label for="checkbox23"></label>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -422,11 +308,7 @@
             </div>
             </div>
             </div>
-            <!-- end: USER PROFILE -->
 
-
-
-            <!-- start: FOURTH SECTION -->
                 @include('rightSidebar')
                 <!-- end: FOURTH SECTION -->
             </div>
@@ -440,7 +322,7 @@
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="vendor/jquery-cookie/jquery.cookie.js"></script>4a
 <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
@@ -453,7 +335,71 @@
 <script>
     jQuery(document).ready(function() {
         Main.init();
+        userAclModule();
     });
+
+    function userAclModule()
+    {
+        var route='user-module-acl';
+        $.get(route,function(res){
+
+            var str;
+
+            var arr=res['allModAclArr'];
+
+            var arr1= $.map(arr,function(index,value){
+                return [value];
+            });
+
+            var arr3=res['allAcls'];
+            var arr2= $.map(arr3,function(index,value){
+                return [index];
+            });
+
+            var arr4=res['userModAclArr'];
+
+            str+='<tr>'+
+                '<th><b>Modules</b></th>';
+            for(var j=0; j<arr2.length; j++)
+            {
+
+                str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
+            }
+
+            str+='</tr>';
+
+
+            for(var i=0; i<arr1.length; i++)
+            {
+
+                str+="<tr>"+
+                "<td>"+(arr1[i]).toUpperCase()+"</td>";
+                    for(var j=0; j<arr2.length; j++)
+                    {
+                str+='<td>'+
+                    '<div class="checkbox clip-check check-primary checkbox-inline">';
+
+
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
+                        {
+
+                      str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" disabled checked>'+
+                        '<label for="checkbox"></label>';
+                        }else{
+                            str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" disabled>'+
+                                '<label for="checkbox"></label>';
+                        }
+                    str+='</div>'+
+                    '</td>';
+                    }
+
+                str+="</tr>";
+            }
+
+            $('#aclMod').html(str);
+        });
+    }
+
 </script>
 
 
