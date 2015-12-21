@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\AclMaster;
 use App\ClassData;
 use App\Classes;
 use App\Division;
+use App\Module;
+use App\ModuleAcl;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
@@ -38,7 +41,49 @@ class UsersController extends Controller
     public function usersProfile()
     {
         $user=Auth::user();
-        return view('userProfile')->with('user',$user);
+
+       return view('userProfile')->with('user',$user);
+
+    }
+
+    public function userModuleAcls()
+    {
+        $user=Auth::user();
+        $modules=Module::select('slug')->get();
+        $result=User::Join('module_acls', 'users.id', '=', 'module_acls.user_id')
+            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
+            ->where('users.id','=',$user->id)
+            ->select('acl_master.slug as acl','modules.title as module','modules.slug as module_slug')
+            ->get();
+        $acls=AclMaster::all();
+        $allModuleAcl=array();
+        $arrMod=array();
+        $userModAclArr=array();
+        $mainArr=array();
+
+        $userModAclArr=session('functionArr');
+
+        foreach($modules as $row1)
+        {
+            $i=0;
+            foreach($acls as $row)
+            {
+
+                $allModuleAcl[$row1->slug][$i]=$row->slug;
+                $i++;
+
+            }
+
+        }
+
+        $mainArr['allModules']=$modules;
+        $mainArr['allAcls']=$acls;
+        $mainArr['userModAclArr']=$userModAclArr;
+        $mainArr['allModAclArr']=$allModuleAcl;
+
+        return $mainArr;
+
     }
 
     /**

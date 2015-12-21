@@ -34,7 +34,13 @@
                     <div class="row">
                         @include('selectClassDivisionDropdown')
                         <div class="col-sm-8 center" id="timetable-create-btn">
-                           <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
+                            @foreach(session('functionArr') as $row)
+                            @if($row == 'create_timetable')
+                            <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
+                            @else
+                            <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...
+                            @endif
+                            @endforeach
                         </div>
                         <div class="row" id="timetable-div">
 
@@ -76,6 +82,8 @@
             <div class="modal-content">
                 <form class="form-full-event">
                     <div class="modal-body">
+                        @foreach(session('functionArr') as $row)
+                        @if($row == 'create_timetable')
                         <div id="createper">
                         <div class="form-group">
 
@@ -170,13 +178,20 @@
                         </div>
 
                     </div>
+                    @endif
+                    @endforeach
+
                     <div class="modal-footer">
                         <button class="btn btn-danger btn-o delete-event">
                             Cancel
                         </button>
+                        @foreach(session('functionArr') as $row)
+                        @if($row == 'create_timetable')
                         <button class="btn btn-primary btn-o save-event" type="submit">
                             Create
                         </button>
+                        @endif
+                        @endforeach
                     </div>
 
                 </form>
@@ -190,6 +205,8 @@
             <div class="modal-content">
                 <form class="form-full-event">
                     <div class="modal-body">
+                        @foreach(session('functionArr') as $row)
+                        @if($row == 'update_timetable')
                         <div class="form-group">
                             <h4>Edit Period</h4>
                         </div>
@@ -250,17 +267,28 @@
 
                             </div>
                         </div>
+
+                        @endif
+                        @endforeach
                     </div>
                     <div class="modal-footer">
+                        @foreach(session('functionArr') as $row)
+                        @if($row == 'delete_timetable')
                         <button class="btn btn-danger btn-o btn-danger pull-left" data-dismiss="modal" onclick="confirm('Are you sure to delete this period?')">
                             Delete
                         </button>
+                        @endif
+                        @endforeach
                         <button class="btn btn-danger btn-o " data-dismiss="modal">
                             Cancel
                         </button>
+                        @foreach(session('functionArr') as $row)
+                        @if($row == 'update_timetable')
                         <button class="btn btn-primary btn-o " data-dismiss="modal" type="button" onclick="confirm('would you like to change this period?')">
                             Save
                         </button>
+                        @endif
+                        @endforeach
                     </div>
                 </form>
             </div>
