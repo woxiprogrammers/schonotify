@@ -171,4 +171,9 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
 
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
     Route::get('getMessageList','api\MessageController@getMessageList');
+    Route::post('createHomework','api\HomeworkController@createHomework');
+    Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
+    Route::get('viewHomeWork',array('uses' => 'api\HomeworkController@viewHomeWork'));
+
+
 });
