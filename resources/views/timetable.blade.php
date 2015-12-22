@@ -37,7 +37,6 @@
                         @foreach(session('functionArr') as $row)
                         @if($row == 'create_timetable')
                         <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
-                        @else
                         @endif
                         @endforeach
                     </div>
