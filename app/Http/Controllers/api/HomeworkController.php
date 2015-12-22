@@ -133,30 +133,225 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
-    public function viewHomeWork(Requests\HomeworkRequest $request)
-    {
-        $user =User::where('remember_token',$request->token)->first();
-
-        $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->get();
-        $homeworkTeacherArray=$homeworkTeacher->toArray();
-        //dd($homeworkTeacherArray);
-        foreach($homeworkTeacherArray as $val)
+    public function viewHomeWork(Requests\HomeworkRequest $request,$page_id)
+    {   $str=array();
+        $data=array();
+        try
         {
-            $homeworkIdArray[]=$val['homework_id'];
-            $div[]=$val['division_id'];
-        }
-        $homework=Homework::wherein('id',$homeworkIdArray)->get();
-        $division=Division::wherein('id',$div)->get();
-        foreach($homework as $value)
-        {
-            $homeworkType[]=$value['homework_type_id'];
-            $subject[]=$value['subject_id'];
-        }
-        $subjectData=Subject::wherein('id',$subject)->get();
-        $homeworkTypeData=HomeworkType::wherein('id',$homeworkType)->get();
+            $messageCount = $page_id * 2;
+            $user =User::where('remember_token',$request->token)->first();
+            $val1=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
+                ->Join('classes', 'divisions.class_id', '=', 'classes.id')
+                ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
+                ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
+                ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
+                ->where('homework_teacher.teacher_id','=',$user->id)
+                ->where('homeworks.status','=',0)
+                ->orWhere('homeworks.status', '=', 1)
+                ->select('homeworks.title as homeworkTitle','description','due_date','attachment_file','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name')
+                ->skip($messageCount)->take(2)
+                ->get();
 
-        $data['division']=$division['division_id'];
-        dd($data);
+            $i=0;
+        if($val1 != null){
+            foreach($val1 as $value)
+            {
+                $title=$value['homeworkTitle'];
+                $userId=$value['userId'];
+                $str[$title]['description']=$value['description'];
+                $str[$title]['status']=$value['status'];
+                $str[$title]['due_date']=$value['due_date'];
+                $str[$title]['attachment_file']=$value['attachment_file'];
+                $str[$title]['homeworkType']=$value['homeworkType'];
+                $str[$title]['subjectName']=$value['subjectName'];
+                $str[$title]['division_name']=$value['division_name'];
+                $str[$title]['class_name']=$value['class_name'];
+                $str[$title]['studentList'][$userId]=$value['first_name'].''.$value['last_name'];
+                $i++;
+            }
+            $data=$str;
+            $status = 200;
+            $message = "successfully";
+        }
+        else{
+            $status = 202;
+            $message = "homework not found";
+        }
+        }
+        catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = ["message" => $message,"data" =>$data];
+
+        return response($response, $status);
+
     }
+
+    public function viewPublishHomeWork(Requests\HomeworkRequest $request,$page_id)
+    {   $str=array();
+        $data=array();
+        try{
+            $messageCount = $page_id * 2;
+            $status = 200;
+            $message = "successfully";
+            $user =User::where('remember_token',$request->token)->first();
+            $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->get();
+            $homeworkTeacherArray=$homeworkTeacher->toArray();
+            foreach($homeworkTeacherArray as $val)
+            {
+                $div[]=$val['division_id'];
+            }
+            $division=Division::wherein('id',$div)->get();
+
+        foreach($division as $value)
+            {
+                $divArray[]=$value['class_teacher_id'];
+            }
+
+
+        if(in_array($user->id, $divArray))
+        {
+            $val2=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
+                ->Join('classes', 'divisions.class_id', '=', 'classes.id')
+                ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
+                ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
+                ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
+                ->where('homework_teacher.division_id','=',$divArray)
+                ->where('homeworks.status','=',2)
+                ->select('homeworks.title as homeworkTitle','description','due_date','attachment_file','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name')
+                ->skip($messageCount)->take(2)
+                ->get();
+            $i=0;
+            if($val2 != null){
+                foreach($val2 as $value)
+                {
+                    $title=$value['homeworkTitle'];
+                    $userId=$value['userId'];
+                    $strArr[$title]['description']=$value['description'];
+                    $strArr[$title]['status']=$value['status'];
+                    $strArr[$title]['due_date']=$value['due_date'];
+                    $strArr[$title]['attachment_file']=$value['attachment_file'];
+                    $strArr[$title]['homeworkType']=$value['homeworkType'];
+                    $strArr[$title]['subjectName']=$value['subjectName'];
+                    $strArr[$title]['division_name']=$value['division_name'];
+                    $strArr[$title]['class_name']=$value['class_name'];
+                    $strArr[$title]['studentList'][$userId]=$value['first_name'].''.$value['last_name'];
+                    $i++;
+                }
+                $data=$strArr;
+
+            }
+            else{
+                $status = 202;
+                $message = "homework not found";
+
+            }
+        }
+        else{
+            $val1=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
+                ->Join('classes', 'divisions.class_id', '=', 'classes.id')
+                ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
+                ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
+                ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
+                ->where('homework_teacher.division_id','=',$user->id)
+                ->where('homeworks.status','=',2)
+                ->select('homeworks.title as homeworkTitle','description','due_date','attachment_file','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name')
+                ->skip($messageCount)->take(2)
+                ->get();
+            $i=0;
+            if($val1 != null){
+                foreach($val1 as $value)
+                {
+                    $title=$value['homeworkTitle'];
+                    $userId=$value['userId'];
+                    $str[$title]['description']=$value['description'];
+                    $str[$title]['status']=$value['status'];
+                    $str[$title]['due_date']=$value['due_date'];
+                    $str[$title]['attachment_file']=$value['attachment_file'];
+                    $str[$title]['homeworkType']=$value['homeworkType'];
+                    $str[$title]['subjectName']=$value['subjectName'];
+                    $str[$title]['division_name']=$value['division_name'];
+                    $str[$title]['class_name']=$value['class_name'];
+                    $str[$title]['studentList'][$userId]=$value['first_name'].''.$value['last_name'];
+                    $i++;
+                }
+                $data=$str;
+            }
+            else{
+                $status = 202;
+                $message = "homework not found";
+            }
+
+
+        }
+
+        }
+        catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = ["message" => $message,"data" =>$data];
+
+        return response($response, $status);
+    }
+
+    public function viewDetailHomeWork(Requests\HomeworkRequest $request,$homeWork_id)
+    {   $data=array();
+       try{
+           $status = 200;
+           $message = "successfully";
+              $val1=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+               ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
+               ->Join('classes', 'divisions.class_id', '=', 'classes.id')
+               ->Join('batches', 'classes.batch_id', '=', 'batches.id')
+               ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
+               ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
+               ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
+               ->where('homework_teacher.homework_id','=',$homeWork_id)
+               ->where('homeworks.status','=',2)
+               ->select('homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','batches.name as batch')
+               ->get();
+                $i=0;
+                if($val1 != null){
+                    foreach($val1 as $value)
+                    {
+                        $title=$value['homeworkTitle'];
+                        $userId=$value['userId'];
+                        $str[$title]['description']=$value['description'];
+                        $str[$title]['status']=$value['status'];
+                        $str[$title]['due_date']=$value['due_date'];
+                        $str[$title]['attachment_file']=$value['attachment_file'];
+                        $str[$title]['homeworkType']=$value['homeworkType'];
+                        $str[$title]['teacher']=$value['teacher'];
+                        $str[$title]['subjectName']=$value['subjectName'];
+                        $str[$title]['division_name']=$value['division_name'];
+                        $str[$title]['batch']=$value['batch'];
+                        $str[$title]['class_name']=$value['class_name'];
+                        $str[$title]['studentList'][$userId]=$value['first_name'].''.$value['last_name'];
+                        $i++;
+                    }
+                    $data=$str;
+                }
+                else{
+                    $status = 202;
+                    $message = "homework not found";
+                }
+           }
+       catch (\Exception $e) {
+           $status = 500;
+           $message = "Something went wrong";
+       }
+        $response = ["message" => $message,"data" =>$data];
+
+        return response($response, $status);
+
+
+    }
+
+
 
 }
