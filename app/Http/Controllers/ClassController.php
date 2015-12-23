@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+class ClassController extends Controller
+{
+
+    public function __construct()
+    {
+        $this->middleware('db');
+        $this->middleware('auth');
+    }
+    public function create()
+    {
+        return view('admin.classCreate');
+    }
+}
