@@ -179,5 +179,7 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('viewPublishHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
     Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
 
+    Route::get('viewTimetableParent/{day}','api\TimetableController@viewTimetableParent');
+    Route::get('viewTimetableTeacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
 
 });
