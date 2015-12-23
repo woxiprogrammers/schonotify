@@ -36,8 +36,7 @@ class UserController extends Controller
     protected function login(Requests\LoginRequest $request)
     {   $data=array();
      try{
-
-         $user = User::where('email', $request->email)->first();
+       $user = User::where('email', $request->email)->first();
           if ($user == NULL) {
             $status = 404;
             $message = "Sorry!! Incorrect email or password";
@@ -50,27 +49,45 @@ class UserController extends Controller
               'password' => $request->password
           ])) {
               $status = 200;
-              $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+              $val1=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                  ->where('users.id','=',$user->id)
+                  ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','user_roles.slug','users.remember_token as token','users.password as pass')
+                  ->get();
+              $valueArray=$val1->toArray();
+
+              foreach($valueArray as $val)
+              {
+                  $data['users']['user_id']=$val['id'];
+                  $data['users']['role_type']=$val['slug'];
+                  $data['users']['user_id']=$val['id'];
+                  $data['users']['username']=$val['firstname'].''.$val['lastname'];
+                  $data['users']['password']=$val['pass'];
+                  $data['users']['token']=$val['token'];
+                  $data['users']['email']=$val['email'];
+                  $data['users']['avatar']=$val['avatar'];
+              }
+
+              $value=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
                   ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
                   ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
                   ->where('users.id','=',$user->id)
-                  ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
+                  ->select('users.id','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
                   ->get();
               $resultArr=array();
-              foreach($val1 as $val)
+              foreach($value as $val)
               {
                   array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
               }
-
+              foreach($resultArr as $val)
+              {
+                  $data['Acl_Modules']['user_id']=$val['id'];
+                  $data['Acl_Modules']['acl_module ']=$val;
+              }
+              dd($data);
               $msgCount=Message::where('to_id',$user->id)
                                ->where('read_status',0)
                                ->count();
-              $data['token'] = $user->remember_token;
-              $data['fname'] = $user->first_name;
-              $data['lname'] = $user->last_name;
-              $data['avatar'] = $user->avatar;
-              $data['acl_module'] = $resultArr;
               $data['unread_messagees'] = $msgCount;
               $message = 'login successfully';
         }
