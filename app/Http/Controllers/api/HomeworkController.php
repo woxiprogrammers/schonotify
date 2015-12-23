@@ -350,6 +350,67 @@ class HomeworkController extends Controller
 
     }
 
+    public function publishHomeWork(Requests\PublishRequest $request)
+    {
+     try{
+        $data=array();
+        $userToken=$request->all();
+        $userId='';
+        foreach($userToken as $userData)
+        {
+            $userId=$userData;
+        }
+        $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
+            ->where('users.remember_token','=',$userId)
+            ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
+            ->get();
+        $resultArr=array();
+        foreach($val1 as $val)
+        {
+            array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
+        }
+        unset($request->_method);
+
+        if(in_array('Publish_homework',$resultArr) ){
+
+            $homework_id= Homework::where('id',$request->homework_id)->update(array('status'=>2));
+            $status = 200;
+            $message = "homework published";
+        }
+        elseif (in_array('Create_homework',$resultArr)){
+            $homework_id= Homework::where('id',$request->homework_id)->update(array('status'=>1));
+            $status = 200;
+            $message = "homework request for publish";
+        }
+        else{
+            $status = 401;
+            $message = "unauthorised ";
+        }
+     }
+     catch (\Exception $e) {
+         $status = 500;
+         $message = "Something went wrong";
+     }
+        $response = ["message" => $message];
+        return response($response, $status);
+    }
+
+
+    public function deleteHomework(Requests\deleteHomeworkRequest $request,$homework_id)
+    {
+     try{
+         Homework::where('id',$homework_id)->where('status',0)->update(array('is_active'=>0));
+         $status = 200;
+         $message = "homework deleted";
+     }catch (\Exception $e) {
+        $status = 500;
+        $message = "Something went wrong";
+    }
+        $response = ["message" => $message];
+        return response($response, $status);
+    }
 
 }
