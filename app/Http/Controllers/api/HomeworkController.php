@@ -192,6 +192,7 @@ class HomeworkController extends Controller
     public function viewPublishHomeWork(Requests\HomeworkRequest $request,$page_id)
     {   $str=array();
         $data=array();
+        $strArr=array();
         try{
             $messageCount = $page_id * 2;
             $status = 200;
@@ -208,18 +209,19 @@ class HomeworkController extends Controller
         foreach($division as $value)
             {
                 $divArray[]=$value['class_teacher_id'];
-            }
 
+            }
 
         if(in_array($user->id, $divArray))
         {
-            $val2=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+
+                $val2=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                 ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                 ->Join('classes', 'divisions.class_id', '=', 'classes.id')
                 ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
                 ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
                 ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
-                ->where('homework_teacher.division_id','=',$divArray)
+                ->where('divisions.class_teacher_id','=',$user->id)
                 ->where('homeworks.status','=',2)
                 ->select('homeworks.title as homeworkTitle','description','due_date','attachment_file','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name')
                 ->skip($messageCount)->take(2)
@@ -228,6 +230,7 @@ class HomeworkController extends Controller
             if($val2 != null){
                 foreach($val2 as $value)
                 {
+
                     $title=$value['homeworkTitle'];
                     $userId=$value['userId'];
                     $strArr[$title]['description']=$value['description'];
@@ -242,12 +245,10 @@ class HomeworkController extends Controller
                     $i++;
                 }
                 $data=$strArr;
-
             }
             else{
                 $status = 202;
                 $message = "homework not found";
-
             }
         }
         else{
@@ -257,7 +258,7 @@ class HomeworkController extends Controller
                 ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
                 ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
                 ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
-                ->where('homework_teacher.division_id','=',$user->id)
+                ->where('homework_teacher.teacher_id','=',$user->id)
                 ->where('homeworks.status','=',2)
                 ->select('homeworks.title as homeworkTitle','description','due_date','attachment_file','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name')
                 ->skip($messageCount)->take(2)
@@ -285,10 +286,7 @@ class HomeworkController extends Controller
                 $status = 202;
                 $message = "homework not found";
             }
-
-
         }
-
         }
         catch (\Exception $e) {
             $status = 500;
