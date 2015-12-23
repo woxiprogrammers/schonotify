@@ -169,8 +169,6 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
 
 
 
-
-
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
     Route::get('getMessageList','api\MessageController@getMessageList');
     Route::get('viewTimetableParent/{day}','api\TimetableController@viewTimetableParent');
