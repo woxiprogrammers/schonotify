@@ -41,6 +41,8 @@
                         <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...
                             @endif
                             @endforeach
+                        @endif
+                        @endforeach
                     </div>
                     <div class="row" id="timetable-div">
 

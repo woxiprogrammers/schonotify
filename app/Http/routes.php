@@ -175,7 +175,4 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('getMessageList','api\MessageController@getMessageList');
     Route::get('viewTimetableParent/{day}','api\TimetableController@viewTimetableParent');
     Route::get('viewTimetableTeacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
-
-
-
 });
