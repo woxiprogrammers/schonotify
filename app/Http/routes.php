@@ -178,7 +178,8 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
     Route::get('viewPublishHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
     Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
-
+    Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
+    Route::get('deleteHomework/{homework_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
     Route::get('viewTimetableParent/{day}','api\TimetableController@viewTimetableParent');
     Route::get('viewTimetableTeacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
 
