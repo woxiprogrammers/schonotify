@@ -38,17 +38,16 @@ class UserController extends Controller
      try{
        $user = User::where('email', $request->email)->first();
           if ($user == NULL) {
-            $status = 404;
-            $message = "Sorry!! Incorrect email or password";
+              $status =404;
+              $message = 'Sorry!! Incorrect email or password';
           } elseif ($user->is_active == 0) {
-            $status = 401;
-            $message = "Please confirm your email id first";
+              $status = 401;
+              $message = "Please confirm your email id first";
 
           } elseif (Auth::attempt([
               'email' => $request->email,
               'password' => $request->password
           ])) {
-              $status = 200;
               $val1=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
                   ->where('users.id','=',$user->id)
                   ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','user_roles.slug','users.remember_token as token','users.password as pass')
@@ -57,6 +56,7 @@ class UserController extends Controller
 
               foreach($valueArray as $val)
               {
+
                   $data['users']['user_id']=$val['id'];
                   $data['users']['role_type']=$val['slug'];
                   $data['users']['user_id']=$val['id'];
@@ -73,35 +73,55 @@ class UserController extends Controller
                   ->where('users.id','=',$user->id)
                   ->select('users.id','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
                   ->get();
+
               $resultArr=array();
               foreach($value as $val)
               {
                   array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
               }
+              $data['Acl_Modules']['user_id']=$user->id;
+               $i=0;
               foreach($resultArr as $val)
               {
-                  $data['Acl_Modules']['user_id']=$val['id'];
-                  $data['Acl_Modules']['acl_module ']=$val;
+                  $data['Acl_Modules']['acl_module '][$i]=$val;
+                  $i++;
               }
-              dd($data);
               $msgCount=Message::where('to_id',$user->id)
                                ->where('read_status',0)
                                ->count();
-              $data['unread_messagees'] = $msgCount;
+
+              $data['Badge_count']['user_id']=$user->id;
+
+              $data['Badge_count']['message_count'] = $msgCount;
+              $data['Badge_count']['auto_notification_count'] = $msgCount;
+              $parent_student=User::where('parent_id',$user->id)->get();
+              $data['Parent_student_relation']['parent_id']=$user->id;
+              foreach($parent_student as $val)
+              {
+
+                  $data['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
+                  $data['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
+                  $data['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
+                  $i++;
+              }
+
+
               $message = 'login successfully';
-        }
+              $status =200;
+              }
        else   {
-            $status = 404;
-            $message = "Sorry!! Incorrect email or password";
-        }
+
+           $status =404;
+           $message = 'Sorry!! Incorrect email or password';
+       }
      }catch (\Exception $e) {
          $status = 500;
          $message = "Something went wrong";
      }
-        $response = ["message" => $message,"userData" =>$data];
+        $response = ["message" => $message,"status" => $status,"Data" =>$data];
 
-        return response($response, $status);
+        return response($response);
 
     }
 
