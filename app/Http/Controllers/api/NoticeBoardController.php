@@ -28,7 +28,6 @@ class NoticeBoardController extends Controller
     public function CreateAnnouncement(Requests\createAnnouncement $request)
     {
         $data=$request->all();
-        // dd($data['User']);
         try{
             $Batch = Batch::where('name',$data['batch'])->first();
             $Class = Classes::where('slug',$data['class'])
@@ -96,6 +95,5 @@ class NoticeBoardController extends Controller
     public function EditAnnouncement(Requests\editAnnouncement $request, $id)
     {
            $data=$request->all();
-           dd($data);
     }
 }

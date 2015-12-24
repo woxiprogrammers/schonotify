@@ -20,18 +20,18 @@ class createAnnouncement extends Request
         {
             $userId=$userData;
         }
-        $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+        $users=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
             ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
             ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
             ->where('users.id','=',$userId->id)
             ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
             ->get();
-        $resultArr=array();
-        foreach($val1 as $val)
+        $resultArray=array();
+        foreach($users as $value)
         {
-            array_push($resultArr,$val->acl.'_'.$val->module_slug);
+            array_push($resultArray,$value->acl.'_'.$value->module_slug);
         }
-        if(in_array('Create_event',$resultArr) ){
+        if(in_array('Create_event',$resultArray) ){
             return true;
         }else{
             return false;
