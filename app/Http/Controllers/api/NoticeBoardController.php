@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Announcement;
 use App\announcement_read_unread;
 use App\Batch;
 use App\Classes;
@@ -25,7 +26,7 @@ class NoticeBoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function CreateAnnouncement(Requests\createAnnouncement $request)
+    public function createAnnouncement(Requests\createAnnouncement $request)
     {
         $data=$request->all();
         try{
@@ -79,7 +80,7 @@ class NoticeBoardController extends Controller
                 $announcementData['event_id']=$event_id;
                 $announcementData['created_at']= Carbon::now();
                 $announcementData['updated_at']= Carbon::now();
-                announcement_read_unread::insert($announcementData);
+                Announcement::insert($announcementData);
             }
         }
        catch (\Exception $e) {
@@ -92,7 +93,7 @@ class NoticeBoardController extends Controller
            ];
         return response($response, $status);
     }
-    public function EditAnnouncement(Requests\editAnnouncement $request, $id)
+    public function editAnnouncement(Requests\editAnnouncement $request, $id)
     {
            $data=$request->all();
     }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use App\User;
 
-class editAnnouncement extends Request
+Class EditAnnouncement extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
