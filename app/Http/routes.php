@@ -183,4 +183,5 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('viewTimetableParent/{day}','api\TimetableController@viewTimetableParent');
     Route::get('viewTimetableTeacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
 
+    Route::post('CreateAnnouncement/{batch}/{class}/{div}','api\NoticeBoardController@CreateAnnouncement');
 });
