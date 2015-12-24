@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Announcement;
-use App\announcement_read_unread;
 use App\Batch;
 use App\Classes;
 use App\Division;
-use App\event;
-use App\event_user_roles;
+use App\Event;
+use App\EventUserRoles;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -47,7 +46,8 @@ class NoticeBoardController extends Controller
             $eventData['date']=$date;
             $eventData['created_at']= Carbon::now();
             $eventData['updated_at']= Carbon::now();
-            $event_id=event::insertGetId($eventData);
+            $event_id=Event::insertGetId($eventData);
+
            if($event_id != null)
             {
                 $eventUserRolesData['event_id']=$event_id;
@@ -56,7 +56,7 @@ class NoticeBoardController extends Controller
                 $eventUserRolesData['division_id']=$Division['id'];
                 $eventUserRolesData['created_at']= Carbon::now();
                 $eventUserRolesData['updated_at']= Carbon::now();
-                event_user_roles::insert($eventUserRolesData);
+                EventUserRoles::insert($eventUserRolesData);
                 $status = 200;
                 $message = "Event Created Successfully";
             }
