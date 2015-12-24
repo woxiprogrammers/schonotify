@@ -399,8 +399,8 @@ class HomeworkController extends Controller
     }
 
 
-    public function deleteHomework(Requests\deleteHomeworkRequest $request,$homework_id)
-    {
+  public function deleteHomework(Requests\deleteHomeworkRequest $request,$homework_id)
+  {
      try{
          Homework::where('id',$homework_id)->where('status',0)->update(array('is_active'=>0));
          $status = 200;
@@ -411,6 +411,74 @@ class HomeworkController extends Controller
     }
         $response = ["message" => $message];
         return response($response, $status);
+  }
+  public function viewHomeworkParent(Requests\HomeworkRequest $request,$student_id)
+  {
+      $data=array();
+    try{
+        $status = 200;
+        $message = "homework successfully";
+        $userToken=$request->all();
+        $userId='';
+        foreach($userToken as $userData)
+        {
+             $userId=$userData;
+        }
+        $studentData=User::where('parent_id',$userId->id)->get();
+        $studentId=array();
+        foreach($studentData as $value)
+        {
+            $studentId[]=$value->id;
+        }
+        if(in_array($student_id,$studentId))
+        {
+            $studentHomework=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                  ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
+                  ->Join('classes', 'divisions.class_id', '=', 'classes.id')
+                  ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
+                  ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
+                  ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
+                  ->where('homework_teacher.student_id','=',$student_id)
+                  ->where('homework_teacher.student_id','=',$student_id)
+                  ->where('homeworks.status','=',2)
+                  ->select('homeworks.title as homeworkTitle','description','due_date','attachment_file','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name')
+                  ->get();
+            $i=0;
+            if($studentHomework != null){
+                foreach($studentHomework as $value)
+                {
+                    $title=$value['homeworkTitle'];
+                    $userId=$value['userId'];
+                    $data[$title]['description']=$value['description'];
+                    $data[$title]['status']=$value['status'];
+                    $data[$title]['due_date']=$value['due_date'];
+                    $data[$title]['attachment_file']=$value['attachment_file'];
+                    $data[$title]['homeworkType']=$value['homeworkType'];
+                    $data[$title]['teacher']=$value['teacher'];
+                    $data[$title]['subjectName']=$value['subjectName'];
+                    $data[$title]['division_name']=$value['division_name'];
+                    $data[$title]['batch']=$value['batch'];
+                    $data[$title]['class_name']=$value['class_name'];
+                    $data[$title]['student'][$userId]=$value['first_name'].''.$value['last_name'];
+                    $i++;
+                }
+
+            }
+            else{
+                $status = 202;
+                $message = "homework not found";
+            }
+        }
+        else{
+            $status = 202;
+            $message = "student not found";
+        }
+    }catch (\Exception $e) {
+        $status = 500;
+        $message = "Something went wrong";
     }
+      $response = ["message" => $message,"status" =>$status,"data" =>$data];
+      return response($response, $status);
+  }
 
 }
