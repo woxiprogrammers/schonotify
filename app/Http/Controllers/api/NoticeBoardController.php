@@ -42,13 +42,14 @@ class NoticeBoardController extends Controller
             $eventData['image']=null;
             $eventData['title']=$data['title'];
             $eventData['detail']=$data['detail'];
-            $eventData['date']=$data['date'];
+            $date= date("Y-m-d h:i:s", strtotime($data['date']));
+            $eventData['date']=$date;
             $eventData['created_at']= Carbon::now();
             $eventData['updated_at']= Carbon::now();
             $event_id=event::insertGetId($eventData);
            if($event_id != null)
             {
-                $eventUserRolesData['event_id']=
+                $eventUserRolesData['event_id']=$event_id;
                 $eventUserRolesData['user_role_id']=$data['teacher']['role_id'];
                 $eventUserRolesData['status']=0; // will be 0 by default for not published
                 $eventUserRolesData['division_id']=$Division['id'];
@@ -62,16 +63,27 @@ class NoticeBoardController extends Controller
                 $status = 202;
                 $message = "Event Not Found";
             }
+            $students =User::where('division_id',$Division['id'])->get();
+            $studentsArray=$students->toArray();
+            $i=0;
+            foreach($studentsArray as $value){
+                $studentsId[$i]=$value['id'];
+                $i++;
+            }
+            $size=count($studentsId);
+            for($i=0;$i<$size;$i++){
+                $announcementData['user_id']=$studentsId[$i];
+                $announcementData['read_status']=0;//read status will be 0 by default
+                $announcementData['event_id']=$event_id;
+                $announcementData['created_at']= Carbon::now();
+                $announcementData['updated_at']= Carbon::now();
+                announcement_read_unread::insert($announcementData);
+            }
         }
         catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
         }
-
-   $studentData=User::where('id','=');
-
-
-
         $response = [
             "message" => $message,
             "status" =>$status
