@@ -182,6 +182,9 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
     Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
     Route::get('view-timetable-teacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
-    Route::post('create-announcement','api\NoticeBoardController@CreateAnnouncement');
-    Route::post('edit-announcement/{id}','api\NoticeBoardController@EditAnnouncement');
+
+    //Announcement
+    Route::post('create-announcement','api\NoticeBoardController@createAnnouncement');
+    Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
+    Route::get('view-announcement','api\NoticeBoardController@viewAnnouncement');
 });
