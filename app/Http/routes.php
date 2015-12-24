@@ -184,4 +184,5 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('view-timetable-teacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
     Route::post('create-announcement','api\NoticeBoardController@CreateAnnouncement');
     Route::post('edit-announcement/{id}','api\NoticeBoardController@EditAnnouncement');
+    Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
 });
