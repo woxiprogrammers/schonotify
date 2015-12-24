@@ -179,9 +179,11 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('viewPublishHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
     Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
     Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
-    Route::get('deleteHomework/{homework_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
+    Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
     Route::get('viewTimetableParent/{day}','api\TimetableController@viewTimetableParent');
     Route::get('viewTimetableTeacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
 
-    Route::post('CreateAnnouncement/{batch}/{class}/{div}','api\NoticeBoardController@CreateAnnouncement');
+    Route::post('createAnnouncement','api\NoticeBoardController@CreateAnnouncement');
+
+    Route::post('editAnnouncement/{id}','api\NoticeBoardController@EditAnnouncement');
 });

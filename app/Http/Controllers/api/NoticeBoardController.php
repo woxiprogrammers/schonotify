@@ -25,15 +25,16 @@ class NoticeBoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function CreateAnnouncement(Requests\createAnnouncement $request,$batch,$class,$div)
+    public function CreateAnnouncement(Requests\createAnnouncement $request)
     {
         $data=$request->all();
+        // dd($data['User']);
         try{
-            $Batch = Batch::where('name',$batch)->first();
-            $Class = Classes::where('slug',$class)
+            $Batch = Batch::where('name',$data['batch'])->first();
+            $Class = Classes::where('slug',$data['class'])
                 ->where('batch_id', '=',$Batch->id)
                 ->first();
-            $Division = Division::where('slug',$div)
+            $Division = Division::where('slug',$data['division'])
                 ->where('class_id', '=',$Class->id)
                 ->first();
             $creator =User::where('remember_token',$request->token)->first();
@@ -57,13 +58,15 @@ class NoticeBoardController extends Controller
                 $eventUserRolesData['updated_at']= Carbon::now();
                 event_user_roles::insert($eventUserRolesData);
                 $status = 200;
-                $message = "Event Updated Successfully";
+                $message = "Event Created Successfully";
             }
             else{
                 $status = 202;
                 $message = "Event Not Found";
             }
-            $students =User::where('division_id',$Division['id'])->get();
+            $students =User::where('division_id',$Division['id'])
+                             ->where('role_id', '=',$data['User'])
+                             ->get();
             $studentsArray=$students->toArray();
             $i=0;
             foreach($studentsArray as $value){
@@ -80,7 +83,7 @@ class NoticeBoardController extends Controller
                 announcement_read_unread::insert($announcementData);
             }
         }
-        catch (\Exception $e) {
+       catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
         }
@@ -89,5 +92,10 @@ class NoticeBoardController extends Controller
             "status" =>$status
            ];
         return response($response, $status);
+    }
+    public function EditAnnouncement(Requests\editAnnouncement $request, $id)
+    {
+           $data=$request->all();
+           dd($data);
     }
 }
