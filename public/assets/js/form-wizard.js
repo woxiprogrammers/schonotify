@@ -137,9 +137,23 @@ var FormWizard = function () {
     };
     var onFinish = function (obj, context) {
         if (validateAllSteps()) {
-            alert('form submit function');
+
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            //wizardForm.submit();
+            var form=$('#form').serialize();
+
+            $.ajax({
+                url:'save-user',
+                data: form,
+                processData: false,
+
+                type: 'POST',
+
+                success: function(data){
+
+                    wizardContent.smartWizard("goForward");
+                }
+            });
+
         }
     };
     var validateSteps = function (stepnumber, nextstep) {

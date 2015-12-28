@@ -13,8 +13,10 @@ use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Auth;
 
@@ -48,14 +50,9 @@ class UsersController extends Controller
 
     public function userModuleAcls()
     {
-        $user=Auth::user();
+        
         $modules=Module::select('slug')->get();
-        $result=User::Join('module_acls', 'users.id', '=', 'module_acls.user_id')
-            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
-            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
-            ->where('users.id','=',$user->id)
-            ->select('acl_master.slug as acl','modules.title as module','modules.slug as module_slug')
-            ->get();
+
         $acls=AclMaster::all();
         $allModuleAcl=array();
         $arrMod=array();
@@ -117,43 +114,62 @@ class UsersController extends Controller
 
     }
 
-    public function adminCreateForm()
+    public function adminCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.adminCreateForm')->with('userRoles',$roles);
+        if($request->authorize()===true)
+        {
+            return view('admin.adminCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
-    public function teacherCreateForm()
+    public function teacherCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.teacherCreateForm')->with('userRoles',$roles);
+        if($request->authorize()===true)
+        {
+            return view('admin.teacherCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
-    public function studentCreateForm()
+    public function studentCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.studentCreateForm')->with('userRoles',$roles);
+        if($request->authorize()===true)
+        {
+            return view('admin.studentCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
-    public function parentCreateForm()
+    public function parentCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.parentCreateForm')->with('userRoles',$roles);
-
+        if($request->authorize()===true)
+        {
+            return view('admin.parentCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
     }
 
-    public function usersCreateForm()
+    public function usersCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.usersCreateForm')->with('userRoles',$roles);
+        if($request->authorize()===true)
+        {
+            return view('admin.usersCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
@@ -166,6 +182,8 @@ class UsersController extends Controller
     public function store(Request $request)
     {
 
+       $data=Input::all();
+        dd($data);
     }
 
     /**

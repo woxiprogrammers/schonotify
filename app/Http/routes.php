@@ -137,6 +137,8 @@ Route::post('save-event','EventController@saveEvent');
 
 Route::get('user-module-acl','UsersController@userModuleAcls');
 
+Route::post('save-user','UsersController@store');
+
 //getAttendance()
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {

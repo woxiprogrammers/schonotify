@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 
-class EventRequest extends Request
+class UserRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,7 +38,7 @@ class EventRequest extends Request
         {
             case 'GET':
 
-                if(in_array('view_event',$resultArr)) {
+                if(in_array('create_user',$resultArr)) {
                     return true;
                 } else {
 
@@ -46,26 +46,43 @@ class EventRequest extends Request
                     return Redirect::to('/');
                 }
 
-            break;
+                break;
 
             case 'PUT':
-                    dd('put');
+                dd('put');
                 break;
 
             case 'POST':
 
-                if(in_array('create_event',$resultArr)) {
-                    return true;
-                } else {
-
-                    Session::flash('message-error','you don`t have access');
-                    return Redirect::to('/');
-                }
-
-                    break;
-             default:break;
+                break;
+            default:break;
         }
 
+
+        /*$userId='';
+        foreach($userToken as $userData)
+        {
+            $userId=$userData;
+        }
+        $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
+            ->where('users.id','=',$userId->id)
+            ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
+            ->get();
+        $resultArr=array();
+        foreach($val1 as $val)
+        {
+            array_push($resultArr,$val->acl.'_'.$val->module_slug);
+
+        }
+        if(in_array('Publish_leave',$resultArr)) {
+            return true;
+        } else {
+            return false;
+        }*/
+
+        //return true;
     }
 
     /**
@@ -76,17 +93,6 @@ class EventRequest extends Request
     public function rules()
     {
 
-        if(Request::method()=="POST")
-        {
-            return [
-                'eventName' => 'required',
-                'eventDescription' => 'required|text',
-                'eventStartDate' => 'required|date|after:tomorrow',
-                'eventEndDate' => 'required|date|after:start_date',
-                'image' => 'mimes:jpeg,jpg,png,gif|max:10000'
-            ];
-        }else{
-            return [];
-        }
+        return [];
     }
 }

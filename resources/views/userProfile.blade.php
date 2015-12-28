@@ -261,7 +261,7 @@
     </form>
 </div>
 
-<div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
+<div id="panel_module_assigned" class="tab-pane fade">
     <div class="panel-body">
         <div class="col-sm-10">
 

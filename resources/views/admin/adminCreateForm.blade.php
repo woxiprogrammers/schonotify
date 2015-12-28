@@ -29,7 +29,7 @@
     @include('admin.userRoleDropdownCreate')
 </div>
 
-<form action="#" role="form" class="smart-wizard" id="form">
+<form role="form" class="smart-wizard" id="form">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <ul>
@@ -148,6 +148,7 @@
                     </div>
                 </div>
 
+
             </fieldset>
 
             <div class="form-group">
@@ -163,125 +164,15 @@
         <div class="col-md-12">
             <fieldset>
                 <div class="panel-body">
-                    <div class="row" style="margin-bottom: 14px;">
-                        <div class="col-sm-3"><h4 class="center" style="margin:0px !important; color:#ccc;">Modules</h4></div>
-                        <div>
+                    <div id="panel_module_assigned" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="col-sm-10">
 
-                            <span class="label label-info" style="margin:6px;">View</span>
+                                <table class="table table-responsive" id="aclModCreate">
 
-                            <span class="label label-default" style="margin:6px;">Create</span>
+                                </table>
 
-                            <span class="label label-warning" style="margin:6px;">Update</span>
-
-                            <span class="label label-danger" style="margin:6px;">Delete</span>
-
-                        </div>
-                    </div>
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Users Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox" value="1">
-                            <label for="checkbox"></label>
-
-                            <input type="checkbox" id="checkbox1" value="1">
-                            <label for="checkbox1"></label>
-
-                            <input type="checkbox" id="checkbox2" value="1">
-                            <label for="checkbox2"></label>
-
-                            <input type="checkbox" id="checkbox3" value="1">
-                            <label for="checkbox3"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Event Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox4" value="1">
-                            <label for="checkbox4"></label>
-
-                            <input type="checkbox" id="checkbox5" value="1">
-                            <label for="checkbox5"></label>
-
-                            <input type="checkbox" id="checkbox6" value="1">
-                            <label for="checkbox6"></label>
-
-                            <input type="checkbox" id="checkbox7" value="1">
-                            <label for="checkbox7"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Class Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox8" value="1">
-                            <label for="checkbox8"></label>
-
-                            <input type="checkbox" id="checkbox9" value="1">
-                            <label for="checkbox9"></label>
-
-                            <input type="checkbox" id="checkbox10" value="1">
-                            <label for="checkbox10"></label>
-
-                            <input type="checkbox" id="checkbox11" value="1">
-                            <label for="checkbox11"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Subjects Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox12" value="1">
-                            <label for="checkbox12"></label>
-
-                            <input type="checkbox" id="checkbox13" value="1">
-                            <label for="checkbox13"></label>
-
-                            <input type="checkbox" id="checkbox14" value="1">
-                            <label for="checkbox14"></label>
-
-                            <input type="checkbox" id="checkbox15" value="1">
-                            <label for="checkbox15"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Exams Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox16" value="1">
-                            <label for="checkbox16"></label>
-
-                            <input type="checkbox" id="checkbox17" value="1">
-                            <label for="checkbox17"></label>
-
-                            <input type="checkbox" id="checkbox18" value="1">
-                            <label for="checkbox18"></label>
-
-                            <input type="checkbox" id="checkbox19" value="1">
-                            <label for="checkbox19"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Timetable Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox20" value="1">
-                            <label for="checkbox20"></label>
-
-                            <input type="checkbox" id="checkbox21" value="1">
-                            <label for="checkbox21"></label>
-
-                            <input type="checkbox" id="checkbox22" value="1">
-                            <label for="checkbox22"></label>
-
-                            <input type="checkbox" id="checkbox23" value="1">
-                            <label for="checkbox23"></label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -290,7 +181,7 @@
                 <button class="btn btn-primary btn-o back-step btn-wide pull-left">
                     <i class="fa fa-circle-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-primary btn-o next-step btn-wide pull-right">
+                <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep">
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
@@ -352,6 +243,7 @@
 
 <script>
     jQuery(document).ready(function() {
+        userAclModule();
         Main.init();
         FormWizard.init();
     });
@@ -371,6 +263,61 @@
         }
 
     });
+
+    function userAclModule()
+    {
+        var route='user-module-acl';
+        $.get(route,function(res){
+
+            var str;
+
+            var arr=res['allModAclArr'];
+
+            var arr1= $.map(arr,function(index,value){
+                return [value];
+            });
+
+            var arr3=res['allAcls'];
+            var arr2= $.map(arr3,function(index,value){
+                return [index];
+            });
+
+            str+='<tr>'+
+                '<th><b>Modules</b></th>';
+            for(var j=0; j<arr2.length; j++)
+            {
+
+                str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
+            }
+
+            str+='</tr>';
+
+
+            for(var i=0; i<arr1.length; i++)
+            {
+
+                str+="<tr>"+
+                    "<td>"+(arr1[i]).toUpperCase()+"</td>";
+                for(var j=0; j<arr2.length; j++)
+                {
+                    str+='<td>'+
+                        '<div class="checkbox form-group clip-check check-primary checkbox-inline">';
+
+                        str+='<input type="checkbox" class="form-control" value="'+arr2[j]['slug']+'_'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="modules[]">'+
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+
+                    str+='</div>'+
+                        '</td>';
+                }
+
+                str+="</tr>";
+            }
+
+            $('#aclModCreate').html(str);
+        });
+    }
+
+
 
 </script>
 
