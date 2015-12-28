@@ -12,9 +12,10 @@
 <script src="assets/js/main.js"></script>
 
 <script src="assets/js/index.js"></script>
+<script src="assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
-        Main.init();
+        getMsgCount();
         Index.init();
     });
 </script>

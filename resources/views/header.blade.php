@@ -91,8 +91,9 @@
             </li>
 
             <li class="dropdown">
-                <a href class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="badge partition-red">22</span> <i class="ti-comment"></i> <span>MESSAGES</span>
+                <a href class="dropdown-toggle" data-toggle="dropdown" id="msgCountArea">
+
+                    <span id ="msgCount" class="badge partition-red"></span> <i class="ti-comment"></i> <span>MESSAGES</span>
                 </a>
                 <ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large">
                     <li>
@@ -100,53 +101,12 @@
                     </li>
                     <li>
                         <div class="drop-down-wrapper ps-container flexcroll">
-                            <ul>
-                                <li class="unread">
-                                    <a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar">
-                                        <div class="clearfix">
-                                            <div class="thread-image">
-                                                <img src="./assets/images/avatar-2.jpg" alt="">
-                                            </div>
-                                            <div class="thread-content">
-                                                <span class="author">Mrs.Rossy Sharma</span>
-                                                <span class="preview">document verifications completed waiting for admission...</span>
-                                                <span class="time"> Just Now</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar">
-                                        <div class="clearfix">
-                                            <div class="thread-image">
-                                                <img src="./assets/images/avatar-3.jpg" alt="">
-                                            </div>
-                                            <div class="thread-content">
-                                                <span class="author">Mr.Vishnu Nimangare</span>
-                                                <span class="preview">then i will be there at meeting ...</span>
-                                                <span class="time">8 hrs ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar">
-                                        <div class="clearfix">
-                                            <div class="thread-image">
-                                                <img src="./assets/images/avatar-5.jpg" alt="">
-                                            </div>
-                                            <div class="thread-content">
-                                                <span class="author">Mr.Debojit Boss</span>
-                                                <span class="preview">fine.. thank you!</span>
-                                                <span class="time">14 hrs ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
+
+                            <ul id="msgList">
                             </ul>
                         </div>
                     </li>
-                    <li class="view-all">
+                    <li class="view-all" id="see-all">
                         <a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">
                             See All
                         </a>
