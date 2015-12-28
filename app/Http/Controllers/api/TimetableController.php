@@ -67,10 +67,11 @@ class TimetableController extends Controller
     public function viewTimetableTeacher(Requests\viewTimetableRequest $request,$batch,$class,$div,$day)
     {
         try{
-            $teacherBatch = Batch::where('name',$batch)->first();
+            $teacherBatch = Batch::where('slug',$batch)->first();
             $teacherClass = Classes::where('slug',$class)
                 ->where('batch_id', '=',$teacherBatch->id)
                 ->first();
+
             $teacherDivision = Division::where('slug',$div)
                 ->where('class_id', '=',$teacherClass->id)
                 ->first();

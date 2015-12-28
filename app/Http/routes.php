@@ -188,6 +188,8 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
     Route::get('view-announcement','api\NoticeBoardController@viewAnnouncement');
 
+    //Result
+    Route::get('view-result/{id}','api\ResultController@viewResult');
 
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
 

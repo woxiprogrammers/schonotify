@@ -27,8 +27,8 @@ class NoticeBoardController extends Controller
     public function createAnnouncement(Requests\createAnnouncement $request)
     {
         $data=$request->all();
-        try{
-            $Batch = Batch::where('name',$data['batch'])->first();
+       //try{
+            $Batch = Batch::where('slug',$data['batch'])->first();
             $Class = Classes::where('slug',$data['class'])
                 ->where('batch_id', '=',$Batch->id)
                 ->first();
@@ -81,11 +81,11 @@ class NoticeBoardController extends Controller
                 $announcementData['updated_at']= Carbon::now();
                 Announcement::insert($announcementData);
             }
-        }
+      /*  }
        catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
-        }
+        }*/
         $response = [
             "message" => $message,
             "status" =>$status
