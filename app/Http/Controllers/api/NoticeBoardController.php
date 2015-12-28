@@ -111,7 +111,11 @@ class NoticeBoardController extends Controller
                 $unreadAnnouncementData[$i]['event_id']=$value['event_id'];
                 $event =Event::where('id', '=',$value['event_id'])->first();
                 $user=User::where('id', '=',$event ['user_id'])->first();
-                $unreadAnnouncementData[$i]['created_by']=$user['first_name']." ".$user['last_name'];
+                if($user!=null){
+                    $unreadAnnouncementData[$i]['created_by']=$user['first_name']." ".$user['last_name'];
+                }else{
+                    $unreadAnnouncementData[$i]['created_by']=null;
+                }
                 $unreadAnnouncementData[$i]['title']=$event['title'];
                 $unreadAnnouncementData[$i]['detail']=$event['detail'];
                 $unreadAnnouncementData[$i]['date']=$event['date'];
