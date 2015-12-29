@@ -9,7 +9,7 @@
 
 <body >
 
-@include('alerts.errors')
+
 
 @yield('content')
 
