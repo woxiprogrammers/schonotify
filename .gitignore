@@ -12,5 +12,5 @@ Homestead.json
 .idea/
 storage/
 bootstrap/cache/
-uploads/profile-picture/
+/uploads/profile-picture/
 
