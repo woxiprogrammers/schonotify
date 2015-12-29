@@ -94,7 +94,7 @@ class UsersController extends Controller
         $password = $request->all();
         unset($password['_method']);
         $user = Auth::user();
-        $ss=$user->update(array('password' => bcrypt($password['password'])));
+        $user->update(array('password' => bcrypt($password['password'])));
         Session::flash('message-success','password successfully updated');
         return Redirect::to('/myProfile');
 
