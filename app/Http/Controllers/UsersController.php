@@ -55,10 +55,9 @@ class UsersController extends Controller
          $userImage=User::where('id',$id)->first();
           unset($request->_method);
           $user=Auth::user();
-
-          if(Input::hasFile('avatar')){
-               $image = Input::file('avatar');
-               $name = Input::file('avatar')->getClientOriginalName();
+          if($request->hasFile('avatar')){
+               $image = $request->file('avatar');
+               $name = $request->file('avatar')->getClientOriginalName();
                $filename = time()."_".$name;
                $path = public_path('uploads/profile-picture/');
               if (! file_exists($path)) {
