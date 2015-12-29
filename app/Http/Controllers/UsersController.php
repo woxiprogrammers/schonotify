@@ -13,10 +13,13 @@ use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use Auth;
+
+
 
 
 class UsersController extends Controller
@@ -41,11 +44,61 @@ class UsersController extends Controller
     public function usersProfile()
     {
         $user=Auth::user();
-
         return view('userProfile')->with('user',$user);
 
     }
 
+
+
+    public function updateUsersProfile(Requests\WebRequests\ProfileRequest $request,$id)
+    {
+         $userImage=User::where('id',$id)->first();
+          unset($request->_method);
+          $user=Auth::user();
+          if($request->hasFile('avatar')){
+               $image = $request->file('avatar');
+               $name = $request->file('avatar')->getClientOriginalName();
+               $filename = time()."_".$name;
+               $path = public_path('uploads/profile-picture/');
+              if (! file_exists($path)) {
+                   File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+              }
+              $image->move($path,$filename);
+          }
+          else{
+                $filename=$userImage->avatar;
+
+          }
+          $userData['username']= $request->username;
+          $userData['first_name']= $request->firstname;
+          $userData['email']= $request->email;
+          $userData['last_name']= $request->lastname;
+          $userData['gender']= $request->gender;
+          $userData['mobile']= $request->mobile;
+          $userData['address']= $request->address;
+          $userData['avatar']= $filename;
+            $userUpdate=User::where('id',$id)->update($userData);
+            if($userUpdate == 1){
+                Session::flash('message-success','profile updated successfully');
+               return Redirect::to('/myProfile');
+            }
+            else{
+                Session::flash('message-error','something went wrong');
+                return Redirect::to('/myProfile');
+            }
+
+    }
+
+    public function changePassword(Requests\WebRequests\ChangePasswordRequest $request)
+    {
+        $password = $request->all();
+        unset($password['_method']);
+        $user = Auth::user();
+        $user->update(array('password' => bcrypt($password['password'])));
+        Session::flash('message-success','password successfully updated');
+        return Redirect::to('/myProfile');
+
+    }
     public function userModuleAcls()
     {
         $user=Auth::user();
