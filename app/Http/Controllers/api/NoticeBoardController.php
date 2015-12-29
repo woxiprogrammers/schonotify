@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\api;
-
 use App\Announcement;
 use App\Batch;
 use App\Classes;
@@ -96,5 +95,44 @@ class NoticeBoardController extends Controller
     public function editAnnouncement(Requests\editAnnouncement $request, $id)
     {
            $data=$request->all();
+    }
+
+    public function viewAnnouncement(Requests\ViewAnnouncement $request)
+    {
+        $data=$request->all();
+        try{
+            $user =User::where('remember_token',$data['token'])->first();
+            $unreadAnnouncement =Announcement::where('user_id', '=',$user['id'])
+                ->where('read_status','=',0)
+                ->get();
+            $unreadAnnouncementArray=$unreadAnnouncement->toArray();
+            $i=0;
+            foreach($unreadAnnouncementArray as $value){
+                $unreadAnnouncementData[$i]['event_id']=$value['event_id'];
+                $event =Event::where('id', '=',$value['event_id'])->first();
+                $user=User::where('id', '=',$event ['user_id'])->first();
+                if($user!=null){
+                    $unreadAnnouncementData[$i]['created_by']=$user['first_name']." ".$user['last_name'];
+                }else{
+                    $unreadAnnouncementData[$i]['created_by']=null;
+                }
+                $unreadAnnouncementData[$i]['title']=$event['title'];
+                $unreadAnnouncementData[$i]['detail']=$event['detail'];
+                $unreadAnnouncementData[$i]['date']=$event['date'];
+                $i++;
+            }
+            $status = 200;
+            $message = "Success";
+            $responseData=$unreadAnnouncementData;
+        }catch (\Exception $e) {
+                $status = 500;
+                $message = "Something went wrong"  .  $e->getMessage();
+            }
+        $response = [
+            "message" => $message,
+            "status" =>$status,
+            "data" => $responseData
+        ];
+        return response($response, $status);
     }
 }
