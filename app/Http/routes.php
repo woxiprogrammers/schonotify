@@ -57,6 +57,10 @@ Route::get('usersCreate','UsersController@usersCreateForm');
 
 Route::get('myProfile','UsersController@usersProfile');
 
+Route::put('my-profile/{id}','UsersController@updateUsersProfile');
+
+Route::put('change-password','UsersController@changePassword');
+
 Route::get('searchUsers','SearchController@searchUsers');
 
 Route::get('edit/{id}','UsersController@edit');
