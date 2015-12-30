@@ -44,7 +44,7 @@ var FormWizard = function () {
                 },
                 password2: {
                     required: true,
-                    minlength: 5,
+                    minlength: 6,
                     equalTo: "#password"
                 },
                 studid:{
@@ -58,6 +58,16 @@ var FormWizard = function () {
                 modules: {
                     required: true,
                     minlength: 2
+                },
+                mobile:{
+                    required:true,
+                    number:true,
+                    minlength:10
+                },
+                alt_number:{
+                    required:true,
+                    number:true,
+                    minlength:10
                 }
 
             },
@@ -75,6 +85,22 @@ var FormWizard = function () {
                 },
                 modules: {
                     minlength: jQuery.validator.format("Please select  at least {0} types of Service")
+                },
+                password:{
+                    required:"Password is required",
+                    minlength: jQuery.validator.format("Password must contain at least {0} characters")
+                },
+                password2:{
+                    required:"Password is required",
+                    minlength: jQuery.validator.format("Password must contain at least {0} characters")
+                },
+                mobile:{
+                    required:"Mobile number is required",
+                    number:"Mobile number must be numeric"
+                },
+                alt_number:{
+                    required:"Alternate number is required",
+                    number:"Alternate number must be numeric"
                 }
             },
             highlight: function (element) {
@@ -140,7 +166,6 @@ var FormWizard = function () {
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
             var form=$('#form').serialize();
-
             $.ajax({
                 url:'save-user',
                 data: form,
@@ -149,8 +174,21 @@ var FormWizard = function () {
                 type: 'POST',
 
                 success: function(data){
-
+                    $('#error-div').html('');
                     wizardContent.smartWizard("goForward");
+                },
+                error:function(data){
+                    var errors = $.parseJSON(data.responseText);
+
+
+                    var errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                    });
+                    errorsHtml += '</ul></di>';
+
+                    $('#error-div').html(errorsHtml);
                 }
             });
 

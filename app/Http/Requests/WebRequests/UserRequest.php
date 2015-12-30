@@ -53,7 +53,7 @@ class UserRequest extends Request
                 break;
 
             case 'POST':
-
+                    return true;
                 break;
             default:break;
         }
@@ -92,7 +92,24 @@ class UserRequest extends Request
      */
     public function rules()
     {
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET': return [];
+                break;
+            case 'POST':return [
+                'firstName'=>'required|min:5',
+                'lastName' => 'required|min:5',
+                'password' => 'required|min:6',
+                'password2' => 'required|min:6',
+                'mobile' => 'required|min:10',
+                'alt_number' => 'required|min:10',
+                'email' => 'required|email',
+                'address' => 'required|min:15'
+            ];
+                break;
+            default:break;
+        }
 
-        return [];
     }
 }

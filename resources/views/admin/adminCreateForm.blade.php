@@ -32,6 +32,7 @@
 <form role="form" class="smart-wizard" id="form">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
+<div id="error-div"></div>
 <ul>
     <li>
         <a href="#step-1">
@@ -60,7 +61,8 @@
 </ul>
 <div id="step-1">
     <div class="row">
-
+        <input type="hidden" id="role" name="role" value="1">
+        <input type="hidden" id="role_name" name="role_name" value="admin">
         <div class="col-md-8 col-md-offset-2">
             <fieldset>
                 <legend>
@@ -109,6 +111,25 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
+                                Mobile Number <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter a Mobile Number" class="form-control" name="mobile"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Alternate Contact Number
+                            </label>
+                            <input type="text" placeholder="Enter a Alternate Contact Number" class="form-control" name="alt_number"/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
                                 Email <span class="symbol required"></span>
                             </label>
                             <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email">
@@ -122,11 +143,11 @@
                                     Gender
                                 </label>
                                 <div class="clip-radio radio-primary">
-                                    <input type="radio" id="wz-female" name="gender" value="female">
+                                    <input type="radio" id="wz-female" name="gender" value="F">
                                     <label for="wz-female">
                                         Female
                                     </label>
-                                    <input type="radio" id="wz-male" name="gender" value="male" checked>
+                                    <input type="radio" id="wz-male" name="gender" value="M" checked>
                                     <label for="wz-male">
                                         Male
                                     </label>
@@ -146,6 +167,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <label class="control-label">
+                            Employee Type <span class="symbol required"></span>
+                        </label>
+
+                        <div class="form-group">
+                            <select class="form-control" id="emp_type" name="emp_type" style="-webkit-appearance: menulist;">
+                                <option value="full-time">Full Time  </option>
+                                <option value="part_time">Part Time</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
 
 
