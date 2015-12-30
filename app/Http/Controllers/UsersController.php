@@ -53,6 +53,7 @@ class UsersController extends Controller
     public function updateUsersProfile(Requests\WebRequests\ProfileRequest $request,$id)
     {
          $userImage=User::where('id',$id)->first();
+        dd($request->all());
           unset($request->_method);
           $user=Auth::user();
           if($request->hasFile('avatar')){
