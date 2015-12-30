@@ -145,26 +145,18 @@ class NoticeBoardController extends Controller
     public function createAchievement(Requests\CreateAchievement $request)
     {
         $data=$request->all();
-       // try{
-            $Batch = Batch::where('slug',$data['batch'])->first();
-            $Class = Classes::where('slug',$data['class'])
-                ->where('batch_id', '=',$Batch->id)
-                ->first();
-            $Division = Division::where('slug',$data['division'])
-                ->where('class_id', '=',$Class->id)
-                ->first();
+        try{
             $creator =User::where('remember_token',$request->token)->first();
             $eventData['user_id']=$creator->id;
-            $eventData['event_type_id']=2 ; //event type is 2 for achivement
+            $eventData['event_type_id']=2 ; //event type is 2 for Achievement
 
                   if($request->hasFile('image')){
                        $image = $request->file('image');
                        $name = $request->file('image')->getClientOriginalName();
                        $filename = time()."_".$name;
-                       $path = public_path('achievements/');
-
+                       $path = public_path('uploads/achievements/');
                              if (!file_exists($path)) {
-                                 File::makeDirectory('achievements/', $mode = 0777, true,true);
+                                 File::makeDirectory('uploads/achievements/', $mode = 0777, true,true);
                              }
                             $image->move($path,$filename);
                         }
@@ -185,7 +177,7 @@ class NoticeBoardController extends Controller
                 $eventUserRolesData['event_id']=$event_id;
                 $eventUserRolesData['user_role_id']=$data['teacher']['role_id'];
                 $eventUserRolesData['status']=0; // will be 0 by default for not published
-                $eventUserRolesData['division_id']=$Division['id'];
+                $eventUserRolesData['division_id']=0;
                 $eventUserRolesData['created_at']= Carbon::now();
                 $eventUserRolesData['updated_at']= Carbon::now();
                 EventUserRoles::insert($eventUserRolesData);
@@ -196,10 +188,10 @@ class NoticeBoardController extends Controller
                 $status = 202;
                 $message = "Event Not Found";
             }
-      /*  }catch (\Exception $e) {
+        }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
-        }*/
+        }
         $response = [
             "message" => $message,
             "status" =>$status
@@ -207,7 +199,8 @@ class NoticeBoardController extends Controller
         return response($response, $status);
     }
 
-   /* public function viewAchievement(Requests\ViewAnnouncement $request)
+
+    public function viewAchievement(Requests\ViewAnnouncement $request)
     {
         $data=$request->all();
         try{
@@ -244,5 +237,8 @@ class NoticeBoardController extends Controller
             "data" => $responseData
         ];
         return response($response, $status);
-    }*/
-        }
+    }
+
+
+
+}
