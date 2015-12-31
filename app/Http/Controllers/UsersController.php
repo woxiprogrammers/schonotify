@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\AclMaster;
 use App\ClassData;
 use App\Classes;
 use App\Division;
+use App\Module;
+use App\ModuleAcl;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use Auth;
+
+
 
 
 class UsersController extends Controller
@@ -39,6 +45,100 @@ class UsersController extends Controller
     {
         $user=Auth::user();
         return view('userProfile')->with('user',$user);
+
+    }
+
+
+
+    public function updateUsersProfile(Requests\WebRequests\ProfileRequest $request,$id)
+    {
+         $userImage=User::where('id',$id)->first();
+          unset($request->_method);
+          $user=Auth::user();
+          if($request->hasFile('avatar')){
+               $image = $request->file('avatar');
+               $name = $request->file('avatar')->getClientOriginalName();
+               $filename = time()."_".$name;
+               $path = public_path('uploads/profile-picture/');
+              if (! file_exists($path)) {
+                   File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+              }
+              $image->move($path,$filename);
+          }
+          else{
+                $filename=$userImage->avatar;
+
+          }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+          $userData['username']= $request->username;
+          $userData['first_name']= $request->firstname;
+          $userData['email']= $request->email;
+          $userData['last_name']= $request->lastname;
+          $userData['gender']= $request->gender;
+          $userData['mobile']= $request->mobile;
+          $userData['address']= $request->address;
+          $userData['avatar']= $filename;
+          $userData['birth_date']= $date;
+        $userUpdate=User::where('id',$id)->update($userData);
+            if($userUpdate == 1){
+                Session::flash('message-success','profile updated successfully');
+               return Redirect::to('/myProfile');
+            }
+            else{
+                Session::flash('message-error','something went wrong');
+                return Redirect::to('/myProfile');
+            }
+
+    }
+
+    public function changePassword(Requests\WebRequests\ChangePasswordRequest $request)
+    {
+        $password = $request->all();
+        unset($password['_method']);
+        $user = Auth::user();
+        $user->update(array('password' => bcrypt($password['password'])));
+        Session::flash('message-success','password successfully updated');
+        return Redirect::to('/myProfile');
+
+    }
+    public function userModuleAcls()
+    {
+        $user=Auth::user();
+        $modules=Module::select('slug')->get();
+        $result=User::Join('module_acls', 'users.id', '=', 'module_acls.user_id')
+            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
+            ->where('users.id','=',$user->id)
+            ->select('acl_master.slug as acl','modules.title as module','modules.slug as module_slug')
+            ->get();
+        $acls=AclMaster::all();
+        $allModuleAcl=array();
+        $arrMod=array();
+        $userModAclArr=array();
+        $mainArr=array();
+
+        $userModAclArr=session('functionArr');
+
+        foreach($modules as $row1)
+        {
+            $i=0;
+            foreach($acls as $row)
+            {
+
+                $allModuleAcl[$row1->slug][$i]=$row->slug;
+                $i++;
+
+            }
+
+        }
+
+        $mainArr['allModules']=$modules;
+        $mainArr['allAcls']=$acls;
+        $mainArr['userModAclArr']=$userModAclArr;
+        $mainArr['allModAclArr']=$allModuleAcl;
+
+        return $mainArr;
+
     }
 
     /**
@@ -49,9 +149,9 @@ class UsersController extends Controller
     public function create($id)
     {
 
-      $role1=UserRoles::find($id);
+        $role1=UserRoles::find($id);
 
-      Session::put('user_create_role',$role1->slug);
+        Session::put('user_create_role',$role1->slug);
 
         if($role1->slug=='admin')
         {
@@ -143,9 +243,9 @@ class UsersController extends Controller
     public function edit($id)
     {
         $userRole=User::select('user_roles.slug as role_slug')
-                        ->join('user_roles','users.role_id','=','user_roles.id')
-                        ->where('users.id','=',$id)
-                        ->get();
+            ->join('user_roles','users.role_id','=','user_roles.id')
+            ->where('users.id','=',$id)
+            ->get();
 
         if($userRole[0]->role_slug == 'admin')
         {

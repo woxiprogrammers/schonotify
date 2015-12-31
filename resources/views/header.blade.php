@@ -117,7 +117,7 @@
             <!-- start: USER OPTIONS DROPDOWN -->
             <li class="dropdown current-user">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
-                    <img src="assets/images/{!! $user->avatar !!}" alt="Peter"> <span class="username">{!! $user->username !!}</span><i class="ti-angle-down"></i></i></span>
+                    <img src="uploads/profile-picture/{!! $user->avatar !!}" alt="Peter"> <span class="username">{!! $user->username !!}</span><i class="ti-angle-down"></i></i></span>
                 </a>
                 <ul class="dropdown-menu dropdown-dark">
                     <li>
