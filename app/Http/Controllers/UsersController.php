@@ -69,6 +69,7 @@ class UsersController extends Controller
                 $filename=$userImage->avatar;
 
           }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
           $userData['username']= $request->username;
           $userData['first_name']= $request->firstname;
           $userData['email']= $request->email;
@@ -77,7 +78,8 @@ class UsersController extends Controller
           $userData['mobile']= $request->mobile;
           $userData['address']= $request->address;
           $userData['avatar']= $filename;
-            $userUpdate=User::where('id',$id)->update($userData);
+          $userData['birth_date']= $date;
+        $userUpdate=User::where('id',$id)->update($userData);
             if($userUpdate == 1){
                 Session::flash('message-success','profile updated successfully');
                return Redirect::to('/myProfile');
