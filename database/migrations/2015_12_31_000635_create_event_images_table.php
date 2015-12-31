@@ -3,9 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventUserRoleTable extends Migration
+class CreateEventImagesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -13,12 +12,10 @@ class CreateEventUserRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('event_user_roles', function (Blueprint $table) {
+        Schema::create('event_images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id')->unsigned();
-            $table->integer('user_role_id')->unsigned();
-            $table->boolean('status');
-          //  $table->integer('division_id',10);
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -30,6 +27,8 @@ class CreateEventUserRoleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('event_user_roles');
+        Schema::table('event_images', function (Blueprint $table) {
+            Schema::drop('event_images');
+        });
     }
 }

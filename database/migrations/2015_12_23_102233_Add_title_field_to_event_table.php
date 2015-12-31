@@ -13,7 +13,7 @@ class AddTitleFieldToEventTable extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->string('title',255)->after('image');
+            $table->string('title',255)->after('event_type_id');
         });
     }
 

@@ -6,6 +6,7 @@ use App\Batch;
 use App\Classes;
 use App\Division;
 use App\Event;
+use App\EventImages;
 use App\EventUserRoles;
 use App\User;
 use Illuminate\Http\Request;
@@ -41,7 +42,6 @@ class NoticeBoardController extends Controller
             $creator =User::where('remember_token',$request->token)->first();
             $eventData['user_id']=$creator->id;
             $eventData['event_type_id']=1 ; //event type is 1 for announcement
-            $eventData['image']=null;
             $eventData['title']=$data['title'];
             $eventData['detail']=$data['detail'];
             $date= date("Y-m-d h:i:s", strtotime($data['date']));
@@ -95,13 +95,10 @@ class NoticeBoardController extends Controller
            ];
         return response($response, $status);
     }
-
-
     public function editAnnouncement(Requests\editAnnouncement $request, $id)
     {
            $data=$request->all();
     }
-
     public function viewAnnouncement(Requests\ViewAnnouncement $request)
     {
         $data=$request->all();
@@ -140,8 +137,6 @@ class NoticeBoardController extends Controller
         ];
         return response($response, $status);
     }
-
-
     public function createAchievement(Requests\CreateAchievement $request)
     {
         $data=$request->all();
@@ -163,7 +158,6 @@ class NoticeBoardController extends Controller
                  else{
                         $filename=null;
                      }
-            $eventData['image']=$filename;
             $eventData['title']=$data['title'];
             $eventData['detail']=$data['detail'];
             $date= date("Y-m-d h:i:s", strtotime($data['date']));
@@ -181,6 +175,11 @@ class NoticeBoardController extends Controller
                 $eventUserRolesData['created_at']= Carbon::now();
                 $eventUserRolesData['updated_at']= Carbon::now();
                 EventUserRoles::insert($eventUserRolesData);
+                $eventImageData['event_id']=$event_id;
+                $eventImageData['image']=$filename;
+                $eventImageData['created_at']= Carbon::now();
+                $eventImageData['updated_at']= Carbon::now();
+                EventImages::insert($eventImageData);
                 $status = 200;
                 $message = "Achivement Broadcast Successfully";
             }
@@ -198,47 +197,4 @@ class NoticeBoardController extends Controller
         ];
         return response($response, $status);
     }
-
-
-    public function viewAchievement(Requests\ViewAnnouncement $request)
-    {
-        $data=$request->all();
-        try{
-            $user =User::where('remember_token',$data['token'])->first();
-            $unreadAnnouncement =Announcement::where('user_id', '=',$user['id'])
-                ->where('read_status','=',0)
-                ->get();
-            $unreadAnnouncementArray=$unreadAnnouncement->toArray();
-            $i=0;
-            foreach($unreadAnnouncementArray as $value){
-                $unreadAnnouncementData[$i]['event_id']=$value['event_id'];
-                $event =Event::where('id', '=',$value['event_id'])->first();
-                $user=User::where('id', '=',$event ['user_id'])->first();
-                if($user!=null){
-                    $unreadAnnouncementData[$i]['created_by']=$user['first_name']." ".$user['last_name'];
-                }else{
-                    $unreadAnnouncementData[$i]['created_by']=null;
-                }
-                $unreadAnnouncementData[$i]['title']=$event['title'];
-                $unreadAnnouncementData[$i]['detail']=$event['detail'];
-                $unreadAnnouncementData[$i]['date']=$event['date'];
-                $i++;
-            }
-            $status = 200;
-            $message = "Success";
-            $responseData=$unreadAnnouncementData;
-        }catch (\Exception $e) {
-            $status = 500;
-            $message = "Something went wrong"  .  $e->getMessage();
-        }
-        $response = [
-            "message" => $message,
-            "status" =>$status,
-            "data" => $responseData
-        ];
-        return response($response, $status);
-    }
-
-
-
 }
