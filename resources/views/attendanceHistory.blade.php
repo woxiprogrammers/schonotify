@@ -129,8 +129,10 @@
 <script src="assets/js/main.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
         $('#attendance-content').hide();
         getStudents(1);

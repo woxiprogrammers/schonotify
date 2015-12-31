@@ -140,9 +140,10 @@
 <script src="vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/attendance-calender.js"></script>
-
+<script src="assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
         Calendar.init();
         $('.fc-agendaWeek-button').hide();

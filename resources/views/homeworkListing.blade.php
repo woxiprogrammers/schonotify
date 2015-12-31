@@ -274,6 +274,7 @@
 
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
     });
 

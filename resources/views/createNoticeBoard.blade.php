@@ -464,6 +464,7 @@
 <script src="js/cors/jquery.xdr-transport.js"></script>
 <![endif]-->
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script src="assets/js/custom-project.js"></script>
 
 
 
@@ -472,6 +473,7 @@
 
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
         FormValidator.init();
 
