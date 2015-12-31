@@ -35,7 +35,7 @@ function doListing(id) {
         }
         $('#chat-history').html(str);
         getMsgCount();
-        Main.init();
+        toggle();
     });
 }
 
@@ -71,7 +71,7 @@ $('#send-msg').click(function() {
             }
         }
         $('#chat-history').html(str);
-        Main.init();
+        toggle();
         $('#description').val('');
     });
 });
@@ -94,33 +94,24 @@ $('#msgCountArea').click(function() {
                 '</a>'+
                 '</li>';
         }
+
+        var seeAll='<a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">See All</a>';
+        $('#see-all').html(seeAll);
         $('#msgList').html(str);
-        Main.init();
+        toggle();
     });
 });
 
 $('#see-all').click(function(){
-    $.get('get-msg-list',function(res){
-        var str="";
-        for(var i=0; i<res.length; i++) {
-            str+='<li class="media">'+
-                '<a data-toggle-class="chat-open" data-toggle-target="#users" href="javascript:void(0);" onclick="doListing('+res[i]["user_id"]+')">'+
-                '<input type="hidden" name="to_id" id="to_id" value="'+res[i]["user_id"]+'" />'+
-                '<img alt="..." src="'+res[i]["avatar"]+'" class="media-object">'+
-                '<div class="media-body">'+
-                '<h4 class="media-heading">'+res[i]['first_name']+' '+res[i]['last_name']+'</h4>'+
-                '<span> '+res[i]['role']+ ' </span>'+
-                '</div>'+
-                '</a>'+
-                '</li>';
-        }
-        $('#userList').html(str);
-        Main.init();
-    });
-})
+    userList();
+});
 
 $('#backChat').click(function(){
     $("#users").removeClass("chat-open");
+    userList();
+})
+
+function userList(){
     $.get('get-msg-list',function(res){
         var str="";
         for(var i=0; i<res.length; i++) {
@@ -136,6 +127,45 @@ $('#backChat').click(function(){
                 '</li>';
         }
         $('#userList').html(str);
-        Main.init();
+        toggle();
     });
-})
+}
+
+function toggle(){
+    var toggleAttribute = $('*[data-toggle-class]');
+    toggleAttribute.each(function() {
+        var _this = $(this);
+        var toggleClass = _this.attr('data-toggle-class');
+        var outsideElement;
+        var toggleElement;
+        typeof _this.attr('data-toggle-target') !== 'undefined' ? toggleElement = $(_this.attr('data-toggle-target')) : toggleElement = _this;
+        _this.on("click", function(e) {
+            if(_this.attr('data-toggle-type') !== 'undefined' && _this.attr('data-toggle-type') == "on") {
+                toggleElement.addClass(toggleClass);
+            } else if(_this.attr('data-toggle-type') !== 'undefined' && _this.attr('data-toggle-type') == "off") {
+                toggleElement.removeClass(toggleClass);
+            } else {
+                toggleElement.toggleClass(toggleClass);
+            }
+            e.preventDefault();
+            if(_this.attr('data-toggle-click-outside')) {
+
+                outsideElement = $(_this.attr('data-toggle-click-outside'));
+                $(document).on("mousedown touchstart", toggleOutside);
+
+            };
+
+        });
+
+        var toggleOutside = function(e) {
+            if(outsideElement.has(e.target).length === 0//checks if descendants of $box was clicked
+                && !outsideElement.is(e.target)//checks if the $box itself was clicked
+                && !toggleAttribute.is(e.target) && toggleElement.hasClass(toggleClass)) {
+
+                toggleElement.removeClass(toggleClass);
+                $(document).off("mousedown touchstart", toggleOutside);
+            }
+        };
+
+    });
+}

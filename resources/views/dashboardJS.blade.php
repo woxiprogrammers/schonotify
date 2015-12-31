@@ -16,6 +16,7 @@
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
+        Main.init();
         Index.init();
     });
 </script>
