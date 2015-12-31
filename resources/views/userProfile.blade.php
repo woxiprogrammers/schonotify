@@ -244,7 +244,7 @@
                     <div class="form-group">
                         <label class="control-label">Date of Birth </label>
                         <div class="input-group input-append datepicker date col-sm-6">
-                            <input type="text" class="form-control" name="DOB"/>
+                            <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
 								<span class="input-group-btn">
 									<button type="button" class="btn btn-default">
                                          <i class="glyphicon glyphicon-calendar"></i>

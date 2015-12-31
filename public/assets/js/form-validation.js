@@ -385,6 +385,21 @@ var FormValidator = function () {
             rules: {
                 username: {
                     required: true
+                },
+                firstname: {
+                    required: true
+                },
+                lastname: {
+                    required: true
+                },
+                email: {
+                    required: true
+                },
+                mobile: {
+                    required: true
+                },
+                address: {
+                    required: true
                 }
 
             },
