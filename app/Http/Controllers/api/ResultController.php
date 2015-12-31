@@ -30,9 +30,76 @@ class ResultController extends Controller
             $data[$i]['marks']=$value['student_marks'];
             $subject=Subject::where('id','=',$exam_subject['subject_id'])->first();
             $data[$i]['subject']=$subject['subject_name'];
+            $data[$i]['subject_id']=$subject['id'];
+            $data[$i]['exam_id']=$exam['id'];
                 $i++;
         }
+           // dd($data);
         $size=count($data);
+        $subjectArray = array();
+        for($i=0,$j=0;$i<$size;$i++){
+            $result = array(
+                'subject_id'=> $data[$i]['subject_id'],
+                'subject_name' => $data[$i]['subject'] );
+            $subjectArray[$i] = $result;
+        }
+
+        $size1=count($subjectArray);
+        $dataArraySize=count($data);
+        for($i=0;$i<$size1;$i++)
+        {
+            $examName=$data[$i]['exam_name'];
+            $subjectArraySubject_id=$subjectArray[$i]['subject_id'];
+            for($j=0;$j<$dataArraySize;$j++){
+                $dataArraySubject_id= $data[$j]['subject_id'];
+                if($subjectArraySubject_id==$dataArraySubject_id){
+                    $result1 = array(
+                           'test_id'=> $data[$i]['exam_id'],
+                            'marks'=> $data[$i]['marks'],
+                            'subject_id' => $data[$i]['subject_id'],
+                            'subject_name' => $data[$i]['subject']);
+                    $finalExamData[$examName][$j]=$result1;
+                }else{
+                    $finalExamData[$examName][$j]=[];
+                }
+            }
+        }
+
+        return $finalExamData;
+      /*  $size=count($data);
+        $finalExamArray = array();
+        $examResultArray = $data;
+        $examName="";
+        for($i=0,$j=1;$i<$size;$i++ && $j++){
+            $result = array(
+                'Test_id'=> $examResultArray[$i]['exam_id'],
+                'marks'=> $examResultArray[$i]['marks'],
+                'subject_id' => $examResultArray[$i]['subject_id'],
+                'subject_name' => $examResultArray[$i]['subject']);
+            $examName=$examResultArray[$i]['exam_name'];
+            $finalExamArray[$examName][$j] = $result;
+        }
+
+
+      $size=count($data);
+        $finalExamArray = array();
+        $examResultArray = $data;
+        $examName="";
+        for($i=0,$j=0;$i<$size;$i++){
+            $result = array(
+                'Test_id'=> $examResultArray[$i]['exam_id'],
+                'marks'=> $examResultArray[$i]['marks'],
+                'subject_id' => $examResultArray[$i]['subject_id'],
+                'subject_name' => $examResultArray[$i]['subject']);
+            $examName=$examResultArray[$i]['exam_name'];
+            $finalExamArray[$examName][$i] = $result;
+        }
+        return $finalExamArray;
+
+
+        return $finalExamArray;
+*/
+       /* $size=count($data);
         $finalExamArray = array();
         $examResultArray = $data;
         $examName="";
@@ -64,6 +131,6 @@ class ResultController extends Controller
             $subjectName=$examResultArray[$i]['subject'];
             $finaleSubjectArray[$subjectName][$j] = $result;
         }
-        return $finaleSubjectArray;
+        return $finaleSubjectArray;*/
     }
 }
