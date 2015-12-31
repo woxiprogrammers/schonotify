@@ -355,7 +355,7 @@ var FormValidator = function () {
         CKEDITOR.disableAutoInline = true;
         $('textarea.ckeditor').ckeditor();
     };
-   /* var runValidator4 = function () {
+   var runValidator4 = function () {
         var form4 = $('#form4');
         var errorHandler2 = $('.errorHandler', form4);
         var successHandler2 = $('.successHandler', form4);
@@ -384,6 +384,21 @@ var FormValidator = function () {
             ignore: "",
             rules: {
                 username: {
+                    required: true
+                },
+                firstname: {
+                    required: true
+                },
+                lastname: {
+                    required: true
+                },
+                email: {
+                    required: true
+                },
+                mobile: {
+                    required: true
+                },
+                address: {
                     required: true
                 }
 
@@ -416,14 +431,15 @@ var FormValidator = function () {
                 successHandler2.show();
                 errorHandler2.hide();
                 // submit form
-                //$('#form2').submit();
+
+                $('#form4').submit();
             }
         });
 
         CKEDITOR.disableAutoInline = true;
         $('textarea.ckeditor').ckeditor();
 
-    };*/
+    };
 
     return {
         //main function to initiate template pages
@@ -432,7 +448,7 @@ var FormValidator = function () {
             runValidator1();
             runValidator2();
             runValidator3();
-            //runValidator4();
+            runValidator4();
         }
     };
 }();

@@ -213,6 +213,7 @@
                             Phone
                         </label>
                         <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
+
                     </div>
 
                 </div>
@@ -241,6 +242,18 @@
                         <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Date of Birth </label>
+                        <div class="input-group input-append datepicker date col-sm-6">
+                            <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default">
+                                         <i class="glyphicon glyphicon-calendar"></i>
+                                    </button> </span>
+                        </div>
+
+<!--                            <input class="form-control format-datepicker" type="text">-->
+                    </div>
+                    <div class="form-group">
                         <label>
                             Image Upload
                         </label>
@@ -261,6 +274,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </fieldset>
@@ -350,16 +364,27 @@
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/main.js"></script>
+<script src="vendor/maskedinput/jquery.maskedinput.min.js"></script>
+<script src="vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+<script src="vendor/autosize/autosize.min.js"></script>
+<script src="vendor/selectFx/classie.js"></script>
+<script src="vendor/selectFx/selectFx.js"></script>
+<script src="vendor/select2/select2.min.js"></script>
+<script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+
 <!-- start: JavaScript Event Handlers for this page -->
-<script src="assets/js/form-wizard.js"></script>
 <script src="assets/js/form-validation.js"></script>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/form-elements.js"></script>
 <script>
     jQuery(document).ready(function() {
 
         Main.init();
-      //  FormWizard.init();
         FormValidator.init();
+        FormElements.init();
+
         userAclModule();
     });
 
