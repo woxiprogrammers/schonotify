@@ -39,7 +39,7 @@ class MessageController extends Controller
         $message = array();
         $messagesLists = array();
         $profileImagePath = URL::asset(env('PROFILE_IMAGE_UPLOAD'));
-        $ProfileDirectory = $profileImagePath . "/" . "profile_image/";
+        $ProfileDirectory = $profileImagePath . "/";
 
         foreach($messageContactLists as $messageList){
             $messages = Message::where('to_id',$userId)
@@ -74,7 +74,7 @@ class MessageController extends Controller
         $message = array();
         $messagesLists = array();
         $profileImagePath = URL::asset(env('PROFILE_IMAGE_UPLOAD'));
-        $ProfileDirectory = $profileImagePath . "/" . "profile_image/";
+        $ProfileDirectory = $profileImagePath . "/";
 
         foreach($messageContactLists as $messageList){
 
@@ -123,7 +123,7 @@ class MessageController extends Controller
         $message = array();
         $messagesLists = array();
         $profileImagePath = URL::asset(env('PROFILE_IMAGE_UPLOAD'));
-        $ProfileDirectory = $profileImagePath . "/" . "profile_image/";
+        $ProfileDirectory = $profileImagePath . "/";
         $messages = Message::whereIn('to_id',[$sender,$receiver])
             ->whereIn('from_id',[$sender,$receiver])
             ->get();
