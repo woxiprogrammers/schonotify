@@ -6,10 +6,10 @@ use Illuminate\Database\Schema\Blueprint;
  class AddFKToEventImages extends Migration
  {
        /**
-    +     * Run the migrations.
-    +     *
-    +     * @return void
-    +     */
+        * Run the migrations.
+        *
+        * @return void
+        */
         public function up()
      {
                 Schema::table('event_images', function (Blueprint $table) {
