@@ -104,7 +104,7 @@ class MessageController extends Controller
     public function sendMessage(Request $request){
 
         if($request->ajax()){
-           $data=Input::all();
+           $data = $request->all();
             $userId = Auth::user()->id;
             $messageData['to_id'] = $data['id'];
             $messageData['from_id'] = $userId;

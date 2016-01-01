@@ -90,6 +90,8 @@
                 </ul>
             </li>
 
+
+            @if(in_array('view_message',session('functionArr')))
             <li class="dropdown">
                 <a href class="dropdown-toggle" data-toggle="dropdown" id="msgCountArea">
 
@@ -113,6 +115,15 @@
                     </li>
                 </ul>
             </li>
+            @else
+            <li class="dropdown">
+                <a id="msgCountArea" onclick="alertError()">
+                    <span id ="msgCount" class="badge partition-red"></span> <i class="ti-comment"></i> <span>MESSAGES</span>
+                </a>
+            </li>
+            @endif
+
+
 
             <!-- start: USER OPTIONS DROPDOWN -->
             <li class="dropdown current-user">

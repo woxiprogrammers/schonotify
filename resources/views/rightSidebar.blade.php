@@ -26,17 +26,21 @@
 </ol>
 </div>
 </div>
-<div class="message-bar">
-    <div class="message-inner">
-        <a class="link icon-only" href="#"><i class="fa fa-camera"></i></a>
-        <div class="message-area">
-            <textarea placeholder="Message" id="description"></textarea>
+    @foreach(session('functionArr') as $row)
+    @if($row == 'create_message')
+    <div class="message-bar">
+        <div class="message-inner">
+            <a class="link icon-only" href="#"><i class="fa fa-camera"></i></a>
+            <div class="message-area">
+                <textarea placeholder="Message" id="description"></textarea>
+            </div>
+            <a class="link" id="send-msg" onlick="">
+                Send
+            </a>
         </div>
-        <a class="link" id="send-msg" onlick="">
-            Send
-        </a>
     </div>
-</div>
+    @endif
+    @endforeach
 </div>
 </div>
 </div>

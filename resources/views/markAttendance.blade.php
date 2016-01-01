@@ -145,6 +145,7 @@
 <script src="assets/js/ui-buttons.js"></script>
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
         TableData.init();
         FormElements.init();

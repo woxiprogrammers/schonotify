@@ -79,11 +79,12 @@
 <script src="assets/js/form-elements.js"></script>
 
 <script src="assets/js/form-validation.js"></script>
+<script src="assets/js/custom-project.js"></script>
 
 <script>
 
     jQuery(document).ready(function() {
-
+        getMsgCount();
         $('#popup_valid').click(function(event){
             event.preventDefault();
             Main.init();
