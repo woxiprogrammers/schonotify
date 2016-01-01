@@ -197,4 +197,58 @@ class NoticeBoardController extends Controller
         ];
         return response($response, $status);
     }
+
+    public function viewAchievement(Requests\ViewAnnouncement $request)
+    {
+        try{
+            $AchievementsData =Event::join('event_user_roles','events.id', '=', 'event_user_roles.event_id')
+                ->where('events.event_type_id','=',2)
+                ->where('event_user_roles.status','=',1)
+                ->select('events.id','events.user_id','events.title','events.detail','events.date')
+                ->orderBy('events.id', 'desc')
+                ->get();
+            $AchievementDataArray=$AchievementsData->toArray();
+            $i=0;
+            foreach($AchievementDataArray as $value){
+                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['user_id']=$value['user_id'];
+                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['title']=$value['title'];
+                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['detail']=$value['detail'];
+                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['date']=$value['date'];
+                     $i++;
+            }
+            $i=0;
+            foreach($AchievementDataArray as $value){
+                  $result=EventImages::where('event_id','=',$value['id'])
+                                             ->groupby('image')
+                                             ->orderBy('event_id', 'asc')
+                                             ->get();
+                $resultArray=$result->toArray();
+                $key=$resultArray[0]['event_id'];
+                $images[$key]=$resultArray;
+                          $i++;
+            }
+            $i=0;$j=0;
+           foreach($images as $key=>$value){
+               foreach($value as $val){
+                   $AchievementImageArray[$key]['image'][$i]=$val['image'];
+                   $i++;
+               }
+              $i=0;
+            }
+            $status = 200;
+            $message = "Success";
+            $dataArray=$finalAchievementDataArray;
+            $imageArray=$AchievementImageArray;
+        }catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong"  .  $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" =>$status,
+            "dataArray" => $dataArray,
+            "imageArray" => $imageArray
+        ];
+        return response($response, $status);
+    }
 }
