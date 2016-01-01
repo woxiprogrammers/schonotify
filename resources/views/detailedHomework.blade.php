@@ -344,6 +344,7 @@
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
         FormElements.init();
         TableData.init();

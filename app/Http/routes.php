@@ -33,6 +33,16 @@ Route::group(['domain' => '{account}.schnotify.com'], function () {
 
 Route::get('/','FrontController@index');
 
+Route::get('get-msg-count','MessageController@getMessageCount');
+
+Route::get('get-unread-list','MessageController@getUnreadMessageListing');
+
+Route::get('get-msg-list','MessageController@getMessageList');
+
+Route::get('get-detail-message/{id}',array('uses' =>'MessageController@getDetailMessages'));
+
+Route::post('send-message',array('uses' =>'MessageController@sendMessage'));
+
 Route::get('forgot','LogController@forgot');
 
 Route::resource('log','LogController');
@@ -194,6 +204,11 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
 
     //Result
     Route::get('view-result/{id}','api\ResultController@viewResult');
+
+    Route::post('create-achievement','api\NoticeBoardController@createAchievement');
+
+    Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
+
 
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
 

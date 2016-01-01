@@ -5,14 +5,14 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use App\User;
 
-class CreateAnnouncement extends Request
+class CreateAchievement extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-        public function authorize()
+    public function authorize()
     {
         $userToken=$this->request->all();
         $userId='';
@@ -52,7 +52,8 @@ class CreateAnnouncement extends Request
             'batch'=>'required',
             'class'=>'required',
             'division'=>'required',
-            'User'=>'required|integer'
+            'User'=>'required | Integer',
+            'image' => 'mimes:jpeg,jpg,png,gif|max:10000'
         ];
     }
 }

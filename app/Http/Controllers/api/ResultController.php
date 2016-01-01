@@ -34,7 +34,6 @@ class ResultController extends Controller
             $data[$i]['exam_id']=$exam['id'];
                 $i++;
         }
-           // dd($data);
         $size=count($data);
         $subjectArray = array();
         for($i=0,$j=0;$i<$size;$i++){
@@ -59,78 +58,9 @@ class ResultController extends Controller
                             'subject_id' => $data[$i]['subject_id'],
                             'subject_name' => $data[$i]['subject']);
                     $finalExamData[$examName][$j]=$result1;
-                }else{
-                    $finalExamData[$examName][$j]=[];
                 }
             }
         }
-
         return $finalExamData;
-      /*  $size=count($data);
-        $finalExamArray = array();
-        $examResultArray = $data;
-        $examName="";
-        for($i=0,$j=1;$i<$size;$i++ && $j++){
-            $result = array(
-                'Test_id'=> $examResultArray[$i]['exam_id'],
-                'marks'=> $examResultArray[$i]['marks'],
-                'subject_id' => $examResultArray[$i]['subject_id'],
-                'subject_name' => $examResultArray[$i]['subject']);
-            $examName=$examResultArray[$i]['exam_name'];
-            $finalExamArray[$examName][$j] = $result;
-        }
-
-
-      $size=count($data);
-        $finalExamArray = array();
-        $examResultArray = $data;
-        $examName="";
-        for($i=0,$j=0;$i<$size;$i++){
-            $result = array(
-                'Test_id'=> $examResultArray[$i]['exam_id'],
-                'marks'=> $examResultArray[$i]['marks'],
-                'subject_id' => $examResultArray[$i]['subject_id'],
-                'subject_name' => $examResultArray[$i]['subject']);
-            $examName=$examResultArray[$i]['exam_name'];
-            $finalExamArray[$examName][$i] = $result;
-        }
-        return $finalExamArray;
-
-
-        return $finalExamArray;
-*/
-       /* $size=count($data);
-        $finalExamArray = array();
-        $examResultArray = $data;
-        $examName="";
-        for($i=0,$j=0;$i<$size;$i++){
-            if($examName==$examResultArray[$i]['exam_name']){
-                $j++;
-            }else{
-                $j=0;
-            }
-            $result = array(
-                'marks'=> $examResultArray[$i]['marks'],
-                'subject' => $examResultArray[$i]['subject'] );
-            $examName=$examResultArray[$i]['exam_name'];
-            $finalExamArray[$examName][$j] = $result;
-        }
-        $size=count($data);
-        $finaleSubjectArray = array();
-        $subjectName="";
-        $subjectResultArray = $data;
-        for($i=0,$j=0;$i<$size;$i++){
-            if($subjectName==$subjectResultArray[$i]['subject']){
-                $j++;
-            }else{
-                $j=0;
-            }
-            $result = array(
-                'exam_name'=> $examResultArray[$i]['exam_name'],
-                'marks' => $examResultArray[$i]['marks'] );
-            $subjectName=$examResultArray[$i]['subject'];
-            $finaleSubjectArray[$subjectName][$j] = $result;
-        }
-        return $finaleSubjectArray;*/
     }
 }

@@ -14,7 +14,7 @@ class Result extends Request
      */
     public function authorize()
     {
-       /* $userToken=$this->request->all();
+        $userToken=$this->request->all();
         $userId='';
         foreach($userToken as $userData)
         {
@@ -31,11 +31,11 @@ class Result extends Request
         {
             array_push($resultArray,$value->acl.'_'.$value->module_slug);
         }
-        if(in_array('View_result',$resultArray) ){*/
+        if(in_array('View_result',$resultArray) ){
             return true;
-        /*}else{
+         }else{
             return false;
-        }*/
+        }
     }
 
     /**
