@@ -201,23 +201,23 @@ class NoticeBoardController extends Controller
     public function viewAchievement(Requests\ViewAnnouncement $request)
     {
         try{
-            $AchievementsData =Event::join('event_user_roles','events.id', '=', 'event_user_roles.event_id')
+            $achievementsData =Event::join('event_user_roles','events.id', '=', 'event_user_roles.event_id')
                 ->where('events.event_type_id','=',2)
                 ->where('event_user_roles.status','=',1)
                 ->select('events.id','events.user_id','events.title','events.detail','events.date')
                 ->orderBy('events.id', 'desc')
                 ->get();
-            $AchievementDataArray=$AchievementsData->toArray();
+            $achievementDataArray=$achievementsData->toArray();
             $i=0;
-            foreach($AchievementDataArray as $value){
-                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['user_id']=$value['user_id'];
-                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['title']=$value['title'];
-                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['detail']=$value['detail'];
-                $finalAchievementDataArray[$AchievementDataArray[$i]['id']]['date']=$value['date'];
+            foreach($achievementDataArray as $value){
+                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['user_id']=$value['user_id'];
+                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['title']=$value['title'];
+                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['detail']=$value['detail'];
+                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['date']=$value['date'];
                      $i++;
             }
             $i=0;
-            foreach($AchievementDataArray as $value){
+            foreach($achievementDataArray as $value){
                   $result=EventImages::where('event_id','=',$value['id'])
                                              ->groupby('image')
                                              ->orderBy('event_id', 'asc')
@@ -230,7 +230,7 @@ class NoticeBoardController extends Controller
             $i=0;$j=0;
            foreach($images as $key=>$value){
                foreach($value as $val){
-                   $AchievementImageArray[$key]['image'][$i]=$val['image'];
+                   $achievementImageArray[$key]['image'][$i]=$val['image'];
                    $i++;
                }
               $i=0;
@@ -238,7 +238,7 @@ class NoticeBoardController extends Controller
             $status = 200;
             $message = "Success";
             $dataArray=$finalAchievementDataArray;
-            $imageArray=$AchievementImageArray;
+            $imageArray=$achievementImageArray;
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
