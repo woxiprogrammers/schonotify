@@ -18,12 +18,12 @@
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/table-data.js"></script>
-
+<script src="assets/js/custom-project.js"></script>
 
 
 <script type="text/javascript">
     $(document).ready(function(){
-
+        getMsgCount();
         tabUserSelect(2);
 
         Main.init();

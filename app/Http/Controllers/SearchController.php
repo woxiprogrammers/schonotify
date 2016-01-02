@@ -184,7 +184,7 @@ class SearchController extends Controller
     public function searchDivision()
     {
         $user=Auth::User();
-        $result= Division::Join('classes', 'divisions.class_id', '=', 'class.id')
+        $result= Division::Join('classes', 'divisions.class_id', '=', 'classes.id')
             ->join('batches','batches.id','=','classes.batch_id')
             ->select('classes.id as class_id','classes.slug as class_name','divisions.slug as div_name','divisions.id as div_id','batches.id as batch_id','batches.slug as batch_name')
             ->where('classes.body_id','=',$user->body_id)
