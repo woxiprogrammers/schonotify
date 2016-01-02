@@ -31,7 +31,8 @@ class NoticeBoardController extends Controller
     public function createAnnouncement(Requests\createAnnouncement $request)
     {
         $data=$request->all();
-        try{
+     try{
+
             $Batch = Batch::where('slug',$data['batch'])->first();
             $Class = Classes::where('slug',$data['class'])
                 ->where('batch_id', '=',$Batch->id)
