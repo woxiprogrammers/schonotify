@@ -163,9 +163,11 @@
 <script src="assets/js/form-wizard.js"></script>
 
 <script src="assets/js/form-validation.js"></script>
+<script src="assets/js/custom-project.js"></script>
 
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
         FormWizard.init();
         FormValidator.init();

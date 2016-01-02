@@ -139,9 +139,11 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="assets/js/custom-project.js"></script>
 
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
 
         getStudents(1);

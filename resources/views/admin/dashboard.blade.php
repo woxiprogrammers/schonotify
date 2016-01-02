@@ -24,6 +24,7 @@
 
 							</div>
 						</section>
+                        <div id="message-error-div"></div>
 						<!-- end: DASHBOARD TITLE -->
 						<!-- start: FEATURED BOX LINKS -->
 						<div class="container-fluid container-fullw bg-white">
