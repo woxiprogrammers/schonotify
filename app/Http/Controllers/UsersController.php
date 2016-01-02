@@ -193,7 +193,6 @@ class UsersController extends Controller
      */
     public function store(Requests\WebRequests\UserRequest $request)
     {
-        //return $request;
         $data = Input::all();
         $user=Auth::user();
         if(!empty($data)){
@@ -277,10 +276,9 @@ class UsersController extends Controller
                 }
                 ModuleAcl::insert($userAclsData);
             }
-            $this->sendEmail($data['email'],$data['firstName']);
             return $request;
         }else{
-            dd("Please Insert Data");
+            return "Please Insert Data";
         }
     }
 
@@ -444,13 +442,33 @@ class UsersController extends Controller
     }
 
 
+    public function checkUser(Request $request){
 
-    public function sendEmail($id,$name)
-    {
-       Mail::send('admin.registration', ['user' => $id], function ($m) use ($id,$name) {
-            $m->from('ganesh.woxi@gmail.com', 'Your Application');
-            $m->to($id,$name)->subject('Your Reminder!');
-        });
+        if($request->ajax()){
+            $data = $request->all();
+            $userName = $data['name'];
+            $userCount = User::where('username',$userName)->count();
+            if($userCount >= 1){
+                $count = '1';
+            }else{
+                $count = '0';
+            }
+            return $count;
+        }
+    }
+
+    public function checkEmail(Request $request){
+        if($request->ajax()){
+            $data = $request->all();
+            $email = $data['email'];
+            $userCount = User::where('email',$email)->count();
+            if($userCount >= 1){
+                $count = '1';
+            }else{
+                $count = '0';
+            }
+            return $count;
+        }
     }
 
 }

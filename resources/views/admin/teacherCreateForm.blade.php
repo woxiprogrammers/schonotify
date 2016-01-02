@@ -142,7 +142,7 @@
                                 Allow For
                             </label>
                             <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" id="checkbox6" name ="web-access" value="1">
+                                <input type="checkbox" id="checkbox6" name ="web-access" value="1" checked>
                                 <label for="checkbox6">
                                     Web Access
                                 </label>

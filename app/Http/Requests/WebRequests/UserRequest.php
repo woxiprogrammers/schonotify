@@ -98,8 +98,8 @@ class UserRequest extends Request
             case 'GET': return [];
                 break;
             case 'POST':return [
-                'firstName'=>'required|min:5',
-                'lastName' => 'required|min:5',
+                'firstName'=>'required|min:2',
+                'lastName' => 'required|min:2',
                 'password' => 'required|min:6',
                 'password2' => 'required|min:6',
                 'mobile' => 'required|min:10',

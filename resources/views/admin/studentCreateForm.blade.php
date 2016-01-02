@@ -65,7 +65,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label>
+                <label class="control-label">
                     Select Batch
                 </label>
                 <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
@@ -76,7 +76,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label>
+                <label class="control-label">
                     Select class
                 </label>
                 <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
@@ -85,7 +85,7 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label>
+                <label class="control-label">
                     Select division
                 </label>
                 <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
@@ -101,8 +101,8 @@
 
                     <div id="searchfield">
                         <form>
-                            <div class="form-group col-md-6">
-                                <label>
+                            <div class="form-group ">
+                                <label class="control-label">
                                     Parent Name: <span class="symbol required"></span>
                                 </label>
                                 <input type="text" placeholder="Enter Parent Name" class="form-control" name="parent_name" id="autocomplete">
@@ -119,7 +119,7 @@
         <div class="col-md-6">
 
             <div class="form-group">
-                <label>
+                <label  class="control-label">
                     First Name <span class="symbol required"></span>
                 </label>
                 <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
@@ -204,7 +204,7 @@
     <div class="row">
 
         <div class="col-md-6">
-            <label class="block">
+            <label  class="control-label">
                 Address
             </label>
             <div class="form-group">
@@ -220,7 +220,7 @@
 </fieldset>
 
 <div class="form-group">
-    <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep">
+    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="submitStep">
         Next <i class="fa fa-arrow-circle-right"></i>
     </button>
 </div>
@@ -279,7 +279,7 @@
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 
-<script src="assets/js/form-wizard.js"></script>
+<script src="assets/js/student-form-wizard.js"></script>
 
 <script>
     jQuery(document).ready(function() {

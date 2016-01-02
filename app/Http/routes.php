@@ -143,6 +143,9 @@ Route::get('get-batches',array('uses' => 'UsersController@getBatches'));
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
+Route::post('check-user',array('uses' => 'UsersController@checkUser'));
+Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
+
 
 //getAttendance()
 /* API Routes */

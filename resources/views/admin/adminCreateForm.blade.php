@@ -71,7 +71,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>
+                            <label class="control-label">
                                 First Name <span class="symbol required"></span>
                             </label>
                             <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
@@ -87,6 +87,22 @@
                     </div>
 
                 </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                User Name <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
+                            <div class="" id="feedback" ></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
 
                 <div class="row">
                     <div class="col-md-6">
@@ -132,7 +148,8 @@
                             <label class="control-label">
                                 Email <span class="symbol required"></span>
                             </label>
-                            <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email">
+                            <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" id="email">
+                            <div class="" id="emailfeedback" ></div>
                         </div>
                     </div>
 
@@ -186,7 +203,7 @@
             </fieldset>
 
             <div class="form-group">
-                <button class="btn btn-primary btn-o next-step btn-wide pull-right">
+                <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" disabled>
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
@@ -298,6 +315,42 @@
 
     });
 
+    $('#userName').on('keyup',function(){
+        var username = $(this).val();
+        var route='check-user';
+        $.post(route,{name:username},function(res){
+            if(res == 0 ) {
+                $('#feedback').removeClass("alert alert-danger alert-dismissible");
+                $('#feedback').addClass("alert alert-success alert-dismissible");
+                $('#feedback').html("Username Can Be Used");
+                $('#checkUser').removeAttr('disabled');
+            } else {
+                document.getElementById("feedback").disabled = true;
+                $('#feedback').addClass("alert alert-danger alert-dismissible");
+                $('#feedback').html("Username Already Exists");
+                $('#checkUser').attr('disabled','disabled');
+            }
+        });
+    });
+
+    $('#email').on('keyup',function(){
+        var email = $(this).val();
+        var route='check-email';
+        $.post(route,{email:email},function(res){
+            if(res == 0 ) {
+                $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
+                $('#emailfeedback').addClass("alert alert-success alert-dismissible");
+                $('#emailfeedback').html("Email Id Can Be Used");
+                $('#checkUser').removeAttr('disabled');
+            } else {
+                document.getElementById("feedback").disabled = true;
+                $('#emailfeedback').addClass("alert alert-danger alert-dismissible");
+                $('#emailfeedback').html("Email Id Already Exists");
+                $('#checkUser').attr('disabled','disabled');
+            }
+        });
+    });
+
     function userAclModule()
     {
         var route='user-module-acl';
@@ -353,9 +406,9 @@
 
 
 
+
+
 </script>
 
 
 @stop
-
-
