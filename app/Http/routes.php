@@ -203,6 +203,7 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::get('view-announcement','api\NoticeBoardController@viewAnnouncement');
 
     Route::post('create-achievement','api\NoticeBoardController@createAchievement');
+
     Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
 
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
