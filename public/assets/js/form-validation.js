@@ -311,7 +311,7 @@ var FormValidator = function () {
                 },
                 password_again: {
                     required: true,
-                    minlength: 5,
+                    minlength: 6,
                     equalTo: "#password"
                 }
 
@@ -349,7 +349,7 @@ var FormValidator = function () {
                 successHandler2.show();
                 errorHandler2.hide();
                 // submit form
-                //$('#form2').submit();
+                $('#form3').submit();
             }
         });
         CKEDITOR.disableAutoInline = true;
