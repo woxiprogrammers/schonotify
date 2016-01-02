@@ -3,9 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventTable extends Migration
+class CreateEventImagesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -13,12 +12,10 @@ class CreateEventTable extends Migration
      */
     public function up()
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('event_images', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('event_type_id')->unsigned();
-            $table->text('detail');
-            $table->dateTime('date');
+            $table->integer('event_id')->unsigned();
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -30,6 +27,8 @@ class CreateEventTable extends Migration
      */
     public function down()
     {
-        Schema::drop('events');
+        Schema::table('event_images', function (Blueprint $table) {
+            Schema::drop('event_images');
+        });
     }
 }
