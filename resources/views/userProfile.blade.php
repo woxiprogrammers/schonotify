@@ -187,7 +187,7 @@
                         <label class="control-label">
                             Username
                         </label>
-                        <input type="text" value="{!! $user->username !!}" class="form-control" id="username" name="username">
+                        <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
                     </div>
                     <div class="form-group">
                         <label class="control-label">
