@@ -90,8 +90,8 @@ class ResultController extends Controller
         $response = [
             "message" => $message,
             "status" =>$status,
-            "Test Array"=>$testData,
-            "Subject Array"=>$subjectData
+            "testArray"=>$testData,
+            "subjectArray"=>$subjectData
         ];
         return response($response,$status);
       }
