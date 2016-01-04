@@ -8,203 +8,215 @@
 @include('sidebar')
 
 <div class="app-content">
-    <!-- start: TOP NAVBAR -->
-    @include('header')
+<!-- start: TOP NAVBAR -->
+@include('header')
 
 
-    <!-- end: TOP NAVBAR -->
-    <div class="main-content" >
-        <div class="wrap-content container" id="container">
+<!-- end: TOP NAVBAR -->
+<div class="main-content" >
+<div class="wrap-content container" id="container">
 
-            <section id="page-title">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <h1 class="mainTitle">Edit {!! $user->first_name !!} {!! $user->last_name !!}  Profile</h1>
-                        @include('alerts.errors')
-                        <ul>
-                            @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <div id="error-div"></div>
-                    </div>
-                </div>
-            </section>
-            <!-- end: PAGE TITLE -->
-            <!-- start: USER PROFILE -->
-            <div class="container-fluid container-fullw bg-white">
-                <div class="row">
-                    <div class="col-md-12">
-
-
-                        <div class="tabbable">
-                            <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
-
-                                <li class="active">
-                                    <a data-toggle="tab" href="#panel_edit_account">
-                                        Edit Account
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#panel_module_assigned">
-                                        Assigned Modules
-                                    </a>
-                                </li>
+<section id="page-title">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">Edit {!! $user->first_name !!} {!! $user->last_name !!}  Profile</h1>
+            @include('alerts.errors')
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <div id="error-div"></div>
+        </div>
+    </div>
+</section>
+<!-- end: PAGE TITLE -->
+<!-- start: USER PROFILE -->
+<div class="container-fluid container-fullw bg-white">
+    <div class="row">
+        <div class="col-md-12">
 
 
-                            </ul>
-                            <div class="tab-content">
-                                <div id="panel_edit_account" class="tab-pane fade in active ">
-                                    <form id="form4" method="post" action="/my-profile/{!! $user->id !!}"  enctype="multipart/form-data">
-                                        <input name="_method" type="hidden" value="PUT">
-                                        <fieldset>
-                                            <legend>
-                                                Account Info
-                                            </legend>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Username
-                                                        </label>
-                                                        <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            First name
-                                                        </label>
-                                                        <input type="text" value="{!! $user->first_name !!}" class="form-control" id="firstname" name="firstname">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Last name
-                                                        </label>
-                                                        <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
-                                                    </div>
+            <div class="tabbable">
+                <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
 
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Email Address
-                                                        </label>
-                                                        <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                                                        <div class="" id="emailfeedback" ></div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Phone
-                                                        </label>
-                                                        <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
+                    <li class="active">
+                        <a data-toggle="tab" href="#panel_edit_account">
+                            Edit Account
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#panel_module_assigned">
+                            Assigned Modules
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#panel_my_child">
+                            My Children
+                        </a>
+                    </li>
 
-                                                    </div>
 
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Gender
-                                                        </label>
-                                                        <div class="clip-radio radio-primary">
-                                                            <input type="radio" value="F" name="gender" id="us-female" @if($user->gender=='F') checked @endif>
-                                                            <label for="us-female">
-                                                                Female
-                                                            </label>
+                </ul>
+                <div class="tab-content">
+                    <div id="panel_edit_account" class="tab-pane fade in active ">
+                        <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
+                            <input name="_method" type="hidden" value="PUT">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Username
+                                            </label>
+                                            <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                First name
+                                            </label>
+                                            <input type="text" value="{!! $user->first_name !!}" class="form-control" id="firstname" name="firstname">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Last name
+                                            </label>
+                                            <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
+                                        </div>
 
-                                                            <input type="radio" value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Email Address
+                                            </label>
+                                            <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
+                                            <div class="" id="emailfeedback" ></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Phone
+                                            </label>
+                                            <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
 
-                                                            <label for="us-male">
-                                                                Male
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Address
-                                                        </label>
-                                                        <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Date of Birth </label>
-                                                        <div class="input-group input-append datepicker date col-sm-6">
-                                                            <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Gender
+                                            </label>
+                                            <div class="clip-radio radio-primary">
+                                                <input type="radio" value="F" name="gender" id="us-female" @if($user->gender=='F') checked @endif>
+                                                <label for="us-female">
+                                                    Female
+                                                </label>
+
+                                                <input type="radio" value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
+
+                                                <label for="us-male">
+                                                    Male
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Address
+                                            </label>
+                                            <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Date of Birth </label>
+                                            <div class="input-group input-append datepicker date col-sm-6">
+                                                <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
 								<span class="input-group-btn">
 									<button type="button" class="btn btn-default">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button> </span>
-                                                        </div>
+                                            </div>
 
-                                                        <!--                            <input class="form-control format-datepicker" type="text">-->
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>
-                                                            Image Upload
-                                                        </label>
-                                                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                            <div class="fileinput-new thumbnail  col-sm-4">
+                                            <!--                            <input class="form-control format-datepicker" type="text">-->
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Alternate number
+                                            </label>
+                                            <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
 
-                                                                <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
+                                        </div>
 
-                                                            </div>
-                                                            <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
-                                                            <div class="user-edit-image-buttons pull-right col-sm-6">
+
+                                    <div class="form-group">
+                                        <label>
+                                            Image Upload
+                                        </label>
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                            <div class="fileinput-new thumbnail  col-sm-4">
+
+                                                <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
+
+                                            </div>
+                                            <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
+                                            <div class="user-edit-image-buttons pull-right col-sm-6">
 																			<span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
 																				<input type="file" name="avatar" >
 																			</span>
-                                                                <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
-                                                                    <i class="fa fa-times"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
+                                                <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
                                             </div>
-                                        </fieldset>
-
-                                        <div class="row">
-
-                                            <div class="col-md-4">
-                                                <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
-                                                    Update <i class="fa fa-arrow-circle-right"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
-                                    <div class="panel-body">
-                                        <div class="col-sm-10">
-                                            <form id="form4" method="post" action="/my-profile/{!! $user->id !!}"  enctype="multipart/form-data">
-                                                <table class="table table-responsive" id="aclMod">
-
-                                                </table>
-                                                <div class="row">
-
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-primary pull-right" type="submit" >
-                                                            Update <i class="fa fa-arrow-circle-right"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-
                                         </div>
                                     </div>
+
                                 </div>
 
+                            </fieldset>
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
+                                        Update <i class="fa fa-arrow-circle-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
+                        <div class="panel-body">
+                            <div class="col-sm-10">
+                                <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
+                                    <table class="table table-responsive" id="aclMod">
+                                    </table>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button class="btn btn-primary pull-right" type="submit" >
+                                                Update <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </form>
 
                             </div>
-
                         </div>
                     </div>
+                    <div id="panel_my_child" class="tab-pane fade" id="aclMod">
+                        <div class="panel-body">
+                            <div class="col-sm-10"></div></div></div>
+
+
                 </div>
+
             </div>
         </div>
-
-        @include('rightSidebar')
-        <!-- end: FOURTH SECTION -->
     </div>
+</div>
+</div>
+
+@include('rightSidebar')
+<!-- end: FOURTH SECTION -->
+</div>
 </div>
 </div>
 
@@ -313,10 +325,10 @@
                     if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
                     {
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" disabled checked>'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
                             '<label for="checkbox"></label>';
                     }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" disabled>'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
                             '<label for="checkbox"></label>';
                     }
                     str+='</div>'+
