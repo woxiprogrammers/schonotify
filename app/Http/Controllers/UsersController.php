@@ -241,6 +241,64 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function editUser(Request $request,$id)
+    {
+
+        $user=User::where('id',$id)->first();
+        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->get();
+        if($userRole[0]['slug'] == 'admin')
+        {
+            return view('editAdmin')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'teacher')
+        {
+            return view('editTeacher')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'student')
+        {
+
+        }elseif($userRole[0]['slug'] == 'parent')
+        {
+
+
+        }
+        else{
+
+        }
+
+
+    }
+
+    public function checkEmail(Request $request){
+        if($request->ajax()){
+            $data = $request->all();
+            $email = $data['email'];
+            $userCount = User::where('email',$email)->count();
+            if($userCount >= 1){
+                $count = '1';
+            }else{
+                $count = '0';
+            }
+            return $count;
+        }
+    }
+
+    public function updateAdmin(Request $request,$id)
+    {
+
+    }
+    public function updateStudent(Request $request,$id)
+    {
+
+    }
+    public function updateParent(Request $request,$id)
+    {
+
+    }
+    public function updateTeacher(Request $request,$id)
+    {
+
+    }
+
     public function edit($id)
     {
         $userRole=User::select('user_roles.slug as role_slug')

@@ -69,11 +69,21 @@ Route::get('myProfile','UsersController@usersProfile');
 
 Route::put('my-profile/{id}','UsersController@updateUsersProfile');
 
+Route::get('edit-user/{id}','UsersController@editUser');
+
+Route::put('edit-teacher/{id}','UsersController@updateTeacher');
+
+Route::put('edit-admin/{id}','UsersController@updateAdmin');
+
+Route::put('edit-student/{id}','UsersController@updateStudent');
+
+Route::put('edit-parent/{id}','UsersController@updateParent');
+
+Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
+
 Route::put('change-password','UsersController@changePassword');
 
 Route::get('searchUsers','SearchController@searchUsers');
-
-Route::get('edit/{id}','UsersController@edit');
 
 Route::get('selectUser/{id}','SearchController@selectRole');
 
