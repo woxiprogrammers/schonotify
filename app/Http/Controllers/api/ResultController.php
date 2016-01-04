@@ -75,6 +75,7 @@ class ResultController extends Controller
             }else{
                 $message="Sorry ! No result found for this user";
                 $testData="";
+                $subjectData="";
                 $status=404;
             }
       }else{
