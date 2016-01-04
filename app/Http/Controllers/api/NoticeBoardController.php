@@ -211,6 +211,7 @@ class NoticeBoardController extends Controller
             $achievementDataArray=$achievementsData->toArray();
             $i=0;
             foreach($achievementDataArray as $value){
+                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['event_id']=$achievementDataArray[$i]['id'];
                 $finalAchievementDataArray[$achievementDataArray[$i]['id']]['user_id']=$value['user_id'];
                 $finalAchievementDataArray[$achievementDataArray[$i]['id']]['title']=$value['title'];
                 $finalAchievementDataArray[$achievementDataArray[$i]['id']]['detail']=$value['detail'];
@@ -228,10 +229,10 @@ class NoticeBoardController extends Controller
                 $images[$key]=$resultArray;
                           $i++;
             }
-            $i=0;$j=0;
+            $i=0;
            foreach($images as $key=>$value){
                foreach($value as $val){
-                   $achievementImageArray[$key]['image'][$i]=$val['image'];
+                   $achievementImageArray[$key][$i]=$val['image'];
                    $i++;
                }
               $i=0;
@@ -240,6 +241,14 @@ class NoticeBoardController extends Controller
             $message = "Success";
             $dataArray=$finalAchievementDataArray;
             $imageArray=$achievementImageArray;
+
+            $finalDataImageArray   = array();
+            foreach($dataArray as $key=>$val){
+                if(array_key_exists($key,$imageArray)){
+                    $val['image']= $imageArray[$key];
+                }
+                $finalDataImageArray[$key]   = $val;
+            }
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
@@ -247,8 +256,7 @@ class NoticeBoardController extends Controller
         $response = [
             "message" => $message,
             "status" =>$status,
-            "dataArray" => $dataArray,
-            "imageArray" => $imageArray
+            "data"=>$finalDataImageArray
         ];
         return response($response, $status);
     }
