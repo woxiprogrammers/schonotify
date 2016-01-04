@@ -58,9 +58,6 @@
     <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
         <input name="_method" type="hidden" value="PUT">
         <fieldset>
-            <legend>
-                Account Info
-            </legend>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -134,6 +131,23 @@
 
                         <!--                            <input class="form-control format-datepicker" type="text">-->
                     </div>
+                    <div class="form-group">
+                            <label>
+                                Allow For
+                            </label>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="checkbox6" value="1">
+                                <label for="checkbox6">
+                                    Web Access
+                                </label>
+                                <input type="checkbox" id="checkbox7" value="2">
+                                <label for="checkbox7">
+                                    Mobile Access
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>
                             Image Upload
