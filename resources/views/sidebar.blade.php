@@ -33,21 +33,21 @@
         @foreach(session('functionArr') as $row)
         @if($row == 'view_user')
         <li>
-            <a href="searchUsers">
+            <a href="/searchUsers">
                 <span class="title"> Users </span>
             </a>
         </li>
         @endif
         @if($row == 'view_class')
         <li>
-            <a href="searchClasses/2">
+            <a href="/searchClasses/2">
                 <span class="title"> Classes  </span>
             </a>
         </li>
         @endif
         @if($row == 'view_subject')
         <li>
-            <a href="searchSubjects">
+            <a href="/searchSubjects">
                 <span class="title"> Subjects  </span>
             </a>
         </li>
@@ -60,7 +60,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'create_user')
 <li>
-    <a href="createUsers/1">
+    <a href="/createUsers/1">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-users"></i>
@@ -77,7 +77,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'create_class')
 <li>
-    <a href="createClass">
+    <a href="/createClass">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-suitcase"></i>
@@ -110,7 +110,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'view_timetable')
 <li>
-    <a href="timetable">
+    <a href="/timetable">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-clock-o"></i>
@@ -126,7 +126,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'view_event')
 <li>
-    <a href="event">
+    <a href="/event">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-calendar-o"></i>
@@ -142,7 +142,7 @@
 @endforeach
 
 <li>
-    <a href="noticeBoard">
+    <a href="/noticeBoard">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-bullhorn"></i>
@@ -169,14 +169,14 @@
         @foreach(session('functionArr') as $row)
         @if($row == 'create_attendance')
         <li>
-            <a href="markAttendance">
+            <a href="/markAttendance">
                 <span class="title"> Mark Attendance </span>
             </a>
         </li>
         @endif
         @if($row == 'view_attendance')
         <li>
-            <a href="view-attendance">
+            <a href="/view-attendance">
                 <span class="title"> View Attendance  </span>
             </a>
         </li>
@@ -195,7 +195,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'view_homework')
 <li>
-    <a href="homeworkListing">
+    <a href="/homeworkListing">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-book"></i>
@@ -212,7 +212,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'view_result')
 <li>
-    <a href="results">
+    <a href="/results">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-bar-chart"></i>
@@ -238,13 +238,13 @@
     </a>
     <ul class="sub-menu">
         <li>
-            <a href="students-attendance-history">
+            <a href="/students-attendance-history">
                 <span class="title"> Attendance </span>
             </a>
         </li>
 
         <li>
-            <a href="students-results-history">
+            <a href="/students-results-history">
                 <span class="title"> Results  </span>
             </a>
         </li>
