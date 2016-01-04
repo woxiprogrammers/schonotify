@@ -37,6 +37,14 @@ class ResultController extends Controller
               ->where('results.student_id','=',$id)
               ->get();
           $resultDataArray=$resultData->toArray();
+            $size=count($resultDataArray);
+            $subjectDataArray = array();
+            for($i=0;$i<$size;$i++){
+                $result = array(
+                    'subject_id'=> $resultDataArray[$i]['Subject_id'],
+                    'subject_name' => $resultDataArray[$i]['subject_name'] );
+                $subjectDataArray[$i] = $result;
+            }
             $resultDataArraySize= count($resultDataArray);
             if($resultDataArraySize!=0){
                 $i=0;
@@ -61,15 +69,18 @@ class ResultController extends Controller
                 }
                 $message="success";
                 $status=200;
-                $data=$finalExamData;
+                $testData=$finalExamData;
+                $subjectData=$subjectDataArray;
+
             }else{
                 $message="Sorry ! No result found for this user";
-                $data="";
+                $testData="";
                 $status=404;
             }
       }else{
             $message="Sorry ! No user Found";
-            $data="";
+            $testData="";
+            $subjectData="";
             $status=406;
           }
         }catch (\Exception $e) {
@@ -79,7 +90,8 @@ class ResultController extends Controller
         $response = [
             "message" => $message,
             "status" =>$status,
-            "data"=>$data
+            "Test Array"=>$testData,
+            "Subject Array"=>$subjectData
         ];
         return response($response,$status);
       }
