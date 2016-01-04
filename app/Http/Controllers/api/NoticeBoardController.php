@@ -178,7 +178,7 @@ class NoticeBoardController extends Controller
                 $eventImageData['updated_at']= Carbon::now();
                 EventImages::insert($eventImageData);
                 $status = 200;
-                $message = "Achivement Broadcast Successfully";
+                $message = "Achievement Broadcast Successfully";
             }
             else{
                 $status = 202;
