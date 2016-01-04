@@ -20,7 +20,7 @@ class NoticeBoardController extends Controller
 {
     public function __construct(Request $request)
     {
-        $this->middleware('db');
+       $this->middleware('db');
         $this->middleware('authenticate.user');
     }
     /**
@@ -32,7 +32,6 @@ class NoticeBoardController extends Controller
     {
         $data=$request->all();
      try{
-
             $Batch = Batch::where('slug',$data['batch'])->first();
             $Class = Classes::where('slug',$data['class'])
                 ->where('batch_id', '=',$Batch->id)
@@ -50,7 +49,6 @@ class NoticeBoardController extends Controller
             $eventData['created_at']= Carbon::now();
             $eventData['updated_at']= Carbon::now();
             $event_id=Event::insertGetId($eventData);
-
            if($event_id != null)
             {
                 $eventUserRolesData['event_id']=$event_id;
@@ -145,7 +143,6 @@ class NoticeBoardController extends Controller
             $creator =User::where('remember_token',$request->token)->first();
             $eventData['user_id']=$creator->id;
             $eventData['event_type_id']=2 ; //event type is 2 for Achievement
-
                   if($request->hasFile('image')){
                        $image = $request->file('image');
                        $name = $request->file('image')->getClientOriginalName();
@@ -166,7 +163,6 @@ class NoticeBoardController extends Controller
             $eventData['created_at']= Carbon::now();
             $eventData['updated_at']= Carbon::now();
             $event_id=Event::insertGetId($eventData);
-
             if($event_id != null)
             {
                 $eventUserRolesData['event_id']=$event_id;
@@ -198,7 +194,6 @@ class NoticeBoardController extends Controller
         ];
         return response($response, $status);
     }
-
     public function viewAchievement(Requests\ViewAnnouncement $request)
     {
         try{
@@ -237,18 +232,16 @@ class NoticeBoardController extends Controller
                }
               $i=0;
             }
+            $finalDataImageArray   = array();
+            foreach($finalAchievementDataArray as $key=>$value){
+                if(array_key_exists($key,$achievementImageArray)){
+                    $value['image']= $achievementImageArray[$key];
+                }
+                $finalDataImageArray[$key]   = $value;
+            }
             $status = 200;
             $message = "Success";
-            $dataArray=$finalAchievementDataArray;
-            $imageArray=$achievementImageArray;
-
-            $finalDataImageArray   = array();
-            foreach($dataArray as $key=>$val){
-                if(array_key_exists($key,$imageArray)){
-                    $val['image']= $imageArray[$key];
-                }
-                $finalDataImageArray[$key]   = $val;
-            }
+            $data=$finalDataImageArray;
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
@@ -256,7 +249,7 @@ class NoticeBoardController extends Controller
         $response = [
             "message" => $message,
             "status" =>$status,
-            "data"=>$finalDataImageArray
+            "data"=>$data
         ];
         return response($response, $status);
     }
