@@ -69,11 +69,13 @@ Route::get('myProfile','UsersController@usersProfile');
 
 Route::put('my-profile/{id}','UsersController@updateUsersProfile');
 
+Route::get('edit-user/{id}','UsersController@editUser');
+
 Route::put('change-password','UsersController@changePassword');
 
 Route::get('searchUsers','SearchController@searchUsers');
 
-Route::get('edit/{id}','UsersController@edit');
+//Route::get('edit/{id}','UsersController@edit');
 
 Route::get('selectUser/{id}','SearchController@selectRole');
 

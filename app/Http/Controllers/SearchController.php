@@ -76,7 +76,7 @@ class SearchController extends Controller
 
         foreach(session('functionArr') as $row)
         {
-            if($row == 'edit_user')
+            if($row == 'update_user')
             {
                 $str.="<th>Action</th>";
             }
@@ -126,9 +126,9 @@ class SearchController extends Controller
 
             foreach(session('functionArr') as $row1)
             {
-                if($row1 == 'edit_user')
+                if($row1 == 'update_user')
                 {
-                    $str.="<td><a data-toggle='modal' onclick='userEdit(".$row->id.")' id='popup_valid' data-target='.bs-example-modal-sm' value='$row->id'>Edit</a></td>";
+                    $str.="<td><a href='edit-user/".$row->id."'>Edit</a></td>";
                 }
             }
 
