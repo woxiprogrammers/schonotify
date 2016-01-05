@@ -34,13 +34,15 @@ function doListing(id) {
             }
         }
         $('#chat-history').html(str);
+        $(".perfect-scrollbar").scrollTop( $( '#chat-history').prop( "scrollHeight" ) );
+        $(".perfect-scrollbar").perfectScrollbar('update');
         getMsgCount();
         toggle();
     });
 }
 
 $('#send-msg').click(function() {
-    var val=$('#to_id').val();
+    var val = $('#chat-history').find('input[type=hidden]:first').val();
     var description = $('#description').val();
     var route='send-message';
     $.post(route,{id:val,description:description},function(res){
