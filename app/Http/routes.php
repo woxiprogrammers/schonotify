@@ -69,11 +69,21 @@ Route::get('myProfile','UsersController@usersProfile');
 
 Route::put('my-profile/{id}','UsersController@updateUsersProfile');
 
+Route::get('edit-user/{id}','UsersController@editUser');
+
+Route::put('edit-teacher/{id}','UsersController@updateTeacher');
+
+Route::put('edit-admin/{id}','UsersController@updateAdmin');
+
+Route::put('edit-student/{id}','UsersController@updateStudent');
+
+Route::put('edit-parent/{id}','UsersController@updateParent');
+
+Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
+
 Route::put('change-password','UsersController@changePassword');
 
 Route::get('searchUsers','SearchController@searchUsers');
-
-Route::get('edit/{id}','UsersController@edit');
 
 Route::get('selectUser/{id}','SearchController@selectRole');
 
@@ -151,7 +161,16 @@ Route::post('save-event','EventController@saveEvent');
 
 Route::get('user-module-acl','UsersController@userModuleAcls');
 
-//getAttendance()
+Route::post('save-user','UsersController@store');
+
+Route::get('get-batches',array('uses' => 'UsersController@getBatches'));
+Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
+Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
+Route::get('get-parents',array('uses' => 'UsersController@getParents'));
+Route::post('check-user',array('uses' => 'UsersController@checkUser'));
+Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
+
+
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
@@ -201,6 +220,13 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('create-announcement','api\NoticeBoardController@createAnnouncement');
     Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
     Route::get('view-announcement','api\NoticeBoardController@viewAnnouncement');
+
+    //Result
+    Route::get('view-result/{id}','api\ResultController@viewResult');
+
+    Route::post('create-achievement','api\NoticeBoardController@createAchievement');
+
+    Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
 
 
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');

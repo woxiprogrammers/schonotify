@@ -25,8 +25,8 @@ class ChangePasswordRequest extends Request
     {
         return [
 
-            'password' => 'required|min:6|max:60',
-            'password_again' => 'required|min:6|max:60|same:new'
+            'password' => 'required|min:6',
+            'password_again' => 'required|min:6|same:password'
         ];
     }
 }

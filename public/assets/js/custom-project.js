@@ -1,11 +1,11 @@
 
 function getMsgCount() {
-    $.get('get-msg-count',function(res){
+    $.get('/get-msg-count',function(res){
         $('#msgCount').html(res);
     });
 }
 function doListing(id) {
-    var route='get-detail-message/'+id;
+    var route='/get-detail-message/'+id;
     $.get(route,function(res){
         var str="";
         for(var i=0; i<res.length; i++)
@@ -44,7 +44,7 @@ function doListing(id) {
 $('#send-msg').click(function() {
     var val = $('#chat-history').find('input[type=hidden]:first').val();
     var description = $('#description').val();
-    var route='send-message';
+    var route='/send-message';
     $.post(route,{id:val,description:description},function(res){
         var str="";
         for(var i=0; i<res.length; i++)
@@ -79,7 +79,7 @@ $('#send-msg').click(function() {
 });
 
 $('#msgCountArea').click(function() {
-    $.get('get-unread-list',function(res){
+    $.get('/get-unread-list',function(res){
         var str="";
         for(var i=0; i<res.length; i++) {
             str+='<li><a href="javascript:void(0);" onclick="doListing('+res[i]['user_id']+');" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar" >'+
@@ -114,7 +114,7 @@ $('#backChat').click(function(){
 })
 
 function userList(){
-    $.get('get-msg-list',function(res){
+    $.get('/get-msg-list',function(res){
         var str="";
         for(var i=0; i<res.length; i++) {
             str+='<li class="media">'+

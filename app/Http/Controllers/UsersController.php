@@ -3,19 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\AclMaster;
+use App\Batch;
 use App\ClassData;
 use App\Classes;
 use App\Division;
 use App\Module;
 use App\ModuleAcl;
+use App\TeacherView;
 use App\User;
 use App\UserRoles;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Auth;
 
@@ -103,14 +108,9 @@ class UsersController extends Controller
     }
     public function userModuleAcls()
     {
-        $user=Auth::user();
+        
         $modules=Module::select('slug')->get();
-        $result=User::Join('module_acls', 'users.id', '=', 'module_acls.user_id')
-            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
-            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
-            ->where('users.id','=',$user->id)
-            ->select('acl_master.slug as acl','modules.title as module','modules.slug as module_slug')
-            ->get();
+
         $acls=AclMaster::all();
         $allModuleAcl=array();
         $arrMod=array();
@@ -172,43 +172,70 @@ class UsersController extends Controller
 
     }
 
-    public function adminCreateForm()
+    public function adminCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.adminCreateForm')->with('userRoles',$roles);
+        $role_id='1';
+        Session::put('role_id', $role_id);
+        if($request->authorize()===true)
+        {
+            return view('admin.adminCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
-    public function teacherCreateForm()
+    public function teacherCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.teacherCreateForm')->with('userRoles',$roles);
+        $role_id='2';
+        Session::put('role_id', $role_id);
+        if($request->authorize()===true)
+        {
+            return view('admin.teacherCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
-    public function studentCreateForm()
+    public function studentCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.studentCreateForm')->with('userRoles',$roles);
+        $role_id='3';
+        Session::put('role_id', $role_id);
+        if($request->authorize()===true)
+        {
+            return view('admin.studentCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
-    public function parentCreateForm()
+    public function parentCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.parentCreateForm')->with('userRoles',$roles);
-
+        $role_id='4';
+        Session::put('role_id', $role_id);
+        if($request->authorize()===true)
+        {
+            return view('admin.parentCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
     }
 
-    public function usersCreateForm()
+    public function usersCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-
-        return view('admin.usersCreateForm')->with('userRoles',$roles);
+        if($request->authorize()===true)
+        {
+            return view('admin.usersCreateForm')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
 
@@ -218,9 +245,95 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\WebRequests\UserRequest $request)
     {
-
+        $data = Input::all();
+        $user=Auth::user();
+        if(!empty($data)){
+            $userData= new User;
+            $userData->first_name = $data['firstName'];
+            $userData->last_name = $data['lastName'];
+            $userData->password = bcrypt($data['password']);
+            $userData->email = $data['email'];
+            $userData->gender = $data['gender'];
+            $userData->address = $data['address'];
+            $userData->mobile = $data['mobile'];
+            $userData->alternate_number = $data['alt_number'];
+            $userData->role_id = $data['role'];
+            $userData->is_active = 0;
+            $userData->remember_token = csrf_token();
+            $userData->body_id = $user->body_id;
+            $userData->created_at = Carbon::now();
+            $userData->updated_at = Carbon::now();
+            if($data['role_name']== 'admin'){
+                $userData = array_add($userData, 'emp_type', $data['emp_type']);
+                $userData->save();
+                $LastInsertId = $userData->id;
+            }elseif($data['role_name']== 'teacher'){
+                $userData = array_add($userData, 'emp_type', $data['emp_type']);
+                $userData->save();
+                $LastInsertId = $userData->id;
+                if(isset($data['class-teacher'])){
+                    Division::where('id',$data['division'])->update(['class_teacher_id' => $LastInsertId]);
+                }
+                $teacherViews['web_view']= 0;
+                $teacherViews['mobile_view']= 0;
+                if(isset($data['web-access'])){
+                    $teacherViews['web_view'] = $data['web-access'];
+                }
+                if(isset($data['mobile-access'])){
+                    $teacherViews['mobile_view'] = $data['mobile-access'];
+                }
+                $teacherViews['user_id'] = $LastInsertId;
+                $teacherViews['created_at'] = Carbon::now();
+                $teacherViews['updated_at'] = Carbon::now();
+                TeacherView::insert($teacherViews);
+            }elseif($data['role_name']== 'parent'){
+                $userData->save();
+                $LastInsertId = $userData->id;
+            }elseif($data['role_name']== 'student'){
+                if(isset($data['division'])){
+                    $userData = array_add($userData, 'division_id', $data['division']);
+                }
+                if(isset($data['parent_id'])){
+                    $userData = array_add($userData, 'parent_id', $data['parent_id']);
+                }
+                $userData->save();
+                $LastInsertId = $userData->id;
+            }
+            if(!empty($data['modules'])){
+                $userAclsData = array();
+                $modules = $data['modules'];
+                foreach($modules as $module){
+                    $acl_module = $module;
+                    $aclData = explode("_", $acl_module);
+                    $userAcl = $aclData[0];
+                    $userModule = $aclData[1];
+                    $aclMasters = AclMaster::select('id','slug')->get();
+                    $aclMasters = $aclMasters->toArray();
+                    foreach ($aclMasters as $aclMaster){
+                        if($aclMaster['slug'] == $userAcl){
+                            $userAclData['acl_id'] = $aclMaster['id'];
+                        }
+                    }
+                    $moduleMasters = Module::select('id','slug')->get();
+                    $moduleMasters = $moduleMasters->toArray();
+                    foreach ($moduleMasters as $moduleMaster){
+                        if($moduleMaster['slug'] == $userModule){
+                            $userAclData['module_id'] = $aclMaster['id'];
+                        }
+                    }
+                    $userAclData['user_id'] = $LastInsertId;
+                    $userAclData['created_at'] = Carbon::now();
+                    $userAclData['updated_at'] = Carbon::now();
+                    array_push($userAclsData,$userAclData);
+                }
+                ModuleAcl::insert($userAclsData);
+            }
+            return $request;
+        }else{
+            return "Please Insert Data";
+        }
     }
 
     /**
@@ -240,6 +353,64 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function editUser(Request $request,$id)
+    {
+
+        $user=User::where('id',$id)->first();
+        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->get();
+        if($userRole[0]['slug'] == 'admin')
+        {
+            return view('editAdmin')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'teacher')
+        {
+            return view('editTeacher')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'student')
+        {
+            return view('editStudent')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'parent')
+        {
+
+            return view('editParent')->with('user',$user);
+        }
+        else{
+
+        }
+
+
+    }
+
+    public function checkEmail(Request $request){
+        if($request->ajax()){
+            $data = $request->all();
+            $email = $data['email'];
+            $userCount = User::where('email',$email)->count();
+            if($userCount >= 1){
+                $count = '1';
+            }else{
+                $count = '0';
+            }
+            return $count;
+        }
+    }
+
+    public function updateAdmin(Request $request,$id)
+    {
+
+    }
+    public function updateStudent(Request $request,$id)
+    {
+
+    }
+    public function updateParent(Request $request,$id)
+    {
+
+    }
+    public function updateTeacher(Request $request,$id)
+    {
+
+    }
+
     public function edit($id)
     {
         $userRole=User::select('user_roles.slug as role_slug')
@@ -350,5 +521,52 @@ class UsersController extends Controller
         //
     }
 
+    public function getBatches(Request $request){
+        $user=Auth::user();
+        $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
+        $batchList = $batchData->toArray();
+        return $batchList;
+    }
+
+    public function getClasses($id){
+        $classData = Classes::where('batch_id', $id)->select('id','class_name')->get();
+        $classList = $classData->toArray();
+        return $classList;
+    }
+
+    public function getDivisions($id){
+        $divisionData = Division::where('class_id', $id)->select('id','division_name')->get();
+        $divisionList = $divisionData->toArray();
+        return $divisionList;
+    }
+
+    public function getParents(){
+        $user=Auth::user();
+        $userInformation =array();
+        $userData = User::where('body_id',$user->body_id)->where('role_id',4)->select('id','first_name','last_name','email')->get();
+        $userList = $userData->toArray();
+        foreach($userList as $user){
+            $userInfo['data'] = $user['id'];
+            $userInfo['value'] = $user['first_name']." ".$user['first_name']." ,".$user['email'];
+            array_push($userInformation,$userInfo);
+        }
+        return $userInformation;
+    }
+
+
+    public function checkUser(Request $request){
+
+        if($request->ajax()){
+            $data = $request->all();
+            $userName = $data['name'];
+            $userCount = User::where('username',$userName)->count();
+            if($userCount >= 1){
+                $count = '1';
+            }else{
+                $count = '0';
+            }
+            return $count;
+        }
+    }
 
 }

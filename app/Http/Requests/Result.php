@@ -5,14 +5,14 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use App\User;
 
-class CreateAnnouncement extends Request
+class Result extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-        public function authorize()
+    public function authorize()
     {
         $userToken=$this->request->all();
         $userId='';
@@ -31,9 +31,9 @@ class CreateAnnouncement extends Request
         {
             array_push($resultArray,$value->acl.'_'.$value->module_slug);
         }
-        if(in_array('Create_event',$resultArray) ){
+        if(in_array('View_result',$resultArray) ){
             return true;
-        }else{
+         }else{
             return false;
         }
     }
@@ -46,13 +46,7 @@ class CreateAnnouncement extends Request
     public function rules()
     {
         return [
-            'title' => 'required|min:5|max:100',
-            'detail' => 'required',
-            'date' => 'required',
-            'batch'=>'required',
-            'class'=>'required',
-            'division'=>'required',
-            'User'=>'required|integer'
+            //
         ];
     }
 }
