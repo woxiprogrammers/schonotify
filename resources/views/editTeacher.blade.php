@@ -16,19 +16,21 @@
 <div class="main-content" >
 <div class="wrap-content container" id="container">
 
-<section id="page-title">
+<section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
-        <div class="col-sm-8">
-            <h1 class="mainTitle">Edit {!! $user->first_name !!} {!! $user->last_name !!}  Profile</h1>
-            @include('alerts.errors')
-            <ul>
-                @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <div id="error-div"></div>
+        <div class="col-sm-7">
+            <h1 class="mainTitle">Edit</h1>
+            <span class="mainDescription">Teacher</span>
         </div>
+
     </div>
+    @include('alerts.errors')
+    <ul>
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+    <div id="error-div"></div>
 </section>
 <!-- end: PAGE TITLE -->
 <!-- start: USER PROFILE -->

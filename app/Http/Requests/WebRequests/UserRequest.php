@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 
-class EventRequest extends Request
+class UserRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,7 +38,7 @@ class EventRequest extends Request
         {
             case 'GET':
 
-                if(in_array('view_event',$resultArr)) {
+                if(in_array('create_user',$resultArr)) {
                     return true;
                 } else {
 
@@ -46,24 +46,16 @@ class EventRequest extends Request
                     return Redirect::to('/');
                 }
 
-            break;
+                break;
 
             case 'PUT':
-                    dd('put');
+                dd('put');
                 break;
 
             case 'POST':
-
-                if(in_array('create_event',$resultArr)) {
                     return true;
-                } else {
-
-                    Session::flash('message-error','you don`t have access');
-                    return Redirect::to('/');
-                }
-
-                    break;
-             default:break;
+                break;
+            default:break;
         }
 
     }
@@ -75,18 +67,40 @@ class EventRequest extends Request
      */
     public function rules()
     {
-
-        if(Request::method()=="POST")
+        $ch=Request::method();
+        switch($ch)
         {
-            return [
-                'eventName' => 'required',
-                'eventDescription' => 'required|text',
-                'eventStartDate' => 'required|date|after:tomorrow',
-                'eventEndDate' => 'required|date|after:start_date',
-                'image' => 'mimes:jpeg,jpg,png,gif|max:10000'
+            case 'GET': return [];
+                break;
+            case 'POST':return [
+                'firstName'=>'required|min:2',
+                'lastName' => 'required|min:2',
+                'password' => 'required|min:6',
+                'password2' => 'required|min:6',
+                'mobile' => 'required|min:10',
+                'alt_number' => 'required|min:10',
+                'email' => 'required|email',
+                'address' => 'required|min:15',
+                'modules' => 'required|min:1'
             ];
-        }else{
-            return [];
+                break;
+            default:break;
+        }
+
+    }
+
+    public function messages()
+    {
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET': return [];
+                break;
+            case 'POST':return [
+                'modules.required'=>'Please check at least one Module Acls.',
+            ];
+                break;
+            default:break;
         }
     }
 }

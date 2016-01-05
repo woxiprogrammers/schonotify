@@ -34,6 +34,7 @@
 <form action="#" role="form" class="smart-wizard" id="form">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
+<div id="error-div"></div>
 <ul>
     <li>
         <a href="#step-1">
@@ -48,21 +49,14 @@
             <div class="stepNumber">
                 2
             </div>
-            <span class="stepDesc"><small> Assign Modules </small></span>
-        </a>
-    </li>
-    <li>
-        <a href="#step-3">
-            <div class="stepNumber">
-                3
-            </div>
-            <span class="stepDesc"> <small> Complete </small> </span>
+            <span class="stepDesc"><small> Complete </small></span>
         </a>
     </li>
 </ul>
 <div id="step-1">
 <div class="row">
-
+    <input type="hidden" id="role" name="role" value="3">
+    <input type="hidden" id="role_name" name="role_name" value="student">
 <div class="col-md-8 col-md-offset-2">
 <fieldset>
     <legend>
@@ -71,34 +65,61 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label>
-                    Select class
+                <label class="control-label">
+                    Select Batch
                 </label>
-                <select class="form-control" name="country" style="-webkit-appearance: menulist;">
-                    <option value=""></option>
-                    <option value="first">First</option>
-                    <option value="second">Second</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>
-                    Select division
-                </label>
-                <select class="form-control" name="country" style="-webkit-appearance: menulist;">
-                    <option value=""></option>
-                    <option value="a">A</option>
-                    <option value="b">B</option>
+                <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
                 </select>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Select class
+                </label>
+                <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Select division
+                </label>
+                <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <div id="w">
+                <div id="content">
+
+                    <div id="searchfield">
+                        <form>
+                            <div class="form-group ">
+                                <label class="control-label">
+                                    Parent Name: <span class="symbol required"></span>
+                                </label>
+                                <input type="text" placeholder="Enter Parent Name" class="form-control" name="parent_name" id="autocomplete">
+                                <br>
+                                <div class="form-group" id="outputcontent"></div>
+                            </div>
+                        </form>
+                    </div><!-- @end #searchfield -->
+                </div><!-- @end #content -->
+            </div><!-- @end #w -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
 
             <div class="form-group">
-                <label>
+                <label  class="control-label">
                     First Name <span class="symbol required"></span>
                 </label>
                 <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
@@ -138,6 +159,25 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">
+                    Mobile Number <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Enter a Mobile Number" class="form-control" name="mobile"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Alternate Contact Number
+                </label>
+                <input type="text" placeholder="Enter a Alternate Contact Number" class="form-control" name="alt_number"/>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
                     Email <span class="symbol required"></span>
                 </label>
                 <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email">
@@ -149,11 +189,11 @@
                     Gender
                 </label>
                 <div class="clip-radio radio-primary">
-                    <input type="radio" id="wz-female" name="gender" value="female">
+                    <input type="radio" id="wz-female" name="gender" value="F">
                     <label for="wz-female">
                         Female
                     </label>
-                    <input type="radio" id="wz-male" name="gender" value="male" checked>
+                    <input type="radio" id="wz-male" name="gender" value="M" checked>
                     <label for="wz-male">
                         Male
                     </label>
@@ -164,7 +204,7 @@
     <div class="row">
 
         <div class="col-md-6">
-            <label class="block">
+            <label  class="control-label">
                 Address
             </label>
             <div class="form-group">
@@ -180,7 +220,7 @@
 </fieldset>
 
 <div class="form-group">
-    <button class="btn btn-primary btn-o next-step btn-wide pull-right">
+    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="submitStep">
         Next <i class="fa fa-arrow-circle-right"></i>
     </button>
 </div>
@@ -188,145 +228,6 @@
 </div>
 </div>
 <div id="step-2">
-    <div class="row">
-        <div class="col-md-12">
-            <fieldset>
-                <div class="panel-body">
-                    <div class="row" style="margin-bottom: 14px;">
-                        <div class="col-sm-3"><h4 class="center" style="margin:0px !important; color:#ccc;">Modules</h4></div>
-                        <div>
-
-                            <span class="label label-info" style="margin:6px;">View</span>
-
-                            <span class="label label-default" style="margin:6px;">Create</span>
-
-                            <span class="label label-warning" style="margin:6px;">Update</span>
-
-                            <span class="label label-danger" style="margin:6px;">Delete</span>
-
-                        </div>
-                    </div>
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Users Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox" value="1">
-                            <label for="checkbox"></label>
-
-                            <input type="checkbox" id="checkbox1" value="1">
-                            <label for="checkbox1"></label>
-
-                            <input type="checkbox" id="checkbox2" value="1">
-                            <label for="checkbox2"></label>
-
-                            <input type="checkbox" id="checkbox3" value="1">
-                            <label for="checkbox3"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Event Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox4" value="1">
-                            <label for="checkbox4"></label>
-
-                            <input type="checkbox" id="checkbox5" value="1">
-                            <label for="checkbox5"></label>
-
-                            <input type="checkbox" id="checkbox6" value="1">
-                            <label for="checkbox6"></label>
-
-                            <input type="checkbox" id="checkbox7" value="1">
-                            <label for="checkbox7"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Class Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox8" value="1">
-                            <label for="checkbox8"></label>
-
-                            <input type="checkbox" id="checkbox9" value="1">
-                            <label for="checkbox9"></label>
-
-                            <input type="checkbox" id="checkbox10" value="1">
-                            <label for="checkbox10"></label>
-
-                            <input type="checkbox" id="checkbox11" value="1">
-                            <label for="checkbox11"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Subjects Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox12" value="1">
-                            <label for="checkbox12"></label>
-
-                            <input type="checkbox" id="checkbox13" value="1">
-                            <label for="checkbox13"></label>
-
-                            <input type="checkbox" id="checkbox14" value="1">
-                            <label for="checkbox14"></label>
-
-                            <input type="checkbox" id="checkbox15" value="1">
-                            <label for="checkbox15"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Exams Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox16" value="1">
-                            <label for="checkbox16"></label>
-
-                            <input type="checkbox" id="checkbox17" value="1">
-                            <label for="checkbox17"></label>
-
-                            <input type="checkbox" id="checkbox18" value="1">
-                            <label for="checkbox18"></label>
-
-                            <input type="checkbox" id="checkbox19" value="1">
-                            <label for="checkbox19"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Timetable Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox20" value="1">
-                            <label for="checkbox20"></label>
-
-                            <input type="checkbox" id="checkbox21" value="1">
-                            <label for="checkbox21"></label>
-
-                            <input type="checkbox" id="checkbox22" value="1">
-                            <label for="checkbox22"></label>
-
-                            <input type="checkbox" id="checkbox23" value="1">
-                            <label for="checkbox23"></label>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-primary btn-o back-step btn-wide pull-left">
-                    <i class="fa fa-circle-arrow-left"></i> Back
-                </button>
-                <button class="btn btn-primary btn-o next-step btn-wide pull-right">
-                    Next <i class="fa fa-arrow-circle-right"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="step-3">
     <div class="row">
         <div class="col-md-12">
             <div class="text-center">
@@ -373,11 +274,13 @@
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
+<script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 
-<script src="assets/js/form-wizard.js"></script>
+<script src="assets/js/student-form-wizard.js"></script>
+
 <script src="assets/js/custom-project.js"></script>
 
 <script>
@@ -385,6 +288,8 @@
         getMsgCount();
         Main.init();
         FormWizard.init();
+        getParents();
+        getbatches();
     });
 </script>
 <script type="text/javascript">
@@ -402,6 +307,66 @@
         }
 
     });
+    function getbatches()
+    {
+        var route='get-batches';
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Batch</option>";
+            for(var i=0; i<res.length; i++){
+                str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+            }
+            $('#batch').html(str);
+        });
+    }
+
+    $("#batch").change(function() {
+        var id = this.value;
+        var route='get-classes/'+id;
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Class</option>";
+            for(var i=0; i<res.length; i++){
+                str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
+            }
+            $('#class').html(str);
+        });
+    });
+
+    $("#class").change(function() {
+        var id = this.value;
+        var route='get-divisions/'+id;
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Division</option>";
+            for(var i=0; i<res.length; i++){
+                str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
+            }
+            $('#division').html(str);
+        });
+    });
+
+    function getParents()
+    {
+        $(function(){
+            $.ajax({
+                url: '/get-parents',
+                type:'get',
+                dataType:'json',
+                success: function (currencies) {
+                    $('#autocomplete').autocomplete({
+                        lookup: currencies,
+                        onSelect: function (suggestion) {
+                            var thehtml = '<strong>Showing result for:</strong> ' + suggestion.value;
+                            thehtml+="<input type='hidden' value='"+suggestion.data+"' name='parent_id'> ";
+                            $('#outputcontent').html(thehtml);
+                            $('#tabTable').show();
+                            console.log(suggestion.data);
+                        }
+                    });
+                }
+            });
+
+        });
+
+    }
 
 </script>
 

@@ -11704,3 +11704,10 @@ a.control_next {
 .position-absolute{
     position: absolute;
 }
+
+.fixBackButton{
+    position: fixed !important;
+    z-index: 99999;
+    background: #eee;
+    top: 67px;
+}
