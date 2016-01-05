@@ -76,7 +76,7 @@ class SearchController extends Controller
 
         foreach(session('functionArr') as $row)
         {
-            if($row == 'edit_user')
+            if($row == 'update_user')
             {
                 $str.="<th>Action</th>";
             }
@@ -126,9 +126,9 @@ class SearchController extends Controller
 
             foreach(session('functionArr') as $row1)
             {
-                if($row1 == 'edit_user')
+                if($row1 == 'update_user')
                 {
-                    $str.="<td><a data-toggle='modal' onclick='userEdit(".$row->id.")' id='popup_valid' data-target='.bs-example-modal-sm' value='$row->id'>Edit</a></td>";
+                    $str.="<td><a href='edit-user/".$row->id."'>Edit</a></td>";
                 }
             }
 
@@ -184,7 +184,7 @@ class SearchController extends Controller
     public function searchDivision()
     {
         $user=Auth::User();
-        $result= Division::Join('classes', 'divisions.class_id', '=', 'class.id')
+        $result= Division::Join('classes', 'divisions.class_id', '=', 'classes.id')
             ->join('batches','batches.id','=','classes.batch_id')
             ->select('classes.id as class_id','classes.slug as class_name','divisions.slug as div_name','divisions.id as div_id','batches.id as batch_id','batches.slug as batch_name')
             ->where('classes.body_id','=',$user->body_id)

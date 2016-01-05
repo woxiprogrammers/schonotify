@@ -33,6 +33,16 @@ Route::group(['domain' => '{account}.schnotify.com'], function () {
 
 Route::get('/','FrontController@index');
 
+Route::get('get-msg-count','MessageController@getMessageCount');
+
+Route::get('get-unread-list','MessageController@getUnreadMessageListing');
+
+Route::get('get-msg-list','MessageController@getMessageList');
+
+Route::get('get-detail-message/{id}',array('uses' =>'MessageController@getDetailMessages'));
+
+Route::post('send-message',array('uses' =>'MessageController@sendMessage'));
+
 Route::get('forgot','LogController@forgot');
 
 Route::resource('log','LogController');
@@ -57,9 +67,23 @@ Route::get('usersCreate','UsersController@usersCreateForm');
 
 Route::get('myProfile','UsersController@usersProfile');
 
-Route::get('searchUsers','SearchController@searchUsers');
+Route::put('my-profile/{id}','UsersController@updateUsersProfile');
 
-Route::get('edit/{id}','UsersController@edit');
+Route::get('edit-user/{id}','UsersController@editUser');
+
+Route::put('edit-teacher/{id}','UsersController@updateTeacher');
+
+Route::put('edit-admin/{id}','UsersController@updateAdmin');
+
+Route::put('edit-student/{id}','UsersController@updateStudent');
+
+Route::put('edit-parent/{id}','UsersController@updateParent');
+
+Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
+
+Route::put('change-password','UsersController@changePassword');
+
+Route::get('searchUsers','SearchController@searchUsers');
 
 Route::get('selectUser/{id}','SearchController@selectRole');
 
@@ -183,4 +207,29 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
 
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
     Route::get('getMessageList','api\MessageController@getMessageList');
+    Route::post('createHomework','api\HomeworkController@createHomework');
+    Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
+    Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
+    Route::get('viewPublishHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
+    Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
+    Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
+    Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
+    Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
+    Route::get('view-timetable-teacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
+
+    //Announcement
+    Route::post('create-announcement','api\NoticeBoardController@createAnnouncement');
+    Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
+    Route::get('view-announcement','api\NoticeBoardController@viewAnnouncement');
+
+    //Result
+    Route::get('view-result/{id}','api\ResultController@viewResult');
+
+    Route::post('create-achievement','api\NoticeBoardController@createAchievement');
+
+    Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
+
+
+    Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
+
 });

@@ -291,10 +291,12 @@
 <script src="assets/js/main.js"></script>
 
 <script src="assets/js/form-wizard.js"></script>
+<script src="assets/js/custom-project.js"></script>
 
 <script>
     jQuery(document).ready(function() {
         userAclModule();
+        getMsgCount();
         Main.init();
         FormWizard.init();
     });

@@ -317,8 +317,10 @@
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/form-elements.js"></script>
+<script src="assets/js/custom-project.js"></script>
 <script>
 $(document).ready(function(){
+    getMsgCount();
     Main.init();
     FormValidator.init();
     showTimetable(1);

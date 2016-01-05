@@ -11,6 +11,7 @@
 <!-- start: TOP NAVBAR -->
 @include('header')
 
+
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
 <div class="wrap-content container" id="container">
@@ -19,7 +20,13 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">My Profile</h1>
-
+            @include('alerts.errors')
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <div id="error-div"></div>
         </div>
     </div>
 </section>
@@ -28,6 +35,8 @@
 <div class="container-fluid container-fullw bg-white">
 <div class="row">
 <div class="col-md-12">
+
+
 <div class="tabbable">
 <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
     <li class="active">
@@ -61,7 +70,7 @@
                     <h4>{!! $user->name !!}</h4>
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                         <div class="user-image">
-                            <div class="fileinput-new thumbnail"><img src="assets/images/{!! $user->avatar !!}" alt="">
+                            <div class="fileinput-new thumbnail"><img src="uploads/profile-picture/{!! $user->avatar !!}" alt="">
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail"></div>
                             <div class="user-image-buttons">
@@ -122,7 +131,7 @@
                         </tr>
                         <tr>
                             <td>Gender</td>
-                            <td>{!! $user->gender !!}</td>
+                            <td>@if($user->gender=='M') Male @else Female @endif</td>
                             <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
                         </tr>
 
@@ -166,7 +175,8 @@
     </div>
 </div>
 <div id="panel_edit_account" class="tab-pane fade">
-    <form action="#" role="form" id="form">
+    <form id="form4" method="post" action="my-profile/{!! $user->id !!}"  enctype="multipart/form-data">
+       <input name="_method" type="hidden" value="PUT">
         <fieldset>
             <legend>
                 Account Info
@@ -177,7 +187,7 @@
                         <label class="control-label">
                             Username
                         </label>
-                        <input type="text" value="{!! $user->username !!}" class="form-control" id="username" name="username">
+                        <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
                     </div>
                     <div class="form-group">
                         <label class="control-label">
@@ -202,7 +212,8 @@
                         <label class="control-label">
                             Phone
                         </label>
-                        <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="phone" name="email">
+                        <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
+
                     </div>
 
                 </div>
@@ -212,11 +223,13 @@
                             Gender
                         </label>
                         <div class="clip-radio radio-primary">
-                            <input type="radio" value="female" name="gender" id="us-female">
+                            <input type="radio" value="F" name="gender" id="us-female" @if($user->gender=='F') checked @endif>
                             <label for="us-female">
                                 Female
                             </label>
-                            <input type="radio" value="male" name="gender" id="us-male" checked>
+
+                            <input type="radio" value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
+
                             <label for="us-male">
                                 Male
                             </label>
@@ -226,19 +239,34 @@
                         <label class="control-label">
                             Address
                         </label>
-                        <input type="text" value="{!! $user->address !!}" class="form-control" id="phone" name="email">
+                        <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Date of Birth </label>
+                        <div class="input-group input-append datepicker date col-sm-6">
+                            <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default">
+                                         <i class="glyphicon glyphicon-calendar"></i>
+                                    </button> </span>
+                        </div>
+
+<!--                            <input class="form-control format-datepicker" type="text">-->
                     </div>
                     <div class="form-group">
                         <label>
                             Image Upload
                         </label>
                         <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-new thumbnail  col-sm-4"><img src="assets/images/{!! $user->avatar !!}" alt="">
+                            <div class="fileinput-new thumbnail  col-sm-4">
+
+                                <img src="uploads/profile-picture/{!! $user->avatar !!}" alt="">
+
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
                             <div class="user-edit-image-buttons pull-right col-sm-6">
 																			<span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
-																				<input type="file">
+																				<input type="file" name="avatar" >
 																			</span>
                                 <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
                                     <i class="fa fa-times"></i>
@@ -246,6 +274,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </fieldset>
@@ -253,7 +282,7 @@
         <div class="row">
 
             <div class="col-md-4">
-                <button class="btn btn-primary pull-right" type="submit">
+               <button class="btn btn-primary pull-right" type="submit" >
                     Update <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
@@ -273,7 +302,8 @@
     </div>
 </div>
 <div id="panel_change_password" class="tab-pane fade">
-    <form id="form">
+    <form id="form3"  method="post" action="change-password">
+        <input name="_method" type="hidden" value="PUT">
         <div class="row">
             <div class="form-group col-sm-6">
                 <label class="control-label">
@@ -328,13 +358,34 @@
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <script src="vendor/bootstrap-fileinput/jasny-bootstrap.js"></script>
+<script src="vendor/ckeditor/ckeditor.js"></script>
+<script src="vendor/ckeditor/adapters/jquery.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/main.js"></script>
+<script src="vendor/maskedinput/jquery.maskedinput.min.js"></script>
+<script src="vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+<script src="vendor/autosize/autosize.min.js"></script>
+<script src="vendor/selectFx/classie.js"></script>
+<script src="vendor/selectFx/selectFx.js"></script>
+<script src="vendor/select2/select2.min.js"></script>
+<script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+
 <!-- start: JavaScript Event Handlers for this page -->
+<script src="assets/js/form-validation.js"></script>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/form-elements.js"></script>
+<script src="assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
+        FormValidator.init();
+        FormElements.init();
+
         userAclModule();
     });
 
@@ -399,6 +450,9 @@
             $('#aclMod').html(str);
         });
     }
+
+
+
 
 </script>
 

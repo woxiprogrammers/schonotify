@@ -281,12 +281,15 @@
 
 <script src="assets/js/student-form-wizard.js"></script>
 
+<script src="assets/js/custom-project.js"></script>
+
 <script>
     jQuery(document).ready(function() {
-        getbatches();
+        getMsgCount();
         Main.init();
         FormWizard.init();
         getParents();
+        getbatches();
     });
 </script>
 <script type="text/javascript">

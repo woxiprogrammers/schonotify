@@ -180,11 +180,13 @@
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/pages-calendar.js"></script>
+<script src="assets/js/custom-project.js"></script>
 
 
 
 <script>
     jQuery(document).ready(function() {
+        getMsgCount();
         Main.init();
         Calendar.init();
     });

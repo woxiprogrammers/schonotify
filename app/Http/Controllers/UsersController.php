@@ -16,13 +16,15 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Auth;
+
+
 
 
 class UsersController extends Controller
@@ -47,11 +49,63 @@ class UsersController extends Controller
     public function usersProfile()
     {
         $user=Auth::user();
-
         return view('userProfile')->with('user',$user);
 
     }
 
+
+
+    public function updateUsersProfile(Requests\WebRequests\ProfileRequest $request,$id)
+    {
+         $userImage=User::where('id',$id)->first();
+          unset($request->_method);
+          $user=Auth::user();
+          if($request->hasFile('avatar')){
+               $image = $request->file('avatar');
+               $name = $request->file('avatar')->getClientOriginalName();
+               $filename = time()."_".$name;
+               $path = public_path('uploads/profile-picture/');
+              if (! file_exists($path)) {
+                   File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+              }
+              $image->move($path,$filename);
+          }
+          else{
+                $filename=$userImage->avatar;
+
+          }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+          $userData['username']= $request->username;
+          $userData['first_name']= $request->firstname;
+          $userData['email']= $request->email;
+          $userData['last_name']= $request->lastname;
+          $userData['gender']= $request->gender;
+          $userData['mobile']= $request->mobile;
+          $userData['address']= $request->address;
+          $userData['avatar']= $filename;
+          $userData['birth_date']= $date;
+        $userUpdate=User::where('id',$id)->update($userData);
+            if($userUpdate == 1){
+                Session::flash('message-success','profile updated successfully');
+               return Redirect::to('/myProfile');
+            }
+            else{
+                Session::flash('message-error','something went wrong');
+                return Redirect::to('/myProfile');
+            }
+
+    }
+
+    public function changePassword(Requests\WebRequests\ChangePasswordRequest $request)
+    {
+        $password = $request->all();
+        unset($password['_method']);
+        $user = Auth::user();
+        $user->update(array('password' => bcrypt($password['password'])));
+        Session::flash('message-success','password successfully updated');
+        return Redirect::to('/myProfile');
+
+    }
     public function userModuleAcls()
     {
         
@@ -299,6 +353,64 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function editUser(Request $request,$id)
+    {
+
+        $user=User::where('id',$id)->first();
+        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->get();
+        if($userRole[0]['slug'] == 'admin')
+        {
+            return view('editAdmin')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'teacher')
+        {
+            return view('editTeacher')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'student')
+        {
+            return view('editStudent')->with('user',$user);
+        }elseif($userRole[0]['slug'] == 'parent')
+        {
+
+            return view('editParent')->with('user',$user);
+        }
+        else{
+
+        }
+
+
+    }
+
+    public function checkEmail(Request $request){
+        if($request->ajax()){
+            $data = $request->all();
+            $email = $data['email'];
+            $userCount = User::where('email',$email)->count();
+            if($userCount >= 1){
+                $count = '1';
+            }else{
+                $count = '0';
+            }
+            return $count;
+        }
+    }
+
+    public function updateAdmin(Request $request,$id)
+    {
+
+    }
+    public function updateStudent(Request $request,$id)
+    {
+
+    }
+    public function updateParent(Request $request,$id)
+    {
+
+    }
+    public function updateTeacher(Request $request,$id)
+    {
+
+    }
+
     public function edit($id)
     {
         $userRole=User::select('user_roles.slug as role_slug')
@@ -448,20 +560,6 @@ class UsersController extends Controller
             $data = $request->all();
             $userName = $data['name'];
             $userCount = User::where('username',$userName)->count();
-            if($userCount >= 1){
-                $count = '1';
-            }else{
-                $count = '0';
-            }
-            return $count;
-        }
-    }
-
-    public function checkEmail(Request $request){
-        if($request->ajax()){
-            $data = $request->all();
-            $email = $data['email'];
-            $userCount = User::where('email',$email)->count();
             if($userCount >= 1){
                 $count = '1';
             }else{
