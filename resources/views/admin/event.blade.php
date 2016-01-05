@@ -12,6 +12,7 @@
 
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
+            
             <div class="wrap-content container" id="container">
                 <!-- start: DASHBOARD TITLE -->
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
@@ -201,7 +202,6 @@
     function uploadImage(file)
     {
         var formData=new FormData(file[0]);
-        console.log(file[0]);
 
         $.ajax({
             url:'save-event',
