@@ -118,6 +118,7 @@
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
+<script src="assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
