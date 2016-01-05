@@ -347,7 +347,7 @@
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/form-validation.js"></script>
-
+<script src="assets/js/custom-project.js"></script>
 
 
 
