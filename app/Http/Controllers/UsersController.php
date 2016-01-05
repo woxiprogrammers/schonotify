@@ -255,11 +255,11 @@ class UsersController extends Controller
             return view('editTeacher')->with('user',$user);
         }elseif($userRole[0]['slug'] == 'student')
         {
-
+            return view('editStudent')->with('user',$user);
         }elseif($userRole[0]['slug'] == 'parent')
         {
 
-
+            return view('editParent')->with('user',$user);
         }
         else{
 
