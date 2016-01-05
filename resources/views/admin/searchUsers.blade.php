@@ -142,7 +142,6 @@
 
 </script>
 
-        @include('admin.linkModalUser')
 
 
 @stop

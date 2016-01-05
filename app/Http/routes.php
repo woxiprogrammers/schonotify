@@ -171,7 +171,6 @@ Route::post('check-user',array('uses' => 'UsersController@checkUser'));
 Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
 
 
-//getAttendance()
 /* API Routes */
 Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
