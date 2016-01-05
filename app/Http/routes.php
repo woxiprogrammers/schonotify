@@ -224,6 +224,10 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     //Result
     Route::get('view-result/{id}','api\ResultController@viewResult');
 
+    Route::get('view-test-chart/{uid}/{tid}','api\ResultController@viewTestGraph');
+
+    Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
+
     Route::post('create-achievement','api\NoticeBoardController@createAchievement');
 
     Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
