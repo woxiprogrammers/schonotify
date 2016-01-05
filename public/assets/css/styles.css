@@ -11706,7 +11706,7 @@ a.control_next {
 }
 
 .fixBackButton{
-    position: fixed;
+    position: fixed !important;
     z-index: 99999;
     background: #eee;
     top: 67px;

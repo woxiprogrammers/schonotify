@@ -143,6 +143,7 @@
 <script src="vendor/ladda-bootstrap/spin.min.js"></script>
 <script src="vendor/ladda-bootstrap/ladda.min.js"></script>
 <script src="assets/js/ui-buttons.js"></script>
+<script src="assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
