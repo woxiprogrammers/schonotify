@@ -33,6 +33,7 @@
 <form action="#" role="form" class="smart-wizard" id="form">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
+<div id="error-div"></div>
 <ul>
     <li>
         <a href="#step-1">
@@ -61,7 +62,8 @@
 </ul>
 <div id="step-1">
     <div class="row">
-
+        <input type="hidden" id="role" name="role" value="2">
+        <input type="hidden" id="role_name" name="role_name" value="teacher">
         <div class="col-md-8 col-md-offset-2">
             <fieldset>
                 <legend>
@@ -110,6 +112,25 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
+                                Mobile Number <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter a Mobile Number" class="form-control" name="mobile"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Alternate Contact Number
+                            </label>
+                            <input type="text" placeholder="Enter a Alternate Contact Number" class="form-control" name="alt_number"/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
                                 Email <span class="symbol required"></span>
                             </label>
                             <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email">
@@ -121,11 +142,11 @@
                                 Allow For
                             </label>
                             <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" id="checkbox6" value="1">
+                                <input type="checkbox" id="checkbox6" name ="web-access" value="1" checked>
                                 <label for="checkbox6">
                                     Web Access
                                 </label>
-                                <input type="checkbox" id="checkbox7" value="2">
+                                <input type="checkbox" id="checkbox7" name ="mobile-access" value="1">
                                 <label for="checkbox7">
                                     Mobile Access
                                 </label>
@@ -140,11 +161,11 @@
                                 Gender
                             </label>
                             <div class="clip-radio radio-primary">
-                                <input type="radio" id="wz-female" name="gender" value="female">
+                                <input type="radio" id="wz-female" name="gender" value="F">
                                 <label for="wz-female">
                                     Female
                                 </label>
-                                <input type="radio" id="wz-male" name="gender" value="male" checked>
+                                <input type="radio" id="wz-male" name="gender" value="M" checked>
                                 <label for="wz-male">
                                     Male
                                 </label>
@@ -165,12 +186,26 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
+                        <label class="control-label">
+                            Employee Type <span class="symbol required"></span>
+                        </label>
+
+                        <div class="form-group">
+                            <select class="form-control" id="emp_type" name="emp_type" style="-webkit-appearance: menulist;">
+                                <option value="full-time">Full Time  </option>
+                                <option value="part_time">Part Time</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
                                 Make Class Teacher
                             </label>
                             <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" id="checkbox8" value="1" onchange="clsTeacher(this.checked)">
+                                <input type="checkbox" id="checkbox8" value="1" onchange="clsTeacher(this.checked)" name="class-teacher">
                                 <label for="checkbox8">
                                     Approve
                                 </label>
@@ -183,22 +218,16 @@
                             <label>
                                 Select Batch
                             </label>
-                            <select class="form-control" name="country" style="-webkit-appearance: menulist;">
-                                <option value=""></option>
-                                <option value="morning">Morning</option>
-                                <option value="evening">Evening</option>
+                            <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group" id="clstchr_class" style="display:none;">
+                        <div class="form-group" id="clstchr_class" style="display:none;" >
                             <label>
                                 Select Class
                             </label>
-                            <select class="form-control" name="country" style="-webkit-appearance: menulist;">
-                                <option value=""></option>
-                                <option value="first">First</option>
-                                <option value="second">Second</option>
+                            <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
                             </select>
                         </div>
                     </div>
@@ -207,12 +236,7 @@
                             <label>
                                 Select Division
                             </label>
-                            <select class="form-control" name="country" style="-webkit-appearance: menulist;">
-                                <option value=""></option>
-                                <option value="a">A</option>
-                                <option value="b">B</option>
-                                <option value="c">C</option>
-                                <option value="d">D</option>
+                            <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
                             </select>
                         </div>
                     </div>
@@ -235,125 +259,15 @@
         <div class="col-md-12">
             <fieldset>
                 <div class="panel-body">
-                    <div class="row" style="margin-bottom: 14px;">
-                        <div class="col-sm-3"><h4 class="center" style="margin:0px !important; color:#ccc;">Modules</h4></div>
-                        <div>
+                    <div id="panel_module_assigned" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="col-sm-10">
 
-                            <span class="label label-info" style="margin:6px;">View</span>
+                                <table class="table table-responsive" id="aclModCreate">
 
-                            <span class="label label-default" style="margin:6px;">Create</span>
+                                </table>
 
-                            <span class="label label-warning" style="margin:6px;">Update</span>
-
-                            <span class="label label-danger" style="margin:6px;">Delete</span>
-
-                        </div>
-                    </div>
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Users Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox" value="1">
-                            <label for="checkbox"></label>
-
-                            <input type="checkbox" id="checkbox1" value="1">
-                            <label for="checkbox1"></label>
-
-                            <input type="checkbox" id="checkbox2" value="1">
-                            <label for="checkbox2"></label>
-
-                            <input type="checkbox" id="checkbox3" value="1">
-                            <label for="checkbox3"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Event Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox4" value="1">
-                            <label for="checkbox4"></label>
-
-                            <input type="checkbox" id="checkbox5" value="1">
-                            <label for="checkbox5"></label>
-
-                            <input type="checkbox" id="checkbox6" value="1">
-                            <label for="checkbox6"></label>
-
-                            <input type="checkbox" id="checkbox7" value="1">
-                            <label for="checkbox7"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Class Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox8" value="1">
-                            <label for="checkbox8"></label>
-
-                            <input type="checkbox" id="checkbox9" value="1">
-                            <label for="checkbox9"></label>
-
-                            <input type="checkbox" id="checkbox10" value="1">
-                            <label for="checkbox10"></label>
-
-                            <input type="checkbox" id="checkbox11" value="1">
-                            <label for="checkbox11"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Subjects Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox12" value="1">
-                            <label for="checkbox12"></label>
-
-                            <input type="checkbox" id="checkbox13" value="1">
-                            <label for="checkbox13"></label>
-
-                            <input type="checkbox" id="checkbox14" value="1">
-                            <label for="checkbox14"></label>
-
-                            <input type="checkbox" id="checkbox15" value="1">
-                            <label for="checkbox15"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Exams Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox16" value="1">
-                            <label for="checkbox16"></label>
-
-                            <input type="checkbox" id="checkbox17" value="1">
-                            <label for="checkbox17"></label>
-
-                            <input type="checkbox" id="checkbox18" value="1">
-                            <label for="checkbox18"></label>
-
-                            <input type="checkbox" id="checkbox19" value="1">
-                            <label for="checkbox19"></label>
-                        </div>
-                    </div>
-
-                    <div class="row" id="checkbox-acl">
-                        <div class="col-sm-3 pull-left"><h5 style="margin:0px !important;">Timetable Management</h5></div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-
-                            <input type="checkbox" id="checkbox20" value="1">
-                            <label for="checkbox20"></label>
-
-                            <input type="checkbox" id="checkbox21" value="1">
-                            <label for="checkbox21"></label>
-
-                            <input type="checkbox" id="checkbox22" value="1">
-                            <label for="checkbox22"></label>
-
-                            <input type="checkbox" id="checkbox23" value="1">
-                            <label for="checkbox23"></label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -362,7 +276,7 @@
                 <button class="btn btn-primary btn-o back-step btn-wide pull-left">
                     <i class="fa fa-circle-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-primary btn-o next-step btn-wide pull-right">
+                <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep">
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
@@ -425,6 +339,8 @@
 
 <script>
     jQuery(document).ready(function() {
+        userAclModule();
+        getbatches();
         getMsgCount();
         Main.init();
         FormWizard.init();
@@ -458,6 +374,95 @@
             $('#clstchr_div').hide();
         }
     }
+    function userAclModule()
+    {
+        var route='user-module-acl';
+        $.get(route,function(res){
+
+            var str;
+
+            var arr=res['allModAclArr'];
+
+            var arr1= $.map(arr,function(index,value){
+                return [value];
+            });
+
+            var arr3=res['allAcls'];
+            var arr2= $.map(arr3,function(index,value){
+                return [index];
+            });
+
+            str+='<tr>'+
+                '<th><b>Modules</b></th>';
+            for(var j=0; j<arr2.length; j++)
+            {
+
+                str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
+            }
+
+            str+='</tr>';
+
+
+            for(var i=0; i<arr1.length; i++)
+            {
+
+                str+="<tr>"+
+                    "<td>"+(arr1[i]).toUpperCase()+"</td>";
+                for(var j=0; j<arr2.length; j++)
+                {
+                    str+='<td>'+
+                        '<div class="checkbox form-group clip-check check-primary checkbox-inline">';
+
+                    str+='<input type="checkbox" class="form-control" value="'+arr2[j]['slug']+'_'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="modules[]">'+
+                        '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+
+                    str+='</div>'+
+                        '</td>';
+                }
+
+                str+="</tr>";
+            }
+
+            $('#aclModCreate').html(str);
+        });
+    }
+
+
+    function getbatches()
+    {
+        var route='get-batches';
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Batch</option>";
+            for(var i=0; i<res.length; i++){
+                str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+            }
+            $('#batch').html(str);
+        });
+    }
+
+    $("#batch").change(function() {
+        var id = this.value;
+        var route='get-classes/'+id;
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Class</option>";
+            for(var i=0; i<res.length; i++){
+                str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
+            }
+            $('#class').html(str);
+        });
+    });
+
+    $("#class").change(function() {
+        var id = this.value;
+        var route='get-divisions/'+id;
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Division</option>";
+            for(var i=0; i<res.length; i++){
+                str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
+            }
+            $('#division').html(str);
+        });
+    });
 </script>
 
 @stop

@@ -1,6 +1,6 @@
 var FormWizard = function () {
 
-	"use strict";
+    "use strict";
     var wizardContent = $('#wizard');
     var wizardForm = $('#form');
     var numberOfSteps = $('.swMain > ul > li').length;
@@ -15,6 +15,7 @@ var FormWizard = function () {
         var numberOfSteps = 0;
         initValidator();
 
+
     };
 
     $.validator.addMethod("alpha", function(value, element) {
@@ -28,17 +29,8 @@ var FormWizard = function () {
         if ($("#checkbox8").is(":checked") && ($.trim(val) == '')) { return false; }
         return true;
     }, "This field is required if Make as Class Teacher is checked...");
-
-    $.validator.addMethod("modules", function(value, elem, param) {
-        if($("input[name='modules']:checked").length > 1){
-            return true;
-        }else {
-            return false;
-        }
-    },"You must select at least two!");
-
     var initValidator = function () {
-        
+
         $.validator.setDefaults({
             errorElement: "span", // contain the error msg in a span tag
             errorClass: 'help-block',
@@ -53,7 +45,7 @@ var FormWizard = function () {
                     minlength: 2,
                     required: true
                 },
-                 email: {
+                email: {
                     required: true,
                     email: true
                 },
@@ -76,7 +68,7 @@ var FormWizard = function () {
                 },
                 modules: {
                     required: true,
-                    minlength:2
+                    minlength: 2
                 },
                 mobile:{
                     required:true,
@@ -85,19 +77,21 @@ var FormWizard = function () {
                     mobileNumber:true
                 },
                 alt_number:{
-                    required:true,
                     number:true,
                     minlength:10,
                     mobileNumber:true
                 },
                 batch:{
-                    requiredIfChecked:true
+                    required:true
                 },
                 class:{
-                    requiredIfChecked:true
+                    required:true
                 },
                 division:{
-                    requiredIfChecked:true
+                    required:true
+                },
+                parent_name:{
+                    required:true
                 }
 
             },
@@ -107,8 +101,8 @@ var FormWizard = function () {
                     alpha: "First name must contain only letters"
                 },
                 lastName: {
-                     required: "Last Name is required",
-                     alpha: "Last name must contain only letters"
+                    required: "Last Name is required",
+                    alpha: "Last name must contain only letters"
                 },
                 studid:"please provide correct student id",
                 email: {
@@ -116,8 +110,8 @@ var FormWizard = function () {
                     email: "Your email address must be in the format of name@domain.com"
                 },
                 address:{
-                     required:"Please provide users address",
-                     address:"Address must contain at-least 15 characters"
+                    required:"Please provide users address",
+                    address:"Address must contain at-least 15 characters"
                 },
                 modules: {
                     minlength: jQuery.validator.format("Please select  at least {0} types of Service")
@@ -136,8 +130,16 @@ var FormWizard = function () {
                     mobileNumber : "Mobile number must be 10 digit only "
                 },
                 alt_number:{
-                    required:"Alternate number is required",
                     number:"Alternate number must be numeric"
+                },
+                'batch':{
+                    required:"Please Select Batch"
+                },
+                'class':{
+                    required:"Please Select Class"
+                },
+                'division':{
+                    required:"Please Select Division"
                 }
             },
 
@@ -175,14 +177,16 @@ var FormWizard = function () {
         });
     };
     var onShowStep = function (obj, context) {
-    	if(context.toStep == numberOfSteps){
-    		$('.anchor').children("li:nth-child(" + context.toStep + ")").children("a").removeClass('wait');
+        if(context.toStep == numberOfSteps){
+            $('.anchor').children("li:nth-child(" + context.toStep + ")").children("a").removeClass('wait');
             displayConfirm();
-    	}
+        }
         $(".next-step").unbind("click").click(function (e) {
             e.preventDefault();
 
-            wizardContent.smartWizard("goForward");
+
+                onFinish(obj, context);
+
 
         });
         $(".back-step").unbind("click").click(function (e) {
@@ -195,6 +199,7 @@ var FormWizard = function () {
         });
         $(".finish-step").unbind("click").click(function (e) {
             e.preventDefault();
+
             onFinish(obj, context);
         });
     };
@@ -203,8 +208,8 @@ var FormWizard = function () {
         // return false to stay on step and true to continue navigation
     };
     var onFinish = function (obj, context) {
-
         if (validateAllSteps()) {
+
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
             var form=$('#form').serialize();
@@ -212,6 +217,7 @@ var FormWizard = function () {
                 url:'save-user',
                 data: form,
                 processData: false,
+
                 type: 'POST',
 
                 success: function(data){
@@ -221,6 +227,7 @@ var FormWizard = function () {
                 error:function(data){
                     var errors = $.parseJSON(data.responseText);
 
+
                     var errorsHtml = '<div class="alert alert-danger"><ul>';
 
                     $.each( errors, function( key, value ) {
@@ -229,40 +236,41 @@ var FormWizard = function () {
                     errorsHtml += '</ul></di>';
 
                     $('#error-div').html(errorsHtml);
-                    wizardContent.smartWizard("goToStep", 2);
                 }
             });
 
         }
     };
     var validateSteps = function (stepnumber, nextstep) {
-
         var isStepValid = false;
+
 
         if (numberOfSteps >= nextstep && nextstep > stepnumber) {
 
             // cache the form element selector
             if (wizardForm.valid()) { // validate the form
-
-            wizardForm.validate().focusInvalid();
+                wizardForm.validate().focusInvalid();
                 for (var i=stepnumber; i<=nextstep; i++){
-        		$('.anchor').children("li:nth-child(" + i + ")").not("li:nth-child(" + nextstep + ")").children("a").removeClass('wait').addClass('done').children('.stepNumber').addClass('animated tada');
-        		}
+                    $('.anchor').children("li:nth-child(" + i + ")").not("li:nth-child(" + nextstep + ")").children("a").removeClass('wait').addClass('done').children('.stepNumber').addClass('animated tada');
+                }
                 //focus the invalid fields
                 isStepValid = true;
                 return true;
             };
         } else if (nextstep < stepnumber) {
-        	for (i=nextstep; i<=stepnumber; i++){
-        		$('.anchor').children("li:nth-child(" + i + ")").children("a").addClass('wait').children('.stepNumber').removeClass('animated tada');
-        	}
-            
+            for (i=nextstep; i<=stepnumber; i++){
+                $('.anchor').children("li:nth-child(" + i + ")").children("a").addClass('wait').children('.stepNumber').removeClass('animated tada');
+            }
+
             return true;
-        } 
+        }
     };
     var validateAllSteps = function () {
-        return true;
-
+        if(wizardForm.valid()){
+            return true;
+        }else{
+            return false;
+        }
     };
     return {
         init: function () {

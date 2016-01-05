@@ -1,7 +1,6 @@
 <?php
-
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Database\Migrations\Migration;
 
 class CreateEventImagesTable extends Migration
 {
@@ -15,7 +14,7 @@ class CreateEventImagesTable extends Migration
         Schema::create('event_images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id')->unsigned();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

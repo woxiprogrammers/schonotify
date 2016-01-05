@@ -19,9 +19,16 @@ class EventController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
-    public function index()
+
+    public function index(Requests\WebRequests\EventRequest $request)
     {
-        return view('admin.event');
+        if($request->authorize()===true)
+        {
+            return view('admin.event');
+        }else{
+            return Redirect::to('/');
+        }
+
     }
 
     public function saveEvent(Requests\WebRequests\EventRequest $request)
