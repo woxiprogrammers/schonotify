@@ -95,4 +95,78 @@ class ResultController extends Controller
         ];
         return response($response,$status);
       }
+    public function viewTestGraph(Requests\Result $request , $uid, $tid)
+    {
+        try{
+            $user=User::where('id','=',$uid)->first();
+            if($user!=null){
+                $resultData =Result::join('exam_subjects','results.exam_subject_id', '=', 'exam_subjects.id')
+                    ->join('exams','exam_subjects.exam_id','=','exams.id')
+                    ->join('subjects','exam_subjects.subject_id','=','subjects.id')
+                    ->join('users','users.id','=','results.student_id')
+                    ->select('exams.id as Test_id','exams.exam_name','results.student_marks','subjects.id as Subject_id','subjects.subject_name')
+                    ->where('exam_subjects.exam_id','=',$tid)
+                    ->where('results.student_id','=',$uid)
+                    ->get();
+                $resultDataArray=$resultData->toArray();
+                $size=count($resultDataArray);
+                for($i=0;$i<$size;$i++){
+                    $test_name=$resultDataArray[$i]['exam_name'];
+                    $result = array(
+                        'Subject_id'=>$resultDataArray[$i]['Subject_id'],
+                        'Subject_marks'=>$resultDataArray[$i]['student_marks'] );
+                    $testDataArray[$test_name][$i] = $result;
+                }
+                $message="success";
+                $status=200;
+                $graphData=$testDataArray;
+              }
+            }catch (\Exception $e) {
+                $status = 500;
+                $message = "Something went wrong"  .  $e->getMessage();
+            }
+        $response = [
+            "message" => $message,
+            "status" =>$status,
+            "graphData" =>$graphData
+        ];
+        return response($response,$status);
+    }
+    public function viewSubjectGraph(Requests\Result $request , $uid, $sid)
+    {
+        try{
+            $user=User::where('id','=',$uid)->first();
+            if($user!=null){
+                $resultData =Result::join('exam_subjects','results.exam_subject_id', '=', 'exam_subjects.id')
+                    ->join('exams','exam_subjects.exam_id','=','exams.id')
+                    ->join('subjects','exam_subjects.subject_id','=','subjects.id')
+                    ->join('users','users.id','=','results.student_id')
+                    ->select('exams.id as Test_id','exams.exam_name','results.student_marks','subjects.id as Subject_id','subjects.subject_name')
+                    ->where('exam_subjects.subject_id','=',$sid)
+                    ->where('results.student_id','=',$uid)
+                    ->get();
+                $resultDataArray=$resultData->toArray();
+                $size=count($resultDataArray);
+                for($i=0;$i<$size;$i++){
+                    $subject_name=$resultDataArray[$i]['subject_name'];
+                    $result = array(
+                        'Test_id'=>$resultDataArray[$i]['Test_id'],
+                        'Test_marks'=>$resultDataArray[$i]['student_marks'] );
+                    $subjectDataArray[$subject_name][$i] = $result;
+                }
+                $message="success";
+                $status=200;
+                $graphData=$subjectDataArray;
+            }
+        }catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong"  .  $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" =>$status,
+            "graphData" =>$graphData
+        ];
+        return response($response,$status);
+    }
 }
