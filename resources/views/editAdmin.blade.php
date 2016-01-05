@@ -120,8 +120,9 @@
                                                         <label class="control-label">
                                                             Address
                                                         </label>
-                                                        <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
+                                                        <textarea maxlength="250"  id="address" name="address"  class="form-control limited">{!! $user->address !!}</textarea>
                                                     </div>
+
                                                     <div class="form-group">
                                                         <label class="control-label">Date of Birth </label>
                                                         <div class="input-group input-append datepicker date col-sm-6">
@@ -133,6 +134,13 @@
                                                         </div>
 
                                                         <!--                            <input class="form-control format-datepicker" type="text">-->
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                            Alternate number
+                                                        </label>
+                                                        <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
+
                                                     </div>
                                                     <div class="form-group">
                                                         <label>
@@ -155,6 +163,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
 
                                                 </div>
                                             </div>

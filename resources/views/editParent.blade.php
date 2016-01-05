@@ -123,7 +123,7 @@
                                             <label class="control-label">
                                                 Address
                                             </label>
-                                            <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
+                                            <textarea maxlength="250"  id="address" name="address"  class="form-control limited">{!! $user->address !!}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Date of Birth </label>
