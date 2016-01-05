@@ -15,7 +15,6 @@ var FormWizard = function () {
         var numberOfSteps = 0;
         initValidator();
 
-
     };
 
     $.validator.addMethod("alpha", function(value, element) {
@@ -31,12 +30,13 @@ var FormWizard = function () {
     }, "This field is required if Make as Class Teacher is checked...");
 
     $.validator.addMethod("modules", function(value, elem, param) {
-        if($(".roles:checkbox:checked").length > 1){
+        if($("input[name='modules']:checked").length > 1){
             return true;
         }else {
             return false;
         }
     },"You must select at least two!");
+
     var initValidator = function () {
         
         $.validator.setDefaults({
@@ -75,7 +75,8 @@ var FormWizard = function () {
                     required:true
                 },
                 modules: {
-                    required: true
+                    required: true,
+                    minlength:2
                 },
                 mobile:{
                     required:true,
@@ -180,7 +181,9 @@ var FormWizard = function () {
     	}
         $(".next-step").unbind("click").click(function (e) {
             e.preventDefault();
+
             wizardContent.smartWizard("goForward");
+
         });
         $(".back-step").unbind("click").click(function (e) {
             e.preventDefault();
@@ -200,15 +203,15 @@ var FormWizard = function () {
         // return false to stay on step and true to continue navigation
     };
     var onFinish = function (obj, context) {
+
         if (validateAllSteps()) {
-            debugger;
+
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
             var form=$('#form').serialize();
             $.ajax({
                 url:'save-user',
                 data: form,
                 processData: false,
-
                 type: 'POST',
 
                 success: function(data){
@@ -218,7 +221,6 @@ var FormWizard = function () {
                 error:function(data){
                     var errors = $.parseJSON(data.responseText);
 
-
                     var errorsHtml = '<div class="alert alert-danger"><ul>';
 
                     $.each( errors, function( key, value ) {
@@ -227,20 +229,22 @@ var FormWizard = function () {
                     errorsHtml += '</ul></di>';
 
                     $('#error-div').html(errorsHtml);
+                    wizardContent.smartWizard("goToStep", 2);
                 }
             });
 
         }
     };
     var validateSteps = function (stepnumber, nextstep) {
+
         var isStepValid = false;
-        
-        
+
         if (numberOfSteps >= nextstep && nextstep > stepnumber) {
-        	
+
             // cache the form element selector
             if (wizardForm.valid()) { // validate the form
-                wizardForm.validate().focusInvalid();
+
+            wizardForm.validate().focusInvalid();
                 for (var i=stepnumber; i<=nextstep; i++){
         		$('.anchor').children("li:nth-child(" + i + ")").not("li:nth-child(" + nextstep + ")").children("a").removeClass('wait').addClass('done').children('.stepNumber').addClass('animated tada');
         		}
@@ -257,14 +261,8 @@ var FormWizard = function () {
         } 
     };
     var validateAllSteps = function () {
-        /*var isStepValid = true;
-        // all step validation logic
-        return isStepValid;*/
-        if(wizardForm.valid()){
-            return true;
-        }else{
-            return false;
-        }
+        return true;
+
     };
     return {
         init: function () {

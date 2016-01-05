@@ -105,11 +105,27 @@ class UserRequest extends Request
                 'mobile' => 'required|min:10',
                 'alt_number' => 'required|min:10',
                 'email' => 'required|email',
-                'address' => 'required|min:15'
+                'address' => 'required|min:15',
+                'modules' => 'required|min:1'
             ];
                 break;
             default:break;
         }
 
+    }
+
+    public function messages()
+    {
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET': return [];
+                break;
+            case 'POST':return [
+                'modules.required'=>'Please check at least one Module Acls.',
+            ];
+                break;
+            default:break;
+        }
     }
 }
