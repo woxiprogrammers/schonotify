@@ -50,15 +50,14 @@ class UserController extends Controller
           ])) {
               $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
                   ->where('users.id','=',$user->id)
-                  ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','user_roles.slug','users.remember_token as token','users.password as pass')
+                  ->select('users.id','users.role_id','users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','user_roles.slug','users.remember_token as token','users.password as pass')
                   ->get();
-              $valueArray=$userData->toArray();
-
+               $valueArray=$userData->toArray();
               foreach($valueArray as $val)
               {
-
                   $data['users']['user_id']=$val['id'];
                   $data['users']['role_type']=$val['slug'];
+                  $data['users']['role_id']=$val['role_id'];
                   $data['users']['user_id']=$val['id'];
                   $data['users']['username']=$val['firstname'].''.$val['lastname'];
                   $data['users']['password']=$val['pass'];
@@ -87,26 +86,39 @@ class UserController extends Controller
                   $data['Acl_Modules']['acl_module '][$i]=$val;
                   $i++;
               }
-              $messageCount=Message::where('to_id',$user->id)
-                               ->where('read_status',0)
-                               ->count();
+              if($data['users']['role_id']==4)
+              {
+                  $i=0;
+                  $userData=User::where('parent_id','=',$data['users']['user_id'])->get();
+                  $userDataArray=$userData->toArray();
+                  foreach($userDataArray as $value ){
+                      $messageCount=Message::where('to_id',$value['id'])
+                          ->where('read_status',0)
+                          ->count();
+                      $data['Badge_count'][$i]['user_id']=$value['id'];
+                      $data['Badge_count'][$i]['message_count'] = $messageCount;
+                      $data['Badge_count'][$i]['auto_notification_count'] = $messageCount;
+                      $i++;
+                  }
+              }else{
+                  $messageCount=Message::where('to_id',$user->id)
+                      ->where('read_status',0)
+                      ->count();
+                  $data['Badge_count']['user_id']=$user->id;
+                  $data['Badge_count']['message_count'] = $messageCount;
+                  $data['Badge_count']['auto_notification_count'] = $messageCount;
+              }
 
-              $data['Badge_count']['user_id']=$user->id;
-
-              $data['Badge_count']['message_count'] = $messageCount;
-              $data['Badge_count']['auto_notification_count'] = $messageCount;
               $parent_student=User::where('parent_id',$user->id)->get();
               $data['Parent_student_relation']['parent_id']=$user->id;
+              $i=0;
               foreach($parent_student as $val)
               {
-
                   $data['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
                   $data['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
                   $data['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
                   $i++;
               }
-
-
               $message = 'login successfully';
               $status =200;
               }
