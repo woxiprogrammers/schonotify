@@ -16,13 +16,14 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
-use Auth;
+
 
 
 
@@ -358,12 +359,17 @@ class UsersController extends Controller
     {
 
         $user=User::where('id',$id)->first();
+
         $userRole=UserRoles::where('id',$user->role_id)->select('slug')->get();
+
         if($userRole[0]['slug'] == 'admin')
         {
             return view('editAdmin')->with('user',$user);
         }elseif($userRole[0]['slug'] == 'teacher')
         {
+            $teacherView=TeacherView::where('user_id',$id)->first();
+            $user['web_view'] = $teacherView->web_view;
+            $user['mobile_view']= $teacherView->mobile_view;
             return view('editTeacher')->with('user',$user);
         }elseif($userRole[0]['slug'] == 'student')
         {
@@ -373,9 +379,7 @@ class UsersController extends Controller
 
             return view('editParent')->with('user',$user);
         }
-        else{
 
-        }
 
 
     }
@@ -408,7 +412,58 @@ class UsersController extends Controller
     }
     public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
     {
+       // dd($request->all());
+        $userImage=User::where('id',$id)->first();
+        unset($request->_method);
+        if($request->hasFile('avatar')){
+            $image = $request->file('avatar');
+            $name = $request->file('avatar')->getClientOriginalName();
+            $filename = time()."_".$name;
+            $path = public_path('uploads/profile-picture/');
+            if (! file_exists($path)) {
+                File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+            }
+            $image->move($path,$filename);
+        }
+        else{
+            $filename=$userImage->avatar;
 
+        }
+        if(in_array('web_view',$request->access)){
+            $teacherView['web_view']=1;
+
+        }else{
+            $teacherView['web_view']=0;
+        }
+
+        if(in_array('mobile_view',$request->access)){
+            $teacherView['mobile_view']=1;
+        }else{
+            $teacherView['mobile_view']=0;
+          }
+
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $userData['username']= $request->username;
+        $userData['first_name']= $request->firstname;
+        $userData['email']= $request->email;
+        $userData['last_name']= $request->lastname;
+        $userData['gender']= $request->gender;
+        $userData['mobile']= $request->mobile;
+        $userData['alternate_number']= $request->alternate_number;
+        $userData['address']= $request->address;
+        $userData['avatar']= $filename;
+        $userData['birth_date']= $date;
+
+        $userUpdate=User::where('id',$id)->update($userData);
+        $teacherViewUpdate=TeacherView::where('user_id',$id)->update($teacherView);
+        if($userUpdate == 1){
+            Session::flash('message-success','teacher updated successfully');
+            return Redirect::to('/searchUsers');
+        }
+        else{
+            Session::flash('message-error','something went wrong');
+            return Redirect::to('/searchUsers');
+        }
     }
 
     public function edit($id)
@@ -521,13 +576,12 @@ class UsersController extends Controller
         //
     }
 
-    public function getBatches(Request $request){
+    public function getBatches(){
         $user=Auth::user();
-        $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
+        $batchData = Batch::where('body_id',1)->select('id','name')->get();
         $batchList = $batchData->toArray();
-        return $batchList;
+        return $batchData;
     }
-
     public function getClasses($id){
         $classData = Classes::where('batch_id', $id)->select('id','class_name')->get();
         $classList = $classData->toArray();

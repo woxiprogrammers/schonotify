@@ -30,7 +30,8 @@ class EditTeacherRequest extends Request
             'email' => 'required|email',
             'mobile' =>'required|digits:10',
             'address' =>'required',
-            'avatar' => 'mimes:jpeg,jpg,png,gif|max:10000'
+            'avatar' => 'mimes:jpeg,jpg,png,gif|max:10000',
+            'access'=>'required|min:1'
         ];
     }
 }
