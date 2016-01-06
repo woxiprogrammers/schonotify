@@ -394,19 +394,19 @@ class UsersController extends Controller
         }
     }
 
-    public function updateAdmin(Request $request,$id)
+    public function updateAdmin(Requests\WebRequests\EditAdminRequest $request,$id)
     {
 
     }
-    public function updateStudent(Request $request,$id)
+    public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
 
     }
-    public function updateParent(Request $request,$id)
+    public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
     {
 
     }
-    public function updateTeacher(Request $request,$id)
+    public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
     {
 
     }
