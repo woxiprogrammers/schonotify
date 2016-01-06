@@ -37,8 +37,6 @@
 <div class="container-fluid container-fullw bg-white">
 <div class="row">
 <div class="col-md-12">
-
-
 <div class="tabbable">
 <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
 
@@ -52,8 +50,6 @@
             Assigned Modules
         </a>
     </li>
-
-
 </ul>
 <div class="tab-content">
 <div id="panel_edit_account" class="tab-pane fade in active ">
@@ -155,7 +151,7 @@
                                 </label>
                             </div>
                         </div>
-                    </div>
+
 
                     <div class="form-group">
                         <label>
@@ -230,7 +226,6 @@
 </div>
 
 @include('footer')
-</div>
 
 
 <script src="/vendor/jquery/jquery.min.js"></script>
@@ -335,10 +330,10 @@
                     {
 
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+
                         '</td>';
