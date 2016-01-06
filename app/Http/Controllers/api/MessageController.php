@@ -212,11 +212,9 @@ class MessageController extends Controller
                 $data1['sender']['last_name']=$user['last_name'];
                 if($user['role_id'] == 3)
                 {
-
                     $studentDivision = Division::where('id',$user['division_id'])->first();
                     $studentClass = Classes::where('id',$studentDivision->class_id)->first();
                     $studentBatch = Batch::where('id',$studentClass->batch_id)->first();
-
                     $data1['studentInfo']['student-division']= $studentDivision->division_name;
                     $data1['studentInfo']['student-class'] = $studentClass->class_name;
                     $data1['studentInfo']['student-batch'] = $studentBatch->name;
@@ -241,8 +239,4 @@ class MessageController extends Controller
         ];
         return response($response, $status);
     }
-
-
-
-
 }
