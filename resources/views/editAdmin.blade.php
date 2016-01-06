@@ -305,10 +305,10 @@
                     {
 
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+
                         '</td>';
