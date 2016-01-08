@@ -180,6 +180,10 @@ var FormValidator = function () {
                 },
                 address:{
                     required:true
+                },
+                access:{
+                    required:true,
+                    minlength:1
                 }
 
 
