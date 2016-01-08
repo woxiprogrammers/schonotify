@@ -35,9 +35,9 @@
 <!-- end: PAGE TITLE -->
 <!-- start: USER PROFILE -->
 <div class="container-fluid container-fullw bg-white">
-<div class="row">
-<div class="col-md-12">
-<div class="tabbable">
+ <div class="row">
+  <div class="col-md-12">
+   <div class="tabbable">
 <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
 
     <li class="active">
@@ -53,7 +53,7 @@
 </ul>
 <div class="tab-content">
 <div id="panel_edit_account" class="tab-pane fade in active ">
-    <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
+    <form id="formEditAccount" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
         <input name="_method" type="hidden" value="PUT">
         <fieldset>
 
@@ -189,7 +189,6 @@
                         </div>
                     </div>
                 </div>
-                <div>
                 <div class="col-md-6">
                     <div class="form-group" id="clstchr_batch" style="display:none;" >
                         <label>
@@ -220,7 +219,7 @@
                         </select>
                     </div>
                 </div>
-                </div>
+
 
             </div>
         </fieldset>
@@ -239,9 +238,10 @@
 <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
     <div class="panel-body">
         <div class="col-sm-10">
-            <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
-            <table class="table table-responsive" id="aclMod">
-            </table>
+            <form id="editAcl" method="post" action="/acl-update/{!! $user->id !!}">
+                <table class="table table-responsive" id="aclMod">
+
+                </table>
                 <div class="row">
                     <div class="col-md-4">
                         <button class="btn btn-primary pull-right" type="submit" >
@@ -360,23 +360,25 @@
 
     function userAclModule()
     {
-        var route='/user-module-acl';
+        var route='/user-module-acl-edit/{!! $user->id !!}';
         $.get(route,function(res){
 
             var str;
 
-            var arr=res['allModAclArr'];
+            var allModAclArr=res['allModAclArr'];
 
-            var arr1= $.map(arr,function(index,value){
+            var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
 
-            var arr3=res['allAcls'];
-            var arr2= $.map(arr3,function(index,value){
+            var allAcls=res['allAcls'];
+            var arr2= $.map(allAcls,function(index,value){
                 return [index];
             });
 
-            var arr4=res['userModAclArr'];
+            var userModAclArr=res['userModAclArr'];
+
+            var allModules=res['allModules'];
 
             str+='<tr>'+
                 '<th><b>Modules</b></th>';
@@ -388,7 +390,6 @@
 
             str+='</tr>';
 
-
             for(var i=0; i<arr1.length; i++)
             {
 
@@ -399,14 +400,13 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
                     {
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+
