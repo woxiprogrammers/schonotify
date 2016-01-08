@@ -18,7 +18,7 @@ class CreateEventUserRoleTable extends Migration
             $table->integer('event_id')->unsigned();
             $table->integer('user_role_id')->unsigned();
             $table->boolean('status');
-            $table->integer('division_id',10);
+            $table->integer('division_id')->nullable();
             $table->timestamps();
         });
     }

@@ -26,14 +26,57 @@ class MessageController extends Controller
         try {
             $data = $request->all();
             $sender = $data['teacher']['id'];
-           // $receiver = $id;
             $messages = Message::where('to_id',$sender)
                                 ->orwhere('from_id',$sender)
                                 ->get();
             $message = $messages->toArray();
-            $responseData['messages']= $message;
+            $i=0;
+        foreach($message as $value)
+        {
+            if($data['teacher']['id']==$value['from_id'])
+            {
+                  $receiverName = User::where('id','=',$value['to_id'])
+                                ->select('first_name', 'last_name')->first();
+                  $senderName = User::where('id','=',$value['from_id'])
+                                ->select('first_name', 'last_name')->first();
+            }else{
+                $senderName = User::where('id','=',$value['to_id'])
+                    ->select('first_name', 'last_name')->first();
+                $receiverName = User::where('id','=',$value['from_id'])
+                    ->select('first_name', 'last_name')->first();
+            }
+            $sender=$senderName['first_name']." ".$senderName['last_name'];
+            $receiver= $receiverName['first_name']." ".$receiverName['last_name'];
+            $finalMessageData[$receiver][$i]['message_id']=$value['id'];
+            $finalMessageData[$receiver][$i]['user_id']=$data['teacher']['id'];
+            $finalMessageData[$receiver][$i]['from_id']=$value['from_id'];
+            $finalMessageData[$receiver][$i]['to_id']=$value['to_id'];
+            $finalMessageData[$receiver][$i]['description']=$value['description'];
+            $finalMessageData[$receiver][$i]['sender_name']=$sender;
+            $finalMessageData[$receiver][$i]['receiver_name']=$receiver;
+            $finalMessageData[$receiver][$i]['timestamp']=$value['timestamp'];
+            $finalMessageData[$receiver][$i]['read_status']=$value['read_status'];
+            $i++;
+         }
+        return $finalMessageData;
+
+           /* $responseData['messages']= $finalMessageData;
             $status = 200;
-            $message = 'Successful';
+            $message = 'Successful';*/
+
+
+            /*$messageData[$i]['message_id']=$value['id'];
+            $messageData[$i]['user_id']=$value['from_id'];
+            $messageData[$i]['from_id']=$value['from_id'];
+            $messageData[$i]['to_id']=$value['to_id'];
+            $messageData[$i]['description']=$value['description'];
+            $userInfo = User::where('id','=',$messageData[$i]['to_id'])
+                ->select('first_name', 'last_name')->first();
+            $messageData[$i]['name']=$userInfo['first_name']." ".$userInfo['last_name'];
+            $messageData[$i]['timestamp']=$value['timestamp'];
+            $messageData[$i]['read_status']=$value['read_status'];
+            $i++;*/
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             $status = 500;
@@ -42,7 +85,7 @@ class MessageController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $responseData
+           // "data" => $responseData
         ];
         return response($response, $status);
     }
@@ -157,9 +200,14 @@ class MessageController extends Controller
     public function getTeachers(){
         try{
             $teacher_id = UserRoles::whereIn('slug', ['teacher'])->pluck('id');
-            $teacher = User::where('role_id',$teacher_id)->get();
-            $teachers = $teacher->toArray();
-            $responseData['teachers']= $teachers;
+            $teacher = User::where('role_id',$teacher_id)->get()->toArray();
+            $i=0;
+            foreach($teacher as $value){
+                $teacherData[$i]['id']=$value['id'];
+                $teacherData[$i]['name']=$value['first_name']." ".$value['first_name'];
+                $i++;
+            }
+            $responseData['teachers']= $teacherData;
             $status = 200;
             $message = 'Successfully Listed';
         }catch (\Exception $e){

@@ -36,19 +36,19 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        Description
+                                        Message
                                     </label>
-                                    <input type="text" placeholder="Enter Description" class="form-control" name="description"/>
+                                    <input type="text" placeholder="Enter Text Message Here" class="form-control" name="description"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="resetBatch1" class="btn btn-primary btn-o" data-dismiss="modal" >
-                            Close
+                            Cancel
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            Save
+                            Send
                         </button>
                     </div>
                 </form>
@@ -71,19 +71,19 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        Description
+                                        Message
                                     </label>
-                                    <input type="text" placeholder="Enter Description" class="form-control" name="description"/>
+                                    <input type="text" placeholder="Enter Text Message Here" class="form-control" name="description"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="resetBatch1" class="btn btn-primary btn-o" data-dismiss="modal" >
-                            Close
+                            Cancel
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            Save
+                            Send
                         </button>
                     </div>
                 </form>
@@ -136,19 +136,19 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        Description
+                                        Message
                                     </label>
-                                    <input type="text" placeholder="Enter Description" class="form-control" name="description"/>
+                                    <input type="text" placeholder="Enter Text Message Here" class="form-control" name="description"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="resetBatch1" class="btn btn-primary btn-o" data-dismiss="modal" >
-                            Close
+                            Cancel
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            Save
+                            Send
                         </button>
                     </div>
                 </form>

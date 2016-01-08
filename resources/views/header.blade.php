@@ -161,8 +161,14 @@
         </div>
         <!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
     </div>
+    @if($user->role_id == 1)
+    <a></a>
+    @else
+    @if(in_array('view_message',session('functionArr')))
     <a class="dropdown-off-sidebar" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">
         &nbsp;
     </a>
+    @endif
+    @endif
     <!-- end: NAVBAR COLLAPSE -->
 </header>
