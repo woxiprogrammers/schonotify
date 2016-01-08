@@ -140,6 +140,49 @@ class UsersController extends Controller
         return $mainArr;
 
     }
+    public function userModuleAclsEdit(Request $request, $id)
+    {
+
+        $modules=Module::select('slug','id')->get();
+
+        $acls=AclMaster::all();
+        $allModuleAcl=array();
+        $arrMod=ModuleAcl::where('user_id',$id)
+            ->join('modules','module_acls.module_id','=','modules.id')
+            ->join('acl_master','module_acls.acl_id','=','acl_master.id')
+            ->select('modules.slug as modules','acl_master.slug as acls')
+            ->get();
+
+        $userModAclArr=array();
+        foreach($arrMod as $row)
+        {
+            array_push($userModAclArr,$row->acls.'_'.$row->modules);
+        }
+
+        $mainArr=array();
+
+
+        foreach($modules as $row1)
+        {
+            $i=0;
+            foreach($acls as $row)
+            {
+
+                $allModuleAcl[$row1->slug][$i]=$row->slug;
+                $i++;
+
+            }
+
+        }
+
+        $mainArr['allModules']=$modules;
+        $mainArr['allAcls']=$acls;
+        $mainArr['userModAclArr']=$userModAclArr;
+        $mainArr['allModAclArr']=$allModuleAcl;
+
+        return $mainArr;
+
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -394,19 +437,83 @@ class UsersController extends Controller
         }
     }
 
-    public function updateAdmin(Request $request,$id)
+
+    public function aclUpdate(Request $request,$id)
+    {
+        $aclRequest=$request->all();
+
+        $acl_mod=$aclRequest['acls'];
+        $aclSeperate=array();
+        foreach($acl_mod as $row)
+        {
+            array_push($aclSeperate,explode('_',$row));
+        }
+
+       ModuleAcl::where('user_id',$id)->delete();
+    $module_acl=array();
+        foreach($aclSeperate as $row)
+        {
+            $module_acl['user_id']=$id;
+            $module_acl['acl_id']=$row[0];
+            $module_acl['module_id']=$row[1];
+            $dml=ModuleAcl::insert($module_acl);
+        }
+        Session::flash('message-success','Acl updated successfully');
+        return Redirect::to('/edit-user/'.$id);
+
+    }
+
+
+    public function updateAdmin(Requests\WebRequests\EditAdminRequest $request,$id)
+    {
+        $userImage=User::where('id',$id)->first();
+        unset($request->_method);
+        if($request->hasFile('avatar')){
+            $image = $request->file('avatar');
+            $name = $request->file('avatar')->getClientOriginalName();
+            $filename = time()."_".$name;
+            $path = public_path('uploads/profile-picture/');
+            if (! file_exists($path)) {
+                File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+            }
+            $image->move($path,$filename);
+        }
+        else{
+            $filename=$userImage->avatar;
+
+        }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $userData['username']= $request->username;
+        $userData['first_name']= $request->firstname;
+        $userData['email']= $request->email;
+        $userData['last_name']= $request->lastname;
+        $userData['gender']= $request->gender;
+        $userData['mobile']= $request->mobile;
+        $userData['address']= $request->address;
+        $userData['avatar']= $filename;
+        $userData['birth_date']= $date;
+        $userData['alternate_number']= $request->alternate_number;
+
+        $userUpdate=User::where('id',$id)->update($userData);
+        if($userUpdate == 1){
+            Session::flash('message-success','User updated successfully');
+            return Redirect::to('/edit-user/'.$id);
+        }
+        else{
+            Session::flash('message-error','Something went wrong');
+            return Redirect::to('/edit-user/'.$id);
+        }
+
+    }
+    public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
 
     }
-    public function updateStudent(Request $request,$id)
+    public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
     {
 
     }
-    public function updateParent(Request $request,$id)
-    {
-
-    }
-    public function updateTeacher(Request $request,$id)
+    public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
     {
 
     }

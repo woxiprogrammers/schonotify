@@ -10,6 +10,7 @@ use App\Division;
 use App\Message;
 use App\Module;
 use App\ModuleAcl;
+use App\SubjectClassDivision;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -50,15 +51,14 @@ class UserController extends Controller
           ])) {
               $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
                   ->where('users.id','=',$user->id)
-                  ->select('users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','user_roles.slug','users.remember_token as token','users.password as pass')
+                  ->select('users.id','users.role_id','users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','user_roles.slug','users.remember_token as token','users.password as pass')
                   ->get();
-              $valueArray=$userData->toArray();
-
+               $valueArray=$userData->toArray();
               foreach($valueArray as $val)
               {
-
                   $data['users']['user_id']=$val['id'];
                   $data['users']['role_type']=$val['slug'];
+                  $data['users']['role_id']=$val['role_id'];
                   $data['users']['user_id']=$val['id'];
                   $data['users']['username']=$val['firstname'].''.$val['lastname'];
                   $data['users']['password']=$val['pass'];
@@ -87,26 +87,39 @@ class UserController extends Controller
                   $data['Acl_Modules']['acl_module '][$i]=$val;
                   $i++;
               }
-              $messageCount=Message::where('to_id',$user->id)
-                               ->where('read_status',0)
-                               ->count();
+              if($data['users']['role_id']==4)
+              {
+                  $i=0;
+                  $userData=User::where('parent_id','=',$data['users']['user_id'])->get();
+                  $userDataArray=$userData->toArray();
+                  foreach($userDataArray as $value ){
+                      $messageCount=Message::where('to_id',$value['id'])
+                          ->where('read_status',0)
+                          ->count();
+                      $data['Badge_count'][$i]['user_id']=$value['id'];
+                      $data['Badge_count'][$i]['message_count'] = $messageCount;
+                      $data['Badge_count'][$i]['auto_notification_count'] = $messageCount;
+                      $i++;
+                  }
+              }else{
+                  $messageCount=Message::where('to_id',$user->id)
+                      ->where('read_status',0)
+                      ->count();
+                  $data['Badge_count']['user_id']=$user->id;
+                  $data['Badge_count']['message_count'] = $messageCount;
+                  $data['Badge_count']['auto_notification_count'] = $messageCount;
+              }
 
-              $data['Badge_count']['user_id']=$user->id;
-
-              $data['Badge_count']['message_count'] = $messageCount;
-              $data['Badge_count']['auto_notification_count'] = $messageCount;
               $parent_student=User::where('parent_id',$user->id)->get();
               $data['Parent_student_relation']['parent_id']=$user->id;
+              $i=0;
               foreach($parent_student as $val)
               {
-
                   $data['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
                   $data['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
                   $data['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
                   $i++;
               }
-
-
               $message = 'login successfully';
               $status =200;
               }
@@ -124,8 +137,26 @@ class UserController extends Controller
         return response($response);
 
     }
-
     public function getBatches(Request $request){
+        try{
+                $batches = Batch::select('id','name')->get();
+                $batchesArray = $batches->toArray();
+                $status = 200;
+                $responseData['batchList']= $batchesArray;
+                $message = 'Successfully Listed';
+                }catch (\Exception $e){
+                    echo $e->getMessage();
+                    $status = 500;
+                    $message = "something went wrong";
+                }
+                $response = [
+                    "message" => $message,
+                    "status" => $status,
+            "data" => $responseData
+                ];
+        return response($response, $status);
+    }
+   /* public function getBatches(Request $request){
         try{
             $data = $request->all();
             $division = $request->teacher->teacher()->lists('division_id');
@@ -147,17 +178,77 @@ class UserController extends Controller
             "data" => $responseData
         ];
         return response($response, $status);
+    }*/
+
+
+
+    public function getTeachersList(Request $request , $id )
+       {
+           try{
+            $data=$request->all();
+            $studentData=User::where('id','=',$id)->first();
+            $divisions=SubjectClassDivision::where('division_id','=',$studentData['division_id'])
+                                             ->groupBy('teacher_id')
+                                             ->get();
+           $i=0;
+           foreach($divisions as $value){
+               $studentData1=User::where('id','=',$value['teacher_id'])->first();
+               $teacherData[$i]['id']=$value['teacher_id'];
+               $teacherData[$i]['name']=$studentData1['first_name']." ".$studentData1['last_name'];
+               $i++;
+           }
+               $status = 200;
+               $responseData['teachersList']= $teacherData;
+               $message = 'Successfully Listed';
+           }catch (\Exception $e){
+               $status = 500;
+               $message = "Something went wrong"  .  $e->getMessage();
+           }
+           $response = [
+               "message" => $message,
+               "status" => $status,
+               "data" => $responseData
+           ];
+           return response($response, $status);
+        /*try{
+            $classData = Classes::where('batch_id', $id)
+                ->select('id','class_name')
+                ->get();
+            /* $data = $request->all();
+             $division = $request->teacher->teacher()->lists('division_id');
+             $class = Division::whereIn('id', $division)->distinct()->lists('class_id');
+             $classData = Classes::whereIn('id', $class)->get();
+             $classList = $classData->toArray();
+            $status = 200;
+            $responseData['classList']= $classData->toArray();;
+            $message = 'Successfully Listed';
+        }catch (\Exception $e){
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $responseData
+        ];
+        return response($response, $status);*/
     }
 
-    public function getClasses(Request $request){
+
+
+    public function getClasses(Request $request, $id){
         try{
-            $data = $request->all();
+            $classData = Classes::where('batch_id', $id)
+                          ->select('id','class_name')
+                          ->get();
+           /* $data = $request->all();
             $division = $request->teacher->teacher()->lists('division_id');
             $class = Division::whereIn('id', $division)->distinct()->lists('class_id');
             $classData = Classes::whereIn('id', $class)->get();
-            $classList = $classData->toArray();
+            $classList = $classData->toArray();*/
             $status = 200;
-            $responseData['classList']= $classList;
+            $responseData['classList']= $classData->toArray();;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
             echo $e->getMessage();
@@ -172,14 +263,17 @@ class UserController extends Controller
         return response($response, $status);
     }
 
-    public function getDivisions(Request $request){
+    public function getDivisions(Request $request, $id){
         try{
-            $data = $request->all();
+            $divisionData = Division::where('class_id', $id)
+                                        ->select('id','division_name')
+                                        ->get();
+           /* $data = $request->all();
             $division = $request->teacher->teacher()->lists('division_id');
             $divisionData = Division::whereIn('id', $division)->get();
-            $divisionList = $divisionData->toArray();
+            $divisionList = $divisionData->toArray();*/
             $status = 200;
-            $responseData['divisionList']= $divisionList;
+            $responseData['divisionList']= $divisionData->toArray();
             $message = 'Successfully Listed';
         }catch (\Exception $e){
             echo $e->getMessage();
