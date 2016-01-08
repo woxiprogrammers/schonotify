@@ -367,6 +367,18 @@ class UsersController extends Controller
             return view('editAdmin')->with('user',$user);
         }elseif($userRole[0]['slug'] == 'teacher')
         {
+            $classTeacher=Division::where('class_teacher_id',$id)->get();
+            if(! $classTeacher->isEmpty())
+            {
+                $class=Classes::where('id',$classTeacher[0]['class_id'])->get();
+                $batch=Batch::where('id',$class[0]['batch_id'])->get();
+                $user['batch_id']=$batch[0]['id'];
+                $user['batch_name']=$batch[0]['slug'];
+                $user['class_id']=$class[0]['id'];
+                $user['class_name']=$class[0]['slug'];
+                $user['division_id']=$classTeacher[0]['id'];
+                $user['division_name']=$classTeacher[0]['slug'];
+            }
             $teacherView=TeacherView::where('user_id',$id)->first();
             $user['web_view'] = $teacherView->web_view;
             $user['mobile_view']= $teacherView->mobile_view;
@@ -412,7 +424,7 @@ class UsersController extends Controller
     }
     public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
     {
-       // dd($request->all());
+        //dd($request->all());
         $userImage=User::where('id',$id)->first();
         unset($request->_method);
         if($request->hasFile('avatar')){
@@ -441,7 +453,9 @@ class UsersController extends Controller
         }else{
             $teacherView['mobile_view']=0;
           }
-
+        $classTeacherId['class_teacher_id']=$id;
+        $classTeacher=Division::where('id',$request->division)->where('class_id',$request->class)
+                                ->update($classTeacherId);
         $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
         $userData['username']= $request->username;
         $userData['first_name']= $request->firstname;
@@ -456,13 +470,15 @@ class UsersController extends Controller
 
         $userUpdate=User::where('id',$id)->update($userData);
         $teacherViewUpdate=TeacherView::where('user_id',$id)->update($teacherView);
+        Division::where('id',$request->division)->
+                  where('class_id',$request->class)->update(array('class_teacher_id'=>$id));
         if($userUpdate == 1){
             Session::flash('message-success','teacher updated successfully');
-            return Redirect::to('/searchUsers');
+            return Redirect::to('/edit-user/'.$id);
         }
         else{
             Session::flash('message-error','something went wrong');
-            return Redirect::to('/searchUsers');
+            return Redirect::to('/edit-user/'.$id);
         }
     }
 

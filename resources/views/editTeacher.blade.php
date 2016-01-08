@@ -181,7 +181,7 @@
                             Make Class Teacher
                         </label>
                         <div class="checkbox clip-check check-primary">
-                            <input type="checkbox" id="checkbox8" value="1" onchange="clsTeacher(this.checked)" name="class-teacher">
+                            <input type="checkbox" id="checkbox8" value="1" onchange="clsTeacher(this.checked)" name="checkbox8" @if($user->batch_id !='') checked @endif>
                             <label for="checkbox8">
                                 Approve
                             </label>
@@ -189,12 +189,15 @@
                         </div>
                     </div>
                 </div>
+                <div>
                 <div class="col-md-6">
-                    <div class="form-group" id="clstchr_batch" style="display:none;">
+                    <div class="form-group" id="clstchr_batch" style="display:none;" >
                         <label>
                             Select Batch
                         </label>
-                        <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
+
+                        <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch"  >
+
                         </select>
                     </div>
                 </div>
@@ -204,6 +207,7 @@
                             Select Class
                         </label>
                         <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
+
                         </select>
                     </div>
                 </div>
@@ -215,6 +219,7 @@
                         <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
                         </select>
                     </div>
+                </div>
                 </div>
 
             </div>
@@ -294,7 +299,7 @@
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
 
 <!-- start: JavaScript Event Handlers for this page -->
-<script src="/assets/js/form-validation.js"></script>
+<script src="/assets/js/form-validation-edit.js"></script>
 
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
@@ -308,6 +313,19 @@
         FormElements.init();
         userAclModule();
         getbatches();
+
+        if($('#checkbox8').is(":checked")==true)
+        {
+            clsTeacher(true);
+        }
+        if({!! $user->batch_id !!})
+        {
+            getCls({!! $user->batch_id !!});
+        }
+        if({!! $user->class_id !!})
+        {
+            getDivisions({!! $user->class_id !!});
+        }
 
     });
     $('#email').on('keyup',function(){
@@ -408,7 +426,13 @@
         $.get(route,function(res){
             var str = "<option value=''>Please Select Batch</option>";
             for(var i=0; i<res.length; i++){
-                str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+                if({!! $user->batch_id !!} == res[i]['id'])
+                {
+                    str+='<option value='+res[i]['id']+' selected>'+res[i]['name']+'</option>';
+                }else{
+                str+='<option value='+res[i]['id']+' >'+res[i]['name']+'</option>';
+                }
+
             }
             $('#batch').html(str);
         });
@@ -416,27 +440,47 @@
 
     $("#batch").change(function() {
         var id = this.value;
+        getCls(id);
+    });
+
+    function getCls(id)
+    {
         var route='/get-classes/'+id;
         $.get(route,function(res){
             var str = "<option value=''>Please Select Class</option>";
             for(var i=0; i<res.length; i++){
+                if({!! $user->class_id !!} == res[i]['id'])
+            {
+                str+='<option value='+res[i]['id']+' selected>'+res[i]['class_name']+'</option>';
+            }else{
                 str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
             }
-            $('#class').html(str);
+        }
+        $('#class').html(str);
         });
-    });
+    }
 
     $("#class").change(function() {
         var id = this.value;
+        getDivisions(id);
+
+    });
+    function getDivisions(id)
+    {
         var route='/get-divisions/'+id;
         $.get(route,function(res){
             var str = "<option value=''>Please Select Division</option>";
             for(var i=0; i<res.length; i++){
+                if({!! $user->division_id !!} == res[i]['id'])
+            {
+                str+='<option value='+res[i]['id']+' selected>'+res[i]['division_name']+'</option>';
+            }else{
                 str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
             }
-            $('#division').html(str);
-        });
+        }
+        $('#division').html(str);
     });
+    }
 
 
 
