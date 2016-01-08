@@ -163,6 +163,10 @@ Route::get('user-module-acl','UsersController@userModuleAcls');
 
 Route::post('save-user','UsersController@store');
 
+Route::post('acl-update/{id}','UsersController@aclUpdate');
+
+Route::get('user-module-acl-edit/{id}','UsersController@userModuleAclsEdit');
+
 Route::get('get-batches',array('uses' => 'UsersController@getBatches'));
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));

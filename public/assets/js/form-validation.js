@@ -432,7 +432,8 @@ var FormValidator = function () {
                 errorHandler2.hide();
                 // submit form
 
-                $('#form4').submit();
+                //$('#form4').submit();
+                return true;
             }
         });
 

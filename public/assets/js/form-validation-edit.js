@@ -174,12 +174,14 @@ var FormValidator = function () {
                     minlength:10,
                     maxlength:10
                 },
+                alternate_number:{
+                    minlength:10,
+                    maxlength:10
+                },
                 address:{
                     required:true
-                },
-                alternate_number:{
-
                 }
+
 
             },
             messages: {
@@ -219,7 +221,7 @@ var FormValidator = function () {
                 errorHandler2.hide();
                 // submit form
 
-                $('#form4').submit();
+               return true;
             }
         });
 
