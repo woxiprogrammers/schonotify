@@ -349,7 +349,8 @@ var FormValidator = function () {
                 successHandler2.show();
                 errorHandler2.hide();
                 // submit form
-                $('#form3').submit();
+               // $('#form3').submit();
+                return true;
             }
         });
         CKEDITOR.disableAutoInline = true;
