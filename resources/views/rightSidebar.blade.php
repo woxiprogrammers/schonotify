@@ -2,12 +2,15 @@
 <div class="sidebar-wrapper">
 <ul class="nav nav-tabs nav-justified">
     <li>
-        <a href="#off-users" aria-controls="off-users" role="tab" data-toggle="tab">
+        <a href="#off-users" aria-controls="off-users" role="tab" data-toggle="modal" data-target="#compose-msg" id="message">
             <i class="ti-comments"></i>
+
         </a>
+
     </li>
 
 </ul>
+
 <div class="tab-content">
 <div role="tabpanel" class="tab-pane active" id="off-users">
 <div id="users" toggleable active-class="chat-open">
@@ -47,3 +50,4 @@
 </div>
 </div>
 </div>
+@include('composeMessage')

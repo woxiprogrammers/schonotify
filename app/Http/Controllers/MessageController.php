@@ -11,14 +11,18 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
+use Mockery\CountValidator\Exception;
 
 class MessageController extends Controller
 {
     public function __construct()
     {
         $this->middleware('db');
+        $this->middleware('auth');
 
     }
     public function getMessageCount(Request $request){
@@ -138,11 +142,31 @@ class MessageController extends Controller
             $message['from_avatar'] = $ProfileDirectory.$from_name['avatar'];
             $message['from_name'] = $from_name['first_name'].' '.$from_name['last_name'];
             $message['timestamp'] = $messageHistory['timestamp'];
-            $message['date'] = date("l , F j, g:i ",strtotime($messageHistory['timestamp']));
+            $message['date'] = date("M j, g:i a",strtotime($messageHistory['timestamp']));
             $message['read_status'] = $messageHistory['read_status'];
             $message['is_delete'] = $messageHistory['is_delete'];
             array_push($messagesLists,$message);
         }
         return $messagesLists;
+    }
+
+    public function composeMessage(Requests\WebRequests\MessageRequest $request){
+        try{
+        $data = $request->all();
+        $userId = Auth::user()->id;
+        $messageData['to_id'] = $data['user_id'];
+        $messageData['from_id'] = $userId;
+        $messageData['description'] = $data['description'];
+        $messageData['timestamp'] = Carbon::now();
+        $messageData['created_at'] = Carbon::now();
+        $messageData['updated_at'] = Carbon::now();
+        $newMessage = Message::insert($messageData);
+        Session::flash('message-success', "Message Successfully send");
+        return Redirect::back();
+        }catch (Exception $e){
+            Session::flash('message-error',  "Message Not Successfully send");
+            return Redirect::back();
+
+        }
     }
 }

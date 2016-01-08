@@ -10,10 +10,10 @@
     <div class="app-content">
 
         @include('header')
-
-        <div class="main-content" >
-            <div class="wrap-content container" id="container">
-
+<!-- end: TOP NAVBAR -->
+    <div class="main-content" >
+        <div class="wrap-content container" id="container">
+            @include('alerts.errors')
             <section id="page-title" class="padding-top-15 padding-bottom-15">
                 <div class="row">
                     <div class="col-sm-7">
@@ -22,16 +22,9 @@
                     </div>
 
                 </div>
-                @include('alerts.errors')
-                <ul>
-                    @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
                 <div id="error-div"></div>
             </section>
-
-                <div class="container-fluid container-fullw bg-white">
+            <div class="container-fluid container-fullw bg-white">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="tabbable">
@@ -49,7 +42,7 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div id="panel_edit_account" class="tab-pane fade in active ">
-                                        <form id="formEditAccount" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
+                                        <form id="formEditAccount" method="post" action="/edit-admin/{!! $user->id !!}"  enctype="multipart/form-data">
                                             <input name="_method" type="hidden" value="PUT">
                                             <fieldset>
                                                 <legend>
@@ -128,7 +121,7 @@
                                                             <label class="control-label">
                                                                 Alternate number
                                                             </label>
-                                                            <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
+                                                            <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
 
                                                         </div>
                                                         <div class="form-group">
@@ -170,7 +163,7 @@
                                     <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
                                         <div class="panel-body">
                                             <div class="col-sm-10">
-                                                <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
+                                                <form id="editAcl" method="post" action="/acl-update/{!! $user->id !!}">
                                                     <table class="table table-responsive" id="aclMod">
 
                                                     </table>
@@ -261,23 +254,25 @@
     });
     function userAclModule()
     {
-        var route='/user-module-acl';
+        var route='/user-module-acl-edit/{!! $user->id !!}';
         $.get(route,function(res){
 
             var str;
 
-            var arr=res['allModAclArr'];
+            var allModAclArr=res['allModAclArr'];
 
-            var arr1= $.map(arr,function(index,value){
+            var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
 
-            var arr3=res['allAcls'];
-            var arr2= $.map(arr3,function(index,value){
+            var allAcls=res['allAcls'];
+            var arr2= $.map(allAcls,function(index,value){
                 return [index];
             });
 
-            var arr4=res['userModAclArr'];
+            var userModAclArr=res['userModAclArr'];
+
+            var allModules=res['allModules'];
 
             str+='<tr>'+
                 '<th><b>Modules</b></th>';
@@ -289,7 +284,6 @@
 
             str+='</tr>';
 
-
             for(var i=0; i<arr1.length; i++)
             {
 
@@ -300,14 +294,13 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
                     {
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+

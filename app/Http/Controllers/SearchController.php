@@ -37,6 +37,7 @@ class SearchController extends Controller
     public function selectRole($role_id=1)
     {
         $user=Auth::user();
+
         if($user->role_id == 1)
         {
         $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -51,7 +52,6 @@ class SearchController extends Controller
                 ->where('users.role_id','=',$role_id)
                 ->where('users.id','!=',$user->id)
                 ->get();
-
         }
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
 
@@ -63,13 +63,11 @@ class SearchController extends Controller
                 $str.="<th>Role No.</th>";
             }
 
-
         $str.="<th>Name</th></th><th>Username</th><th>Email</th><th>Gender</th>";
 
         if($result[0]['user_role']== 'student')
         {
                 $str.="<th>Parent Name</th>";
-
         }
 
         $str.="<th>Status</th>";
