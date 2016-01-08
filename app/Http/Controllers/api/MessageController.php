@@ -22,18 +22,75 @@ class MessageController extends Controller
         $this->middleware('authenticate.user');
     }
 
-    public function getDetailMessages(Request $request){
+    public function getDetailMessages(Request $request ){
         try {
             $data = $request->all();
             $sender = $data['teacher']['id'];
-            $receiver = $data['user_id'];
-            $messageCount = $data['page_id'] * 2;
-            $messages = Message::whereIn('to_id',[$sender,$receiver])
-                                ->whereIn('from_id',[$sender,$receiver])
-                                ->skip($messageCount)->take(2)
+           // $receiver = $id;
+            $messages = Message::where('to_id',$sender)
+                                ->orwhere('from_id',$sender)
                                 ->get();
             $message = $messages->toArray();
             $responseData['messages']= $message;
+            $status = 200;
+            $message = 'Successful';
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $responseData
+        ];
+        return response($response, $status);
+    }
+
+   public function getMessageList(Request $request){
+        try {
+            $data = $request->all();
+            $sender = $data['teacher']['id'];
+            $senderArray = array();
+            array_push($senderArray,$sender);
+            $tomessageList = Message::where('to_id',$sender)->orwhere('from_id',$sender)->lists('to_id');
+            $frommessageList = Message::where('to_id',$sender)->orwhere('from_id',$sender)->lists('from_id');
+            $toMessageData = array_unique(array_diff($tomessageList->toArray(),$senderArray));
+            $fromMessageData = array_unique(array_diff($frommessageList->toArray(),$senderArray));
+            $messagecontact = array_unique(array_merge($toMessageData,$fromMessageData));
+            $userInfo = User::whereIn('id',$messagecontact)->select('id','first_name','last_name','role_id',
+            'division_id')->get();
+        $messageData=array();
+            $da=array();
+            foreach($userInfo as $user){
+                $messages = Message::Where(function ($query) use($sender) {
+                    $query->orwhere('to_id', $sender)->orwhere('from_id', $sender);
+                })->orderby('timestamp','desc')->first();
+                $messageData['message_id']=$messages['id'];
+                $messageData['user_id']=$messages['from_id'];
+                $messageData['from_id']=$messages['from_id'];
+                $messageData['to_id']=$messages['to_id'];
+                $messageData['description']=$messages['description'];
+                $userInfo = User::where('id','=',$messageData['from_id'])
+                    ->select('first_name', 'last_name')->first();
+                $messageData['name']=$userInfo['first_name']." ".$userInfo['last_name'];
+                $messageData['timestamp']=$messages['timestamp'];
+                $messageData['read_status']=$messages['read_status'];
+
+                if($user['role_id'] == 3)
+                {
+                    $studentDivision = Division::where('id',$user['division_id'])->first();
+                    $studentClass = Classes::where('id',$studentDivision->class_id)->first();
+                    $studentBatch = Batch::where('id',$studentClass->batch_id)->first();
+                    $messageData['studentInfo']['student-division']= $studentDivision->division_name;
+                    $messageData['studentInfo']['student-class'] = $studentClass->class_name;
+                    $messageData['studentInfo']['student-batch'] = $studentBatch->name;
+                }else{
+                    $messageData['studentInfo']='';
+                }
+                array_push($da,$messageData);
+            }
+            $responseData['data']= $da;
             $status = 200;
             $message = 'Successful';
         } catch (\Exception $e) {
@@ -78,9 +135,10 @@ class MessageController extends Controller
 
     public function getUserRoles(){
         try{
-            $userRole = UserRoles::whereNotIn('slug', ['parent'])->get();
-            $userRoles = $userRole->toArray();
-            $responseData['userRoles']= $userRoles;
+            $userRole = UserRoles::whereNotIn('slug', ['parent','admin'])
+                        ->select('user_roles.id','user_roles.name')
+                        ->get()->toArray();;
+            $responseData['userRoles']= $userRole;
             $status = 200;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
@@ -185,58 +243,5 @@ class MessageController extends Controller
         return response($response, $status);
 
     }
-    public function getMessageList(Request $request){
-        try {
-            $data = $request->all();
-            $sender = $data['teacher']['id'];
-            $senderArray = array();
-            array_push($senderArray,$sender);
-            $tomessageList = Message::where('to_id',$sender)->orwhere('from_id',$sender)->lists('to_id');
-            $frommessageList = Message::where('to_id',$sender)->orwhere('from_id',$sender)->lists('from_id');
-            $toMessageData = array_unique(array_diff($tomessageList->toArray(),$senderArray));
-            $fromMessageData = array_unique(array_diff($frommessageList->toArray(),$senderArray));
-            $messagecontact = array_unique(array_merge($toMessageData,$fromMessageData));
-            $userInfo = User::whereIn('id',$messagecontact)->select('id','first_name','last_name','role_id',
-            'division_id')->get();
-            $data1=array();
-            $da=array();
-            foreach($userInfo as $user){
-                $messages = Message::Where(function ($query) use($sender) {
-                    $query->orwhere('to_id', $sender)->orwhere('from_id', $sender);
-                })->orderby('timestamp','desc')->first();
 
-                $data1['message']['description']=$messages->description;
-                $data1['message']['timestamp']=$messages->timestamp;
-                $data1['sender']['user_id']=$user['id'];
-                $data1['sender']['first_name']=$user['first_name'];
-                $data1['sender']['last_name']=$user['last_name'];
-                if($user['role_id'] == 3)
-                {
-                    $studentDivision = Division::where('id',$user['division_id'])->first();
-                    $studentClass = Classes::where('id',$studentDivision->class_id)->first();
-                    $studentBatch = Batch::where('id',$studentClass->batch_id)->first();
-                    $data1['studentInfo']['student-division']= $studentDivision->division_name;
-                    $data1['studentInfo']['student-class'] = $studentClass->class_name;
-                    $data1['studentInfo']['student-batch'] = $studentBatch->name;
-                }else{
-                    $data1['studentInfo']='';
-
-                }
-                array_push($da,$data1);
-            }
-            $responseData['data']= $da;
-            $status = 200;
-            $message = 'Successful';
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            $status = 500;
-            $message = "something went wrong";
-        }
-        $response = [
-            "message" => $message,
-            "status" => $status,
-            "data" => $responseData
-        ];
-        return response($response, $status);
-    }
 }
