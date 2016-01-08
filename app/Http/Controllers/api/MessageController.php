@@ -135,11 +135,10 @@ class MessageController extends Controller
 
     public function getUserRoles(){
         try{
-            $userRole = UserRoles::whereNotIn('slug', ['parent'])
+            $userRole = UserRoles::whereNotIn('slug', ['parent','admin'])
                         ->select('user_roles.id','user_roles.name')
-                        ->get();
-            $userRoles = $userRole->toArray();
-            $responseData['userRoles']= $userRoles;
+                        ->get()->toArray();;
+            $responseData['userRoles']= $userRole;
             $status = 200;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
@@ -150,7 +149,7 @@ class MessageController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-              "data" => $responseData
+            "data" => $responseData
         ];
         return response($response, $status);
     }
