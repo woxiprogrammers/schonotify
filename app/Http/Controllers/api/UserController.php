@@ -194,7 +194,7 @@ class UserController extends Controller
            foreach($divisions as $value){
                $studentData1=User::where('id','=',$value['teacher_id'])->first();
                $teacherData[$i]['id']=$value['teacher_id'];
-               $teacherData[$i]['name']=$studentData1['first_name']."".$studentData1['last_name'];
+               $teacherData[$i]['name']=$studentData1['first_name']." ".$studentData1['last_name'];
                $i++;
            }
                $status = 200;
