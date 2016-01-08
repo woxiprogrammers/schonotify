@@ -96,7 +96,7 @@
                                     <label class="control-label">
                                         Select Batch
                                     </label>
-                                    <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
+                                    <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="msgbatch">
                                     </select>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                                     <label class="control-label">
                                         Select class
                                     </label>
-                                    <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
+                                    <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="msgclass">
                                     </select>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                                     <label class="control-label">
                                         Select division
                                     </label>
-                                    <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
+                                    <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="msgdivision">
                                     </select>
                                 </div>
                             </div>

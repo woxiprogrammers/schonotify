@@ -24,12 +24,6 @@
             </div>
 
         </div>
-        @include('alerts.errors')
-        <ul>
-            @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
         <div id="error-div"></div>
     </section>
 <!-- end: PAGE TITLE -->
@@ -85,7 +79,6 @@
                                             </label>
                                             <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
                                         </div>
-
                                         <div class="form-group">
                                             <label class="control-label">
                                                 Email Address
@@ -100,8 +93,6 @@
                                             <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
 
                                         </div>
-
-
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -146,9 +137,7 @@
                                             <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
 
                                         </div>
-
-
-                                    <div class="form-group">
+                                        <div class="form-group">
                                         <label>
                                             Image Upload
                                         </label>
@@ -169,11 +158,8 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                </div>
-
+                                     </div>
                             </fieldset>
-
                             <div class="row">
 
                                 <div class="col-md-4">
@@ -184,7 +170,6 @@
                             </div>
                         </form>
                     </div>
-
                     <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
                         <div class="panel-body">
                             <div class="col-sm-10">
@@ -204,10 +189,8 @@
                         </div>
                     </div>
                     <div id="panel_my_child" class="tab-pane fade" id="aclMod">
-                        <div class="panel-body">
-                            <div class="col-sm-10"></div></div></div>
 
-
+                    </div>
                 </div>
 
             </div>
@@ -223,7 +206,7 @@
 </div>
 
 @include('footer')
-</div>
+
 
 
 <script src="/vendor/jquery/jquery.min.js"></script>
@@ -328,10 +311,10 @@
                     {
 
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+
                         '</td>';

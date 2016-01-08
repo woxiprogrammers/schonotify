@@ -27,14 +27,10 @@
 <script type="text/javascript">
     $(document).ready(function(){
         getMsgCount();
-        tabUserSelect(2);
-
+        tabUserSelect(1);
         Main.init();
         FormValidator.init();
-
     });
-
-
 
     $('#role-select').change(function(){
 

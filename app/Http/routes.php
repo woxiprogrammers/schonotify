@@ -163,7 +163,12 @@ Route::get('user-module-acl','UsersController@userModuleAcls');
 
 Route::post('save-user','UsersController@store');
 
-Route::get('get-batches',array('uses' => 'UsersController@getBatches'));
+Route::get('get-batches','UsersController@getBatches');
+
+Route::post('acl-update/{id}','UsersController@aclUpdate');
+
+Route::get('user-module-acl-edit/{id}','UsersController@userModuleAclsEdit');
+
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
@@ -174,11 +179,14 @@ Route::get('get-admins',array('uses' => 'UsersController@getAdmins'));
 Route::get('get-teachers',array('uses' => 'UsersController@getTeachers'));
 Route::get('get-students/{division}',array('uses' => 'UsersController@getStudentList'));
 Route::post('compose-message',array('uses'=>'MessageController@composeMessage'));
+Route::get('get-batches-teacher','UsersController@getBatchesTeacher');
+Route::get('get-classes-teacher/{id}',array('uses' => 'UsersController@getClassesTeacher'));
+Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivisionsTeacher'));
 
 
 
 /* API Routes */
-Route::group(['prefix' => 'api/v1/user/'], function () {
+    Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
     Route::post('attendance','api\AttendanceController@markAttendance');
 
@@ -192,26 +200,26 @@ Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
 
 
-    Route::post('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
+    Route::get('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
     Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
     Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
     Route::get('gettadmins',array('uses' => 'api\MessageController@getAdmins'));
     Route::get('getbatches',array('uses' => 'api\UserController@getBatches'));
-    Route::get('getclasses',array('uses' => 'api\UserController@getClasses'));
-    Route::get('getdivisions',array('uses' => 'api\UserController@getDivisions'));
+    Route::get('getclasses/{id}',array('uses' => 'api\UserController@getClasses'));
+    Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
     Route::get('gettstudents/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
 
 
-
+    Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
 
 
 
 
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
-    Route::get('getMessageList','api\MessageController@getMessageList');
+    Route::get('get-message-list','api\MessageController@getMessageList');
     Route::post('createHomework','api\HomeworkController@createHomework');
     Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
     Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));

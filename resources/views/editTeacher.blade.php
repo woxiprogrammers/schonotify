@@ -24,22 +24,14 @@
         </div>
 
     </div>
-    @include('alerts.errors')
-    <ul>
-        @foreach($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
     <div id="error-div"></div>
 </section>
 <!-- end: PAGE TITLE -->
 <!-- start: USER PROFILE -->
 <div class="container-fluid container-fullw bg-white">
-<div class="row">
-<div class="col-md-12">
-
-
-<div class="tabbable">
+ <div class="row">
+  <div class="col-md-12">
+   <div class="tabbable">
 <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
 
     <li class="active">
@@ -52,14 +44,13 @@
             Assigned Modules
         </a>
     </li>
-
-
 </ul>
 <div class="tab-content">
 <div id="panel_edit_account" class="tab-pane fade in active ">
-    <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
+    <form id="formEditAccount" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
         <input name="_method" type="hidden" value="PUT">
         <fieldset>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -80,7 +71,6 @@
                         </label>
                         <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
                     </div>
-
                     <div class="form-group">
                         <label class="control-label">
                             Email Address
@@ -99,10 +89,9 @@
                         <label class="control-label">
                             Alternate number
                         </label>
-                        <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
+                        <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
 
                     </div>
-
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -145,18 +134,16 @@
                                 Allow For
                             </label>
                             <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" id="checkbox6" value="1">
+                                <input type="checkbox" id="checkbox6" value="web_view" name="access[]" @if($user->web_view=='1') checked @endif >
                                 <label for="checkbox6">
                                     Web Access
                                 </label>
-                                <input type="checkbox" id="checkbox7" value="2">
+                                <input type="checkbox" id="checkbox7"  value="mobile_view" name="access[]" @if($user->mobile_view=='1') checked @endif >
                                 <label for="checkbox7">
                                     Mobile Access
                                 </label>
                             </div>
                         </div>
-                    </div>
-
                     <div class="form-group">
                         <label>
                             Image Upload
@@ -180,7 +167,55 @@
                     </div>
 
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Make Class Teacher
+                        </label>
+                        <div class="checkbox clip-check check-primary">
+                            <input type="checkbox" id="checkbox8" value="1" onchange="clsTeacher(this.checked)" name="checkbox8" @if($user->batch_id !='') checked @endif>
+                            <label for="checkbox8">
+                                Approve
+                            </label>
 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group" id="clstchr_batch" style="display:none;" >
+                        <label>
+                            Select Batch
+                        </label>
+
+                        <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch"  >
+
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group" id="clstchr_class" style="display:none;" >
+                        <label>
+                            Select Class
+                        </label>
+                        <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group" id="clstchr_div" style="display:none;">
+                        <label>
+                            Select Division
+                        </label>
+                        <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
+                        </select>
+                    </div>
+                </div>
+
+
+            </div>
         </fieldset>
 
         <div class="row">
@@ -197,9 +232,10 @@
 <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
     <div class="panel-body">
         <div class="col-sm-10">
-            <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
-            <table class="table table-responsive" id="aclMod">
-            </table>
+            <form id="editAcl" method="post" action="/acl-update/{!! $user->id !!}">
+                <table class="table table-responsive" id="aclMod">
+
+                </table>
                 <div class="row">
                     <div class="col-md-4">
                         <button class="btn btn-primary pull-right" type="submit" >
@@ -230,7 +266,6 @@
 </div>
 
 @include('footer')
-</div>
 
 
 <script src="/vendor/jquery/jquery.min.js"></script>
@@ -258,18 +293,33 @@
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
 
 <!-- start: JavaScript Event Handlers for this page -->
-<script src="/assets/js/form-validation.js"></script>
+<script src="/assets/js/form-validation-edit.js"></script>
 
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
+
         getMsgCount();
         Main.init();
         FormValidator.init();
         FormElements.init();
         userAclModule();
+        getbatches();
+
+        if($('#checkbox8').is(":checked")==true)
+        {
+            clsTeacher(true);
+        }
+        if({!! $user->batch_id !!})
+        {
+            getCls({!! $user->batch_id !!});
+        }
+        if({!! $user->class_id !!})
+        {
+            getDivisions({!! $user->class_id !!});
+        }
 
     });
     $('#email').on('keyup',function(){
@@ -289,25 +339,40 @@
             }
         });
     });
+    function clsTeacher(chk){
+        if(chk==true)
+        {
+            $('#clstchr_batch').show();
+            $('#clstchr_class').show();
+            $('#clstchr_div').show();
+        }else{
+            $('#clstchr_batch').hide();
+            $('#clstchr_class').hide();
+            $('#clstchr_div').hide();
+        }
+    }
+
     function userAclModule()
     {
-        var route='/user-module-acl';
+        var route='/user-module-acl-edit/{!! $user->id !!}';
         $.get(route,function(res){
 
             var str;
 
-            var arr=res['allModAclArr'];
+            var allModAclArr=res['allModAclArr'];
 
-            var arr1= $.map(arr,function(index,value){
+            var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
 
-            var arr3=res['allAcls'];
-            var arr2= $.map(arr3,function(index,value){
+            var allAcls=res['allAcls'];
+            var arr2= $.map(allAcls,function(index,value){
                 return [index];
             });
 
-            var arr4=res['userModAclArr'];
+            var userModAclArr=res['userModAclArr'];
+
+            var allModules=res['allModules'];
 
             str+='<tr>'+
                 '<th><b>Modules</b></th>';
@@ -319,7 +384,6 @@
 
             str+='</tr>';
 
-
             for(var i=0; i<arr1.length; i++)
             {
 
@@ -330,15 +394,14 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
                     {
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
-                            '<label for="checkbox"></label>';
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
-                            '<label for="checkbox"></label>';
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+
                         '</td>';
@@ -351,6 +414,67 @@
         });
     }
 
+    function getbatches()
+    {
+        var route='/get-batches';
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Batch</option>";
+            for(var i=0; i<res.length; i++){
+                if({!! $user->batch_id !!} == res[i]['id'])
+                {
+                    str+='<option value='+res[i]['id']+' selected>'+res[i]['name']+'</option>';
+                }else{
+                str+='<option value='+res[i]['id']+' >'+res[i]['name']+'</option>';
+                }
+
+            }
+            $('#batch').html(str);
+        });
+    }
+
+    $("#batch").change(function() {
+        var id = this.value;
+        getCls(id);
+    });
+
+    function getCls(id)
+    {
+        var route='/get-classes/'+id;
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Class</option>";
+            for(var i=0; i<res.length; i++){
+                if({!! $user->class_id !!} == res[i]['id'])
+            {
+                str+='<option value='+res[i]['id']+' selected>'+res[i]['class_name']+'</option>';
+            }else{
+                str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
+            }
+        }
+        $('#class').html(str);
+        });
+    }
+
+    $("#class").change(function() {
+        var id = this.value;
+        getDivisions(id);
+
+    });
+    function getDivisions(id)
+    {
+        var route='/get-divisions/'+id;
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Division</option>";
+            for(var i=0; i<res.length; i++){
+                if({!! $user->division_id !!} == res[i]['id'])
+            {
+                str+='<option value='+res[i]['id']+' selected>'+res[i]['division_name']+'</option>';
+            }else{
+                str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
+            }
+        }
+        $('#division').html(str);
+    });
+    }
 
 
 

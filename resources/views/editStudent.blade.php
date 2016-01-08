@@ -24,12 +24,6 @@
         </div>
 
     </div>
-    @include('alerts.errors')
-    <ul>
-        @foreach($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
     <div id="error-div"></div>
 </section>
     <!-- end: PAGE TITLE -->
@@ -37,8 +31,6 @@
     <div class="container-fluid container-fullw bg-white">
         <div class="row">
             <div class="col-md-12">
-
-
                 <div class="tabbable">
                     <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
 
@@ -64,6 +56,7 @@
                         <div id="panel_edit_account" class="tab-pane fade in active ">
                             <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
+
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -131,7 +124,6 @@
                                                 </label>
                                                 <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
                                             </div>
-
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Email Address
@@ -144,10 +136,7 @@
                                                     Phone
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
-
                                             </div>
-
-
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -173,18 +162,19 @@
                                                 </label>
                                                 <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="control-label">Date of Birth </label>
                                                 <div class="input-group input-append datepicker date col-sm-6">
                                                     <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
-								<span class="input-group-btn">
-									<button type="button" class="btn btn-default">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </button> </span>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default">
+                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                            </button>
+                                                        </span>
                                                 </div>
-
-                                                <!--                            <input class="form-control format-datepicker" type="text">-->
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Alternate number
@@ -193,30 +183,30 @@
 
                                             </div>
 
-                                        <div class="form-group">
-                                            <label>
-                                                Image Upload
-                                            </label>
-                                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                <div class="fileinput-new thumbnail  col-sm-4">
+                                            <div class="form-group">
+                                                <label>
+                                                    Image Upload
+                                                </label>
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-new thumbnail  col-sm-4">
 
-                                                    <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
+                                                        <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
 
-                                                </div>
-                                                <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
-                                                <div class="user-edit-image-buttons pull-right col-sm-6">
-																			<span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
-																				<input type="file" name="avatar" >
-																			</span>
-                                                    <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
+                                                    </div>
+                                                    <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
+                                                    <div class="user-edit-image-buttons pull-right col-sm-6">
+                                                                                <span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
+                                                                                    <input type="file" name="avatar" >
+                                                                                </span>
+                                                        <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
+                                                            <i class="fa fa-times"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div>
-
                                     </div>
-
                                 </fieldset>
 
                                 <div class="row">
@@ -229,11 +219,11 @@
                                 </div>
                             </form>
                         </div>
+
                         <div id="panel_edit_Parent" class="tab-pane fade in active ">
                             <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
                                 <fieldset>
-
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -267,10 +257,7 @@
                                                     Phone
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
-
                                             </div>
-
-
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -300,31 +287,26 @@
                                                 <label class="control-label">Date of Birth </label>
                                                 <div class="input-group input-append datepicker date col-sm-6">
                                                     <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
-								<span class="input-group-btn">
-									<button type="button" class="btn btn-default">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </button> </span>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default">
+                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                            </button>
+                                                        </span>
                                                 </div>
-
-                                                <!--                            <input class="form-control format-datepicker" type="text">-->
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Alternate number
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
-
                                             </div>
-
                                             <div class="form-group">
                                                 <label>
                                                     Image Upload
                                                 </label>
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <div class="fileinput-new thumbnail  col-sm-4">
-
                                                         <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
-
                                                     </div>
                                                     <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
                                                     <div class="user-edit-image-buttons pull-right col-sm-6">
@@ -339,11 +321,9 @@
                                             </div>
 
                                         </div>
-
+                                    </div>
                                 </fieldset>
-
                                 <div class="row">
-
                                     <div class="col-md-4">
                                         <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
                                             Update <i class="fa fa-arrow-circle-right"></i>
@@ -375,7 +355,6 @@
 
 
                     </div>
-
                 </div>
             </div>
         </div>
@@ -389,7 +368,7 @@
 </div>
 
 @include('footer')
-</div>
+
 
 
 <script src="/vendor/jquery/jquery.min.js"></script>
@@ -494,10 +473,10 @@
                     {
 
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
-                            '<label for="checkbox"></label>';
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+
                         '</td>';

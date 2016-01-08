@@ -240,42 +240,42 @@ else if ( this.value == '3')
 
 
 $("#user-role").change(function() {
-    var route='get-batches';
+    var route='get-batches-teacher';
     $.get(route,function(res){
     var str = "<option value=''>Please Select Batch</option>";
     for(var i=0; i<res.length; i++){
     str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
     }
-$('#batch').html(str);
+$('#msgbatch').html(str);
 });
 });
 
 
-$("#batch").change(function() {
+$("#msgbatch").change(function() {
     var id = this.value;
-    var route='get-classes/'+id;
+    var route='get-classes-teacher/'+id;
     $.get(route,function(res){
     var str = "<option value=''>Please Select Class</option>";
     for(var i=0; i<res.length; i++){
     str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
     }
-$('#class').html(str);
+$('#msgclass').html(str);
 });
 });
 
-$("#class").change(function() {
+$("#msgclass").change(function() {
     var id = this.value;
-    var route='get-divisions/'+id;
+    var route='get-divisions-teacher/'+id;
     $.get(route,function(res){
     var str = "<option value=''>Please Select Division</option>";
     for(var i=0; i<res.length; i++){
     str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
     }
-$('#division').html(str);
+$('#msgdivision').html(str);
 });
 });
 
-$("#division").change(function() {
+$("#msgdivision").change(function() {
     var id = this.value;
     var route='get-students/'+id;
     $.get(route,function(res){
