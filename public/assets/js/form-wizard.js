@@ -36,6 +36,9 @@ var FormWizard = function () {
             return false;
         }
     },"You must select at least two!");
+    $.validator.addMethod("alphanumeric", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
+    });
 
     var initValidator = function () {
         
@@ -51,7 +54,13 @@ var FormWizard = function () {
                 },
                 lastName: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    alpha: true
+                },
+                userName:{
+                    minlength: 2,
+                    required: true,
+                    alphanumeric: true
                 },
                  email: {
                     required: true,
@@ -104,11 +113,15 @@ var FormWizard = function () {
             messages: {
                 firstName: {
                     required: "First Name is required" ,
-                    alpha: "First name must contain only letters"
+                    alpha: "First name must contain only letters OR Space added"
                 },
                 lastName: {
                      required: "Last Name is required",
-                     alpha: "Last name must contain only letters"
+                     alpha: "Last name must contain only letters OR Space added"
+                },
+                userName: {
+                    required: "User Name is required",
+                    alphanumeric: "User name must contain only letters ,Numbers OR Space added"
                 },
                 studid:"please provide correct student id",
                 email: {
