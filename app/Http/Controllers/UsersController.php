@@ -433,10 +433,10 @@ class UsersController extends Controller
         }elseif($userRole[0]['slug'] == 'parent')
         {
 
-            return view('editParent')->with('user',$user);
+            $students=User::where('parent_id',$user->id)->get();
+
+            return view('editParent')->with(compact('user','students'));
         }
-
-
 
     }
 
@@ -458,26 +458,31 @@ class UsersController extends Controller
     public function aclUpdate(Request $request,$id)
     {
         $aclRequest=$request->all();
-
-        $acl_mod=$aclRequest['acls'];
-        $aclSeperate=array();
-        foreach($acl_mod as $row)
+        if($aclRequest)
         {
-            array_push($aclSeperate,explode('_',$row));
-        }
+            $acl_mod=$aclRequest['acls'];
+            $aclSeperate=array();
+            foreach($acl_mod as $row)
+            {
+                array_push($aclSeperate,explode('_',$row));
+            }
 
-       ModuleAcl::where('user_id',$id)->delete();
-    $module_acl=array();
-        foreach($aclSeperate as $row)
-        {
-            $module_acl['user_id']=$id;
-            $module_acl['acl_id']=$row[0];
-            $module_acl['module_id']=$row[1];
-            $dml=ModuleAcl::insert($module_acl);
+           ModuleAcl::where('user_id',$id)->delete();
+            $module_acl=array();
+            foreach($aclSeperate as $row)
+            {
+                $module_acl['user_id']=$id;
+                $module_acl['acl_id']=$row[0];
+                $module_acl['module_id']=$row[1];
+                $dml=ModuleAcl::insert($module_acl);
+            }
+            Session::flash('message-success','Acl updated successfully');
+            return Redirect::to('/edit-user/'.$id);
+        }else{
+            ModuleAcl::where('user_id',$id)->delete();
+            Session::flash('message-success','Acl updated successfully');
+            return Redirect::to('/edit-user/'.$id);
         }
-        Session::flash('message-success','Acl updated successfully');
-        return Redirect::to('/edit-user/'.$id);
-
     }
 
 
@@ -524,11 +529,83 @@ class UsersController extends Controller
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
-
+        $userImage=User::where('id',$id)->first();
+        unset($request->_method);
+        if($request->hasFile('avatar')){
+            $image = $request->file('avatar');
+            $name = $request->file('avatar')->getClientOriginalName();
+            $filename = time()."_".$name;
+            $path = public_path('uploads/profile-picture/');
+            if (! file_exists($path)) {
+                File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+            }
+            $image->move($path,$filename);
+        }
+        else{
+            $filename=$userImage->avatar;
+        }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $userData['username']= $request->username;
+        $userData['first_name']= $request->firstname;
+        $userData['email']= $request->email;
+        $userData['last_name']= $request->lastname;
+        $userData['gender']= $request->gender;
+        $userData['mobile']= $request->mobile;
+        $userData['alternate_number']= $request->alternate_number;
+        $userData['address']= $request->address;
+        $userData['avatar']= $filename;
+        $userData['birth_date']= $date;
+        $userData['division_id']=$request->division;
+        $userData['roll_number']=$request->roll_number;
+        $userUpdate=User::where('id',$id)->update($userData);
+        if($userUpdate == 1){
+            Session::flash('message-success','student updated successfully');
+            return Redirect::back();
+        }
+        else{
+            Session::flash('message-error','something went wrong');
+            return Redirect::back();
+        }
     }
     public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
     {
+        $userImage=User::where('id',$id)->first();
+        unset($request->_method);
+        if($request->hasFile('avatar')){
+            $image = $request->file('avatar');
+            $name = $request->file('avatar')->getClientOriginalName();
+            $filename = time()."_".$name;
+            $path = public_path('uploads/profile-picture/');
+            if (! file_exists($path)) {
+                File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+            }
+            $image->move($path,$filename);
+        }
+        else{
+            $filename=$userImage->avatar;
 
+        }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $userData['username']= $request->username;
+        $userData['first_name']= $request->firstname;
+        $userData['email']= $request->email;
+        $userData['last_name']= $request->lastname;
+        $userData['gender']= $request->gender;
+        $userData['mobile']= $request->mobile;
+        $userData['address']= $request->address;
+        $userData['avatar']= $filename;
+        $userData['birth_date']= $date;
+        $userData['alternate_number']= $request->alternate_number;
+
+        $userUpdate=User::where('id',$id)->update($userData);
+        if($userUpdate == 1){
+            Session::flash('message-success','User updated successfully');
+            return Redirect::back();
+        }
+        else{
+            Session::flash('message-error','Something went wrong');
+            return Redirect::back();
+        }
     }
     public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
     {
@@ -547,7 +624,6 @@ class UsersController extends Controller
         }
         else{
             $filename=$userImage->avatar;
-
         }
         if(in_array('web_view',$request->access)){
             $teacherView['web_view']=1;
