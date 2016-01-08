@@ -84,7 +84,7 @@ class MessageRequest extends Request
             $role_id = User::where('id',$user_id)->pluck('role_id');
             if($role_id == 3){
             return [
-                'description' => 'required|min:5',
+                'description' => 'required|min:2',
                 'user_id' => 'required',
                 'batch' => 'required',
                 'class' => 'required',
@@ -92,7 +92,7 @@ class MessageRequest extends Request
             ];
             }else{
                 return [
-                    'description' => 'required|min:5',
+                    'description' => 'required|min:2',
                     'user_id' => 'required'
                 ];
             }
