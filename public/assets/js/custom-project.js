@@ -66,6 +66,8 @@ $('#send-msg').click(function() {
             }
         }
         $('#chat-history').html(str);
+        $(".perfect-scrollbar").scrollTop( $( '#chat-history').prop( "scrollHeight" ) );
+        $(".perfect-scrollbar").perfectScrollbar('update');
         toggle();
         $('#description').val('');
     });
