@@ -2,7 +2,7 @@ var FormWizard = function () {
 
     "use strict";
     var wizardContent = $('#wizard');
-    var wizardForm = $('#form');
+    var wizardForm = $('#student-registration-form');
     var numberOfSteps = $('.swMain > ul > li').length;
     var initWizard = function () {
         // function to initiate Wizard Form
@@ -212,7 +212,7 @@ var FormWizard = function () {
 
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#form').serialize();
+            var form=$('#student-registration-form').serialize();
             $.ajax({
                 url:'save-user',
                 data: form,

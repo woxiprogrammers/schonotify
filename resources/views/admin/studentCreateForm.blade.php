@@ -32,7 +32,7 @@
     @include('admin.userRoleDropdownCreate')
 </div>
 
-<form action="#" role="form" class="smart-wizard" id="form">
+<form action="#" role="form" class="smart-wizard" id="student-registration-form">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
@@ -136,6 +136,18 @@
         </div>
 
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    User Name <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
+                <div class="" id="feedback" ></div>
+            </div>
+        </div>
+
+    </div>
 
     <div class="row">
         <div class="col-md-6">
@@ -182,6 +194,7 @@
                     Email <span class="symbol required"></span>
                 </label>
                 <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email">
+                <div class="" id="emailfeedback" ></div>
             </div>
         </div>
         <div class="col-md-6">
@@ -221,7 +234,7 @@
 </fieldset>
 
 <div class="form-group">
-    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="submitStep">
+    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="submitStep" >
         Next <i class="fa fa-arrow-circle-right"></i>
     </button>
 </div>

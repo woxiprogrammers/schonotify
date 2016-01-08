@@ -2,7 +2,7 @@ var FormWizard = function () {
 
 	"use strict";
     var wizardContent = $('#wizard');
-    var wizardForm = $('#form');
+    var wizardForm = $('#registrationForm');
     var numberOfSteps = $('.swMain > ul > li').length;
     var initWizard = function () {
         // function to initiate Wizard Form
@@ -112,7 +112,7 @@ var FormWizard = function () {
                 },
                 studid:"please provide correct student id",
                 email: {
-                    required: "We need your email address to contact you",
+                    required: "We need your email dsfsdf address to contact you",
                     email: "Your email address must be in the format of name@domain.com"
                 },
                 address:{
@@ -207,7 +207,7 @@ var FormWizard = function () {
         if (validateAllSteps()) {
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#form').serialize();
+            var form=$('#registrationForm').serialize();
             $.ajax({
                 url:'save-user',
                 data: form,
