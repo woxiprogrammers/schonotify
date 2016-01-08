@@ -31,15 +31,6 @@ class MessageController extends Controller
                                 ->orwhere('from_id',$sender)
                                 ->get();
             $message = $messages->toArray();
-            foreach($message as $value)
-            {
-                return $value;
-                //if()
-                {
-
-                }
-            }
-            dd($message);
             $responseData['messages']= $message;
             $status = 200;
             $message = 'Successful';
@@ -69,7 +60,6 @@ class MessageController extends Controller
             $messagecontact = array_unique(array_merge($toMessageData,$fromMessageData));
             $userInfo = User::whereIn('id',$messagecontact)->select('id','first_name','last_name','role_id',
             'division_id')->get();
-            dd($tomessageList);
         $messageData=array();
             $da=array();
             foreach($userInfo as $user){
