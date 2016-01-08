@@ -11,22 +11,18 @@ function doListing(id) {
         for(var i=0; i<res.length; i++)
         {
             if(res[i]['from_id'] == id){
-                str+='<li class="messages-date">'+res[i]['date'] +'</li>'+
+                str+='<li class="self">'+
                     '<input type="hidden" name="to_id" id="to_id" value="'+ id +'" />'+
-                    '<li class="self">'+
                     '<div class="message">'+
-                    '<div class="message-name">'+res[i]['from_name']+'</div>'+
-                    '<div class="message-text">'+res[i]['description']+'</div>'+
+                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
                     '</li>';
             }else{
-                str+='<li class="messages-date">'+res[i]['date'] +'</li>'+
-                    '<li class="other">'+
+                str+='<li class="other">'+
                     '<div class="message">'+
-                    '<div class="message-name">'+res[i]['from_name']+'</div>'+
-                    '<div class="message-text">'+res[i]['description']+'</div>'+
+                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
@@ -50,22 +46,19 @@ $('#send-msg').click(function() {
         for(var i=0; i<res.length; i++)
         {
             if(res[i]['to_id'] == val){
-                str+='<li class="messages-date">'+res[i]['date'] +'</li>'+
-                    '<li class="other">'+
+                str+='<li class="other">'+
                     '<div class="message">'+
-                    '<div class="message-name">'+res[i]['from_name']+'</div>'+
-                    '<div class="message-text">'+res[i]['description']+'</div>'+
+                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
                     '</li>';
             }else{
-                str+='<li class="messages-date">'+res[i]['date'] +'</li>'+
-                    '<input type="hidden" name="to_id" id="to_id" value="'+ val +'" />'+
+                str+=
                     '<li class="self">'+
+                    '<input type="hidden" name="to_id" id="to_id" value="'+ val +'" />'+
                     '<div class="message">'+
-                    '<div class="message-name">'+res[i]['from_name']+'</div>'+
-                    '<div class="message-text">'+res[i]['description']+'</div>'+
+                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
@@ -85,7 +78,7 @@ $('#msgCountArea').click(function() {
             str+='<li><a href="javascript:void(0);" onclick="doListing('+res[i]['user_id']+');" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar" >'+
                 '<div class="clearfix">'+
                 '<div class="thread-image">'+
-                '<img src= "'+res[i]["avatar"]+'" alt="">'+
+                '<img class ="message_image" src= "'+res[i]["avatar"]+'" alt="">'+
                 '</div>'+
                 '<div class="thread-content">'+
                 '<span class="author">'+res[i]['first_name']+' '+res[i]['last_name']+'</span>'+
@@ -183,3 +176,117 @@ function alertError()
     $('#message-error-div').html(str);
 
 }
+
+
+////////////Compose Message JS Start///////////
+
+$("#message").click(function() {
+    var route='get-user-roles';
+    $.get(route,function(res){
+    var str = "<option value=''>Please Select User Role</option>";
+    for(var i=0; i<res.length; i++){
+    str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+    }
+$('#user-role').html(str);
+});
+$("#compose-message-teacher").hide();
+$("#compose-message-admin").hide();
+$("#compose-message-student").hide();
+});
+
+$("#user-role").change(function() {
+    if ( this.value == '1') {
+        $("#compose-message-teacher").hide();
+        $("#compose-message-admin").show();
+        $("#compose-message-student").hide();
+    var route='get-admins';
+    $.get(route,function(res){
+    var str = "<option value=''>Please Select Admin</option>";
+    for(var i=0; i<res.length; i++){
+    str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+    }
+    $('#admin-list').html(str);
+});
+}
+else if ( this.value == '2')
+        {
+            $("#compose-message-teacher").show();
+            $("#compose-message-admin").hide();
+            $("#compose-message-student").hide();
+            var route='get-teachers';
+            $.get(route,function(res){
+            var str = "<option value=''>Please Select Teacher</option>";
+            for(var i=0; i<res.length; i++){
+            str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+            }
+            $('#teacher-list').html(str);
+});
+}
+else if ( this.value == '3')
+        {
+            $("#compose-message-teacher").hide();
+            $("#compose-message-admin").hide();
+            $("#compose-message-student").show();
+        }
+    else if ( this.value == '')
+    {
+        $("#compose-message-teacher").hide();
+        $("#compose-message-admin").hide();
+        $("#compose-message-student").hide();
+    }
+});
+
+
+
+
+$("#user-role").change(function() {
+    var route='get-batches';
+    $.get(route,function(res){
+    var str = "<option value=''>Please Select Batch</option>";
+    for(var i=0; i<res.length; i++){
+    str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+    }
+$('#batch').html(str);
+});
+});
+
+
+$("#batch").change(function() {
+    var id = this.value;
+    var route='get-classes/'+id;
+    $.get(route,function(res){
+    var str = "<option value=''>Please Select Class</option>";
+    for(var i=0; i<res.length; i++){
+    str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
+    }
+$('#class').html(str);
+});
+});
+
+$("#class").change(function() {
+    var id = this.value;
+    var route='get-divisions/'+id;
+    $.get(route,function(res){
+    var str = "<option value=''>Please Select Division</option>";
+    for(var i=0; i<res.length; i++){
+    str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
+    }
+$('#division').html(str);
+});
+});
+
+$("#division").change(function() {
+    var id = this.value;
+    var route='get-students/'+id;
+    $.get(route,function(res){
+    var str = "<option value=''>Please Select Student</option>";
+    for(var i=0; i<res.length; i++){
+    str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+    }
+$('#student-list').html(str);
+});
+});
+
+
+
+/////Compose Message JS End////////////////////

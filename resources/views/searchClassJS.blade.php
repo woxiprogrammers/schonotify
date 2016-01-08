@@ -15,6 +15,9 @@
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/table-data-class.js"></script>
 <script src="assets/js/custom-project.js"></script>
+<script src="vendor/ckeditor/ckeditor.js"></script>
+<script src="vendor/ckeditor/adapters/jquery.js"></script>
+<script src="assets/js/form-validation.js"></script>
 
 
 
@@ -24,6 +27,7 @@
         TableData.init();
 
         Main.init();
+        FormValidator.init();
 
     });
 

@@ -9,6 +9,7 @@ use App\Classes;
 use App\Division;
 use App\Module;
 use App\ModuleAcl;
+use App\SubjectClassDivision;
 use App\TeacherView;
 use App\User;
 use App\UserRoles;
@@ -523,20 +524,45 @@ class UsersController extends Controller
 
     public function getBatches(Request $request){
         $user=Auth::user();
+        if($user->role_id == 1){
         $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
         $batchList = $batchData->toArray();
+        }elseif($user->role_id == 2){
+        $divisionList = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
+        $divisionInfo = Division::wherein('id',$divisionList)->select('id')->get();
+        $classInfo = Classes::wherein('id',$divisionInfo)->select('id')->get();
+        $batchInfo = Batch::wherein('id',$classInfo)->select('id')->get();
+        $batchData = Batch::wherein('id',$batchInfo)->select('id','name')->get();
+        $batchList = $batchData->toArray();
+        }
         return $batchList;
     }
 
     public function getClasses($id){
+        $user=Auth::user();
+        if($user->role_id == 1){
         $classData = Classes::where('batch_id', $id)->select('id','class_name')->get();
         $classList = $classData->toArray();
+        }elseif($user->role_id == 2){
+            $divisionList = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
+            $divisionInfo = Division::wherein('id',$divisionList)->select('class_id')->distinct()->get();
+            $classInfo = Classes::wherein('id',$divisionInfo)->select('id')->distinct()->get();
+            $classData = Classes::wherein('id', $classInfo)->where('batch_id',$id)->select('id','class_name')->distinct()->get();
+            $classList = $classData->toArray();
+        }
         return $classList;
     }
 
     public function getDivisions($id){
+        $user=Auth::user();
+        if($user->role_id == 1){
         $divisionData = Division::where('class_id', $id)->select('id','division_name')->get();
         $divisionList = $divisionData->toArray();
+        }elseif($user->role_id == 2){
+            $divisionList = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
+            $divisionData = Division::wherein('id', $divisionList)->where('class_id',$id)->select('id','division_name')->get();
+            $divisionList = $divisionData->toArray();
+        }
         return $divisionList;
     }
 
@@ -547,7 +573,7 @@ class UsersController extends Controller
         $userList = $userData->toArray();
         foreach($userList as $user){
             $userInfo['data'] = $user['id'];
-            $userInfo['value'] = $user['first_name']." ".$user['first_name']." ,".$user['email'];
+            $userInfo['value'] = $user['first_name']." ".$user['last_name']." ,".$user['email'];
             array_push($userInformation,$userInfo);
         }
         return $userInformation;
@@ -568,5 +594,55 @@ class UsersController extends Controller
             return $count;
         }
     }
+
+
+    public function getUserRoles(){
+        $userRole = UserRoles::whereNotIn('slug', ['parent','admin'])->get();
+        $userRoles = $userRole->toArray();
+        return $userRoles;
+    }
+
+    public function getAdmins(){
+        $user=Auth::user();
+        $admin_role_id = UserRoles::whereIn('slug', ['admin'])->pluck('id');
+        $admin = User::where('role_id',$admin_role_id)->where('body_id',$user->body_id)->whereNotIn('id', [$user->id])->get();
+        $admins = $admin->toArray();
+        $userInformation =array();
+        foreach($admins as $admin){
+            $userInfo['id'] = $admin['id'];
+            $userInfo['name'] = $admin['first_name']." ".$admin['last_name'];
+            array_push($userInformation,$userInfo);
+        }
+        return $userInformation;
+    }
+
+    public function getTeachers(){
+        $user=Auth::user();
+        $teacher_role_id = UserRoles::whereIn('slug', ['teacher'])->pluck('id');
+        $teacher = User::where('role_id',$teacher_role_id)->where('body_id',$user->body_id)->whereNotIn('id', [$user->id])->get();
+        $teachers = $teacher->toArray();
+        $userInformation =array();
+        foreach($teachers as $teacher){
+            $userInfo['id'] = $teacher['id'];
+            $userInfo['name'] = $teacher['first_name']." ".$teacher['last_name'];
+            array_push($userInformation,$userInfo);
+        }
+        return $userInformation;
+    }
+
+    public function getStudentList(Request $request){
+        $user=Auth::user();
+        $student_id = UserRoles::whereIn('slug', ['student'])->pluck('id');
+        $student = User::where('role_id',$student_id)->where('division_id',$request->division)->get();
+        $students = $student->toArray();
+        $userInformation =array();
+        foreach($students as $student){
+            $userInfo['id'] = $student['id'];
+            $userInfo['name'] = $student['first_name']." ".$student['last_name'];
+            array_push($userInformation,$userInfo);
+        }
+        return $userInformation;
+    }
+
 
 }
