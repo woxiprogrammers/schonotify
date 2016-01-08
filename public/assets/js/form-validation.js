@@ -349,7 +349,8 @@ var FormValidator = function () {
                 successHandler2.show();
                 errorHandler2.hide();
                 // submit form
-                $('#form3').submit();
+               // $('#form3').submit();
+                return true;
             }
         });
         CKEDITOR.disableAutoInline = true;
@@ -442,6 +443,240 @@ var FormValidator = function () {
 
     };
 
+    var runValidator5 = function () {
+        var form5 = $('#compose-message-admin');
+        var errorHandler5 = $('.errorHandler', form5);
+        var successHandler5 = $('.successHandler', form5);
+        form5.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                description: {
+                    required: true,
+                    minlength:2
+                },
+                user_id: {
+                    required: true
+                }
+
+            },
+            messages: {
+
+                description:{
+                    required:"Please Enter Description",
+                    minlength:"Meassage must be at least 2 characters "
+                },
+                user_id:{
+                    required:"Please Select Admin"
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler5.hide();
+                errorHandler5.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler5.show();
+                errorHandler5.hide();
+                return true;
+            }
+        });
+
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+
+    };
+
+    var runValidator6 = function () {
+        var form6 = $('#compose-message-teacher');
+        var errorHandler6 = $('.errorHandler', form6);
+        var successHandler6 = $('.successHandler', form6);
+        form6.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                description: {
+                    required: true,
+                    minlength:2
+                },
+                user_id: {
+                    required: true
+                }
+
+            },
+            messages: {
+
+                description:{
+                    required:"Please Enter Description",
+                    minlength:"Meassage must be at least 2 characters "
+                },
+                user_id:{
+                    required:"Please Select teacher"
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler6.hide();
+                errorHandler6.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler6.show();
+                errorHandler6.hide();
+                // submit form
+
+                return true;
+            }
+        });
+
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+
+    };
+
+    var runValidator7 = function () {
+        var form7 = $('#compose-message-student');
+        var errorHandler7 = $('.errorHandler', form7);
+        var successHandler7 = $('.successHandler', form7);
+        form7.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                description: {
+                    required: true,
+                    minlength:2
+                },
+                user_id: {
+                    required: true
+                },
+                batch: {
+                    required: true
+                },
+                class: {
+                    required: true
+                },
+                division: {
+                    required: true
+                }
+
+            },
+            messages: {
+
+                description:{
+                    required:"Please Enter Description",
+                    minlength:"Meassage must be at least 2 characters "
+                },
+                user_id:{
+                    required:"Please Select student"
+                },
+                batch:{
+                    required:"Please Select Batch"
+                },
+                class:{
+                    required:"Please Select Class"
+                },
+                division:{
+                    required:"Please Select Division"
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler7.hide();
+                errorHandler7.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler7.show();
+                errorHandler7.hide();
+                // submit form
+
+                return true;
+            }
+        });
+
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+
+    };
+
+
+
     return {
         //main function to initiate template pages
         init: function () {
@@ -450,6 +685,9 @@ var FormValidator = function () {
             runValidator2();
             runValidator3();
             runValidator4();
+            runValidator5();
+            runValidator6();
+            runValidator7();
         }
     };
 }();

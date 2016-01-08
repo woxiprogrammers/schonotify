@@ -12,11 +12,16 @@
 <script src="assets/js/main.js"></script>
 
 <script src="assets/js/index.js"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="assets/js/custom-project.js"></script>
+<script src="vendor/ckeditor/ckeditor.js"></script>
+<script src="vendor/ckeditor/adapters/jquery.js"></script>
+<script src="assets/js/form-validation.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
         Main.init();
+        FormValidator.init();
         Index.init();
     });
 </script>
