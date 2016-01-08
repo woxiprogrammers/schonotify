@@ -90,7 +90,10 @@
                 </ul>
             </li>
 
-
+            @if($user->role_id == 1)
+            <li class="dropdown">
+            </li>
+            @else
             @if(in_array('view_message',session('functionArr')))
             <li class="dropdown">
                 <a href class="dropdown-toggle" data-toggle="dropdown" id="msgCountArea">
@@ -121,6 +124,7 @@
                     <span id ="msgCount" class="badge partition-red"></span> <i class="ti-comment"></i> <span>MESSAGES</span>
                 </a>
             </li>
+            @endif
             @endif
 
 

@@ -11711,3 +11711,13 @@ a.control_next {
     background: #eee;
     top: 67px;
 }
+
+.new-date{
+    font-size: 11px;
+}
+
+
+.message_image{
+    height: 50px;
+    width: 50px;
+}

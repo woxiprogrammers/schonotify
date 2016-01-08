@@ -174,6 +174,15 @@ Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'))
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
 Route::post('check-user',array('uses' => 'UsersController@checkUser'));
 Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
+Route::get('get-user-roles',array('uses' => 'UsersController@getUserRoles'));
+Route::get('get-admins',array('uses' => 'UsersController@getAdmins'));
+Route::get('get-teachers',array('uses' => 'UsersController@getTeachers'));
+Route::get('get-students/{division}',array('uses' => 'UsersController@getStudentList'));
+Route::post('compose-message',array('uses'=>'MessageController@composeMessage'));
+Route::get('get-batches-teacher','UsersController@getBatchesTeacher');
+Route::get('get-classes-teacher/{id}',array('uses' => 'UsersController@getClassesTeacher'));
+Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivisionsTeacher'));
+
 
 
 /* API Routes */

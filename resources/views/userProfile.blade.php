@@ -15,7 +15,7 @@
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
 <div class="wrap-content container" id="container">
-
+@include('alerts.errors')
 <section id="page-title">
     <div class="row">
         <div class="col-sm-8">

@@ -14,6 +14,7 @@
         <div class="main-content" >
             <div class="wrap-content container" id="container">
                 <!-- start: DASHBOARD TITLE -->
+                @include('alerts.errors')
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
@@ -284,11 +285,15 @@
 
 <script src="assets/js/form-wizard.js"></script>
 <script src="assets/js/custom-project.js"></script>
+<script src="vendor/ckeditor/ckeditor.js"></script>
+<script src="vendor/ckeditor/adapters/jquery.js"></script>
+<script src="assets/js/form-validation.js"></script>
 
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
         Main.init();
+        FormValidator.init();
         FormWizard.init();
     });
 </script>
