@@ -80,8 +80,7 @@ class UserRequest extends Request
                 'mobile' => 'required|min:10',
                 'alt_number' => 'required|min:10',
                 'email' => 'required|email',
-                'address' => 'required|min:15',
-                'modules' => 'required|min:1'
+                'address' => 'required|min:15'
             ];
                 break;
             default:break;

@@ -30,7 +30,7 @@
     @include('admin.userRoleDropdownCreate')
 </div>
 
-<form role="form" class="smart-wizard" id="form">
+<form role="form" class="smart-wizard" id="registrationForm">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
@@ -322,41 +322,7 @@
 
     });
 
-    $('#userName').on('keyup',function(){
-        var username = $(this).val();
-        var route='check-user';
-        $.post(route,{name:username},function(res){
-            if(res == 0 ) {
-                $('#feedback').removeClass("alert alert-danger alert-dismissible");
-                $('#feedback').addClass("alert alert-success alert-dismissible");
-                $('#feedback').html("Username Can Be Used");
-                $('#checkUser').removeAttr('disabled');
-            } else {
-                document.getElementById("feedback").disabled = true;
-                $('#feedback').addClass("alert alert-danger alert-dismissible");
-                $('#feedback').html("Username Already Exists");
-                $('#checkUser').attr('disabled','disabled');
-            }
-        });
-    });
 
-    $('#email').on('keyup',function(){
-        var email = $(this).val();
-        var route='check-email';
-        $.post(route,{email:email},function(res){
-            if(res == 0 ) {
-                $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
-                $('#emailfeedback').addClass("alert alert-success alert-dismissible");
-                $('#emailfeedback').html("Email Id Can Be Used");
-                $('#checkUser').removeAttr('disabled');
-            } else {
-                document.getElementById("feedback").disabled = true;
-                $('#emailfeedback').addClass("alert alert-danger alert-dismissible");
-                $('#emailfeedback').html("Email Id Already Exists");
-                $('#checkUser').attr('disabled','disabled');
-            }
-        });
-    });
 
     function userAclModule()
     {

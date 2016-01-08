@@ -1,13 +1,17 @@
 <div id="off-sidebar" class="sidebar">
 <div class="sidebar-wrapper">
 <ul class="nav nav-tabs nav-justified">
+    @foreach(session('functionArr') as $row)
+    @if($row == 'create_message')
     <li>
         <a href="#off-users" aria-controls="off-users" role="tab" data-toggle="modal" data-target="#compose-msg" id="message">
-            <i class="ti-comments"></i>
+            <i class="ti-comments"></i>Compose Message
 
         </a>
 
     </li>
+    @endif
+    @endforeach
 
 </ul>
 

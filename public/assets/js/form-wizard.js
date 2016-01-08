@@ -2,7 +2,7 @@ var FormWizard = function () {
 
 	"use strict";
     var wizardContent = $('#wizard');
-    var wizardForm = $('#form');
+    var wizardForm = $('#registrationForm');
     var numberOfSteps = $('.swMain > ul > li').length;
     var initWizard = function () {
         // function to initiate Wizard Form
@@ -36,6 +36,9 @@ var FormWizard = function () {
             return false;
         }
     },"You must select at least two!");
+    $.validator.addMethod("alphanumeric", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
+    });
 
     var initValidator = function () {
         
@@ -51,7 +54,13 @@ var FormWizard = function () {
                 },
                 lastName: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    alpha: true
+                },
+                userName:{
+                    minlength: 2,
+                    required: true,
+                    alphanumeric: true
                 },
                  email: {
                     required: true,
@@ -104,15 +113,19 @@ var FormWizard = function () {
             messages: {
                 firstName: {
                     required: "First Name is required" ,
-                    alpha: "First name must contain only letters"
+                    alpha: "First name must contain only letters OR Space added"
                 },
                 lastName: {
                      required: "Last Name is required",
-                     alpha: "Last name must contain only letters"
+                     alpha: "Last name must contain only letters OR Space added"
+                },
+                userName: {
+                    required: "User Name is required",
+                    alphanumeric: "User name must contain only letters ,Numbers OR Space added"
                 },
                 studid:"please provide correct student id",
                 email: {
-                    required: "We need your email address to contact you",
+                    required: "We need your email dsfsdf address to contact you",
                     email: "Your email address must be in the format of name@domain.com"
                 },
                 address:{
@@ -207,7 +220,7 @@ var FormWizard = function () {
         if (validateAllSteps()) {
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#form').serialize();
+            var form=$('#registrationForm').serialize();
             $.ajax({
                 url:'save-user',
                 data: form,
