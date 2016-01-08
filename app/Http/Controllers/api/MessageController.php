@@ -157,9 +157,14 @@ class MessageController extends Controller
     public function getTeachers(){
         try{
             $teacher_id = UserRoles::whereIn('slug', ['teacher'])->pluck('id');
-            $teacher = User::where('role_id',$teacher_id)->get();
-            $teachers = $teacher->toArray();
-            $responseData['teachers']= $teachers;
+            $teacher = User::where('role_id',$teacher_id)->get()->toArray();
+            $i=0;
+            foreach($teacher as $value){
+                $teacherData[$i]['id']=$value['id'];
+                $teacherData[$i]['name']=$value['first_name']." ".$value['first_name'];
+                $i++;
+            }
+            $responseData['teachers']= $teacherData;
             $status = 200;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
