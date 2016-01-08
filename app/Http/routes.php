@@ -208,7 +208,7 @@ Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivi
     Route::get('get-batches-teacher',array('uses' => 'api\UserController@getBatchesTeacher'));
     Route::get('getclasses/{id}',array('uses' => 'api\UserController@getClassesTeacher'));
     Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
-    Route::get('gettstudents/{division}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
 
 
