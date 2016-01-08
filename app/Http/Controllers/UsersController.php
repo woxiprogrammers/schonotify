@@ -437,6 +437,7 @@ class UsersController extends Controller
         }
     }
 
+
     public function aclUpdate(Request $request,$id)
     {
         $aclRequest=$request->all();
@@ -462,7 +463,8 @@ class UsersController extends Controller
 
     }
 
-    public function updateAdmin(Request $request,$id)
+
+    public function updateAdmin(Requests\WebRequests\EditAdminRequest $request,$id)
     {
         $userImage=User::where('id',$id)->first();
         unset($request->_method);
@@ -503,15 +505,15 @@ class UsersController extends Controller
         }
 
     }
-    public function updateStudent(Request $request,$id)
+    public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
 
     }
-    public function updateParent(Request $request,$id)
+    public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
     {
 
     }
-    public function updateTeacher(Request $request,$id)
+    public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
     {
 
     }
