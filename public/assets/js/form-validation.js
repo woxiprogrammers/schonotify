@@ -384,23 +384,29 @@ var FormValidator = function () {
             },
             ignore: "",
             rules: {
-                username: {
-                    required: true
-                },
                 firstname: {
+                    minlength: 2,
                     required: true
                 },
                 lastname: {
+                    minlength: 2,
                     required: true
                 },
                 email: {
-                    required: true
+                    required: true,
+                    email: true
                 },
-                mobile: {
-                    required: true
+                mobile:{
+                    required: true,
+                    minlength:10,
+                    maxlength:10
                 },
-                address: {
-                    required: true
+                alternate_number:{
+                    minlength:10,
+                    maxlength:10
+                },
+                address:{
+                    required:true
                 }
 
             },
