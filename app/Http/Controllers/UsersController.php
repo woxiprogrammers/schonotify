@@ -7,6 +7,8 @@ use App\Batch;
 use App\ClassData;
 use App\Classes;
 use App\Division;
+use App\HomeworkTeacher;
+use App\Leave;
 use App\Module;
 use App\ModuleAcl;
 use App\SubjectClassDivision;
@@ -491,7 +493,7 @@ class UsersController extends Controller
             $dml=ModuleAcl::insert($module_acl);
         }
         Session::flash('message-success','Acl updated successfully');
-        return Redirect::to('/searchUsers');
+        return Redirect::back();
 
     }
 
@@ -568,14 +570,18 @@ class UsersController extends Controller
         $userData['birth_date']= $date;
         $userData['division_id']=$request->division;
         $userData['roll_number']=$request->roll_number;
+        $homework['division_id'] = $request->division;
+        HomeworkTeacher::where('student_id',$request->id)->update($homework);
+        $leaves['division_id']=$request->division;
+        Leave::where('student_id',$request->id)->update($leaves);
         $userUpdate=User::where('id',$id)->update($userData);
         if($userUpdate == 1){
             Session::flash('message-success','student updated successfully');
-            return Redirect::to('/edit-user/'.$id);
+            return Redirect::back();
         }
         else{
             Session::flash('message-error','something went wrong');
-            return Redirect::to('/edit-user/'.$id);
+            return Redirect::back();
         }
     }
     public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
@@ -611,11 +617,11 @@ class UsersController extends Controller
         $userUpdate=User::where('id',$id)->update($userData);
         if($userUpdate == 1){
             Session::flash('message-success','User updated successfully');
-            return Redirect::to('/searchUsers');
+            return Redirect::back();
         }
         else{
             Session::flash('message-error','Something went wrong');
-            return Redirect::to('/searchUsers');
+            return Redirect::back();
         }
     }
     public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
@@ -669,11 +675,11 @@ class UsersController extends Controller
                   where('class_id',$request->class)->update(array('class_teacher_id'=>$id));
         if($userUpdate == 1){
             Session::flash('message-success','teacher updated successfully');
-            return Redirect::to('/edit-user/'.$id);
+            return Redirect::back();
         }
         else{
             Session::flash('message-error','something went wrong');
-            return Redirect::to('/edit-user/'.$id);
+            return Redirect::back();
         }
     }
 
