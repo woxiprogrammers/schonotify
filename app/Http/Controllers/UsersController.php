@@ -405,52 +405,53 @@ class UsersController extends Controller
     public function editUser(Request $request,$id)
     {
         $user=User::where('id',$id)->first();
-        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->get();
-        if($userRole[0]['slug'] == 'admin')
+        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->first();
+        if($userRole->slug == 'admin')
         {
             return view('editAdmin')->with('user',$user);
-        }elseif($userRole[0]['slug'] == 'teacher')
+        }elseif($userRole->slug == 'teacher')
         {
-            $classTeacher=Division::where('class_teacher_id',$id)->get();
-            if(! $classTeacher->isEmpty())
+            $classTeacher=Division::where('class_teacher_id',$id)->first();
+            if($classTeacher != null)
             {
-                $class=Classes::where('id',$classTeacher[0]['class_id'])->get();
-                $batch=Batch::where('id',$class[0]['batch_id'])->get();
-                $user['batch_id']=$batch[0]['id'];
-                $user['batch_name']=$batch[0]['slug'];
-                $user['class_id']=$class[0]['id'];
-                $user['class_name']=$class[0]['slug'];
-                $user['division_id']=$classTeacher[0]['id'];
-                $user['division_name']=$classTeacher[0]['slug'];
+                $class=Classes::where('id',$classTeacher->class_id)->first();
+                $batch=Batch::where('id',$class->batch_id)->first();
+                $user['batch_id']=$batch->id;
+                $user['batch_name']=$batch->slug;
+                $user['class_id']=$class->id;
+                $user['class_name']=$class->slug;
+                $user['division_id']=$classTeacher->id;
+                $user['division_name']=$classTeacher->slug;
             }
             $teacherView=TeacherView::where('user_id',$id)->first();
             $user['web_view'] = $teacherView->web_view;
             $user['mobile_view']= $teacherView->mobile_view;
             return view('editTeacher')->with('user',$user);
-        }elseif($userRole[0]['slug'] == 'student')
+        }elseif($userRole->slug == 'student')
         {
-            $userData=User::where('id',$user['parent_id'])->get();
-            $user['parentUserName']=$userData[0]['username'];
-            $user['parentFirstName']=$userData[0]['first_name'];
-            $user['parentLastName']=$userData[0]['last_name'];
-            $user['parentEmail']=$userData[0]['email'];
-            $user['parentGender']=$userData[0]['gender'];
-            $user['parentBirth_date']=$userData[0]['birth_date'];
-            $user['parentMobile']=$userData[0]['mobile'];
-            $user['parentAddress']=$userData[0]['address'];
-            $user['parentAlternateNumber']=$userData[0]['alternate_number'];
-            $user['parentAvatar']=$userData[0]['avatar'];
-            $division=Division::where('id',$user['division_id'])->get();
-            $class=Classes::where('id',$division[0]['id'])->get();
-            $batch=Batch::where('id',$class[0]['batch_id'])->get();
-            $user['batch_id']=$batch[0]['id'];
-            $user['batch_name']=$batch[0]['slug'];
-            $user['class_id']=$class[0]['id'];
-            $user['class_name']=$class[0]['slug'];
-            $user['division_id']=$division[0]['id'];
-            $user['division_name']=$division[0]['slug'];
+            $userData=User::where('id',$user['parent_id'])->first();
+            $user['parentUserName']=$userData->username;
+            $user['parentFirstName']=$userData->first_name;
+            $user['parentLastName']=$userData->last_name;
+            $user['parentEmail']=$userData->email;
+            $user['parentGender']=$userData->gender;
+            $user['parentBirth_date']=$userData->birth_date;
+            $user['parentMobile']=$userData->mobile;
+            $user['parentAddress']=$userData->address;
+            $user['parentAlternateNumber']=$userData->alternate_number;
+            $user['parentAvatar']=$userData->avatar;
+            $division=Division::where('id',$user['division_id'])->first();
+            $class=Classes::where('id',$division->id)->first();
+            $batch=Batch::where('id',$class->batch_id)->first();
+            $user['batch_id']=$batch->id;
+            $user['batch_name']=$batch->slug;
+            $user['class_id']=$class->id;
+            $user['class_name']=$class->slug;
+            $user['division_id']=$division->id;
+            $user['division_name']=$division->slug;
+            dd($user->toArray());
             return view('editStudent')->with('user',$user);
-        }elseif($userRole[0]['slug'] == 'parent')
+        }elseif($userRole->slug == 'parent')
         {
 
             return view('editParent')->with('user',$user);
