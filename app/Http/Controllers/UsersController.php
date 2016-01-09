@@ -7,6 +7,8 @@ use App\Batch;
 use App\ClassData;
 use App\Classes;
 use App\Division;
+use App\HomeworkTeacher;
+use App\Leave;
 use App\Module;
 use App\ModuleAcl;
 use App\SubjectClassDivision;
@@ -402,43 +404,84 @@ class UsersController extends Controller
 
     public function editUser(Request $request,$id)
     {
-
         $user=User::where('id',$id)->first();
-
-        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->get();
-
-        if($userRole[0]['slug'] == 'admin')
+        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->first();
+        if($userRole->slug == 'admin')
         {
             return view('editAdmin')->with('user',$user);
-        }elseif($userRole[0]['slug'] == 'teacher')
+        }elseif($userRole->slug == 'teacher')
         {
-            $classTeacher=Division::where('class_teacher_id',$id)->get();
-            if(! $classTeacher->isEmpty())
+            $classTeacher=Division::where('class_teacher_id',$id)->first();
+            if($classTeacher != null)
             {
-                $class=Classes::where('id',$classTeacher[0]['class_id'])->get();
-                $batch=Batch::where('id',$class[0]['batch_id'])->get();
-                $user['batch_id']=$batch[0]['id'];
-                $user['batch_name']=$batch[0]['slug'];
-                $user['class_id']=$class[0]['id'];
-                $user['class_name']=$class[0]['slug'];
-                $user['division_id']=$classTeacher[0]['id'];
-                $user['division_name']=$classTeacher[0]['slug'];
+                $class=Classes::where('id',$classTeacher->class_id)->first();
+                $batch=Batch::where('id',$class->batch_id)->first();
+                $user['batch_id']=$batch->id;
+                $user['batch_name']=$batch->slug;
+                $user['class_id']=$class->id;
+                $user['class_name']=$class->slug;
+                $user['division_id']=$classTeacher->id;
+                $user['division_name']=$classTeacher->slug;
             }
             $teacherView=TeacherView::where('user_id',$id)->first();
             $user['web_view'] = $teacherView->web_view;
             $user['mobile_view']= $teacherView->mobile_view;
             return view('editTeacher')->with('user',$user);
-        }elseif($userRole[0]['slug'] == 'student')
+        }elseif($userRole->slug == 'student')
         {
+            $userData=User::where('id',$user['parent_id'])->first();
+            $user['parentUserName']=$userData->username;
+            $user['parentFirstName']=$userData->first_name;
+            $user['parentLastName']=$userData->last_name;
+            $user['parentEmail']=$userData->email;
+            $user['parentGender']=$userData->gender;
+            $user['parentBirth_date']=$userData->birth_date;
+            $user['parentMobile']=$userData->mobile;
+            $user['parentAddress']=$userData->address;
+            $user['parentAlternateNumber']=$userData->alternate_number;
+            $user['parentAvatar']=$userData->avatar;
+            $division=Division::where('id',$user['division_id'])->first();
+            $class=Classes::where('id',$division->id)->first();
+            $batch=Batch::where('id',$class->batch_id)->first();
+            $user['batch_id']=$batch->id;
+            $user['batch_name']=$batch->slug;
+            $user['class_id']=$class->id;
+            $user['class_name']=$class->slug;
+            $user['division_id']=$division->id;
+            $user['division_name']=$division->slug;
             return view('editStudent')->with('user',$user);
-        }elseif($userRole[0]['slug'] == 'parent')
+        }elseif($userRole->slug == 'parent')
         {
-
-            return view('editParent')->with('user',$user);
+            $students=User::where('parent_id',$user->id)->get();
+            return view('editParent')->with(compact('user','students'));
         }
 
+    }
+    public function editMyChildren($id)
+    {
+        $user=User::where('id',$id)->first();
+        $userData=User::where('id',$user['parent_id'])->first();
+        $user['parentUserName']=$userData->username;
+        $user['parentFirstName']=$userData->first_name;
+        $user['parentLastName']=$userData->last_name;
+        $user['parentEmail']=$userData->email;
+        $user['parentGender']=$userData->gender;
+        $user['parentBirth_date']=$userData->birth_date;
+        $user['parentMobile']=$userData->mobile;
+        $user['parentAddress']=$userData->address;
+        $user['parentAlternateNumber']=$userData->alternate_number;
+        $user['parentAvatar']=$userData->avatar;
+        $division=Division::where('id',$user['division_id'])->first();
+        $class=Classes::where('id',$division->id)->first();
+        $batch=Batch::where('id',$class->batch_id)->first();
+        $user['batch_id']=$batch->id;
+        $user['batch_name']=$batch->slug;
+        $user['class_id']=$class->id;
+        $user['class_name']=$class->slug;
+        $user['division_id']=$division->id;
+        $user['division_name']=$division->slug;
 
-
+        return view('myChildrensEdit')->with(compact('user'));
     }
 
     public function checkEmail(Request $request){
@@ -459,26 +502,31 @@ class UsersController extends Controller
     public function aclUpdate(Request $request,$id)
     {
         $aclRequest=$request->all();
-
-        $acl_mod=$aclRequest['acls'];
-        $aclSeperate=array();
-        foreach($acl_mod as $row)
+        if($aclRequest)
         {
-            array_push($aclSeperate,explode('_',$row));
-        }
+            $acl_mod=$aclRequest['acls'];
+            $aclSeperate=array();
+            foreach($acl_mod as $row)
+            {
+                array_push($aclSeperate,explode('_',$row));
+            }
 
-       ModuleAcl::where('user_id',$id)->delete();
-    $module_acl=array();
-        foreach($aclSeperate as $row)
-        {
-            $module_acl['user_id']=$id;
-            $module_acl['acl_id']=$row[0];
-            $module_acl['module_id']=$row[1];
-            $dml=ModuleAcl::insert($module_acl);
+           ModuleAcl::where('user_id',$id)->delete();
+            $module_acl=array();
+            foreach($aclSeperate as $row)
+            {
+                $module_acl['user_id']=$id;
+                $module_acl['acl_id']=$row[0];
+                $module_acl['module_id']=$row[1];
+                $dml=ModuleAcl::insert($module_acl);
+            }
+            Session::flash('message-success','Acl updated successfully');
+            return Redirect::back();
+        }else{
+            ModuleAcl::where('user_id',$id)->delete();
+            Session::flash('message-success','Acl updated successfully');
+            return Redirect::back();
         }
-        Session::flash('message-success','Acl updated successfully');
-        return Redirect::to('/edit-user/'.$id);
-
     }
 
 
@@ -525,15 +573,6 @@ class UsersController extends Controller
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
-
-    }
-    public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
-    {
-
-    }
-    public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
-    {
-        //dd($request->all());
         $userImage=User::where('id',$id)->first();
         unset($request->_method);
         if($request->hasFile('avatar')){
@@ -549,6 +588,95 @@ class UsersController extends Controller
         else{
             $filename=$userImage->avatar;
 
+        }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $userData['username']= $request->username;
+        $userData['first_name']= $request->firstname;
+        $userData['email']= $request->email;
+        $userData['last_name']= $request->lastname;
+        $userData['gender']= $request->gender;
+        $userData['mobile']= $request->mobile;
+        $userData['alternate_number']= $request->alternate_number;
+        $userData['address']= $request->address;
+        $userData['avatar']= $filename;
+        $userData['birth_date']= $date;
+        $userData['division_id']=$request->division;
+        $userData['roll_number']=$request->roll_number;
+        $homework['division_id'] = $request->division;
+        HomeworkTeacher::where('student_id',$request->id)->update($homework);
+        $leaves['division_id']=$request->division;
+        Leave::where('student_id',$request->id)->update($leaves);
+        $userUpdate=User::where('id',$id)->update($userData);
+        if($userUpdate == 1){
+            Session::flash('message-success','student updated successfully');
+            return Redirect::back();
+        }
+        else{
+            Session::flash('message-error','something went wrong');
+            return Redirect::back();
+        }
+    }
+    public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
+    {
+        $userImage=User::where('id',$id)->first();
+        unset($request->_method);
+        if($request->hasFile('avatar')){
+            $image = $request->file('avatar');
+            $name = $request->file('avatar')->getClientOriginalName();
+            $filename = time()."_".$name;
+            $path = public_path('uploads/profile-picture/');
+            if (! file_exists($path)) {
+                File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+            }
+            $image->move($path,$filename);
+        }
+        else{
+            $filename=$userImage->avatar;
+
+        }
+        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $userData['username']= $request->username;
+        $userData['first_name']= $request->firstname;
+        $userData['email']= $request->email;
+        $userData['last_name']= $request->lastname;
+        $userData['gender']= $request->gender;
+        $userData['mobile']= $request->mobile;
+        $userData['alternate_number']= $request->alternate_number;
+        $userData['address']= $request->address;
+        $userData['avatar']= $filename;
+        $userData['birth_date']= $date;
+        $userData['division_id']=$request->division;
+        $userData['roll_number']=$request->roll_number;
+        $homework['division_id'] = $request->division;
+        HomeworkTeacher::where('student_id',$request->id)->update($homework);
+        $leaves['division_id']=$request->division;
+        Leave::where('student_id',$request->id)->update($leaves);
+        $userUpdate=User::where('id',$id)->update($userData);
+        if($userUpdate == 1){
+            Session::flash('message-success','student updated successfully');
+            return Redirect::back();
+        }
+        else{
+            Session::flash('message-error','something went wrong');
+            return Redirect::back();
+        }
+    }
+    public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
+    {
+        $userImage=User::where('id',$id)->first();
+        unset($request->_method);
+        if($request->hasFile('avatar')){
+            $image = $request->file('avatar');
+            $name = $request->file('avatar')->getClientOriginalName();
+            $filename = time()."_".$name;
+            $path = public_path('uploads/profile-picture/');
+            if (! file_exists($path)) {
+                File::makeDirectory('uploads/profile-picture/', $mode = 0777, true, true);
+            }
+            $image->move($path,$filename);
+        }
+        else{
+            $filename=$userImage->avatar;
         }
         if(in_array('web_view',$request->access)){
             $teacherView['web_view']=1;
@@ -583,11 +711,11 @@ class UsersController extends Controller
                   where('class_id',$request->class)->update(array('class_teacher_id'=>$id));
         if($userUpdate == 1){
             Session::flash('message-success','teacher updated successfully');
-            return Redirect::to('/edit-user/'.$id);
+            return Redirect::back();
         }
         else{
             Session::flash('message-error','something went wrong');
-            return Redirect::to('/edit-user/'.$id);
+            return Redirect::back();
         }
     }
 
@@ -705,7 +833,7 @@ class UsersController extends Controller
         $user=Auth::user();
         $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
         $batchList = $batchData->toArray();
-        return $batchData;
+        return $batchList;
     }
     public function getClasses($id){
         $classData = Classes::where('batch_id', $id)->select('id','class_name')->get();
@@ -719,6 +847,23 @@ class UsersController extends Controller
         return $divisionList;
     }
 
+    public function getBatch(){
+        $user=Auth::user();
+        $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
+        $batchList = $batchData->toArray();
+        return $batchData;
+    }
+    public function getClass($id){
+        $classData = Classes::where('batch_id', $id)->select('id','class_name')->get();
+        $classList = $classData->toArray();
+        return $classList;
+    }
+
+    public function getDiv($id){
+        $divisionData = Division::where('class_id', $id)->select('id','division_name')->get();
+        $divisionList = $divisionData->toArray();
+        return $divisionList;
+    }
     public function getParents(){
         $user=Auth::user();
         $userInformation =array();
