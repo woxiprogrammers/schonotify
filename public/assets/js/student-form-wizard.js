@@ -2,7 +2,7 @@ var FormWizard = function () {
 
     "use strict";
     var wizardContent = $('#wizard');
-    var wizardForm = $('#form');
+    var wizardForm = $('#student-registration-form');
     var numberOfSteps = $('.swMain > ul > li').length;
     var initWizard = function () {
         // function to initiate Wizard Form
@@ -29,6 +29,9 @@ var FormWizard = function () {
         if ($("#checkbox8").is(":checked") && ($.trim(val) == '')) { return false; }
         return true;
     }, "This field is required if Make as Class Teacher is checked...");
+    $.validator.addMethod("alphanumeric", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
+    });
     var initValidator = function () {
 
         $.validator.setDefaults({
@@ -46,7 +49,6 @@ var FormWizard = function () {
                     required: true
                 },
                 email: {
-                    required: true,
                     email: true
                 },
                 password: {
@@ -92,21 +94,25 @@ var FormWizard = function () {
                 },
                 parent_name:{
                     required:true
+                },
+                userName:{
+                    minlength: 2,
+                    required: true,
+                    alphanumeric: true
                 }
 
             },
             messages: {
                 firstName: {
                     required: "First Name is required" ,
-                    alpha: "First name must contain only letters"
+                    alpha: "First name must contain only letters OR Space added"
                 },
                 lastName: {
                     required: "Last Name is required",
-                    alpha: "Last name must contain only letters"
+                    alpha: "Last name must contain only letters OR Space added"
                 },
                 studid:"please provide correct student id",
                 email: {
-                    required: "We need your email address to contact you",
                     email: "Your email address must be in the format of name@domain.com"
                 },
                 address:{
@@ -140,6 +146,10 @@ var FormWizard = function () {
                 },
                 'division':{
                     required:"Please Select Division"
+                },
+                'userName':{
+                    required:"User name is required",
+                    alphanumeric: "User name must contain only letters ,Numbers OR Space added"
                 }
             },
 
@@ -212,7 +222,7 @@ var FormWizard = function () {
 
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#form').serialize();
+            var form=$('#student-registration-form').serialize();
             $.ajax({
                 url:'save-user',
                 data: form,

@@ -26,27 +26,50 @@ class MessageController extends Controller
         try {
             $data = $request->all();
             $sender = $data['teacher']['id'];
-           // $receiver = $id;
             $messages = Message::where('to_id',$sender)
                                 ->orwhere('from_id',$sender)
                                 ->get();
             $message = $messages->toArray();
-            $responseData['messages']= $message;
+            $i=0;
+        foreach($message as $value)
+        {
+            if($data['teacher']['id']==$value['from_id'])
+            {
+                  $receiverName = User::where('id','=',$value['to_id'])
+                                ->select('first_name', 'last_name')->first();
+            }else{
+                $receiverName = User::where('id','=',$value['from_id'])
+                                ->select('first_name', 'last_name')->first();
+            }
+            $receiver= $receiverName['first_name']." ".$receiverName['last_name'];
+            $finalMessageData[$receiver][$i]['message_id']=$value['id'];
+            $finalMessageData[$receiver][$i]['user_id']=$data['teacher']['id'];
+            $finalMessageData[$receiver][$i]['from_id']=$value['from_id'];
+            $finalMessageData[$receiver][$i]['to_id']=$value['to_id'];
+            $finalMessageData[$receiver][$i]['description']=$value['description'];
+            $finalSender=User::where('id','=',$value['from_id'])->select('first_name', 'last_name')->first();
+            $finalSenderName=$finalSender['first_name']." ".$finalSender['last_name'];
+            $finalReceiver = User::where('id','=',$value['to_id'])->select('first_name', 'last_name')->first();
+            $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
+            $finalMessageData[$receiver][$i]['sender_name']=$finalSenderName;
+            $finalMessageData[$receiver][$i]['receiver_name']=$finalReceiverName;
+            $finalMessageData[$receiver][$i]['timestamp']=$value['timestamp'];
+            $finalMessageData[$receiver][$i]['read_status']=$value['read_status'];
+            $i++;
+         }
             $status = 200;
-            $message = 'Successful';
+            $message = "Success";
         } catch (\Exception $e) {
-            echo $e->getMessage();
             $status = 500;
-            $message = "something went wrong";
+            $message = "something went wrong". $e->getMessage();
         }
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $responseData
+            "data" => $finalMessageData
         ];
         return response($response, $status);
     }
-
    public function getMessageList(Request $request){
         try {
             $data = $request->all();
@@ -157,9 +180,14 @@ class MessageController extends Controller
     public function getTeachers(){
         try{
             $teacher_id = UserRoles::whereIn('slug', ['teacher'])->pluck('id');
-            $teacher = User::where('role_id',$teacher_id)->get();
-            $teachers = $teacher->toArray();
-            $responseData['teachers']= $teachers;
+            $teacher = User::where('role_id',$teacher_id)->get()->toArray();
+            $i=0;
+            foreach($teacher as $value){
+                $teacherData[$i]['id']=$value['id'];
+                $teacherData[$i]['name']=$value['first_name']." ".$value['first_name'];
+                $i++;
+            }
+            $responseData['teachers']= $teacherData;
             $status = 200;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
@@ -195,13 +223,18 @@ class MessageController extends Controller
         ];
         return response($response, $status);
     }
-
     public function getStudentList(Request $request){
         try{
             $student_id = UserRoles::whereIn('slug', ['student'])->pluck('id');
-            $student = User::where('role_id',$student_id)->where('division_id',$request->division)->get();
-            $students = $student->toArray();
-            $responseData['studentList']= $students;
+            $student = User::where('role_id',$student_id)->where('division_id',$request->division)
+                                ->select('id','first_name', 'last_name')
+                                ->get()->toArray();
+            $i=0;
+            foreach($student as $value){
+                $responseData['studentList'][$i]['id']= $value['id'];
+                $responseData['studentList'][$i]['name']= $value['first_name']."".$value['last_name'];
+                $i++;
+            }
             $status = 200;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
@@ -216,7 +249,6 @@ class MessageController extends Controller
         ];
         return response($response, $status);
     }
-
     public function sendMessage(Requests\Message $request){
         try{
             $data = $request->all();
@@ -241,7 +273,5 @@ class MessageController extends Controller
             "status" => $status,
         ];
         return response($response, $status);
-
     }
-
 }

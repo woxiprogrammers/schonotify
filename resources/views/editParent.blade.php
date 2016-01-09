@@ -192,12 +192,12 @@
                                                 @foreach($students as $student)
                                                 <tr>
                                                     <td>{!! $student->first_name !!} {!! $student->last_name !!}</td>
-                                                    <td><a data-toggle="modal" data-target="#myChildrensEdit{!! $student->id !!}">Edit <i class="fa fa-pencil edit-user-info"></i></a></td>
+                                                    <td><a href="/edit-mychildrens/{!!  $student->id !!}">Edit <i class="fa fa-pencil edit-user-info"></i></a></td>
                                                 </tr>
                                                 @endforeach
                                             </table>
                                             </div>
-                                            @include('myChildrensEdit')
+
                                         </div>
                                     </div>
                                 </div>
