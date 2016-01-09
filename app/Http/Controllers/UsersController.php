@@ -85,17 +85,18 @@ class UsersController extends Controller
           $userData['last_name']= $request->lastname;
           $userData['gender']= $request->gender;
           $userData['mobile']= $request->mobile;
+          $userData['alternate_number']= $request->alternate_number;
           $userData['address']= $request->address;
           $userData['avatar']= $filename;
           $userData['birth_date']= $date;
         $userUpdate=User::where('id',$id)->update($userData);
             if($userUpdate == 1){
                 Session::flash('message-success','profile updated successfully');
-               return Redirect::to('/myProfile');
+               return Redirect::back();
             }
             else{
                 Session::flash('message-error','something went wrong');
-                return Redirect::to('/myProfile');
+                return Redirect::back();
             }
 
     }
@@ -449,7 +450,6 @@ class UsersController extends Controller
             $user['class_name']=$class->slug;
             $user['division_id']=$division->id;
             $user['division_name']=$division->slug;
-            dd($user->toArray());
             return view('editStudent')->with('user',$user);
         }elseif($userRole->slug == 'parent')
         {
