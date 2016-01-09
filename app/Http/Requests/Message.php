@@ -49,9 +49,7 @@ class Message extends Request
                 break;
             case 'POST':
                 return [
-                    'token' => 'required',
                     'to_id' => 'required|integer',
-                    'description' => 'required'
                 ];
                 break;
             default:
