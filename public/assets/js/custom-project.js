@@ -170,7 +170,7 @@ function toggle(){
 function alertError()
 {
     var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
-        ' You currently do not have view access to your messages. Please contact administrator to grant you access'+
+        ' You currently do not have permission to access this functionality. Please contact administrator to grant you access'+
         '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
             '<span area-hidden="true">&times;</span>'+
         '</button>'+
