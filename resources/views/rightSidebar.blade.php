@@ -1,8 +1,7 @@
 <div id="off-sidebar" class="sidebar">
 <div class="sidebar-wrapper">
 <ul class="nav nav-tabs nav-justified">
-    @foreach(session('functionArr') as $row)
-    @if($row == 'create_message')
+    @if(in_array('create_message',array_values(session('functionArr'))))
     <li>
         <a href="#off-users" aria-controls="off-users" role="tab" data-toggle="modal" data-target="#compose-msg" id="message">
             <i class="ti-comments"></i>Compose Message
@@ -10,9 +9,13 @@
         </a>
 
     </li>
+    @else
+    <li>
+        <a href="#off-users" aria-controls="off-users" role="tab" id="message" onclick="alertError()">
+            <i class="ti-comments"></i>Compose Message
+        </a>
+    </li>
     @endif
-    @endforeach
-
 </ul>
 
 <div class="tab-content">
@@ -33,8 +36,7 @@
 </ol>
 </div>
 </div>
-    @foreach(session('functionArr') as $row)
-    @if($row == 'create_message')
+    @if(in_array('create_message',array_values(session('functionArr'))))
     <div class="message-bar">
         <div class="message-inner">
             <a class="link icon-only" href="#"><i class="fa fa-camera"></i></a>
@@ -46,8 +48,19 @@
             </a>
         </div>
     </div>
+    @else
+    <div class="message-bar">
+        <div class="message-inner">
+            <a class="link icon-only" href="#"><i class="fa fa-camera"></i></a>
+            <div class="message-area">
+                <textarea placeholder="Message"  disabled></textarea>
+            </div>
+            <a class="link"  onclick="alertError()" disabled>
+                Send
+            </a>
+        </div>
+    </div>
     @endif
-    @endforeach
 </div>
 </div>
 </div>

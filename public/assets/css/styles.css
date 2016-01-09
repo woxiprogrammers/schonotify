@@ -11721,3 +11721,7 @@ a.control_next {
     height: 50px;
     width: 50px;
 }
+
+.nav-tabs.nav-justified>li>a#message{
+    text-align: right;
+}
