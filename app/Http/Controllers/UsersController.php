@@ -305,6 +305,7 @@ class UsersController extends Controller
             $userData->mobile = $data['mobile'];
             $userData->alternate_number = $data['alt_number'];
             $userData->role_id = $data['role'];
+            $userData->avatar = 'default-user.png';
             $userData->is_active = 0;
             $userData->remember_token = csrf_token();
             $userData->body_id = $user->body_id;
