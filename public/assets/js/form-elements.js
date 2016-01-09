@@ -88,11 +88,12 @@ var FormElements = function() {"use strict";
 	};
 	var datePickerHandler = function() {
 		$('.datepicker').datepicker({
-			autoclose: true,
+           	autoclose: true,
 			todayHighlight: true
 		});
 		$('.format-datepicker').datepicker({
-			format:  "M, d yyyy",
+
+            format:  "M, d yyyy",
 			todayHighlight: true
 		});
 		

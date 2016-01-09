@@ -384,23 +384,29 @@ var FormValidator = function () {
             },
             ignore: "",
             rules: {
-                username: {
-                    required: true
-                },
                 firstname: {
+                    minlength: 2,
                     required: true
                 },
                 lastname: {
+                    minlength: 2,
                     required: true
                 },
                 email: {
-                    required: true
+                    required: true,
+                    email: true
                 },
-                mobile: {
-                    required: true
+                mobile:{
+                    required: true,
+                    minlength:10,
+                    maxlength:10
                 },
-                address: {
-                    required: true
+                alternate_number:{
+                    minlength:10,
+                    maxlength:10
+                },
+                address:{
+                    required:true
                 }
 
             },
@@ -474,7 +480,7 @@ var FormValidator = function () {
             messages: {
 
                 description:{
-                    required:"Please Enter Description",
+                    required:"Meassage is required",
                     minlength:"Meassage must be at least 2 characters "
                 },
                 user_id:{
@@ -544,7 +550,7 @@ var FormValidator = function () {
             messages: {
 
                 description:{
-                    required:"Please Enter Description",
+                    required:"Meassage is required",
                     minlength:"Meassage must be at least 2 characters "
                 },
                 user_id:{
@@ -625,7 +631,7 @@ var FormValidator = function () {
             messages: {
 
                 description:{
-                    required:"Please Enter Description",
+                    required:"Meassage is required",
                     minlength:"Meassage must be at least 2 characters "
                 },
                 user_id:{

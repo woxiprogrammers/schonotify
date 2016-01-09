@@ -68,10 +68,8 @@
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail"></div>
                             <div class="user-image-buttons">
-																			<span class="btn btn-azure btn-file btn-sm"><span class="fileinput-new"></span><span class="fileinput-exists"><i class="fa fa-pencil"></i></span>
-																				<input type="file">
-																			</span>
-                                <a href="#" class="btn fileinput-exists btn-red btn-sm" data-dismiss="fileinput">
+
+                                <a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a>
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
@@ -170,7 +168,7 @@
 </div>
 <div id="panel_edit_account" class="tab-pane fade">
     <form id="form4" method="post" action="my-profile/{!! $user->id !!}"  enctype="multipart/form-data">
-       <input name="_method" type="hidden" value="PUT">
+        <input name="_method" type="hidden" value="PUT">
         <fieldset>
             <legend>
                 Account Info
@@ -195,21 +193,19 @@
                         </label>
                         <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
                     </div>
-
                     <div class="form-group">
                         <label class="control-label">
                             Email Address
                         </label>
-                        <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
+                        <input type="email" readonly placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
+                        <div class="" id="emailfeedback" ></div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">
                             Phone
                         </label>
                         <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
-
                     </div>
-
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -233,19 +229,25 @@
                         <label class="control-label">
                             Address
                         </label>
-                        <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
+                        <textarea maxlength="250"  id="address" name="address"  class="form-control limited">{!! $user->address !!}</textarea>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Date of Birth </label>
                         <div class="input-group input-append datepicker date col-sm-6">
                             <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
-								<span class="input-group-btn">
-									<button type="button" class="btn btn-default">
-                                         <i class="glyphicon glyphicon-calendar"></i>
-                                    </button> </span>
+                                                                    <span class="input-group-btn">
+                                                                        <button type="button" class="btn btn-default">
+                                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                                        </button>
+                                                                    </span>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Alternate number
+                        </label>
+                        <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
 
-<!--                            <input class="form-control format-datepicker" type="text">-->
                     </div>
                     <div class="form-group">
                         <label>
@@ -254,21 +256,20 @@
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail  col-sm-4">
 
-                                <img src="uploads/profile-picture/{!! $user->avatar !!}" alt="">
+                                <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
 
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
                             <div class="user-edit-image-buttons pull-right col-sm-6">
-																			<span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
-																				<input type="file" name="avatar" >
-																			</span>
+                                                                                <span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
+                                                                                    <input type="file" name="avatar" >
+                                                                                </span>
                                 <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
                                     <i class="fa fa-times"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </fieldset>
@@ -276,7 +277,7 @@
         <div class="row">
 
             <div class="col-md-4">
-               <button class="btn btn-primary pull-right" type="submit" >
+                <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
                     Update <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
@@ -364,9 +365,9 @@
 <script src="vendor/selectFx/classie.js"></script>
 <script src="vendor/selectFx/selectFx.js"></script>
 <script src="vendor/select2/select2.min.js"></script>
-<script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
 
+<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/form-validation.js"></script>
 
