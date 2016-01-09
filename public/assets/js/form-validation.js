@@ -480,7 +480,7 @@ var FormValidator = function () {
             messages: {
 
                 description:{
-                    required:"Please Enter Description",
+                    required:"Meassage is required",
                     minlength:"Meassage must be at least 2 characters "
                 },
                 user_id:{
@@ -550,7 +550,7 @@ var FormValidator = function () {
             messages: {
 
                 description:{
-                    required:"Please Enter Description",
+                    required:"Meassage is required",
                     minlength:"Meassage must be at least 2 characters "
                 },
                 user_id:{
@@ -631,7 +631,7 @@ var FormValidator = function () {
             messages: {
 
                 description:{
-                    required:"Please Enter Description",
+                    required:"Meassage is required",
                     minlength:"Meassage must be at least 2 characters "
                 },
                 user_id:{

@@ -7,207 +7,216 @@
 
 @include('sidebar')
 
-<div class="app-content">
-<!-- start: TOP NAVBAR -->
-@include('header')
+    <div class="app-content">
 
+        @include('header')
 
-<!-- end: TOP NAVBAR -->
-<div class="main-content" >
-<div class="wrap-content container" id="container">
-    @include('alerts.errors')
-    <section id="page-title" class="padding-top-15 padding-bottom-15">
-        <div class="row">
-            <div class="col-sm-7">
-                <h1 class="mainTitle">Edit</h1>
-                <span class="mainDescription">Parent</span>
-            </div>
+        <div class="main-content" >
+            <div class="wrap-content container" id="container">
+                @include('alerts.errors')
 
-        </div>
-        <div id="error-div"></div>
-    </section>
-<!-- end: PAGE TITLE -->
-<!-- start: USER PROFILE -->
-<div class="container-fluid container-fullw bg-white">
-    <div class="row">
-        <div class="col-md-12">
+                <section id="page-title" class="padding-top-15 padding-bottom-15">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <h1 class="mainTitle">Edit</h1>
+                            <span class="mainDescription">Parent</span>
+                        </div>
 
+                    </div>
+                    <div id="error-div"></div>
+                </section>
 
-            <div class="tabbable">
-                <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
+                <div class="container-fluid container-fullw bg-white">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
 
-                    <li class="active">
-                        <a data-toggle="tab" href="#panel_edit_account">
-                            Edit Account
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#panel_module_assigned">
-                            Assigned Modules
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#panel_my_child">
-                            My Children
-                        </a>
-                    </li>
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#panel_edit_account">
+                                            Edit Account
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#panel_module_assigned">
+                                            Assigned Modules
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#panel_my_child">
+                                            My Childrens
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="panel_edit_account" class="tab-pane fade in active ">
+                                        <form id="formEditAccount" method="post" action="/edit-parent/{!! $user->id !!}"  enctype="multipart/form-data">
+                                            <input name="_method" type="hidden" value="PUT">
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Username
+                                                            </label>
+                                                            <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                First name
+                                                            </label>
+                                                            <input type="text" value="{!! $user->first_name !!}" class="form-control" id="firstname" name="firstname">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Last name
+                                                            </label>
+                                                            <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Email Address
+                                                            </label>
+                                                            <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
+                                                            <div class="" id="emailfeedback" ></div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Phone
+                                                            </label>
+                                                            <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Gender
+                                                            </label>
+                                                            <div class="clip-radio radio-primary">
+                                                                <input type="radio" value="F" name="gender" id="us-female" @if($user->gender=='F') checked @endif>
+                                                                <label for="us-female">
+                                                                    Female
+                                                                </label>
 
-                </ul>
-                <div class="tab-content">
-                    <div id="panel_edit_account" class="tab-pane fade in active ">
-                        <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
-                            <input name="_method" type="hidden" value="PUT">
-                            <fieldset>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Username
-                                            </label>
-                                            <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
+                                                                <input type="radio" value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
+
+                                                                <label for="us-male">
+                                                                    Male
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Address
+                                                            </label>
+                                                            <textarea maxlength="250"  id="address" name="address"  class="form-control limited">{!! $user->address !!}</textarea>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">Date of Birth </label>
+                                                            <div class="input-group input-append datepicker date col-sm-6">
+                                                                <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default">
+                                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Alternate number
+                                                            </label>
+                                                            <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>
+                                                                Image Upload
+                                                            </label>
+                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <div class="fileinput-new thumbnail  col-sm-4">
+
+                                                                    <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
+
+                                                                </div>
+                                                                <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
+                                                                <div class="user-edit-image-buttons pull-right col-sm-6">
+                                                                                                <span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
+                                                                                                    <input type="file" name="avatar" >
+                                                                                                </span>
+                                                                    <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
+                                                                        <i class="fa fa-times"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
+                                                        Update <i class="fa fa-arrow-circle-right"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div id="panel_module_assigned" class="tab-pane fade">
+                                        <div class="panel-body">
+                                            <div class="col-sm-10">
+                                                <form id="editAcl" method="post" action="/acl-update/{!! $user->id !!}">
+                                                    <table class="table table-responsive" id="aclMod">
+
+                                                    </table>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-primary pull-right" type="submit" >
+                                                                Update <i class="fa fa-arrow-circle-right"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                First name
-                                            </label>
-                                            <input type="text" value="{!! $user->first_name !!}" class="form-control" id="firstname" name="firstname">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Last name
-                                            </label>
-                                            <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Email Address
-                                            </label>
-                                            <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                                            <div class="" id="emailfeedback" ></div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Phone
-                                            </label>
-                                            <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
+                                    </div>
+                                    <div id="panel_my_child" class="tab-pane fade" id="myChild">
+                                        <div class="panel-body">
+                                            <div class="col-sm-10">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Your Childrens</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                @foreach($students as $student)
+                                                <tr>
+                                                    <td>{!! $student->first_name !!} {!! $student->last_name !!}</td>
+                                                    <td><a href="/edit-mychildrens/{!!  $student->id !!}">Edit <i class="fa fa-pencil edit-user-info"></i></a></td>
+                                                </tr>
+                                                @endforeach
+                                            </table>
+                                            </div>
 
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Gender
-                                            </label>
-                                            <div class="clip-radio radio-primary">
-                                                <input type="radio" value="F" name="gender" id="us-female" @if($user->gender=='F') checked @endif>
-                                                <label for="us-female">
-                                                    Female
-                                                </label>
-
-                                                <input type="radio" value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
-
-                                                <label for="us-male">
-                                                    Male
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Address
-                                            </label>
-                                            <textarea maxlength="250"  id="address" name="address"  class="form-control limited">{!! $user->address !!}</textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Date of Birth </label>
-                                            <div class="input-group input-append datepicker date col-sm-6">
-                                                <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
-								<span class="input-group-btn">
-									<button type="button" class="btn btn-default">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </button> </span>
-                                            </div>
-
-                                            <!--                            <input class="form-control format-datepicker" type="text">-->
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Alternate number
-                                            </label>
-                                            <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
-
-                                        </div>
-                                        <div class="form-group">
-                                        <label>
-                                            Image Upload
-                                        </label>
-                                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                                            <div class="fileinput-new thumbnail  col-sm-4">
-
-                                                <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
-
-                                            </div>
-                                            <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
-                                            <div class="user-edit-image-buttons pull-right col-sm-6">
-																			<span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
-																				<input type="file" name="avatar" >
-																			</span>
-                                                <a href="#" class="btn fileinput-exists btn-red" data-dismiss="fileinput">
-                                                    <i class="fa fa-times"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                     </div>
-                            </fieldset>
-                            <div class="row">
-
-                                <div class="col-md-4">
-                                    <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
-                                        Update <i class="fa fa-arrow-circle-right"></i>
-                                    </button>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
-                        <div class="panel-body">
-                            <div class="col-sm-10">
-                                <form id="form4" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
-                                    <table class="table table-responsive" id="aclMod">
-                                    </table>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <button class="btn btn-primary pull-right" type="submit" >
-                                                Update <i class="fa fa-arrow-circle-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-
-                            </div>
                         </div>
-                    </div>
-                    <div id="panel_my_child" class="tab-pane fade" id="aclMod">
-
                     </div>
                 </div>
 
             </div>
-        </div>
-    </div>
-</div>
-</div>
 
-@include('rightSidebar')
-<!-- end: FOURTH SECTION -->
-</div>
-</div>
-</div>
+        @include('rightSidebar')
+
+        </div>
+
+    </div>
 
 @include('footer')
 
-
+</div>
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -235,6 +244,7 @@
 
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="/assets/js/form-validation.js"></script>
+<script src="/assets/js/form-validation-edit.js"></script>
 
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
@@ -267,23 +277,25 @@
     });
     function userAclModule()
     {
-        var route='/user-module-acl';
+        var route='/user-module-acl-edit/{!! $user->id !!}';
         $.get(route,function(res){
 
             var str;
 
-            var arr=res['allModAclArr'];
+            var allModAclArr=res['allModAclArr'];
 
-            var arr1= $.map(arr,function(index,value){
+            var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
 
-            var arr3=res['allAcls'];
-            var arr2= $.map(arr3,function(index,value){
+            var allAcls=res['allAcls'];
+            var arr2= $.map(allAcls,function(index,value){
                 return [index];
             });
 
-            var arr4=res['userModAclArr'];
+            var userModAclArr=res['userModAclArr'];
+
+            var allModules=res['allModules'];
 
             str+='<tr>'+
                 '<th><b>Modules</b></th>';
@@ -295,7 +307,6 @@
 
             str+='</tr>';
 
-
             for(var i=0; i<arr1.length; i++)
             {
 
@@ -306,14 +317,13 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
                     {
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" >'+
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }
                     str+='</div>'+
@@ -328,16 +338,10 @@
     }
 
 
-
-
 </script>
 
 
 @stop
-
-
-
-
 
 
 

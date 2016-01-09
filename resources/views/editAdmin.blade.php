@@ -160,7 +160,7 @@
                                         </form>
                                     </div>
 
-                                    <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
+                                    <div id="panel_module_assigned" class="tab-pane fade">
                                         <div class="panel-body">
                                             <div class="col-sm-10">
                                                 <form id="editAcl" method="post" action="/acl-update/{!! $user->id !!}">
@@ -190,10 +190,10 @@
 
         </div>
     </div>
-
+    @include('footer')
 </div>
 
-@include('footer')
+
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -313,7 +313,6 @@
             $('#aclMod').html(str);
         });
     }
-
 
 
 
