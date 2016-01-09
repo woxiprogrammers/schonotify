@@ -75,6 +75,7 @@
 
         @include('searchJS')
 
+
 <script>
 
     function statusUser(status,id)
@@ -83,60 +84,29 @@
         if(status==false)
         {
 
-            swal({
-                title: "Are you sure? Do you want to deactive this user.",
-                text: "this user will not get access to his account!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel plx!",
-                closeOnConfirm: false
+            var route='deactive/'+id;
 
-            }, function(isConfirm) {
-                if(isConfirm) {
+            $.get(route,function(res){
+                swal({
+                    title: "Deactivated!",
+                    text: "User has been deactivated!",
+                    type: "error",
+                    confirmButtonColor: "#DD6B55",
+                    closeOnCancel: false
+                });
 
-                    var route='deactive/'+id;
-
-                    $.get(route,function(res){
-
-                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
-                    });
-
-                } else {
-
-
-                    $('status'+id).load('#statusDiv');
-
-                }
             });
 
         }else
         {
-            swal({
-                title: "Are you sure? Do you want to active this user.",
-                text: "this user will get access to his account!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, Active it!",
-                cancelButtonText: "No, cancel plx!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            }, function(isConfirm) {
-                if(isConfirm) {
-                    var route='active/'+id;
 
-                    $.get(route,function(res){
-                        console.log(res);
-                        swal("Activated!", "User has been activated.", "success");
-                    });
+            var route='active/'+id;
 
-                } else {
-                    swal("Cancelled", "Your imaginary file is safe :)", "error");
-                    $('#status'+id).prop('checked', false);
-                }
+            $.get(route,function(res){
+                console.log(res);
+                swal("Activated!", "User has been activated.", "success");
             });
+
         }
 
     }
