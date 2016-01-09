@@ -169,6 +169,8 @@ Route::post('acl-update/{id}','UsersController@aclUpdate');
 
 Route::get('user-module-acl-edit/{id}','UsersController@userModuleAclsEdit');
 
+Route::get('edit-mychildrens/{id}','UsersController@editMyChildren');
+
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
@@ -201,6 +203,9 @@ Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivi
 
 
     Route::get('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
+
+    Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
+
     Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
     Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
