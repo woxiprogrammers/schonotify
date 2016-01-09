@@ -67,14 +67,14 @@
 
                                         <div class="col-md-4">
                                             <label>Add New Batch</label>
-                                            <button type="button" class="btn btn-wide btn-primary " data-toggle="modal" data-target=".bs-example-modal-lg"><i class="ti-plus"></i></button>
+                                            <button type="button" class="btn btn-wide btn-primary " data-toggle="modal" data-target="#batchModal"><i class="ti-plus"></i></button>
                                         </div>
 
                                 </form>
                             </div>
                         </div>
 
-                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" id="batchModal">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
