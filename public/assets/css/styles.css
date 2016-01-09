@@ -11725,3 +11725,8 @@ a.control_next {
 .nav-tabs.nav-justified>li>a#message{
     text-align: right;
 }
+
+.message-wrap{
+    word-wrap: break-word;
+    width: 200px;
+}

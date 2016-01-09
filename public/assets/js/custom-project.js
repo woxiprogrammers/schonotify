@@ -14,7 +14,7 @@ function doListing(id) {
                 str+='<li class="self">'+
                     '<input type="hidden" name="to_id" id="to_id" value="'+ id +'" />'+
                     '<div class="message">'+
-                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
+                    '<div class="message-wrap message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
@@ -22,7 +22,7 @@ function doListing(id) {
             }else{
                 str+='<li class="other">'+
                     '<div class="message">'+
-                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
+                    '<div class="message-wrap message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
@@ -48,7 +48,7 @@ $('#send-msg').click(function() {
             if(res[i]['to_id'] == val){
                 str+='<li class="other">'+
                     '<div class="message">'+
-                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
+                    '<div class="message-wrap message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
@@ -58,7 +58,7 @@ $('#send-msg').click(function() {
                     '<li class="self">'+
                     '<input type="hidden" name="to_id" id="to_id" value="'+ val +'" />'+
                     '<div class="message">'+
-                    '<div class="message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
+                    '<div class="message-wrap message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
                     '</div>'+
                     '</div>'+
