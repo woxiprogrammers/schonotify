@@ -135,6 +135,12 @@ Route::get('detailedHomework','HomeworkController@detailedHomework');
 
 Route::get('createHomework','HomeworkController@createHomework');
 
+Route::post('create-homework','HomeworkController@homeworkCreate');
+
+Route::get('get-subject-divisions/{id}',array('uses' => 'HomeworkController@getSubjectDiv'));
+
+Route::get('get-division-students/{id}',array('uses' => 'HomeworkController@getStudentData'));
+
 Route::get('results','ResultController@showResults');
 
 Route::get('exams/{id}','ResultController@examResults');
@@ -184,6 +190,8 @@ Route::post('compose-message',array('uses'=>'MessageController@composeMessage'))
 Route::get('get-batches-teacher','UsersController@getBatchesTeacher');
 Route::get('get-classes-teacher/{id}',array('uses' => 'UsersController@getClassesTeacher'));
 Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivisionsTeacher'));
+
+Route::get('get-subject-batches/{id}','HomeworkController@getSubjectBatches');
 
 
 

@@ -29,7 +29,7 @@
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
-    <form action="#" role="form" id="form2">
+    <form action="/create-homework" method="post" role="form" id="form2">
         <div class="row">
             <div class="col-md-12">
                 <div class="errorHandler alert alert-danger no-display">
@@ -44,21 +44,20 @@
                     <label for="form-field-select-2">
                         Select Subject
                     </label>
-                    <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
-                        <option value="1">Marathi</option>
-                        <option value="2">English</option>
-                        <option value="3">History</option>
+                    <select class="form-control" id="subjectsDropdown" style="-webkit-appearance: menulist;" name="subjectsDropdown">
+                        @foreach($homework as $home)
+                        <option value="{!! $home['subject_id'] !!}">{!! $home['subjects'] !!}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="control-label">
                         Homework Type <span class="symbol required"></span>
                     </label>
-                    <select class="form-control" style="-webkit-appearance: menulist;">
-                        <option value="1">Assignment</option>
-                        <option value="2">Quiz</option>
-                        <option value="3">Class Test</option>
-                        <option value="4">Other</option>
+                    <select class="form-control" style="-webkit-appearance: menulist;" name="">
+                        @foreach($homeworkTypes as $home)
+                        <option value="{!! $home['type_id'] !!}">{!! $home['type_slug'] !!}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
@@ -97,42 +96,24 @@
                             Select Batch
                         </label>
                         <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
-                            <option value="1">morning</option>
-                            <option value="2">evening</option>
+
+                            <option value="">Select Batch</option>
+
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label">
                             Class <span class="symbol required"></span>
                         </label>
-                        <select class="form-control" style="-webkit-appearance: menulist;">
-                            <option value="1">First</option>
-                            <option value="2">Second</option>
-                            <option value="3">Third</option>
-                            <option value="4">Fourth</option>
-                            <option value="5">Fifth</option>
-                            <option value="6">Sixth</option>
+                        <select class="form-control" style="-webkit-appearance: menulist;" name="classDropdown" id="classDropdown">
+                            <option value="">please select class</option>
+
+
                         </select>
                     </div>
                     <div class="form-group">
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="FirstDiv" id="service6" >
-                            <label for="service6">
-                                A
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="FirstDiv" id="service7" >
-                            <label for="service7">
-                                B
-                            </label>
-                        </div>
-                        <div class="checkbox clip-check check-primary checkbox-inline">
-                            <input type="checkbox" value="" class="FirstDiv" id="service8">
-                            <label for="service8">
-                                C
-                            </label>
-                        </div>
+                        <div id="division"></div>
+
                     </div>
                 </div>
             </div>
@@ -149,36 +130,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><input type="checkbox" class="checkedStud1"/></td>
-                        <td>102</td>
-                        <td>Vinit Singh</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="checkedStud1"/></td>
-                        <td>103</td>
-                        <td>Arjun Kale</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="checkedStud1"/></td>
-                        <td>104</td>
-                        <td>Yash Patil</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="checkedStud1"/></td>
-                        <td>105</td>
-                        <td>N Yadav</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="checkedStud1"/></td>
-                        <td>106</td>
-                        <td>Sunny Rao</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="checkedStud1"/></td>
-                        <td>107</td>
-                        <td>Karan Sharma</td>
-                    </tr>
+                    <div id="studentList"></div>
+
+
 
                     </tbody>
 
@@ -303,7 +257,59 @@
             });
         }
     });
+    $("#classDropdown").change(function() {
+        var id = this.value;
+        var route='get-subject-divisions/'+id;
+        $.get(route,function(res){
+            var str = "";
+            for(var i=0; i<res.length; i++){
+                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
 
+                    '<input type="checkbox" value="'+res[i][id]+'" class="FirstDiv" id="'+res[i]['division_name']+'" >'+
+                    '<label for="'+res[i]['division_name']+'">'+
+                    ''+res[i]['division_name']+''+
+                    '</label>'+
+                    '</div>';
+            }
+            $('#division').html(str);
+        });
+    });
+
+    $("#division").change(function() {
+        var id = this.value;
+        var route='get-division-students/'+id;
+    $.get(route,function(res){
+
+        var str = "";
+        for(var i=0; i<res.length; i++){
+            str+=' <tr>'+
+                '<td><input type="checkbox" class="checkedStud1"/></td>'+
+                '<td>102</td>'+
+                '<td>Vinit Singh</td>'+
+            '</tr>';
+        }
+        $('#studentList').html(str);
+    });
+    });
+    $('#subjectsDropdown').change(function(){
+        var id=this.value;
+        var route='get-subject-batches/'+id;
+        $.get(route,function(res){
+            var batch= $.map(res,function(value,index){
+                return value;
+            });
+            var str="";
+            for(var i=0; i<batch.length; i++)
+            {
+                str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch_slug']+'</option>';
+            }
+            $('#batch-select').html(str);
+        });
+    });
+
+    $('#batch-select').change(function(){
+
+    });
 
 </script>
 
