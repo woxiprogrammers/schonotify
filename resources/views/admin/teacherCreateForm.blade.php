@@ -146,27 +146,32 @@
                             <label class="control-label">
                                 Email <span class="symbol required"></span>
                             </label>
-                            <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email">
+                            <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" id="email">
                             <div class="" id="emailfeedback" ></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
-                                Allow For
+                                Allow For <em>(select at least One)</em> <span class="symbol required"></span>
                             </label>
                             <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" id="checkbox6" name ="web-access" value="1" checked>
+                                <input  type="checkbox" value="web" name="access[]" id="checkbox6">
                                 <label for="checkbox6">
                                     Web Access
                                 </label>
-                                <input type="checkbox" id="checkbox7" name ="mobile-access" value="1">
+                            </div>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" value="mobile" name="access[]" id="checkbox7">
                                 <label for="checkbox7">
                                     Mobile Access
                                 </label>
                             </div>
+                            <div >
+                                <input style="opacity:0; position:absolute; left:9999px;" type="checkbox" value="" name="access[]" id="checkbox8">
+                            </div>
                         </div>
-                    </div>
+                       </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -219,8 +224,8 @@
                                 Make Class Teacher
                             </label>
                             <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" id="checkbox8" value="1" onchange="clsTeacher(this.checked)" name="class-teacher">
-                                <label for="checkbox8">
+                                <input type="checkbox" id="checkbox9" value="1" onchange="clsTeacher(this.checked)" name="class-teacher">
+                                <label for="checkbox9">
                                     Approve
                                 </label>
 
@@ -229,7 +234,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" id="clstchr_batch" style="display:none;">
-                            <label>
+                            <label class="control-label">
                                 Select Batch
                             </label>
                             <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
@@ -238,7 +243,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" id="clstchr_class" style="display:none;" >
-                            <label>
+                            <label class="control-label">
                                 Select Class
                             </label>
                             <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
@@ -247,7 +252,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group" id="clstchr_div" style="display:none;">
-                            <label>
+                            <label class="control-label">
                                 Select Division
                             </label>
                             <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">

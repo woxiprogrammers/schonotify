@@ -42,7 +42,7 @@ class UserRequest extends Request
                     return true;
                 } else {
 
-                    Session::flash('message-error','you don`t have access');
+                    Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
                     return Redirect::to('/');
                 }
 
@@ -78,7 +78,7 @@ class UserRequest extends Request
                 'password' => 'required|min:6',
                 'password2' => 'required|min:6',
                 'mobile' => 'required|min:10',
-                'alt_number' => 'required|min:10',
+                'alt_number' => 'min:10',
                 'email' => 'required|email',
                 'address' => 'required|min:15'
             ];
