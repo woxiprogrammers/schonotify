@@ -8,7 +8,7 @@
 	<!-- start: HEAD -->
 	<!-- start: HEAD -->
 	<head>
-		<title>Clip-Two - Responsive Admin Template</title>
+		<title>VEZA</title>
 		<!-- start: META -->
 		<!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
 		<meta charset="utf-8" />
@@ -48,7 +48,7 @@
 				</div>
 				<!-- start: FORGOT BOX -->
 				<div class="box-forgot">
-					<form class="form-forgot">
+					<form class="form-forgot" action="password/email" method="post">
 						<fieldset>
 							<legend>
 								Forget Password?
@@ -73,7 +73,7 @@
 					</form>
 					<!-- start: COPYRIGHT -->
 					<div class="copyright">
-						&copy; <span class="current-year"></span><span class="text-bold text-uppercase"> ClipTheme</span>. <span>All rights reserved</span>
+						&copy; <span class="current-year"></span><span class="text-bold text-uppercase"> VEZA</span>. <span>ALL RIGHTS RESERVED</span>
 					</div>
 					<!-- end: COPYRIGHT -->
 				</div>

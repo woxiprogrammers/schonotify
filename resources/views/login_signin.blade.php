@@ -38,7 +38,7 @@
 								<span class="input-icon">
 									<input type="password" class="form-control password" name="password" placeholder="Password">
 									<i class="fa fa-lock"></i>
-									<a class="forgot" href="forgot">
+									<a class="forgot" href="password/email">
 										I forgot my password
 									</a> </span>
 							</div>
