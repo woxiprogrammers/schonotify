@@ -146,7 +146,7 @@
                         </a>
                     </li>-->
                     <li>
-                        <a href="logout">
+                        <a href="/logout">
                             Log Out
                         </a>
                     </li>
