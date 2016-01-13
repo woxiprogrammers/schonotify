@@ -305,6 +305,7 @@ class UsersController extends Controller
             $userData= new User;
             $userData->first_name = $data['firstName'];
             $userData->last_name = $data['lastName'];
+            $userData->username = $data['userName'];
             $userData->password = bcrypt($data['password']);
             $userData->email = $data['email'];
             $userData->gender = $data['gender'];
@@ -332,11 +333,14 @@ class UsersController extends Controller
                 }
                 $teacherViews['web_view']= 0;
                 $teacherViews['mobile_view']= 0;
-                if(isset($data['web-access'])){
-                    $teacherViews['web_view'] = $data['web-access'];
-                }
-                if(isset($data['mobile-access'])){
-                    $teacherViews['mobile_view'] = $data['mobile-access'];
+                if(!empty($data['access'])){
+                    foreach($data['access'] as $report_id){
+                        if($report_id == 'web'){
+                            $teacherViews['web_view']= 1;
+                        }else{
+                            $teacherViews['mobile_view']=1;
+                        }
+                    }
                 }
                 $teacherViews['user_id'] = $LastInsertId;
                 $teacherViews['created_at'] = Carbon::now();
@@ -503,7 +507,7 @@ class UsersController extends Controller
     public function checkEmail(Request $request){
         if($request->ajax()){
             $data = $request->all();
-            $email = $data['email'];
+            $email = trim($data['email']);
             $userCount = User::where('email',$email)->count();
             if($userCount >= 1){
                 $count = '1';
@@ -909,7 +913,7 @@ class UsersController extends Controller
 
         if($request->ajax()){
             $data = $request->all();
-            $userName = $data['name'];
+            $userName = trim($data['name']);
             $userCount = User::where('username',$userName)->count();
             if($userCount >= 1){
                 $count = '1';
