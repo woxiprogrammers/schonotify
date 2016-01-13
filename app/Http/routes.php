@@ -137,9 +137,9 @@ Route::get('createHomework','HomeworkController@createHomework');
 
 Route::post('create-homework','HomeworkController@homeworkCreate');
 
-Route::get('get-subject-divisions/{id}',array('uses' => 'HomeworkController@getSubjectDiv'));
+Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
-Route::get('get-division-students/{id}',array('uses' => 'HomeworkController@getStudentData'));
+Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
 
 Route::get('results','ResultController@showResults');
 
@@ -193,7 +193,7 @@ Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivi
 
 Route::get('get-subject-batches/{id}','HomeworkController@getSubjectBatches');
 
-
+Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjectClass');
 
 /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {

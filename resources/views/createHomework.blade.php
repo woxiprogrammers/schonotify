@@ -29,7 +29,7 @@
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
-    <form action="/create-homework" method="post" role="form" id="form2">
+    <form action="/create-homework" method="post" role="form" id="form2" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-12">
                 <div class="errorHandler alert alert-danger no-display">
@@ -45,6 +45,7 @@
                         Select Subject
                     </label>
                     <select class="form-control" id="subjectsDropdown" style="-webkit-appearance: menulist;" name="subjectsDropdown">
+                        <option value="">select subject</option>
                         @foreach($homework as $home)
                         <option value="{!! $home['subject_id'] !!}">{!! $home['subjects'] !!}</option>
                         @endforeach
@@ -54,7 +55,7 @@
                     <label class="control-label">
                         Homework Type <span class="symbol required"></span>
                     </label>
-                    <select class="form-control" style="-webkit-appearance: menulist;" name="">
+                    <select class="form-control" style="-webkit-appearance: menulist;" name="homeworkType">
                         @foreach($homeworkTypes as $home)
                         <option value="{!! $home['type_id'] !!}">{!! $home['type_slug'] !!}</option>
                         @endforeach
@@ -70,14 +71,14 @@
                     <label class="control-label">
                         Description <span class="symbol required"></span>
                     </label>
-                    <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px; margin-bottom: 8px;"></textarea>
+                    <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;"></textarea>
                 </div>
                 <div>
                     <label class="control-label">
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input id="input" size="1" type="file" />
+                        <input id="input" size="1" type="file" name="pdfFile" />
                     </div>
                     <br>
                 </div>
@@ -88,16 +89,16 @@
                         <label class="control-label">
                             Due Date <span class="symbol required"></span>
                         </label>
-                        <input class="form-control datepicker" type="text">
+                        <input class="form-control datepicker" type="text" name="dueDate">
                     </div>
                     <h4>Assign Homework to: </h4>
                     <div class="form-group">
                         <label for="form-field-select-2">
                             Select Batch
                         </label>
-                        <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                        <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;" name="batch">
 
-                            <option value="">Select Batch</option>
+
 
                         </select>
                     </div>
@@ -106,7 +107,7 @@
                             Class <span class="symbol required"></span>
                         </label>
                         <select class="form-control" style="-webkit-appearance: menulist;" name="classDropdown" id="classDropdown">
-                            <option value="">please select class</option>
+
 
 
                         </select>
@@ -124,13 +125,14 @@
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
                     <tr>
-                        <th><input type="checkbox" class="allCheckedStud1" checked/> <span class="position-absolute padding-left-5"><b>Select all</b></span></th>
+                        <th><input type="checkbox" class="allCheckedStud1" checked/> <span class="position-absolute padding-left-5"><b>Select </b></span></th>
                         <th>Roll No.</th>
                         <th>Name</th>
+                        <th>Division</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <div id="studentList"></div>
+                    <tbody id="studentList">
+
 
 
 
@@ -140,10 +142,10 @@
             </div>
                 <div class="col-md-12 form-group">
 
-                        <button class="btn btn-wide btn-primary ladda-button" data-style="expand-left" type="button">
-                            <span class="ladda-label">Save</span>
-                            <span class="ladda-spinner"></span><span class="ladda-spinner"></span></button>
-                        <button class="btn btn-primary btn-wide pull-right" type="button" id="btnSubmit">
+                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save">
+                            <span class="">Save</span>
+                            </button>
+                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="buttons" value="publish">
                             Publish
                         </button>
                 </div>
@@ -200,24 +202,18 @@
         getMsgCount();
         Main.init();
         FormValidator.init();
-        TableData.init();
         FormElements.init();
         UIButtons.init();
 
-        if($('.allCheckedStud1').prop('checked') == true)
-        {
-            $('.checkedStud1').each(function() { //loop through each checkbox
-                this.checked = true;  //select all checkboxes with class "checkbox1"
-            });
-        }
+
 
     });
 
 
 
-    $('#btnSubmit').click(function(){
+   /* $('#btnSubmit').click(function(){
         window.location.href="homeworkListing";
-    });
+    });*/
 
     $('.classFirst').change(function(){
         if($(this).prop('checked') == true)
@@ -246,6 +242,7 @@
     });
 
     $('.allCheckedStud1').change(function(){
+
         if($(this).prop('checked') == true)
         {
             $('.checkedStud1').each(function() { //loop through each checkbox
@@ -257,40 +254,9 @@
             });
         }
     });
-    $("#classDropdown").change(function() {
-        var id = this.value;
-        var route='get-subject-divisions/'+id;
-        $.get(route,function(res){
-            var str = "";
-            for(var i=0; i<res.length; i++){
-                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
 
-                    '<input type="checkbox" value="'+res[i][id]+'" class="FirstDiv" id="'+res[i]['division_name']+'" >'+
-                    '<label for="'+res[i]['division_name']+'">'+
-                    ''+res[i]['division_name']+''+
-                    '</label>'+
-                    '</div>';
-            }
-            $('#division').html(str);
-        });
-    });
 
-    $("#division").change(function() {
-        var id = this.value;
-        var route='get-division-students/'+id;
-    $.get(route,function(res){
 
-        var str = "";
-        for(var i=0; i<res.length; i++){
-            str+=' <tr>'+
-                '<td><input type="checkbox" class="checkedStud1"/></td>'+
-                '<td>102</td>'+
-                '<td>Vinit Singh</td>'+
-            '</tr>';
-        }
-        $('#studentList').html(str);
-    });
-    });
     $('#subjectsDropdown').change(function(){
         var id=this.value;
         var route='get-subject-batches/'+id;
@@ -298,7 +264,7 @@
             var batch= $.map(res,function(value,index){
                 return value;
             });
-            var str="";
+            var str='<option value="">Select Batch</option>';
             for(var i=0; i<batch.length; i++)
             {
                 str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch_slug']+'</option>';
@@ -308,8 +274,78 @@
     });
 
     $('#batch-select').change(function(){
-
+        var id=this.value;
+        var subject_id= $('#subjectsDropdown').val();
+        var route='get-subject-classes/'+id+'/'+subject_id;
+        $.get(route,function(res){
+            var str='<option value="">please select class</option>';
+            for(var i=0; i<res.length; i++)
+            {
+                str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_slug']+'</option>';
+            }
+            $('#classDropdown').html(str);
+        });
     });
+
+    $("#classDropdown").change(function() {
+        var id = this.value;
+        var subject_id= $('#subjectsDropdown').val();
+        var route='get-subject-divisions/'+id+'/'+subject_id;
+        $.get(route,function(res){
+            var str = "";
+
+            var arrStr= $.map(res,function(value){
+                return value;
+            });
+            for(var i=0; i<arrStr.length; i++){
+
+                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                    '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]">'+
+                    '<label for="'+arrStr[i]['division_id']+'">'+
+                    ''+arrStr[i]['division_slug']+''+
+                    '</label>'+
+                    '</div>';
+            }
+            $('#division').html(str);
+
+        });
+    });
+
+    function Selectallcheckbox(){
+        var all_location_id = document.querySelectorAll('input[name="divisions[]"]:checked');
+
+        var aIds = [];
+
+        for(var x = 0, l = all_location_id.length; x < l;  x++)
+        {
+            aIds.push(all_location_id[x].value);
+        }
+        var route='get-division-students';
+        var divisions=aIds;
+        $.post(route,{id:divisions},function(res){
+            var str = "";
+            for(var i=0; i<res.length; i++){
+                str+=' <tr>'+
+                    '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
+                    '<td>'+res[i]['roll_number']+'</td>'+
+                    '<td>'+res[i]['first_name']+' '+res[i]['last_name']+'</td>'+
+                    '<td>'+res[i]['slug']+'</td>'+
+                    '</tr>';
+            }
+            $('#studentList').html(str);
+            if($('.allCheckedStud1').prop('checked') == true)
+            {
+                $('.checkedStud1').each(function() { //loop through each checkbox
+                    this.checked = true;  //select all checkboxes with class "checkbox1"
+                });
+            }
+            TableData.init();
+        });
+    }
+
+
+
 
 </script>
 

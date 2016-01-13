@@ -271,7 +271,7 @@ var FormValidator = function () {
                 successHandler2.show();
                 errorHandler2.hide();
                 // submit form
-                //$('#form2').submit();
+                return true;
             }
         });
         CKEDITOR.disableAutoInline = true;
