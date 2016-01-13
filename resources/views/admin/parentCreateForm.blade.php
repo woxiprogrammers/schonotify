@@ -91,12 +91,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group" id="asd">
                             <label class="control-label">
                                 User Name <span class="symbol required"></span>
                             </label>
                             <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
-                            <div class="" id="feedback" ></div>
+                            <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
                         </div>
                     </div>
 
@@ -146,8 +146,8 @@
                             <label class="control-label">
                                 Email <span class="symbol required"></span>
                             </label>
-                            <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email">
-                            <div class="" id="emailfeedback" ></div>
+                            <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" id="email">
+                            <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -306,6 +306,7 @@
     });
     function userAclModule()
     {
+        var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message'];
         var route='user-module-acl';
         $.get(route,function(res){
 
@@ -326,7 +327,6 @@
                 '<th><b>Modules</b></th>';
             for(var j=0; j<arr2.length; j++)
             {
-
                 str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
             }
 
@@ -342,9 +342,14 @@
                 {
                     str+='<td>'+
                         '<div class="checkbox form-group clip-check check-primary checkbox-inline">';
-
-                    str+='<input type="checkbox" class="form-control" value="'+arr2[j]['slug']+'_'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="modules[]">'+
-                        '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                    console.log(arr2[j]['slug']+'_'+arr1[i]);
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],enabled_modules)==-1){
+                        str+='<input type="checkbox"  disabled class="form-control" value="'+arr2[j]['slug']+'_'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="modules[]">'+
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                    }else{
+                        str+='<input type="checkbox"  class="form-control" value="'+arr2[j]['slug']+'_'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="modules[]">'+
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                    }
 
                     str+='</div>'+
                         '</td>';

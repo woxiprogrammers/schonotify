@@ -10,7 +10,7 @@ var FormWizard = function () {
             selected: 0,
             keyNavigation: false,
             onLeaveStep: leaveAStepCallback,
-            onShowStep: onShowStep,
+            onShowStep: onShowStep
         });
         var numberOfSteps = 0;
         initValidator();
@@ -25,7 +25,7 @@ var FormWizard = function () {
     });
 
     $.validator.addMethod("requiredIfChecked", function (val, ele, arg) {
-        if ($("#checkbox8").is(":checked") && ($.trim(val) == '')) { return false; }
+        if ($("#checkbox9").is(":checked") && ($.trim(val) == '')) { return false; }
         return true;
     }, "This field is required if Make as Class Teacher is checked...");
 
@@ -39,12 +39,28 @@ var FormWizard = function () {
     $.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
     });
-
+    $.validator.addMethod("chkMail", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
+    });
+    $.validator.addMethod("allowAccess", function(value, elem, param) {
+        if ($("#checkbox6").is(":checked") || $("#checkbox7").is(":checked")) { return true; }
+        return false;
+    },"You must select at least one!");
     var initValidator = function () {
-        
+
         $.validator.setDefaults({
             errorElement: "span", // contain the error msg in a span tag
             errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.attr("name") == "dd" || element.attr("name") == "mm" || element.attr("name") == "yyyy") {
+                    error.insertAfter($(element).closest('.form-group').children('div'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
             ignore: ':hidden',
             rules: {
                 firstName: {
@@ -64,7 +80,7 @@ var FormWizard = function () {
                 },
                  email: {
                     required: true,
-                    email: true
+                     chkMail: true
                 },
                 password: {
                     minlength: 6,
@@ -94,7 +110,6 @@ var FormWizard = function () {
                     mobileNumber:true
                 },
                 alt_number:{
-                    required:true,
                     number:true,
                     minlength:10,
                     mobileNumber:true
@@ -107,17 +122,22 @@ var FormWizard = function () {
                 },
                 division:{
                     requiredIfChecked:true
+                },
+                'access[]':{
+                    required:true,
+                    minlength:1
                 }
-
             },
             messages: {
                 firstName: {
                     required: "First Name is required" ,
-                    alpha: "First name must contain only letters OR Space added"
+                    alpha: "First name must contain only letters",
+                    minlength:"Please enter at least 2 character"
                 },
                 lastName: {
                      required: "Last Name is required",
-                     alpha: "Last name must contain only letters OR Space added"
+                     alpha: "Last name must contain only letters",
+                     minlength:"Please enter at least 2 character"
                 },
                 userName: {
                     required: "User Name is required",
@@ -125,11 +145,11 @@ var FormWizard = function () {
                 },
                 studid:"please provide correct student id",
                 email: {
-                    required: "We need your email dsfsdf address to contact you",
-                    email: "Your email address must be in the format of name@domain.com"
+                    required: "Please provide valid email id",
+                    chkMail: "Your email address must be in the format of name@domain.com"
                 },
                 address:{
-                     required:"Please provide users address",
+                     required:"Please provide address",
                      address:"Address must contain at-least 15 characters"
                 },
                 modules: {
@@ -149,8 +169,12 @@ var FormWizard = function () {
                     mobileNumber : "Mobile number must be 10 digit only "
                 },
                 alt_number:{
-                    required:"Alternate number is required",
-                    number:"Alternate number must be numeric"
+                    number:"Alternate number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only"
+                },
+                'access[]':{
+                    required:"Please select al least one",
+                    minlength: jQuery.validator.format("Please select  at least {0} types of Access")
                 }
             },
 
@@ -159,19 +183,28 @@ var FormWizard = function () {
                 // display OK icon
                 $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
                 // add the Bootstrap error class to the control group
+                $('#feedback').remove();
+                $('#emailfeedback').remove();
+
+
             },
             unhighlight: function (element) { // revert the change done by hightlight
                 $(element).closest('.form-group').removeClass('has-error');
+                $('#userNameFeedback').html('<div id="feedback"></div>');
+                $('#emailIdfeedback').html('<div id="emailfeedback"></div>');
+                $('#feedback').show();
+                $('#emailfeedback').show();
                 // set error class to the control group
             },
             success: function (label, element) {
                 label.addClass('help-block valid');
                 // mark the current input as valid and display OK icon
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+                $('#feedback').remove();
+                $('#emailfeedback').remove();
             }
         });
     };
-
     var displayConfirm = function () {
         $('.display-value', form).each(function () {
             var input = $('[name="' + $(this).attr("data-display") + '"]', form);
@@ -191,10 +224,10 @@ var FormWizard = function () {
     	if(context.toStep == numberOfSteps){
     		$('.anchor').children("li:nth-child(" + context.toStep + ")").children("a").removeClass('wait');
             displayConfirm();
+
     	}
         $(".next-step").unbind("click").click(function (e) {
             e.preventDefault();
-
             wizardContent.smartWizard("goForward");
 
         });
