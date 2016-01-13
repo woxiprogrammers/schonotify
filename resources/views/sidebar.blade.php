@@ -56,9 +56,7 @@
     </ul>
 
 </li>
-
-@foreach(session('functionArr') as $row)
-@if($row == 'create_user')
+@if(in_array('create_user',array_values(session('functionArr'))))
 <li>
     <a href="/createUsers/1">
         <div class="item-content">
@@ -71,8 +69,20 @@
         </div>
     </a>
 </li>
+@else
+<li class="disabled">
+    <a href="/createUsers/1">
+        <div class="item-content">
+            <div class="item-media">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="item-inner">
+                <span class="title"> Create Users </span>
+            </div>
+        </div>
+    </a>
+</li>
 @endif
-@endforeach
 
 @foreach(session('functionArr') as $row)
 @if($row == 'create_class')
