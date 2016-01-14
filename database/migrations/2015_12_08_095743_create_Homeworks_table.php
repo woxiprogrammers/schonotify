@@ -20,7 +20,7 @@ class CreateHomeworksTable extends Migration
             $table->dateTime('homework_timestamp');
             $table->dateTime('due_date');
             $table->integer('subject_id')->unsigned();
-            $table->string('attachment_file',255);
+            $table->string('attachment_file',255)->nullable();
             $table->boolean('status');
             $table->timestamps();
 
