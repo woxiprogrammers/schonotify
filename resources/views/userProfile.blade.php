@@ -70,7 +70,7 @@
                             <div class="user-image-buttons">
 
                                 <a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a>
-                                    <i class="fa fa-times"></i>
+
                                 </a>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                         Events <span class="badge badge-danger"> 23 </span>
                     </button>
                 </div>
-                <div class="col-sm-4">
+                <div onclick="window.location='noticeBoard'" class="col-sm-4">
                     <button class="btn btn-icon margin-bottom-5 btn-block">
                         <i class="ti-flag block text-primary text-extra-large margin-bottom-10"></i>
                         Notifications <span class="badge badge-danger"> 9 </span>
@@ -119,7 +119,7 @@
                         <tr>
                             <td>Username</td>
                             <td>{!! $user->username !!}</td>
-                            <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
+                            <td><a href="#panel_edit_account" class="show-tab"></a></td>
                         </tr>
                         <tr>
                             <td>Gender</td>
@@ -145,7 +145,7 @@
                                 <a href="">
                                     {!! $user->email !!}
                                 </a></td>
-                            <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
+                            <td><a href="#panel_edit_account" class="show-tab"></a></td>
                         </tr>
                         <tr>
                             <td>Phone:</td>
