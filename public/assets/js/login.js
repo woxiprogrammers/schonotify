@@ -73,7 +73,7 @@ var Login = function() {
 			},
 			submitHandler : function(form) {
 				errorHandler2.hide();
-				form2.submit();
+                return true;
 			},
 			invalidHandler : function(event, validator) {//display error alert on form submit
 				errorHandler2.show();
