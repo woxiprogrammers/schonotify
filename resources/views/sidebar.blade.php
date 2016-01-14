@@ -56,9 +56,7 @@
     </ul>
 
 </li>
-
-@foreach(session('functionArr') as $row)
-@if($row == 'create_user')
+@if(in_array('create_user',array_values(session('functionArr'))))
 <li>
     <a href="/createUsers/1">
         <div class="item-content">
@@ -71,42 +69,51 @@
         </div>
     </a>
 </li>
-@endif
-@endforeach
-
-@foreach(session('functionArr') as $row)
-@if($row == 'create_class')
-<li>
-    <a href="/createClass">
+@else
+<li class="disabled">
+    <a href="/createUsers/1">
         <div class="item-content">
             <div class="item-media">
-                <i class="fa fa-suitcase"></i>
+                <i class="fa fa-users"></i>
             </div>
             <div class="item-inner">
-                <span class="title"> Create Class </span>
+                <span class="title"> Create Users </span>
             </div>
         </div>
     </a>
 </li>
 @endif
-@endforeach
-
-@foreach(session('functionArr') as $row)
-@if($row == 'create_division')
 <li>
-    <a href="javascript:void(0);">
+    <a href="javascript:void(0)">
         <div class="item-content">
             <div class="item-media">
-                <i class="fa fa-th-list"></i>
+                <i class="fa fa-pencil-square-o"></i>
             </div>
             <div class="item-inner">
-                <span class="title"> Create Division </span>
+                <span class="title"> Create Class </span><i class="icon-arrow"></i>
             </div>
         </div>
     </a>
+    <ul class="sub-menu">
+
+        <li>
+            <a href="/create-class">
+                <div class="item-inner">
+                    <span class="title"> Create Class </span>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="/create-division">
+                <div class="item-inner">
+                    <span class="title"> Create Division </span>
+                </div>
+            </a>
+        </li>
+
+    </ul>
 </li>
-@endif
-@endforeach
+
 @foreach(session('functionArr') as $row)
 @if($row == 'view_timetable')
 <li>

@@ -97,7 +97,7 @@
                                 User Name <span class="symbol required"></span>
                             </label>
                             <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
-                            <div class="" id="feedback" ></div>
+                            <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
                         </div>
                     </div>
 
@@ -150,7 +150,7 @@
                                 Email <span class="symbol required"></span>
                             </label>
                             <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" id="email">
-                            <div class="" id="emailfeedback" ></div>
+                            <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
                         </div>
                     </div>
 

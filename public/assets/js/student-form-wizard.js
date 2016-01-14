@@ -32,6 +32,9 @@ var FormWizard = function () {
     $.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
     });
+    $.validator.addMethod("chkMail", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
+    });
     var initValidator = function () {
 
         $.validator.setDefaults({
@@ -49,7 +52,7 @@ var FormWizard = function () {
                     required: true
                 },
                 email: {
-                    email: true
+                    chkMail: true
                 },
                 password: {
                     minlength: 6,
@@ -113,7 +116,7 @@ var FormWizard = function () {
                 },
                 studid:"please provide correct student id",
                 email: {
-                    email: "Your email address must be in the format of name@domain.com"
+                    chkMail: "Your email address must be in the format of name@domain.com"
                 },
                 address:{
                     required:"Please provide users address",
@@ -136,7 +139,8 @@ var FormWizard = function () {
                     mobileNumber : "Mobile number must be 10 digit only "
                 },
                 alt_number:{
-                    number:"Alternate number must be numeric"
+                    number:"Alternate number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only "
                 },
                 'batch':{
                     required:"Please Select Batch"
