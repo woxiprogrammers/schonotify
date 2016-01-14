@@ -51,8 +51,6 @@
 
             $("#tableContent").html(res);
 
-            TableData.init();
-
             var switcheryHandler = function() {
 
             var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -63,6 +61,8 @@
             };
 
             switcheryHandler();
+
+            TableData.init();
 
         });
 
