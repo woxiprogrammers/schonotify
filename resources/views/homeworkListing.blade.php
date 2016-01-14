@@ -40,202 +40,37 @@
                 <div class="col-md-10 col-md-offset-1">
                     <div class="panel-body">
                         <ul class="timeline-xs" id="tmln">
-                            <li class="timeline-item success">
+                            @foreach($homeworkIdss as $row)
+                            <li class="timeline-item">
                                 <div class="leaveSection">
                                     <div class="text-muted text-small">
-                                        2 minutes ago
+                                       {!! $row['homework_dateNow']!!} hr ago
                                     </div>
                                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                                        <h5><small class="label label-sm label-info">Mr.Sharma</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>
+                                        <h5><small class="label label-sm label-info">{!! $row['homework_teacher_name']!!}</small> {!! $row['homework_title']!!} @if ($row['homework_file'] != null) <i class="fa fa-paperclip"></i> @endif</h5>
 
-                                        <p>Date:<i> 2 Nov, 2015 </i> <br> Due Date: <i>  4 Nov, 2015</i></p>
 
+                                        <p>Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_date'])));!!} </i> <br> Due Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_due_date'])));!!}</i></p>
                                     </div>
                                     <div class="col-sm-2">
+                                        @if($row['homework_status'] == 0)
                                         <small class="label label-sm label-danger">Pending</small>
-                                        <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedHomework">View More</a>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">THIRD <small>Div. A</small></h5>
-                                </div>
-
-                            </li>
-                            <li class="timeline-item">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
-                                        12:00
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">Mrs. Sharma</small> Assignment on chapter 4 <i class="fa fa-paperclip"></i></h5>
-
-
-                                        <p>Date:<i> 2 Nov, 2015 </i> <br> Due Date:<i> 4 Nov, 2015</i></p>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <small class="label label-sm label-danger">Pending</small>
-                                        <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedHomework">View More</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">FIRST <small>Div. C</small></h5>
-                                </div>
-
-                            </li>
-                            <li class="timeline-item danger">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
-                                        11:11
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">Mr. Aanand</small> Solve the questions given below :</h5>
-
-                                        <p>Date:<i> 1 Nov, 2015 </i> <br> Due Date: <i> 4 Nov, 2015</i></p>
-                                    </div>
-                                    <div class="col-sm-2">
+                                        @elseif($row['homework_status'] == 1)
                                         <small class="label label-sm label-inverse">Published</small>
+                                        @endif
                                         <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedHomework">View More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">FIRST <small>Div. A</small></h5>
-                                </div>
-
-                            </li>
-                            <li class="timeline-item info">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
-                                        Thus, 12 Jun
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">Mr. Yadav</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>
-
-                                        <p>Date:<i> 2 Nov, 2015 </i> <br> Due Date: <i> 4 Nov, 2015</i></p>
-
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <small class="label label-sm label-inverse">Published</small>
-                                        <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedHomework">View More</a>
+                                            <a class="text-info " href="/detailedHomework/{!!$row['homework_id']!!}">View More</a>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">FIRST <small>Div. B</small></h5>
+                                    <h5 style="padding: 14px 14px 14px 30px;">{!! $row['homework_class_name']!!}       <small>  Div. {!! $row['homework_division_name']!!}</small></h5>
                                 </div>
 
                             </li>
-                            <li class="timeline-item">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
-                                        Thus, 10 Jun
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>
-
-                                        <p>Date:<i> 21 Jun, 2015 </i> <br> Due Date: <i> 22 Jun, 2015</i></p>
-
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <small class="label label-sm label-inverse">Published</small>
-                                        <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedHomework">View More</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">SECOND <small>Div. A</small></h5>
-                                </div>
-
-                            </li>
-                            <li class="timeline-item">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
-                                        Sun, 11 Apr
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>
-
-                                        <p>Date:<i> 20 Apr, 2015 </i> <br> Due Date: <i> 22 Apr, 2015</i></p>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <small class="label label-sm label-inverse">Published</small>
-                                        <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedLeave">View More</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">THIRD <small>Div. B</small></h5>
-                                </div>
-
-                            </li>
-                            <li class="timeline-item warning">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
-                                        Wed, 25 Mar
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>
-
-                                        <p>Date:<i> 2 Apr, 2015 </i> <br>Due Date: <i> 4 Apr, 2015</i></p>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <small class="label label-sm label-inverse">Published</small>
-                                        <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedHomework">View More</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">THIRD <small>Div. C</small></h5>
-                                </div>
-
-                            </li>
-                            <li class="timeline-item">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
-                                        Fri, 20 Mar
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>
-
-                                        <p>Date:<i> 2 Nov, 2015 </i> <br> Due Date :<i> 4 Nov, 2015</i></p>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <small class="label label-sm label-inverse">Published</small>
-                                        <div style="margin-top:10px;">
-                                            <a class="text-info " href="detailedHomework">View More</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 23px;">FOURTH <small>Div. A</small></h5>
-                                </div>
-
-                            </li>
+                            @endforeach
                         </ul>
                         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                     </div>
