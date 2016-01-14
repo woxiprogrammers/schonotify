@@ -82,7 +82,7 @@
         </div>
     </a>
 </li>
-
+@endif
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -113,6 +113,7 @@
 
     </ul>
 </li>
+
 @foreach(session('functionArr') as $row)
 @if($row == 'view_timetable')
 <li>
