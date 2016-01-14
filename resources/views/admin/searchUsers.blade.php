@@ -32,8 +32,8 @@
                                                 </a>
 											</div>
 										</li>
-                                        
-                                        
+
+
 									</ul>
 									<!-- end: MINI STATS WITH SPARKLINE -->
 								</div>
@@ -85,13 +85,21 @@
             var route='deactive/'+id;
 
             $.get(route,function(res){
-                swal({
-                    title: "Deactivated!",
-                    text: "User has been deactivated!",
-                    type: "error",
-                    confirmButtonColor: "#DD6B55",
-                    closeOnCancel: false
-                });
+                if(res['status']==403)
+                {
+                    var route= "/searchUsers";
+
+                    window.location.replace(route);
+
+                }else{
+                    swal({
+                        title: "Deactivated!",
+                        text: "User has been deactivated!",
+                        type: "error",
+                        confirmButtonColor: "#DD6B55",
+                        closeOnCancel: false
+                    });
+                }
 
             });
 
@@ -101,8 +109,17 @@
             var route='active/'+id;
 
             $.get(route,function(res){
-                console.log(res);
-                swal("Activated!", "User has been activated.", "success");
+
+                if(res['status']==403)
+                {
+                    var route= "/searchUsers";
+
+                    window.location.replace(route);
+
+                }else{
+                    swal("Activated!", "User has been activated.", "success");
+                }
+
             });
 
         }
