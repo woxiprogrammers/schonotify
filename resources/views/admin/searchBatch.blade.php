@@ -24,17 +24,15 @@
                         <div class="col-sm-5">
                             <!-- start: MINI STATS WITH SPARKLINE -->
                             <ul class="mini-stats pull-right">
-                                @foreach(session('functionArr') as $row)
-                                @if($row == 'create_class')
+
                                 <li>
                                     <div class="values">
-                                        <a href="/createClass" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                        <a href="/create-class" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
                                             Create New Class <i class="fa fa-angle-right"></i>
                                         </a>
                                     </div>
                                 </li>
-                                @endif
-                                @endforeach
+
                             </ul>
                             <!-- end: MINI STATS WITH SPARKLINE -->
                         </div>
@@ -58,10 +56,8 @@
                                     @if($row == 'update_class')
                                     <th>Action</th>
                                     @endif
-                                    @if($row == 'delete_class')
-                                    <th>Delete</th>
-                                    @endif
                                     @endforeach
+                                    <th>Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -72,13 +68,13 @@
                                     @if(in_array('update_class',session('functionArr')))
                                     <td><a href="#" class="edit-row">Edit</a></td>
                                     @endif
-                                    @if(in_array('delete_class',session('functionArr')))
+
                                     <td>
-                                        <a href="/delete-batch/{!! $rows->id !!}">
+                                        <a href="#">
                                             Delete
                                         </a>
                                     </td>
-                                    @endif
+
                                 </tr>
                                 @endforeach
                                 </tbody>

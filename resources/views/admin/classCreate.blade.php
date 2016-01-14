@@ -108,6 +108,7 @@
                                                     </div>
                                                  </div>
                                                 <div class="modal-footer">
+                                                    <div id="access-denied"></div>
                                                     <button type="button" id="resetBatch1" class="btn btn-primary btn-o" data-dismiss="modal" >
                                                         Close
                                                     </button>
@@ -165,8 +166,8 @@
         FormValidator.init();
     });
 
-
     $('#resetBatch').click(function() {
+        $('#access-denied').html('');
         var i = $('input[name="batches"]').size();
         while(i > 0) {
             $('#divTxt:last').remove();
@@ -177,6 +178,7 @@
     });
 
     $('#resetBatch1').click(function() {
+        $('#access-denied').html('');
         var i = $('input[name="batches"]').size();
 
         while(i > 0) {
@@ -192,20 +194,26 @@
         var delDiv='.div'+val;
         var delBtn='.del'+val;
 
-        var route="delete-batch/"+val;
+        var route="/delete-batch/"+val;
 
         $.get(route,function(res){
 
-            $(delDiv).remove();
-            $(delBtn).remove();
-
-            if(i<5)
+            if(res==403)
             {
-                $('#checkHeight').removeClass('flexcroll1');
+                $('#access-denied').html('<div class="alert-danger col-sm-10 center">You currently do not have permission to access this functionality. Please contact administrator to grant you access</div>');
             }else{
+                $(delDiv).remove();
+                $(delBtn).remove();
 
-                $('#checkHeight').addClass('flexcroll1');
+                if(i<5)
+                {
+                    $('#checkHeight').removeClass('flexcroll1');
+                }else{
+
+                    $('#checkHeight').addClass('flexcroll1');
+                }
             }
+
         });
 
     }

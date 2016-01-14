@@ -365,9 +365,9 @@
 <script src="vendor/selectFx/classie.js"></script>
 <script src="vendor/selectFx/selectFx.js"></script>
 <script src="vendor/select2/select2.min.js"></script>
-
-<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
 <script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/form-validation.js"></script>
 
@@ -378,8 +378,9 @@
     jQuery(document).ready(function() {
         getMsgCount();
         Main.init();
-        FormValidator.init();
         FormElements.init();
+        FormValidator.init();
+
 
         userAclModule();
     });
