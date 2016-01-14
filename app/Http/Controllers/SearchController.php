@@ -171,9 +171,7 @@ class SearchController extends Controller
     public function searchBatch()
     {
         $user=Auth::User();
-        $result= Batch::join('classes','classes.batch_id','=','batches.id')
-            ->select('batches.id as batch_id','batches.slug as batch_name','batches.description as batch_description')
-            ->where('classes.body_id','=',$user->body_id)
+        $result= Batch::where('body_id','=',$user->body_id)
             ->get();
 
         return view('admin.searchBatch')->with('results',$result);

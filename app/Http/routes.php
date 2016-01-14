@@ -105,7 +105,9 @@ Route::get('active/{id}','UsersController@activeUser');
 
 Route::get('deactive/{id}','UsersController@deactiveUser');
 
-Route::get('createClass','ClassController@create');
+Route::get('create-class','ClassController@index');
+
+Route::post('class-create','ClassController@create');
 
 Route::get('event','EventController@index');
 
@@ -170,6 +172,16 @@ Route::post('acl-update/{id}','UsersController@aclUpdate');
 Route::get('user-module-acl-edit/{id}','UsersController@userModuleAclsEdit');
 
 Route::get('edit-mychildrens/{id}','UsersController@editMyChildren');
+
+Route::get('create-batch/{batchName}','ClassController@createBatch');
+
+Route::get('delete-batch/{id}','ClassController@deleteBatch');
+
+Route::get('create-division','ClassController@createDivision');
+
+Route::post('division-create','ClassController@saveDivision');
+
+Route::get('check-div/{clsDiv}','ClassController@checkDivision');
 
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
