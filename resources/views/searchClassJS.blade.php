@@ -13,6 +13,7 @@
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
+<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="assets/js/table-data-class.js"></script>
 <script src="assets/js/custom-project.js"></script>
 <script src="vendor/ckeditor/ckeditor.js"></script>

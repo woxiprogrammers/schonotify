@@ -26,12 +26,16 @@ class SearchController extends Controller
     {
 
     }
-    public function searchUsers()
+    public function searchUsers(Requests\WebRequests\ViewUserRequest $request)
     {
+        if($request->authorize()===true)
+        {
+            $roles=UserRoles::all();
 
-        $roles=UserRoles::all();
-
-        return view('admin.searchUsers')->with('userRoles',$roles);
+            return view('admin.searchUsers')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
 
     }
     public function selectRole($role_id=1)
@@ -140,17 +144,22 @@ class SearchController extends Controller
 
     }
 
-    public function searchClasses($id)
+    public function searchClasses(Requests\WebRequests\ViewClassRequest $request,$id)
     {
 
-        if($id==1)
+        if($request->authorize()===true)
         {
-            return Redirect::To('searchBatch');
-        }elseif($id==2)
-        {
-            return Redirect::To('searchClass');
+            if($id==1)
+            {
+                return Redirect::To('searchBatch');
+            }elseif($id==2)
+            {
+                return Redirect::To('searchClass');
+            }else{
+                return Redirect::To('searchDivision');
+            }
         }else{
-            return Redirect::To('searchDivision');
+            return Redirect::to('/');
         }
 
     }

@@ -30,33 +30,29 @@
         </div>
     </a>
     <ul class="sub-menu">
-        @foreach(session('functionArr') as $row)
-        @if($row == 'view_user')
+
         <li>
             <a href="/searchUsers">
                 <span class="title"> Users </span>
             </a>
         </li>
-        @endif
-        @if($row == 'view_class')
+
         <li>
             <a href="/searchClasses/2">
                 <span class="title"> Classes  </span>
             </a>
         </li>
-        @endif
-        @if($row == 'view_subject')
+
         <li>
             <a href="/searchSubjects">
                 <span class="title"> Subjects  </span>
             </a>
         </li>
-        @endif
-        @endforeach
+
     </ul>
 
 </li>
-@if(in_array('create_user',array_values(session('functionArr'))))
+
 <li>
     <a href="/createUsers/1">
         <div class="item-content">
@@ -69,20 +65,7 @@
         </div>
     </a>
 </li>
-@else
-<li class="disabled">
-    <a href="/createUsers/1">
-        <div class="item-content">
-            <div class="item-media">
-                <i class="fa fa-users"></i>
-            </div>
-            <div class="item-inner">
-                <span class="title"> Create Users </span>
-            </div>
-        </div>
-    </a>
-</li>
-@endif
+
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">

@@ -12,6 +12,7 @@
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/table-data-division.js"></script>
 <script src="assets/js/custom-project.js"></script>
