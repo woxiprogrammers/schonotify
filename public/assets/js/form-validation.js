@@ -363,6 +363,9 @@ var FormValidator = function () {
         var form4 = $('#form4');
         var errorHandler2 = $('.errorHandler', form4);
         var successHandler2 = $('.successHandler', form4);
+       $.validator.addMethod("mobileNumber", function(value, element) {
+           return this.optional(element) || /^[0-9]{10}(\-[0-9]{4})?$/.test(value);
+       });
         $.validator.addMethod("getEditorValue", function () {
             $("#editor1").val($('#form4 .summernote').code());
             if ($("#editor1").val() != "" && $("#editor1").val().replace(/(<([^>]+)>)/ig, "") != "") {
@@ -400,13 +403,15 @@ var FormValidator = function () {
                     email: true
                 },
                 mobile:{
-                    required: true,
+                    required:true,
+                    number:true,
                     minlength:10,
-                    maxlength:10
+                    mobileNumber:true
                 },
                 alternate_number:{
+                    number:true,
                     minlength:10,
-                    maxlength:10
+                    mobileNumber:true
                 },
                 address:{
                     required:true
@@ -414,7 +419,17 @@ var FormValidator = function () {
 
             },
             messages: {
-
+                mobile:{
+                    required:"Mobile number is required",
+                    number:"Mobile number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only ",
+                    minlength: jQuery.validator.format("Please enter at least 10 digits.")
+                },
+                alternate_number:{
+                    number:"Alternate number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only",
+                    minlength: jQuery.validator.format("Please enter at least 10 digits.")
+                }
 
 
             },
