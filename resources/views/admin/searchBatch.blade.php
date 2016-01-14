@@ -67,20 +67,18 @@
                                 <tbody>
                                 @foreach($results as $rows)
                                 <tr>
-                                    <td>{!! $rows->batch_name !!}</td>
+                                    <td>{!! $rows->name !!}</td>
                                     <td>{!! $rows->batch_description !!}</td>
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'update_class')
+                                    @if(in_array('update_class',session('functionArr')))
                                     <td><a href="#" class="edit-row">Edit</a></td>
                                     @endif
-                                    @if($row == 'delete_class')
+                                    @if(in_array('delete_class',session('functionArr')))
                                     <td>
-                                        <a href="#" class="delete-row">
+                                        <a href="/delete-batch/{!! $rows->id !!}">
                                             Delete
                                         </a>
                                     </td>
                                     @endif
-                                    @endforeach
                                 </tr>
                                 @endforeach
                                 </tbody>

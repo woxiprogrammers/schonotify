@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
 
-                                <form action="#" role="form" id="form2">
+                                <form method="post" action="class-create" role="form" id="form2">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="errorHandler alert alert-danger no-display">
@@ -46,9 +46,9 @@
                                                 </label>
                                                 <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
                                                     <option value="">Select Batch</option>
-                                                    <option value="Category 1">Morning</option>
-                                                    <option value="Category 2">Evening</option>
-
+                                                    @foreach($batches as $batch)
+                                                    <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
 
@@ -85,31 +85,25 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <form action="#" role="form" id="form">
+
                                                 <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="errorHandler alert alert-danger no-display">
-                                                            <i class="fa fa-times-sign"></i> You have some form errors. Please check below.
-                                                        </div>
-                                                        <div class="successHandler alert alert-success no-display">
-                                                            <i class="fa fa-ok"></i> Your form validation is successful!
-                                                        </div>
+                                                    <div class="col-md-11 padding-left-20">
+                                                     <form action="#" role="form" id="batch-create">
                                                         <div class="col-md-10 col-md-offset-2">
 
-                                                        <div class="col-md-8">
-                                                            <div class="form-group">
-                                                                <input type="text" placeholder="Insert new batch name" class="form-control" id="batch" name="batch">
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <input type="text" placeholder="Insert new batch name" class="form-control" id="batchesDefault" name="batchesDefault">
+                                                                </div>
                                                             </div>
-                                                        </div>
                                                             <div class="col-md-4 ">
-                                                                <button type="button" class="btn btn-primary" id="addBatch"><i class="ti-plus"></i></button>
-                                                                <button type="button" class="btn btn-primary btn-red pull-right hideDelete" id="removeBatch"><i class="glyphicon glyphicon-trash"></i></button>
+                                                                <button type="submit" class="btn btn-primary" id="addBatch"><i class="ti-plus"></i></button>
                                                             </div>
-                                                        <div class="col-md-8" id="checkHeight">
-                                                            <div id="batchDiv"></div>
+
                                                         </div>
-
-
+                                                    </form>
+                                                        <div class="col-md-10 col-sm-offset-2 " id="checkHeight">
+                                                            <div id="batchDiv"></div>
                                                         </div>
                                                     </div>
                                                  </div>
@@ -117,11 +111,8 @@
                                                     <button type="button" id="resetBatch1" class="btn btn-primary btn-o" data-dismiss="modal" >
                                                         Close
                                                     </button>
-                                                    <button type="submit" class="btn btn-primary">
-                                                        Save
-                                                    </button>
                                                 </div>
-                                            </form>
+
 
                                         </div>
                                     </div>
@@ -173,111 +164,51 @@
         FormWizard.init();
         FormValidator.init();
     });
-</script>
-<script type="text/javascript">
 
 
-    $('#option-select').on('change',function(){
-
-        var par=this.value;
-
-        if(isNaN(par)==false)
-        {
-            var route= "/createUsers/"+par;
-
-            //console.log(route);
-            //debugger;
-            window.location.replace(route);
-
-
+    $('#resetBatch').click(function() {
+        var i = $('input[name="batches"]').size();
+        while(i > 0) {
+            $('#divTxt:last').remove();
+            $('#del:last').remove();
+            i--;
         }
-
+        $('#checkHeight').removeClass('flexcroll1');
     });
 
-</script>
-<script>
-    $(document).ready(function(){
+    $('#resetBatch1').click(function() {
+        var i = $('input[name="batches"]').size();
 
-        var i = $('#form input[type="text"]').size() + 1;
+        while(i > 0) {
+            $('#divTxt:last').remove();
+            $('#del:last').remove();
+            i--;
+        }
+        $('#checkHeight').removeClass('flexcroll1');
+    });
 
+    function deleteBatch(val){
+        var i = $('input[name="batches"]').size();
+        var delDiv='.div'+val;
+        var delBtn='.del'+val;
 
+        var route="delete-batch/"+val;
 
-        $('.hideDelete').hide();
+        $.get(route,function(res){
 
+            $(delDiv).remove();
+            $(delBtn).remove();
 
-
-        $('#addBatch').click(function() {
-            $('<div class="form-group"><input type="text" class="field form-control" name="batch[]" /></div>').fadeIn('slow').appendTo('form #batchDiv');
-            i++;
-
-            if(i<2)
-            {
-                $('.hideDelete').hide();
-            }else{
-                $('.hideDelete').show();
-
-            }
-
-            if(i<6)
+            if(i<5)
             {
                 $('#checkHeight').removeClass('flexcroll1');
             }else{
+
                 $('#checkHeight').addClass('flexcroll1');
             }
-
         });
 
-        $('#removeBatch').click(function() {
-            if(i > 1) {
-                $('.field:last').remove();
-                i--;
-
-                if(i<=2)
-                {
-                    $('.hideDelete').hide();
-                }
-
-                if(i<6)
-                {
-                    $('#checkHeight').removeClass('flexcroll1');
-                }
-
-            }
-        });
-
-        $('#resetBatch').click(function() {
-            while(i > 2) {
-                $('.field:last').remove();
-                i--;
-            }
-        });
-
-        $('#resetBatch1').click(function() {
-            while(i > 2) {
-                $('.field:last').remove();
-                i--;
-            }
-        });
-
-
-        $('.submit').click(function(){
-
-            var answers = [];
-            $.each($('.field'), function() {
-                answers.push($(this).val());
-            });
-
-            if(answers.length == 0) {
-                answers = "none";
-            }
-
-            return false;
-
-        });
-
-    });
-
-
+    }
 
 
 </script>
