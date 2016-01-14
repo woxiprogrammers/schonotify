@@ -24,17 +24,15 @@
                         <div class="col-sm-5">
                             <!-- start: MINI STATS WITH SPARKLINE -->
                             <ul class="mini-stats pull-right">
-                                @foreach(session('functionArr') as $row)
-                                @if($row == 'create_class')
+
                                 <li>
                                     <div class="values">
-                                        <a href="/createClass" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                        <a href="/create-class" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
                                             Create New Class <i class="fa fa-angle-right"></i>
                                         </a>
                                     </div>
                                 </li>
-                                @endif
-                                @endforeach
+
                             </ul>
                             <!-- end: MINI STATS WITH SPARKLINE -->
                         </div>
