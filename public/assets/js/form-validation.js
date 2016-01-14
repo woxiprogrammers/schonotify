@@ -698,6 +698,114 @@ var FormValidator = function () {
         $('textarea.ckeditor').ckeditor();
 
     };
+    var runValidator24 = function () {
+        var form24 = $('#form24');
+        var errorHandler2 = $('.errorHandler', form24);
+        var successHandler2 = $('.successHandler', form24);
+        $.validator.addMethod("getEditorValue", function () {
+            $("#editor1").val($('#form24 .summernote').code());
+            if ($("#editor1").val() != "" && $("#editor1").val().replace(/(<([^>]+)>)/ig, "") != "") {
+                $('#editor1').val('');
+                return true;
+            } else {
+                return false;
+            }
+        }, 'This field is required.');
+        form24.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                subjectsDropdown: {
+                    required: true
+                },
+                homeworkType: {
+                    required: true
+                },
+                dueDate: {
+                    required: true
+                },
+                title: {
+                    minlength: 2,
+                    required: true
+                },
+                description:{
+                    minlength:15,
+                    required:true
+                },
+                batch:{
+                    required:true
+                },
+                pdfFile:{
+                    maxlength:25000000
+                     },
+                classDropdown:{
+                    required:true
+                },
+                studentinfo:{
+                    required:true
+                },
+                divisions:{
+                    required:true
+                }
+            },
+            messages: {
+                subjectsDropdown: "Please select subject",
+                homeworkType: "Please select homework type",
+                batch: "Please select batch",
+                classDropdown: "Please select class",
+                divisions: "Please select at least one division",
+                studentinfo: "Please select at least one student",
+                pdfFile: "select only pdf files of size 25 mb",
+                dueDate: "please select due date ",
+                title:{
+                    minlength:"please enter at least 2 characters",
+                    required:"please fill title date"
+                      },
+                description:{
+                    minlength:"Please enter more words."
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler2.hide();
+                errorHandler2.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler2.show();
+                errorHandler2.hide();
+                // submit form
+                return true;
+            }
+        });
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+    };
 
     var runValidatorBatch = function () {
         var form7 = $('#batch-create');
@@ -861,7 +969,7 @@ var FormValidator = function () {
                 // submit form
 
 
-                        return true;
+                return true;
 
             }
         });
@@ -870,7 +978,6 @@ var FormValidator = function () {
         $('textarea.ckeditor').ckeditor();
 
     };
-
 
     return {
         //main function to initiate template pages
@@ -883,8 +990,10 @@ var FormValidator = function () {
             runValidator5();
             runValidator6();
             runValidator7();
+            runValidator24();
             runValidatorBatch();
             runValidatorDivision();
+
         }
     };
 }();

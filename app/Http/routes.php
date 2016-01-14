@@ -137,6 +137,12 @@ Route::get('detailedHomework','HomeworkController@detailedHomework');
 
 Route::get('createHomework','HomeworkController@createHomework');
 
+Route::post('create-homework','HomeworkController@homeworkCreate');
+
+Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
+
+Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
+
 Route::get('results','ResultController@showResults');
 
 Route::get('exams/{id}','ResultController@examResults');
@@ -196,7 +202,7 @@ Route::post('compose-message',array('uses'=>'MessageController@composeMessage'))
 Route::get('get-batches-teacher','UsersController@getBatchesTeacher');
 Route::get('get-classes-teacher/{id}',array('uses' => 'UsersController@getClassesTeacher'));
 Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivisionsTeacher'));
-
+Route::get('get-subject-batches/{id}','HomeworkController@getSubjectBatches');
 // Password reset link request routes...
 Route::get('password/email', 'Auth\PasswordController@getEmail');
 Route::post('password/email', 'Auth\PasswordController@postEmail');
@@ -211,7 +217,7 @@ Route::get('/home','FrontController@index');
 Route::post('send-email','UsersController@sendMail');
 Route::get('verify/{confirmationCode}',array('uses' => 'UsersController@verifyUser'));
 
-
+Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjectClass');
 
 /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
