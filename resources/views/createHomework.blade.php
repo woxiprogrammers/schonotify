@@ -29,7 +29,7 @@
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
-    <form action="/create-homework" method="post" role="form" id="form2" enctype="multipart/form-data">
+    <form action="/create-homework" method="post" role="form" id="form24" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-12">
                 <div class="errorHandler alert alert-danger no-display">
@@ -203,9 +203,6 @@
         Main.init();
         FormValidator.init();
         FormElements.init();
-        UIButtons.init();
-
-
 
     });
 

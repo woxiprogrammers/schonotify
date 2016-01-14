@@ -24,13 +24,16 @@ class CreateHomeworkRequest extends Request
     public function rules()
     {
         return [
-            /*'username' => 'required|max:20',
-            'firstname' => 'required|min:3|max:20',
-            'lastname' => 'required|min:3|max:20',
-            'email' => 'required|email',
-            'mobile' =>'required|digits:10',
-            'address' =>'required',
-            'avatar' => 'mimes:jpeg,jpg,png,gif|max:10000'*/
-        ];
+            'subjectsDropdown' => 'required',
+            'homeworkType' => 'required',
+            'title' => 'required|min:3|max:20',
+            'description' => 'required',
+            'dueDate' =>'required|date',
+            'batch' =>'required',
+            'pdfFile' => 'mimes:pdf|max:25000000',
+            'classDropdown' =>'required',
+            'studentinfo' =>'required|min:1',
+            'divisions' =>'required',
+            ];
     }
 }
