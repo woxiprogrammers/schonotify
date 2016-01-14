@@ -22,6 +22,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Response;
@@ -42,7 +43,10 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('db');
-        $this->middleware('auth');
+        $this->middleware('auth',['except' => [
+        'verifyUser'
+    ],
+    ]);
     }
 
     public function index()
@@ -301,6 +305,7 @@ class UsersController extends Controller
             $userData= new User;
             $userData->first_name = $data['firstName'];
             $userData->last_name = $data['lastName'];
+            $userData->username = $data['userName'];
             $userData->password = bcrypt($data['password']);
             $userData->email = $data['email'];
             $userData->gender = $data['gender'];
@@ -311,6 +316,7 @@ class UsersController extends Controller
             $userData->avatar = 'default-user.png';
             $userData->is_active = 0;
             $userData->remember_token = csrf_token();
+            $userData->confirmation_code = str_random(30);
             $userData->body_id = $user->body_id;
             $userData->created_at = Carbon::now();
             $userData->updated_at = Carbon::now();
@@ -327,11 +333,14 @@ class UsersController extends Controller
                 }
                 $teacherViews['web_view']= 0;
                 $teacherViews['mobile_view']= 0;
-                if(isset($data['web-access'])){
-                    $teacherViews['web_view'] = $data['web-access'];
-                }
-                if(isset($data['mobile-access'])){
-                    $teacherViews['mobile_view'] = $data['mobile-access'];
+                if(!empty($data['access'])){
+                    foreach($data['access'] as $report_id){
+                        if($report_id == 'web'){
+                            $teacherViews['web_view']= 1;
+                        }else{
+                            $teacherViews['mobile_view']=1;
+                        }
+                    }
                 }
                 $teacherViews['user_id'] = $LastInsertId;
                 $teacherViews['created_at'] = Carbon::now();
@@ -379,6 +388,16 @@ class UsersController extends Controller
                 }
                 ModuleAcl::insert($userAclsData);
             }
+            $mailData['email']  = $data['email'];
+            $mailData['confirmation_code']  = $userData->confirmation_code;
+            $mailData['password']  = $data['password'];
+            Mail::send('emails.welcome', $mailData, function($message) use ($mailData)
+            {
+                $message->from('no-reply@site.com', "Site name");
+                $message->subject("Welcome to site name");
+                $message->to($mailData['email']);
+            });
+
             return $request;
         }else{
             return "Please Insert Data";
@@ -488,7 +507,7 @@ class UsersController extends Controller
     public function checkEmail(Request $request){
         if($request->ajax()){
             $data = $request->all();
-            $email = $data['email'];
+            $email = trim($data['email']);
             $userCount = User::where('email',$email)->count();
             if($userCount >= 1){
                 $count = '1';
@@ -534,6 +553,7 @@ class UsersController extends Controller
     public function updateAdmin(Requests\WebRequests\EditAdminRequest $request,$id)
     {
         $userImage=User::where('id',$id)->first();
+        $existingEmail= trim($userImage->email);
         unset($request->_method);
         if($request->hasFile('avatar')){
             $image = $request->file('avatar');
@@ -552,7 +572,7 @@ class UsersController extends Controller
         $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
         $userData['username']= $request->username;
         $userData['first_name']= $request->firstname;
-        $userData['email']= $request->email;
+        $userData['email']= trim($request->email);
         $userData['last_name']= $request->lastname;
         $userData['gender']= $request->gender;
         $userData['mobile']= $request->mobile;
@@ -560,9 +580,11 @@ class UsersController extends Controller
         $userData['avatar']= $filename;
         $userData['birth_date']= $date;
         $userData['alternate_number']= $request->alternate_number;
+        $userData['confirmation_code'] = str_random(30);
 
         $userUpdate=User::where('id',$id)->update($userData);
         if($userUpdate == 1){
+            $this->sendUpdateMail($existingEmail,$userData,$id);
             Session::flash('message-success','User updated successfully');
             return Redirect::to('/edit-user/'.$id);
         }
@@ -575,6 +597,7 @@ class UsersController extends Controller
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
         $userImage=User::where('id',$id)->first();
+        $existingEmail= trim($userImage->email);
         unset($request->_method);
         if($request->hasFile('avatar')){
             $image = $request->file('avatar');
@@ -598,6 +621,7 @@ class UsersController extends Controller
         $userData['gender']= $request->gender;
         $userData['mobile']= $request->mobile;
         $userData['alternate_number']= $request->alternate_number;
+        $userData['confirmation_code'] = str_random(30);
         $userData['address']= $request->address;
         $userData['avatar']= $filename;
         $userData['birth_date']= $date;
@@ -620,6 +644,7 @@ class UsersController extends Controller
     public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
     {
         $userImage=User::where('id',$id)->first();
+        $existingEmail= trim($userImage->email);
         unset($request->_method);
         if($request->hasFile('avatar')){
             $image = $request->file('avatar');
@@ -643,6 +668,7 @@ class UsersController extends Controller
         $userData['gender']= $request->gender;
         $userData['mobile']= $request->mobile;
         $userData['alternate_number']= $request->alternate_number;
+        $userData['confirmation_code'] = str_random(30);
         $userData['address']= $request->address;
         $userData['avatar']= $filename;
         $userData['birth_date']= $date;
@@ -654,6 +680,7 @@ class UsersController extends Controller
         Leave::where('student_id',$request->id)->update($leaves);
         $userUpdate=User::where('id',$id)->update($userData);
         if($userUpdate == 1){
+            $this->sendUpdateMail($existingEmail,$userData,$id);
             Session::flash('message-success','student updated successfully');
             return Redirect::back();
         }
@@ -665,6 +692,7 @@ class UsersController extends Controller
     public function updateTeacher(Requests\WebRequests\EditTeacherRequest $request,$id)
     {
         $userImage=User::where('id',$id)->first();
+        $existingEmail= trim($userImage->email);
         unset($request->_method);
         if($request->hasFile('avatar')){
             $image = $request->file('avatar');
@@ -702,6 +730,7 @@ class UsersController extends Controller
         $userData['gender']= $request->gender;
         $userData['mobile']= $request->mobile;
         $userData['alternate_number']= $request->alternate_number;
+        $userData['confirmation_code'] = str_random(30);
         $userData['address']= $request->address;
         $userData['avatar']= $filename;
         $userData['birth_date']= $date;
@@ -711,6 +740,7 @@ class UsersController extends Controller
         Division::where('id',$request->division)->
                   where('class_id',$request->class)->update(array('class_teacher_id'=>$id));
         if($userUpdate == 1){
+            $this->sendUpdateMail($existingEmail,$userData,$id);
             Session::flash('message-success','teacher updated successfully');
             return Redirect::back();
         }
@@ -883,7 +913,7 @@ class UsersController extends Controller
 
         if($request->ajax()){
             $data = $request->all();
-            $userName = $data['name'];
+            $userName = trim($data['name']);
             $userCount = User::where('username',$userName)->count();
             if($userCount >= 1){
                 $count = '1';
@@ -986,6 +1016,41 @@ class UsersController extends Controller
             $classList = $classData->toArray();
         }
         return $classList;
+    }
+
+    public function verifyUser($confirmation_code)
+    {
+        if( ! $confirmation_code)
+        {
+            Session::flash('message-error','Confirmation Code missing.');
+        }
+        $user = User::where('confirmation_code', $confirmation_code)->first();
+        if ($user)
+        {
+            $user->is_active = 1;
+            $user->confirmation_code = null;
+            $user->save();
+
+            Session::flash('message-success','You have successfully verified your account.');
+            return Redirect::to('/');
+
+        }else{
+        Session::flash('message-error','Link you are using is not Valid.');
+        return Redirect::to('/');
+        }
+    }
+
+    public function sendUpdateMail($existingEmail,$userData,$id){
+        $emailStatus = strcmp($existingEmail,$userData['email']);
+            if($emailStatus != 0){
+                User::where('id',$id)->update(['is_active' => 0]);
+                Mail::send('emails.updateInfo', $userData, function($message) use ($userData)
+                {
+                    $message->from('no-reply@site.com', "Site name");
+                    $message->subject("Welcome to site name");
+                    $message->to($userData['email']);
+                });
+        }
     }
 
 

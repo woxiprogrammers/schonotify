@@ -11730,3 +11730,7 @@ a.control_next {
     word-wrap: break-word;
     width: 200px;
 }
+.profile-image-new{
+    height: 39px;
+    width: 39px;
+}

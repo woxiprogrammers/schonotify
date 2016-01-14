@@ -5,12 +5,15 @@ var FormValidator = function () {
         $("input[type='radio'], input[type='checkbox']").on('ifChecked', function(event) {
 			$(this).parent().closest(".has-error").removeClass("has-error").addClass("has-success").find(".help-block").hide().end().find('.symbol').addClass('ok');
 		});
-    }; 
+    };
+
+
     // function to initiate Validation Sample 1
     var runValidator1 = function () {
         var form1 = $('#form');
         var errorHandler1 = $('.errorHandler', form1);
         var successHandler1 = $('.successHandler', form1);
+
         $.validator.addMethod("FullDate", function () {
             //if all values are selected
             if ($("#dd").val() != "" && $("#mm").val() != "" && $("#yyyy").val() != "") {
@@ -33,6 +36,7 @@ var FormValidator = function () {
                 }
             },
             ignore: "",
+
             rules: {
                 firstname: {
                     minlength: 2,
@@ -70,20 +74,14 @@ var FormValidator = function () {
                 newsletter: {
                     required: true
                 },
-                batch:{
-                    required:true
-                },
-
                 title: {
                     minlength: 2,
                     required: true
                 },
-
                 achievement:{
                     minlength:15,
                     required:true
                 }
-
             },
             messages: {
                 firstname: "Please specify your first name",
@@ -93,7 +91,7 @@ var FormValidator = function () {
                     email: "Your email address must be in the format of name@domain.com"
                 },
                 gender: "Please check a gender!",
-                batch:"please enter batch name",
+
                 achievement:{
                     minlength:"Please enter more words."
                 }
@@ -124,7 +122,7 @@ var FormValidator = function () {
                 successHandler1.show();
                 errorHandler1.hide();
                 // submit form
-                //$('#form').submit();
+
             }
         });
     };
@@ -174,6 +172,12 @@ var FormValidator = function () {
                 },
                 dropdown: {
                     required: true
+                },
+                classDropdown:{
+                    required:true
+                },
+                division:{
+                    required:true
                 },
                 services: {
                     required: true,
@@ -271,7 +275,7 @@ var FormValidator = function () {
                 successHandler2.show();
                 errorHandler2.hide();
                 // submit form
-                //$('#form2').submit();
+                return true;
             }
         });
         CKEDITOR.disableAutoInline = true;
@@ -317,7 +321,6 @@ var FormValidator = function () {
 
             },
             messages: {
-
                 password: {
                     minlength: jQuery.validator.format("Please enter  at least {0} character")
                 },
@@ -360,6 +363,9 @@ var FormValidator = function () {
         var form4 = $('#form4');
         var errorHandler2 = $('.errorHandler', form4);
         var successHandler2 = $('.successHandler', form4);
+       $.validator.addMethod("mobileNumber", function(value, element) {
+           return this.optional(element) || /^[0-9]{10}(\-[0-9]{4})?$/.test(value);
+       });
         $.validator.addMethod("getEditorValue", function () {
             $("#editor1").val($('#form4 .summernote').code());
             if ($("#editor1").val() != "" && $("#editor1").val().replace(/(<([^>]+)>)/ig, "") != "") {
@@ -397,13 +403,15 @@ var FormValidator = function () {
                     email: true
                 },
                 mobile:{
-                    required: true,
+                    required:true,
+                    number:true,
                     minlength:10,
-                    maxlength:10
+                    mobileNumber:true
                 },
                 alternate_number:{
+                    number:true,
                     minlength:10,
-                    maxlength:10
+                    mobileNumber:true
                 },
                 address:{
                     required:true
@@ -411,7 +419,17 @@ var FormValidator = function () {
 
             },
             messages: {
-
+                mobile:{
+                    required:"Mobile number is required",
+                    number:"Mobile number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only ",
+                    minlength: jQuery.validator.format("Please enter at least 10 digits.")
+                },
+                alternate_number:{
+                    number:"Alternate number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only",
+                    minlength: jQuery.validator.format("Please enter at least 10 digits.")
+                }
 
 
             },
@@ -681,6 +699,177 @@ var FormValidator = function () {
 
     };
 
+    var runValidatorBatch = function () {
+        var form7 = $('#batch-create');
+        var errorHandler7 = $('.errorHandler', form7);
+        var successHandler7 = $('.successHandler', form7);
+        form7.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                batchesDefault:{
+                    required:true,
+                    minlength:2
+                }
+            },
+            messages: {
+
+                batchesDefault:{
+                    required:"Please enter batch name",
+                    minlength:"Please provide more words"
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler7.hide();
+                errorHandler7.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler7.show();
+                errorHandler7.hide();
+                // submit form
+
+                var i = $('input[name="batches"]').size();
+
+                var batchVal=$('#batchesDefault').val();
+
+                var route="create-batch/"+batchVal;
+
+                $.get(route,function(res){
+
+                    if(res!=0)
+                    {
+                        var batchDelId="_batch_"+i;
+
+                        $('<div class="form-group col-sm-8 div'+res+'" id="divTxt"><input type="text" class="field form-control" id="_batch_'+i+'" value="'+batchVal+'" name="batches" readonly/></div><div class="col-sm-2 del'+res+'" id="del"><button type="button" class="btn btn-primary btn-red pull-left hideDelete" id="removeBatch" onclick="deleteBatch('+res+')"><i class="glyphicon glyphicon-trash"></i></button></div>').fadeIn('slow').appendTo('#batchDiv');
+
+                        i++;
+
+                        if(i<4)
+                        {
+                            $('#checkHeight').removeClass('flexcroll1');
+                        }else{
+
+                            $('#checkHeight').addClass('flexcroll1');
+                        }
+
+                        $('#batchesDefault').val("");
+
+                    }else{
+                        successHandler7.hide();
+                        errorHandler7.show();
+
+                        $('#batchesDefault').closest('.help-block').removeClass('valid');
+                        // display OK icon
+                        $('#batchesDefault').closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                        // add the Bootstrap error class to the control group
+                        $('#batchesDefault-error').html('Batch Name is already in use !');
+
+                    }
+
+                });
+
+
+            }
+        });
+
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+
+    };
+    var runValidatorDivision = function () {
+        var form7 = $('#div-create');
+        var errorHandler7 = $('.errorHandler', form7);
+        var successHandler7 = $('.successHandler', form7);
+        form7.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                dropdown: {
+                    required: true
+                },
+                classDropdown:{
+                    required:true
+                },
+                division:{
+                    required:true
+                }
+            },
+            messages: {
+
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler7.hide();
+                errorHandler7.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler7.show();
+                errorHandler7.hide();
+                // submit form
+
+
+                        return true;
+
+            }
+        });
+
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+
+    };
 
 
     return {
@@ -694,6 +883,8 @@ var FormValidator = function () {
             runValidator5();
             runValidator6();
             runValidator7();
+            runValidatorBatch();
+            runValidatorDivision();
         }
     };
 }();

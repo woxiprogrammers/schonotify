@@ -105,7 +105,9 @@ Route::get('active/{id}','UsersController@activeUser');
 
 Route::get('deactive/{id}','UsersController@deactiveUser');
 
-Route::get('createClass','ClassController@create');
+Route::get('create-class','ClassController@index');
+
+Route::post('class-create','ClassController@create');
 
 Route::get('event','EventController@index');
 
@@ -171,6 +173,16 @@ Route::get('user-module-acl-edit/{id}','UsersController@userModuleAclsEdit');
 
 Route::get('edit-mychildrens/{id}','UsersController@editMyChildren');
 
+Route::get('create-batch/{batchName}','ClassController@createBatch');
+
+Route::get('delete-batch/{id}','ClassController@deleteBatch');
+
+Route::get('create-division','ClassController@createDivision');
+
+Route::post('division-create','ClassController@saveDivision');
+
+Route::get('check-div/{clsDiv}','ClassController@checkDivision');
+
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
@@ -184,6 +196,20 @@ Route::post('compose-message',array('uses'=>'MessageController@composeMessage'))
 Route::get('get-batches-teacher','UsersController@getBatchesTeacher');
 Route::get('get-classes-teacher/{id}',array('uses' => 'UsersController@getClassesTeacher'));
 Route::get('get-divisions-teacher/{id}',array('uses' => 'UsersController@getDivisionsTeacher'));
+
+// Password reset link request routes...
+Route::get('password/email', 'Auth\PasswordController@getEmail');
+Route::post('password/email', 'Auth\PasswordController@postEmail');
+
+// Password reset routes...
+Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+Route::post('password/reset', 'Auth\PasswordController@postReset');
+
+Route::get('/home','FrontController@index');
+
+// Send email and verification routes...
+Route::post('send-email','UsersController@sendMail');
+Route::get('verify/{confirmationCode}',array('uses' => 'UsersController@verifyUser'));
 
 
 

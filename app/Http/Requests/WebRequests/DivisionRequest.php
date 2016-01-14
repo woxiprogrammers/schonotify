@@ -5,10 +5,10 @@ namespace App\Http\Requests\WebRequests;
 use App\Http\Requests\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
-use Session;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
-class UserRequest extends Request
+class DivisionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,6 @@ class UserRequest extends Request
      */
     public function authorize()
     {
-
         $ch=Request::method();
 
         $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
@@ -28,7 +27,6 @@ class UserRequest extends Request
             ->get();
         $resultArr=array();
 
-
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
@@ -38,11 +36,10 @@ class UserRequest extends Request
         {
             case 'GET':
 
-                if(in_array('create_user',$resultArr)) {
+                if(in_array('create_class',$resultArr)) {
                     return true;
                 } else {
-
-                    Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
+                    Session::flash('message-error','you don`t have access');
                     return Redirect::to('/');
                 }
 
@@ -53,11 +50,10 @@ class UserRequest extends Request
                 break;
 
             case 'POST':
-                    return true;
+                return true;
                 break;
             default:break;
         }
-
     }
 
     /**
@@ -73,33 +69,13 @@ class UserRequest extends Request
             case 'GET': return [];
                 break;
             case 'POST':return [
-                'firstName'=>'required|min:2',
-                'lastName' => 'required|min:2',
-                'password' => 'required|min:6',
-                'password2' => 'required|min:6',
-                'mobile' => 'required|min:10',
-                'alt_number' => 'min:10',
-                'email' => 'required|email',
-                'address' => 'required|min:15'
+                'dropdown'=>'required',
+                'classDropdown'=>'required',
+                'division'=>'required'
             ];
                 break;
             default:break;
         }
 
-    }
-
-    public function messages()
-    {
-        $ch=Request::method();
-        switch($ch)
-        {
-            case 'GET': return [];
-                break;
-            case 'POST':return [
-                'modules.required'=>'Please check at least one Module Acls.',
-            ];
-                break;
-            default:break;
-        }
     }
 }
