@@ -76,13 +76,7 @@ class SearchController extends Controller
 
         $str.="<th>Status</th>";
 
-        foreach(session('functionArr') as $row)
-        {
-            if($row == 'update_user')
-            {
-                $str.="<th>Action</th>";
-            }
-        }
+        $str.="<th>Action</th>";
 
         $str.="</tr></thead><tbody>";
 
@@ -105,34 +99,19 @@ class SearchController extends Controller
             {
                 $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
             }
-            if($user->role_id == 1)
-            {
-                $str.="<td>";
-                if($row->is_active == 1)
-                {
-                    $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
-                }else{
-                    $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
-                }
-                $str.="</td>";
-            }else{
-                $str.="<td>";
-                if($row->is_active == 1)
-                {
-                    $str.='<span class="label label-success">Active</span>';
-                }else{
-                    $str.='<span class="label label-inverse">inActive</span>';
-                }
-                $str.="</td>";
-            }
 
-            foreach(session('functionArr') as $row1)
+            $str.="<td>";
+            if($row->is_active == 1)
             {
-                if($row1 == 'update_user')
-                {
-                    $str.="<td><a href='edit-user/".$row->id."'>Edit</a></td>";
-                }
+                $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
+            }else{
+                $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
             }
+            $str.="</td>";
+
+
+            $str.="<td><a href='/edit-user/".$row->id."'>Edit</a></td>";
+
 
         }
 

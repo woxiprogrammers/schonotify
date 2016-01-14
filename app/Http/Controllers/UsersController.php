@@ -422,60 +422,65 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function editUser(Request $request,$id)
+    public function editUser(Requests\WebRequests\EditUserRequest $request,$id)
     {
-        $user=User::where('id',$id)->first();
-        $userRole=UserRoles::where('id',$user->role_id)->select('slug')->first();
-        if($userRole->slug == 'admin')
+        if($request->authorize()===true)
         {
-            return view('editAdmin')->with('user',$user);
-        }elseif($userRole->slug == 'teacher')
-        {
-            $classTeacher=Division::where('class_teacher_id',$id)->first();
-            if($classTeacher != null)
+            $user=User::where('id',$id)->first();
+            $userRole=UserRoles::where('id',$user->role_id)->select('slug')->first();
+            if($userRole->slug == 'admin')
             {
-                $class=Classes::where('id',$classTeacher->class_id)->first();
+                return view('editAdmin')->with('user',$user);
+            }elseif($userRole->slug == 'teacher')
+            {
+                $classTeacher=Division::where('class_teacher_id',$id)->first();
+                if($classTeacher != null)
+                {
+                    $class=Classes::where('id',$classTeacher->class_id)->first();
+                    $batch=Batch::where('id',$class->batch_id)->first();
+                    $user['batch_id']=$batch->id;
+                    $user['batch_name']=$batch->slug;
+                    $user['class_id']=$class->id;
+                    $user['class_name']=$class->slug;
+                    $user['division_id']=$classTeacher->id;
+                    $user['division_name']=$classTeacher->slug;
+                }
+                $teacherView=TeacherView::where('user_id',$id)->first();
+                $user['web_view'] = $teacherView->web_view;
+                $user['mobile_view']= $teacherView->mobile_view;
+                return view('editTeacher')->with('user',$user);
+            }elseif($userRole->slug == 'student')
+            {
+                $userData=User::where('id',$user['parent_id'])->first();
+                $user['parentUserName']=$userData->username;
+                $user['parentFirstName']=$userData->first_name;
+                $user['parentLastName']=$userData->last_name;
+                $user['parentEmail']=$userData->email;
+                $user['parentGender']=$userData->gender;
+                $user['parentBirth_date']=$userData->birth_date;
+                $user['parentMobile']=$userData->mobile;
+                $user['parentAddress']=$userData->address;
+                $user['parentAlternateNumber']=$userData->alternate_number;
+                $user['parentAvatar']=$userData->avatar;
+                $division=Division::where('id',$user['division_id'])->first();
+                $class=Classes::where('id',$division->id)->first();
                 $batch=Batch::where('id',$class->batch_id)->first();
                 $user['batch_id']=$batch->id;
                 $user['batch_name']=$batch->slug;
                 $user['class_id']=$class->id;
                 $user['class_name']=$class->slug;
-                $user['division_id']=$classTeacher->id;
-                $user['division_name']=$classTeacher->slug;
+                $user['division_id']=$division->id;
+                $user['division_name']=$division->slug;
+                return view('editStudent')->with('user',$user);
+            }elseif($userRole->slug == 'parent')
+            {
+                $students=User::where('parent_id',$user->id)->get();
+                return view('editParent')->with(compact('user','students'));
             }
-            $teacherView=TeacherView::where('user_id',$id)->first();
-            $user['web_view'] = $teacherView->web_view;
-            $user['mobile_view']= $teacherView->mobile_view;
-            return view('editTeacher')->with('user',$user);
-        }elseif($userRole->slug == 'student')
-        {
-            $userData=User::where('id',$user['parent_id'])->first();
-            $user['parentUserName']=$userData->username;
-            $user['parentFirstName']=$userData->first_name;
-            $user['parentLastName']=$userData->last_name;
-            $user['parentEmail']=$userData->email;
-            $user['parentGender']=$userData->gender;
-            $user['parentBirth_date']=$userData->birth_date;
-            $user['parentMobile']=$userData->mobile;
-            $user['parentAddress']=$userData->address;
-            $user['parentAlternateNumber']=$userData->alternate_number;
-            $user['parentAvatar']=$userData->avatar;
-            $division=Division::where('id',$user['division_id'])->first();
-            $class=Classes::where('id',$division->id)->first();
-            $batch=Batch::where('id',$class->batch_id)->first();
-            $user['batch_id']=$batch->id;
-            $user['batch_name']=$batch->slug;
-            $user['class_id']=$class->id;
-            $user['class_name']=$class->slug;
-            $user['division_id']=$division->id;
-            $user['division_name']=$division->slug;
-            return view('editStudent')->with('user',$user);
-        }elseif($userRole->slug == 'parent')
-        {
-            $students=User::where('parent_id',$user->id)->get();
-            return view('editParent')->with(compact('user','students'));
-        }
 
+        }else{
+            return Redirect::back();
+        }
     }
     public function editMyChildren($id)
     {
@@ -831,22 +836,33 @@ class UsersController extends Controller
         }
     }
 
-    public function activeUser($id)
+    public function activeUser(Requests\WebRequests\DeleteUserRequest $request,$id)
     {
-        $user=User::find($id);
-        $user->is_active=1;
-        $user->save();
+        if($request->authorize()===true)
+        {
+            $user=User::find($id);
+            $user->is_active=1;
+            $user->save();
 
-        return response()->json(['status'=>'record has been activated.']);
+            return response()->json(['status'=>'record has been activated.']);
+        }else{
+            return response()->json(['status'=>403]);
+        }
     }
 
-    public function deactiveUser($id)
+    public function deactiveUser(Requests\WebRequests\DeleteUserRequest $request,$id)
     {
-        $user=User::find($id);
-        $user->is_active=0;
-        $user->save();
+        if($request->authorize()===true)
+        {
+            $user=User::find($id);
+            $user->is_active=0;
+            $user->save();
 
-        return response()->json(['status'=>'record has been deactivated.']);
+            return response()->json(['status'=>'record has been deactivated.']);
+        }else{
+            return response()->json(['status'=>403]);
+        }
+
     }
 
     /**
