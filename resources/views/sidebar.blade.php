@@ -82,41 +82,37 @@
         </div>
     </a>
 </li>
-@endif
 
-@foreach(session('functionArr') as $row)
-@if($row == 'create_class')
 <li>
-    <a href="/createClass">
+    <a href="javascript:void(0)">
         <div class="item-content">
             <div class="item-media">
-                <i class="fa fa-suitcase"></i>
+                <i class="fa fa-pencil-square-o"></i>
             </div>
             <div class="item-inner">
-                <span class="title"> Create Class </span>
+                <span class="title"> Create Class </span><i class="icon-arrow"></i>
             </div>
         </div>
     </a>
-</li>
-@endif
-@endforeach
+    <ul class="sub-menu">
 
-@foreach(session('functionArr') as $row)
-@if($row == 'create_division')
-<li>
-    <a href="javascript:void(0);">
-        <div class="item-content">
-            <div class="item-media">
-                <i class="fa fa-th-list"></i>
-            </div>
-            <div class="item-inner">
-                <span class="title"> Create Division </span>
-            </div>
-        </div>
-    </a>
+        <li>
+            <a href="/create-class">
+                <div class="item-inner">
+                    <span class="title"> Create Class </span>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="/create-division">
+                <div class="item-inner">
+                    <span class="title"> Create Division </span>
+                </div>
+            </a>
+        </li>
+
+    </ul>
 </li>
-@endif
-@endforeach
 @foreach(session('functionArr') as $row)
 @if($row == 'view_timetable')
 <li>
