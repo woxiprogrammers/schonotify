@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use DateTime;
 
 class HomeworkController extends Controller
 {
@@ -33,8 +34,105 @@ class HomeworkController extends Controller
 
     public function homeworkListing()
     {
+        $user=Auth::user();
+        $homeworkId=array();
+        $i=0;
+        $division=Division::where('class_teacher_id',$user->id)->first();
+        if($division != null){
+           $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)->select('homework_id')->get();
 
-        return view('homeworkListing');
+            foreach($homeworkDivision as $row)
+            {
+                $homeworkId[]=$row['homework_id'];
+            }
+            $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
+            foreach($homeworkTeacher as $row)
+            {
+                $homeworkId[]=$row['homework_id'];
+            }
+            $homeworkId = array_unique($homeworkId, SORT_REGULAR);
+            //above code is for take homeworkids for users
+            $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
+            $i=0;
+            $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+            $currentDate = new DateTime(Carbon::now());
+
+            foreach($homeworkInfo as $home)
+            {
+                $homeworkIdss[$home['id']]['homework_id']=$home['id'];
+                $homeworkIdss[$home['id']]['homework_title']=$home['title'];
+                $homeworkIdss[$home['id']]['homework_description']=$home['description'];
+                $homeworkDate=new DateTime($home['homework_timestamp']);
+                $dateDiff = $currentDate->diff($homeworkDate);
+                $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
+                $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
+                $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
+                $homeworkIdss[$home['id']]['homework_status']=$home['status'];
+                $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
+                $i++;
+            }
+            $i=0;
+            foreach($homeworkData as $row)
+            {
+
+                $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
+                $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
+                $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
+
+                $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
+                $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
+                $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
+                $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
+
+            }
+
+        }else{
+            $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
+            foreach($homeworkTeacher as $row)
+            {
+                $homeworkId[]=$row['homework_id'];
+            }
+            $homeworkId = array_unique($homeworkId, SORT_REGULAR);
+            //above code is for take homeworkids for users
+            $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
+            $i=0;
+            $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+            $currentDate = new DateTime(Carbon::now());
+
+            foreach($homeworkInfo as $home)
+            {
+                $homeworkIdss[$home['id']]['homework_id']=$home['id'];
+                $homeworkIdss[$home['id']]['homework_title']=$home['title'];
+                $homeworkIdss[$home['id']]['homework_description']=$home['description'];
+                $homeworkDate=new DateTime($home['homework_timestamp']);
+                $dateDiff = $currentDate->diff($homeworkDate);
+                $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
+                $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
+                $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
+                $homeworkIdss[$home['id']]['homework_status']=$home['status'];
+                $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
+                $i++;
+            }
+            $i=0;
+            foreach($homeworkData as $row)
+            {
+
+                $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
+                $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
+                $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
+
+                $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
+                $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
+                $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
+                $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
+
+            }
+
+        }
+            //dd($homeworkIdss);
+        return view('homeworkListing')->with(compact('homeworkIdss'));
     }
 
     public function detailedHomework()
@@ -159,7 +257,7 @@ class HomeworkController extends Controller
 
     public function getSubjectBatches($subjectId)
     {
-
+        $batchInfo=array();
         $class_id=Subject::where('id',$subjectId)->get()->toArray();
 
         foreach($class_id as $row)
@@ -212,6 +310,8 @@ class HomeworkController extends Controller
     public function getSubjectDiv($id,$subject_id){
         $user=Auth::user();
         $i=0;
+        $divArray=array();
+        $divisionArray=array();
         $division=Division::where('class_teacher_id',$user->id)->first();
             if($division != null){
                 $divisionInfo=Division::where('class_id',$id)->where('class_teacher_id',$user->id)->first();
@@ -235,7 +335,7 @@ class HomeworkController extends Controller
                 return $divisionArray;
             }else{
                 $divSubjects=SubjectClassDivision::where('teacher_id',$user->id)
-                    ->where('subject_id',$subject_id)->get();
+                                                ->where('subject_id',$subject_id)->get();
                 foreach($divSubjects as $row)
                 {
                     $divArray[$i]=$row['division_id'];
