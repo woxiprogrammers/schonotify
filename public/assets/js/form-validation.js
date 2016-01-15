@@ -363,6 +363,9 @@ var FormValidator = function () {
         var form4 = $('#form4');
         var errorHandler2 = $('.errorHandler', form4);
         var successHandler2 = $('.successHandler', form4);
+       $.validator.addMethod("alpha", function(value, element) {
+           return this.optional(element) || /^[A-z]+$/.test(value);
+       });
        $.validator.addMethod("mobileNumber", function(value, element) {
            return this.optional(element) || /^[0-9]{10}(\-[0-9]{4})?$/.test(value);
        });
@@ -392,11 +395,13 @@ var FormValidator = function () {
             rules: {
                 firstname: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    alpha: true
                 },
                 lastname: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    alpha: true
                 },
                 email: {
                     required: true,
@@ -419,6 +424,16 @@ var FormValidator = function () {
 
             },
             messages: {
+                firstname: {
+                    required: "First Name is required" ,
+                    alpha: "First name must contain only letters",
+                    minlength:"Please enter at least 2 character"
+                },
+                lastname: {
+                    required: "Last Name is required",
+                    alpha: "Last name must contain only letters",
+                    minlength:"Please enter at least 2 character"
+                },
                 mobile:{
                     required:"Mobile number is required",
                     number:"Mobile number must be numeric",
