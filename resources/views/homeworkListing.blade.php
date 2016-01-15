@@ -25,7 +25,7 @@
 
                     <li>
                         <div class="values">
-                            <a href="/createHomework" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
+                            <a href="/detailedHomework/{id}" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
                         </div>
                     </li>
 
