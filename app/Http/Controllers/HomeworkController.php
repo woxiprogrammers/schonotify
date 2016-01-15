@@ -36,6 +36,7 @@ class HomeworkController extends Controller
     {
         $user=Auth::user();
         $homeworkId=array();
+        $homeworkIdss=array();
         $i=0;
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
