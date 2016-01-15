@@ -45,10 +45,7 @@
                                                     Batch <span class="symbol required"></span>
                                                 </label>
                                                 <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
-                                                    <option value="">Select Batch</option>
-                                                    @foreach($batches as $batch)
-                                                    <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
-                                                    @endforeach
+
                                                 </select>
                                             </div>
 
@@ -164,6 +161,7 @@
         Main.init();
         FormWizard.init();
         FormValidator.init();
+        getbatches();
     });
 
     $('#resetBatch').click(function() {
@@ -212,10 +210,24 @@
 
                     $('#checkHeight').addClass('flexcroll1');
                 }
+                getbatches();
             }
 
         });
 
+    }
+
+    function getbatches()
+    {
+        var route="get-batches";
+        $.get(route,function(res){
+            var str="<option>Select Batch</option>";
+            for(var i=0; i<res.length; i++)
+            {
+                str+="<option value='"+res[i]['id']+"'>"+res[i]['name']+"</option>"
+            }
+            $('#dropdown').html(str);
+        });
     }
 
 

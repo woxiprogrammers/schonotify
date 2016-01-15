@@ -889,6 +889,16 @@ var FormValidator = function () {
 
                         $('#batchesDefault').val("");
 
+                        var route="get-batches";
+                        $.get(route,function(res){
+                            var str="<option>Select Batch</option>";
+                            for(var i=0; i<res.length; i++)
+                            {
+                                str+="<option value='"+res[i]['id']+"'>"+res[i]['name']+"</option>"
+                            }
+                            $('#dropdown').html(str);
+                        });
+
                     }else{
                         successHandler7.hide();
                         errorHandler7.show();
