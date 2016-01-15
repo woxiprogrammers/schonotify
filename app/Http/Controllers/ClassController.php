@@ -25,9 +25,7 @@ class ClassController extends Controller
     {
         if($request->authorize()===true)
         {
-            $user=Auth::User();
-            $batches=Batch::where('body_id',$user->body_id)->get();
-            return view('admin.classCreate')->with(compact('batches'));
+            return view('admin.classCreate');
         }else{
             return Redirect::to('/');
         }

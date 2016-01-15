@@ -133,7 +133,7 @@ Route::get('detailedLeave','LeaveController@detailedLeave');
 
 Route::get('homeworkListing','HomeworkController@homeworkListing');
 
-Route::get('detailedHomework','HomeworkController@detailedHomework');
+Route::get('detailedHomework/{id}','HomeworkController@detailedHomework');
 
 Route::get('createHomework','HomeworkController@createHomework');
 
