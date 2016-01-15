@@ -251,8 +251,7 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
-
-
+    Route::get('get-teachers-subjects/{div_id}','api\HomeworkController@getTeacherSubject');
 
 
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
