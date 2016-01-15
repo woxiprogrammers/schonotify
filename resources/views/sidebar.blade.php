@@ -185,7 +185,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'view_homework')
 <li>
-    <a href="/homeworkListing">
+    <a href="/homework-listing">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-book"></i>

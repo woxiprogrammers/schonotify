@@ -131,7 +131,7 @@ Route::get('leaveListing','LeaveController@leaveListing');
 
 Route::get('detailedLeave','LeaveController@detailedLeave');
 
-Route::get('homeworkListing','HomeworkController@homeworkListing');
+Route::get('homework-listing','HomeworkController@homeworkListing');
 
 Route::get('detailedHomework/{id}','HomeworkController@detailedHomework');
 
@@ -139,9 +139,16 @@ Route::get('createHomework','HomeworkController@createHomework');
 
 Route::post('create-homework','HomeworkController@homeworkCreate');
 
+Route::post('edit-homework/{id}','HomeworkController@editHomework');
+
+
+Route::post('edit-homework-detail/{id}','HomeworkController@updateHomeworkDetail');
+
 Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
 Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
+
+Route::get('download/{file_name}', 'HomeworkController@getDownload');
 
 Route::get('results','ResultController@showResults');
 
@@ -188,6 +195,7 @@ Route::get('create-division','ClassController@createDivision');
 Route::post('division-create','ClassController@saveDivision');
 
 Route::get('check-div/{clsDiv}','ClassController@checkDivision');
+
 
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
