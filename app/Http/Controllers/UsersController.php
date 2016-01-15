@@ -1069,5 +1069,14 @@ class UsersController extends Controller
         }
     }
 
+    public function checkClassTeacher($id){
+        $classTeacher = Division::where('id',$id)->first();
+        $users = User::where('id',$classTeacher->class_teacher_id)->select('first_name','last_name')->get();
+        $userinfo = $users->toArray();
+        if($users){
+            return $userinfo;
+        }
+    }
+
 
 }

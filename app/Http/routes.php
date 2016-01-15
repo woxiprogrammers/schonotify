@@ -219,6 +219,9 @@ Route::get('verify/{confirmationCode}',array('uses' => 'UsersController@verifyUs
 
 Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjectClass');
 
+//check class teacher
+Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
+
 /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
