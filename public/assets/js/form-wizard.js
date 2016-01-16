@@ -141,7 +141,7 @@ var FormWizard = function () {
                 },
                 userName: {
                     required: "User Name is required",
-                    alphanumeric: "User name must contain only letters ,Numbers OR Space added"
+                    alphanumeric: "User name must contain only letters"
                 },
                 studid:"please provide correct student id",
                 email: {
@@ -241,6 +241,7 @@ var FormWizard = function () {
         });
         $(".finish-step").unbind("click").click(function (e) {
             e.preventDefault();
+
             onFinish(obj, context);
         });
     };
@@ -263,6 +264,7 @@ var FormWizard = function () {
                 success: function(data){
                     $('#error-div').html('');
                     wizardContent.smartWizard("goForward");
+                    $('.stepNumber').click(false);
                 },
                 error:function(data){
                     var errors = $.parseJSON(data.responseText);
