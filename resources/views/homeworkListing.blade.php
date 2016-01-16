@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         @if($row['homework_status'] == 0)
-                                        <small class="label label-sm label-danger">Pending</small>
+                                        <small class="label label-sm label-danger">saved to draft</small>
                                         @elseif($row['homework_status'] == 1)
                                         <small class="label label-sm label-inverse">Published</small>
                                         @endif
@@ -120,98 +120,10 @@
     });
 
 
-    var loaded = false;
-    $(window).scroll(function()
-    {
-        if($(window).scrollTop() == $(document).height() - $(window).height())
-        {
-            $('div#loadmoreajaxloader').show();
 
 
-            if(loaded){
-                $('div#loadmoreajaxloader').html('<center>No more leaves to show.</center>');
-                return;
-            }else{
-
-                var str='<li class="timeline-item">'+
-                    '<div class="leaveSection">'+
-                    '<div class="text-muted text-small">'+
-                    "Thus, 10 Jun"+
-                    '</div>'+
-                    '<div class="col-sm-8" style="margin-top: 4px;">'+
-
-                    '<h5><small class="label label-sm label-info">Mr. Vishnu</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>'+
-
-                    '</div>'+
-                    '<div class="col-sm-2">'+
-                    '<small class="label label-sm label-inverse">Published</small>'+
-                    '<div style="margin-top:10px;">'+
-                    '<a class="text-info " href="detailedHomework">View More</a>'+
-                    '</div>'+
-                    '</div>'+
-                    '</div>'+
-
-                    '<div class="tmln-div">'+
-                    '<h5 style="padding: 14px 14px 14px 23px;">THIRD <small>Div. A</small></h5>'+
-                    '</div>'+
-
-                    '</li>'+'<li class="timeline-item">'+
-                    '<div class="leaveSection">'+
-                    '<div class="text-muted text-small">'+
-                    "Thus, 10 Jun"+
-                    '</div>'+
-                    '<div class="col-sm-8" style="margin-top: 4px;">'+
-
-                    '<h5><small class="label label-sm label-info">Mr. Vishnu</small> Solve following maths questions</h5>'+
-
-                    '<p>Date:<i> 2 Nov, 2015 </i> <br> Due Date: <i> 4 Nov, 2015</i></p></div>'+
-                    '<div class="col-sm-2">'+
-                    '<small class="label label-sm label-inverse">Published</small>'+
-                    '<div style="margin-top:10px;">'+
-                    '<a class="text-info " href="detailedHomework">View More</a>'+
-                    '</div>'+
-                    '</div>'+
-                    '</div>'+
-
-                    '<div class="tmln-div">'+
-                    '<h5 style="padding: 14px 14px 14px 23px;">THIRD <small>Div. A</small></h5>'+
-                    '</div>'+
-
-                    '</li>'+
-                    '<li class="timeline-item">'+
-                    '<div class="leaveSection">'+
-                    '<div class="text-muted text-small">'+
-                    "Thus, 10 Jun"+
-                    '</div>'+
-                    '<div class="col-sm-8" style="margin-top: 4px;">'+
-
-                    '<h5><small class="label label-sm label-info">Mr. Vishnu</small> Complete the all questions mentioned in file. <i class="fa fa-paperclip"></i></h5>'+
-
-                    '</div>'+
-                    '<div class="col-sm-2">'+
-                    '<small class="label label-sm label-inverse">Published</small>'+
-                    '<div style="margin-top:10px;">'+
-                    '<a class="text-info " href="detailedHomework">View More</a>'+
-                    '</div>'+
-                    '</div>'+
-                    '</div>'+
-                    '<div class="tmln-div">'+
-                    '<h5 style="padding: 14px 14px 14px 23px;">THIRD <small>Div. A</small></h5>'+
-                    '</div>'+
-                    '</li>';
-
-                $("#tmln").append(str);
-                $('div#loadmoreajaxloader').hide();
-
-            }
 
 
-            loaded=true;
-
-        }
-
-
-    });
 
 
 </script>
