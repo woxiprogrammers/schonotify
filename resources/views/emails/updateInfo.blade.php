@@ -8,8 +8,8 @@
 
 <div>
     Your Email-Id changed to {{$email}}.<br/><br/>
-    Please Click on link to Update Account.<br/>
-    {{ URL::to('verify/' . $confirmation_code) }}.<br/>
+    Please Click on link to Update Account
+    <a href=" {{ URL::to('verify/' . $confirmation_code) }}"> Verify account </a><br/><br/> .
 
     You can login with your old password.<br/>
     --The Veza Team.<br/><br/>
