@@ -198,7 +198,7 @@
                             Email Address
                         </label>
                         <input type="email" readonly placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                        <div class="" id="emailfeedback" ></div>
+
                     </div>
                     <div class="form-group">
                         <label class="control-label">

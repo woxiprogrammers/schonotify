@@ -233,7 +233,7 @@
                 <button class="btn btn-primary btn-o back-step btn-wide pull-left">
                     <i class="fa fa-circle-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep">
+                <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep" onclick="this.disabled = true">
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>

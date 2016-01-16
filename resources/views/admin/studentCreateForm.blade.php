@@ -234,7 +234,7 @@
 </fieldset>
 
 <div class="form-group">
-    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="submitStep" >
+    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="submitStep" onclick="this.disabled = true">
         Next <i class="fa fa-arrow-circle-right"></i>
     </button>
 </div>

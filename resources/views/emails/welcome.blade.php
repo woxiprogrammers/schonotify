@@ -4,15 +4,20 @@
     <meta charset="utf-8">
 </head>
 <body>
-<h2>Verify Your Email Address</h2>
-
 <div>
-    Thanks for creating an account with the verification demo app.
+    Welcome to Veza, {{$email}} !
+    Thanks for signing-up for Veza. Please confirm your email.
     Please follow the link below to verify your email address
-    {{ URL::to('verify/' . $confirmation_code) }}.<br/>
 
-    Your User Name:{{$email}}
-    Password:{{$password}}
+    <a href="{{ URL::to('verify/' . $confirmation_code) }}"> Activate account </a>
+
+    Your Email Id : {{$email}}
+    Password : {{$password}} <br/>
+
+    Have any questions or feedback? Just contact your administrator.<br/>
+    --The Veza Team.<br/>
+
+    This is an automated email, please don’t reply.
 
 </div>
 
