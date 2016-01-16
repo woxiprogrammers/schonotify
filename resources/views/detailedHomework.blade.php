@@ -224,8 +224,8 @@
                         <label for="form-field-select-2">
                             Select Batch
                         </label>
-                        <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;" name="batch">
-                        </select>
+                        <div id="batch-select-div"></div>
+
                     </div>
                     <div class="form-group">
                         <label class="control-label">
@@ -329,50 +329,98 @@
         if(sub!="")
         {
             var id=sub;
-            console.log(id);
             var route='/get-subject-batches/'+id;
             $.get(route,function(res){
                 var batch= $.map(res,function(value,index){
                     return value;
                 });
+                var str='<select class="form-control" id="batch-select" style="-webkit-appearance: menulist;" name="batch" >';
 
-                var str='<option value="">Select Batch</option>';
-
-
-                <?php $dummyArr=array(); ?>
-                @foreach($homeworkIdss as $row)
-                @foreach($row['homework_student_list'] as $batch)
-                    <?php
-                        array_push($dummyArr,$batch['batch']);
-                    ?>
-                @endforeach
-                @endforeach
-
-                <?php $batches[]=array_unique($batches,$dummyArr); ?>
-
-                console.log(<?php $batches ?>);
+                @foreach($editHomeworkBatch as $row)
 
                 for(var i=0; i<batch.length; i++)
                 {
-
-                        if(batch[i]['batch_slug'] == )
+                    if(batch[i]['batch_id'] == "{!! $row['batch_id'] !!}" )
                         {
-                            str+='<option value="'+batch[i]['batch_id']+'" selected>'+batch[i]['batch_slug']+'</option>';
+                            str+='<option selected value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
                         }else{
-                            str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch_slug']+'</option>';
-                        }
 
+                            str+='<option value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
+                        }
                 }
 
+                 @endforeach
+
+
+                $('#batch-select-div').html(str);
+
+                $val=$('#batch-select').val();
+                    var route='/get-subject-classes/'+$val+'/'+id;
+                    $.get(route,function(res){
+                        var str='<option value="">please select class</option>';
+                       @foreach($editHomeworkClass as $row)
+                        for(var i=0; i<res.length; i++)
+                        {
+                            if(res[i]['class_id'] == "{!! $row['class_id'] !!}" )
+                            {
+                            str+='<option value="'+res[i]['class_id']+'" selected>'+res[i]['class_slug']+'</option>';
+                            }else{
+                            str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_slug']+'</option>';
+                            }
+                        }
+                         @endforeach
+                        $('#classDropdown').html(str);
+                $val1=$('#classDropdown').val();
+                        var route='/get-subject-divisions/'+$val1+'/'+id;
+                        $.get(route,function(res){
+                            var str = "";
+
+                            var arrStr= $.map(res,function(value){
+                                return value;
+                            });
+                            @foreach($editHomeworkDiv as $row)
+                            for(var i=0; i<arrStr.length; i++){
+
+                                if(arrStr[i]['division_id'] == "{!! $row['division_id'] !!}" )
+                                {
+                                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                                    '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" checked>'+
+                                    '<label for="'+arrStr[i]['division_id']+'">'+
+                                    ''+arrStr[i]['division_slug']+''+
+                                    '</label>'+
+                                    '</div>';
+                                }else{
+                                    str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                                        '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" >'+
+                                        '<label for="'+arrStr[i]['division_id']+'">'+
+                                        ''+arrStr[i]['division_slug']+''+
+                                        '</label>'+
+                                        '</div>';
+                                }
+                            }
+                            @endforeach
+
+                 console.log(res);
+
+                        });
+
+                    });
 
 
 
-
-                $('#batch-select').html(str);
             });
+
         }
 
     });
+
+
+
+
+
+
 
     $('#btnEdit').click(function(){
         $('#detail').hide();
@@ -500,8 +548,10 @@
         }
         var route='/get-division-students';
         var divisions=aIds;
+
         $.post(route,{id:divisions},function(res){
             var str = "";
+
             for(var i=0; i<res.length; i++){
                 str+=' <tr>'+
                     '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+

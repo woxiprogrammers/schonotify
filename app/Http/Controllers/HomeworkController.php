@@ -142,6 +142,9 @@ class HomeworkController extends Controller
         $homeworkdiv=array();
         $homeworkTypes=array();
         $homework=array();
+        $editHomeworkDiv=array();
+        $editHomeworkBatch=array();
+        $editHomeworkClass=array();
         $i=0;
         $homeworkData=HomeworkTeacher::where('homework_id',$id)->select('homework_id','division_id','teacher_id','student_id')->get();
         $homeworkInfo=Homework::where('id',$id)->get()->toArray();
@@ -175,6 +178,13 @@ class HomeworkController extends Controller
                 $division=Division::where('id',$student_name['division_id'])->first();
                 $class=Classes::where('id',$student_name['division_id'])->first();
                 $batch=Batch::where('id',$class['batch_id'])->first();
+                $editHomeworkDiv[$i]['division_name']=$division['division_name'];
+                $editHomeworkDiv[$i]['division_id']=$division['id'];
+                $editHomeworkBatch[$i]['batch_name']=$batch['name'];
+                $editHomeworkBatch[$i]['batch_id']=$batch['id'];
+                $editHomeworkClass[$i]['class_id']=$class['id'];
+                $editHomeworkClass[$i]['class_name']=$class['class_name'];
+
                 $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
                 $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['division']=$division['division_name'];
@@ -186,7 +196,6 @@ class HomeworkController extends Controller
                 $i++;
             }
             $i=0;
-            //dd($homeworkIdss);
             foreach($homeworkIdss[$row['homework_id']]['homework_student_list'] as $row){
                 $homeworkdiv[$i]['div']=$row['division'];
                 $homeworkdiv[$i]['class']=$row['class'];
@@ -201,10 +210,10 @@ class HomeworkController extends Controller
                 $homeworkTypes[$i]['type_slug']=$type['slug'];
                 $i++;
             }
-
-
-
-
+            $i=0;
+        $editHomeworkDiv = array_unique($editHomeworkDiv, SORT_REGULAR);
+        $editHomeworkBatch = array_unique($editHomeworkBatch, SORT_REGULAR);
+        $editHomeworkClass = array_unique($editHomeworkClass, SORT_REGULAR);
 
 
         $user= Auth::user();
@@ -252,7 +261,7 @@ class HomeworkController extends Controller
         }
 
 
-            return view('detailedHomework')->with(compact('homeworkIdss','homeworkdiv','homeworkTypes','homework'));
+            return view('detailedHomework')->with(compact('homeworkIdss','homeworkdiv','homeworkTypes','homework','editHomeworkDiv','editHomeworkBatch','editHomeworkClass'));
     }
 
     public function getDownload($file_name){
