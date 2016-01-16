@@ -11,7 +11,10 @@
     Please Click on link to Update Account.
     {{ URL::to('verify/' . $confirmation_code) }}.<br/>
 
-    Your User Name:{{$email}}
+    You can login with your old password.<br/>
+    --The Veza Team.<br/>
+
+    This is an automated email, please don’t reply.
 
 </div>
 

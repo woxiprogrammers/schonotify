@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
+use Collective\Html\HtmlFacade;
 
 
 

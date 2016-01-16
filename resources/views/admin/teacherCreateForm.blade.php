@@ -157,13 +157,13 @@
                             </label>
                             <div class="checkbox clip-check check-primary">
                                 <input  type="checkbox" value="web" name="access[]" id="checkbox6" checked>
-                                <label for="checkbox6">
+                                <label class="control-label" for="checkbox6">
                                     Web Access
                                 </label>
                             </div>
                             <div class="checkbox clip-check check-primary">
                                 <input type="checkbox" value="mobile" name="access[]" id="checkbox7">
-                                <label for="checkbox7">
+                                <label class="control-label" for="checkbox7">
                                     Mobile Access
                                 </label>
                             </div>
