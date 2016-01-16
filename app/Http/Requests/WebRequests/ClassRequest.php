@@ -40,7 +40,7 @@ class ClassRequest extends Request
                 if(in_array('create_class',$resultArr)) {
                     return true;
                 } else {
-                    Session::flash('message-error','you don`t have access');
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
 
