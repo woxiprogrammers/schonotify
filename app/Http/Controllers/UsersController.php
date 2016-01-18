@@ -1063,8 +1063,8 @@ class UsersController extends Controller
                 User::where('id',$id)->update(['is_active' => 0]);
                 Mail::send('emails.updateInfo', $userData, function($message) use ($userData)
                 {
-                    $message->from('no-reply@site.com', "Site name");
-                    $message->subject("Welcome to site name");
+                    $message->from('no-reply@site.com', "VEZA");
+                    $message->subject("Welcome to VEZA");
                     $message->to($userData['email']);
                 });
         }
