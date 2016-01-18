@@ -38,7 +38,7 @@ class SearchController extends Controller
         }
 
     }
-    public function selectRole($role_id=1)
+    public function selectRole($role_id)
     {
         $user=Auth::user();
 

@@ -25,7 +25,7 @@
 
                     <li>
                         <div class="values">
-                            <a href="/detailedHomework/{id}" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
+                            <a href="/createHomework" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
                         </div>
                     </li>
 
@@ -36,15 +36,19 @@
         <!-- end: DASHBOARD TITLE -->
         <div class="container-fluid container-fullw bg-white">
 
+
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="panel-body">
                         <ul class="timeline-xs" id="tmln">
                             @foreach($homeworkIdss as $row)
+                            @if($row['homework_is_active'] ==1)
                             <li class="timeline-item">
                                 <div class="leaveSection">
                                     <div class="text-muted text-small">
+
                                        {!! $row['homework_dateNow']!!} hr ago
+
                                     </div>
                                     <div class="col-sm-8" style="margin-top: 4px;">
 
@@ -53,16 +57,21 @@
 
                                         <p>Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_date'])));!!} </i> <br> Due Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_due_date'])));!!}</i></p>
                                     </div>
+                                    <a href="/delete-homework/{!! $row['homework_id']!!}" class="btn btn-primary btn-red pull-left"><i class="glyphicon glyphicon-trash"></i></a>
+
                                     <div class="col-sm-2">
-                                        @if($row['homework_status'] == 0)
+
+                                        @if($row['homework_status'] == 0 && $row['homework_is_active'] ==1)
                                         <small class="label label-sm label-danger">saved to draft</small>
-                                        @elseif($row['homework_status'] == 1)
+                                        @elseif($row['homework_status'] == 1 &&  $row['homework_is_active'] ==1 )
                                         <small class="label label-sm label-inverse">Published</small>
                                         @endif
                                         <div style="margin-top:10px;">
                                             <a class="text-info " href="/detailedHomework/{!!$row['homework_id']!!}">View More</a>
                                         </div>
+
                                     </div>
+
                                 </div>
 
                                 <div class="tmln-div">
@@ -70,6 +79,7 @@
                                 </div>
 
                             </li>
+                            @endif
                             @endforeach
                         </ul>
                         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
@@ -77,6 +87,8 @@
                 </div>
 
             </div>
+
+
         </div>
 
 
