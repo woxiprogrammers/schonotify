@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>
+                            <label class="control-label">
                                 First Name <span class="symbol required"></span>
                             </label>
                             <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
@@ -156,14 +156,14 @@
                                 Allow For <em>(select at least One)</em> <span class="symbol required"></span>
                             </label>
                             <div class="checkbox clip-check check-primary">
-                                <input  type="checkbox" value="web" name="access[]" id="checkbox6">
-                                <label for="checkbox6">
+                                <input  type="checkbox" value="web" name="access[]" id="checkbox6" checked>
+                                <label class="control-label" for="checkbox6">
                                     Web Access
                                 </label>
                             </div>
                             <div class="checkbox clip-check check-primary">
                                 <input type="checkbox" value="mobile" name="access[]" id="checkbox7">
-                                <label for="checkbox7">
+                                <label class="control-label" for="checkbox7">
                                     Mobile Access
                                 </label>
                             </div>
@@ -295,7 +295,7 @@
                 <button class="btn btn-primary btn-o back-step btn-wide pull-left">
                     <i class="fa fa-circle-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep">
+                <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep" onclick="this.disabled = true">
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
@@ -484,6 +484,21 @@
                 str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
             }
             $('#division').html(str);
+        });
+    });
+
+    $("#division").change(function() {
+        var id = this.value;
+        var route='check-class-teacher/'+id;
+        $.get(route,function(res){
+            for(var i=0; i<res.length; i++){
+               var confirmation =confirm("For Selected Batch Class Division "+res[i]['first_name']+"  "+ res[i]['last_name']+" is class teacher .Do you want to change ?");
+                if(confirmation == false){
+                    $('#batch').prop('selectedIndex',0);
+                    $('#class').prop('selectedIndex',0);
+                    $('#division').prop('selectedIndex',0);
+                }
+            }
         });
     });
 </script>

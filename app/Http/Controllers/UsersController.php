@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
+use Collective\Html\HtmlFacade;
 
 
 
@@ -1062,10 +1063,19 @@ class UsersController extends Controller
                 User::where('id',$id)->update(['is_active' => 0]);
                 Mail::send('emails.updateInfo', $userData, function($message) use ($userData)
                 {
-                    $message->from('no-reply@site.com', "Site name");
-                    $message->subject("Welcome to site name");
+                    $message->from('no-reply@site.com', "VEZA");
+                    $message->subject("Welcome to VEZA");
                     $message->to($userData['email']);
                 });
+        }
+    }
+
+    public function checkClassTeacher($id){
+        $classTeacher = Division::where('id',$id)->first();
+        $users = User::where('id',$classTeacher->class_teacher_id)->select('first_name','last_name')->get();
+        $userinfo = $users->toArray();
+        if($users){
+            return $userinfo;
         }
     }
 

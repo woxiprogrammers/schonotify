@@ -7,11 +7,14 @@
 <h2>Update User Info</h2>
 
 <div>
-    Your Email-Id changed to {{$email}}.
-    Please Click on link to Update Account.
-    {{ URL::to('verify/' . $confirmation_code) }}.<br/>
+    Your Email-Id changed to {{$email}}.<br/><br/>
+    Please Click on link to Update Account
+    <a href=" {{ URL::to('verify/' . $confirmation_code) }}"> Verify account </a><br/><br/> .
 
-    Your User Name:{{$email}}
+    You can login with your old password.<br/>
+    --The Veza Team.<br/><br/>
+
+    This is an automated email, please don’t reply.
 
 </div>
 

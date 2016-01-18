@@ -197,6 +197,9 @@ Route::post('division-create','ClassController@saveDivision');
 
 Route::get('check-div/{clsDiv}','ClassController@checkDivision');
 
+Route::get('create-subject','SubjectController@createSubjects');
+
+Route::post('subject-create','SubjectController@create');
 
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
@@ -227,6 +230,12 @@ Route::post('send-email','UsersController@sendMail');
 Route::get('verify/{confirmationCode}',array('uses' => 'UsersController@verifyUser'));
 
 Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjectClass');
+
+//check class teacher
+Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
+
+
+
 
 /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
