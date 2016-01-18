@@ -13,7 +13,6 @@ use App\SubjectClassDivision;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -24,7 +23,7 @@ class HomeworkController extends Controller
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-    public function getTeacherSubject(Request $request, $div_id)
+    public function getTeacherSubject(Request $request)
     {
         try{
             $data=$request->all();
@@ -38,13 +37,15 @@ class HomeworkController extends Controller
                 $i++;
             }
             $i=0;
+
             $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
+
             if($division != null){
                 $subjects=Subject::where('class_id',$division->class_id)->get();
                 foreach($subjects as $row)
                 {
-                    $homework[$division['id']][$i]['subjects'] = $row ['slug'] ;
-                    $homework[$division['id']][$i]['subject_id']=$row['id'];
+                    $homework[$i]['subjects'] = $row ['slug'] ;
+                    $homework[$i]['subject_id']=$row['id'];
                     $i++;
                 }
                 $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
@@ -53,8 +54,8 @@ class HomeworkController extends Controller
                     ->get()->toArray();
                 foreach($divisionSubjects as $row)
                 {
-                    $homework[$row['division_id']][$i]['subjects'] = $row ['slug'] ;
-                    $homework[$row['division_id']][$i]['subject_id']=$row['id'];
+                    $homework[$i]['subjects'] = $row ['slug'] ;
+                    $homework[$i]['subject_id']=$row['id'];
                     $i++;
                 }
             }else{
@@ -64,24 +65,12 @@ class HomeworkController extends Controller
                     ->get();
                 foreach($divisionSubjects as $row)
                 {
-                    $homework[$row['division_id']][$i]['subjects'] = $row ['slug'] ;
-                    $homework[$row['division_id']][$i]['subject_id']=$row['id'];
+                    $homework[$i]['subjects'] = $row ['slug'] ;
+                    $homework[$i]['subject_id']=$row['id'];
                     $i++;
                 }
             }
-            $i=0;
-            foreach($homework as $key=>$row)
-            {
-                if($key==$div_id)
-                {
-                    foreach($row as $value){
-                        $finalSubjectList[$i]['subject_id']=$value['subject_id'];
-                        $finalSubjectList[$i]['subjects'] = $value['subjects'];
-                        $i++;
-                    }
-                }
-            }
-            $finalSubjectList = array_unique($finalSubjectList, SORT_REGULAR);
+            $finalSubjectList = array_unique($homework, SORT_REGULAR);
             $status = 200;
             $message = "Successfully listed";
         } catch (\Exception $e) {
@@ -96,6 +85,36 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
+    public function getSubjectBatches(Request $requests, $subjectId)
+    {
+        $batchInfo=array();
+
+        $class_id=Subject::where('id',$subjectId)->get()->toArray();
+
+        foreach($class_id as $row)
+        {
+            $classes[]=$row['class_id'];
+        }
+
+        $batch=Classes::wherein('id',$classes)->get()->toArray();
+        return $batch;
+        $i=0;
+        foreach($batch as $row)
+        {
+            $batches[]=$row['batch_id'];
+            $subjectClass[$i]['class_id']=$row['id'];
+            $subjectClass[$i]['class_slug']=$row['slug'];
+            $i++;
+        }
+        $batchName=Batch::wherein('id',$batches)->get()->toArray();
+        foreach($batchName as $row)
+        {
+            $batchInfo[$i]['batch_id']=$row['id'];
+            $batchInfo[$i]['batch_slug']=$row['slug'];
+            $i++;
+        }
+        return $batchInfo;
+    }
 
     public function createHomework(Requests\HomeworkRequest $request)
     {

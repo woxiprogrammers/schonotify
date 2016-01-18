@@ -251,11 +251,10 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
-    Route::get('get-teachers-subjects/{div_id}','api\HomeworkController@getTeacherSubject');
-
 
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
     Route::get('get-message-list','api\MessageController@getMessageList');
+
     Route::post('createHomework','api\HomeworkController@createHomework');
     Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
     Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
@@ -263,7 +262,18 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
     Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
     Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
     Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
-    Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
+
+    Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
+
+    Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
+
+
+
+
+        Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
+
+
+
     Route::get('view-timetable-teacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
 
     //Announcement
