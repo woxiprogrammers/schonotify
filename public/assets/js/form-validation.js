@@ -988,6 +988,75 @@ var FormValidator = function () {
         $('textarea.ckeditor').ckeditor();
 
     };
+    var runValidatorSubject = function () {
+        var form7 = $('#createSubject');
+        var errorHandler7 = $('.errorHandler', form7);
+        var successHandler7 = $('.successHandler', form7);
+        form7.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                subject_name: {
+                    required: true,
+                    minlength:2
+                },
+                'class[]':{
+                    required:true,
+                    minlength:1
+                }
+            },
+            messages: {
+                subject_name:{
+                    required:"Please enter subject title."
+                },
+                'class[]':{
+                    required:"Please select atleast one class",
+                    minlength:"Please select atleast one class"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler7.hide();
+                errorHandler7.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler7.show();
+                errorHandler7.hide();
+                // submit form
+
+               return true;
+            }
+        });
+
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+
+    };
 
     return {
         //main function to initiate template pages
@@ -1003,7 +1072,7 @@ var FormValidator = function () {
             runValidator24();
             runValidatorBatch();
             runValidatorDivision();
-
+            runValidatorSubject();
         }
     };
 }();
