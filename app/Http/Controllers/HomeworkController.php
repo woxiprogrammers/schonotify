@@ -344,7 +344,6 @@ class HomeworkController extends Controller
     public function homeworkCreate(Requests\WebRequests\CreateHomeworkRequest $request)
     {
             $homeworkData= $request->all();
-            //dd($homeworkData);
             $homework=array();
             $homeworkTeacher=array();
             $i=0;

@@ -442,12 +442,6 @@
 
     });
 
-
-
-
-
-
-
     $('#btnEdit').click(function(){
         $('#detail').hide();
         $('#update').show();
@@ -458,7 +452,6 @@
         $('#detail').show();
 
     });
-
 
     $('.classFirst').change(function(){
         if($(this).prop('checked') == true)
@@ -591,8 +584,6 @@
             TableData.init();
         });
     }
-
-
 
 </script>
 

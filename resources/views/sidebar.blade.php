@@ -192,7 +192,6 @@
             </div>
             <div class="item-inner">
                 <span class="title"> Homework </span>
-               
             </div>
         </div>
     </a>
