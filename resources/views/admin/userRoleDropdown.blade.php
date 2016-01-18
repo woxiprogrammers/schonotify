@@ -12,13 +12,13 @@
 
                         @if(Auth::user()->role_id == 1)
                         @foreach($userRoles as $roles)
-                        @if($roles->name != 'admin')
+
                         <option value="{!! $roles->id !!}"  data-class="fa fa-user">{!! ucfirst($roles->name) !!}</option>
-                        @endif
+
                         @endforeach
                         @else
                         @foreach($userRoles as $roles)
-                            @if($roles->name != 'admin' && $roles->name != 'teacher')
+                            @if($roles->slug != 'admin')
                                 <option value="{!! $roles->id !!}"  data-class="fa fa-user">{!! ucfirst($roles->name) !!}</option>
                             @endif
                         @endforeach
