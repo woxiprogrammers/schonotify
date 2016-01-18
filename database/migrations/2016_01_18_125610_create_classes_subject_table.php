@@ -3,19 +3,14 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubjectTable extends Migration
+class CreateClassesSubjectTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('classes_subject', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('subject_name');
-            $table->string('slug',255);
+            $table->integer('class_id')->unsigned();
+            $table->integer('subject_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ class CreateSubjectTable extends Migration
      */
     public function down()
     {
-        Schema::drop('subjects');
+        Schema::drop('classes_subject');
     }
 }
