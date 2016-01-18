@@ -341,9 +341,6 @@
                     if(batch[i]['batch_id'] == "{!! $row['batch_id'] !!}" )
                         {
                             str+='<option selected value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
-                        }else{
-
-                            str+='<option value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
                         }
                 }
 
@@ -362,12 +359,11 @@
                             if(res[i]['class_id'] == "{!! $row['class_id'] !!}" )
                             {
                             str+='<option value="'+res[i]['class_id']+'" selected>'+res[i]['class_slug']+'</option>';
-                            }else{
-                            str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_slug']+'</option>';
                             }
                         }
                          @endforeach
                         $('#classDropdown').html(str);
+
                 $val1=$('#classDropdown').val();
                         var route='/get-subject-divisions/'+$val1+'/'+id;
                         $.get(route,function(res){
@@ -376,9 +372,9 @@
                             var arrStr= $.map(res,function(value){
                                 return value;
                             });
-                            @foreach($editHomeworkDiv as $row)
-                            for(var i=0; i<arrStr.length; i++){
 
+                            for(var i=0; i<arrStr.length; i++){
+                            @foreach($editHomeworkDiv as $row)
                                 if(arrStr[i]['division_id'] == "{!! $row['division_id'] !!}" )
                                 {
                                 str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
@@ -388,20 +384,14 @@
                                     ''+arrStr[i]['division_slug']+''+
                                     '</label>'+
                                     '</div>';
-                                }else{
-                                    str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
-
-                                        '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" >'+
-                                        '<label for="'+arrStr[i]['division_id']+'">'+
-                                        ''+arrStr[i]['division_slug']+''+
-                                        '</label>'+
-                                        '</div>';
                                 }
+                                 @endforeach
                             }
-                            @endforeach
+
                             $('#division').html(str);
 
-                $divID =res;
+                            $divID =res;
+                            console.log($divID);
                             sample= jQuery.map($divID, function(n, i){
                                return n.division_id;
                             });
