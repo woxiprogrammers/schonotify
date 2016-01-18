@@ -97,6 +97,38 @@
     </ul>
 </li>
 
+<li>
+    <a href="javascript:void(0)">
+        <div class="item-content">
+            <div class="item-media">
+                <i class="fa fa-pencil-square-o"></i>
+            </div>
+            <div class="item-inner">
+                <span class="title"> Create Subject </span><i class="icon-arrow"></i>
+            </div>
+        </div>
+    </a>
+    <ul class="sub-menu">
+
+        <li>
+            <a href="/create-subject">
+                <div class="item-inner">
+                    <span class="title"> Create Subject </span>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <div class="item-inner">
+                    <span class="title"> Assign Subjects </span>
+                </div>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+
 @foreach(session('functionArr') as $row)
 @if($row == 'view_timetable')
 <li>
@@ -185,7 +217,7 @@
 @foreach(session('functionArr') as $row)
 @if($row == 'view_homework')
 <li>
-    <a href="/homeworkListing">
+    <a href="/homework-listing">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-book"></i>
