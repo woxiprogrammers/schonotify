@@ -131,7 +131,7 @@ Route::get('leaveListing','LeaveController@leaveListing');
 
 Route::get('detailedLeave','LeaveController@detailedLeave');
 
-Route::get('homeworkListing','HomeworkController@homeworkListing');
+Route::get('homework-listing','HomeworkController@homeworkListing');
 
 Route::get('detailedHomework/{id}','HomeworkController@detailedHomework');
 
@@ -139,9 +139,16 @@ Route::get('createHomework','HomeworkController@createHomework');
 
 Route::post('create-homework','HomeworkController@homeworkCreate');
 
+Route::post('edit-homework/{id}','HomeworkController@editHomework');
+
+
+Route::post('edit-homework-detail/{id}','HomeworkController@updateHomeworkDetail');
+
 Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
 Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
+
+Route::get('download/{file_name}', 'HomeworkController@getDownload');
 
 Route::get('results','ResultController@showResults');
 
@@ -193,7 +200,6 @@ Route::get('create-subject','SubjectController@createSubjects');
 
 Route::post('subject-create','SubjectController@create');
 
-
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
@@ -223,6 +229,12 @@ Route::post('send-email','UsersController@sendMail');
 Route::get('verify/{confirmationCode}',array('uses' => 'UsersController@verifyUser'));
 
 Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjectClass');
+
+//check class teacher
+Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
+
+
+
 
 /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
@@ -256,8 +268,7 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
-
-
+    Route::get('get-teachers-subjects/{div_id}','api\HomeworkController@getTeacherSubject');
 
 
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');

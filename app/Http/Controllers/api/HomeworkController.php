@@ -9,6 +9,7 @@ use App\Homework;
 use App\HomeworkTeacher;
 use App\HomeworkType;
 use App\Subject;
+use App\SubjectClassDivision;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,16 +24,86 @@ class HomeworkController extends Controller
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
+    public function getTeacherSubject(Request $request, $div_id)
+    {
+        try{
+            $data=$request->all();
+            $i=0;
+            $homework=array();
+            $homeworkType=HomeworkType::all();
+            foreach($homeworkType as $type)
+            {
+                $homeworkTypes[$i]['type_id'] = $type ['id'] ;
+                $homeworkTypes[$i]['type_slug']=$type['slug'];
+                $i++;
+            }
+            $i=0;
+            $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
+            if($division != null){
+                $subjects=Subject::where('class_id',$division->class_id)->get();
+                foreach($subjects as $row)
+                {
+                    $homework[$division['id']][$i]['subjects'] = $row ['slug'] ;
+                    $homework[$division['id']][$i]['subject_id']=$row['id'];
+                    $i++;
+                }
+                $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
+                    ->join('subjects','division_subjects.subject_id','=','subjects.id')
+                    ->select('subjects.id','subjects.slug','division_subjects.division_id')
+                    ->get()->toArray();
+                foreach($divisionSubjects as $row)
+                {
+                    $homework[$row['division_id']][$i]['subjects'] = $row ['slug'] ;
+                    $homework[$row['division_id']][$i]['subject_id']=$row['id'];
+                    $i++;
+                }
+            }else{
+                $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
+                    ->join('subjects','division_subjects.subject_id','=','subjects.id')
+                    ->select('subjects.id','subjects.slug','division_subjects.division_id')
+                    ->get();
+                foreach($divisionSubjects as $row)
+                {
+                    $homework[$row['division_id']][$i]['subjects'] = $row ['slug'] ;
+                    $homework[$row['division_id']][$i]['subject_id']=$row['id'];
+                    $i++;
+                }
+            }
+            $i=0;
+            foreach($homework as $key=>$row)
+            {
+                if($key==$div_id)
+                {
+                    foreach($row as $value){
+                        $finalSubjectList[$i]['subject_id']=$value['subject_id'];
+                        $finalSubjectList[$i]['subjects'] = $value['subjects'];
+                        $i++;
+                    }
+                }
+            }
+            $finalSubjectList = array_unique($finalSubjectList, SORT_REGULAR);
+            $status = 200;
+            $message = "Successfully listed";
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+             "message" => $message,
+             "data"=>$finalSubjectList
+        ];
+
+        return response($response, $status);
+    }
+
 
     public function createHomework(Requests\HomeworkRequest $request)
     {
       try{
             $data=array();
             $HomeworkTeacher=array();
-            $batch=Batch::where('id',$request->batch_id)->first();
-            $class=Classes::where('id',$request->class_id)->first();
             $division=Division::where('id',$request->division_id)->first();
-            $techer_id =User::where('remember_token',$request->token)->first();
+            $teacher_id =User::where('remember_token',$request->token)->first();
             $homework_type=HomeworkType::where('id',$request->homework_type)->first();
             $subject =Subject::where('id',$request->subject_id)->first();
             $data['title']=$request->title;
@@ -43,21 +114,18 @@ class HomeworkController extends Controller
             $data['attachment_file']=$request->attachment_file;
             $data['created_at']= Carbon::now();
             $data['updated_at']= Carbon::now();
-
             $homework_id=Homework::insertGetId($data);
-
             if($homework_id != null)
             {
                 foreach($request->student as $val)
                 {
                     $HomeworkTeacher['student_id'] = $val;
-                    $HomeworkTeacher['teacher_id'] = $techer_id['id'];
+                    $HomeworkTeacher['teacher_id'] = $teacher_id['id'];
                     $HomeworkTeacher['homework_id'] = $homework_id;
                     $HomeworkTeacher['division_id'] = $division['id'];
                     $HomeworkTeacher['created_at']= Carbon::now();
                     $HomeworkTeacher['updated_at']= Carbon::now();
                     HomeworkTeacher::insert($HomeworkTeacher);
-
                 }
                 $status = 200;
                 $message = "saved successfully";
@@ -66,8 +134,6 @@ class HomeworkController extends Controller
                 $status = 202;
                 $message = "homework not found";
             }
-
-
          }
       catch (\Exception $e) {
           $status = 500;
