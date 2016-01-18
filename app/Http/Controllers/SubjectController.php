@@ -55,8 +55,9 @@ class SubjectController extends Controller
         if($request->authorize()===true)
         {
 
-            $subject['subject_name']=$request->subject;
-            $subject['slug']=strtolower($request->subject);
+            $subject['subject_name']=$request->subject_name;
+            $subject['description']=strtolower($request->description);
+            $subject['slug']=strtolower($request->subject_name);
             $query=Subject::insertGetId($subject);
             $subject_class=array();
 
