@@ -28,7 +28,12 @@
 <script type="text/javascript">
     $(document).ready(function(){
         getMsgCount();
-        tabUserSelect(1);
+        var id=$('#role-select').val();
+        if(id!="")
+        {
+            tabUserSelect(id);
+        }
+
         Main.init();
         FormValidator.init();
     });
