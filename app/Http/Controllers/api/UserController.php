@@ -37,7 +37,7 @@ class UserController extends Controller
      */
     protected function login(Requests\LoginRequest $request)
     {   $data=array();
-    // try{
+     try{
        $user = User::where('email', $request->email)->first();
           if ($user == NULL) {
               $status =404;
@@ -134,13 +134,13 @@ class UserController extends Controller
     }
 
 
-     /*}catch (\Exception $e) {
+     }catch (\Exception $e) {
          $status = 500;
          $message = "Something went wrong";
-     }*/
+     }
         $response = ["message" => $message,"status" => $status,"data" =>$data];
 
-        return response($response);
+        return response($response,$status);
 
     }
     public function getBatchesTeacher(Request $request){
