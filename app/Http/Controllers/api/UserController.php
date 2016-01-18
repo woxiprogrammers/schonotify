@@ -38,7 +38,7 @@ class UserController extends Controller
                 $message = 'Sorry!! Incorrect email or password';
             } elseif ($user->is_active == 0) {
                 $status = 401;
-                $message = "Please confirm your email id first";
+                $message = "Sorry ... Your account is not activated";
             } elseif (Auth::attempt([
                 'email' => $request->email,
                 'password' => $request->password
