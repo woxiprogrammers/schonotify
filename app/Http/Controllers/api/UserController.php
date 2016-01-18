@@ -45,7 +45,7 @@ class UserController extends Controller
             ])) {
                 $user=Auth::User();
                 $userView=TeacherView::where('user_id','=',$user['id'])->first();
-                if(Empty($userView) || $userView['mobile_view']==1)
+                if(Empty($userView) && $user['role_id']==4 || $userView['mobile_view']==1)
                 {
                     $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
                         ->where('users.id','=',$user->id)
