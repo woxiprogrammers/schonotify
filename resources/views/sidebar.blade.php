@@ -224,7 +224,6 @@
             </div>
             <div class="item-inner">
                 <span class="title"> Homework </span>
-                <span class="badge pull-right">7</span>
             </div>
         </div>
     </a>

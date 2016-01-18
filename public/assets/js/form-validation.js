@@ -815,6 +815,7 @@ var FormValidator = function () {
                 successHandler2.show();
                 errorHandler2.hide();
                 // submit form
+
                 return true;
             }
         });
