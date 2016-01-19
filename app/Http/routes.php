@@ -235,6 +235,10 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
 
 
+//check email for edit user
+Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit'));
+//check roll number exists or not
+Route::post('check-roll-number',array('uses' => 'UsersController@checkRollNumber'));
 
 
 /* API Routes */
