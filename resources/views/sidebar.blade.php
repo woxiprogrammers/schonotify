@@ -118,7 +118,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="/subject-teacher">
                 <div class="item-inner">
                     <span class="title"> Assign Subjects </span>
                 </div>
