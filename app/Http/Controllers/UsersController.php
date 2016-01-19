@@ -1114,5 +1114,16 @@ class UsersController extends Controller
         }
     }
 
+    public function checkClass(Request $request ){
+        $data = $request->all();
+        $classCount= Classes::where('batch_id',$data['batch_id'])->where('slug',strtolower($data['class']))->count();
+        if($classCount >=1){
+            return 'false';
+        }else{
+            return 'true';
+        }
+
+    }
+
 
 }
