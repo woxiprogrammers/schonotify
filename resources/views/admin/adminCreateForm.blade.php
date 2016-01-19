@@ -192,7 +192,7 @@
 
                         <div class="form-group">
                             <select class="form-control" id="emp_type" name="emp_type" style="-webkit-appearance: menulist;">
-                                <option value="full-time">Full Time  </option>
+                                <option value="full_time">Full Time  </option>
                                 <option value="part_time">Part Time</option>
                             </select>
                         </div>

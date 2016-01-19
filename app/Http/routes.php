@@ -135,14 +135,15 @@ Route::get('homework-listing','HomeworkController@homeworkListing');
 
 Route::get('detailedHomework/{id}','HomeworkController@detailedHomework');
 
+Route::get('delete-homework/{id}','HomeworkController@deleteHomework');
+
 Route::get('createHomework','HomeworkController@createHomework');
 
 Route::post('create-homework','HomeworkController@homeworkCreate');
 
-Route::post('edit-homework/{id}','HomeworkController@editHomework');
+Route::get('edit-homework/{id}','HomeworkController@editHomework');
 
-
-Route::post('edit-homework-detail/{id}','HomeworkController@updateHomeworkDetail');
+Route::post('edit-homework-detail','HomeworkController@updateHomeworkDetail');
 
 Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
@@ -248,6 +249,10 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
 
 
+//check email for edit user
+Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit'));
+//check roll number exists or not
+Route::post('check-roll-number',array('uses' => 'UsersController@checkRollNumber'));
 
 
 /* API Routes */

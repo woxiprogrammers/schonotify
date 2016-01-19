@@ -133,6 +133,19 @@ var FormValidator = function () {
         var form4 = $('#formEditAccount');
         var errorHandler2 = $('.errorHandler', form4);
         var successHandler2 = $('.successHandler', form4);
+        $.validator.addMethod("alpha", function(value, element) {
+            return this.optional(element) || /^[A-z]+$/.test(value);
+        });
+        $.validator.addMethod("mobileNumber", function(value, element) {
+            return this.optional(element) || /^[0-9]{10}(\-[0-9]{4})?$/.test(value);
+        });
+        $.validator.addMethod("chkMail", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
+        });
+        $.validator.addMethod("requiredIfChecked", function (val, ele, arg) {
+            if ($("#checkbox8").is(":checked") && ($.trim(val) == '')) { return false; }
+            return true;
+        }, "This field is required if Make as Class Teacher is checked...");
         $.validator.addMethod("getEditorValue", function () {
             $("#editor1").val($('#formEditAccount .summernote').code());
             if ($("#editor1").val() != "" && $("#editor1").val().replace(/(<([^>]+)>)/ig, "") != "") {
@@ -159,24 +172,28 @@ var FormValidator = function () {
             rules: {
                 firstname: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    alpha: true
                 },
                 lastname: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    alpha: true
                 },
                 email: {
                     required: true,
-                    email: true
+                    chkMail: true
                 },
                 mobile:{
-                    required: true,
+                    required:true,
+                    number:true,
                     minlength:10,
-                    maxlength:10
+                    mobileNumber:true
                 },
                 alternate_number:{
+                    number:true,
                     minlength:10,
-                    maxlength:10
+                    mobileNumber:true
                 },
                 address:{
                     required:true
@@ -184,22 +201,55 @@ var FormValidator = function () {
                 access:{
                     required:true,
                     minlength:1
+                },
+                batch:{
+                    requiredIfChecked:true
+                },
+                class:{
+                    requiredIfChecked:true
+                },
+                division:{
+                    requiredIfChecked:true
+                },
+                roll_number:{
+                    required:true,
+                    number:true
                 }
-
 
             },
             messages: {
-                firstname: "Please specify your first name",
-                lastname: "Please specify your last name",
-                email: {
-                    required: "We need your email address to contact you",
-                    email: "Your email address must be in the format of name@domain.com"
+                firstname: {
+                    required: "First Name is required" ,
+                    alpha: "First name must contain only letters",
+                    minlength:"Please enter at least 2 character"
+                },
+                lastname: {
+                    required: "Last Name is required",
+                    alpha: "Last name must contain only letters",
+                    minlength:"Please enter at least 2 character"
                 },
                 mobile:{
-                    minlength: jQuery.validator.format("Your mobile number must be {0} digits"),
-                    maxlength: jQuery.validator.format("Your mobile number must be {0} digits")
+                    required:"Mobile number is required",
+                    number:"Mobile number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only ",
+                    minlength: jQuery.validator.format("Please enter at least 10 digits.")
+                },
+                alternate_number:{
+                    number:"Alternate number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only",
+                    minlength: jQuery.validator.format("Please enter at least 10 digits.")
+                },
+                email: {
+                    required: "Please provide valid email id",
+                    chkMail: "Your email address must be in the format of name@domain.com"
+                },
+                address:{
+                    required:"Address is required"
+                },
+                roll_number:{
+                    required:"Roll number is required",
+                    number:"Roll number must be numeric"
                 }
-
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler2.hide();
@@ -210,15 +260,19 @@ var FormValidator = function () {
                 // display OK icon
                 $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
                 // add the Bootstrap error class to the control group
+                $('#emailfeedback').remove();
             },
             unhighlight: function (element) { // revert the change done by hightlight
                 $(element).closest('.form-group').removeClass('has-error');
                 // set error class to the control group
+                $('#emailIdfeedback').html('<div id="emailfeedback"></div>');
+                $('#emailfeedback').show();
             },
             success: function (label, element) {
                 label.addClass('help-block valid');
                 // mark the current input as valid and display OK icon
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+                $('#emailfeedback').remove();
             },
             submitHandler: function (form) {
                 successHandler2.show();
