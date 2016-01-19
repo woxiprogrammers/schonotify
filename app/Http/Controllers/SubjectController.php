@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes;
 use App\Subject;
 use App\SubjectClass;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -58,6 +59,8 @@ class SubjectController extends Controller
             $subject['subject_name']=$request->subject_name;
             $subject['description']=strtolower($request->description);
             $subject['slug']=strtolower($request->subject_name);
+            $subject['created_at'] = Carbon::now();
+            $subject['updated_at'] = Carbon::now();
             $query=Subject::insertGetId($subject);
             $subject_class=array();
 
@@ -66,7 +69,8 @@ class SubjectController extends Controller
                 $i=0;
                 foreach($request->class as $classes)
                 {
-                   $subject_class[$i]=array('class_id'=>$classes,'subject_id'=>$query);
+                    $time=Carbon::now();
+                    $subject_class[$i]=array('class_id'=>$classes,'subject_id'=>$query,'created_at'=>$time,'updated_at'=>$time);
                     $i++;
 
                 }
