@@ -205,7 +205,19 @@ var FormValidator = function () {
                 },
                 class: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    remote: {
+                        url: "/check-class",
+                        type: "GET",
+                        data: {
+                            batch_id: function() {
+                                return $( "#dropdown" ).val();
+                            },
+                            classname:function() {
+                                return $( "#class" ).val();
+                            }
+                        }
+                    }
                 },
                 periods:{
                     required:true,
@@ -249,6 +261,92 @@ var FormValidator = function () {
                 userrole: {
                     minlength: jQuery.validator.format("Please select  at least {0} user role"),
                     required: "Please select at least one User Role"
+                },
+                class:{
+
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler2.hide();
+                errorHandler2.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler2.show();
+                errorHandler2.hide();
+                // submit form
+                return true;
+            }
+        });
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+    };
+    var runValidatorclassCreate = function () {
+        var form2 = $('#classCreateForm');
+        var errorHandler2 = $('.errorHandler', form2);
+        var successHandler2 = $('.successHandler', form2);
+        $.validator.addMethod("getEditorValue", function () {
+            $("#editor1").val($('#classCreateForm .summernote').code());
+            if ($("#editor1").val() != "" && $("#editor1").val().replace(/(<([^>]+)>)/ig, "") != "") {
+                $('#editor1').val('');
+                return true;
+            } else {
+                return false;
+            }
+        }, 'This field is required.');
+        form2.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                class: {
+                    minlength: 2,
+                    required: true,
+                    remote: {
+                        url: "/check-class",
+                        type: "GET",
+                        data: {
+                            batch_id: function() {
+                                return $( "#dropdown" ).val();
+                            },
+                            classname:function() {
+                                return $( "#class" ).val();
+                            }
+                        }
+                    }
+                }
+
+            },
+            messages: {
+                class:{
+                    required:"Class name is required",
+                    minlength:"Please enter at least 2 character",
+                    remote:"Class name already in use !!"
                 }
 
             },
@@ -1173,6 +1271,7 @@ var FormValidator = function () {
             runValidatorBatch();
             runValidatorDivision();
             runValidatorSubject();
+            runValidatorclassCreate();
             runValidatorSubjectTeacher();
         }
     };
