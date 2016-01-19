@@ -4671,7 +4671,7 @@ select[multiple="multiple"]:focus option {
   border-bottom-color: #a94442 !important;
 }
 .has-error label {
-  color: #a94442 !important;
+  color: #666 !important;
 }
 
 .has-warning {
@@ -4719,7 +4719,7 @@ select[multiple="multiple"]:focus option {
   border-bottom-color: #3c763d !important;
 }
 .has-success label {
-  color: #3c763d;
+  color: #666;
 }
 
 label {
