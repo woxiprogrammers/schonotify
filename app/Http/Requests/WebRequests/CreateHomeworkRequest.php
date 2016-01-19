@@ -47,7 +47,7 @@ class CreateHomeworkRequest extends Request
                 break;
 
             case 'PUT':
-                dd('put');
+               
                 break;
 
             case 'POST':

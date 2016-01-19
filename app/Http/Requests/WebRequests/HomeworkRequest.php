@@ -47,7 +47,7 @@
                     break;
 
                 case 'PUT':
-                    dd('put');
+
                     break;
 
                 case 'POST':
