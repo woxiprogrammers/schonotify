@@ -48,6 +48,12 @@
 <div class="tab-content">
 <div id="panel_edit_account" class="tab-pane fade in active ">
     <form id="formEditAccount" method="post" action="/edit-teacher/{!! $user->id !!}"  enctype="multipart/form-data">
+        <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
+        <input type="hidden" name="batchID" id="batchID" value="{!! $user->batch_id !!}">
+        <input type="hidden" name="classID" id="classID" value="{!! $user->class_id !!}">
+        <input type="hidden" name="divisionID" id="divisionID" value="{!! $user->division_id !!}">
+        <input type="hidden" name="divisionName" id="divisionName" value="{!! $user->division_name !!}">
+
         <input name="_method" type="hidden" value="PUT">
         <fieldset>
 
@@ -75,8 +81,8 @@
                         <label class="control-label">
                             Email Address
                         </label>
-                        <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                        <div class="" id="emailfeedback" ></div>
+                        <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="editEmail" name="email">
+                        <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">
@@ -91,6 +97,15 @@
                         </label>
                         <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
 
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Employee Type</span>
+                        </label>
+                        <select class="form-control" id="emp_type" name="emp_type" style="-webkit-appearance: menulist;">
+                            <option value='full_time' {!!($user->emp_type == 'full_time' ? ' selected="selected"' : ''); !!}>Full Time</option>
+                            <option value='part_time' {!!($user->emp_type == 'part_time' ? ' selected="selected"' : ''); !!}>Part Time</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -185,7 +200,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" id="clstchr_batch" style="display:none;" >
-                        <label>
+                        <label class="control-label">
                             Select Batch
                         </label>
 
@@ -196,7 +211,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" id="clstchr_class" style="display:none;" >
-                        <label>
+                        <label class="control-label">
                             Select Class
                         </label>
                         <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
@@ -206,7 +221,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" id="clstchr_div" style="display:none;">
-                        <label>
+                        <label class="control-label">
                             Select Division
                         </label>
                         <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
@@ -308,36 +323,16 @@
         userAclModule();
         getbatches();
 
+
         if($('#checkbox8').is(":checked")==true)
         {
             clsTeacher(true);
-        }
-        if({!! $user->batch_id !!})
-        {
-            getCls({!! $user->batch_id !!});
-        }
-        if({!! $user->class_id !!})
-        {
-            getDivisions({!! $user->class_id !!});
-        }
 
-    });
-    $('#email').on('keyup',function(){
-        var email = $(this).val();
-        var route='/check-email';
-        $.post(route,{email:email},function(res){
-            if(res == 0 ) {
-                $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
-                $('#emailfeedback').addClass("alert alert-success alert-dismissible");
-                $('#emailfeedback').html("Email Id Can Be Used");
-                $('#updateUserInfo').removeAttr('disabled');
-            } else {
-                document.getElementById("emailfeedback").disabled = true;
-                $('#emailfeedback').addClass("alert alert-danger alert-dismissible");
-                $('#emailfeedback').html("Email Id Already Exists");
-                $('#updateUserInfo').attr('disabled','disabled');
-            }
-        });
+        }
+        getCls($('#batchID').val());
+        getDivisions($('#classID').val());
+
+
     });
     function clsTeacher(chk){
         if(chk==true)
@@ -350,6 +345,23 @@
             $('#clstchr_class').hide();
             $('#clstchr_div').hide();
         }
+    }
+
+    function getbatches()
+    {
+        var route='/get-batches';
+        $.get(route,function(res){
+            var str = "<option value=''>Please Select Batch</option>";
+            for(var i=0; i<res.length; i++){
+                if($('#batchID').val() == res[i]['id'])
+            {
+                str+='<option value='+res[i]['id']+' selected="selected" >'+res[i]['name']+'</option>';
+            }else{
+                str+='<option value='+res[i]['id']+' >'+res[i]['name']+'</option>';
+            }
+        }
+        $('#batch').html(str);
+    });
     }
 
     function userAclModule()
@@ -414,24 +426,6 @@
         });
     }
 
-    function getbatches()
-    {
-        var route='/get-batches';
-        $.get(route,function(res){
-            var str = "<option value=''>Please Select Batch</option>";
-            for(var i=0; i<res.length; i++){
-                if({!! $user->batch_id !!} == res[i]['id'])
-                {
-                    str+='<option value='+res[i]['id']+' selected>'+res[i]['name']+'</option>';
-                }else{
-                str+='<option value='+res[i]['id']+' >'+res[i]['name']+'</option>';
-                }
-
-            }
-            $('#batch').html(str);
-        });
-    }
-
     $("#batch").change(function() {
         var id = this.value;
         getCls(id);
@@ -443,9 +437,9 @@
         $.get(route,function(res){
             var str = "<option value=''>Please Select Class</option>";
             for(var i=0; i<res.length; i++){
-                if({!! $user->class_id !!} == res[i]['id'])
+                if($('#classID').val() == res[i]['id'])
             {
-                str+='<option value='+res[i]['id']+' selected>'+res[i]['class_name']+'</option>';
+                str+='<option value='+res[i]['id']+' selected="selected" >'+res[i]['class_name']+'</option>';
             }else{
                 str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
             }
@@ -465,9 +459,9 @@
         $.get(route,function(res){
             var str = "<option value=''>Please Select Division</option>";
             for(var i=0; i<res.length; i++){
-                if({!! $user->division_id !!} == res[i]['id'])
+                if($('#divisionID').val() == res[i]['id'])
             {
-                str+='<option value='+res[i]['id']+' selected>'+res[i]['division_name']+'</option>';
+                str+='<option value='+res[i]['id']+' selected="selected">'+res[i]['division_name']+'</option>';
             }else{
                 str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
             }
@@ -475,6 +469,32 @@
         $('#division').html(str);
     });
     }
+    $("#division").change(function() {
+        var id = this.value;
+        var route='/check-class-teacher/'+id;
+        var text_value=$('#divisionName').val();
+        $.get(route,function(res){
+            if(res.length == 0){
+                if(text_value!=''){
+                    var confirmation =confirm("Do you want to assign class teacher ? If you click Ok then Division   "+text_value+"   will not have any class teacher.");
+                }
+            }
+            for(var i=0; i<res.length; i++){
+                if(text_value!=''){
+                    var confirmation =confirm("For Selected Batch Class Division "+res[i]['first_name']+"  "+ res[i]['last_name']+" is class teacher .Do you want to change ? If you click Ok then Division  "+text_value+"  will not have any class teacher.");
+                }else{
+                    var confirmation =confirm("For Selected Batch Class Division "+res[i]['first_name']+"  "+ res[i]['last_name']+" is class teacher .Do you want to change ?");
+                }
+                if(confirmation == false){
+                    $('#batch').prop('selectedIndex',0);
+                    $('#class').prop('selectedIndex',0);
+                    $('#division').prop('selectedIndex',0);
+                }
+            }
+        });
+    });
+
+
 
 
 

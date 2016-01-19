@@ -43,6 +43,7 @@
                                 <div class="tab-content">
                                     <div id="panel_edit_account" class="tab-pane fade in active ">
                                         <form id="formEditAccount" method="post" action="/edit-admin/{!! $user->id !!}"  enctype="multipart/form-data">
+                                            <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                                             <input name="_method" type="hidden" value="PUT">
                                             <fieldset>
                                                 <legend>
@@ -72,8 +73,8 @@
                                                             <label class="control-label">
                                                                 Email Address
                                                             </label>
-                                                            <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                                                            <div class="" id="emailfeedback" ></div>
+                                                            <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="editEmail" name="email">
+                                                            <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label">
@@ -145,7 +146,21 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <label class="control-label">
+                                                            Employee Type</span>
+                                                        </label>
+
+                                                        <div class="form-group">
+                                                            <select class="form-control" id="emp_type" name="emp_type" style="-webkit-appearance: menulist;">
+                                                                <option value='full_time' {!!($user->emp_type == 'full_time' ? ' selected="selected"' : ''); !!}>Full Time</option>
+                                                                <option value='part_time' {!!($user->emp_type == 'part_time' ? ' selected="selected"' : ''); !!}>Part Time</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </fieldset>
 
@@ -235,23 +250,7 @@
         userAclModule();
 
     });
-    $('#email').on('keyup',function(){
-        var email = $(this).val();
-        var route='/check-email';
-        $.post(route,{email:email},function(res){
-            if(res == 0 ) {
-                $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
-                $('#emailfeedback').addClass("alert alert-success alert-dismissible");
-                $('#emailfeedback').html("Email Id Can Be Used");
-                $('#updateUserInfo').removeAttr('disabled');
-            } else {
-                document.getElementById("emailfeedback").disabled = true;
-                $('#emailfeedback').addClass("alert alert-danger alert-dismissible");
-                $('#emailfeedback').html("Email Id Already Exists");
-                $('#updateUserInfo').attr('disabled','disabled');
-            }
-        });
-    });
+
     function userAclModule()
     {
         var route='/user-module-acl-edit/{!! $user->id !!}';

@@ -51,6 +51,7 @@
                                 <div class="tab-content">
                                     <div id="panel_edit_account" class="tab-pane fade in active ">
                                         <form id="formEditAccount" method="post" action="/edit-parent/{!! $user->id !!}"  enctype="multipart/form-data">
+                                            <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                                             <input name="_method" type="hidden" value="PUT">
                                             <fieldset>
                                                 <div class="row">
@@ -77,8 +78,8 @@
                                                             <label class="control-label">
                                                                 Email Address
                                                             </label>
-                                                            <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                                                            <div class="" id="emailfeedback" ></div>
+                                                            <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="editEmail" name="email">
+                                                            <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label">
@@ -127,7 +128,7 @@
                                                             <label class="control-label">
                                                                 Alternate number
                                                             </label>
-                                                            <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
+                                                            <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
                                                         </div>
                                                         <div class="form-group">
                                                             <label>
@@ -185,10 +186,6 @@
                                         <div class="panel-body">
                                             <div class="col-sm-10">
                                             <table class="table">
-                                                <tr>
-                                                    <th>Your Childrens</th>
-                                                    <th>Action</th>
-                                                </tr>
                                                 @foreach($students as $student)
                                                 <tr>
                                                     <td>{!! $student->first_name !!} {!! $student->last_name !!}</td>
@@ -277,6 +274,7 @@
     });
     function userAclModule()
     {
+        var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message'];
         var route='/user-module-acl-edit/{!! $user->id !!}';
         $.get(route,function(res){
 
@@ -317,14 +315,20 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                    {
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],enabled_modules)==-1){
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" disabled value="" >'+
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
+                        {
+
+                            str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }else{
+                            str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }
                     }
                     str+='</div>'+
                         '</td>';

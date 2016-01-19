@@ -230,6 +230,12 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 //check class teacher
 Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
 
+//check email for edit user
+Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit'));
+//check roll number exists or not
+Route::post('check-roll-number',array('uses' => 'UsersController@checkRollNumber'));
+
+
 /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');

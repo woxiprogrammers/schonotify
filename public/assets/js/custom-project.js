@@ -328,7 +328,49 @@ $('#email').on('keyup',function(){
     });
 });
 
+$('#editEmail').on('keyup',function(){
+    var email = $(this).val();
+    var userId = $("#userId").val();
+    var route='/check-email-edit';
+    $.post(route,{email:email,userId:userId},function(res){
+        if(res == 0 ) {
+            $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
+            $('#emailfeedback').addClass("alert alert-success alert-dismissible");
+            $('#emailfeedback').html("Email Id Can Be Used");
+            $('#updateUserInfo').removeAttr('disabled');
+        } else if(res == 1) {
+            $('#emailfeedback').addClass("alert alert-danger alert-dismissible");
+            $('#emailfeedback').html("Email Id Already Exists");
+            $('#updateUserInfo').attr('disabled','disabled');
+        }else if(res == 2 ){
+            $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
+            $('#emailfeedback').html("");
+            $('#updateUserInfo').removeAttr('disabled');
+        }
+    });
+});
 
+$('#editEmailParent').on('keyup',function(){
+    var email = $(this).val();
+    var userId = $("#userPerentId").val();
+    var route='/check-email-edit';
+    $.post(route,{email:email,userId:userId},function(res){
+        if(res == 0 ) {
+            $('#emailparentfeedback').removeClass("alert alert-danger alert-dismissible");
+            $('#emailparentfeedback').addClass("alert alert-success alert-dismissible");
+            $('#emailparentfeedback').html("Email Id Can Be Used");
+            $('#updateUserInfo').removeAttr('disabled');
+        } else if(res == 1) {
+            $('#emailparentfeedback').addClass("alert alert-danger alert-dismissible");
+            $('#emailparentfeedback').html("Email Id Already Exists");
+            $('#updateUserInfo').attr('disabled','disabled');
+        }else if(res == 2 ){
+            $('#emailparentfeedback').removeClass("alert alert-danger alert-dismissible");
+            $('#emailparentfeedback').html("");
+            $('#updateUserInfo').removeAttr('disabled');
+        }
+    });
+});
 
 
 
