@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\TeacherView;
 use App\User;
+use App\UserRoles;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -68,7 +69,9 @@ class LogController extends Controller
     public function store(LoginRequest $request)
     {
 
-        $user=User::join('user_roles','user_roles.id','=','users.role_id')->select()->where('email','=',$request['email'])->first();
+        $user=User::where('email','=',$request['email'])->first();
+
+        $userSlug=UserRoles::where('id',$user->role_id)->first();
 
         if($user == NULL || !(\Hash::check($request['password'],$user->password)))
         {
@@ -78,21 +81,22 @@ class LogController extends Controller
         {
             Session::flash('message-error','Sorry ... Your account is not activated');
             return Redirect::to('/');
-        }elseif($user->slug == "student" || $user->slug == "parent")
+        }elseif($userSlug->slug == "student" || $userSlug->slug == "parent")
         {
 
                 Session::flash('message-error','Sorry...You don`t have web access.');
                 return Redirect::to('/');
 
-        }
-        elseif($user->slug == "teacher")
+        }elseif($userSlug->slug == "teacher")
         {
-            $view= TeacherView::select()->where('user_id','=',$user->id)->get();
+            $view= TeacherView::where('user_id','=',$user->id)
+            ->get();
 
             foreach($view as $val)
             {
                 $web_view=$val['web_view'];
             }
+
             if($web_view == 0)
             {
                 Session::flash('message-error','Sorry...You don`t have web access. Kindly contact to your admin.');
