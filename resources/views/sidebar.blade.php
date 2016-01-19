@@ -214,8 +214,7 @@
         @endforeach
     </ul>
 </li>
-@foreach(session('functionArr') as $row)
-@if($row == 'view_homework')
+
 <li>
     <a href="/homework-listing">
         <div class="item-content">
@@ -228,8 +227,7 @@
         </div>
     </a>
 </li>
-@endif
-@endforeach
+
 @foreach(session('functionArr') as $row)
 @if($row == 'view_result')
 <li>

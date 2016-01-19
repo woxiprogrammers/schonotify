@@ -9,6 +9,7 @@ use App\Homework;
 use App\HomeworkTeacher;
 use App\HomeworkType;
 use App\Subject;
+use App\SubjectClass;
 use App\SubjectClassDivision;
 use App\User;
 use Carbon\Carbon;
@@ -33,112 +34,119 @@ class HomeworkController extends Controller
 
 
 
-    public function homeworkListing()
+    public function homeworkListing(Requests\WebRequests\HomeworkRequest $request)
     {
-        $user=Auth::user();
-        $homeworkId=array();
-        $homeworkIdss=array();
-        $i=0;
-        $division=Division::where('class_teacher_id',$user->id)->first();
-        if($division != null){
-           $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)->select('homework_teacher.homework_id')->get();
+        if($request->authorize()===true)
+        {
 
-            foreach($homeworkDivision as $row)
-            {
-                $homeworkId[]=$row['homework_id'];
-            }
-            $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
-            foreach($homeworkTeacher as $row)
-            {
-                $homeworkId[]=$row['homework_id'];
-            }
-            $homeworkId = array_unique($homeworkId, SORT_REGULAR);
-            //above code is for take homeworkids for users
-            $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
+
+            $user=Auth::user();
+            $homeworkId=array();
+            $homeworkIdss=array();
             $i=0;
-            $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
-            $currentDate = new DateTime(Carbon::now());
+            $division=Division::where('class_teacher_id',$user->id)->first();
+            if($division != null){
+               $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)->select('homework_teacher.homework_id')->get();
 
-            foreach($homeworkInfo as $home)
-            {
-                $homeworkIdss[$home['id']]['homework_id']=$home['id'];
-                $homeworkIdss[$home['id']]['homework_title']=$home['title'];
-                $homeworkIdss[$home['id']]['homework_description']=$home['description'];
-                $homeworkDate=new DateTime($home['homework_timestamp']);
-                $dateDiff = $currentDate->diff($homeworkDate);
-                $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
-                $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
-                $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
-                $homeworkIdss[$home['id']]['homework_status']=$home['status'];
-                $homeworkIdss[$home['id']]['homework_is_active']=$home['is_active'];
-                $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
-                $i++;
+                foreach($homeworkDivision as $row)
+                {
+                    $homeworkId[]=$row['homework_id'];
+                }
+                $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
+                foreach($homeworkTeacher as $row)
+                {
+                    $homeworkId[]=$row['homework_id'];
+                }
+                $homeworkId = array_unique($homeworkId, SORT_REGULAR);
+                //above code is for take homeworkids for users
+                $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
+                $i=0;
+                $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+                $currentDate = new DateTime(Carbon::now());
+
+                foreach($homeworkInfo as $home)
+                {
+                    $homeworkIdss[$home['id']]['homework_id']=$home['id'];
+                    $homeworkIdss[$home['id']]['homework_title']=$home['title'];
+                    $homeworkIdss[$home['id']]['homework_description']=$home['description'];
+                    $homeworkDate=new DateTime($home['homework_timestamp']);
+                    $dateDiff = $currentDate->diff($homeworkDate);
+                    $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
+                    $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
+                    $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
+                    $homeworkIdss[$home['id']]['homework_status']=$home['status'];
+                    $homeworkIdss[$home['id']]['homework_is_active']=$home['is_active'];
+                    $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
+                    $i++;
+                }
+                $i=0;
+                foreach($homeworkData as $row)
+                {
+
+                    $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
+                    $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
+                    $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
+
+                    $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
+                    $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
+                    $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
+
+                }
+
+            }else{
+                $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
+                foreach($homeworkTeacher as $row)
+                {
+                    $homeworkId[]=$row['homework_id'];
+                }
+                $homeworkId = array_unique($homeworkId, SORT_REGULAR);
+                //above code is for take homeworkids for users
+                $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
+                $i=0;
+                $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+                $currentDate = new DateTime(Carbon::now());
+
+                foreach($homeworkInfo as $home)
+                {
+                    $homeworkIdss[$home['id']]['homework_id']=$home['id'];
+                    $homeworkIdss[$home['id']]['homework_title']=$home['title'];
+                    $homeworkIdss[$home['id']]['homework_description']=$home['description'];
+                    $homeworkDate=new DateTime($home['homework_timestamp']);
+                    $dateDiff = $currentDate->diff($homeworkDate);
+                    $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
+                    $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
+                    $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
+                    $homeworkIdss[$home['id']]['homework_status']=$home['status'];
+                    $homeworkIdss[$home['id']]['homework_is_active']=$home['is_active'];
+                    $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
+                    $i++;
+                }
+                $i=0;
+                foreach($homeworkData as $row)
+                {
+
+                    $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
+                    $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
+                    $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
+
+                    $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
+                    $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
+                    $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
+
+                }
+
             }
-            $i=0;
-            foreach($homeworkData as $row)
-            {
 
-                $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
-                $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
-                $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
 
-                $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
-                $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
-                $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
-                $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
 
-            }
-
+            return view('homeworkListing')->with(compact('homeworkIdss'));
         }else{
-            $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
-            foreach($homeworkTeacher as $row)
-            {
-                $homeworkId[]=$row['homework_id'];
-            }
-            $homeworkId = array_unique($homeworkId, SORT_REGULAR);
-            //above code is for take homeworkids for users
-            $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
-            $i=0;
-            $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
-            $currentDate = new DateTime(Carbon::now());
-
-            foreach($homeworkInfo as $home)
-            {
-                $homeworkIdss[$home['id']]['homework_id']=$home['id'];
-                $homeworkIdss[$home['id']]['homework_title']=$home['title'];
-                $homeworkIdss[$home['id']]['homework_description']=$home['description'];
-                $homeworkDate=new DateTime($home['homework_timestamp']);
-                $dateDiff = $currentDate->diff($homeworkDate);
-                $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
-                $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
-                $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
-                $homeworkIdss[$home['id']]['homework_status']=$home['status'];
-                $homeworkIdss[$home['id']]['homework_is_active']=$home['is_active'];
-                $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
-                $i++;
-            }
-            $i=0;
-            foreach($homeworkData as $row)
-            {
-
-                $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
-                $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
-                $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
-
-                $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
-                $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
-                $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
-                $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
-
-            }
-
+            return Redirect::to('/');
         }
-
-
-
-        return view('homeworkListing')->with(compact('homeworkIdss'));
     }
 
     public function detailedHomework($id)
@@ -227,7 +235,7 @@ class HomeworkController extends Controller
         $user= Auth::user();
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
-            $subjects=Subject::where('class_id',$division->class_id)->get();
+            $subjects=SubjectClass::where('class_id',$division->class_id)->join('subjects','subject_classes.subject_id','=','subjects.id')->get();
             foreach($subjects as $row)
             {
                 $homework[$i]['subjects'] = $row ['slug'] ;
@@ -281,8 +289,10 @@ class HomeworkController extends Controller
         return Response::download($file, $file_name, $headers);
     }
 
-    public function createHomework(Request $request)
+    public function createHomework(Requests\WebRequests\CreateHomeworkRequest $request)
     {
+        if($request->authorize()===true)
+        {
         $user= Auth::user();
         $i=0;
         $homework=array();
@@ -296,7 +306,8 @@ class HomeworkController extends Controller
 
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
-                $subjects=Subject::where('class_id',$division->class_id)->get();
+
+            $subjects=SubjectClass::where('class_id',$division->class_id)->join('subjects','subject_classes.subject_id','=','subjects.id')->get();
                 foreach($subjects as $row)
                 {
                     $homework[$i]['subjects'] = $row ['slug'] ;
@@ -339,6 +350,9 @@ class HomeworkController extends Controller
         }
 
         return view('createHomework')->with(compact('homework','homeworkTypes','subjectClass'));
+        }else{
+            return Redirect::to('/');
+        }
     }
 
     public function homeworkCreate(Requests\WebRequests\CreateHomeworkRequest $request)
@@ -398,8 +412,9 @@ class HomeworkController extends Controller
     public function getSubjectBatches($subjectId)
     {
         $batchInfo=array();
-        $class_id=Subject::where('id',$subjectId)->get()->toArray();
-
+        $batches=array();
+        $classes=array();
+        $class_id=SubjectClass::where('id',$subjectId)->get()->toArray();
         foreach($class_id as $row)
         {
             $classes[]=$row['class_id'];
@@ -420,7 +435,6 @@ class HomeworkController extends Controller
             $batchInfo[$i]['batch_slug']=$row['slug'];
             $i++;
         }
-
         return $batchInfo;
 
 
@@ -429,8 +443,8 @@ class HomeworkController extends Controller
     public function getSubjectClass($id,$subject_id){
         $classInfo=array();
         $classSubject=array();
-        $subjectClassId=Subject::where('id',$subject_id)->get();
-       foreach($subjectClassId as $row)
+        $subjectClassId=SubjectClass::where('id',$subject_id)->get();
+        foreach($subjectClassId as $row)
        {
           $classSubject['class_id'] = $row['class_id'];
        }
@@ -472,7 +486,7 @@ class HomeworkController extends Controller
                         $i++;
                     }
                 $divisionArray = array_unique($divisionArray, SORT_REGULAR);
-                return $divisionArray;
+
             }else{
                 $divSubjects=SubjectClassDivision::where('teacher_id',$user->id)
                                                 ->where('subject_id',$subject_id)->get();
@@ -489,9 +503,9 @@ class HomeworkController extends Controller
                     $i++;
                 }
                 $divisionArray = array_unique($divisionArray, SORT_REGULAR);
-                return $divisionArray;
-            }
 
+            }
+        return $divisionArray;
     }
 
     public function getStudentData(Request $request)
