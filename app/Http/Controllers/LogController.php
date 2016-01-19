@@ -78,7 +78,14 @@ class LogController extends Controller
         {
             Session::flash('message-error','Sorry ... Your account is not activated');
             return Redirect::to('/');
-        }elseif($user->role_id == 2)
+        }elseif($user->role_id == 4 || $user->role_id == 3)
+        {
+
+                Session::flash('message-error','Sorry...You don`t have web access.');
+                return Redirect::to('/');
+
+        }
+        elseif($user->role_id == 2)
         {
             $view= TeacherView::select()->where('user_id','=',$user->id)->get();
             foreach($view as $val)

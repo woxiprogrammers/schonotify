@@ -8,6 +8,7 @@ use App\Subject;
 use App\SubjectClass;
 use App\SubjectClassDivision;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -119,6 +120,8 @@ class SubjectTeacherController extends Controller
             $relation['teacher_id']=$data['teacherDropdown'];
             $relation['subject_id']=$data['subjectDropdown'];
             $relation['division_id']=$data['divisionDropdown'];
+            $relation['created_at'] = Carbon::now();
+            $relation['updated_at'] = Carbon::now();
 
             $query=SubjectClassDivision::insert($relation);
             if($query)
