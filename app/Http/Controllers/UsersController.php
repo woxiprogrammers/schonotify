@@ -453,6 +453,7 @@ class UsersController extends Controller
             }elseif($userRole->slug == 'student')
             {
                 $userData=User::where('id',$user['parent_id'])->first();
+                $user['parentUserId']=$user['parent_id'];
                 $user['parentUserName']=$userData->username;
                 $user['parentFirstName']=$userData->first_name;
                 $user['parentLastName']=$userData->last_name;
@@ -463,8 +464,9 @@ class UsersController extends Controller
                 $user['parentAddress']=$userData->address;
                 $user['parentAlternateNumber']=$userData->alternate_number;
                 $user['parentAvatar']=$userData->avatar;
+
                 $division=Division::where('id',$user['division_id'])->first();
-                $class=Classes::where('id',$division->id)->first();
+                $class=Classes::where('id',$division->class_id)->first();
                 $batch=Batch::where('id',$class->batch_id)->first();
                 $user['batch_id']=$batch->id;
                 $user['batch_name']=$batch->slug;
@@ -580,6 +582,7 @@ class UsersController extends Controller
         $userData['first_name']= $request->firstname;
         $userData['email']= trim($request->email);
         $userData['last_name']= $request->lastname;
+        $userData['emp_type']= $request->emp_type;
         $userData['gender']= $request->gender;
         $userData['mobile']= $request->mobile;
         $userData['address']= $request->address;
@@ -687,7 +690,7 @@ class UsersController extends Controller
         $userUpdate=User::where('id',$id)->update($userData);
         if($userUpdate == 1){
             $this->sendUpdateMail($existingEmail,$userData,$id);
-            Session::flash('message-success','student updated successfully');
+            Session::flash('message-success','Parent updated successfully');
             return Redirect::back();
         }
         else{
@@ -725,14 +728,13 @@ class UsersController extends Controller
         }else{
             $teacherView['mobile_view']=0;
           }
-        $classTeacherId['class_teacher_id']=$id;
-        $classTeacher=Division::where('id',$request->division)->where('class_id',$request->class)
-                                ->update($classTeacherId);
+
         $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
         $userData['username']= $request->username;
         $userData['first_name']= $request->firstname;
         $userData['email']= $request->email;
         $userData['last_name']= $request->lastname;
+        $userData['emp_type']= $request->emp_type;
         $userData['gender']= $request->gender;
         $userData['mobile']= $request->mobile;
         $userData['alternate_number']= $request->alternate_number;
@@ -743,8 +745,13 @@ class UsersController extends Controller
 
         $userUpdate=User::where('id',$id)->update($userData);
         $teacherViewUpdate=TeacherView::where('user_id',$id)->update($teacherView);
+        if(isset($request->checkbox8)){
         Division::where('id',$request->division)->
-                  where('class_id',$request->class)->update(array('class_teacher_id'=>$id));
+                  where('class_id',$request->class)->update(['class_teacher_id'=>$id]);
+        }else{
+            Division::where('id',$request->division)->
+                where('class_id',$request->class)->update(['class_teacher_id'=>0]);
+        }
         if($userUpdate == 1){
             $this->sendUpdateMail($existingEmail,$userData,$id);
             Session::flash('message-success','teacher updated successfully');
@@ -1077,6 +1084,45 @@ class UsersController extends Controller
         if($users){
             return $userinfo;
         }
+    }
+
+    public function checkEmailEdit(Request $request){
+        if($request->ajax()){
+            $data = $request->all();
+            $email = trim($data['email']);
+            $userCount = User::where('email',$email)->count();
+            if($userCount >= 1){
+                $userEmail = User::where('email',$email)->where('id',$data['userId'])->count();
+                if($userEmail >= 1){
+                    $count = '2';
+                }else{
+                $count = '1';
+                }
+            }else{
+                $count = '0';
+            }
+            return $count;
+        }
+
+    }
+
+    public function checkRollNumber(Request $request){
+        $users = User::where('roll_number',$request->roll_number)->where('division_id',$request->division)->select('first_name','last_name','id')->get();
+        $userinfo = $users->toArray();
+        if($users){
+            return $userinfo;
+        }
+    }
+
+    public function checkClass(Request $request ){
+        $data = $request->all();
+        $classCount= Classes::where('batch_id',$data['batch_id'])->where('slug',strtolower($data['class']))->count();
+        if($classCount >=1){
+            return 'false';
+        }else{
+            return 'true';
+        }
+
     }
 
 

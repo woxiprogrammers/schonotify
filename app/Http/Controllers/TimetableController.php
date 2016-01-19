@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class TimetableController extends Controller
@@ -14,23 +15,35 @@ class TimetableController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
-    public function index()
+    public function index(Requests\WebRequests\TimetableRequest $request)
     {
-        return view('timetable');
-    }
-    public function timetableShow($id)
-    {
-        Session::put('division_id',$id);
-
-        $div=session('division_id');
-
-        if($div==1)
+        if($request->authorize()===true)
         {
-            return $this::division1();
-        }elseif($div==2){
-            return $this::division2();
+            return view('timetable');
         }else{
-            return $this::division3();
+            return Redirect::to('/');
+        }
+
+    }
+    public function timetableShow(Requests\WebRequests\TimetableRequest $request,$id)
+    {
+
+        if($request->authorize()===true)
+        {
+            Session::put('division_id',$id);
+
+            $div=session('division_id');
+
+            if($div==1)
+            {
+                return $this::division1();
+            }elseif($div==2){
+                return $this::division2();
+            }else{
+                return $this::division3();
+            }
+        }else{
+            return Redirect::to('/');
         }
 
     }

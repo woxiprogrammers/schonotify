@@ -6,6 +6,7 @@ use App\Batch;
 use App\Classes;
 use App\Division;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -36,6 +37,8 @@ class ClassController extends Controller
         $class['batch_id']=$request->dropdown;
         $class['class_name']=$request->class;
         $class['body_id']=$user->body_id;
+        $class['created_at'] = Carbon::now();
+        $class['updated_at'] = Carbon::now();
         $query=Classes::insert($class);
         if($query){
             Session::flash('message-success','Class created successfully!');
@@ -54,6 +57,8 @@ class ClassController extends Controller
         $cnt=Batch::where('name',$batchName)->count();
         if($cnt<1)
         {
+            $batch['created_at'] = Carbon::now();
+            $batch['updated_at'] = Carbon::now();
             $query=Batch::insertGetId($batch);
             if($query)
             {
@@ -109,6 +114,8 @@ class ClassController extends Controller
             Session::flash('message-error','Division Name for this class is already in use !');
             return Redirect::back();
         }else{
+            $div['created_at'] = Carbon::now();
+            $div['updated_at'] = Carbon::now();
             $query=Division::insert($div);
 
             if($query)

@@ -201,6 +201,20 @@ Route::get('create-subject','SubjectController@createSubjects');
 
 Route::post('subject-create','SubjectController@create');
 
+Route::get('subject-teacher','SubjectTeacherController@index');
+
+Route::get('/get-sub-batches/{id}','SubjectTeacherController@getSubjectBatches');
+
+Route::get('/get-sub-classes/{id}/{subject}','SubjectTeacherController@getSubjectClasses');
+
+Route::get('/get-sub-divisions/{id}','SubjectTeacherController@getSubjectDivisions');
+
+Route::get('/get-sub-teachers/{id}/{subject}','SubjectTeacherController@getDivisionTeachers');
+
+Route::post('/create-relation','SubjectTeacherController@createRelation');
+
+Route::get('/delete-relation/{id}','SubjectTeacherController@deleteRelation');
+
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
@@ -235,6 +249,12 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
 
 
+//check email for edit user
+Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit'));
+//check roll number exists or not
+Route::post('check-roll-number',array('uses' => 'UsersController@checkRollNumber'));
+//check class name
+Route::get('check-class',array('uses' => 'UsersController@checkClass'));
 
 
 /* API Routes */
