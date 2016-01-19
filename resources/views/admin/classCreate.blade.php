@@ -230,6 +230,10 @@
         });
     }
 
+    $('#dropdown').change(function(){
+        $('#class').val('');
+    });
+
 
 </script>
 
