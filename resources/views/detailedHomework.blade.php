@@ -20,13 +20,7 @@
         <div class="col-sm-7">
             <h1 class="mainTitle">Homework</h1>
         </div>
-        <ul class="mini-stats col-sm-2 pull-right">
-            <li>
-                <div class="values">
-                    <a href="/create-homework" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
-                </div>
-            </li>
-        </ul>
+
     </div>
 </section>
 <!-- end: DASHBOARD TITLE -->
@@ -113,34 +107,37 @@
 
                     <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
             </div>
-            @foreach($homeworkIdss as $row)
-            <form action="/edit-homework/{!! $row['homework_id'] !!}" method="post" role="form" id="form2">
+
+
             <div class="panel-footer col-sm-12">
 
-
+                @foreach($homeworkIdss as $row)
                 <h4><small>Created By: </small> {!! $row['homework_teacher_name'] !!}  </h4>
 
-                @if($row['homework_status'] == 0)
+                @if($row['homework_status'] == 0 && $row['homework_is_active']==1)
                 <div class="col-md-12" id="btnDiv">
                     <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                         <i class="fa fa-wrench"></i> Update
                     </button>
 
-                    <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="publish" value="publish">
+                    <a href="/edit-homework/{!! $row['homework_id'] !!}" class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="publish" value="publish">
                         Publish
-                    </button>
+                    </a>
                 </div>
                 @endif
+                @endforeach
 
 
             </div>
-             </form>
-            @endforeach
+
+
         </div>
     </div>
 </div>
 <div id="update">
-    <form action="#" role="form" id="form2">
+
+    <form action="/edit-homework-detail" role="form" method="post" id="form24" enctype="multipart/form-data">
+    <input type="hidden" name="homework_id" value="@foreach($homeworkIdss as $work) {!! $work['homework_id']!!} @endforeach"/>
         <div class="row">
             <div class="col-md-12">
                 <div class="errorHandler alert alert-danger no-display">
@@ -196,7 +193,7 @@
                     <label class="control-label">
                         Description <span class="symbol required"></span>
                     </label>
-                    <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px; margin-bottom: 8px;">{!!$row['homework_description']!!}</textarea>
+                    <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;">{!!$row['homework_description']!!}</textarea>
                 </div>
 
                 <div>
@@ -204,8 +201,9 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input id="input" size="1" type="file" value="{!!$row['homework_file']!!}" />{!!$row['homework_file']!!}
+                        <input  name="pdfFile" id="pdfFile" size="1" type="file"  value="{!!$row['homework_file']!!}"  />{!!$row['homework_file']!!}
                     </div>
+
                 </div>
                 @endforeach
             </div>
@@ -216,7 +214,7 @@
                         <label class="control-label">
                             Due Date <span class="symbol required"></span>
                         </label>
-                        <input class="form-control datepicker" type="text" value="{!! $row['homework_due_date']!!}">
+                        <input class="form-control datepicker" name="dueDate" type="text" value="{!! $row['homework_due_date']!!}">
                     </div>
                     @endforeach
                     <h4>Assign Homework to: </h4>
@@ -259,8 +257,8 @@
                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnCancel">
                     Cancel <i class="fa fa-times-circle-o"></i>
                 </button>
-                <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnUpdate">
-                    Update <i class="fa fa-arrow-circle-right"></i>
+                <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnUpdate" name="btnUpdate" >
+                    Update
                 </button>
             </div>
         </div>
@@ -343,9 +341,6 @@
                     if(batch[i]['batch_id'] == "{!! $row['batch_id'] !!}" )
                         {
                             str+='<option selected value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
-                        }else{
-
-                            str+='<option value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
                         }
                 }
 
@@ -364,12 +359,11 @@
                             if(res[i]['class_id'] == "{!! $row['class_id'] !!}" )
                             {
                             str+='<option value="'+res[i]['class_id']+'" selected>'+res[i]['class_slug']+'</option>';
-                            }else{
-                            str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_slug']+'</option>';
                             }
                         }
                          @endforeach
                         $('#classDropdown').html(str);
+
                 $val1=$('#classDropdown').val();
                         var route='/get-subject-divisions/'+$val1+'/'+id;
                         $.get(route,function(res){
@@ -378,9 +372,9 @@
                             var arrStr= $.map(res,function(value){
                                 return value;
                             });
-                            @foreach($editHomeworkDiv as $row)
-                            for(var i=0; i<arrStr.length; i++){
 
+                            for(var i=0; i<arrStr.length; i++){
+                            @foreach($editHomeworkDiv as $row)
                                 if(arrStr[i]['division_id'] == "{!! $row['division_id'] !!}" )
                                 {
                                 str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
@@ -390,19 +384,41 @@
                                     ''+arrStr[i]['division_slug']+''+
                                     '</label>'+
                                     '</div>';
-                                }else{
-                                    str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
-
-                                        '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" >'+
-                                        '<label for="'+arrStr[i]['division_id']+'">'+
-                                        ''+arrStr[i]['division_slug']+''+
-                                        '</label>'+
-                                        '</div>';
                                 }
+                                 @endforeach
                             }
-                            @endforeach
 
-                 console.log(res);
+                            $('#division').html(str);
+
+                            $divID =res;
+                            console.log($divID);
+                            sample= jQuery.map($divID, function(n, i){
+                               return n.division_id;
+                            });
+                            var route='/get-division-students';
+                            var divisions=$divID;
+                            $.post(route,{id:sample},function(res){
+                            var str = "";
+                            for(var i=0; i<res.length; i++){
+                                    str+=' <tr>'+
+                                        '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
+                                        '<td>'+res[i]['roll_number']+'</td>'+
+                                        '<td>'+res[i]['first_name']+' '+res[i]['last_name']+'</td>'+
+                                        '<td>'+res[i]['slug']+'</td>'+
+                                        '</tr>';
+                                }
+                                $('#studentList').html(str);
+                                if($('.allCheckedStud1').prop('checked') == true)
+                                {
+                                    $('.checkedStud1').each(function() { //loop through each checkbox
+                                        this.checked = true;  //select all checkboxes with class "checkbox1"
+                                    });
+                                }
+                                TableData.init();
+                            });
+
+
+
 
                         });
 
@@ -416,12 +432,6 @@
 
     });
 
-
-
-
-
-
-
     $('#btnEdit').click(function(){
         $('#detail').hide();
         $('#update').show();
@@ -432,12 +442,6 @@
         $('#detail').show();
 
     });
-
-    $('#btnUpdate').click(function(){
-        window.location.href="detailedHomework";
-    });
-
-
 
     $('.classFirst').change(function(){
         if($(this).prop('checked') == true)
@@ -570,8 +574,6 @@
             TableData.init();
         });
     }
-
-
 
 </script>
 

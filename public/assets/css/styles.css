@@ -11734,3 +11734,11 @@ a.control_next {
     height: 39px;
     width: 39px;
 }
+.batchClassTab{
+    padding: 20px;
+    background: beige;
+    border: 1px solid #ccc;
+}
+.batchClassTab tr td {
+    border-bottom:none !important;
+}
