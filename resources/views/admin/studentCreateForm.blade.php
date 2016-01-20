@@ -191,9 +191,9 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">
-                    Email <span class="symbol required"></span>
+                    Email
                 </label>
-                <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" id="email">
+                <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" id="stud_email">
                 <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
             </div>
         </div>
@@ -218,10 +218,10 @@
     <div class="row">
 
         <div class="col-md-6">
-            <label  class="control-label">
-                Address
-            </label>
             <div class="form-group">
+                <label  class="control-label">
+                    Address <span class="symbol required"></span>
+                </label>
                 <div class="note-editor">
                     <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
                     </textarea>
@@ -234,7 +234,7 @@
 </fieldset>
 
 <div class="form-group">
-    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="submitStep" onclick="this.disabled = true">
+    <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" >
         Next <i class="fa fa-arrow-circle-right"></i>
     </button>
 </div>
@@ -253,7 +253,7 @@
                 <p class="text-small">
                     User will get the mail confirmation about his/her account. This mail includes link for login and his/her login credentials.
                 </p>
-                <a class="btn btn-primary btn-o" href="createUsers/1">
+                <a class="btn btn-primary btn-o" href="studentCreate">
                     Back to first step
                 </a>
             </div>
@@ -385,6 +385,10 @@
         });
 
     }
+
+    $('#autocomplete').on('keyup',function(){
+        $('parent_id').val('');
+    });
 
 </script>
 

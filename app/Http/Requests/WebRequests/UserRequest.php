@@ -68,21 +68,42 @@ class UserRequest extends Request
     public function rules()
     {
         $ch=Request::method();
+        $userToken=$this->request->all();
         switch($ch)
         {
             case 'GET': return [];
                 break;
-            case 'POST':return [
-                'firstName'=>'required|min:2',
-                'lastName' => 'required|min:2',
-                'password' => 'required|min:6',
-                'password2' => 'required|min:6',
-                'mobile' => 'required|min:10',
-                'alt_number' => 'min:10',
-                'email' => 'required|email',
-                'address' => 'required|min:15'
-            ];
-                break;
+
+            case 'POST':
+                if($userToken){
+                if($userToken['role_name'] == 'student'){
+                    return [
+                        'firstName'=>'required|min:2',
+                        'lastName' => 'required|min:2',
+                        'password' => 'required|min:6',
+                        'password2' => 'required|min:6',
+                        'mobile' => 'required|min:10',
+                        'alt_number' => 'min:10',
+                        'email' => 'email',
+                        'address' => 'required|min:15'
+                    ];
+                    break;
+                }
+                }else{
+                    return [
+                        'firstName'=>'required|min:2',
+                        'lastName' => 'required|min:2',
+                        'password' => 'required|min:6',
+                        'password2' => 'required|min:6',
+                        'mobile' => 'required|min:10',
+                        'alt_number' => 'min:10',
+                        'email' => 'required|email',
+                        'address' => 'required|min:15'
+                    ];
+                    break;
+                }
+
+
             default:break;
         }
 

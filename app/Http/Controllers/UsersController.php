@@ -300,7 +300,7 @@ class UsersController extends Controller
      */
     public function store(Requests\WebRequests\UserRequest $request)
     {
-        $data = Input::all();
+        $data = $request->all();
         $user=Auth::user();
         if(!empty($data)){
             $userData= new User;
@@ -379,7 +379,7 @@ class UsersController extends Controller
                     $moduleMasters = $moduleMasters->toArray();
                     foreach ($moduleMasters as $moduleMaster){
                         if($moduleMaster['slug'] == $userModule){
-                            $userAclData['module_id'] = $aclMaster['id'];
+                            $userAclData['module_id'] = $moduleMaster['id'];
                         }
                     }
                     $userAclData['user_id'] = $LastInsertId;
@@ -389,6 +389,7 @@ class UsersController extends Controller
                 }
                 ModuleAcl::insert($userAclsData);
             }
+            if($data['role_name'] != 'student'){
             $mailData['email']  = $data['email'];
             $mailData['confirmation_code']  = $userData->confirmation_code;
             $mailData['password']  = $data['password'];
@@ -398,7 +399,7 @@ class UsersController extends Controller
                 $message->subject("Welcome to site name");
                 $message->to($mailData['email']);
             });
-
+            }
             return $request;
         }else{
             return "Please Insert Data";
@@ -746,6 +747,8 @@ class UsersController extends Controller
         $userUpdate=User::where('id',$id)->update($userData);
         $teacherViewUpdate=TeacherView::where('user_id',$id)->update($teacherView);
         if(isset($request->checkbox8)){
+            Division::where('id',$request->division)->
+                where('class_id',$request->class)->where('class_teacher_id',$id)->update(['class_teacher_id'=>$id]);
         Division::where('id',$request->division)->
                   where('class_id',$request->class)->update(['class_teacher_id'=>$id]);
         }else{
@@ -1122,6 +1125,21 @@ class UsersController extends Controller
         }else{
             return 'true';
         }
+    }
+
+    public function checkParent(Request $request){
+        $data = $request->all();
+        if($data['parentID'] == " "){
+            return 'false';
+        }else{
+            $count = User::where('id',$data['parentID'])->count();
+            if($count >=1){
+                return 'true';
+            }else{
+                return 'false';
+            }
+        }
+
 
     }
 

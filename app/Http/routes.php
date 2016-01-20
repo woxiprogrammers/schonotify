@@ -255,6 +255,7 @@ Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit')
 Route::post('check-roll-number',array('uses' => 'UsersController@checkRollNumber'));
 //check class name
 Route::get('check-class',array('uses' => 'UsersController@checkClass'));
+Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
 
 
 /* API Routes */
