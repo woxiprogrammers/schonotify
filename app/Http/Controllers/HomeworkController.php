@@ -307,10 +307,7 @@ class HomeworkController extends Controller
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
 
-            $subjects=SubjectClassDivision::where('teacher_id',$user->id)
-                ->join('subjects','division_subjects.subject_id','=','subjects.id')
-                ->select('subjects.id','subjects.slug')
-                ->get();
+            $subjects=SubjectClass::where('class_id',$division->class_id)->join('subjects','subject_classes.subject_id','=','subjects.id')->get();
                 foreach($subjects as $row)
                 {
                     $homework[$i]['subjects'] = $row ['slug'] ;
@@ -329,7 +326,7 @@ class HomeworkController extends Controller
                     $divisionId['division_id'][$i]=$row['division_id'];
                     $i++;
                 }
-                $homework = array_unique($homework, SORT_REGULAR);
+
 
 
         }else{
@@ -346,6 +343,7 @@ class HomeworkController extends Controller
 
 
         }
+            $homework = array_unique($homework, SORT_REGULAR);
         $subjectId=array();
         foreach($homework as $row)
         {
