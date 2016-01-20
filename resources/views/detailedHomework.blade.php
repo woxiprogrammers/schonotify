@@ -137,7 +137,7 @@
 <div id="update">
 
     <form action="/edit-homework-detail" role="form" method="post" id="form24" enctype="multipart/form-data">
-    <input type="hidden" name="homework_id" value="@foreach($homeworkIdss as $work) {!! $work['homework_id']!!} @endforeach"/>
+    <input type="hidden" name="homework_id" id="homework_id" value="@foreach($homeworkIdss as $work){!! $work['homework_id']!!}@endforeach"/>
         <div class="row">
             <div class="col-md-12">
                 <div class="errorHandler alert alert-danger no-display">
@@ -362,10 +362,15 @@
                             }
                         }
                          @endforeach
+
                         $('#classDropdown').html(str);
 
-                $val1=$('#classDropdown').val();
-                        var route='/get-subject-divisions/'+$val1+'/'+id;
+                        var val1=$('#classDropdown').val();
+
+
+                        var route='/get-subject-divisions/'+val1+'/'+id;
+
+
                         $.get(route,function(res){
                             var str = "";
 
@@ -373,32 +378,57 @@
                                 return value;
                             });
 
-                            for(var i=0; i<arrStr.length; i++){
-                            @foreach($editHomeworkDiv as $row)
-                                if(arrStr[i]['division_id'] == "{!! $row['division_id'] !!}" )
+                            var hrId=$('#homework_id').val();
+
+                            var route1='/get-edit-data/'+hrId;
+
+
+                            $.get(route1,function(res){
+
+                                var arr1=[];
+                                for(var i=0; i<res.length; i++)
                                 {
-                                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
-
-                                    '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" checked>'+
-                                    '<label for="'+arrStr[i]['division_id']+'">'+
-                                    ''+arrStr[i]['division_slug']+''+
-                                    '</label>'+
-                                    '</div>';
+                                    arr1[i]=res[i]['division_id'];
                                 }
-                                 @endforeach
-                            }
 
-                            $('#division').html(str);
+                                for(var i=0; i<arrStr.length; i++){
 
-                            $divID =res;
-                            console.log($divID);
-                            sample= jQuery.map($divID, function(n, i){
+                                   if($.inArray(arrStr[i]['division_id'],arr1)!=-1)
+                                    {
+                                        str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                                            '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" checked>'+
+                                            '<label for="'+arrStr[i]['division_id']+'">'+
+                                            ''+arrStr[i]['division_slug']+''+
+                                            '</label>'+
+                                            '</div>';
+                                    }else{
+                                        str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                                            '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" >'+
+                                            '<label for="'+arrStr[i]['division_id']+'">'+
+                                            ''+arrStr[i]['division_slug']+''+
+                                            '</label>'+
+                                            '</div>';
+                                    }
+
+                                }
+
+                                $('#division').html(str);
+                            });
+
+
+                            var divID =res;
+
+                            var sample= jQuery.map(divID, function(n, i){
                                return n.division_id;
                             });
+
                             var route='/get-division-students';
-                            var divisions=$divID;
+                            var divisions=divID;
                             $.post(route,{id:sample},function(res){
                             var str = "";
+
                             for(var i=0; i<res.length; i++){
                                     str+=' <tr>'+
                                         '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
