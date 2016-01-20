@@ -168,7 +168,7 @@
                                 </label>
                             </div>
                             <div >
-                                <input style="opacity:0; position:absolute; left:9999px;" type="checkbox" value="" name="access[]" id="checkbox8">
+                                <input style="opacity:0; position:absolute;" type="checkbox" value="" name="access[]" id="checkbox8">
                             </div>
                         </div>
                        </div>
@@ -192,10 +192,10 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="block">
-                            Address
-                        </label>
                         <div class="form-group">
+                            <label class="control-label">
+                                Address <span class="symbol required"></span>
+                            </label>
                             <div class="note-editor">
                                 <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
                                 </textarea>
@@ -314,7 +314,7 @@
                 <p class="text-small">
                     User will get the mail confirmation about his/her account. This mail includes link for login and his/her login credentials.
                 </p>
-                <a class="btn btn-primary btn-o" href="createUsers/1">
+                <a class="btn btn-primary btn-o" href="teacherCreate">
                     Back to first step
                 </a>
             </div>

@@ -14,8 +14,8 @@ class EditParentRequest extends Request
     {
         return [
             'username' => 'required|max:20',
-            'firstname' => 'required|min:3|max:20',
-            'lastname' => 'required|min:3|max:20',
+            'firstname' => 'required|min:2|max:20',
+            'lastname' => 'required|min:2|max:20',
             'email' => 'required|email',
             'mobile' =>'required|digits:10',
             'address' =>'required',
