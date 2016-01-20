@@ -276,9 +276,11 @@ Route::get('check-class',array('uses' => 'ClassController@checkClass'));
 
     //Message
 
-    Route::get('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
+    Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
+    Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));//teacher gets message listing
 
-    Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));
+
+    Route::get('get-messages-parent/{student_id}',array('uses' => 'api\MessageController@getMessagesParent'));//teacher gets message listing
 
     Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
     Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));

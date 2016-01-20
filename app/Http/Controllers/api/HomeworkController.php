@@ -76,7 +76,7 @@ class HomeworkController extends Controller
                 }
                 $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
-                    ->select('subjects.id','subjects.subject_name'/*,'division_subjects.division_id'*/)
+                    ->select('subjects.id','subjects.subject_name')
                     ->get();
                 foreach($divisionSubjects as $row)
                 {
