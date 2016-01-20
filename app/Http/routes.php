@@ -145,6 +145,8 @@ Route::get('edit-homework/{id}','HomeworkController@editHomework');
 
 Route::post('edit-homework-detail','HomeworkController@updateHomeworkDetail');
 
+Route::get('get-edit-data/{id}','HomeworkController@editDataDiv');
+
 Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
 Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
@@ -276,7 +278,12 @@ Route::get('check-class',array('uses' => 'ClassController@checkClass'));
 
     //Message
 
-    Route::get('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
+    Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
+    Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));//teacher gets message listing
+
+
+    Route::get('get-messages-parent/{student_id}',array('uses' => 'api\MessageController@getMessagesParent'));//teacher gets message listing
+
     Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
     Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
