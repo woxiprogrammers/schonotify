@@ -148,9 +148,10 @@ class MessageController extends Controller
 
     public function getDetailMessages(Request $request ){
         $finalMessageData=array();
+        $MessageData=array();
         try {
             $data = $request->all();
-
+            //return $data['teacher']['id'];
             $from_id = $data['from_id'];
             $to_id = $data['to_id'];
             Message::where('to_id', $to_id)
@@ -165,11 +166,24 @@ class MessageController extends Controller
             $messages2 = Message::where('to_id',$from_id)
                                  ->where('from_id',$to_id)
                                  ->get()->toArray();
-            $finalMessageData=array_merge_recursive($messages1,$messages2);
-                foreach ($finalMessageData as $key => $part) {
+            $MessageData=array_merge_recursive($messages1,$messages2);
+                foreach ($MessageData as $key => $part) {
                                $sort[$key] = strtotime($part['created_at']);
                                                    }
-                array_multisort($sort, SORT_ASC, $finalMessageData);
+                array_multisort($sort, SORT_ASC, $MessageData);
+                    $i=0;
+            foreach($MessageData as $value){
+                        if($value['from_id']==$data['teacher']['id']){
+                            $finalMessageData[$i]['description']=$value['description'];
+                            $finalMessageData[$i]['timestamp']=date("M j, g:i a",strtotime($value['timestamp']));;
+                            $finalMessageData[$i]['type']="Sent";
+                }else{
+                            $finalMessageData[$i]['description']=$value['description'];
+                            $finalMessageData[$i]['timestamp']=date("M j, g:i a",strtotime($value['timestamp']));;
+                            $finalMessageData[$i]['type']="Receive";
+                        }
+                $i++;
+            }
             $status = 200;
             $message = "Success";
         } catch (\Exception $e) {
