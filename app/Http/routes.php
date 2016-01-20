@@ -256,7 +256,7 @@ Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit')
 //check roll number exists or not
 Route::post('check-roll-number',array('uses' => 'UsersController@checkRollNumber'));
 //check class name
-Route::get('check-class',array('uses' => 'UsersController@checkClass'));
+Route::get('check-class',array('uses' => 'ClassController@checkClass'));
 
 
 /* API Routes */
