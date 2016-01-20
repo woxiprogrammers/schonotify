@@ -42,6 +42,7 @@
 
             <form id="formEditAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
                 <input name="_method" type="hidden" value="PUT">
+                <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                 <fieldset>
                     <div class="row">
                         <div class="col-md-6">
@@ -73,7 +74,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>
+                                <label class="control-label">
                                     Roll Number
                                 </label>
                                 <input type="text" value="{!! $user->roll_number !!}"  class="form-control" id="roll_number" name="roll_number">
@@ -104,8 +105,8 @@
                                 <label class="control-label">
                                     Email Address
                                 </label>
-                                <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                                <div class="" id="emailfeedback" ></div>
+                                <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="editEmail" name="email">
+                                <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">
@@ -338,5 +339,24 @@
         $('#division').html(str);
     });
     }
+
+
+    $('#roll_number').on('keyup',function(){
+        var roll_number = this.value;
+        var division = $('#division').val();
+        var userId = $('#userId').val();
+        var route='/check-roll-number';
+
+        $.post(route,{roll_number:roll_number,division:division},function(res){
+            for(var i=0; i<res.length; i++){
+                if((res[i]['id']) != userId ){
+                var confirmation =confirm("For Selected Batch Class Division "+res[i]['first_name']+"  "+ res[i]['last_name']+" is having this Roll number .Do you want to change ?");
+                }
+                    if(confirmation == false){
+                    $('#roll_number').val("");
+                }
+            }
+        });
+    });
 </script>
 @stop

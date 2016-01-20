@@ -135,14 +135,15 @@ Route::get('homework-listing','HomeworkController@homeworkListing');
 
 Route::get('detailedHomework/{id}','HomeworkController@detailedHomework');
 
+Route::get('delete-homework/{id}','HomeworkController@deleteHomework');
+
 Route::get('createHomework','HomeworkController@createHomework');
 
 Route::post('create-homework','HomeworkController@homeworkCreate');
 
-Route::post('edit-homework/{id}','HomeworkController@editHomework');
+Route::get('edit-homework/{id}','HomeworkController@editHomework');
 
-
-Route::post('edit-homework-detail/{id}','HomeworkController@updateHomeworkDetail');
+Route::post('edit-homework-detail','HomeworkController@updateHomeworkDetail');
 
 Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
@@ -158,7 +159,7 @@ Route::get('subjects/{id}','ResultController@subjectResults');
 
 Route::get('getStudents/{id}','ResultController@getStudents');
 
-Route::get('markAttendance','AttendanceController@markAttendance');
+Route::get('mark-attendance','AttendanceController@markAttendance');
 
 Route::get('view-attendance','AttendanceController@viewAttendance');
 
@@ -196,9 +197,25 @@ Route::post('division-create','ClassController@saveDivision');
 
 Route::get('check-div/{clsDiv}','ClassController@checkDivision');
 
+Route::get('check-division','ClassController@divisionCheck');
+
 Route::get('create-subject','SubjectController@createSubjects');
 
 Route::post('subject-create','SubjectController@create');
+
+Route::get('subject-teacher','SubjectTeacherController@index');
+
+Route::get('/get-sub-batches/{id}','SubjectTeacherController@getSubjectBatches');
+
+Route::get('/get-sub-classes/{id}/{subject}','SubjectTeacherController@getSubjectClasses');
+
+Route::get('/get-sub-divisions/{id}','SubjectTeacherController@getSubjectDivisions');
+
+Route::get('/get-sub-teachers/{id}/{subject}','SubjectTeacherController@getDivisionTeachers');
+
+Route::post('/create-relation','SubjectTeacherController@createRelation');
+
+Route::get('/delete-relation/{id}','SubjectTeacherController@deleteRelation');
 
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
@@ -234,6 +251,12 @@ Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjec
 Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
 
 
+//check email for edit user
+Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit'));
+//check roll number exists or not
+Route::post('check-roll-number',array('uses' => 'UsersController@checkRollNumber'));
+//check class name
+Route::get('check-class',array('uses' => 'ClassController@checkClass'));
 
 
 /* API Routes */

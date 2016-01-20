@@ -55,6 +55,7 @@
 
                             <form id="formEditAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
+                                <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -86,7 +87,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>
+                                                <label class="control-label">
                                                     Roll Number
                                                 </label>
                                                 <input type="text" value="{!! $user->roll_number !!}"  class="form-control" id="roll_number" name="roll_number">
@@ -117,8 +118,8 @@
                                                 <label class="control-label">
                                                     Email Address
                                                 </label>
-                                                <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="email" name="email">
-                                                <div class="" id="emailfeedback" ></div>
+                                                <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="editEmail" name="email">
+                                                <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -204,6 +205,7 @@
                             <div class="panel-body">
                                  <form id="formEditAccount" method="post" action="/edit-parent/{!! $user->parent_id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
+                                <input type="hidden" name="userId" id="userPerentId" value="{!! $user->parentUserId !!}">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -230,8 +232,8 @@
                                                 <label class="control-label">
                                                     Email Address
                                                 </label>
-                                                <input type="email" placeholder="{!! $user->parentEmail !!}" value="{!! $user->parentEmail !!}" class="form-control" id="email" name="email">
-                                                <div class="" id="emailfeedback" ></div>
+                                                <input type="email" placeholder="{!! $user->parentEmail !!}" value="{!! $user->parentEmail !!}" class="form-control" id="editEmailParent" name="email">
+                                                <div id="emailIdfeedback"><div class="" id="emailparentfeedback" ></div></div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -433,6 +435,7 @@
         }
     }
     function userAclModule(){
+        var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message'];
         var route='/user-module-acl-edit/{!! $user->parent_id !!}';
         $.get(route,function(res){
 
@@ -473,14 +476,20 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                    {
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],enabled_modules)==-1){
+                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" disabled value="" >'+
+                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                     }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
+                        {
+
+                            str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }else{
+                            str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }
                     }
                     str+='</div>'+
                         '</td>';
@@ -501,7 +510,7 @@
             for(var i=0; i<res.length; i++){
                 if({!! $user->batch_id !!} == res[i]['id'])
             {
-                str+='<option value='+res[i]['id']+' selected>'+res[i]['name']+'</option>';
+                str+='<option value='+res[i]['id']+' selected >'+res[i]['name']+'</option>';
             }else{
                 str+='<option value='+res[i]['id']+' >'+res[i]['name']+'</option>';
             }
@@ -554,6 +563,26 @@
         $('#division').html(str);
     });
     }
+
+
+
+    $('#roll_number').on('keyup',function(){
+        var roll_number = this.value;
+        var division = $('#division').val();
+        var userId = $('#userId').val();
+        var route='/check-roll-number';
+
+        $.post(route,{roll_number:roll_number,division:division},function(res){
+            for(var i=0; i<res.length; i++){
+                var confirmation =confirm("For Selected Batch Class Division "+res[i]['first_name']+"  "+ res[i]['last_name']+" is having this Roll number .Do you want to change ?");
+                if(confirmation == false){
+                    $('#roll_number').val("");
+                }
+            }
+        });
+    });
+
+
 </script>
 @stop
 

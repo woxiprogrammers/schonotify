@@ -5,10 +5,10 @@ namespace App\Http\Requests\WebRequests;
 use App\Http\Requests\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Session;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 
-class CreateHomeworkRequest extends Request
+class AssignSubjectRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,6 +17,7 @@ class CreateHomeworkRequest extends Request
      */
     public function authorize()
     {
+
         $ch=Request::method();
 
         $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
@@ -35,32 +36,30 @@ class CreateHomeworkRequest extends Request
         switch($ch)
         {
             case 'GET':
-
-                if(in_array('create_homework',$resultArr)) {
+                if(in_array('delete_subject',$resultArr)) {
                     return true;
                 } else {
-
-                    Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
-
                 break;
 
             case 'PUT':
-               
+                dd('put');
                 break;
 
             case 'POST':
-                if(in_array('create_homework',$resultArr)) {
+                if(in_array('create_subject',$resultArr)) {
                     return true;
                 } else {
-
-                    Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
+
                 break;
             default:break;
         }
+
     }
 
     /**
@@ -76,20 +75,28 @@ class CreateHomeworkRequest extends Request
             case 'GET': return [];
                 break;
             case 'POST':return [
-                'subjectsDropdown' => 'required',
-                'homeworkType' => 'required',
-                'title' => 'required|min:3|max:20',
-                'description' => 'required',
-                'dueDate' =>'required|date',
-                'batch' =>'required',
-                'pdfFile' => 'mimes:pdf|max:25000000',
-                'classDropdown' =>'required',
-                'studentinfo' =>'required|min:1',
-                'divisions' =>'required',
+                'subjectDropdown'=>'required',
+                'batchDropdown'=>'required',
+                'classDropdown'=>'required',
+                'divisionDropdown'=>'required',
+                'teacherDropdown'=>'required'
             ];
                 break;
             default:break;
         }
 
+    }
+
+    public function messages()
+    {
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET': return [];
+                break;
+            case 'POST':return [];
+                break;
+            default:break;
+        }
     }
 }

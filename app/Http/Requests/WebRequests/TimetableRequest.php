@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class CreateHomeworkRequest extends Request
+class TimetableRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,6 +27,7 @@ class CreateHomeworkRequest extends Request
             ->get();
         $resultArr=array();
 
+
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
@@ -36,29 +37,29 @@ class CreateHomeworkRequest extends Request
         {
             case 'GET':
 
-                if(in_array('create_homework',$resultArr)) {
+                if(in_array('view_timetable',$resultArr)) {
                     return true;
                 } else {
-
-                    Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
 
                 break;
 
             case 'PUT':
-               
+                dd('put');
                 break;
 
             case 'POST':
-                if(in_array('create_homework',$resultArr)) {
+                if(in_array('create_timetable',$resultArr)) {
                     return true;
                 } else {
-
-                    Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
+
                 break;
+
             default:break;
         }
     }
@@ -76,16 +77,8 @@ class CreateHomeworkRequest extends Request
             case 'GET': return [];
                 break;
             case 'POST':return [
-                'subjectsDropdown' => 'required',
-                'homeworkType' => 'required',
-                'title' => 'required|min:3|max:20',
-                'description' => 'required',
-                'dueDate' =>'required|date',
-                'batch' =>'required',
-                'pdfFile' => 'mimes:pdf|max:25000000',
-                'classDropdown' =>'required',
-                'studentinfo' =>'required|min:1',
-                'divisions' =>'required',
+                'subject_name'=>'required|min:1|unique:subjects',
+                'class'=>'required|min:1'
             ];
                 break;
             default:break;

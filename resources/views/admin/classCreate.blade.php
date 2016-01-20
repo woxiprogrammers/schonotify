@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
 
-                                <form method="post" action="class-create" role="form" id="form2">
+                                <form method="post" action="class-create" role="form" id="classCreateForm">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="errorHandler alert alert-danger no-display">
@@ -221,7 +221,7 @@
     {
         var route="get-batches";
         $.get(route,function(res){
-            var str="<option>Select Batch</option>";
+            var str="<option value=''>Select Batch</option>";
             for(var i=0; i<res.length; i++)
             {
                 str+="<option value='"+res[i]['id']+"'>"+res[i]['name']+"</option>"
@@ -229,6 +229,10 @@
             $('#dropdown').html(str);
         });
     }
+
+    $('#dropdown').change(function(){
+        $('#class').val('');
+    });
 
 
 </script>
