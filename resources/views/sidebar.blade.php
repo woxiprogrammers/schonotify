@@ -181,7 +181,7 @@
     </a>
     <ul class="sub-menu">
         <li>
-            <a href="/markAttendance">
+            <a href="/mark-attendance">
                 <span class="title"> Mark Attendance </span>
             </a>
         </li>
@@ -191,7 +191,7 @@
             </a>
         </li>
         <li>
-            <a href="leaveListing">
+            <a href="/leaveListing">
                 <span class="title"> Leaves </span>
                 <span class="badge pull-right">9</span>
             </a>

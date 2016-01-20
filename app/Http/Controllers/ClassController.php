@@ -36,6 +36,7 @@ class ClassController extends Controller
         $user=Auth::User();
         $class['batch_id']=$request->dropdown;
         $class['class_name']=$request->class;
+        $class['slug']=strtolower($request->class);
         $class['body_id']=$user->body_id;
         $class['created_at'] = Carbon::now();
         $class['updated_at'] = Carbon::now();
@@ -127,4 +128,25 @@ class ClassController extends Controller
 
     }
 
+    public function divisionCheck(Request $request)
+    {
+        $cnt=Division::where('class_id','=',$request->class_id)->where('division_name','=',$request->division_name)->count();
+
+        if($cnt>=1)
+        {
+            return 'false';
+        }else{
+            return 'true';
+        }
+    }
+    public function checkClass(Request $request ){
+        $data = $request->all();
+        $classCount= Classes::where('batch_id',$data['batch_id'])->where('slug',strtolower($data['class']))->count();
+        if($classCount >=1){
+            return 'false';
+        }else{
+            return 'true';
+        }
+
+    }
 }
