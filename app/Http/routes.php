@@ -249,12 +249,12 @@ Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassT
 
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
+    Route::post('viewAttendance','api\AttendanceController@viewAttendance');
 
+    //Message
 
     Route::get('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
-
     Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
-
     Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
     Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
@@ -264,14 +264,11 @@ Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassT
     Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
     Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
-
-
+    Route::get('get-message-list','api\MessageController@getMessageList');
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
 
-    Route::post('viewAttendance','api\AttendanceController@viewAttendance');
-    Route::get('get-message-list','api\MessageController@getMessageList');
-
+ //Homework related
     Route::post('createHomework','api\HomeworkController@createHomework');
     Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
     Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
@@ -279,11 +276,10 @@ Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassT
     Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
     Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
     Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
-
     Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
-
     Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
-
+    Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
+    Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
 
 
 

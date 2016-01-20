@@ -7,7 +7,7 @@ class CreateClassesSubjectTable extends Migration
 {
     public function up()
     {
-        Schema::create('classes_subject', function (Blueprint $table) {
+        Schema::create('subject_classes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('class_id')->unsigned();
             $table->integer('subject_id')->unsigned();
@@ -22,6 +22,6 @@ class CreateClassesSubjectTable extends Migration
      */
     public function down()
     {
-        Schema::drop('classes_subject');
+        Schema::drop('subject_classes');
     }
 }
