@@ -269,6 +269,7 @@ Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassT
 
 
  //Homework related
+    Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
     Route::post('createHomework','api\HomeworkController@createHomework');
     Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
     Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
@@ -280,7 +281,7 @@ Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassT
     Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
     Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
     Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
-
+    Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
 
 
         Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
