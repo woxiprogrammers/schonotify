@@ -1061,12 +1061,25 @@ var FormValidator = function () {
                     required:true
                 },
                 division:{
-                    required:true
+                    required:true,
+                    remote: {
+                        url: "/check-division",
+                        type: "GET",
+                        data: {
+                            class_id: function() {
+                                return $( "#classDropdown" ).val();
+                            },
+                            division_name:function() {
+                                return $( "#division" ).val();
+                            }
+                        }
+                    }
                 }
             },
             messages: {
-
-
+                division:{
+                    remote:"Division is already existed !"
+                }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler7.hide();
