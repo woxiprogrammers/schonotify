@@ -879,7 +879,8 @@ var FormValidator = function () {
                 classDropdown: "Please select class",
                 divisions: "Please select at least one division",
                 studentinfo: "Please select at least one student",
-                pdfFile: "select only pdf files of size 25 mb",
+                pdfFile:{
+                    maxlength: "select only pdf files of size 25 mb"},
                 dueDate: "please select due date ",
                 title:{
                     minlength:"please enter at least 2 characters",
