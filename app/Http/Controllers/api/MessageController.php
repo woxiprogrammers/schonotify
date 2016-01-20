@@ -150,8 +150,15 @@ class MessageController extends Controller
         $finalMessageData=array();
         try {
             $data = $request->all();
+
             $from_id = $data['from_id'];
             $to_id = $data['to_id'];
+            Message::where('to_id', $to_id)
+                     ->where('from_id', $from_id)
+                     ->update(['read_status' => 1]);
+            Message::where('to_id', $from_id)
+                ->where('from_id', $to_id)
+                ->update(['read_status' => 1]);
             $messages1 = Message::where('to_id',$to_id)
                                  ->where('from_id',$from_id)
                                  ->get()->toArray();
