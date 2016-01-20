@@ -49,8 +49,76 @@ class MessageController extends Controller
                 $finalSenderName=$finalSender['first_name']." ".$finalSender['last_name'];
                 $finalReceiver = User::where('id','=',$value['to_id'])->select('first_name', 'last_name')->first();
                 $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
+                if($messageData['MessageList'][$receiver]['user_id']==$messageData['MessageList'][$receiver]['from_id']){
+                            $title=$finalReceiverName;
+                }else{
+                             $title=$finalSenderName;
+                }
                 $messageData['MessageList'][$receiver]['sender_name']=$finalSenderName;
                 $messageData['MessageList'][$receiver]['receiver_name']=$finalReceiverName;
+                $messageData['MessageList'][$receiver]['title']=$title;
+                $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
+                $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                $i++;
+            }
+            $i=0;
+            foreach($messageData as $value)
+            {
+                foreach($value as $key=>$val)
+                {
+                    $finalMessageData[$i]=$val;
+                    $i++;
+                }
+            }
+            $status = 200;
+            $message = "Success";
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "something went wrong". $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "MessageList" => $finalMessageData
+        ];
+        return response($response, $status);
+    }
+    public function getMessagesParent(Request $request ,$student_id){
+        try {
+            $data = $request->all();
+            $sender = $student_id;
+            $messages = Message::where('to_id',$sender)
+                ->orwhere('from_id',$sender)
+                ->get()->toArray();
+            $i=0;
+            foreach($messages as $value)
+            {
+                if($data['teacher']['id']==$value['from_id'])
+                {
+                    $receiverName = User::where('id','=',$value['to_id'])
+                        ->select('first_name', 'last_name')->first();
+                }else{
+                    $receiverName = User::where('id','=',$value['from_id'])
+                        ->select('first_name', 'last_name')->first();
+                }
+                $receiver= $receiverName['first_name']." ".$receiverName['last_name'];
+                $messageData['MessageList'][$receiver]['message_id']=$value['id'];
+                $messageData['MessageList'][$receiver]['user_id']=$data['teacher']['id'];
+                $messageData['MessageList'][$receiver]['from_id']=$value['from_id'];
+                $messageData['MessageList'][$receiver]['to_id']=$value['to_id'];
+                $messageData['MessageList'][$receiver]['description']=$value['description'];
+                $finalSender=User::where('id','=',$value['from_id'])->select('first_name', 'last_name')->first();
+                $finalSenderName=$finalSender['first_name']." ".$finalSender['last_name'];
+                $finalReceiver = User::where('id','=',$value['to_id'])->select('first_name', 'last_name')->first();
+                $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
+                if($messageData['MessageList'][$receiver]['user_id']==$messageData['MessageList'][$receiver]['from_id']){
+                    $title=$finalReceiverName;
+                }else{
+                    $title=$finalSenderName;
+                }
+                $messageData['MessageList'][$receiver]['sender_name']=$finalSenderName;
+                $messageData['MessageList'][$receiver]['receiver_name']=$finalReceiverName;
+                $messageData['MessageList'][$receiver]['title']=$title;
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
                 $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
                 $i++;
@@ -78,51 +146,23 @@ class MessageController extends Controller
         return response($response, $status);
     }
 
-
     public function getDetailMessages(Request $request ){
+        $finalMessageData=array();
         try {
             $data = $request->all();
-            $sender = $data['teacher']['id'];
-            $messages = Message::where('to_id',$sender)
-                ->orwhere('from_id',$sender)
-                ->get()->toArray();
-            $i=0;
-            foreach($messages as $value)
-            {
-                if($data['teacher']['id']==$value['from_id'])
-                {
-                    $receiverName = User::where('id','=',$value['to_id'])
-                        ->select('first_name', 'last_name')->first();
-                }else{
-                    $receiverName = User::where('id','=',$value['from_id'])
-                        ->select('first_name', 'last_name')->first();
-                }
-                $receiver= $receiverName['first_name']." ".$receiverName['last_name'];
-                $messageData['MessageList'][$receiver][$i]['message_id']=$value['id'];
-                $messageData['MessageList'][$receiver][$i]['user_id']=$data['teacher']['id'];
-                $messageData['MessageList'][$receiver][$i]['from_id']=$value['from_id'];
-                $messageData['MessageList'][$receiver][$i]['to_id']=$value['to_id'];
-                $messageData['MessageList'][$receiver][$i]['description']=$value['description'];
-                $finalSender=User::where('id','=',$value['from_id'])->select('first_name', 'last_name')->first();
-                $finalSenderName=$finalSender['first_name']." ".$finalSender['last_name'];
-                $finalReceiver = User::where('id','=',$value['to_id'])->select('first_name', 'last_name')->first();
-                $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
-                $messageData['MessageList'][$receiver][$i]['sender_name']=$finalSenderName;
-                $messageData['MessageList'][$receiver][$i]['receiver_name']=$finalReceiverName;
-                $messageData['MessageList'][$receiver][$i]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
-                $messageData['MessageList'][$receiver][$i]['read_status']=$value['read_status'];
-                $i++;
-            }
-            $i=0;
-            foreach($messageData as $value)
-            {
-                foreach($value as $key=>$val)
-                {
-                    $finalMessageData[$i]['Name']= $key;
-                    $finalMessageData[$i]['Messages']=$val;
-                    $i++;
-                }
-            }
+            $from_id = $data['from_id'];
+            $to_id = $data['to_id'];
+            $messages1 = Message::where('to_id',$to_id)
+                                 ->where('from_id',$from_id)
+                                 ->get()->toArray();
+            $messages2 = Message::where('to_id',$from_id)
+                                 ->where('from_id',$to_id)
+                                 ->get()->toArray();
+            $finalMessageData=array_merge_recursive($messages1,$messages2);
+                foreach ($finalMessageData as $key => $part) {
+                               $sort[$key] = strtotime($part['created_at']);
+                                                   }
+                array_multisort($sort, SORT_ASC, $finalMessageData);
             $status = 200;
             $message = "Success";
         } catch (\Exception $e) {
