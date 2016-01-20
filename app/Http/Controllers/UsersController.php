@@ -501,7 +501,7 @@ class UsersController extends Controller
         $user['parentAlternateNumber']=$userData->alternate_number;
         $user['parentAvatar']=$userData->avatar;
         $division=Division::where('id',$user['division_id'])->first();
-        $class=Classes::where('id',$division->id)->first();
+        $class=Classes::where('id',$division->class_id)->first();
         $batch=Batch::where('id',$class->batch_id)->first();
         $user['batch_id']=$batch->id;
         $user['batch_name']=$batch->slug;
