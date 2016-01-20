@@ -198,7 +198,7 @@
         </li>
     </ul>
 </li>
-
+@if(Auth::User()->role_id != 1)
 <li>
     <a href="/homework-listing">
         <div class="item-content">
@@ -211,7 +211,7 @@
         </div>
     </a>
 </li>
-
+@endif
 <li>
     <a href="/results">
         <div class="item-content">
