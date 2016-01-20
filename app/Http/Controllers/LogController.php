@@ -71,8 +71,6 @@ class LogController extends Controller
 
         $user=User::where('email','=',$request['email'])->first();
 
-        $userSlug=UserRoles::where('id',$user->role_id)->first();
-
         if($user == NULL || !(\Hash::check($request['password'],$user->password)))
         {
             Session::flash('message-error','Wrong email or password');
@@ -81,34 +79,37 @@ class LogController extends Controller
         {
             Session::flash('message-error','Sorry ... Your account is not activated');
             return Redirect::to('/');
-        }elseif($userSlug->slug == "student" || $userSlug->slug == "parent")
-        {
+        }elseif($user!=NULL){
+                    $userSlug=UserRoles::where('id',$user->role_id)->first();
+                    if($userSlug->slug == "student" || $userSlug->slug == "parent")
+                    {
 
-                Session::flash('message-error','Sorry...You don`t have web access.');
-                return Redirect::to('/');
+                        Session::flash('message-error','Sorry...You don`t have web access.');
+                        return Redirect::to('/');
 
-        }elseif($userSlug->slug == "teacher")
-        {
-            $view= TeacherView::where('user_id','=',$user->id)
-            ->get();
+                    }elseif($userSlug->slug == "teacher")
+                    {
+                        $view= TeacherView::where('user_id','=',$user->id)
+                            ->get();
 
-            foreach($view as $val)
-            {
-                $web_view=$val['web_view'];
-            }
+                        foreach($view as $val)
+                        {
+                            $web_view=$val['web_view'];
+                        }
 
-            if($web_view == 0)
-            {
-                Session::flash('message-error','Sorry...You don`t have web access. Kindly contact to your admin.');
-                return Redirect::to('/');
-            }elseif(Auth::attempt(['email'=>$request['email'],'password'=>$request['password']]))
-                {
-                    return Redirect::to('/');
-                }
+                        if($web_view == 0)
+                        {
+                            Session::flash('message-error','Sorry...You don`t have web access. Kindly contact to your admin.');
+                            return Redirect::to('/');
+                        }elseif(Auth::attempt(['email'=>$request['email'],'password'=>$request['password']]))
+                        {
+                            return Redirect::to('/');
+                        }
 
-        }elseif(Auth::attempt(['email'=>$request['email'],'password'=>$request['password']]))
-        {
-            return Redirect::to('/');
+                    }elseif(Auth::attempt(['email'=>$request['email'],'password'=>$request['password']]))
+                    {
+                        return Redirect::to('/');
+                    }
         }else{
             Session::flash('message-error','Wrong email or password');
             return Redirect::to('/');
