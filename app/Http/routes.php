@@ -145,6 +145,8 @@ Route::get('edit-homework/{id}','HomeworkController@editHomework');
 
 Route::post('edit-homework-detail','HomeworkController@updateHomeworkDetail');
 
+Route::get('get-edit-data/{id}','HomeworkController@editDataDiv');
+
 Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
 Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
@@ -272,12 +274,15 @@ Route::get('check-class',array('uses' => 'ClassController@checkClass'));
 
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
+    Route::post('viewAttendance','api\AttendanceController@viewAttendance');
 
+    //Message
 
     Route::get('getdetailmessage',array('uses' => 'api\MessageController@getDetailMessages'));
 
-    Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
+    Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));
 
+    Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
     Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
     Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
@@ -287,15 +292,12 @@ Route::get('check-class',array('uses' => 'ClassController@checkClass'));
     Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
     Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
-
-
+    Route::get('get-message-list','api\MessageController@getMessageList');
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
-    Route::get('get-teachers-subjects/{div_id}','api\HomeworkController@getTeacherSubject');
 
-
-    Route::post('viewAttendance','api\AttendanceController@viewAttendance');
-    Route::get('get-message-list','api\MessageController@getMessageList');
+ //Homework related
+    Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
     Route::post('createHomework','api\HomeworkController@createHomework');
     Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
     Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
@@ -303,7 +305,17 @@ Route::get('check-class',array('uses' => 'ClassController@checkClass'));
     Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
     Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
     Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
-    Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
+    Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
+    Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
+    Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
+    Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
+    Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
+
+
+        Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
+
+
+
     Route::get('view-timetable-teacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
 
     //Announcement

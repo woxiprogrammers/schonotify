@@ -195,7 +195,7 @@
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="assets/js/form-validation.js"></script>
-
+<script src="assets/js/additional-methods.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
     jQuery(document).ready(function() {
