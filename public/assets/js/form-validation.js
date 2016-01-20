@@ -879,7 +879,8 @@ var FormValidator = function () {
                 classDropdown: "Please select class",
                 divisions: "Please select at least one division",
                 studentinfo: "Please select at least one student",
-                pdfFile: "select only pdf files of size 25 mb",
+                pdfFile:{
+                    maxlength: "select only pdf files of size 25 mb"},
                 dueDate: "please select due date ",
                 title:{
                     minlength:"please enter at least 2 characters",
@@ -1061,12 +1062,25 @@ var FormValidator = function () {
                     required:true
                 },
                 division:{
-                    required:true
+                    required:true,
+                    remote: {
+                        url: "/check-division",
+                        type: "GET",
+                        data: {
+                            class_id: function() {
+                                return $( "#classDropdown" ).val();
+                            },
+                            division_name:function() {
+                                return $( "#division" ).val();
+                            }
+                        }
+                    }
                 }
             },
             messages: {
-
-
+                division:{
+                    remote:"Division is already existed !"
+                }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler7.hide();

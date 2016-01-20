@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class ResultController extends Controller
 {
@@ -13,9 +14,14 @@ class ResultController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
-    public function showResults()
+    public function showResults(Requests\WebRequests\ResultRequest $request)
     {
-        return view('showResults');
+        if($request->authorize()===true)
+        {
+            return view('showResults');
+        }else{
+            return Redirect::to('/');
+        }
     }
 
     public function examResults()

@@ -1116,7 +1116,6 @@ class UsersController extends Controller
             return $userinfo;
         }
     }
-
     public function checkClass(Request $request ){
         $data = $request->all();
         $classCount= Classes::where('batch_id',$data['batch_id'])->where('slug',strtolower($data['class']))->count();
@@ -1139,8 +1138,6 @@ class UsersController extends Controller
                 return 'false';
             }
         }
-
-
     }
 
 

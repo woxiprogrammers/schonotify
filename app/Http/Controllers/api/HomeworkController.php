@@ -4,18 +4,22 @@ namespace App\Http\Controllers\api;
 
 use App\Batch;
 use App\Classes;
+use App\classes_subject;
 use App\Division;
 use App\Homework;
 use App\HomeworkTeacher;
 use App\HomeworkType;
 use App\Subject;
+use App\SubjectClass;
 use App\SubjectClassDivision;
 use App\User;
+use App\UserRoles;
 use Carbon\Carbon;
+use Faker\Provider\File;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+//use Illuminate\Support\Facades\File;
 
 class HomeworkController extends Controller
 {
@@ -24,67 +28,83 @@ class HomeworkController extends Controller
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-    public function getTeacherSubject(Request $request, $div_id)
+
+    public function getDivisionsStudents(Request $request)
     {
+        $finalStudentsList=array();
         try{
-            $data=$request->all();
             $i=0;
-            $homework=array();
-            $homeworkType=HomeworkType::all();
-            foreach($homeworkType as $type)
+            foreach($request->division as $value)
             {
-                $homeworkTypes[$i]['type_id'] = $type ['id'] ;
-                $homeworkTypes[$i]['type_slug']=$type['slug'];
-                $i++;
+                $student_role = UserRoles::whereIn('slug', ['student'])->pluck('id');
+                $student = User::where('role_id',$student_role)->where('division_id',$value)->get()->toArray();
+                foreach($student as $value){
+                    $finalStudentsList[$value['division_id']][$i]['id'] = $value['id'];
+                    $finalStudentsList[$value['division_id']][$i]['name'] = $value['first_name']." ".$value['last_name'];
+                    $i++;
+                }
+               $i=0;
             }
+            $status = 200;
+            $message = "Successfully listed";
+         } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+            }
+            $response = [
+                     "message" => $message,
+                     "data"=>$finalStudentsList
+            ];
+    return response($response, $status);
+    }
+    public function getTeacherSubject(Request $request)
+    {
+       try{
+            $data=$request->all();
+            $homework=array();
+           $finalSubjectList=array();
             $i=0;
             $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
             if($division != null){
-                $subjects=Subject::where('class_id',$division->class_id)->get();
-                foreach($subjects as $row)
+                $classesSubjects=SubjectClassDivision::where('division_id',$division->id)->get();
+                foreach($classesSubjects as $row)
                 {
-                    $homework[$division['id']][$i]['subjects'] = $row ['slug'] ;
-                    $homework[$division['id']][$i]['subject_id']=$row['id'];
+                    $subjects=Subject::where('id','=',$row['subject_id'])->first();
+                    $homework[$i]['subject_id']=$row['subject_id'];
+                    $homework[$i]['subject'] = $subjects ['subject_name'] ;
                     $i++;
                 }
                 $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
-                    ->select('subjects.id','subjects.slug','division_subjects.division_id')
-                    ->get()->toArray();
+                    ->select('subjects.id','subjects.subject_name')
+                    ->get();
                 foreach($divisionSubjects as $row)
                 {
-                    $homework[$row['division_id']][$i]['subjects'] = $row ['slug'] ;
-                    $homework[$row['division_id']][$i]['subject_id']=$row['id'];
+                    $homework[$i]['subject_id']=$row['id'];
+                    $homework[$i]['subject'] = $row ['subject_name'] ;
                     $i++;
                 }
             }else{
                 $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
-                    ->select('subjects.id','subjects.slug','division_subjects.division_id')
+                    ->select('subjects.id','subjects.subject_name','division_subjects.division_id')
                     ->get();
                 foreach($divisionSubjects as $row)
                 {
-                    $homework[$row['division_id']][$i]['subjects'] = $row ['slug'] ;
-                    $homework[$row['division_id']][$i]['subject_id']=$row['id'];
+                    $homework[$i]['subject_id']=$row['id'];
+                    $homework[$i]['subject'] = $row ['subject_name'] ;
                     $i++;
                 }
             }
-            $i=0;
-            foreach($homework as $key=>$row)
-            {
-                if($key==$div_id)
-                {
-                    foreach($row as $value){
-                        $finalSubjectList[$i]['subject_id']=$value['subject_id'];
-                        $finalSubjectList[$i]['subjects'] = $value['subjects'];
-                        $i++;
-                    }
-                }
-            }
-            $finalSubjectList = array_unique($finalSubjectList, SORT_REGULAR);
+           $subjectList = array_unique($homework, SORT_REGULAR);
+           $i=0;
+           foreach($subjectList as $value){
+               $finalSubjectList[$i]=$value;
+               $i++;
+           }
             $status = 200;
             $message = "Successfully listed";
-        } catch (\Exception $e) {
+      } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
@@ -92,14 +112,218 @@ class HomeworkController extends Controller
              "message" => $message,
              "data"=>$finalSubjectList
         ];
-
         return response($response, $status);
     }
 
+    public function getSubjectBatches(Request $requests, $subjectId)
+    {
+        try{
+            $data=$requests->all();
+            $division=array();
+            $batchInfo=array();
+            $Classes=array();
+            $divisionData=SubjectClassDivision::where('subject_id','=',$subjectId)
+                                            ->where('teacher_id','=',$data['teacher']['id'])
+                                            ->select('division_id')
+                                            ->get()->toArray();
+           $k=0;
+            if(!Empty($divisionData))
+                {
+                    foreach($divisionData as $value){
+                        $division['id'][$k]=$value['division_id'];
+                        $k++;
+                 }
+               }
+            $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if(!Empty($divisions)){
+              $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                                                   ->where('subject_id','=',$subjectId)
+                                                   ->select('division_id')
+                                                   ->get()->toArray();
+               if(!Empty($divisionData))
+               {
+                  foreach($divisionData as $value){
+                        $division['id'][$k]=$value['division_id'];
+                        $k++;
+                       }
+               }
+            }
+            $DivisionArray=array_unique($division['id'],SORT_REGULAR);
+            $i=0;
+            foreach ($DivisionArray  as $value)
+            {
+                $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                $className=Classes::where('id','=',$class_id['class_id'])->select('class_name as class_name', 'batch_id as batch_id')->first();
+                if(!Empty($class_id)){
+                    $Classes[$i]['id']=$class_id['class_id'];
+                    $Classes[$i]['name']=$className['class_name'];
+                    $Classes[$i]['batch_id']=$className['batch_id'];
+                    $i++;
+                }
+            }
+            $i=0;
+            foreach($Classes as $row)
+            {
+                $batchName=Batch::where('id',$row['batch_id'])->first();
+                $batchInfo[$i]['batch_id']=$batchName['id'];
+                $batchInfo[$i]['batch']=$batchName['name'];
+                $i++;
+            }
+            $status = 200;
+            $message = "Successfully Listed";
+      }catch (\Exception     $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+             "message" => $message,
+              "status" => $status,
+              "data" => $batchInfo
+         ];
+        return response($response, $status);
+    }
 
+   public function getBatchesClasses(Request $requests, $subjectId , $batch_id)
+    {
+        try{
+            $data=$requests->all();
+            $division=array();
+            $finalClasses=array();
+            $divisionData=SubjectClassDivision::where('subject_id','=',$subjectId)
+                ->where('teacher_id','=',$data['teacher']['id'])
+                ->select('division_id')
+                ->get()->toArray();
+            $k=0;
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+            $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if(!Empty($divisions)){
+                $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                    ->where('subject_id','=',$subjectId)
+                    ->select('division_id')
+                    ->get()->toArray();
+                if(!Empty($divisionData))
+                {
+                    foreach($divisionData as $value){
+                        $division['id'][$k]=$value['division_id'];
+                        $k++;
+                    }
+                }
+            }
+            $DivisionArray=array_unique($division['id'],SORT_REGULAR);
+            $i=0;
+            foreach ($DivisionArray  as $value){
+                $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                $className=Classes::where('id','=',$class_id['class_id'])
+                                  ->where('batch_id','=',$batch_id)
+                                  ->select('id','class_name as class_name')->first();
+                if(!Empty($class_id)&&!Empty($className)){
+                    $finalClasses[$i]['class_id']=$class_id['class_id'];
+                    $finalClasses[$i]['class_name']=$className['class_name'];
+                    $i++;
+                    }
+                }
+                $status = 200;
+                $message = "Successfully Listed";
+       }catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+              "message" => $message,
+              "status" => $status,
+              "data" => $finalClasses
+         ];
+        return response($response, $status);
+    }
+
+    public function getClassesDivision(Request $requests, $subjectId , $batch_id, $class_id)
+    {
+        try{
+            $data=$requests->all();
+            $division=array();
+            $finalDivisions=array();
+            $divisionData=SubjectClassDivision::where('subject_id','=',$subjectId)
+                ->where('teacher_id','=',$data['teacher']['id'])
+                ->select('division_id')
+                ->get()->toArray();
+            $k=0;
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+            $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if(!Empty($divisions)){
+                $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                    ->where('subject_id','=',$subjectId)
+                    ->select('division_id')
+                    ->get()->toArray();
+                if(!Empty($divisionData))
+                {
+                    foreach($divisionData as $value){
+                        $division['id'][$k]=$value['division_id'];
+                        $k++;
+                    }
+                }
+            }
+            $DivisionArray=array_unique($division['id'],SORT_REGULAR);
+            $i=0;
+           foreach($DivisionArray as $division_id){
+               $finalData=Division::join('classes','divisions.class_id', '=', 'classes.id')
+                     ->where('divisions.class_id','=',$class_id)
+                     ->where('classes.batch_id','=',$batch_id)
+                     ->where('divisions.id','=',$division_id)
+                     ->select('divisions.id as div_id','divisions.division_name')
+                      ->first();
+               if(!Empty($finalData)){
+                   $finalDivisions[$i]=$finalData;
+                   $i++;
+               }
+           }
+            $status = 200;
+            $message = "Successfully Listed";
+        }catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $finalDivisions
+        ];
+        return response($response, $status);
+    }
+
+    public function getHomeworkType(Request $request)
+    {
+        try{
+        $homework_type = HomeworkType::select('id', 'title')->get()->toArray();
+        $status = 200;
+        $message = "Successfully Listed";
+        }
+        catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+                "message" => $message,
+                "status"=>  $status,
+                "data"=>$homework_type
+
+        ];
+        return response($response, $status);
+    }
     public function createHomework(Requests\HomeworkRequest $request)
     {
-      try{
+        try{
             $data=array();
             $HomeworkTeacher=array();
             $division=Division::where('id',$request->division_id)->first();
@@ -111,13 +335,27 @@ class HomeworkController extends Controller
             $data['homework_type_id']= $homework_type['id'];
             $data['due_date']=$request->due_date;
             $data['subject_id']=$subject['id'];
-            $data['attachment_file']=$request->attachment_file;
+            $data['homework_timestamp']=Carbon::now();
+            if($request->hasFile('attachment_file')){
+                $attachment_file = $request->file('attachment_file');
+                $name = $request->file('attachment_file')->getClientOriginalName();
+                $filename = time()."_".$name;
+                $path = public_path('uploads/homework/');
+                if (!file_exists($path)) {
+                    \Illuminate\Support\Facades\File::makeDirectory('uploads/homework/', $mode = 0777, true,true);
+                }
+                $attachment_file->move($path,$filename);
+            }
+            else{
+                $filename=null;
+            }
+            $data['attachment_file']=$filename;
             $data['created_at']= Carbon::now();
             $data['updated_at']= Carbon::now();
             $homework_id=Homework::insertGetId($data);
             if($homework_id != null)
             {
-                foreach($request->student as $val)
+                foreach($request->student_id as $val)
                 {
                     $HomeworkTeacher['student_id'] = $val;
                     $HomeworkTeacher['teacher_id'] = $teacher_id['id'];
@@ -128,7 +366,7 @@ class HomeworkController extends Controller
                     HomeworkTeacher::insert($HomeworkTeacher);
                 }
                 $status = 200;
-                $message = "saved successfully";
+                $message = "homework Saved successfully";
             }
             else{
                 $status = 202;
@@ -139,7 +377,10 @@ class HomeworkController extends Controller
           $status = 500;
           $message = "Something went wrong";
       }
-        $response = ["message" => $message];
+        $response = [
+            "status" =>$status,
+            "message" => $message
+          ];
 
         return response($response, $status);
     }

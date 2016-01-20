@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\api;
+
 use App\AclMaster;
 use App\Batch;
 use App\ClassData;
@@ -16,21 +18,26 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+
+
 class UserController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('db');
         $this->middleware('remember.user.token');
         $this->middleware('authenticate.user',['except' => ['login']]);
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     protected function login(Requests\LoginRequest $request)
-    {   $data=array();
+    {
+        $data=array();
         try{
             $user = User::where('email', $request->email)->first();
             if ($user == NULL) {
@@ -128,10 +135,12 @@ class UserController extends Controller
             $message = "Something went wrong";
         }
         $response = ["message" => $message,"status" => $status,"data" =>$data];
+
         return response($response,$status);
+
     }
     public function getBatchesTeacher(Request $request){
-        $data=$request->all();
+           $data=$request->all();
         try{
             if($data['teacher']['role_id'] == 1){
                 $batchData = Batch::where('body_id',$data['teacher']['body_id'])->select('id','name')->get();
@@ -158,35 +167,38 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
+
+
+
     public function getTeachersList(Request $request , $id )
-    {
-        try{
+       {
+           try{
             $data=$request->all();
             $studentData=User::where('id','=',$id)->first();
             $divisions=SubjectClassDivision::where('division_id','=',$studentData['division_id'])
-                ->groupBy('teacher_id')
-                ->get();
-            $i=0;
-            foreach($divisions as $value){
-                $studentData1=User::where('id','=',$value['teacher_id'])->first();
-                $teacherData[$i]['id']=$value['teacher_id'];
-                $teacherData[$i]['name']=$studentData1['first_name']." ".$studentData1['last_name'];
-                $i++;
-            }
-            $status = 200;
-            $responseData['teachersList']= $teacherData;
-            $message = 'Successfully Listed';
-        }catch (\Exception $e){
-            $status = 500;
-            $message = "Something went wrong"  .  $e->getMessage();
-        }
-        $response = [
-            "message" => $message,
-            "status" => $status,
-            "data" => $responseData
-        ];
-        return response($response, $status);
-    }
+                                             ->groupBy('teacher_id')
+                                             ->get();
+           $i=0;
+           foreach($divisions as $value){
+               $studentData1=User::where('id','=',$value['teacher_id'])->first();
+               $teacherData[$i]['id']=$value['teacher_id'];
+               $teacherData[$i]['name']=$studentData1['first_name']." ".$studentData1['last_name'];
+               $i++;
+           }
+               $status = 200;
+               $responseData['teachersList']= $teacherData;
+               $message = 'Successfully Listed';
+           }catch (\Exception $e){
+               $status = 500;
+               $message = "Something went wrong"  .  $e->getMessage();
+           }
+           $response = [
+               "message" => $message,
+               "status" => $status,
+               "data" => $responseData
+           ];
+           return response($response, $status);
+     }
     public function getClassesTeacher(Request $request, $id){
         try{
             $data=$request->all();
@@ -214,6 +226,7 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
+
     public function getDivisions(Request $request, $id){
         try{
             $data=$request->all();

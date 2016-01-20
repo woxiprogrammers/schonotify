@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class AttendanceController extends Controller
 {
@@ -13,13 +14,25 @@ class AttendanceController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
-    public function markAttendance()
+    public function markAttendance(Requests\WebRequests\CreateAttendanceRequest $request)
     {
-        return view('markAttendance');
+        if($request->authorize()===true)
+        {
+            return view('markAttendance');
+        }else{
+            return Redirect::to('/');
+        }
+
     }
-    public function viewAttendance()
+    public function viewAttendance(Requests\WebRequests\ViewAttendanceRequest $request)
     {
-        return view('viewAttendance');
+        if($request->authorize()===true)
+        {
+            return view('viewAttendance');
+        }else{
+            return Redirect::to('/');
+        }
+
     }
 
 }
