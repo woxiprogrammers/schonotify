@@ -326,7 +326,7 @@ class HomeworkController extends Controller
                     $divisionId['division_id'][$i]=$row['division_id'];
                     $i++;
                 }
-                $homework = array_unique($homework, SORT_REGULAR);
+
 
 
         }else{
@@ -343,6 +343,7 @@ class HomeworkController extends Controller
 
 
         }
+            $homework = array_unique($homework, SORT_REGULAR);
         $subjectId=array();
         foreach($homework as $row)
         {
@@ -463,6 +464,7 @@ class HomeworkController extends Controller
 
     public function getSubjectDiv($id,$subject_id){
         $user=Auth::user();
+
         $i=0;
         $divArray=array();
         $divisionArray=array();
@@ -549,7 +551,9 @@ class HomeworkController extends Controller
 
     public function updateHomeworkDetail(Requests\WebRequests\EditHomeworkRequest $request){
 
+
         $homeworkData= $request->all();
+
         $homework=array();
         $homeworkTeacher=array();
         $i=0;
@@ -595,6 +599,12 @@ class HomeworkController extends Controller
         }
         Session::flash('message-success','homework updated successfully');
         return Redirect::to('/homework-listing');
+    }
+    public function editDataDiv($id)
+    {
+        $homeworkData=HomeworkTeacher::where('homework_id',$id)->select('division_id')->distinct()->get();
+        return $homeworkData->toArray();
+
     }
 
 
