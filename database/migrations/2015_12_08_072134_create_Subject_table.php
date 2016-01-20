@@ -16,6 +16,7 @@ class CreateSubjectTable extends Migration
             $table->increments('id');
             $table->string('subject_name');
             $table->string('slug',255);
+            $table->string('Description');
             $table->timestamps();
         });
     }
