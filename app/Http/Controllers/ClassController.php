@@ -127,4 +127,15 @@ class ClassController extends Controller
 
     }
 
+    public function divisionCheck(Request $request)
+    {
+        $cnt=Division::where('class_id','=',$request->class_id)->where('division_name','=',$request->division_name)->count();
+
+        if($cnt>=1)
+        {
+            return 'false';
+        }else{
+            return 'true';
+        }
+    }
 }

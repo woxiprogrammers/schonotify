@@ -197,6 +197,8 @@ Route::post('division-create','ClassController@saveDivision');
 
 Route::get('check-div/{clsDiv}','ClassController@checkDivision');
 
+Route::get('check-division','ClassController@divisionCheck');
+
 Route::get('create-subject','SubjectController@createSubjects');
 
 Route::post('subject-create','SubjectController@create');
