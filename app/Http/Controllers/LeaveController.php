@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class LeaveController extends Controller
 {
@@ -14,13 +15,24 @@ class LeaveController extends Controller
         $this->middleware('auth');
     }
 
-    public function leaveListing()
+    public function leaveListing(Requests\WebRequests\LeaveRequest $request)
     {
-        return view('leaveListing');
+        if($request->authorize()===true)
+        {
+            return view('leaveListing');
+        }else{
+            return Redirect::to('/');
+        }
+
     }
 
-    public function detailedLeave()
+    public function detailedLeave(Requests\WebRequests\LeaveRequest $request)
     {
-        return view('detailedLeave');
+        if($request->authorize()===true)
+        {
+            return view('detailedLeave');
+        }else{
+            return Redirect::to('/');
+        }
     }
 }

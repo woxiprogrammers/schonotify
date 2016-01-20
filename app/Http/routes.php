@@ -159,7 +159,7 @@ Route::get('subjects/{id}','ResultController@subjectResults');
 
 Route::get('getStudents/{id}','ResultController@getStudents');
 
-Route::get('markAttendance','AttendanceController@markAttendance');
+Route::get('mark-attendance','AttendanceController@markAttendance');
 
 Route::get('view-attendance','AttendanceController@viewAttendance');
 
