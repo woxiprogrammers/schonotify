@@ -203,6 +203,7 @@
         Main.init();
         FormValidator.init();
         FormElements.init();
+        TableData.init();
 
     });
 
@@ -337,8 +338,9 @@
                     this.checked = true;  //select all checkboxes with class "checkbox1"
                 });
             }
-            TableData.init();
+
         });
+
     }
 
 
