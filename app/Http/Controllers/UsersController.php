@@ -755,7 +755,7 @@ class UsersController extends Controller
 
         $userUpdate=User::where('id',$id)->update($userData);
         $teacherViewUpdate=TeacherView::where('user_id',$id)->update($teacherView);
-        if(isset($request->checkbox8)){
+        if ($request->has('checkbox8')){
             Division::where('class_teacher_id',$id)->update(['class_teacher_id'=>0]);
             Division::where('id',$request->division)->
                       where('class_id',$request->class)->update(['class_teacher_id'=>$id]);
