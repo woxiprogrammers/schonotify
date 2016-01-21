@@ -96,7 +96,16 @@ var FormWizard = function () {
                     required:true
                 },
                 parent_name:{
-                    required:true
+                    required:true,
+                    remote:{
+                        url:"/check-parent",
+                        type:"POST",
+                        data:{
+                            parentID:function() {
+                                return $( "#parent_id" ).val();
+                            }
+                        }
+                    }
                 },
                 userName:{
                     minlength: 2,
@@ -119,7 +128,7 @@ var FormWizard = function () {
                     chkMail: "Your email address must be in the format of name@domain.com"
                 },
                 address:{
-                    required:"Please provide users address",
+                    required:"Address is required",
                     address:"Address must contain at-least 15 characters"
                 },
                 modules: {
@@ -154,23 +163,39 @@ var FormWizard = function () {
                 'userName':{
                     required:"User name is required",
                     alphanumeric: "User name must contain only letters ,Numbers OR Space added"
+                },
+                parent_name:{
+                    required:"Parent name is required",
+                    remote:"Please Select proper parent"
                 }
             },
 
             highlight: function (element) {
+                $('#feedback').remove();
+                $('#emailfeedback').remove();
+
                 $(element).closest('.help-block').removeClass('valid');
                 // display OK icon
                 $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
                 // add the Bootstrap error class to the control group
+
             },
             unhighlight: function (element) { // revert the change done by hightlight
+                $('#userNameFeedback').html('<div id="feedback"></div>');
+                $('#emailIdfeedback').html('<div id="emailfeedback"></div>');
+                $('#feedback').show();
+                $('#emailfeedback').show();
                 $(element).closest('.form-group').removeClass('has-error');
                 // set error class to the control group
+
             },
             success: function (label, element) {
+                $('#feedback').remove();
+                $('#emailfeedback').remove();
                 label.addClass('help-block valid');
                 // mark the current input as valid and display OK icon
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+
             }
         });
     };
@@ -226,6 +251,7 @@ var FormWizard = function () {
 
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
+            $('#checkUser').prop('disabled', true);
             var form=$('#student-registration-form').serialize();
             $.ajax({
                 url:'save-user',
@@ -236,6 +262,7 @@ var FormWizard = function () {
 
                 success: function(data){
                     $('#error-div').html('');
+
                     wizardContent.smartWizard("goForward");
                 },
                 error:function(data){

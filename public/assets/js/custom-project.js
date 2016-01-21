@@ -313,6 +313,11 @@ $('#userName').on('keyup',function(){
 
 $('#email').on('keyup',function(){
     var email = $(this).val();
+    if(email.length == 0){
+        $('#emailfeedback').addClass("alert alert-danger alert-dismissible");
+        $('#emailfeedback').html("Email Id Already Exists");
+        $('#checkUser').attr('disabled','disabled');
+    }else{
     var route='check-email';
     $.post(route,{email:email},function(res){
         if(res == 0 ) {
@@ -326,6 +331,28 @@ $('#email').on('keyup',function(){
             $('#checkUser').attr('disabled','disabled');
         }
     });
+    }
+});
+
+$('#stud_email').on('keyup',function(){
+    var email = $(this).val();
+    if(email.length == 0){
+        $('#checkUser').removeAttr('disabled');
+    }else{
+        var route='check-email';
+        $.post(route,{email:email},function(res){
+            if(res == 0 ) {
+                $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
+                $('#emailfeedback').addClass("alert alert-success alert-dismissible");
+                $('#emailfeedback').html("Email Id Can Be Used");
+                $('#checkUser').removeAttr('disabled');
+            } else {
+                $('#emailfeedback').addClass("alert alert-danger alert-dismissible");
+                $('#emailfeedback').html("Email Id Already Exists");
+                $('#checkUser').attr('disabled','disabled');
+            }
+        });
+    }
 });
 
 $('#editEmail').on('keyup',function(){

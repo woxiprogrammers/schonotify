@@ -29,34 +29,7 @@ class HomeworkController extends Controller
         $this->middleware('authenticate.user');
     }
 
-    public function getDivisionsStudents(Request $request)
-    {
-        $finalStudentsList=array();
-        try{
-            $i=0;
-            foreach($request->division as $value)
-            {
-                $student_role = UserRoles::whereIn('slug', ['student'])->pluck('id');
-                $student = User::where('role_id',$student_role)->where('division_id',$value)->get()->toArray();
-                foreach($student as $value){
-                    $finalStudentsList[$value['division_id']][$i]['id'] = $value['id'];
-                    $finalStudentsList[$value['division_id']][$i]['name'] = $value['first_name']." ".$value['last_name'];
-                    $i++;
-                }
-               $i=0;
-            }
-            $status = 200;
-            $message = "Successfully listed";
-         } catch (\Exception $e) {
-            $status = 500;
-            $message = "Something went wrong";
-            }
-            $response = [
-                     "message" => $message,
-                     "data"=>$finalStudentsList
-            ];
-    return response($response, $status);
-    }
+
     public function getTeacherSubject(Request $request)
     {
        try{
@@ -76,7 +49,7 @@ class HomeworkController extends Controller
                 }
                 $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
-                    ->select('subjects.id','subjects.subject_name'/*,'division_subjects.division_id'*/)
+                    ->select('subjects.id','subjects.subject_name')
                     ->get();
                 foreach($divisionSubjects as $row)
                 {
@@ -298,6 +271,34 @@ class HomeworkController extends Controller
             "message" => $message,
             "status" => $status,
             "data" => $finalDivisions
+        ];
+        return response($response, $status);
+    }
+    public function getDivisionsStudents(Request $request)
+    {
+        $finalStudentsList=array();
+        try{
+            $i=0;
+            foreach($request->division as $value)
+            {
+                $student_role = UserRoles::whereIn('slug', ['student'])->pluck('id');
+                $student = User::where('role_id',$student_role)->where('division_id',$value)->get()->toArray();
+                foreach($student as $value){
+                    $finalStudentsList[$value['division_id']][$i]['id'] = $value['id'];
+                    $finalStudentsList[$value['division_id']][$i]['name'] = $value['first_name']." ".$value['last_name'];
+                    $i++;
+                }
+                $i=0;
+            }
+            $status = 200;
+            $message = "Successfully listed";
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "data"=>$finalStudentsList
         ];
         return response($response, $status);
     }
