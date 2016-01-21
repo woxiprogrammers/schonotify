@@ -63,6 +63,7 @@ class MessageController extends Controller
                 $messageData['MessageList'][$receiver]['title']=$title;
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
                 $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                $messageData['MessageList'][$receiver]['created_at']=$value['timestamp'];
                 $i++;
             }
             $i=0;
@@ -74,6 +75,10 @@ class MessageController extends Controller
                     $i++;
                 }
             }
+            foreach ($finalMessageData as $key => $part) {
+                $sort[$key] = strtotime($part['created_at']);
+            }
+            array_multisort($sort, SORT_ASC, $finalMessageData);
             $status = 200;
             $message = "Success";
         } catch (\Exception $e) {
@@ -327,6 +332,7 @@ class MessageController extends Controller
     public function sendMessage(Requests\Message $request){
         try{
             $data = $request->all();
+            return $data;
             $from_id = $data['from_id'];
             $to_id = $data['to_id'];
             $status = 200;

@@ -297,19 +297,45 @@ Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
 
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
+
     Route::post('createHomework','api\HomeworkController@createHomework');
-    Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
-    Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
-    Route::get('viewPublishHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
-    Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
-    Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
+
+    Route::put('update-homework',array('uses' => 'api\HomeworkController@updateHomework'));
+
+    Route::put('publish-homework/',array('uses' => 'api\HomeworkController@publishHomeWork'));
+
     Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
+
     Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
+
     Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
+
     Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
+
     Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
+
     Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
+
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
+
+
+
+
+    //remained
+
+    Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
+
+    Route::get('view-published-homework/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
+
+    Route::get('view-detail-homework/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
+
+
+
+
+
+
+
+
 
         //Timetable
     Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
