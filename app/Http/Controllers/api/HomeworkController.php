@@ -391,52 +391,69 @@ class HomeworkController extends Controller
         try{
             $data=array();
             $HomeworkTeacher=array();
-            $batch=Batch::where('id',$request->batch_id)->first();
-            $class=Classes::where('id',$request->class_id)->first();
-            $division=Division::where('id',$request->division_id)->first();
-            $techer_id =User::where('remember_token',$request->token)->first();
-            $homework_type=HomeworkType::where('id',$request->homework_type)->first();
-            $subject =Subject::where('id',$request->subject_id)->first();
-            unset($request->_method);
-            $data['title']=$request->title;
-            $data['description']=$request->description;
-            $data['homework_type_id']= $homework_type['id'];
-            $data['due_date']=$request->due_date;
-            $data['subject_id']=$subject['id'];
-            $data['attachment_file']=$request->attachment_file;
-            $data['created_at']= Carbon::now();
-            $data['updated_at']= Carbon::now();
-
             $homework_id= Homework::where('id',$request->homework_id)->
-                                    where('status',0)->update($data);
-            if($homework_id != null)
-            {
-                HomeworkTeacher::where('homework_id',$request->homework_id)->delete();
-                foreach($request->student as $val)
-                {
-                    $HomeworkTeacher['student_id'] = $val;
-                    $HomeworkTeacher['teacher_id'] = $techer_id['id'];
-                    $HomeworkTeacher['homework_id'] = $request->homework_id;
-                    $HomeworkTeacher['division_id'] = $division['id'];
-                    $HomeworkTeacher['created_at']= Carbon::now();
-                    $HomeworkTeacher['updated_at']= Carbon::now();
-                    HomeworkTeacher::insert($HomeworkTeacher);
+                                      where('status',0)->first();
+            if($homework_id!=null){
+                $batch=Batch::where('id',$request->batch_id)->first();
+                $class=Classes::where('id',$request->class_id)->first();
+                $division=Division::where('id',$request->division_id)->first();
+                $teacher_id =User::where('remember_token',$request->token)->first();
+                $homework_type=HomeworkType::where('id',$request->homework_type)->first();
+                $subject =Subject::where('id',$request->subject_id)->first();
+                unset($request->_method);
+                $data['title']=$request->title;
+                $data['description']=$request->description;
+                $data['homework_type_id']= $homework_type['id'];
+                $data['due_date']=$request->due_date;
+                $data['subject_id']=$subject['id'];
+                $data['homework_timestamp']=Carbon::now();
+                if($request->hasFile('attachment_file')){
+                    $attachment_file = $request->file('attachment_file');
+                    $name = $request->file('attachment_file')->getClientOriginalName();
+                    $filename = time()."_".$name;
+                    $path = public_path('uploads/homework/');
+                    if (!file_exists($path)) {
+                        \Illuminate\Support\Facades\File::makeDirectory('uploads/homework/', $mode = 0777, true,true);
+                    }
+                    $attachment_file->move($path,$filename);
                 }
-                $status = 200;
-                $message = "saved successfully";
-            }
+                else{
+                    $filename=null;
+                }
+                $data['attachment_file']=$filename;
+                $data['created_at']= Carbon::now();
+                $data['updated_at']= Carbon::now();
+                $homework_id= Homework::where('id',$request->homework_id)->update($data);
+                if($homework_id != null)
+                {
+                    HomeworkTeacher::where('homework_id',$request->homework_id)->delete();
+                    foreach($request->student as $val)
+                    {
+                        $HomeworkTeacher['student_id'] = $val;
+                        $HomeworkTeacher['teacher_id'] = $teacher_id['id'];
+                        $HomeworkTeacher['homework_id'] = $request->homework_id;
+                        $HomeworkTeacher['division_id'] = $division['id'];
+                        $HomeworkTeacher['created_at']= Carbon::now();
+                        $HomeworkTeacher['updated_at']= Carbon::now();
+                        HomeworkTeacher::insert($HomeworkTeacher);
+                    }
+                    $status = 200;
+                    $message = "Homework Updated successfully";
+                }
+               }
             else{
                 $status = 202;
-                $message = "homework not found";
+                $message = "Homework not found";
             }
-
-
         }
         catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
-        $response = ["message" => $message];
+        $response = [
+                 "message" => $message,
+                 "status" =>$status
+        ];
 
         return response($response, $status);
     }
