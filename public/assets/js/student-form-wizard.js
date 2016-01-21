@@ -265,6 +265,7 @@ var FormWizard = function () {
                     $('#error-div').html('');
 
                     wizardContent.smartWizard("goForward");
+                    $('.stepNumber').click(false);
                 },
                 error:function(data){
                     var errors = $.parseJSON(data.responseText);
