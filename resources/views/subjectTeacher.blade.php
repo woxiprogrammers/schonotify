@@ -301,9 +301,17 @@
         route="/check-sub-teacher/"+subject+"/"+div;
 
         $.get(route,function(res){
-            if(res!=0)
+
+            if(res.length!=0)
             {
-                var confirmVal=confirm('teacher '+name+' already assigned to this subject do you want to change it? !');
+                var str='Teacher named';
+
+                for(var i=0; i<res.length; i++)
+                {
+                    str+="\n"+res[i]['firstname']+" "+res[i]['lastname']+" ("+res[i]['username']+")";
+                }
+                    str+='\n is already assigned to this subject do you want to change it ?';
+                var confirmVal=confirm(str);
                 if(confirmVal==false)
                 {
                     $('#teacherDropdown option:eq(0)').attr('selected','selected');

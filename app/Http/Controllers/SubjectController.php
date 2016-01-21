@@ -89,6 +89,17 @@ class SubjectController extends Controller
             return Redirect::to('/');
         }
     }
+    public function checkSubject(Request $request)
+    {
+        $cnt=Subject::where('subject_name',$request->subject_name)->count();
+
+        if($cnt>=1)
+        {
+            return 'false';
+        }{
+         return 'true';
+        }
+    }
 
 
 }
