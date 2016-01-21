@@ -27,7 +27,7 @@ class EditStudentRequest extends Request
             'username' => 'required|max:20',
             'firstname' => 'required|min:2|max:20',
             'lastname' => 'required|min:2|max:20',
-            'email' => 'required|email',
+            'email' => 'email',
             'mobile' =>'required|digits:10',
             'address' =>'required',
             'avatar' => 'mimes:jpeg,jpg,png,gif|max:10000',
