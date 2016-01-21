@@ -1135,18 +1135,23 @@ var FormValidator = function () {
             },
             ignore: "",
             rules: {
-                subject_name: {
-                    required: true,
-                    minlength:2
-                },
                 'class[]':{
                     required:true,
                     minlength:1
+                },
+                subject_name:{
+                    required:true,
+                    remote: {
+                        url: "/check-subject",
+                        type: "GET"
+
+                    }
                 }
             },
             messages: {
                 subject_name:{
-                    required:"Please enter subject title."
+                    required:"Please enter subject title.",
+                    remote:"The subject name has already been taken !"
                 },
                 'class[]':{
                     required:"Please select atleast one class",

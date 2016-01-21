@@ -103,6 +103,7 @@
             }
 
             $availableTeacher=User::where('role_id','=',2)
+                ->whereNotIn('id',$teachers)
                 ->select('users.last_name as lastname','users.first_name as firstname','users.username as username','users.id as id')
                 ->get();
 
@@ -171,7 +172,7 @@
         }
         public function checkTeacher($subject,$division)
         {
-            $check=SubjectClassDivision::where('subject_id','=',$subject)->where('division_id','=',$division)->count();
+            $check=SubjectClassDivision::join('users','users.id','=','division_subjects.teacher_id')->where('subject_id','=',$subject)->where('division_subjects.division_id','=',$division)->select('users.username','users.first_name as firstname','users.last_name as lastname')->get();
 
             return $check;
 
