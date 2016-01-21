@@ -43,6 +43,7 @@ class HomeworkController extends Controller
             $user=Auth::user();
             $homeworkId=array();
             $homeworkIdss=array();
+            $homeworkDiv=array();
             $i=0;
             $division=Division::where('class_teacher_id',$user->id)->first();
             if($division != null){
@@ -77,25 +78,28 @@ class HomeworkController extends Controller
                     $homeworkIdss[$home['id']]['homework_status']=$home['status'];
                     $homeworkIdss[$home['id']]['homework_is_active']=$home['is_active'];
                     $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
+
                     $i++;
                 }
                 $i=0;
                 foreach($homeworkData as $row)
                 {
-
                     $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
                     $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
-                    $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
-
+                    $class=Classes::where('id',$division['class_id'])->select('class_name','batch_id')->first()->toArray();
+                    $batch=Batch::where('id',$class['batch_id'])->first();
+                    $homeworkDiv[$i]['div']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
                     $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
+                    $i++;
+
 
                 }
-
-            }else{
+                }else{
                 $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
                 foreach($homeworkTeacher as $row)
                 {
@@ -126,24 +130,36 @@ class HomeworkController extends Controller
                 $i=0;
                 foreach($homeworkData as $row)
                 {
-
                     $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
                     $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
-                    $class=Classes::where('id',$division['class_id'])->select('class_name')->first()->toArray();
-
+                    $class=Classes::where('id',$division['class_id'])->select('class_name','batch_id')->first()->toArray();
+                    $batch=Batch::where('id',$class['batch_id'])->first();
+                    $homeworkDiv[$i]['div']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
                     $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
+                    $i++;
+
 
                 }
 
+
+            }
+            /*$division_name=array();
+            $homeworkDiv = array_unique($homeworkDiv, SORT_REGULAR);
+            foreach($homeworkDiv as $row)
+            {
+                $division_name[]=$row['div'];
             }
 
+            $homeworkIdss['divs']=$division_name;*/
+           // dd($homeworkIdss);
+            //dd($homeworkDiv[0]['div']);
 
-
-            return view('homeworkListing')->with(compact('homeworkIdss'));
+         return view('homeworkListing')->with(compact('homeworkIdss','homeworkDiv'));
         }else{
             return Redirect::to('/');
         }
