@@ -52,12 +52,16 @@
                                     </div>
                                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                                        <h5><small class="label label-sm label-info">{!! $row['homework_teacher_name']!!}</small> {!! $row['homework_title']!!} @if ($row['homework_file'] != null) <i class="fa fa-paperclip"></i> @endif</h5>
+                                        <h5><small class="label label-sm label-info">{!! $row['homework_teacher_name']!!}</small> {!! $row['homework_title']!!} </h5>
 
 
                                         <p>Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_date'])));!!} </i> <br> Due Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_due_date'])));!!}</i></p>
+
                                     </div>
+
+                                    @if($row['homework_status'] == 0 && $row['homework_is_active'] ==1)
                                     <a href="/delete-homework/{!! $row['homework_id']!!}" class="btn btn-primary btn-red pull-left"><i class="glyphicon glyphicon-trash"></i></a>
+                                    @endif
 
                                     <div class="col-sm-2">
 
@@ -67,6 +71,7 @@
                                         <small class="label label-sm label-inverse">Published</small>
                                         @endif
                                         <div style="margin-top:10px;">
+                                            @if ($row['homework_file'] != null) <i class="fa fa-paperclip"></i> @endif
                                             <a class="text-info " href="/detailedHomework/{!!$row['homework_id']!!}">View More</a>
                                         </div>
 
@@ -75,7 +80,7 @@
                                 </div>
 
                                 <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 30px;">{!! $row['homework_class_name']!!}       <small>  Div. {!! $row['homework_division_name']!!}</small></h5>
+                                    <h5 style="padding: 14px 14px 14px 30px;"><small>{!! $row['homework_batch_name']!!}</small> <small >{!! $row['homework_class_name']!!}</small></br>       <small>  {!! $row['homework_division_name']!!}  </small></h5>
                                 </div>
 
                             </li>

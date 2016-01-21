@@ -49,7 +49,8 @@ var FormWizard = function () {
                 },
                 lastName: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    alpha: true
                 },
                 email: {
                     chkMail: true
@@ -117,11 +118,11 @@ var FormWizard = function () {
             messages: {
                 firstName: {
                     required: "First Name is required" ,
-                    alpha: "First name must contain only letters OR Space added"
+                    alpha: "First name must contain only letters"
                 },
                 lastName: {
                     required: "Last Name is required",
-                    alpha: "Last name must contain only letters OR Space added"
+                    alpha: "Last name must contain only letters"
                 },
                 studid:"please provide correct student id",
                 email: {
@@ -162,7 +163,7 @@ var FormWizard = function () {
                 },
                 'userName':{
                     required:"User name is required",
-                    alphanumeric: "User name must contain only letters ,Numbers OR Space added"
+                    alphanumeric: "User name must contain only letters"
                 },
                 parent_name:{
                     required:"Parent name is required",
