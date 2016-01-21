@@ -44,7 +44,7 @@
                                     </li>
                                     <li>
                                         <a data-toggle="tab" href="#panel_my_child">
-                                            My Childrens
+                                            My Children
                                         </a>
                                     </li>
                                 </ul>

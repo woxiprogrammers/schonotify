@@ -53,7 +53,7 @@
                     <div class="tab-content">
                         <div id="panel_edit_account" class="tab-pane fade in active ">
 
-                            <form id="formEditAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
+                            <form id="formEditStudentAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                                 <fieldset>
