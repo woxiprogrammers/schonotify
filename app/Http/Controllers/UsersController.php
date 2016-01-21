@@ -314,7 +314,7 @@ class UsersController extends Controller
             $userData->mobile = $data['mobile'];
             $userData->alternate_number = $data['alt_number'];
             $userData->role_id = $data['role'];
-            $userData->avatar = 'default-user.png';
+            $userData->avatar = 'default-user.jpg';
             $userData->is_active = 0;
             $userData->remember_token = csrf_token();
             $userData->confirmation_code = str_random(30);
