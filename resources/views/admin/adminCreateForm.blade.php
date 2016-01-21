@@ -252,7 +252,7 @@
                 <p class="text-small">
                     User will get the mail confirmation about his/her account. This mail includes link for login and his/her login credentials.
                 </p>
-                <a class="btn btn-primary btn-o" href="createUsers/1">
+                <a class="btn btn-primary btn-o" href="adminCreate">
                     Back to first step
                 </a>
             </div>
