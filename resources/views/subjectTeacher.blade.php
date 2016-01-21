@@ -301,7 +301,7 @@
         route="/check-sub-teacher/"+subject+"/"+div;
 
         $.get(route,function(res){
-            if(res==1)
+            if(res!=0)
             {
                 var confirmVal=confirm('teacher '+name+' already assigned to this subject do you want to change it? !');
                 if(confirmVal==false)
