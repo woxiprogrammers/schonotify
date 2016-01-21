@@ -49,6 +49,7 @@ class Message extends Request
                 break;
             case 'POST':
                 return [
+                    'from_id' => 'required|integer',
                     'to_id' => 'required|integer',
                 ];
                 break;
