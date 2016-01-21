@@ -373,7 +373,7 @@
                         lookup: currencies,
                         onSelect: function (suggestion) {
                             var thehtml = '<strong>Showing result for:</strong> ' + suggestion.value;
-                            thehtml+="<input type='hidden' value='"+suggestion.data+"' name='parent_id'> ";
+                            thehtml+="<input type='hidden' value='"+suggestion.data+"' name='parent_id' id='parent_id'> ";
                             $('#outputcontent').html(thehtml);
                             $('#tabTable').show();
                             console.log(suggestion.data);
@@ -387,7 +387,7 @@
     }
 
     $('#autocomplete').on('keyup',function(){
-        $('parent_id').val('');
+        $('#parent_id').val('');
     });
 
 </script>

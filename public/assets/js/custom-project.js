@@ -358,6 +358,9 @@ $('#stud_email').on('keyup',function(){
 $('#editEmail').on('keyup',function(){
     var email = $(this).val();
     var userId = $("#userId").val();
+    if(email.length == 0){
+        $('#updateUserInfo').removeAttr('disabled');
+    }else{
     var route='/check-email-edit';
     $.post(route,{email:email,userId:userId},function(res){
         if(res == 0 ) {
@@ -375,11 +378,15 @@ $('#editEmail').on('keyup',function(){
             $('#updateUserInfo').removeAttr('disabled');
         }
     });
+    }
 });
 
 $('#editEmailParent').on('keyup',function(){
     var email = $(this).val();
     var userId = $("#userPerentId").val();
+    if(email.length == 0){
+        $('#updateUserInfo').removeAttr('disabled');
+    }else{
     var route='/check-email-edit';
     $.post(route,{email:email,userId:userId},function(res){
         if(res == 0 ) {
@@ -397,6 +404,7 @@ $('#editEmailParent').on('keyup',function(){
             $('#updateUserInfo').removeAttr('disabled');
         }
     });
+    }
 });
 
 
