@@ -102,8 +102,7 @@ class SubjectTeacherController extends Controller
             array_push($dummy,$teacher->id);
         }
 
-        $availableTeacher=User::whereNotIn('id',$teachers)
-            ->where('role_id','=',2)
+        $availableTeacher=User::where('role_id','=',2)
             ->select('users.last_name as lastname','users.first_name as firstname','users.username as username','users.id as id')
             ->get();
 
@@ -122,6 +121,16 @@ class SubjectTeacherController extends Controller
             $relation['division_id']=$data['divisionDropdown'];
             $relation['created_at'] = Carbon::now();
             $relation['updated_at'] = Carbon::now();
+            $cnt=SubjectClassDivision::where('subject_id',$relation['subject_id'])
+                ->where('division_id',$relation['division_id'])
+                ->count();
+
+            if($cnt>=1)
+            {
+                $delQuery=SubjectClassDivision::where('subject_id',$relation['subject_id'])
+                ->where('division_id',$relation['division_id'])
+                ->delete();
+            }
 
             $query=SubjectClassDivision::insert($relation);
             if($query)
@@ -158,6 +167,13 @@ class SubjectTeacherController extends Controller
         }else{
             return Redirect::back();
         }
+
+    }
+    public function checkTeacher($subject,$division)
+    {
+        $check=SubjectClassDivision::where('subject_id','=',$subject)->where('division_id','=',$division)->count();
+
+        return $check;
 
     }
 

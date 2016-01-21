@@ -116,6 +116,7 @@
                                     <th>Batch</th>
                                     <th>Class</th>
                                     <th>Division</th>
+                                    <th>Subject</th>
                                     <th>Teacher Name (Username)</th>
                                     <th>Action</th>
                                 </tr>
@@ -126,6 +127,7 @@
                                         <td>{!! $association->batch !!}</td>
                                         <td>{!! $association->class !!}</td>
                                         <td>{!! $association->division !!}</td>
+                                        <td>{!! $association->subject !!}</td>
                                         <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
                                         <td><a onclick="deleteConfirm({!! $association->id !!});">Delete</a></td>
                                     </tr>
@@ -288,6 +290,27 @@
             window.location.href='/delete-relation/'+val;
         }
     }
+
+    $('#teacherDropdown').change(function(){
+        var teacher=this.value;
+        var name=$('#teacherDropdown :selected').text();
+
+        var div=$('#divisionDropdown').val();
+        var subject=$('#subjectDropdown').val();
+
+        route="/check-sub-teacher/"+subject+"/"+div;
+
+        $.get(route,function(res){
+            if(res==1)
+            {
+                var confirmVal=confirm('teacher '+name+' already assigned to this subject do you want to change it? !');
+                if(confirmVal==false)
+                {
+                    $('#teacherDropdown option:eq(0)').attr('selected','selected');
+                }
+            }
+        });
+    });
 
 
 </script>

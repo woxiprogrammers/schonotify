@@ -219,6 +219,9 @@ Route::post('/create-relation','SubjectTeacherController@createRelation');
 
 Route::get('/delete-relation/{id}','SubjectTeacherController@deleteRelation');
 
+Route::get('/check-sub-teacher/{subject}/{division}','SubjectTeacherController@checkTeacher');
+
+
 Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
 Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
 Route::get('get-parents',array('uses' => 'UsersController@getParents'));
