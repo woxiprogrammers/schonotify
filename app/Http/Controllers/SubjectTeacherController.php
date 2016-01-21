@@ -103,6 +103,7 @@
             }
 
             $availableTeacher=User::where('role_id','=',2)
+                ->whereNotIn('id',$teachers)
                 ->select('users.last_name as lastname','users.first_name as firstname','users.username as username','users.id as id')
                 ->get();
 

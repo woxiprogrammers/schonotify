@@ -221,6 +221,8 @@
 
     Route::get('/check-sub-teacher/{subject}/{division}','SubjectTeacherController@checkTeacher');
 
+    Route::get('/check-subject','SubjectController@checkSubject');
+
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
