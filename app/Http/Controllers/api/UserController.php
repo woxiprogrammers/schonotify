@@ -153,12 +153,12 @@ class UserController extends Controller
                 $batchData = Batch::wherein('id',$batchInfo)->select('id','name')->get();
                 $batchList = $batchData->toArray();
             }
-            $message="Sucessfully Listed";
+            $message="Successfully Listed";
             $status=200;
         }catch (\Exception $e){
             echo $e->getMessage();
             $status = 500;
-            $message = "something went wrong";
+            $message = "Something went wrong";
         }
         $response = [
             "message" => $message,
