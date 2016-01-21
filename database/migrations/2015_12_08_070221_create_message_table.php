@@ -19,7 +19,6 @@ class CreateMessageTable extends Migration
             $table->integer('to_id')->unsigned();
             $table->dateTime('timestamp');
             $table->boolean('read_status');
-            $table->boolean('is_delete');
             $table->timestamps();
         });
     }
