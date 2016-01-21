@@ -264,28 +264,25 @@ Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
 /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
-    Route::post('attendance','api\AttendanceController@markAttendance');
 
-    //leave related
+    //leave Related
     Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
     Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
     Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
     Route::post('deatil-leaveinformation',array('uses' => 'api\LeaveController@getDetailLeaveInformation'));
 
+    //Attendance Related
+    Route::post('attendance','api\AttendanceController@markAttendance');
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
     Route::post('viewAttendance','api\AttendanceController@viewAttendance');
 
-    //Message
-
+    //Message Related
     Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
     Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));//teacher gets message listing
-
-
     Route::get('get-messages-parent/{student_id}',array('uses' => 'api\MessageController@getMessagesParent'));//teacher gets message listing
-
     Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
-    Route::put('deletemessages',array('uses' => 'api\MessageController@deleteMessages'));
+    Route::put('delete-messages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
     Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
     Route::get('gettadmins',array('uses' => 'api\MessageController@getAdmins'));
@@ -293,7 +290,7 @@ Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
     Route::get('getclasses/{id}',array('uses' => 'api\UserController@getClassesTeacher'));
     Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
     Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
-    Route::post('sendmessage',array('uses' => 'api\MessageController@sendMessage'));
+    Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-message-list','api\MessageController@getMessageList');
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
@@ -312,12 +309,10 @@ Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
     Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
     Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
     Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
+    Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
 
-
-        Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
-
-
-
+        //Timetable
+    Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
     Route::get('view-timetable-teacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
 
     //Announcement
@@ -327,16 +322,10 @@ Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
 
     //Result
     Route::get('view-result/{id}','api\ResultController@viewResult');
-
     Route::get('view-test-chart/{uid}/{tid}','api\ResultController@viewTestGraph');
-
     Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
-
     Route::post('create-achievement','api\NoticeBoardController@createAchievement');
-
     Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
 
-
-    Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
 
 });
