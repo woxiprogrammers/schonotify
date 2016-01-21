@@ -14,7 +14,6 @@ class HomeworkRequest extends Request
      */
     public function authorize()
     {
-
         $userToken=$this->request->all();
         $userId='';
         foreach($userToken as $userData)
@@ -34,6 +33,7 @@ class HomeworkRequest extends Request
 
         }
         switch ($this->method()) {
+
             case 'GET':
                 if(in_array('View_homework',$resultArr) ){
                     return true;
@@ -43,7 +43,8 @@ class HomeworkRequest extends Request
                 }
                 break;
             case 'PUT':
-                if(in_array('Update_homework',$resultArr) ){
+
+                if(in_array('Edit_homework',$resultArr) ){
                     return true;
                 }
                 else{

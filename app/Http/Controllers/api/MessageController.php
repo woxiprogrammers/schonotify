@@ -327,7 +327,7 @@ class MessageController extends Controller
     public function sendMessage(Requests\Message $request){
         try{
             $data = $request->all();
-            $from_id = $data['teacher']['id'];
+            $from_id = $data['from_id'];
             $to_id = $data['to_id'];
             $status = 200;
             $message = 'Message Successfully Sent';
