@@ -44,7 +44,7 @@
                         <p class="pull-right">
                             <strong>Batch :</strong> <i>  @foreach($homeworkdiv as $home){!! $home['batch']!!}  @endforeach</i>
                             <strong>Class :</strong> <i>@foreach($homeworkdiv as $home){!! $home['class']!!}  @endforeach </i>
-                            <strong>Div : </strong> <i> @foreach($homeworkdiv as $home){!! $home['div']!!}  @endforeach</i>
+                            <strong>Div : </strong> <i> @foreach($homeworkdiv as $home){!! $home['div']!!}| @endforeach</i>
                         </p>
 
                     </h5>
@@ -313,7 +313,7 @@
         Main.init();
         FormValidator.init();
         FormElements.init();
-        //TableData.init();
+        TableData.init();
 
         $('#update').hide();
         $('#btnStatus').hide();
@@ -444,7 +444,7 @@
                                         this.checked = true;  //select all checkboxes with class "checkbox1"
                                     });
                                 }
-                                TableData.init();
+
                             });
 
 
@@ -601,7 +601,7 @@
                     this.checked = true;  //select all checkboxes with class "checkbox1"
                 });
             }
-            TableData.init();
+           // TableData.init();
         });
     }
 
