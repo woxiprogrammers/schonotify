@@ -46,7 +46,7 @@
                                             <select class="form-control" id="subjectDropdown" name="subjectDropdown" style="-webkit-appearance: menulist;">
                                                 <option value=""> Please select subjects...</option>
                                                 @foreach($subjects as $subject)
-                                                    <option value="{!! $subject->id !!}">{!! $subject->subject !!}</option>
+                                                <option value="{!! $subject->id !!}">{!! $subject->subject !!}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -94,12 +94,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                                    Add <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                                            Add <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
+                                </div>
 
                             </form>
                         </div>
@@ -116,19 +116,21 @@
                                     <th>Batch</th>
                                     <th>Class</th>
                                     <th>Division</th>
+                                    <th>Subject</th>
                                     <th>Teacher Name (Username)</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($associations as $association)
-                                    <tr>
-                                        <td>{!! $association->batch !!}</td>
-                                        <td>{!! $association->class !!}</td>
-                                        <td>{!! $association->division !!}</td>
-                                        <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
-                                        <td><a onclick="deleteConfirm({!! $association->id !!});">Delete</a></td>
-                                    </tr>
+                                <tr>
+                                    <td>{!! $association->batch !!}</td>
+                                    <td>{!! $association->class !!}</td>
+                                    <td>{!! $association->division !!}</td>
+                                    <td>{!! $association->subject !!}</td>
+                                    <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
+                                    <td><a onclick="deleteConfirm({!! $association->id !!});">Delete</a></td>
+                                </tr>
                                 @endforeach
                                 </tbody>
 
@@ -288,6 +290,35 @@
             window.location.href='/delete-relation/'+val;
         }
     }
+
+    $('#teacherDropdown').change(function(){
+        var teacher=this.value;
+        var name=$('#teacherDropdown :selected').text();
+
+        var div=$('#divisionDropdown').val();
+        var subject=$('#subjectDropdown').val();
+
+        route="/check-sub-teacher/"+subject+"/"+div;
+
+        $.get(route,function(res){
+
+            if(res.length!=0)
+            {
+                var str='Teacher named';
+
+                for(var i=0; i<res.length; i++)
+                {
+                    str+="\n"+res[i]['firstname']+" "+res[i]['lastname']+" ("+res[i]['username']+")";
+                }
+                    str+='\n is already assigned to this subject do you want to change it ?';
+                var confirmVal=confirm(str);
+                if(confirmVal==false)
+                {
+                    $('#teacherDropdown option:eq(0)').attr('selected','selected');
+                }
+            }
+        });
+    });
 
 
 </script>
