@@ -382,7 +382,6 @@ class HomeworkController extends Controller
 
         }
             $homework = array_unique($homework, SORT_REGULAR);
-            dd($homework);
         $subjectId=array();
         foreach($homework as $row)
         {
