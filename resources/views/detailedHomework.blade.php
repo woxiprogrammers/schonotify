@@ -543,8 +543,6 @@
     });
 
 
-
-
     $('#subjectsDropdown').change(function(){
         var id=this.value;
 
@@ -612,24 +610,58 @@
         {
             aIds.push(all_location_id[x].value);
         }
+
         var route='/get-division-students';
-        var divisions=aIds;
+        $.post(route,{id:aIds},function(res1){
 
-        $.post(route,{id:divisions},function(res){
-            var str = "";
+        var route3='/get-edit-division-students';
+        var hrId=$('#homework_id').val();
+        var str1="";
+        $.post(route3,{id:aIds,homework_id:hrId},function(res2){
 
-            for(var i=0; i<res.length; i++){
-                str+=' <tr>'+
-                    '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
-                    '<td>'+res[i]['roll_number']+'</td>'+
-                    '<td>'+res[i]['first_name']+' '+res[i]['last_name']+'</td>'+
-                    '<td>'+res[i]['slug']+'</td>'+
-                    '</tr>';
+            var arrStr= $.map(res2,function(value){
+                return value['user_id'];
+            });
+
+            for(var i=0;i<res1.length;i++)
+            {
+
+
+                if($.inArray(res1[i]['user_id'],arrStr)!=-1){
+
+                    str1+=' <tr>'+
+                        '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" checked/></td>'+
+                        '<td>'+res1[i]['roll_number']+'</td>'+
+                        '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
+                        '<td>'+res1[i]['slug']+'</td>'+
+                        '</tr>';
+
+
+                }else{
+
+
+                    str1+=' <tr>'+
+                        '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
+                        '<td>'+res1[i]['roll_number']+'</td>'+
+                        '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
+                        '<td>'+res1[i]['slug']+'</td>'+
+                        '</tr>';
+                }
+
             }
-            $('#studentList').html(str);
+            $('#studentList').html(str1);
             TableData.init();
+            if($('.allCheckedStud1').prop('checked') == true)
+            {
+                $('.checkedStud1').each(function() { //loop through each checkbox
+                    this.checked = true;  //select all checkboxes with class "checkbox1"
+                });
+            }
 
         });
+        });
+
+
     }
 
     $('.allCheckedStud1').change(function(){
