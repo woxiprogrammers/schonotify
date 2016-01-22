@@ -49,7 +49,6 @@ class UserController extends Controller
             } elseif (Auth::attempt(['email' => $request->email,'password' => $request->password])) {
                 $user=Auth::User();
                 $userView=TeacherView::where('user_id','=',$user['id'])->first();
-                //return $userView;
                 if(Empty($userView) && $user['role_id']==4 || $userView['mobile_view']==1)
                 {
                     $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
