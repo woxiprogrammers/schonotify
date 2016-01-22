@@ -155,6 +155,10 @@
 
     Route::get('results','ResultController@showResults');
 
+Route::post('get-edit-division-students',array('uses' => 'HomeworkController@getEditStudentData'));
+
+Route::get('download/{file_name}', 'HomeworkController@getDownload');
+
     Route::get('exams/{id}','ResultController@examResults');
 
     Route::get('subjects/{id}','ResultController@subjectResults');

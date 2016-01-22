@@ -232,6 +232,7 @@
         var id=this.value;
         var route='get-subject-batches/'+id;
         $.get(route,function(res){
+            //console.log(res);
             var batch= $.map(res,function(value,index){
                 return value;
             });
@@ -344,6 +345,7 @@
                     this.checked = true;  //select all checkboxes with class "checkbox1"
                 });
             }
+            TableData.init();
 
 
         });
