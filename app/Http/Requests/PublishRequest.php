@@ -32,11 +32,11 @@ class PublishRequest extends Request
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
         }
-        //if(in_array('Publish_homework',$resultArr) ){
+        if(in_array('Publish_homework',$resultArr) ){
             return true;
-       /* }else{
+        }else{
             return false;
-        }*/
+        }
     }
 
     /**

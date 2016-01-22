@@ -19,7 +19,6 @@ use Faker\Provider\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-//use Illuminate\Support\Facades\File;
 
 class HomeworkController extends Controller
 {
@@ -491,7 +490,6 @@ class HomeworkController extends Controller
                 ->first()->toArray();
             $i=0;
             if($val1 != null){
-                //return $val1['homeworkTitle'];
                     $title=$val1['homeworkTitle'];
                     $userId=$val1['userId'];
                     $str[$title]['description']=$val1['description'];
@@ -516,14 +514,8 @@ class HomeworkController extends Controller
             $message = "Something went wrong";
         }
         $response = ["message" => $message,"data" =>$data];
-
         return response($response, $status);
-
-
     }
-
-
-
     public function viewPublishHomeWork(Requests\HomeworkRequest $request,$page_id)
     {   $str=array();
         $data=array();
@@ -546,10 +538,8 @@ class HomeworkController extends Controller
                 $divArray[]=$value['class_teacher_id'];
 
             }
-
             if(in_array($user->id, $divArray))
             {
-
                 $val2=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                     ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                     ->Join('classes', 'divisions.class_id', '=', 'classes.id')
@@ -631,8 +621,6 @@ class HomeworkController extends Controller
 
         return response($response, $status);
     }
-
-
     public function viewHomeWork(Requests\HomeworkRequest $request,$page_id)
     {
         $str=array();
@@ -689,11 +677,6 @@ class HomeworkController extends Controller
         return response($response, $status);
 
     }
-
-
-
-
-
   public function deleteHomework(Requests\deleteHomeworkRequest $request,$homework_id)
   {
      try{
