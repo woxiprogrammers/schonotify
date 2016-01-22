@@ -78,7 +78,7 @@ class MessageController extends Controller
             foreach ($finalMessageData as $key => $part) {
                 $sort[$key] = strtotime($part['created_at']);
             }
-            array_multisort($sort, SORT_ASC, $finalMessageData);
+            array_multisort($sort, SORT_DESC, $finalMessageData);
             $status = 200;
             $message = "Success";
         } catch (\Exception $e) {
@@ -133,6 +133,7 @@ class MessageController extends Controller
                 $messageData['MessageList'][$receiver]['title']=$title;
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
                 $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                $messageData['MessageList'][$receiver]['created_at']=$value['timestamp'];
                 $i++;
             }
             $i=0;
@@ -144,6 +145,11 @@ class MessageController extends Controller
                     $i++;
                 }
             }
+            foreach ($finalMessageData as $key => $part) {
+                $sort[$key] = strtotime($part['created_at']);
+            }
+            array_multisort($sort, SORT_DESC, $finalMessageData);
+            return $finalMessageData;
             $status = 200;
             $message = "Success";
         } catch (\Exception $e) {
