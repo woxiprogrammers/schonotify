@@ -632,7 +632,6 @@ class HomeworkController extends Controller
          {
              $HomeworkListingSubjectTeacher=array();
              $data=$request->all();
-             dd($data);
              $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
 
              if($division != null){
@@ -668,7 +667,6 @@ class HomeworkController extends Controller
                              ->get();
                  }
            }
-                 dd($HomeworkListingSubjectTeacher);
             $flag=0;
           $count=count($HomeworkListingClassTeacher);
               foreach($HomeworkListingClassTeacher as $classTeacherValue){
