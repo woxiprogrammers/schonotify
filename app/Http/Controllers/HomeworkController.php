@@ -62,7 +62,7 @@ class HomeworkController extends Controller
                 //above code is for take homeworkids for users
                 $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
                 $i=0;
-                $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+                $homeworkInfo=Homework::wherein('id',$homeworkId)->orderby('status')->get()->toArray();
                 $currentDate = new DateTime(Carbon::now());
 
                 foreach($homeworkInfo as $home)
@@ -90,7 +90,7 @@ class HomeworkController extends Controller
                     $batch=Batch::where('id',$class['batch_id'])->first();
                     $homeworkDiv[$i]['div']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_division_name'][$i]=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
                     $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
@@ -99,7 +99,8 @@ class HomeworkController extends Controller
 
 
                 }
-                }else{
+
+            }else{
                 $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
                 foreach($homeworkTeacher as $row)
                 {
@@ -109,7 +110,8 @@ class HomeworkController extends Controller
                 //above code is for take homeworkids for users
                 $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
                 $i=0;
-                $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+                $homeworkInfo=Homework::wherein('id',$homeworkId)->orderby('status')->get()->toArray();
+
                 $currentDate = new DateTime(Carbon::now());
 
                 foreach($homeworkInfo as $home)
@@ -136,7 +138,7 @@ class HomeworkController extends Controller
                     $batch=Batch::where('id',$class['batch_id'])->first();
                     $homeworkDiv[$i]['div']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_division_name'][$i]=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
                     $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
@@ -148,6 +150,13 @@ class HomeworkController extends Controller
 
 
             }
+            foreach($homeworkIdss as $row)
+            {
+                $rq= array_unique($row['homework_division_name']);
+                $homeworkIdss[$row['homework_id']]['divs']=$rq;
+
+            }
+            //dd($homeworkIdss);
             /*$division_name=array();
             $homeworkDiv = array_unique($homeworkDiv, SORT_REGULAR);
             foreach($homeworkDiv as $row)
@@ -156,7 +165,7 @@ class HomeworkController extends Controller
             }
 
             $homeworkIdss['divs']=$division_name;*/
-           // dd($homeworkIdss);
+
             //dd($homeworkDiv[0]['div']);
 
          return view('homeworkListing')->with(compact('homeworkIdss','homeworkDiv'));
@@ -167,6 +176,7 @@ class HomeworkController extends Controller
 
     public function detailedHomework($id)
     {   $homeworkIdss=array();
+        $homeworkdivs=array();
         $homeworkdiv=array();
         $homeworkTypes=array();
         $homework=array();
@@ -206,7 +216,8 @@ class HomeworkController extends Controller
                 $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
                 $student_name=User::where('id',$row['student_id'])->first();
                 $division=Division::where('id',$student_name['division_id'])->first();
-                $class=Classes::where('id',$student_name['division_id'])->first();
+                $class=Classes::where('id',$division['class_id'])->first();
+
                 $batch=Batch::where('id',$class['batch_id'])->first();
                 $editHomeworkDiv[$i]['division_name']=$division['division_name'];
                 $editHomeworkDiv[$i]['division_id']=$division['id'];
@@ -226,15 +237,21 @@ class HomeworkController extends Controller
 
                 $i++;
 
+
             $i=0;
-            foreach($homeworkIdss[$row['homework_id']]['homework_student_list'] as $row1){
-                $homeworkdiv[$i]['div']=$row1['division'];
-                $homeworkdiv[$i]['class']=$row1['class'];
-                $homeworkdiv[$i]['batch']=$row1['batch'];
+
+                foreach($homeworkIdss[$row['homework_id']]['homework_student_list'] as $row1){
+
+                $homeworkdiv[$row1['batch']][$row1['class']][$i]=$row1['division'];
+                $homeworkdiv['batch']=$row1['batch'];
+                $homeworkdiv['class']=$row1['class'];
                 $i++;
             }
+            $homeworkdivs = array_unique($homeworkdiv[$row1['batch']][$row1['class']], SORT_REGULAR);
             }
-            $homeworkdiv = array_unique($homeworkdiv, SORT_REGULAR);
+            $homeworkdiv['divisions']=$homeworkdivs;
+
+
             $homeworkType=HomeworkType::all();
             foreach($homeworkType as $type)
             {
@@ -273,6 +290,7 @@ class HomeworkController extends Controller
             $homework = array_unique($homework, SORT_REGULAR);
 
 
+
         }else{
             $divisionSubjects=SubjectClassDivision::where('teacher_id',$user->id)
                 ->join('subjects','division_subjects.subject_id','=','subjects.id')
@@ -291,6 +309,7 @@ class HomeworkController extends Controller
         {
             array_push($subjectId,$row['subject_id']);
         }
+
 
 
             return view('detailedHomework')->with(compact('homeworkIdss','homeworkdiv','homeworkTypes','homework','editHomeworkDiv','editHomeworkBatch','editHomeworkClass'));
@@ -431,8 +450,10 @@ class HomeworkController extends Controller
         $batchInfo=array();
         $batches=array();
         $classes=array();
-        $class_id=SubjectClass::where('id',$subjectId)->get()->toArray();
-        foreach($class_id as $row)
+
+        $class_id=SubjectClass::where('subject_id',$subjectId)->get();
+
+        foreach($class_id->toArray() as $row)
         {
             $classes[]=$row['class_id'];
         }
@@ -460,14 +481,19 @@ class HomeworkController extends Controller
     public function getSubjectClass($id,$subject_id){
         $classInfo=array();
         $classSubject=array();
-        $subjectClassId=SubjectClass::where('id',$subject_id)->get();
+        $subjectClassId=SubjectClass::where('subject_id',$subject_id)->get();
+
+
         foreach($subjectClassId as $row)
        {
-          $classSubject['class_id'] = $row['class_id'];
+          $classSubject[] = $row['class_id'];
        }
-       $class=Classes::where('batch_id',$id)->
-                       where('id',$classSubject['class_id'])
-                       ->get();
+
+
+       $class=Classes::where('batch_id',$id)
+                    ->whereIn('id',$classSubject)
+                    ->get();
+
         $i=0;
        foreach($class as $row)
        {
@@ -535,6 +561,17 @@ class HomeworkController extends Controller
         $studentList = $students->toArray();
         return $studentList;
     }
+    public function getEditStudentData(Request $request)
+    {
+        $students = HomeworkTeacher::wherein('homework_teacher.division_id',$request->id)->where('homework_id',$request->homework_id)
+            ->join('users','homework_teacher.student_id','=','users.id')
+            ->join('divisions','users.division_id','=','divisions.id')
+            ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.division_name')
+            ->get();
+        $studentList = $students->toArray();
+        return $studentList;
+    }
+
 
     public function editHomework($id){
         $homeworkUpdate=array();
@@ -569,7 +606,6 @@ class HomeworkController extends Controller
 
 
         $homeworkData= $request->all();
-
         $homework=array();
         $homeworkTeacher=array();
         $i=0;
@@ -612,6 +648,7 @@ class HomeworkController extends Controller
             $HomeworkTeacher['created_at']= Carbon::now();
             $HomeworkTeacher['updated_at']= Carbon::now();
             HomeworkTeacher::insert($HomeworkTeacher);
+
         }
         Session::flash('message-success','homework updated successfully');
         return Redirect::to('/homework-listing');
