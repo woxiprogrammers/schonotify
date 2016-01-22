@@ -682,7 +682,6 @@ class HomeworkController extends Controller
                   $count++;
               }
           }
-                 return $HomeworkListingSubjectTeacher;
              $status=200;
              $message = "Successfully Listed";
         }
