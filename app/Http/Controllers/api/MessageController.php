@@ -55,10 +55,13 @@ class MessageController extends Controller
                 $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
                 if($messageData['MessageList'][$receiver]['user_id']==$messageData['MessageList'][$receiver]['from_id']){
                             $title=$finalReceiverName;
+                           $title_id=$value['to_id'];
                 }else{
                              $title=$finalSenderName;
+                             $title_id=$value['from_id'];;
                 }
                 $messageData['MessageList'][$receiver]['sender_name']=$finalSenderName;
+                $messageData['MessageList'][$receiver]['title_id']=$title_id;
                 $messageData['MessageList'][$receiver]['receiver_name']=$finalReceiverName;
                 $messageData['MessageList'][$receiver]['title']=$title;
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
@@ -125,10 +128,13 @@ class MessageController extends Controller
                 $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
                 if($messageData['MessageList'][$receiver]['user_id']==$messageData['MessageList'][$receiver]['from_id']){
                     $title=$finalReceiverName;
+                    $title_id=$value['to_id'];
                 }else{
                     $title=$finalSenderName;
+                    $title_id=$value['from_id'];;
                 }
                 $messageData['MessageList'][$receiver]['sender_name']=$finalSenderName;
+                $messageData['MessageList'][$receiver]['title_id']=$title_id;
                 $messageData['MessageList'][$receiver]['receiver_name']=$finalReceiverName;
                 $messageData['MessageList'][$receiver]['title']=$title;
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
