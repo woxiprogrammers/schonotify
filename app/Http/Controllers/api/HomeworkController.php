@@ -486,7 +486,7 @@ class HomeworkController extends Controller
                          ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
                          ->where('homework_teacher.division_id','=',$division['id'])
                          ->groupBy('homework_teacher.homework_id')
-                         ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
+                         ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
                          ->get();
                  $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                      ->join('subjects','division_subjects.subject_id','=','subjects.id')
@@ -503,7 +503,7 @@ class HomeworkController extends Controller
                              ->where('homeworks.subject_id','=',$value['subject_id'])
                              ->where('homework_teacher.division_id','=',$value['division_id'])
                              ->groupBy('homework_teacher.homework_id')
-                             ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
+                             ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
                              ->get();
                  }
            }
@@ -736,7 +736,7 @@ class HomeworkController extends Controller
                          ->where('homework_teacher.division_id','=',$division['id'])
                          ->where('homeworks.status','=',0)
                          ->groupBy('homework_teacher.homework_id')
-                         ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
+                         ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
                          ->get();
                  $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                      ->join('subjects','division_subjects.subject_id','=','subjects.id')
@@ -754,7 +754,7 @@ class HomeworkController extends Controller
                              ->where('homework_teacher.division_id','=',$value['division_id'])
                              ->where('homeworks.status','=',0)
                              ->groupBy('homework_teacher.homework_id')
-                             ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
+                             ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
                              ->get();
                  }
            }
