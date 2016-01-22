@@ -268,53 +268,71 @@
 
     /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
-        Route::post('auth','api\UserController@login');
 
-        //leave Related
-        Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
-        Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
-        Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
-        Route::post('deatil-leaveinformation',array('uses' => 'api\LeaveController@getDetailLeaveInformation'));
+    Route::post('auth','api\UserController@login');
 
-        //Attendance Related
-        Route::post('attendance','api\AttendanceController@markAttendance');
-        Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
-        Route::post('submitAttendance','api\AttendanceController@submitAttendance');
-        Route::post('viewAttendance','api\AttendanceController@viewAttendance');
+    //leave Related
+    Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
+    Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
+    Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
+    Route::post('deatil-leaveinformation',array('uses' => 'api\LeaveController@getDetailLeaveInformation'));
 
-        //Message Related
-        Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
-        Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));//teacher gets message listing
-        Route::get('get-messages-parent/{student_id}',array('uses' => 'api\MessageController@getMessagesParent'));//teacher gets message listing
-        Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
-        Route::put('delete-messages',array('uses' => 'api\MessageController@deleteMessages'));
-        Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
-        Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
-        Route::get('gettadmins',array('uses' => 'api\MessageController@getAdmins'));
-        Route::get('get-batches-teacher',array('uses' => 'api\UserController@getBatchesTeacher'));
-        Route::get('getclasses/{id}',array('uses' => 'api\UserController@getClassesTeacher'));
-        Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
-        Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
-        Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
-        Route::get('get-message-list','api\MessageController@getMessageList');
-        Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
+    //Attendance Related
+    Route::post('attendance','api\AttendanceController@markAttendance');
+    Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
+    Route::post('submitAttendance','api\AttendanceController@submitAttendance');
+    Route::post('viewAttendance','api\AttendanceController@viewAttendance');
+
+    //Message Related
+    Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
+    Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));//teacher gets message listing
+    Route::get('get-messages-parent/{student_id}',array('uses' => 'api\MessageController@getMessagesParent'));//teacher gets message listing
+    Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
+    Route::put('delete-messages',array('uses' => 'api\MessageController@deleteMessages'));
+    Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
+    Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
+    Route::get('gettadmins',array('uses' => 'api\MessageController@getAdmins'));
+    Route::get('get-batches-teacher',array('uses' => 'api\UserController@getBatchesTeacher'));
+    Route::get('getclasses/{id}',array('uses' => 'api\UserController@getClassesTeacher'));
+    Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
+    Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
+    Route::get('get-message-list','api\MessageController@getMessageList');
+    Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
 
 
-        //Homework related
-        Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
-        Route::post('createHomework','api\HomeworkController@createHomework');
-        Route::put('updateHomework',array('uses' => 'api\HomeworkController@updateHomework'));
-        Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
-        Route::get('viewPublishHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
-        Route::get('viewDetailHomeWork/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
-        Route::put('publishHomeWork',array('uses' => 'api\HomeworkController@publishHomeWork'));
-        Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
-        Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
-        Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
-        Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
-        Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
-        Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
-        Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
+ //Homework related
+    Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
+
+    Route::post('createHomework','api\HomeworkController@createHomework');
+
+    Route::put('update-homework',array('uses' => 'api\HomeworkController@updateHomework'));
+
+    Route::put('publish-homework/',array('uses' => 'api\HomeworkController@publishHomeWork'));
+
+    Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
+
+    Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
+
+    Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
+
+    Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
+
+    Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
+
+    Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
+
+    Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
+
+
+    //remained
+
+    Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
+
+    Route::get('view-published-homework/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
+
+    Route::get('view-detail-homework/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
+
 
         //Timetable
         Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
@@ -331,6 +349,5 @@
         Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
         Route::post('create-achievement','api\NoticeBoardController@createAchievement');
         Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
-
 
     });
