@@ -324,10 +324,10 @@
 
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
 
-
+    Route::get('view-unpublished-homework',array('uses' => 'api\HomeworkController@viewUnpublishedHomeWork'));
     //remained
 
-    Route::get('viewHomeWork/{page_id}',array('uses' => 'api\HomeworkController@viewHomeWork'));
+
 
     Route::get('view-published-homework/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
 
