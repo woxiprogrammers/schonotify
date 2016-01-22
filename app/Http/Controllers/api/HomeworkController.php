@@ -630,6 +630,7 @@ class HomeworkController extends Controller
     {
         try
          {
+             $HomeworkListingSubjectTeacher=array();
              $data=$request->all();
              $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
              if($division != null){
@@ -702,7 +703,9 @@ class HomeworkController extends Controller
                         ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
                         ->get();
                   }
-                }
+                }else{
+                $HomeworkListingSubjectTeacher=[];
+            }
              }
          }
         catch (\Exception $e) {
