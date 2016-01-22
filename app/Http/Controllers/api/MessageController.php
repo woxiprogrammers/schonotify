@@ -276,7 +276,7 @@ class MessageController extends Controller
             $i=0;
             foreach($teacher as $value){
                 $teacherData[$i]['id']=$value['id'];
-                $teacherData[$i]['name']=$value['first_name']." ".$value['first_name'];
+                $teacherData[$i]['name']=$value['first_name']." ".$value['last_name'];
                 $i++;
             }
             $responseData['teachers']= $teacherData;
