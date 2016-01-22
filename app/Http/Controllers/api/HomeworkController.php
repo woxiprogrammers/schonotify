@@ -633,6 +633,7 @@ class HomeworkController extends Controller
              $HomeworkListingSubjectTeacher=array();
              $data=$request->all();
              $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
+
              if($division != null){
                 $HomeworkListingClassTeacher=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                          ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
@@ -645,6 +646,7 @@ class HomeworkController extends Controller
                          ->groupBy('homework_teacher.homework_id')
                          ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
                          ->get();
+
                  $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                      ->join('subjects','division_subjects.subject_id','=','subjects.id')
                      ->select('subjects.id as subject_id','division_id')
@@ -683,6 +685,7 @@ class HomeworkController extends Controller
              $status=200;
              $message = "Successfully Listed";
         }
+
         else{
             $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                 ->join('subjects','division_subjects.subject_id','=','subjects.id')
@@ -714,7 +717,7 @@ class HomeworkController extends Controller
         }
         $response = [
              "message" => $message,
-            "data" =>$HomeworkListingSubjectTeacher
+             "data" =>$HomeworkListingSubjectTeacher
               ];
         return response($response, $status);
     }
