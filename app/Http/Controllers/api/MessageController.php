@@ -155,7 +155,6 @@ class MessageController extends Controller
                 $sort[$key] = strtotime($part['created_at']);
             }
             array_multisort($sort, SORT_DESC, $finalMessageData);
-            return $finalMessageData;
             $status = 200;
             $message = "Success";
         } catch (\Exception $e) {
