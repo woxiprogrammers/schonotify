@@ -715,7 +715,7 @@ class HomeworkController extends Controller
          }
         catch (\Exception $e) {
             $status = 500;
-            $message = "Something went wrong";
+            $message = "Something went wrong" .  $e->getMessage();;
         }
         $response = [
              "message" => $message,
