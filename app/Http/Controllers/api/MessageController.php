@@ -19,7 +19,6 @@ class MessageController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user');
     }
   public function getMessages(Request $request ){
         try {
@@ -200,11 +199,11 @@ class MessageController extends Controller
             foreach($MessageData as $value){
                         if($value['from_id']==$data['teacher']['id']){
                             $finalMessageData[$i]['description']=$value['description'];
-                            $finalMessageData[$i]['timestamp']=date("M j, g:i a",strtotime($value['timestamp']));;
+                            $finalMessageData[$i]['timestamp']=date("M j, g:i a",strtotime($value['timestamp']));
                             $finalMessageData[$i]['type']="Sent";
                 }else{
                             $finalMessageData[$i]['description']=$value['description'];
-                            $finalMessageData[$i]['timestamp']=date("M j, g:i a",strtotime($value['timestamp']));;
+                            $finalMessageData[$i]['timestamp']=date("M j, g:i a",strtotime($value['timestamp']));
                             $finalMessageData[$i]['type']="Receive";
                         }
                 $i++;
@@ -246,7 +245,7 @@ class MessageController extends Controller
         try{
             $userRole = UserRoles::whereNotIn('slug', ['parent','admin'])
                         ->select('user_roles.id','user_roles.name')
-                        ->get()->toArray();;
+                        ->get()->toArray();
             $responseData['userRoles']= $userRole;
             $status = 200;
             $message = 'Successfully Listed';
