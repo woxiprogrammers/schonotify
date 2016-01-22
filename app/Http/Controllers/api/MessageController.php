@@ -131,7 +131,7 @@ class MessageController extends Controller
                     $title_id=$value['to_id'];
                 }else{
                     $title=$finalSenderName;
-                    $title_id=$value['from_id'];;
+                    $title_id=$value['from_id'];
                 }
                 $messageData['MessageList'][$receiver]['sender_name']=$finalSenderName;
                 $messageData['MessageList'][$receiver]['title_id']=$title_id;
