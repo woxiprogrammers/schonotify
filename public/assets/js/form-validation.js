@@ -850,7 +850,8 @@ var FormValidator = function () {
                 },
                 title: {
                     minlength: 2,
-                    required: true
+                    required: true,
+                    maxlength:20
                 },
                 description:{
                     minlength:15,
@@ -860,7 +861,8 @@ var FormValidator = function () {
                     required:true
                 },
                 pdfFile:{
-                    maxlength:25000000
+                    maxlength:25000000,
+                    accept:"pdf"
                      },
                 classDropdown:{
                     required:true
@@ -880,11 +882,14 @@ var FormValidator = function () {
                 divisions: "Please select at least one division",
                 studentinfo: "Please select at least one student",
                 pdfFile:{
-                    maxlength: "select only pdf files of size 25 mb"},
+                    maxlength: "select only pdf files of size 25 mb",
+                    accept:"Please upload .pdf only"
+                },
                 dueDate: "please select due date ",
                 title:{
                     minlength:"please enter at least 2 characters",
-                    required:"please fill title date"
+                    required:"please fill title",
+                    maxlength:"please enter  20 characters only"
                       },
                 description:{
                     minlength:"Please enter more words."
@@ -1135,18 +1140,23 @@ var FormValidator = function () {
             },
             ignore: "",
             rules: {
-                subject_name: {
-                    required: true,
-                    minlength:2
-                },
                 'class[]':{
                     required:true,
                     minlength:1
+                },
+                subject_name:{
+                    required:true,
+                    remote: {
+                        url: "/check-subject",
+                        type: "GET"
+
+                    }
                 }
             },
             messages: {
                 subject_name:{
-                    required:"Please enter subject title."
+                    required:"Please enter subject title.",
+                    remote:"The subject name has already been taken !"
                 },
                 'class[]':{
                     required:"Please select atleast one class",

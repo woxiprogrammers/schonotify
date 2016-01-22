@@ -515,6 +515,7 @@ class HomeworkController extends Controller
                 $divisionInfo=Division::where('class_id',$id)->where('class_teacher_id',$user->id)->first();
                 $divisionArray[0]['division_id']=$divisionInfo->id;
                 $divisionArray[0]['division_slug']=$divisionInfo->slug;
+                $divisionArray[0]['division_name']=$divisionInfo->division_name;
                 $divSubjects=SubjectClassDivision::where('teacher_id',$user->id)
                                                   ->where('subject_id',$subject_id)->get();
                 foreach($divSubjects as $row)
@@ -527,6 +528,7 @@ class HomeworkController extends Controller
                     {
                         $divisionArray[$i]['division_id']=$row['id'];
                         $divisionArray[$i]['division_slug']=$row['slug'];
+                        $divisionArray[$i]['division_name']=$row['division_name'];
                         $i++;
                     }
                 $divisionArray = array_unique($divisionArray, SORT_REGULAR);
@@ -544,6 +546,7 @@ class HomeworkController extends Controller
                 {
                     $divisionArray[$i]['division_id']=$row['id'];
                     $divisionArray[$i]['division_slug']=$row['slug'];
+                    $divisionArray[$i]['division_name']=$row['division_name'];
                     $i++;
                 }
                 $divisionArray = array_unique($divisionArray, SORT_REGULAR);

@@ -16,6 +16,7 @@
 <div class="main-content" >
 <div class="wrap-content container" id="container">
 @include('alerts.errors')
+<div id="message-error-div"></div>
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
@@ -53,7 +54,7 @@
                     <div class="tab-content">
                         <div id="panel_edit_account" class="tab-pane fade in active ">
 
-                            <form id="formEditAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
+                            <form id="formEditStudentAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                                 <fieldset>

@@ -15,13 +15,12 @@
 <div class="wrap-content container" id="container">
 <!-- start: DASHBOARD TITLE -->
     @include('alerts.errors')
+    <div id="message-error-div"></div>
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
             <h1 class="mainTitle">Homework</h1>
         </div>
-
-
     </div>
 </section>
 <!-- end: DASHBOARD TITLE -->
@@ -73,7 +72,7 @@
                     </label>
                     <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;"></textarea>
                 </div>
-                <div>
+                <div class="form-group">
                     <label class="control-label">
                         Upload Document
                     </label>
@@ -89,7 +88,7 @@
                         <label class="control-label">
                             Due Date <span class="symbol required"></span>
                         </label>
-                        <input class="form-control datepicker" type="text" name="dueDate">
+                        <input class="form-control datepicker" type="text" name="dueDate" id="dueDate"  >
                     </div>
                     <h4>Assign Homework to: </h4>
                     <div class="form-group">
@@ -122,23 +121,8 @@
                 <div class="row" style="margin-bottom: 4px;">
                     <label>Select Students to assign homework</label>
                 </div>
-                <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
-                    <thead>
-                    <tr>
-                        <th><input type="checkbox" class="allCheckedStud1" checked/> <span class="position-absolute padding-left-5"><b>Select </b></span></th>
-                        <th>Roll No.</th>
-                        <th>Name</th>
-                        <th>Division</th>
-                    </tr>
-                    </thead>
-                    <tbody id="studentList">
+                <div id="tableData"></div>
 
-
-
-
-                    </tbody>
-
-                </table>
             </div>
                 <div class="col-md-12 form-group">
 
@@ -195,7 +179,7 @@
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="assets/js/form-validation.js"></script>
-<script src="assets/js/additional-methods.js"></script>
+<script src="vendor/jquery-validation/additional-methods.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
     jQuery(document).ready(function() {
@@ -203,8 +187,9 @@
         Main.init();
         FormValidator.init();
         FormElements.init();
-
-
+        TableData.init();
+        var startDate = new Date();
+        $('#dueDate').datepicker('setStartDate', startDate);
     });
 
 
@@ -239,19 +224,7 @@
         }
     });
 
-    $('.allCheckedStud1').change(function(){
 
-        if($(this).prop('checked') == true)
-        {
-            $('.checkedStud1').each(function() { //loop through each checkbox
-                this.checked = true;  //select all checkboxes with class "checkbox1"
-            });
-        }else{
-            $('.checkedStud1').each(function() { //loop through each checkbox
-                this.checked = false;  //select all checkboxes with class "checkbox1"
-            });
-        }
-    });
 
 
 
@@ -302,13 +275,14 @@
 
                     '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]">'+
                     '<label for="'+arrStr[i]['division_id']+'">'+
-                    ''+arrStr[i]['division_slug']+''+
+                    ''+arrStr[i]['division_name']+''+
                     '</label>'+
                     '</div>';
             }
             $('#division').html(str);
 
         });
+
     });
 
     function Selectallcheckbox(){
@@ -323,7 +297,20 @@
         var route='get-division-students';
         var divisions=aIds;
         $.post(route,{id:divisions},function(res){
+
             var str = "";
+            var str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>"+
+                "<thead>"+
+                "<tr>"+
+                "<th><input type='checkbox' id='selectAll' class='allCheckedStud1' data-set='#sample_2 .checkedStud1' checked/> <span class='position-absolute padding-left-5'><b>Select </b></span></th>"+
+                "<th>Roll No.</th>"+
+                "<th>Name</th>"+
+                "<th>Division</th>"+
+            "</tr>"+
+            "</thead>"+
+            "<tbody id='studentList'>";
+
+
             for(var i=0; i<res.length; i++){
                 str+=' <tr>'+
                     '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
@@ -332,7 +319,26 @@
                     '<td>'+res[i]['slug']+'</td>'+
                     '</tr>';
             }
-            $('#studentList').html(str);
+            str += '</tbody>'+
+            '</table>';
+            $('#tableData').html(str);
+
+            jQuery(document).ready(function() {
+                TableData.init();
+            });
+            $('.allCheckedStud1').change(function(){
+
+                if($(this).prop('checked') == true)
+                {
+                    $('.checkedStud1').each(function() { //loop through each checkbox
+                        this.checked = true;  //select all checkboxes with class "checkbox1"
+                    });
+                }else{
+                    $('.checkedStud1').each(function() { //loop through each checkbox
+                        this.checked = false;  //select all checkboxes with class "checkbox1"
+                    });
+                }
+            });
             if($('.allCheckedStud1').prop('checked') == true)
             {
                 $('.checkedStud1').each(function() { //loop through each checkbox
@@ -341,9 +347,14 @@
             }
             TableData.init();
 
+
         });
 
+
+
     }
+
+
 
 
 
