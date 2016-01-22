@@ -328,6 +328,8 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
 
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
 
+    Route::get('view-homework','api\HomeworkController@viewHomeWork');
+
     Route::get('view-unpublished-homework',array('uses' => 'api\HomeworkController@viewUnpublishedHomeWork'));
     //remained
 
