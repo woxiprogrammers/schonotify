@@ -108,6 +108,7 @@ class ClassController extends Controller
 
         $div['class_id']=$request->classDropdown;
         $div['division_name']=strtoupper($request->division);
+        $div['slug']=strtolower($request->division);
         $cnt=Division::where($div)->count();
 
         if($cnt>0)
