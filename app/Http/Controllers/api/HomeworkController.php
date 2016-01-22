@@ -703,7 +703,7 @@ class HomeworkController extends Controller
                         ->where('homework_teacher.division_id','=',$value['division_id'])
                         ->where('homeworks.status','=',0)
                         ->groupBy('homework_teacher.homework_id')
-                        ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
+                        ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','homeworks.created_at')
                         ->get();
                   }
                 }else{
@@ -715,7 +715,7 @@ class HomeworkController extends Controller
          }
         catch (\Exception $e) {
             $status = 500;
-            $message = "Something went wrong";
+            $message = "Something went wrong" .  $e->getMessage();
         }
         $response = [
              "message" => $message,
