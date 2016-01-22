@@ -21,8 +21,8 @@ class AuthenticateUser
             $teacher = User::where('remember_token',$request->token)->first();
             if (!empty($teacher)){
                 if($teacher->role_id == 2){
-                    $teacherView = TeacherView::where('user_id',$teacher->id)->where('mobile_view',1)->count();
-                    if($teacherView == 1){
+                    $teacherView = TeacherView::where('user_id',$teacher->id)->select('mobile_view')->first();
+                    if($teacherView['mobile_view'] == 1){
                         $request->merge(compact('teacher'));
                         return $next($request);
                     }else{
