@@ -195,8 +195,8 @@ class HomeworkController extends Controller
                                   ->where('batch_id','=',$batch_id)
                                   ->select('id','class_name as class_name')->first();
                 if(!Empty($class_id)&&!Empty($className)){
-                    $finalClasses[$i]['class_id']=$class_id['class_id'];
-                    $finalClasses[$i]['class_name']=$className['class_name'];
+                    $finalClasses[$i]['id']=$class_id['class_id'];
+                    $finalClasses[$i]['name']=$className['class_name'];
                     $i++;
                     }
                 }
@@ -253,7 +253,7 @@ class HomeworkController extends Controller
                      ->where('divisions.class_id','=',$class_id)
                      ->where('classes.batch_id','=',$batch_id)
                      ->where('divisions.id','=',$division_id)
-                     ->select('divisions.id as div_id','divisions.division_name')
+                     ->select('divisions.id as id','divisions.division_name as name')
                       ->first();
                if(!Empty($finalData)){
                    $finalDivisions[$i]=$finalData;
