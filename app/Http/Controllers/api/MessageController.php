@@ -176,6 +176,7 @@ class MessageController extends Controller
             $data = $request->all();
             $from_id = $data['from_id'];
             $to_id = $data['to_id'];
+            $user_id = $data['user_id'];
             Message::where('to_id', $to_id)
                      ->where('from_id', $from_id)
                      ->where('is_delete','=',0)
@@ -203,7 +204,7 @@ class MessageController extends Controller
                 array_multisort($sort, SORT_ASC, $MessageData);
                     $i=0;
             foreach($MessageData as $value){
-                        if($value['from_id']==$data['teacher']['id']){
+                        if($value['from_id']==$user_id){
                             $finalMessageData[$i]['description']=$value['description'];
                             $finalMessageData[$i]['timestamp']=date("M j, g:i a",strtotime($value['timestamp']));
                             $finalMessageData[$i]['type']="Sent";
