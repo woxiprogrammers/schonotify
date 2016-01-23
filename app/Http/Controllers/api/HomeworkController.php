@@ -503,6 +503,7 @@ class HomeworkController extends Controller
                              ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
                              ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
                              ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
+                             ->Join('users as teacher' ,'homework_teacher.teacher_id', '=', 'teacher.id')
                              ->where('homeworks.subject_id','=',$value['subject_id'])
                              ->where('homework_teacher.division_id','=',$value['division_id'])
                              ->groupBy('homework_teacher.homework_id')
