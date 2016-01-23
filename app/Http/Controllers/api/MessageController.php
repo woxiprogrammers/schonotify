@@ -108,7 +108,7 @@ class MessageController extends Controller
             $i=0;
             foreach($messages as $value)
             {
-                if($data['teacher']['id']==$value['from_id'])
+                if($student_id == $value['from_id'])
                 {
                     $receiverName = User::where('id','=',$value['to_id'])
                         ->select('first_name', 'last_name')->first();
@@ -126,7 +126,7 @@ class MessageController extends Controller
                 $finalSenderName=$finalSender['first_name']." ".$finalSender['last_name'];
                 $finalReceiver = User::where('id','=',$value['to_id'])->select('first_name', 'last_name')->first();
                 $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
-                if($messageData['MessageList'][$receiver]['user_id']==$messageData['MessageList'][$receiver]['from_id']){
+                if($student_id == $messageData['MessageList'][$receiver]['from_id']){
                     $title=$finalReceiverName;
                     $title_id=$value['to_id'];
                 }else{
