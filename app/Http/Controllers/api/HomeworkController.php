@@ -137,8 +137,8 @@ class HomeworkController extends Controller
             foreach($Classes as $row)
             {
                 $batchName=Batch::where('id',$row['batch_id'])->first();
-                $batchInfo[$i]['batch_id']=$batchName['id'];
-                $batchInfo[$i]['batch']=$batchName['name'];
+                $batchInfo[$i]['id'] = $batchName['id'];
+                $batchInfo[$i]['name'] = $batchName['name'];
                 $i++;
             }
             $status = 200;
@@ -858,32 +858,34 @@ class HomeworkController extends Controller
         if(in_array($student_id,$studentId))
         {
             $studentHomework=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
-                  ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
-                  ->Join('classes', 'divisions.class_id', '=', 'classes.id')
-                  ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
-                  ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
-                  ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
-                  ->where('homework_teacher.student_id','=',$student_id)
-                  ->where('homeworks.status','=',1)//parent ca n see published homework ony
-                  ->select('homeworks.title as homeworkTitle','description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name')
-                  ->get();
+                ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
+                ->Join('classes', 'divisions.class_id', '=', 'classes.id')
+                ->Join('batches', 'classes.batch_id', '=', 'batches.id')
+                ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
+                ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
+                ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
+                ->where('homework_teacher.student_id','=',$student_id)
+                ->where('homeworks.status','=',1)//parent ca n see published homework ony
+                ->select('homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','batches.name')
+                ->get();
             $i=0;
             if($studentHomework != null){
                 foreach($studentHomework as $value)
                 {
                     $userId=$value['userId'];
+                    $data[$i]['title']=$value['homeworkTitle'];
                     $data[$i]['description']=$value['description'];
-                    $data[$i]['status']=$value['status'];
-                    $data[$i]['due_date']=$value['due_date'];
+                    $data[$i]['due_date']=date("M j",strtotime($value['due_date']));
+                    $data[$i]['created_At']=date("M j",strtotime($value['created_At']));
                     $data[$i]['attachment_file']=$value['attachment_file'];
                     $data[$i]['homeworkType']=$value['homeworkType'];
                     $teacherName=User::where('id','=',$value['teacher_id'])->first();
-                    $data[$i]['teacher_name']=$teacherName['first_name']."".$teacherName['last_name'];
-                    $data[$i]['subjectName']=$value['subjectName'];
-                    $data[$i]['division_name']=$value['division_name'];
-                    $data[$i]['batch']=$value['batch'];
-                    $data[$i]['class_name']=$value['class_name'];
-                    $data[$i]['student'][$userId]=$value['first_name'].''.$value['last_name'];
+                    $data[$i]['teacher_name']=$teacherName['first_name']."  ".$teacherName['last_name'];
+                    $data[$i]['subject_name']=ucfirst($value['subjectName']);
+                    $data[$i]['division_name']=ucfirst($value['division_name']);
+                    $data[$i]['batch_name']=ucfirst($value['name']);
+                    $data[$i]['class_name']=ucfirst($value['class_name']);
+                    $data[$i]['student']['student_name']=$value['first_name'].'  '.$value['last_name'];
                     $i++;
                 }
 
