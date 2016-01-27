@@ -70,7 +70,7 @@ class MessageController extends Controller
                     $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
                     if($data['teacher']['id']==$value['from_id'])
                     {
-                        $messageData['MessageList'][$receiver]['read_status']=0;
+                        $messageData['MessageList'][$receiver]['read_status']=1;
 
                     }else{
                         $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
@@ -156,7 +156,7 @@ class MessageController extends Controller
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
                 if($data['teacher']['id']==$value['from_id'])
                 {
-                    $messageData['MessageList'][$receiver]['read_status']=0;
+                    $messageData['MessageList'][$receiver]['read_status']=1;
 
                 }else{
                     $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
