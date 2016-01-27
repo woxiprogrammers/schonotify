@@ -17,8 +17,9 @@ class AuthenticateUser
      */
     public function handle($request, Closure $next)
     {
-        if($request->has('token')){
-            $teacher = User::where('remember_token',$request->token)->first();
+
+	 if($request->has('token')){
+	      $teacher = User::where('remember_token',$request->token)->first();
             if (!empty($teacher)){
                 if($teacher->role_id == 2){
                     $teacherView = TeacherView::where('user_id',$teacher->id)->select('mobile_view')->first();

@@ -1029,8 +1029,8 @@ class UsersController extends Controller
             $batchList = $batchData->toArray();
         }elseif($user->role_id == 2){
             $divisionList = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
-            $divisionInfo = Division::wherein('id',$divisionList)->select('id')->get();
-            $classInfo = Classes::wherein('id',$divisionInfo)->select('id')->get();
+            $divisionInfo = Division::wherein('id',$divisionList)->select('class_id')->get();
+            $classInfo = Classes::wherein('id',$divisionInfo)->select('batch_id')->get();
             $batchInfo = Batch::wherein('id',$classInfo)->select('id')->get();
             $batchData = Batch::wherein('id',$batchInfo)->select('id','name')->get();
             $batchList = $batchData->toArray();
