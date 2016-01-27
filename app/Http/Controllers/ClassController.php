@@ -55,6 +55,7 @@ class ClassController extends Controller
         $user=Auth::User();
         $batch['body_id']=$user->body_id;
         $batch['name']=$batchName;
+        $batch['slug']=strtolower($batchName);
         $cnt=Batch::where('name',$batchName)->count();
         if($cnt<1)
         {
