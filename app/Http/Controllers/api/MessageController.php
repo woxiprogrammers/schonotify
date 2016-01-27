@@ -106,6 +106,7 @@ class MessageController extends Controller
         try {
             $finalMessageData=array();
             $data = $request->all();
+            RETURN $data['teacher']['id'];
             $sender = $student_id;
             $messages= Message::where('is_delete','=',0)
                 ->Where(function($query) use ($sender)
