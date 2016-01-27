@@ -290,8 +290,7 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
     //Message Related
     Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
     Route::get('get-messages',array('uses' => 'api\MessageController@getMessages'));//teacher gets message listing
-    Route::get('get-messages-parent/{student_id}',array('uses' => 'api\MessageController@getMessagesParent'));//teacher gets message listing
-    Route::get('getdetailmessage/{id}',array('uses' => 'api\MessageController@getDetailMessagesTeacher'));
+    Route::get('get-messages-parent/{student_id}',array('uses' => 'api\MessageController@getMessagesParent'));//parent gets message listing
     Route::put('delete-messages',array('uses' => 'api\MessageController@deleteMessages'));
     Route::get('userroles',array('uses' => 'api\MessageController@getUserRoles'));
     Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
@@ -301,7 +300,6 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
     Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
     Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
-    Route::get('get-message-list','api\MessageController@getMessageList');
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
     Route::get('get-acl-details','api\MessageController@getAclDetails');
@@ -333,12 +331,7 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
     Route::get('view-homework','api\HomeworkController@viewHomeWork');
 
     Route::get('view-unpublished-homework',array('uses' => 'api\HomeworkController@viewUnpublishedHomeWork'));
-    //remained
-
-
-
-    Route::get('view-published-homework/{page_id}',array('uses' => 'api\HomeworkController@viewPublishHomeWork'));
-
+   
     Route::get('view-detail-homework/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
 
 
