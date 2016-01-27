@@ -68,8 +68,15 @@ class MessageController extends Controller
                     $messageData['MessageList'][$receiver]['receiver_name']=$finalReceiverName;
                     $messageData['MessageList'][$receiver]['title']=$title;
                     $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
-                    $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                    if($data['teacher']['id']==$value['from_id'])
+                    {
+                        $messageData['MessageList'][$receiver]['read_status']=0;
+
+                    }else{
+                        $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                    }
                     $messageData['MessageList'][$receiver]['created_at']=$value['timestamp'];
+
                     $i++;
                 }
                 $i=0;
@@ -147,9 +154,16 @@ class MessageController extends Controller
                 $messageData['MessageList'][$receiver]['receiver_name']=$finalReceiverName;
                 $messageData['MessageList'][$receiver]['title']=$title;
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
-                $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                if($data['teacher']['id']==$value['from_id'])
+                {
+                    $messageData['MessageList'][$receiver]['read_status']=0;
+
+                }else{
+                    $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                }
                 $messageData['MessageList'][$receiver]['created_at']=$value['timestamp'];
                 $i++;
+
             }
             $i=0;
             foreach($messageData as $value)

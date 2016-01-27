@@ -63,8 +63,8 @@ class HomeworkController extends Controller
                     ->get();
                 foreach($divisionSubjects as $row)
                 {
-                    $homework[$i]['subject_id']=$row['id'];
-                    $homework[$i]['subject'] = $row ['subject_name'] ;
+                    $homework[$i]['id']=$row['id'];
+                    $homework[$i]['name'] = $row ['subject_name'] ;
                     $i++;
                 }
             }
@@ -82,6 +82,7 @@ class HomeworkController extends Controller
         }
         $response = [
              "message" => $message,
+             "status" => $status,
              "data"=>$finalSubjectList
         ];
         return response($response, $status);
