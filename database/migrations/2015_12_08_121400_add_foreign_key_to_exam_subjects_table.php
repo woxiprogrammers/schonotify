@@ -16,13 +16,11 @@ class AddForeignKeyToExamSubjectsTable extends Migration
             $table->foreign('exam_id')
                 ->references('id')
                 ->on('exams')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('subject_id')
                 ->references('id')
                 ->on('subjects')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 

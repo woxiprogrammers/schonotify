@@ -383,6 +383,7 @@
                          @endforeach
 
                         $('#classDropdown').html(str);
+
                         }
 
                         var val1=$('#classDropdown').val();
@@ -524,6 +525,7 @@
 
     });
 
+
     $('#btnEdit').click(function(){
         $('#detail').hide();
         $('#update').show();
@@ -564,7 +566,7 @@
 
     $('#subjectsDropdown').change(function(){
         var id=this.value;
-        var route='get-subject-batches/'+id;
+        var route='/get-subject-batches/'+id;
         $.get(route,function(res){
             //console.log(res);
             var batch= $.map(res,function(value,index){
@@ -588,7 +590,7 @@
     $('#batch-select').change(function(){
         var id=this.value;
         var subject_id= $('#subjectsDropdown').val();
-        var route='get-subject-classes/'+id+'/'+subject_id;
+        var route='/get-subject-classes/'+id+'/'+subject_id;
         $.get(route,function(res){
 
             if(res.length == 0)
@@ -611,9 +613,9 @@
         var id = this.value;
         var subject_id= $('#subjectsDropdown').val();
         var batch_id= $('#batch-select').val();
-        var route='get-subject-divisions/'+id+'/'+subject_id+'/'+batch_id;
-        console.log(route);
+        var route='/get-subject-divisions/'+id+'/'+subject_id+'/'+batch_id;
         $.get(route,function(res){
+            $('#division').html(" ");
             var str = "";
 
             var arrStr= $.map(res,function(value){
@@ -628,13 +630,14 @@
 
                     str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
 
-                        '<input type="checkbox" value="'+arrStr[i]['div_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['div_id']+'" name="divisions[]">'+
+                        '<input type="checkbox" value="'+arrStr[i]['div_id']+'" id="'+arrStr[i]['div_id']+'" class="FirstDiv" class="input-checkbox" onchange="Selectallcheckbox()" name="divisions[]">'+
                         '<label for="'+arrStr[i]['div_id']+'">'+
                         ''+arrStr[i]['division_name']+''+
                         '</label>'+
                         '</div>';
                 }
                 $('#division').html(str);
+                FormElements.init();
             }
         });
 
@@ -688,7 +691,7 @@
 
             }
             $('#studentList').html(str1);
-            TableData.init();
+            $("#tableData").dataTable().fnDestroy();
             if($('.allCheckedStud1').prop('checked') == true)
             {
                 $('.checkedStud1').each(function() { //loop through each checkbox
@@ -715,7 +718,22 @@
         }
     });
 
+    $('#subjectsDropdown').change(function(){
+
+        $('#classDropdown').val('');
+        $('#batch-select').val('');
+        $('#division').html('');
+        $('#studentList').html('');
+        FormElements.init();
+    });
+
+    $('#classDropdown').change(function(){
+        FormElements.init();
+    });
+
+
 </script>
+
 
 
 <!-- start: MAIN JAVASCRIPTS -->

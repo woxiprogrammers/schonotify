@@ -16,8 +16,7 @@ class AddFkToExamsTable extends Migration
             $table->foreign('exam_type')
                 ->references('id')
                 ->on('exam_types')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 

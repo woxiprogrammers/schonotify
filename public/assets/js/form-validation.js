@@ -325,7 +325,7 @@ var FormValidator = function () {
             ignore: "",
             rules: {
                 class: {
-                    minlength: 2,
+
                     required: true,
                     remote: {
                         url: "/check-class",
@@ -345,7 +345,6 @@ var FormValidator = function () {
             messages: {
                 class:{
                     required:"Class name is required",
-                    minlength:"Please enter at least 2 character",
                     remote:"Class name already in use !!"
                 }
 
@@ -870,7 +869,7 @@ var FormValidator = function () {
                 studentinfo:{
                     required:true
                 },
-                divisions:{
+                'divisions[]':{
                     required:true
                 }
             },
@@ -879,7 +878,7 @@ var FormValidator = function () {
                 homeworkType: "Please select homework type",
                 batch: "Please select batch",
                 classDropdown: "Please select class",
-                divisions: "Please select at least one division",
+                'divisions[]': "Please select at least one division",
                 studentinfo: "Please select at least one student",
                 pdfFile:{
                     maxlength: "select only pdf files of size 25 mb",

@@ -16,13 +16,11 @@ class AddForeignKeyToDivisionsTable extends Migration
             $table->foreign('class_id')
                 ->references('id')
                 ->on('classes')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('class_teacher_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
         });
     }

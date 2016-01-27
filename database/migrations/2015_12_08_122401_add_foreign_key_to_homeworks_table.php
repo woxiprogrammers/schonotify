@@ -16,13 +16,11 @@ class AddForeignKeyToHomeworksTable extends Migration
             $table->foreign('homework_type_id')
                 ->references('id')
                 ->on('homework_types')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('subject_id')
                 ->references('id')
                 ->on('subjects')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 

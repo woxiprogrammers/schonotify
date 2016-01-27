@@ -16,8 +16,7 @@ class AddFKToLeaveTable extends Migration
             $table->foreign('division_id')
                 ->references('id')
                 ->on('divisions')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 

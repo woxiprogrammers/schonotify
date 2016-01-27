@@ -170,6 +170,7 @@
             }
 
         }
+
         public function checkTeacher($subject,$division)
         {
             $check=SubjectClassDivision::join('users','users.id','=','division_subjects.teacher_id')->where('subject_id','=',$subject)->where('division_subjects.division_id','=',$division)->select('users.username','users.first_name as firstname','users.last_name as lastname')->get();
