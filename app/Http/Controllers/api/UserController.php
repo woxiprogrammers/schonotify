@@ -92,7 +92,8 @@ class UserController extends Controller
                         $userDataArray=$userData->toArray();
                         foreach($userDataArray as $value ){
                             $messageCount=Message::where('to_id',$value['id'])
-                                ->where('read_status',0)
+                                ->where('read_status','=',0)
+                                ->where('is_delete','=',0)
                                 ->count();
                             $data['Badge_count'][$i]['user_id']=$value['id'];
                             $data['Badge_count'][$i]['message_count'] = $messageCount;
@@ -102,6 +103,7 @@ class UserController extends Controller
                     }else{
                         $messageCount=Message::where('to_id',$user->id)
                             ->where('read_status',0)
+                            ->where('is_delete','=',0)
                             ->count();
                         $data['Badge_count']['user_id']=$user->id;
                         $data['Badge_count']['message_count'] = $messageCount;
@@ -144,11 +146,9 @@ class UserController extends Controller
                 $batchList = $batchData->toArray();
             }elseif($data['teacher']['role_id'] == 2){
                 $divisionList = SubjectClassDivision::where('teacher_id',$data['teacher']['id'])->select('division_id')->get();
-                $divisionInfo = Division::wherein('id',$divisionList)->select('id')->get();
+                $divisionInfo = Division::wherein('id',$divisionList)->select('class_id')->distinct()->get();
                 $classInfo = Classes::wherein('id',$divisionInfo)->select('id')->get();
-                $batchInfo = Batch::wherein('id',$classInfo)->select('id')->get();
-                $batchData = Batch::wherein('id',$batchInfo)->select('id','name')->get();
-                $batchList = $batchData->toArray();
+                $batchInfo = Batch::wherein('id',$classInfo)->select('id','name')->get()->toArray();
             }
             $message="Successfully Listed";
             $status=200;
@@ -160,7 +160,7 @@ class UserController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $batchList
+            "data" => $batchInfo
         ];
         return response($response, $status);
     }

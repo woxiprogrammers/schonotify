@@ -303,6 +303,8 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-message-list','api\MessageController@getMessageList');
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
+    Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
+    Route::get('get-acl-details','api\MessageController@getAclDetails');
 
 
  //Homework related
@@ -327,6 +329,8 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
     Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
 
     Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
+
+    Route::get('view-homework','api\HomeworkController@viewHomeWork');
 
     Route::get('view-unpublished-homework',array('uses' => 'api\HomeworkController@viewUnpublishedHomeWork'));
     //remained
