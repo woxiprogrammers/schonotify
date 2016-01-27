@@ -147,7 +147,7 @@
 
     Route::get('get-edit-data/{id}','HomeworkController@editDataDiv');
 
-    Route::get('get-subject-divisions/{id}/{subject_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
+    Route::get('get-subject-divisions/{id}/{subject_id}/{batch_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
     Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
 
