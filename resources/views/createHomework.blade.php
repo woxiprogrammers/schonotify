@@ -236,12 +236,18 @@
             var batch= $.map(res,function(value,index){
                 return value;
             });
+            if(batch.length == 0)
+            {
+                $('#batch-select').html("no record found");
+            }
+            else{
             var str='<option value="">Select Batch</option>';
             for(var i=0; i<batch.length; i++)
             {
-                str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch_slug']+'</option>';
+                str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch']+'</option>';
             }
             $('#batch-select').html(str);
+            }
         });
     });
 
@@ -250,37 +256,52 @@
         var subject_id= $('#subjectsDropdown').val();
         var route='get-subject-classes/'+id+'/'+subject_id;
         $.get(route,function(res){
-            var str='<option value="">please select class</option>';
-            for(var i=0; i<res.length; i++)
+
+            if(res.length == 0)
             {
-                str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_slug']+'</option>';
+                $('#classDropdown').html("no record found");
             }
-            $('#classDropdown').html(str);
-        });
+            else{
+
+                var str='<option value="">please select class</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                }
+                $('#classDropdown').html(str);
+            }
+            });
     });
 
     $("#classDropdown").change(function() {
         var id = this.value;
         var subject_id= $('#subjectsDropdown').val();
-        var route='get-subject-divisions/'+id+'/'+subject_id;
+        var batch_id= $('#batch-select').val();
+        var route='get-subject-divisions/'+id+'/'+subject_id+'/'+batch_id;
+        console.log(route);
         $.get(route,function(res){
             var str = "";
 
             var arrStr= $.map(res,function(value){
                 return value;
             });
-            for(var i=0; i<arrStr.length; i++){
-
-                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
-
-                    '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]">'+
-                    '<label for="'+arrStr[i]['division_id']+'">'+
-                    ''+arrStr[i]['division_name']+''+
-                    '</label>'+
-                    '</div>';
+            if(arrStr.length == 0)
+            {
+                $('#division').html("no record found");
             }
-            $('#division').html(str);
+            else{
+                for(var i=0; i<arrStr.length; i++){
 
+                    str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                        '<input type="checkbox" value="'+arrStr[i]['div_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['div_id']+'" name="divisions[]">'+
+                        '<label for="'+arrStr[i]['div_id']+'">'+
+                        ''+arrStr[i]['division_name']+''+
+                        '</label>'+
+                        '</div>';
+                }
+                $('#division').html(str);
+            }
         });
 
     });
@@ -310,7 +331,11 @@
             "</thead>"+
             "<tbody id='studentList'>";
 
-
+            if(res.length == 0)
+            {
+                $('#tableData').html("no record found");
+            }
+            else{
             for(var i=0; i<res.length; i++){
                 str+=' <tr>'+
                     '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
@@ -322,6 +347,7 @@
             str += '</tbody>'+
             '</table>';
             $('#tableData').html(str);
+            }
 
             jQuery(document).ready(function() {
                 TableData.init();

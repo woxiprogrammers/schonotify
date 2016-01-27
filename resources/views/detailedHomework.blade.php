@@ -336,19 +336,24 @@
         {
             var id=sub;
             var route='/get-subject-batches/'+id;
+            console.log(route);
             $.get(route,function(res){
                 var batch= $.map(res,function(value,index){
                     return value;
                 });
+                if(batch.length == 0)
+                {
+                    $('#batch-select').html("no record found");
+                }
+                else{
                 var str='<select class="form-control" id="batch-select" style="-webkit-appearance: menulist;" name="batch" >';
-
                 @foreach($editHomeworkBatch as $row)
 
                 for(var i=0; i<batch.length; i++)
                 {
                     if(batch[i]['batch_id'] == "{!! $row['batch_id'] !!}" )
                         {
-                            str+='<option selected value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
+                            str+='<option selected value="'+batch[i]['batch_id']+'" >'+batch[i]['batch']+'</option>';
                         }
                 }
 
@@ -356,27 +361,34 @@
 
 
                 $('#batch-select-div').html(str);
+                }
 
                 $val=$('#batch-select').val();
                     var route='/get-subject-classes/'+$val+'/'+id;
                     $.get(route,function(res){
+                        if(res.length == 0)
+                        {
+                            $('#classDropdown').html("no record found");
+                        }
+                        else{
                         var str='<option value="">please select class</option>';
                        @foreach($editHomeworkClass as $row)
                         for(var i=0; i<res.length; i++)
                         {
                             if(res[i]['class_id'] == "{!! $row['class_id'] !!}" )
                             {
-                            str+='<option value="'+res[i]['class_id']+'" selected>'+res[i]['class_slug']+'</option>';
+                            str+='<option value="'+res[i]['class_id']+'" selected>'+res[i]['class_name']+'</option>';
                             }
                         }
                          @endforeach
 
                         $('#classDropdown').html(str);
+                        }
 
                         var val1=$('#classDropdown').val();
 
 
-                        var route='/get-subject-divisions/'+val1+'/'+id;
+                        var route='/get-subject-divisions/'+val1+'/'+id+'/'+$val;
 
 
                         $.get(route,function(res5){
@@ -385,6 +397,7 @@
                             var arrStr= $.map(res5,function(value){
                                 return value;
                             });
+                            console.log(arrStr);
 
                             var hrId=$('#homework_id').val();
 
@@ -392,30 +405,35 @@
 
 
                             $.get(route1,function(res7){
-
+                                if(res5.length == 0)
+                                {
+                                    $('#division').html("no record found");
+                                }
+                                else{
                                 var arr1=[];
                                 for(var i=0; i<res7.length; i++)
                                 {
                                     arr1[i]=res7[i]['division_id'];
                                 }
 
+
                                 for(var i=0; i<arrStr.length; i++){
 
-                                   if($.inArray(arrStr[i]['division_id'],arr1)!=-1)
+                                   if($.inArray(arrStr[i]['div_id'],arr1)!=-1)
                                     {
                                         str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
 
-                                            '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" checked>'+
-                                            '<label for="'+arrStr[i]['division_id']+'">'+
-                                            ''+arrStr[i]['division_slug']+''+
+                                            '<input type="checkbox" value="'+arrStr[i]['div_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['div_id']+'" name="divisions[]" checked>'+
+                                            '<label for="'+arrStr[i]['div_id']+'">'+
+                                            ''+arrStr[i]['division_name']+''+
                                             '</label>'+
                                             '</div>';
                                     }else{
                                         str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
 
-                                            '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" >'+
-                                            '<label for="'+arrStr[i]['division_id']+'">'+
-                                            ''+arrStr[i]['division_slug']+''+
+                                            '<input type="checkbox" value="'+arrStr[i]['div_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['div_id']+'" name="divisions[]" >'+
+                                            '<label for="'+arrStr[i]['div_id']+'">'+
+                                            ''+arrStr[i]['division_name']+''+
                                             '</label>'+
                                             '</div>';
                                     }
@@ -423,6 +441,7 @@
                                 }
 
                                 $('#division').html(str);
+                                }
 
 
 
@@ -545,60 +564,80 @@
 
     $('#subjectsDropdown').change(function(){
         var id=this.value;
-
-        var route='/get-subject-batches/'+id;
+        var route='get-subject-batches/'+id;
         $.get(route,function(res){
+            //console.log(res);
             var batch= $.map(res,function(value,index){
                 return value;
             });
-            var str='<option value="">Select Batch</option>';
-
-
-            for(var i=0; i<batch.length; i++)
+            if(batch.length == 0)
             {
-                str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch_slug']+'</option>';
+                $('#batch-select').html("no record found");
             }
-            $('#batch-select').html(str);
+            else{
+                var str='<option value="">Select Batch</option>';
+                for(var i=0; i<batch.length; i++)
+                {
+                    str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch']+'</option>';
+                }
+                $('#batch-select').html(str);
+            }
         });
     });
 
     $('#batch-select').change(function(){
         var id=this.value;
         var subject_id= $('#subjectsDropdown').val();
-        var route='/get-subject-classes/'+id+'/'+subject_id;
+        var route='get-subject-classes/'+id+'/'+subject_id;
         $.get(route,function(res){
-            var str='<option value="">please select class</option>';
-            for(var i=0; i<res.length; i++)
+
+            if(res.length == 0)
             {
-                str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_slug']+'</option>';
+                $('#classDropdown').html("no record found");
             }
-            $('#classDropdown').html(str);
+            else{
+
+                var str='<option value="">please select class</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                }
+                $('#classDropdown').html(str);
+            }
         });
     });
 
     $("#classDropdown").change(function() {
         var id = this.value;
         var subject_id= $('#subjectsDropdown').val();
-        var route='/get-subject-divisions/'+id+'/'+subject_id;
+        var batch_id= $('#batch-select').val();
+        var route='get-subject-divisions/'+id+'/'+subject_id+'/'+batch_id;
+        console.log(route);
         $.get(route,function(res){
             var str = "";
 
             var arrStr= $.map(res,function(value){
                 return value;
             });
-            for(var i=0; i<arrStr.length; i++){
-
-                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
-
-                    '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]">'+
-                    '<label for="'+arrStr[i]['division_id']+'">'+
-                    ''+arrStr[i]['division_slug']+''+
-                    '</label>'+
-                    '</div>';
+            if(arrStr.length == 0)
+            {
+                $('#division').html("no record found");
             }
-            $('#division').html(str);
+            else{
+                for(var i=0; i<arrStr.length; i++){
 
+                    str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                        '<input type="checkbox" value="'+arrStr[i]['div_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['div_id']+'" name="divisions[]">'+
+                        '<label for="'+arrStr[i]['div_id']+'">'+
+                        ''+arrStr[i]['division_name']+''+
+                        '</label>'+
+                        '</div>';
+                }
+                $('#division').html(str);
+            }
         });
+
     });
 
     function Selectallcheckbox(){
@@ -610,7 +649,6 @@
         {
             aIds.push(all_location_id[x].value);
         }
-
         var route='/get-division-students';
         $.post(route,{id:aIds},function(res1){
 
