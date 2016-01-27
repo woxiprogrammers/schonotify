@@ -169,6 +169,86 @@ class MessageController extends Controller
         return response($response, $status);
     }
 
+    public function getMessageCount(Request $request , $id){
+        try {
+         $finalMessageCount=array();
+        $data=$request->all();
+        if($data['teacher']['role_id']==4)
+        {
+            $i=0;
+            $userData=User::where('parent_id','=',$data['users']['user_id'])->get();
+            $userDataArray=$userData->toArray();
+            foreach($userDataArray as $value ){
+                $messageCount=Message::where('to_id',$value['id'])
+                    ->where('read_status',0)
+                    ->count();
+                $finalMessageCount['Badge_count'][$i]['user_id']=$value['id'];
+                $finalMessageCount['Badge_count'][$i]['message_count'] = $messageCount;
+                $finalMessageCount['Badge_count'][$i]['auto_notification_count'] = $messageCount;
+                $i++;
+            }
+            $status=200;
+            $message="Success";
+        }else{
+            $messageCount=Message::where('to_id',$id)
+                ->where('read_status',0)
+                ->count();
+            $finalMessageCount['Badge_count']['user_id']=$id;
+            $finalMessageCount['Badge_count']['message_count'] = $messageCount;
+            $finalMessageCount['Badge_count']['auto_notification_count'] = $messageCount;
+         }
+        $status=200;
+        $message="Success";
+         } catch (\Exception $e) {
+                $status = 500;
+                $message = "something went wrong". $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "Data" => $finalMessageCount
+        ];
+        return response($response, $status);
+}
+    public function getAclDetails(Request $request ){
+    try {
+        $data=$request->all();
+        $finalAclDetails=array();
+        $acl_module=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
+            ->where('users.id','=', $data['teacher']['id'])
+            ->select('users.id','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
+            ->get();
+        $AclModuleArray=array();
+        $i=0;
+        if($acl_module!=null)
+        {
+            foreach($acl_module as $val)
+            {
+                array_push($AclModuleArray,$val->acl.'_'.$val->module_slug);
+            }
+            $data['Acl_Modules']['user_id']= $data['teacher']['id'];
+
+            foreach($AclModuleArray as $val)
+            {
+                $finalAclDetails['Acl_Modules'][$i]=$val;
+                $i++;
+            }
+        }
+        $message="Success";
+        $status=200;
+     }catch (\Exception $e) {
+        $status = 500;
+        $message = "something went wrong". $e->getMessage();
+    }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "Data" => $finalAclDetails
+        ];
+        return response($response, $status);
+    }
     public function getDetailMessages(Request $request ){
         $finalMessageData=array();
         $MessageData=array();
