@@ -17,20 +17,17 @@ class AddFkToModuleAclTable extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
             $table->foreign('module_id')
                 ->references('id')
                 ->on('modules')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
             $table->foreign('acl_id')
                 ->references('id')
                 ->on('acl_master')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
         });
     }

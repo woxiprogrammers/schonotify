@@ -691,7 +691,7 @@
 
             }
             $('#studentList').html(str1);
-            TableData.init();
+            $("#tableData").dataTable().fnDestroy();
             if($('.allCheckedStud1').prop('checked') == true)
             {
                 $('.checkedStud1').each(function() { //loop through each checkbox

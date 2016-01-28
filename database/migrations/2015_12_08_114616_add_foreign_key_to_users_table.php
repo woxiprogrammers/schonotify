@@ -16,18 +16,15 @@ class AddForeignKeyToUsersTable extends Migration
             $table->foreign('role_id')
                 ->references('id')
                 ->on('user_roles')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('body_id')
                 ->references('id')
                 ->on('bodies')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('division_id')
                 ->references('id')
                 ->on('divisions')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 

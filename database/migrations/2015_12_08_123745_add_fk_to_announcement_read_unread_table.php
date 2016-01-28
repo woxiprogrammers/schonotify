@@ -16,14 +16,12 @@ class AddFkToAnnouncementReadUnreadTable extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
             $table->foreign('event_id')
                 ->references('id')
                 ->on('events')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
         });
     }
