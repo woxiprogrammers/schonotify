@@ -16,8 +16,7 @@ class AddForeignKeyToTimetablesTable extends Migration
             $table->foreign('division_subject_id')
                 ->references('id')
                 ->on('division_subjects')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
         });
     }

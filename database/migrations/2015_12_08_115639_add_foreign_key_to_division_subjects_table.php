@@ -16,18 +16,15 @@ class AddForeignKeyToDivisionSubjectsTable extends Migration
             $table->foreign('division_id')
                 ->references('id')
                 ->on('divisions')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('teacher_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('subject_id')
                 ->references('id')
                 ->on('subjects')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
         });
     }

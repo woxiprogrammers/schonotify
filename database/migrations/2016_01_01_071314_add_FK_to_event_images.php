@@ -16,8 +16,7 @@ use Illuminate\Database\Schema\Blueprint;
                         $table->foreign('event_id')
                             ->references('id')
                             ->on('events')
-                           ->onUpdate('cascade')
-                            ->onDelete('cascade');
+                           ->onUpdate('cascade');
          });
             }
 
