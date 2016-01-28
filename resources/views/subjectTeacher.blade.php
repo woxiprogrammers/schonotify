@@ -124,14 +124,15 @@
                                 </thead>
                                 <tbody>
                                 @foreach($associations as $association)
-                                <tr>
-                                    <td>{!! $association->batch !!}</td>
-                                    <td>{!! $association->class !!}</td>
-                                    <td>{!! $association->division !!}</td>
-                                    <td>{!! $association->subject !!}</td>
-                                    <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
-                                    <td><a onclick="deleteConfirm({!! $association->id !!});">Delete</a></td>
-                                </tr>
+                                    <tr>
+                                        <td>{!! $association->batch !!}</td>
+                                        <td>{!! $association->class !!}</td>
+                                        <td>{!! $association->division !!}</td>
+                                        <td>{!! $association->subject !!}</td>
+                                        <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
+                                        <td><a onclick="deleteConfirm({!! $association->id !!});">Delete</a></td>
+                                    </tr>
+
                                 @endforeach
                                 </tbody>
 
