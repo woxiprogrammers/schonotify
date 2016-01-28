@@ -62,7 +62,7 @@ class HomeworkController extends Controller
                 //above code is for take homeworkids for users
                 $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
                 $i=0;
-                $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+                $homeworkInfo=Homework::wherein('id',$homeworkId)->orderby('status')->get()->toArray();
                 $currentDate = new DateTime(Carbon::now());
 
                 foreach($homeworkInfo as $home)
@@ -90,7 +90,7 @@ class HomeworkController extends Controller
                     $batch=Batch::where('id',$class['batch_id'])->first();
                     $homeworkDiv[$i]['div']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_division_name'][$i]=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
                     $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
@@ -99,7 +99,8 @@ class HomeworkController extends Controller
 
 
                 }
-                }else{
+
+            }else{
                 $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
                 foreach($homeworkTeacher as $row)
                 {
@@ -109,7 +110,8 @@ class HomeworkController extends Controller
                 //above code is for take homeworkids for users
                 $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
                 $i=0;
-                $homeworkInfo=Homework::wherein('id',$homeworkId)->get()->toArray();
+                $homeworkInfo=Homework::wherein('id',$homeworkId)->orderby('status')->get()->toArray();
+
                 $currentDate = new DateTime(Carbon::now());
 
                 foreach($homeworkInfo as $home)
@@ -136,7 +138,7 @@ class HomeworkController extends Controller
                     $batch=Batch::where('id',$class['batch_id'])->first();
                     $homeworkDiv[$i]['div']=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_division_name']=$division['division_name'];
+                    $homeworkIdss[$row['homework_id']]['homework_division_name'][$i]=$division['division_name'];
                     $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
                     $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
                     $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
@@ -148,6 +150,13 @@ class HomeworkController extends Controller
 
 
             }
+            foreach($homeworkIdss as $row)
+            {
+                $rq= array_unique($row['homework_division_name']);
+                $homeworkIdss[$row['homework_id']]['divs']=$rq;
+
+            }
+            //dd($homeworkIdss);
             /*$division_name=array();
             $homeworkDiv = array_unique($homeworkDiv, SORT_REGULAR);
             foreach($homeworkDiv as $row)
@@ -156,7 +165,7 @@ class HomeworkController extends Controller
             }
 
             $homeworkIdss['divs']=$division_name;*/
-           // dd($homeworkIdss);
+
             //dd($homeworkDiv[0]['div']);
 
          return view('homeworkListing')->with(compact('homeworkIdss','homeworkDiv'));
@@ -167,6 +176,7 @@ class HomeworkController extends Controller
 
     public function detailedHomework($id)
     {   $homeworkIdss=array();
+        $homeworkdivs=array();
         $homeworkdiv=array();
         $homeworkTypes=array();
         $homework=array();
@@ -206,7 +216,8 @@ class HomeworkController extends Controller
                 $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
                 $student_name=User::where('id',$row['student_id'])->first();
                 $division=Division::where('id',$student_name['division_id'])->first();
-                $class=Classes::where('id',$student_name['division_id'])->first();
+                $class=Classes::where('id',$division['class_id'])->first();
+
                 $batch=Batch::where('id',$class['batch_id'])->first();
                 $editHomeworkDiv[$i]['division_name']=$division['division_name'];
                 $editHomeworkDiv[$i]['division_id']=$division['id'];
@@ -226,15 +237,21 @@ class HomeworkController extends Controller
 
                 $i++;
 
+
             $i=0;
-            foreach($homeworkIdss[$row['homework_id']]['homework_student_list'] as $row1){
-                $homeworkdiv[$i]['div']=$row1['division'];
-                $homeworkdiv[$i]['class']=$row1['class'];
-                $homeworkdiv[$i]['batch']=$row1['batch'];
+
+                foreach($homeworkIdss[$row['homework_id']]['homework_student_list'] as $row1){
+
+                $homeworkdiv[$row1['batch']][$row1['class']][$i]=$row1['division'];
+                $homeworkdiv['batch']=$row1['batch'];
+                $homeworkdiv['class']=$row1['class'];
                 $i++;
             }
+            $homeworkdivs = array_unique($homeworkdiv[$row1['batch']][$row1['class']], SORT_REGULAR);
             }
-            $homeworkdiv = array_unique($homeworkdiv, SORT_REGULAR);
+            $homeworkdiv['divisions']=$homeworkdivs;
+
+
             $homeworkType=HomeworkType::all();
             foreach($homeworkType as $type)
             {
@@ -273,6 +290,7 @@ class HomeworkController extends Controller
             $homework = array_unique($homework, SORT_REGULAR);
 
 
+
         }else{
             $divisionSubjects=SubjectClassDivision::where('teacher_id',$user->id)
                 ->join('subjects','division_subjects.subject_id','=','subjects.id')
@@ -291,6 +309,7 @@ class HomeworkController extends Controller
         {
             array_push($subjectId,$row['subject_id']);
         }
+
 
 
             return view('detailedHomework')->with(compact('homeworkIdss','homeworkdiv','homeworkTypes','homework','editHomeworkDiv','editHomeworkBatch','editHomeworkClass'));
@@ -323,7 +342,10 @@ class HomeworkController extends Controller
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
 
-            $subjects=SubjectClass::where('class_id',$division->class_id)->join('subjects','subject_classes.subject_id','=','subjects.id')->get();
+            $subjects=SubjectClassDivision::where('division_id',$division->id)
+                ->join('subjects','division_subjects.subject_id','=','subjects.id')
+                ->select('subjects.id','subjects.slug','division_subjects.division_id')
+                ->get();
                 foreach($subjects as $row)
                 {
                     $homework[$i]['subjects'] = $row ['slug'] ;
@@ -428,102 +450,158 @@ class HomeworkController extends Controller
 
     public function getSubjectBatches($subjectId)
     {
+        $user=Auth::user();
+        $division=array();
         $batchInfo=array();
-        $batches=array();
-        $classes=array();
-        $class_id=SubjectClass::where('id',$subjectId)->get()->toArray();
-        foreach($class_id as $row)
+        $Classes=array();
+        $divisionData=SubjectClassDivision::where('subject_id','=',$subjectId)
+            ->where('teacher_id','=',$user->id)
+            ->select('division_id')
+            ->get()->toArray();
+        $k=0;
+        if(!Empty($divisionData))
         {
-            $classes[]=$row['class_id'];
+            foreach($divisionData as $value){
+                $division['id'][$k]=$value['division_id'];
+                $k++;
+            }
         }
-        $batch=Classes::wherein('id',$classes)->get()->toArray();
+        $divisions=Division::where('class_teacher_id','=',$user->id)->first();
+        if(!Empty($divisions)){
+            $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                ->where('subject_id','=',$subjectId)
+                ->select('division_id')
+                ->get()->toArray();
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+        }
+        $DivisionArray=array_unique($division['id'],SORT_REGULAR);
         $i=0;
-        foreach($batch as $row)
+        foreach ($DivisionArray  as $value)
         {
-            $batches[]=$row['batch_id'];
-            $subjectClass[$i]['class_id']=$row['id'];
-            $subjectClass[$i]['class_slug']=$row['slug'];
+            $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+            $className=Classes::where('id','=',$class_id['class_id'])->select('class_name as class_name', 'batch_id as batch_id')->first();
+            if(!Empty($class_id)){
+                $Classes[$i]['id']=$class_id['class_id'];
+                $Classes[$i]['name']=$className['class_name'];
+                $Classes[$i]['batch_id']=$className['batch_id'];
+                $i++;
+            }
+        }
+        $i=0;
+        foreach($Classes as $row)
+        {
+            $batchName=Batch::where('id',$row['batch_id'])->first();
+            $batchInfo[$i]['batch_id']=$batchName['id'];
+            $batchInfo[$i]['batch']=$batchName['name'];
             $i++;
         }
-        $batchName=Batch::wherein('id',$batches)->get()->toArray();
-        foreach($batchName as $row)
-        {
-            $batchInfo[$i]['batch_id']=$row['id'];
-            $batchInfo[$i]['batch_slug']=$row['slug'];
-            $i++;
-        }
+        $batchInfo=array_unique($batchInfo,SORT_REGULAR);
         return $batchInfo;
 
 
     }
 
     public function getSubjectClass($id,$subject_id){
+        $division=array();
+        $user=Auth::user();
         $classInfo=array();
-        $classSubject=array();
-        $subjectClassId=SubjectClass::where('id',$subject_id)->get();
-        foreach($subjectClassId as $row)
-       {
-          $classSubject['class_id'] = $row['class_id'];
-       }
-       $class=Classes::where('batch_id',$id)->
-                       where('id',$classSubject['class_id'])
-                       ->get();
+        $divisionData=SubjectClassDivision::where('subject_id','=',$subject_id)
+            ->where('teacher_id','=',$user->id)
+            ->select('division_id')
+            ->get()->toArray();
+        $k=0;
+        if(!Empty($divisionData))
+        {
+            foreach($divisionData as $value){
+                $division['id'][$k]=$value['division_id'];
+                $k++;
+            }
+        }
+        $divisions=Division::where('class_teacher_id','=',$user->id)->first();
+        if(!Empty($divisions)){
+            $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                ->where('subject_id','=',$subject_id)
+                ->select('division_id')
+                ->get()->toArray();
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+        }
+        $DivisionArray=array_unique($division['id'],SORT_REGULAR);
         $i=0;
-       foreach($class as $row)
-       {
-           $classInfo[$i]['class_id']=$row['id'];
-           $classInfo[$i]['class_slug']=$row['slug'];
-           $i++;
-       }
+        foreach ($DivisionArray  as $value){
+            $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+            $className=Classes::where('id','=',$class_id['class_id'])
+                ->where('batch_id','=',$id)
+                ->select('id','class_name as class_name')->first();
+            if(!Empty($class_id)&&!Empty($className)){
+                $classInfo[$i]['class_id']=$class_id['class_id'];
+                $classInfo[$i]['class_name']=$className['class_name'];
+                $i++;
+            }
+        }
+        $classInfo=array_unique($classInfo,SORT_REGULAR);
         return $classInfo;
     }
 
-    public function getSubjectDiv($id,$subject_id){
+    public function getSubjectDiv($id,$subject_id,$batch_id){
+
         $user=Auth::user();
-
         $i=0;
-        $divArray=array();
-        $divisionArray=array();
-        $division=Division::where('class_teacher_id',$user->id)->first();
-            if($division != null){
-                $divisionInfo=Division::where('class_id',$id)->where('class_teacher_id',$user->id)->first();
-                $divisionArray[0]['division_id']=$divisionInfo->id;
-                $divisionArray[0]['division_slug']=$divisionInfo->slug;
-                $divSubjects=SubjectClassDivision::where('teacher_id',$user->id)
-                                                  ->where('subject_id',$subject_id)->get();
-                foreach($divSubjects as $row)
-                {
-                    $divArray[$i]=$row['division_id'];
-                    $i++;
-                }
-                    $divs=Division::wherein('id',$divArray)->get();
-                    foreach($divs as $row)
-                    {
-                        $divisionArray[$i]['division_id']=$row['id'];
-                        $divisionArray[$i]['division_slug']=$row['slug'];
-                        $i++;
-                    }
-                $divisionArray = array_unique($divisionArray, SORT_REGULAR);
-
-            }else{
-                $divSubjects=SubjectClassDivision::where('teacher_id',$user->id)
-                                                ->where('subject_id',$subject_id)->get();
-                foreach($divSubjects as $row)
-                {
-                    $divArray[$i]=$row['division_id'];
-                    $i++;
-                }
-                $divs=Division::wherein('id',$divArray)->get();
-                foreach($divs as $row)
-                {
-                    $divisionArray[$i]['division_id']=$row['id'];
-                    $divisionArray[$i]['division_slug']=$row['slug'];
-                    $i++;
-                }
-                $divisionArray = array_unique($divisionArray, SORT_REGULAR);
-
+        $division=array();
+        $finalDivisions=array();
+        $divisionData=SubjectClassDivision::where('subject_id','=',$subject_id)
+            ->where('teacher_id','=',$user->id)
+            ->select('division_id')
+            ->get()->toArray();
+        $k=0;
+        if(!Empty($divisionData))
+        {
+            foreach($divisionData as $value){
+                $division['id'][$k]=$value['division_id'];
+                $k++;
             }
-        return $divisionArray;
+        }
+        $divisions=Division::where('class_teacher_id','=',$user->id)->first();
+        if(!Empty($divisions)){
+            $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                ->where('subject_id','=',$subject_id)
+                ->select('division_id')
+                ->get()->toArray();
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+        }
+        $DivisionArray=array_unique($division['id'],SORT_REGULAR);
+        $i=0;
+        foreach($DivisionArray as $division_id){
+            $finalData=Division::join('classes','divisions.class_id', '=', 'classes.id')
+                ->where('divisions.class_id','=',$id)
+                ->where('classes.batch_id','=',$batch_id)
+                ->where('divisions.id','=',$division_id)
+                ->select('divisions.id as div_id','divisions.division_name')
+                ->first();
+            if(!Empty($finalData)){
+                $finalDivisions[$i]=$finalData;
+                $i++;
+            }
+        }
+        $finalDivisions=array_unique($finalDivisions,SORT_REGULAR);
+        return $finalDivisions;
     }
 
     public function getStudentData(Request $request)
@@ -535,6 +613,17 @@ class HomeworkController extends Controller
         $studentList = $students->toArray();
         return $studentList;
     }
+    public function getEditStudentData(Request $request)
+    {
+        $students = HomeworkTeacher::wherein('homework_teacher.division_id',$request->id)->where('homework_id',$request->homework_id)
+            ->join('users','homework_teacher.student_id','=','users.id')
+            ->join('divisions','users.division_id','=','divisions.id')
+            ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.division_name')
+            ->get();
+        $studentList = $students->toArray();
+        return $studentList;
+    }
+
 
     public function editHomework($id){
         $homeworkUpdate=array();
@@ -569,7 +658,6 @@ class HomeworkController extends Controller
 
 
         $homeworkData= $request->all();
-
         $homework=array();
         $homeworkTeacher=array();
         $i=0;
@@ -612,6 +700,7 @@ class HomeworkController extends Controller
             $HomeworkTeacher['created_at']= Carbon::now();
             $HomeworkTeacher['updated_at']= Carbon::now();
             HomeworkTeacher::insert($HomeworkTeacher);
+
         }
         Session::flash('message-success','homework updated successfully');
         return Redirect::to('/homework-listing');

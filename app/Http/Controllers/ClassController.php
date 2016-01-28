@@ -55,6 +55,7 @@ class ClassController extends Controller
         $user=Auth::User();
         $batch['body_id']=$user->body_id;
         $batch['name']=$batchName;
+        $batch['slug']=strtolower($batchName);
         $cnt=Batch::where('name',$batchName)->count();
         if($cnt<1)
         {
@@ -108,6 +109,7 @@ class ClassController extends Controller
 
         $div['class_id']=$request->classDropdown;
         $div['division_name']=strtoupper($request->division);
+        $div['slug']=strtolower($request->division);
         $cnt=Division::where($div)->count();
 
         if($cnt>0)

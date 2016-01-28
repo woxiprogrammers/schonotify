@@ -14,7 +14,6 @@ class HomeworkRequest extends Request
      */
     public function authorize()
     {
-
         $userToken=$this->request->all();
         $userId='';
         foreach($userToken as $userData)
@@ -34,6 +33,7 @@ class HomeworkRequest extends Request
 
         }
         switch ($this->method()) {
+
             case 'GET':
                 if(in_array('View_homework',$resultArr) ){
                     return true;
@@ -43,7 +43,8 @@ class HomeworkRequest extends Request
                 }
                 break;
             case 'PUT':
-                if(in_array('Update_homework',$resultArr) ){
+
+                if(in_array('Edit_homework',$resultArr) ){
                     return true;
                 }
                 else{
@@ -71,6 +72,7 @@ class HomeworkRequest extends Request
      */
     public function rules()
     {
+
         switch ($this->method()) {
             case 'GET':
                 return [];
@@ -86,6 +88,8 @@ class HomeworkRequest extends Request
                     'description' => 'required',
                     'subject_id' => 'required|integer',
                     'homework_id'=> 'required|integer',
+                    'attachment_file' => 'mimes:pdf|max:25000000',
+
                 ];
                 break;
             case 'POST':
@@ -98,6 +102,8 @@ class HomeworkRequest extends Request
                     'due_date' => 'required|date',
                     'description' => 'required',
                     'subject_id' => 'required|integer',
+                    'attachment_file' => 'mimes:pdf|max:25000000',
+
                 ];
                 break;
             default:

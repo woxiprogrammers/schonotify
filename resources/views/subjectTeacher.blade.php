@@ -15,6 +15,7 @@
             <div class="wrap-content container" id="container">
                 <!-- start: DASHBOARD TITLE -->
                 @include('alerts.errors')
+                <div id="message-error-div"></div>
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
@@ -46,7 +47,7 @@
                                             <select class="form-control" id="subjectDropdown" name="subjectDropdown" style="-webkit-appearance: menulist;">
                                                 <option value=""> Please select subjects...</option>
                                                 @foreach($subjects as $subject)
-                                                    <option value="{!! $subject->id !!}">{!! $subject->subject !!}</option>
+                                                <option value="{!! $subject->id !!}">{!! $subject->subject !!}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -94,12 +95,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                                    Add <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                                            Add <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
+                                </div>
 
                             </form>
                         </div>
@@ -131,6 +132,7 @@
                                         <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
                                         <td><a onclick="deleteConfirm({!! $association->id !!});">Delete</a></td>
                                     </tr>
+
                                 @endforeach
                                 </tbody>
 
@@ -301,9 +303,17 @@
         route="/check-sub-teacher/"+subject+"/"+div;
 
         $.get(route,function(res){
-            if(res==1)
+
+            if(res.length!=0)
             {
-                var confirmVal=confirm('teacher '+name+' already assigned to this subject do you want to change it? !');
+                var str='Teacher named';
+
+                for(var i=0; i<res.length; i++)
+                {
+                    str+="\n"+res[i]['firstname']+" "+res[i]['lastname']+" ("+res[i]['username']+")";
+                }
+                    str+='\n is already assigned to this subject do you want to change it ?';
+                var confirmVal=confirm(str);
                 if(confirmVal==false)
                 {
                     $('#teacherDropdown option:eq(0)').attr('selected','selected');

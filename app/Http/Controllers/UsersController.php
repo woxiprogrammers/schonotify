@@ -314,7 +314,7 @@ class UsersController extends Controller
             $userData->mobile = $data['mobile'];
             $userData->alternate_number = $data['alt_number'];
             $userData->role_id = $data['role'];
-            $userData->avatar = 'default-user.png';
+            $userData->avatar = 'default-user.jpg';
             $userData->is_active = 0;
             $userData->remember_token = csrf_token();
             $userData->confirmation_code = str_random(30);
@@ -356,6 +356,10 @@ class UsersController extends Controller
                 }
                 if(isset($data['parent_id'])){
                     $userData = array_add($userData, 'parent_id', $data['parent_id']);
+                    $parent=User::where('id',$data['parent_id'])->select('is_active')->first();
+                    if($parent->is_active == 1){
+                        $userData->is_active = 1;
+                    }
                 }
                 $userData->save();
                 $LastInsertId = $userData->id;
@@ -638,6 +642,11 @@ class UsersController extends Controller
         $userData['division_id']=$request->division;
         $userData['roll_number']=$request->roll_number;
         $homework['division_id'] = $request->division;
+        $checkRollNumber = User::where('division_id',$request->division)->where('roll_number',$request->roll_number)->whereNotIn('id',[$id])->first();
+        if($checkRollNumber){
+           User::where('id',$checkRollNumber->id)->update(['roll_number'=>'0']);
+        }
+
         HomeworkTeacher::where('student_id',$request->id)->update($homework);
         $leaves['division_id']=$request->division;
         Leave::where('student_id',$request->id)->update($leaves);
@@ -746,11 +755,10 @@ class UsersController extends Controller
 
         $userUpdate=User::where('id',$id)->update($userData);
         $teacherViewUpdate=TeacherView::where('user_id',$id)->update($teacherView);
-        if(isset($request->checkbox8)){
+        if ($request->has('checkbox8')){
+            Division::where('class_teacher_id',$id)->update(['class_teacher_id'=>0]);
             Division::where('id',$request->division)->
-                where('class_id',$request->class)->where('class_teacher_id',$id)->update(['class_teacher_id'=>$id]);
-        Division::where('id',$request->division)->
-                  where('class_id',$request->class)->update(['class_teacher_id'=>$id]);
+                      where('class_id',$request->class)->update(['class_teacher_id'=>$id]);
         }else{
             Division::where('id',$request->division)->
                 where('class_id',$request->class)->update(['class_teacher_id'=>0]);
@@ -1021,8 +1029,8 @@ class UsersController extends Controller
             $batchList = $batchData->toArray();
         }elseif($user->role_id == 2){
             $divisionList = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
-            $divisionInfo = Division::wherein('id',$divisionList)->select('id')->get();
-            $classInfo = Classes::wherein('id',$divisionInfo)->select('id')->get();
+            $divisionInfo = Division::wherein('id',$divisionList)->select('class_id')->get();
+            $classInfo = Classes::wherein('id',$divisionInfo)->select('batch_id')->get();
             $batchInfo = Batch::wherein('id',$classInfo)->select('id')->get();
             $batchData = Batch::wherein('id',$batchInfo)->select('id','name')->get();
             $batchList = $batchData->toArray();

@@ -15,6 +15,7 @@
 <div class="wrap-content container" id="container">
 <!-- start: DASHBOARD TITLE -->
 @include('alerts.errors')
+<div id="message-error-div"></div>
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
@@ -36,15 +37,22 @@
                     <i class="fa fa-book fa-2x pull-left fa-border"></i>
                     @foreach($homeworkIdss as $row)
                     <h4 class="panel-title no-margin text-primary" style="padding: 14px;">{!! $row['homework_type']!!}</h4>
+                    @endforeach
                     <h5 style=" background-color: rgb(0, 122, 255);color: #fff;padding: 10px;">
+
                         <strong>Subject: </strong>
+                        @foreach($homeworkIdss as $row)
                         <small class="label label-sm label-white">{!! $row['homework_subject']!!}</small>
                         @endforeach
 
                         <p class="pull-right">
-                            <strong>Batch :</strong> <i>  @foreach($homeworkdiv as $home){!! $home['batch']!!}  @endforeach</i>
-                            <strong>Class :</strong> <i>@foreach($homeworkdiv as $home){!! $home['class']!!}  @endforeach </i>
-                            <strong>Div : </strong> <i> @foreach($homeworkdiv as $home){!! $home['div']!!}| @endforeach</i>
+
+                            <strong>Batch :</strong> <i>  {!! $homeworkdiv['batch'] !!}  </i>
+                            <strong>Class :</strong> <i>{!! $homeworkdiv['class'] !!}  </i>
+
+
+                            <strong>Div : </strong> <i>@foreach($homeworkdiv['divisions'] as $home){!! $home !!} @endforeach</i>
+
                         </p>
 
                     </h5>
@@ -243,7 +251,7 @@
                 <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                     <thead>
                     <tr>
-                        <th><input type="checkbox" class="allCheckedStud1" checked/><span class="position-absolute padding-left-5"><b>Select all</b></span></th>
+                        <th id="selectAllCheck"><input type="checkbox" class="allCheckedStud1"/><span class="position-absolute padding-left-5"><b>Select all</b></span></th>
                         <th>Roll No.</th>
                         <th>Name</th>
                         <th>Division</th>
@@ -313,7 +321,7 @@
         Main.init();
         FormValidator.init();
         FormElements.init();
-        TableData.init();
+       // TableData.init();
 
         $('#update').hide();
         $('#btnStatus').hide();
@@ -328,19 +336,24 @@
         {
             var id=sub;
             var route='/get-subject-batches/'+id;
+            console.log(route);
             $.get(route,function(res){
                 var batch= $.map(res,function(value,index){
                     return value;
                 });
+                if(batch.length == 0)
+                {
+                    $('#batch-select').html("no record found");
+                }
+                else{
                 var str='<select class="form-control" id="batch-select" style="-webkit-appearance: menulist;" name="batch" >';
-
                 @foreach($editHomeworkBatch as $row)
 
                 for(var i=0; i<batch.length; i++)
                 {
                     if(batch[i]['batch_id'] == "{!! $row['batch_id'] !!}" )
                         {
-                            str+='<option selected value="'+batch[i]['batch_id']+'" >'+batch[i]['batch_slug']+'</option>';
+                            str+='<option selected value="'+batch[i]['batch_id']+'" >'+batch[i]['batch']+'</option>';
                         }
                 }
 
@@ -348,66 +361,80 @@
 
 
                 $('#batch-select-div').html(str);
+                }
 
                 $val=$('#batch-select').val();
                     var route='/get-subject-classes/'+$val+'/'+id;
                     $.get(route,function(res){
+                        if(res.length == 0)
+                        {
+                            $('#classDropdown').html("no record found");
+                        }
+                        else{
                         var str='<option value="">please select class</option>';
                        @foreach($editHomeworkClass as $row)
                         for(var i=0; i<res.length; i++)
                         {
                             if(res[i]['class_id'] == "{!! $row['class_id'] !!}" )
                             {
-                            str+='<option value="'+res[i]['class_id']+'" selected>'+res[i]['class_slug']+'</option>';
+                            str+='<option value="'+res[i]['class_id']+'" selected>'+res[i]['class_name']+'</option>';
                             }
                         }
                          @endforeach
 
                         $('#classDropdown').html(str);
 
+                        }
+
                         var val1=$('#classDropdown').val();
 
 
-                        var route='/get-subject-divisions/'+val1+'/'+id;
+                        var route='/get-subject-divisions/'+val1+'/'+id+'/'+$val;
 
 
-                        $.get(route,function(res){
+                        $.get(route,function(res5){
                             var str = "";
 
-                            var arrStr= $.map(res,function(value){
+                            var arrStr= $.map(res5,function(value){
                                 return value;
                             });
+                            console.log(arrStr);
 
                             var hrId=$('#homework_id').val();
 
                             var route1='/get-edit-data/'+hrId;
 
 
-                            $.get(route1,function(res){
-
-                                var arr1=[];
-                                for(var i=0; i<res.length; i++)
+                            $.get(route1,function(res7){
+                                if(res5.length == 0)
                                 {
-                                    arr1[i]=res[i]['division_id'];
+                                    $('#division').html("no record found");
                                 }
+                                else{
+                                var arr1=[];
+                                for(var i=0; i<res7.length; i++)
+                                {
+                                    arr1[i]=res7[i]['division_id'];
+                                }
+
 
                                 for(var i=0; i<arrStr.length; i++){
 
-                                   if($.inArray(arrStr[i]['division_id'],arr1)!=-1)
+                                   if($.inArray(arrStr[i]['div_id'],arr1)!=-1)
                                     {
                                         str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
 
-                                            '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" checked>'+
-                                            '<label for="'+arrStr[i]['division_id']+'">'+
-                                            ''+arrStr[i]['division_slug']+''+
+                                            '<input type="checkbox" value="'+arrStr[i]['div_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['div_id']+'" name="divisions[]" checked>'+
+                                            '<label for="'+arrStr[i]['div_id']+'">'+
+                                            ''+arrStr[i]['division_name']+''+
                                             '</label>'+
                                             '</div>';
                                     }else{
                                         str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
 
-                                            '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]" >'+
-                                            '<label for="'+arrStr[i]['division_id']+'">'+
-                                            ''+arrStr[i]['division_slug']+''+
+                                            '<input type="checkbox" value="'+arrStr[i]['div_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['div_id']+'" name="divisions[]" >'+
+                                            '<label for="'+arrStr[i]['div_id']+'">'+
+                                            ''+arrStr[i]['division_name']+''+
                                             '</label>'+
                                             '</div>';
                                     }
@@ -415,42 +442,78 @@
                                 }
 
                                 $('#division').html(str);
-                            });
+                                }
 
 
-                            var divID =res;
 
-                            var sample= jQuery.map(divID, function(n, i){
+                            var divID =res7;
+                            var sample= jQuery.map(divID, function(n,i){
                                return n.division_id;
                             });
 
-                            var route='/get-division-students';
-                            var divisions=divID;
-                            $.post(route,{id:sample},function(res){
-                            var str = "";
-
-                            for(var i=0; i<res.length; i++){
-                                    str+=' <tr>'+
-                                        '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
-                                        '<td>'+res[i]['roll_number']+'</td>'+
-                                        '<td>'+res[i]['first_name']+' '+res[i]['last_name']+'</td>'+
-                                        '<td>'+res[i]['slug']+'</td>'+
-                                        '</tr>';
-                                }
-                                $('#studentList').html(str);
-                                if($('.allCheckedStud1').prop('checked') == true)
-                                {
-                                    $('.checkedStud1').each(function() { //loop through each checkbox
-                                        this.checked = true;  //select all checkboxes with class "checkbox1"
-                                    });
-                                }
-
-                            });
+                                var route='/get-division-students';
+                                $.post(route,{id:sample},function(res1){
 
 
+                                        var route3='/get-edit-division-students';
+                                        var hrId=$('#homework_id').val();
+                                        var str1="";
+                                            $.post(route3,{id:sample,homework_id:hrId},function(res2){
+
+                                                var arrStr= $.map(res2,function(value){
+                                                    return value['user_id'];
+                                                });
+
+                                                for(var i=0;i<res1.length;i++)
+                                                {
+
+
+                                                    if($.inArray(res1[i]['user_id'],arrStr)!=-1){
+
+                                                       str1+=' <tr>'+
+                                                           '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" checked/></td>'+
+                                                           '<td>'+res1[i]['roll_number']+'</td>'+
+                                                           '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
+                                                           '<td>'+res1[i]['slug']+'</td>'+
+                                                           '</tr>';
+
+
+                                                   }else{
+
+
+                                                        str1+=' <tr>'+
+                                                            '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
+                                                            '<td>'+res1[i]['roll_number']+'</td>'+
+                                                            '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
+                                                            '<td>'+res1[i]['slug']+'</td>'+
+                                                            '</tr>';
+                                                    }
+
+                                                }
+                                                $('#studentList').html(str1);
+                                                TableData.init();
+                                                if($('.allCheckedStud1').prop('checked') == true)
+                                                {
+                                                    $('.checkedStud1').each(function() { //loop through each checkbox
+                                                        this.checked = true;  //select all checkboxes with class "checkbox1"
+                                                    });
+                                                }
+
+                                            });
+
+
+                                });
 
 
                         });
+
+
+                });
+
+
+
+
+
 
                     });
 
@@ -461,6 +524,7 @@
         }
 
     });
+
 
     $('#btnEdit').click(function(){
         $('#detail').hide();
@@ -499,6 +563,148 @@
         }
     });
 
+
+    $('#subjectsDropdown').change(function(){
+        var id=this.value;
+        var route='/get-subject-batches/'+id;
+        $.get(route,function(res){
+            //console.log(res);
+            var batch= $.map(res,function(value,index){
+                return value;
+            });
+            if(batch.length == 0)
+            {
+                $('#batch-select').html("no record found");
+            }
+            else{
+                var str='<option value="">Select Batch</option>';
+                for(var i=0; i<batch.length; i++)
+                {
+                    str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch']+'</option>';
+                }
+                $('#batch-select').html(str);
+            }
+        });
+    });
+
+    $('#batch-select').change(function(){
+        var id=this.value;
+        var subject_id= $('#subjectsDropdown').val();
+        var route='/get-subject-classes/'+id+'/'+subject_id;
+        $.get(route,function(res){
+
+            if(res.length == 0)
+            {
+                $('#classDropdown').html("no record found");
+            }
+            else{
+
+                var str='<option value="">please select class</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                }
+                $('#classDropdown').html(str);
+            }
+        });
+    });
+
+    $("#classDropdown").change(function() {
+        var id = this.value;
+        var subject_id= $('#subjectsDropdown').val();
+        var batch_id= $('#batch-select').val();
+        var route='/get-subject-divisions/'+id+'/'+subject_id+'/'+batch_id;
+        $.get(route,function(res){
+            $('#division').html(" ");
+            var str = "";
+
+            var arrStr= $.map(res,function(value){
+                return value;
+            });
+            if(arrStr.length == 0)
+            {
+                $('#division').html("no record found");
+            }
+            else{
+                for(var i=0; i<arrStr.length; i++){
+
+                    str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
+
+                        '<input type="checkbox" value="'+arrStr[i]['div_id']+'" id="'+arrStr[i]['div_id']+'" class="FirstDiv" class="input-checkbox" onchange="Selectallcheckbox()" name="divisions[]">'+
+                        '<label for="'+arrStr[i]['div_id']+'">'+
+                        ''+arrStr[i]['division_name']+''+
+                        '</label>'+
+                        '</div>';
+                }
+                $('#division').html(str);
+                FormElements.init();
+            }
+        });
+
+    });
+
+    function Selectallcheckbox(){
+        var all_location_id = document.querySelectorAll('input[name="divisions[]"]:checked');
+
+        var aIds = [];
+
+        for(var x = 0, l = all_location_id.length; x < l;  x++)
+        {
+            aIds.push(all_location_id[x].value);
+        }
+        var route='/get-division-students';
+        $.post(route,{id:aIds},function(res1){
+
+        var route3='/get-edit-division-students';
+        var hrId=$('#homework_id').val();
+        var str1="";
+        $.post(route3,{id:aIds,homework_id:hrId},function(res2){
+
+            var arrStr= $.map(res2,function(value){
+                return value['user_id'];
+            });
+
+            for(var i=0;i<res1.length;i++)
+            {
+
+
+                if($.inArray(res1[i]['user_id'],arrStr)!=-1){
+
+                    str1+=' <tr>'+
+                        '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" checked/></td>'+
+                        '<td>'+res1[i]['roll_number']+'</td>'+
+                        '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
+                        '<td>'+res1[i]['slug']+'</td>'+
+                        '</tr>';
+
+
+                }else{
+
+
+                    str1+=' <tr>'+
+                        '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
+                        '<td>'+res1[i]['roll_number']+'</td>'+
+                        '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
+                        '<td>'+res1[i]['slug']+'</td>'+
+                        '</tr>';
+                }
+
+            }
+            $('#studentList').html(str1);
+            TableData.init();
+            if($('.allCheckedStud1').prop('checked') == true)
+            {
+                $('.checkedStud1').each(function() { //loop through each checkbox
+                    this.checked = true;  //select all checkboxes with class "checkbox1"
+                });
+            }
+
+        });
+        });
+
+
+    }
+
     $('.allCheckedStud1').change(function(){
         if($(this).prop('checked') == true)
         {
@@ -512,100 +718,22 @@
         }
     });
 
-
     $('#subjectsDropdown').change(function(){
-        var id=this.value;
-        console.log(id);
-        var route='/get-subject-batches/'+id;
-        $.get(route,function(res){
-            var batch= $.map(res,function(value,index){
-                return value;
-            });
-            var str='<option value="">Select Batch</option>';
 
-
-            for(var i=0; i<batch.length; i++)
-            {
-                str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch_slug']+'</option>';
-            }
-            $('#batch-select').html(str);
-        });
+        $('#classDropdown').val('');
+        $('#batch-select').val('');
+        $('#division').html('');
+        $('#studentList').html('');
+        FormElements.init();
     });
 
-    $('#batch-select').change(function(){
-        var id=this.value;
-        var subject_id= $('#subjectsDropdown').val();
-        var route='/get-subject-classes/'+id+'/'+subject_id;
-        $.get(route,function(res){
-            var str='<option value="">please select class</option>';
-            for(var i=0; i<res.length; i++)
-            {
-                str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_slug']+'</option>';
-            }
-            $('#classDropdown').html(str);
-        });
+    $('#classDropdown').change(function(){
+        FormElements.init();
     });
 
-    $("#classDropdown").change(function() {
-        var id = this.value;
-        var subject_id= $('#subjectsDropdown').val();
-        var route='/get-subject-divisions/'+id+'/'+subject_id;
-        $.get(route,function(res){
-            var str = "";
-
-            var arrStr= $.map(res,function(value){
-                return value;
-            });
-            for(var i=0; i<arrStr.length; i++){
-
-                str+='<div class="checkbox clip-check check-primary checkbox-inline">'+
-
-                    '<input type="checkbox" value="'+arrStr[i]['division_id']+'" class="FirstDiv" onchange="Selectallcheckbox()" id="'+arrStr[i]['division_id']+'" name="divisions[]">'+
-                    '<label for="'+arrStr[i]['division_id']+'">'+
-                    ''+arrStr[i]['division_slug']+''+
-                    '</label>'+
-                    '</div>';
-            }
-            $('#division').html(str);
-
-        });
-    });
-
-    function Selectallcheckbox(){
-        var all_location_id = document.querySelectorAll('input[name="divisions[]"]:checked');
-
-        var aIds = [];
-
-        for(var x = 0, l = all_location_id.length; x < l;  x++)
-        {
-            aIds.push(all_location_id[x].value);
-        }
-        var route='/get-division-students';
-        var divisions=aIds;
-
-        $.post(route,{id:divisions},function(res){
-            var str = "";
-
-            for(var i=0; i<res.length; i++){
-                str+=' <tr>'+
-                    '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
-                    '<td>'+res[i]['roll_number']+'</td>'+
-                    '<td>'+res[i]['first_name']+' '+res[i]['last_name']+'</td>'+
-                    '<td>'+res[i]['slug']+'</td>'+
-                    '</tr>';
-            }
-            $('#studentList').html(str);
-            if($('.allCheckedStud1').prop('checked') == true)
-            {
-                $('.checkedStud1').each(function() { //loop through each checkbox
-                    this.checked = true;  //select all checkboxes with class "checkbox1"
-                });
-            }
-           // TableData.init();
-        });
-    }
 
 </script>
+
 
 
 <!-- start: MAIN JAVASCRIPTS -->

@@ -15,6 +15,7 @@
 <div class="wrap-content container" id="container">
 <!-- start: DASHBOARD TITLE -->
 @include('alerts.errors')
+<div id="message-error-div"></div>
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
@@ -373,7 +374,7 @@
                         lookup: currencies,
                         onSelect: function (suggestion) {
                             var thehtml = '<strong>Showing result for:</strong> ' + suggestion.value;
-                            thehtml+="<input type='hidden' value='"+suggestion.data+"' name='parent_id'> ";
+                            thehtml+="<input type='hidden' value='"+suggestion.data+"' name='parent_id' id='parent_id'> ";
                             $('#outputcontent').html(thehtml);
                             $('#tabTable').show();
                             console.log(suggestion.data);
@@ -387,7 +388,7 @@
     }
 
     $('#autocomplete').on('keyup',function(){
-        $('parent_id').val('');
+        $('#parent_id').val('');
     });
 
 </script>

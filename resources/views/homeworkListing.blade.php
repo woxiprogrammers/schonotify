@@ -15,6 +15,7 @@
     <div class="wrap-content container" id="container">
         <!-- start: DASHBOARD TITLE -->
         @include('alerts.errors')
+        <div id="message-error-div"></div>
         <section id="page-title" class="padding-top-15 padding-bottom-15">
             <div class="row">
                 <div class="col-sm-7">
@@ -80,7 +81,7 @@
                                 </div>
 
                                 <div class="tmln-div">
-                                    <h5 style="padding: 14px 14px 14px 30px;"><small>{!! $row['homework_batch_name']!!}</small> <small >{!! $row['homework_class_name']!!}</small></br>       <small>  {!! $row['homework_division_name']!!}  </small></h5>
+                                    <h5 style="padding: 1px 14px 14px 30px;text-align: center "><small>{!! $row['homework_batch_name']!!}</small> <small >  {!! $row['homework_class_name']!!}   </br>    @foreach($row['divs'] as $r1) {!! $r1 !!}, @endforeach    </small></h5>
                                 </div>
 
                             </li>

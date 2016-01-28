@@ -88,6 +88,18 @@ class UserRequest extends Request
                         'address' => 'required|min:15'
                     ];
                     break;
+                }else{
+                    return [
+                        'firstName'=>'required|min:2',
+                        'lastName' => 'required|min:2',
+                        'password' => 'required|min:6',
+                        'password2' => 'required|min:6',
+                        'mobile' => 'required|min:10',
+                        'alt_number' => 'min:10',
+                        'email' => 'required|email',
+                        'address' => 'required|min:15'
+                    ];
+                    break;
                 }
                 }else{
                     return [

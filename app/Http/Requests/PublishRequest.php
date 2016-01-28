@@ -14,9 +14,29 @@ class PublishRequest extends Request
      */
     public function authorize()
     {
+        $userToken=$this->request->all();
+        $userId='';
+        foreach($userToken as $userData)
+        {
+            $userId=$userData;
+        }
+        $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+            ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
+            ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
+            ->where('users.remember_token','=',$userId)
+            ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
+            ->get();
+        $resultArr=array();
+        foreach($val1 as $val)
+        {
+            array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
-        return true;
-
+        }
+        if(in_array('Publish_homework',$resultArr) ){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
