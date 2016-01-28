@@ -32,7 +32,6 @@ class Message extends Request
 
         }
         switch ($this->method()) {
-
             case 'GET':
                 if(in_array('View_message',$resultArr) ){
                     return true;
@@ -42,7 +41,6 @@ class Message extends Request
                 }
                 break;
             case 'PUT':
-
                 if(in_array('Edit_message',$resultArr) ){
                     return true;
                 }
@@ -72,12 +70,9 @@ class Message extends Request
         switch ($this->method()) {
             case 'GET':
                 return[
-                    'token'=>'required',
-                    'user_id' => 'required|integer'
                 ];
             case 'PUT':
                 return [
-
                 ];
                 break;
             case 'POST':
