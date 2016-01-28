@@ -380,6 +380,10 @@
 
     }
 
+    $('#subjectsDropdown').change(function(){
+
+        $('#division').val('');
+    });
 
 
 
