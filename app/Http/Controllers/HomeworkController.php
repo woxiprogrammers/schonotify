@@ -550,6 +550,7 @@ class HomeworkController extends Controller
                 $i++;
             }
         }
+        $classInfo=array_unique($classInfo,SORT_REGULAR);
         return $classInfo;
     }
 
@@ -599,6 +600,7 @@ class HomeworkController extends Controller
                 $i++;
             }
         }
+        $finalDivisions=array_unique($finalDivisions,SORT_REGULAR);
         return $finalDivisions;
     }
 
