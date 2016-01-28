@@ -252,7 +252,6 @@ var FormWizard = function () {
 
 
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            $('#checkUser').prop('disabled', true);
             var form=$('#student-registration-form').serialize();
             $.ajax({
                 url:'save-user',
