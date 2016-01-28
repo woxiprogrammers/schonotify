@@ -325,7 +325,7 @@ var FormValidator = function () {
             ignore: "",
             rules: {
                 class: {
-                    minlength: 2,
+
                     required: true,
                     remote: {
                         url: "/check-class",
@@ -345,7 +345,6 @@ var FormValidator = function () {
             messages: {
                 class:{
                     required:"Class name is required",
-                    minlength:"Please enter at least 2 character",
                     remote:"Class name already in use !!"
                 }
 

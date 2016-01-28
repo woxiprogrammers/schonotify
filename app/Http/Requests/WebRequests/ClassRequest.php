@@ -71,7 +71,7 @@ class ClassRequest extends Request
                 break;
             case 'POST':return [
                 'dropdown'=>'required',
-                'class'=>'required|min:2'
+                'class'=>'required'
             ];
                 break;
             default:break;
