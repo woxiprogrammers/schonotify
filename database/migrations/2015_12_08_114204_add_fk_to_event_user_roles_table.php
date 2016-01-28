@@ -17,14 +17,12 @@ class AddFkToEventUserRolesTable extends Migration
             $table->foreign('event_id')
                 ->references('id')
                 ->on('events')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
             $table->foreign('user_role_id')
                 ->references('id')
                 ->on('user_roles')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
 
         });
     }

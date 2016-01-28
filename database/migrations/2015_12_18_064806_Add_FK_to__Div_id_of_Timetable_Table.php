@@ -16,8 +16,7 @@ class AddFKToDivIdOfTimetableTable extends Migration
             $table->foreign('div_id')
                 ->references('id')
                 ->on('divisions')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 
