@@ -16,13 +16,11 @@ class AddForeignKeyToClassesTable extends Migration
             $table->foreign('body_id')
                 ->references('id')
                 ->on('bodies')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('batch_id')
                 ->references('id')
                 ->on('batches')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 

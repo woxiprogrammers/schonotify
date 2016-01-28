@@ -16,14 +16,14 @@ class AddFkToMessagesTable extends Migration
             $table->foreign('from_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
+
 
             $table->foreign('to_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
+
 
         });
     }
