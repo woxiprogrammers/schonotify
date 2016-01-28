@@ -99,7 +99,7 @@ $('#msgCountArea').click(function() {
         var seeAll='<a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">See All</a>';
         $('#see-all').html(seeAll);
         if(str == ""){
-            var noData="No new message found."
+            var noData="No new message found.";
         $('#msgList').html(noData.bold().italics());
         }else{
         $('#msgList').html(str);
