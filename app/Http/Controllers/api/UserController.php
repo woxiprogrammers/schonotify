@@ -101,11 +101,11 @@ class UserController extends Controller
                             $i++;
                         }
                     }else{
-                        $messageCount=Message::where('to_id',$user->id)
-                            ->where('read_status',0)
+                        $messageCount=Message::where('to_id',$user['id'])
+                            ->where('read_status','=',0)
                             ->where('is_delete','=',0)
                             ->count();
-                        $data['Badge_count']['user_id']=$user->id;
+                        $data['Badge_count']['user_id']=$user['id'];
                         $data['Badge_count']['message_count'] = $messageCount;
                         $data['Badge_count']['auto_notification_count'] = $messageCount;
                     }
