@@ -371,8 +371,8 @@
                     this.checked = true;  //select all checkboxes with class "checkbox1"
                 });
             }
-            TableData.init();
 
+            $("#tableData").dataTable().fnDestroy();
 
         });
 
@@ -380,6 +380,10 @@
 
     }
 
+    $('#subjectsDropdown').change(function(){
+
+        $('#division').val('');
+    });
 
 
 
