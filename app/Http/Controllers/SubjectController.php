@@ -80,7 +80,7 @@ class SubjectController extends Controller
                 if($query1)
                 {
 
-                    Session::flash('message-success','Subject successfully created !');
+                    Session::flash('message-success','Subject created successfully.');
                     return Redirect::back();
                 }
 
