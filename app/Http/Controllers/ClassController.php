@@ -42,7 +42,7 @@ class ClassController extends Controller
         $class['updated_at'] = Carbon::now();
         $query=Classes::insert($class);
         if($query){
-            Session::flash('message-success','Class created successfully!');
+            Session::flash('message-success','Class created successfully.');
             return Redirect::back();
         }else{
             Session::flash('message-error','Something went wrong!');
@@ -79,7 +79,7 @@ class ClassController extends Controller
             {
                 return 1;
             }else{
-                Session::flash('message-success','Batch has been deleted!');
+                Session::flash('message-success','Batch has been deleted.');
                 return Redirect::back();
             }
         }else{
@@ -114,7 +114,7 @@ class ClassController extends Controller
 
         if($cnt>0)
         {
-            Session::flash('message-error','Division Name for this class is already in use !');
+            Session::flash('message-error','Division Name for this class is already in use.');
             return Redirect::back();
         }else{
             $div['created_at'] = Carbon::now();
@@ -123,7 +123,7 @@ class ClassController extends Controller
 
             if($query)
             {
-                Session::flash('message-success','Division has been created!');
+                Session::flash('message-success','Division has been created.');
                 return Redirect::back();
             }
         }
