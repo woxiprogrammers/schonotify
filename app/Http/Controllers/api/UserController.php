@@ -109,16 +109,6 @@ class UserController extends Controller
                         $data['Badge_count']['message_count'] = $messageCount;
                         $data['Badge_count']['auto_notification_count'] = $messageCount;
                     }
-                    $parent_student=User::where('parent_id',$user->id)->get();
-                    $data['Parent_student_relation']['parent_id']=$user->id;
-                    $i=0;
-                    foreach($parent_student as $val)
-                    {
-                        $data['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
-                        $data['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
-                        $data['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
-                        $i++;
-                    }
                     $message = 'login successfully';
                     $status =200;
                 }else{
