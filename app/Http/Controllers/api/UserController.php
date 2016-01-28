@@ -239,4 +239,32 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
+    public function getSwitchingDetails(Request $request){
+        try{
+            $data=$request->all();
+            $finalData=array();
+            $parent_student=User::where('parent_id',$data['teacher']['id'])->get();
+            $finalData['Parent_student_relation']['parent_id']=$data['teacher']['id'];
+                               $i=0;
+                              foreach($parent_student as $val)
+                                 {
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
+                                       $i++;
+                                   }
+            $message="Successfully Listed";
+            $status=200;
+        }
+        catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong" .  $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" =>$finalData
+        ];
+        return response($response, $status);
+    }
 }

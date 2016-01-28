@@ -304,6 +304,8 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
     Route::get('get-acl-details','api\MessageController@getAclDetails');
 
+    Route::get('get-switching-details','api\UserController@getSwitchingDetails');
+
 
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
