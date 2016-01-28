@@ -108,6 +108,7 @@
                                     Parent Name: <span class="symbol required"></span>
                                 </label>
                                 <input type="text" placeholder="Enter Parent Name" class="form-control" name="parent_name" id="autocomplete">
+                                <input type='hidden' name='parent_id' id='parent_id'>
                                 <br>
                                 <div class="form-group" id="outputcontent"></div>
                             </div>
@@ -374,7 +375,7 @@
                         lookup: currencies,
                         onSelect: function (suggestion) {
                             var thehtml = '<strong>Showing result for:</strong> ' + suggestion.value;
-                            thehtml+="<input type='hidden' value='"+suggestion.data+"' name='parent_id' id='parent_id'> ";
+                            $('#parent_id').val(suggestion.data);
                             $('#outputcontent').html(thehtml);
                             $('#tabTable').show();
                             var val3=$('#autocomplete').html(suggestion.value).text();
