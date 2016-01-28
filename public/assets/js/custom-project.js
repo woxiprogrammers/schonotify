@@ -1,7 +1,11 @@
 
 function getMsgCount() {
     $.get('/get-msg-count',function(res){
-        $('#msgCount').html(res);
+        if(res == 0){
+            $('#msgCount').html('');
+        }else{
+            $('#msgCount').html(res);
+        }
     });
 }
 function doListing(id) {
@@ -94,7 +98,12 @@ $('#msgCountArea').click(function() {
 
         var seeAll='<a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">See All</a>';
         $('#see-all').html(seeAll);
+        if(str == ""){
+            var noData="No new message found."
+        $('#msgList').html(noData.bold().italics());
+        }else{
         $('#msgList').html(str);
+        }
         toggle();
     });
 });
