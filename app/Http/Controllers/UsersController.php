@@ -937,7 +937,7 @@ class UsersController extends Controller
         $userList = $userData->toArray();
         foreach($userList as $user){
             $userInfo['data'] = $user['id'];
-            $userInfo['value'] = $user["first_name"].' '.$user["last_name"].' ,<i>"'.$user["email"].'"</i>';
+            $userInfo['value'] = $user["first_name"].' '.$user["last_name"].' ,"<i>'.$user["email"].'</i>"';
             array_push($userInformation,$userInfo);
         }
         return $userInformation;

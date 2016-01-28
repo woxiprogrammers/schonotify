@@ -377,7 +377,8 @@
                             thehtml+="<input type='hidden' value='"+suggestion.data+"' name='parent_id' id='parent_id'> ";
                             $('#outputcontent').html(thehtml);
                             $('#tabTable').show();
-                            console.log(suggestion.data);
+                            var val3=$('#autocomplete').html(suggestion.value).text();
+                            $('#autocomplete').val(val3);
                         }
                     });
                 }
