@@ -16,13 +16,11 @@ class AddForeignKeyToResultsTable extends Migration
             $table->foreign('exam_subject_id')
                 ->references('id')
                 ->on('exam_subjects')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
             $table->foreign('student_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 

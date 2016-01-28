@@ -16,8 +16,7 @@ class AddFkToLeavesTable extends Migration
             $table->foreign('student_id')
                 ->references('id')
                 ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onUpdate('cascade');
         });
     }
 
