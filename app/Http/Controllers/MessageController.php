@@ -130,6 +130,7 @@ class MessageController extends Controller
         $ProfileDirectory = $profileImagePath . "/";
         $messages = Message::whereIn('to_id',[$sender,$receiver])
             ->whereIn('from_id',[$sender,$receiver])
+            ->where('is_delete','0')
             ->orderby('created_at','asc')
             ->get();
         foreach($messages as $messageHistory){
