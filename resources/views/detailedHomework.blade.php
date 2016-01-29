@@ -209,7 +209,10 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input  name="pdfFile" id="pdfFile" size="1" type="file"  value="{!!$row['homework_file']!!}"  />{!!$row['homework_file']!!}
+                        <input  name="pdfFile" id="input" size="1" type="file"  value="{!!$row['homework_file']!!}"/>{!!$row['homework_file']!!}
+                        @if($row['homework_file'] != null )
+                        <a href="/delete-file/{!! $row['homework_file']!!}/{!! $row['homework_id']!!}"  style="padding: 4px;/* position: absolute; */left: 202px;width: 31px;top: -28px;border-radius: 35px;" class="btn btn-primary btn-red pull-left"><i class="glyphicon glyphicon-trash"></i></a>
+                        @endif
                     </div>
 
                 </div>
@@ -314,6 +317,7 @@
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
+
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
     jQuery(document).ready(function() {

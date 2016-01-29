@@ -218,7 +218,7 @@ class HomeworkController extends Controller
                 $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
                 $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['division']=$division['division_name'];
-                $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['name']=$student_name['first_name']."".$student_name['last_name'];
+                $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['name']=$student_name['first_name']." ".$student_name['last_name'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['stud_id']=$student_name['id'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['roll_number']=$student_name['roll_number'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['class']=$class['class_name'];
@@ -700,6 +700,14 @@ class HomeworkController extends Controller
         return $homeworkData->toArray();
 
     }
-
+    public function deleteFile($file_name,$homework_id)
+    {
+     $homework=array();
+     unlink('../public/uploads/homework/' . $file_name);
+     $homework['attachment_file']=null;
+     Homework::where('id',$homework_id)->update($homework);
+        Session::flash('message-success','file deleted successfully');
+        return Redirect::to('/detailedHomework/'.$homework_id);
+    }
 
 }

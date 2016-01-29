@@ -153,6 +153,8 @@
 
     Route::get('download/{file_name}', 'HomeworkController@getDownload');
 
+    Route::get('delete-file/{file_name}/{homework_id}', 'HomeworkController@deleteFile');
+
     Route::get('results','ResultController@showResults');
 
 Route::post('get-edit-division-students',array('uses' => 'HomeworkController@getEditStudentData'));
