@@ -312,7 +312,7 @@
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
 
-    Route::post('Homeworkcreate','api\HomeworkController@createHomework');
+    Route::post('homework-create','api\HomeworkController@createHomework');
 
     Route::put('update-homework',array('uses' => 'api\HomeworkController@updateHomework'));
 

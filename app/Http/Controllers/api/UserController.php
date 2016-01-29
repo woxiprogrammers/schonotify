@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-       // $this->middleware('db');
+        $this->middleware('db');
         $this->middleware('remember.user.token');
         $this->middleware('authenticate.user',['except' => ['login']]);
     }
