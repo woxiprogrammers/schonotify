@@ -1,4 +1,5 @@
 
+
 function getMsgCount() {
     $.get('/get-msg-count',function(res){
         if(res == 0){
@@ -33,6 +34,7 @@ function doListing(id) {
                     '</li>';
             }
         }
+
         $('#chat-history').html(str);
         $(".perfect-scrollbar").scrollTop( $( '#chat-history').prop( "scrollHeight" ) );
         $(".perfect-scrollbar").perfectScrollbar('update');
@@ -40,10 +42,27 @@ function doListing(id) {
         toggle();
     });
 }
+$('#send-msg').hide();
+
+$('#description').on('keyup',function(){
+    console.log($('#description').val());
+    if($('#description').val()==" " || $('#description').val()==""){
+        $('#send-msg').hide();
+    }else{
+        if($('#description').val().trim() == ""){
+
+            $('#send-msg').hide();
+        }else{
+
+            $('#send-msg').show();
+        }
+    }
+});
 
 $('#send-msg').click(function() {
     var val = $('#chat-history').find('input[type=hidden]:first').val();
     var description = $('#description').val();
+
     var route='/send-message';
     $.post(route,{id:val,description:description},function(res){
         var str="";
