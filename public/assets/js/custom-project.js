@@ -93,6 +93,7 @@ $('#send-msg').click(function() {
         $(".perfect-scrollbar").perfectScrollbar('update');
         toggle();
         $('#description').val('');
+        $('#send-msg').hide();
     });
 });
 
