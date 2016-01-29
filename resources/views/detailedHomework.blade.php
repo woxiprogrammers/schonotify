@@ -222,7 +222,7 @@
                         <label class="control-label">
                             Due Date <span class="symbol required"></span>
                         </label>
-                        <input class="form-control datepicker" name="dueDate" type="text" value="{!! $row['homework_due_date']!!}">
+                        <input class="form-control datepicker" name="dueDate" id="dueDate" type="text" value="{!! $row['homework_due_date']!!}">
                     </div>
                     @endforeach
                     <h4>Assign Homework to: </h4>
@@ -322,6 +322,8 @@
         FormValidator.init();
         FormElements.init();
        // TableData.init();
+        var startDate = new Date();
+        $('#dueDate').datepicker('setStartDate', startDate);
 
         $('#update').hide();
         $('#btnStatus').hide();
