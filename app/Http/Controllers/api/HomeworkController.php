@@ -19,6 +19,7 @@ use Faker\Provider\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class HomeworkController extends Controller
 {
@@ -325,6 +326,8 @@ class HomeworkController extends Controller
     public function createHomework(Requests\HomeworkRequest $request)
     {
         try{
+            $data=$request->all();
+            Log::info('your data.', ['all data' => $data]);
             $data=array();
             $HomeworkTeacher=array();
             $division=Division::where('id',$request->division_id)->first();

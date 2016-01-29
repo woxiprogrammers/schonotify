@@ -44,14 +44,22 @@ class HomeworkController extends Controller
             $homeworkId=array();
             $homeworkIdss=array();
             $homeworkDiv=array();
+            $homeworkIdTeacher=array();
             $i=0;
             $division=Division::where('class_teacher_id',$user->id)->first();
             if($division != null){
-               $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)->select('homework_teacher.homework_id')->get();
+               $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)
+                                                  ->select('homework_teacher.homework_id')->get();
 
                 foreach($homeworkDivision as $row)
                 {
-                    $homeworkId[]=$row['homework_id'];
+                    $homeworkIdTeacher[]=$row['homework_id'];
+                }
+                $homeworkIdTeacher = array_unique($homeworkIdTeacher, SORT_REGULAR);
+                $homeworkInfoTeacher=Homework::wherein('id',$homeworkIdTeacher)->where('status',1)->select('id')->get()->toArray();
+                foreach($homeworkInfoTeacher as $row)
+                {
+                    $homeworkId[]=$row['id'];
                 }
                 $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
                 foreach($homeworkTeacher as $row)
@@ -156,18 +164,6 @@ class HomeworkController extends Controller
                 $homeworkIdss[$row['homework_id']]['divs']=$rq;
 
             }
-            //dd($homeworkIdss);
-            /*$division_name=array();
-            $homeworkDiv = array_unique($homeworkDiv, SORT_REGULAR);
-            foreach($homeworkDiv as $row)
-            {
-                $division_name[]=$row['div'];
-            }
-
-            $homeworkIdss['divs']=$division_name;*/
-
-            //dd($homeworkDiv[0]['div']);
-
          return view('homeworkListing')->with(compact('homeworkIdss','homeworkDiv'));
         }else{
             return Redirect::to('/');
@@ -229,7 +225,7 @@ class HomeworkController extends Controller
                 $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
                 $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['division']=$division['division_name'];
-                $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['name']=$student_name['first_name']."".$student_name['last_name'];
+                $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['name']=$student_name['first_name']." ".$student_name['last_name'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['stud_id']=$student_name['id'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['roll_number']=$student_name['roll_number'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['class']=$class['class_name'];
@@ -606,9 +602,9 @@ class HomeworkController extends Controller
 
     public function getStudentData(Request $request)
     {
-        $students = User::wherein('division_id',$request->id)
+        $students = User::wherein('division_id',$request->id)->where('is_active',1)
                           ->join('divisions','users.division_id','=','divisions.id')
-                          ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.slug')
+                          ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.division_name')
                           ->get();
         $studentList = $students->toArray();
         return $studentList;
@@ -711,6 +707,14 @@ class HomeworkController extends Controller
         return $homeworkData->toArray();
 
     }
-
+    public function deleteFile($file_name,$homework_id)
+    {
+     $homework=array();
+     unlink('../public/uploads/homework/' . $file_name);
+     $homework['attachment_file']=null;
+     Homework::where('id',$homework_id)->update($homework);
+        Session::flash('message-success','file deleted successfully');
+        return Redirect::to('/detailedHomework/'.$homework_id);
+    }
 
 }
