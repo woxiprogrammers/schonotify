@@ -156,7 +156,6 @@ class HomeworkController extends Controller
                 $homeworkIdss[$row['homework_id']]['divs']=$rq;
 
             }
-
          return view('homeworkListing')->with(compact('homeworkIdss','homeworkDiv'));
         }else{
             return Redirect::to('/');
