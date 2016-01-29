@@ -41,7 +41,7 @@ class CreateHomeworkRequest extends Request
                 } else {
 
                     Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
-                    return Redirect::to('/');
+                    return Redirect::to('/createHomework');
                 }
 
                 break;
@@ -56,7 +56,7 @@ class CreateHomeworkRequest extends Request
                 } else {
 
                     Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
-                    return Redirect::to('/');
+                    return Redirect::to('/createHomework');
                 }
                 break;
             default:break;
@@ -78,7 +78,7 @@ class CreateHomeworkRequest extends Request
             case 'POST':return [
                 'subjectsDropdown' => 'required',
                 'homeworkType' => 'required',
-                'title' => 'required|min:3|max:20',
+                'title' => 'required|min:2|max:20',
                 'description' => 'required',
                 'dueDate' =>'required|date',
                 'batch' =>'required',

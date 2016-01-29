@@ -210,7 +210,8 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input  name="pdfFile" id="input" size="1" type="file"  title="{!!$row['homework_file']!!}" value="{!!$row['homework_file']!!}"/>{!!$row['homework_file']!!}
+                        <input  id="input" size="1" type="file" name="pdfFile"  value="{!!$row['homework_file']!!}" />
+                        </br>{!!$row['homework_file']!!}
                         @if($row['homework_file'] != null )
                         <a href="/delete-file/{!! $row['homework_file']!!}/{!! $row['homework_id']!!}"  class="btn btn-primary btn-red pull-left fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
                         @endif
@@ -318,6 +319,7 @@
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
+<script src="/vendor/jquery-validation/additional-methods.js"></script>
 
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
@@ -481,7 +483,7 @@
                                                            '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" checked/></td>'+
                                                            '<td>'+res1[i]['roll_number']+'</td>'+
                                                            '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                                                           '<td>'+res1[i]['slug']+'</td>'+
+                                                           '<td>'+res1[i]['division_name']+'</td>'+
                                                            '</tr>';
 
 
@@ -492,7 +494,7 @@
                                                             '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
                                                             '<td>'+res1[i]['roll_number']+'</td>'+
                                                             '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                                                            '<td>'+res1[i]['slug']+'</td>'+
+                                                            '<td>'+res1[i]['division_name']+'</td>'+
                                                             '</tr>';
                                                     }
 
@@ -681,7 +683,7 @@
                         '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" checked/></td>'+
                         '<td>'+res1[i]['roll_number']+'</td>'+
                         '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                        '<td>'+res1[i]['slug']+'</td>'+
+                        '<td>'+res1[i]['division_name']+'</td>'+
                         '</tr>';
 
 
@@ -692,7 +694,7 @@
                         '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
                         '<td>'+res1[i]['roll_number']+'</td>'+
                         '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                        '<td>'+res1[i]['slug']+'</td>'+
+                        '<td>'+res1[i]['division_name']+'</td>'+
                         '</tr>';
                 }
 
