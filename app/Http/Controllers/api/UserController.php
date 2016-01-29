@@ -101,23 +101,13 @@ class UserController extends Controller
                             $i++;
                         }
                     }else{
-                        $messageCount=Message::where('to_id',$user->id)
-                            ->where('read_status',0)
+                        $messageCount=Message::where('to_id',$user['id'])
+                            ->where('read_status','=',0)
                             ->where('is_delete','=',0)
                             ->count();
-                        $data['Badge_count']['user_id']=$user->id;
+                        $data['Badge_count']['user_id']=$user['id'];
                         $data['Badge_count']['message_count'] = $messageCount;
                         $data['Badge_count']['auto_notification_count'] = $messageCount;
-                    }
-                    $parent_student=User::where('parent_id',$user->id)->get();
-                    $data['Parent_student_relation']['parent_id']=$user->id;
-                    $i=0;
-                    foreach($parent_student as $val)
-                    {
-                        $data['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
-                        $data['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
-                        $data['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
-                        $i++;
                     }
                     $message = 'login successfully';
                     $status =200;
@@ -246,6 +236,34 @@ class UserController extends Controller
             "message" => $message,
             "status" => $status,
             "data" => $responseData
+        ];
+        return response($response, $status);
+    }
+    public function getSwitchingDetails(Request $request){
+        try{
+            $data=$request->all();
+            $finalData=array();
+            $parent_student=User::where('parent_id',$data['teacher']['id'])->get();
+            $finalData['Parent_student_relation']['parent_id']=$data['teacher']['id'];
+                               $i=0;
+                              foreach($parent_student as $val)
+                                 {
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
+                                       $i++;
+                                   }
+            $message="Successfully Listed";
+            $status=200;
+        }
+        catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong" .  $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" =>$finalData
         ];
         return response($response, $status);
     }

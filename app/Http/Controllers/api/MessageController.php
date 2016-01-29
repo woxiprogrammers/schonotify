@@ -21,7 +21,7 @@ class MessageController extends Controller
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-  public function getMessages(Request $request ){
+  public function getMessages(Requests\Message $request ){
         try {
             $finalMessageData=array();
             $messageData=array();
@@ -70,7 +70,7 @@ class MessageController extends Controller
                     $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
                     if($data['teacher']['id']==$value['from_id'])
                     {
-                        $messageData['MessageList'][$receiver]['read_status']=0;
+                        $messageData['MessageList'][$receiver]['read_status']=1;
 
                     }else{
                         $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
@@ -109,7 +109,7 @@ class MessageController extends Controller
         ];
         return response($response, $status);
     }
-    public function getMessagesParent(Request $request ,$student_id){
+    public function getMessagesParent(Requests\Message $request ,$student_id){
         try {
             $finalMessageData=array();
             $data = $request->all();
@@ -156,7 +156,7 @@ class MessageController extends Controller
                 $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
                 if($data['teacher']['id']==$value['from_id'])
                 {
-                    $messageData['MessageList'][$receiver]['read_status']=0;
+                    $messageData['MessageList'][$receiver]['read_status']=1;
 
                 }else{
                     $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
@@ -277,7 +277,7 @@ class MessageController extends Controller
         ];
         return response($response, $status);
     }
-    public function getDetailMessages(Request $request ){
+    public function getDetailMessages(Requests\Message $request ){
         try {
             $finalMessageData=array();
             $MessageData=array();
