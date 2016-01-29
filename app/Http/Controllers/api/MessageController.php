@@ -18,7 +18,7 @@ class MessageController extends Controller
 {
     public function __construct(Request $request)
     {
-        $this->middleware('db');
+       // $this->middleware('db');
         $this->middleware('authenticate.user');
     }
   public function getMessages(Requests\Message $request ){
@@ -206,12 +206,13 @@ class MessageController extends Controller
             $userDataArray=$userData->toArray();
             foreach($userDataArray as $value ){
                 $messageCount=Message::where('to_id',$value['id'])
-                    ->where('read_status',0)
+                    ->groupBy('from_id')
+                    ->where('read_status','=',0)
                     ->where('is_delete','=',0)
                     ->count();
-                $finalMessageCount['Badge_count'][$i]['user_id']=$value['id'];
-                $finalMessageCount['Badge_count'][$i]['message_count'] = $messageCount;
-                $finalMessageCount['Badge_count'][$i]['auto_notification_count'] = $messageCount;
+                $data['Badge_count'][$i]['user_id']=$value['id'];
+                $data['Badge_count'][$i]['message_count'] = $messageCount;
+                $data['Badge_count'][$i]['auto_notification_count'] = $messageCount;
                 $i++;
             }
             $status=200;
