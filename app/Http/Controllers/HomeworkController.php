@@ -44,14 +44,22 @@ class HomeworkController extends Controller
             $homeworkId=array();
             $homeworkIdss=array();
             $homeworkDiv=array();
+            $homeworkIdTeacher=array();
             $i=0;
             $division=Division::where('class_teacher_id',$user->id)->first();
             if($division != null){
-               $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)->select('homework_teacher.homework_id')->get();
+               $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)
+                                                  ->select('homework_teacher.homework_id')->get();
 
                 foreach($homeworkDivision as $row)
                 {
-                    $homeworkId[]=$row['homework_id'];
+                    $homeworkIdTeacher[]=$row['homework_id'];
+                }
+                $homeworkIdTeacher = array_unique($homeworkIdTeacher, SORT_REGULAR);
+                $homeworkInfoTeacher=Homework::wherein('id',$homeworkIdTeacher)->where('status',1)->select('id')->get()->toArray();
+                foreach($homeworkInfoTeacher as $row)
+                {
+                    $homeworkId[]=$row['id'];
                 }
                 $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
                 foreach($homeworkTeacher as $row)
@@ -596,7 +604,7 @@ class HomeworkController extends Controller
     {
         $students = User::wherein('division_id',$request->id)->where('is_active',1)
                           ->join('divisions','users.division_id','=','divisions.id')
-                          ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.slug')
+                          ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.division_name')
                           ->get();
         $studentList = $students->toArray();
         return $studentList;

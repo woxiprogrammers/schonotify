@@ -11745,8 +11745,7 @@ a.control_next {
 .fileDelBtn{
     background: #666;
     padding: 4px;
-    left: 202px;
     border: 1px solid #ccc;
     width: 31px;
-    top: -28px;
+    top: -10px;
 }
