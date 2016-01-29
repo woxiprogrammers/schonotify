@@ -326,7 +326,8 @@ class HomeworkController extends Controller
     public function createHomework(Requests\HomeworkRequest $request)
     {
         try{
-            Log::info('your data.', ['student data' => $request->student_id]);
+            $data=$request->all();
+            Log::info('your data.', ['all data' => $data]);
             $data=array();
             $HomeworkTeacher=array();
             $division=Division::where('id',$request->division_id)->first();
