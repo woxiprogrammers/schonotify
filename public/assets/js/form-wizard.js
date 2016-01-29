@@ -46,6 +46,14 @@ var FormWizard = function () {
         if ($("#checkbox6").is(":checked") || $("#checkbox7").is(":checked")) { return true; }
         return false;
     },"You must select at least one!");
+    jQuery.validator.addMethod("removespace", function(value, element) {
+        	if (value.trim().length >=15)
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }, "Address must contain at-least 15 characters");
     var initValidator = function () {
 
         $.validator.setDefaults({
@@ -97,7 +105,8 @@ var FormWizard = function () {
                 },
                 address:{
                     minlength:15,
-                    required:true
+                    required: true,
+                    removespace:true
                 },
                 modules: {
                     required: true,
