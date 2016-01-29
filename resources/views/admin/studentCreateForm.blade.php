@@ -389,8 +389,11 @@
 
     }
 
-    $('#autocomplete').on('keyup',function(){
-        $('#parent_id').val('');
+    $('#autocomplete').keyup(function(e){
+        if(e.keyCode != 13)
+        {
+            $('#parent_id').val('');
+        }
     });
 
 </script>
