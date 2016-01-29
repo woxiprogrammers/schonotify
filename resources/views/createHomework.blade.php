@@ -278,7 +278,6 @@
         var subject_id= $('#subjectsDropdown').val();
         var batch_id= $('#batch-select').val();
         var route='get-subject-divisions/'+id+'/'+subject_id+'/'+batch_id;
-        console.log(route);
         $.get(route,function(res){
             var str = "";
 
