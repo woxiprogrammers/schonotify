@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ExamTypeTableSeeder::class);
         $this->call(Day_Master_seeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(ModulesAclsTableSeeder::class);
         Model::reguard();
     }
 }

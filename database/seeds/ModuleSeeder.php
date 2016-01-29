@@ -45,16 +45,38 @@ class ModuleSeeder extends Seeder
                 'updated_at' => Carbon::now()
             ],
             [
-
                 'title' => 'Class',
                 'slug' => 'class',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
-
                 'title' => 'Subject',
                 'slug' => 'subject',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'title' => 'Leave',
+                'slug' => 'leave',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+             ],
+            [
+                'title' => 'Homework',
+                'slug' => 'homework',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'title' => 'Result',
+                'slug' => 'result',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'title' => 'Message',
+                'slug' => 'message',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
