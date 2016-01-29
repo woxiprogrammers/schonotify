@@ -37,6 +37,7 @@ class UserController extends Controller
      */
     protected function login(Requests\LoginRequest $request)
     {
+
         $data=array();
         try{
             $user = User::where('email', $request->email)->first();

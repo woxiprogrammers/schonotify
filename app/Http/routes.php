@@ -157,9 +157,9 @@
 
     Route::get('results','ResultController@showResults');
 
-Route::post('get-edit-division-students',array('uses' => 'HomeworkController@getEditStudentData'));
+    Route::post('get-edit-division-students',array('uses' => 'HomeworkController@getEditStudentData'));
 
-Route::get('download/{file_name}', 'HomeworkController@getDownload');
+    Route::get('download/{file_name}', 'HomeworkController@getDownload');
 
     Route::get('exams/{id}','ResultController@examResults');
 
@@ -312,13 +312,13 @@ Route::get('download/{file_name}', 'HomeworkController@getDownload');
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
 
-    Route::post('createHomework','api\HomeworkController@createHomework');
+    Route::post('homework-create','api\HomeworkController@createHomework');
 
     Route::put('update-homework',array('uses' => 'api\HomeworkController@updateHomework'));
 
     Route::put('publish-homework/',array('uses' => 'api\HomeworkController@publishHomeWork'));
 
-    Route::get('deleteHomework/{homewodrk_id}',array('uses' => 'api\HomeworkController@deleteHomework'));
+    Route::put('deleteHomework',array('uses' => 'api\HomeworkController@deleteHomework'));
 
     Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
 
