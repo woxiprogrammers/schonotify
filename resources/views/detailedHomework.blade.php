@@ -71,7 +71,8 @@
                     <h4>{!!$row['homework_title']!!}  @if($row['homework_file'] != null) <a href="/download/{!!$row['homework_file']!!}"> Download <i class="fa fa-cloud-download"></i></a> @endif</h4>
                     <br>
                     <p>
-                        {!!$row['homework_description']!!}
+
+                    <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;" readonly="yes" >{!!$row['homework_description']!!}</textarea>
                     </p>
                     <br>
                     <br>
@@ -209,7 +210,10 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input  name="pdfFile" id="pdfFile" size="1" type="file"  value="{!!$row['homework_file']!!}"  />{!!$row['homework_file']!!}
+                        <input  name="pdfFile" id="input" size="1" type="file"  title="{!!$row['homework_file']!!}" value="{!!$row['homework_file']!!}"/>{!!$row['homework_file']!!}
+                        @if($row['homework_file'] != null )
+                        <a href="/delete-file/{!! $row['homework_file']!!}/{!! $row['homework_id']!!}"  class="btn btn-primary btn-red pull-left fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
+                        @endif
                     </div>
 
                 </div>
@@ -314,6 +318,7 @@
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
+
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
     jQuery(document).ready(function() {
