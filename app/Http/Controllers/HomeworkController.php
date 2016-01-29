@@ -156,17 +156,6 @@ class HomeworkController extends Controller
                 $homeworkIdss[$row['homework_id']]['divs']=$rq;
 
             }
-            //dd($homeworkIdss);
-            /*$division_name=array();
-            $homeworkDiv = array_unique($homeworkDiv, SORT_REGULAR);
-            foreach($homeworkDiv as $row)
-            {
-                $division_name[]=$row['div'];
-            }
-
-            $homeworkIdss['divs']=$division_name;*/
-
-            //dd($homeworkDiv[0]['div']);
 
          return view('homeworkListing')->with(compact('homeworkIdss','homeworkDiv'));
         }else{
@@ -606,7 +595,7 @@ class HomeworkController extends Controller
 
     public function getStudentData(Request $request)
     {
-        $students = User::wherein('division_id',$request->id)
+        $students = User::wherein('division_id',$request->id)->where('is_active',1)
                           ->join('divisions','users.division_id','=','divisions.id')
                           ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.slug')
                           ->get();

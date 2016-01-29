@@ -997,7 +997,7 @@ class UsersController extends Controller
     public function getStudentList(Request $request){
         $user=Auth::user();
         $student_id = UserRoles::whereIn('slug', ['student'])->pluck('id');
-        $student = User::where('role_id',$student_id)->where('division_id',$request->division)->get();
+        $student = User::where('role_id',$student_id)->where('division_id',$request->division)->where('is_active',1)->get();
         $students = $student->toArray();
         $userInformation =array();
         foreach($students as $student){
