@@ -750,14 +750,23 @@ if($request->authorize()===true)
         }
     }
 
-    public function deleteFile($file_name,$homework_id)
+    public function deleteFile(Requests\WebRequests\EditHomeworkRequest $request,$file_name,$homework_id)
     {
-     $homework=array();
-     unlink('../public/uploads/homework/' . $file_name);
-     $homework['attachment_file']=null;
-     Homework::where('id',$homework_id)->update($homework);
-        Session::flash('message-success','file deleted successfully');
-        return Redirect::to('/detailedHomework/'.$homework_id);
+
+        if($request->authorize()===true)
+        {
+            $homework=array();
+            unlink('../public/uploads/homework/' . $file_name);
+            $homework['attachment_file']=null;
+            $delete=Homework::where('id',$homework_id)->update($homework);
+            if($delete)
+            {
+                return "true";
+            }
+        }else{
+            return Redirect::back();
+        }
+
     }
 
 }
