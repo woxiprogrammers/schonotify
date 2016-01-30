@@ -301,6 +301,8 @@
                         '</div>';
                 }
                 $('#division').html(str);
+
+
             }
         });
 
@@ -319,6 +321,10 @@
         var divisions=aIds;
         $.post(route,{id:divisions},function(res){
 
+            if(res.length == 0)
+            {
+                $('#tableData').html("no record found"+'<input type="hidden"  name="studentinfo[]" value=""/>');
+            }else{
             var str = "";
             var str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>"+
                 "<thead>"+
@@ -331,22 +337,20 @@
             "</thead>"+
             "<tbody id='studentList'>";
 
-            if(res.length == 0)
-            {
-                $('#tableData').html("no record found");
-            }
-            else{
-            for(var i=0; i<res.length; i++){
-                str+=' <tr>'+
-                    '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
-                    '<td>'+res[i]['roll_number']+'</td>'+
-                    '<td>'+res[i]['first_name']+' '+res[i]['last_name']+'</td>'+
-                    '<td>'+res[i]['division_name']+'</td>'+
-                    '</tr>';
-            }
+
+                for(var i=0; i<res.length; i++){
+                    str+=' <tr>'+
+                        '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res[i]['user_id']+'"/></td>'+
+                        '<td>'+res[i]['roll_number']+'</td>'+
+                        '<td>'+res[i]['first_name']+' '+res[i]['last_name']+'</td>'+
+                        '<td>'+res[i]['division_name']+'</td>'+
+                        '</tr>';
+                }
+
             str += '</tbody>'+
             '</table>';
             $('#tableData').html(str);
+
             }
 
             jQuery(document).ready(function() {

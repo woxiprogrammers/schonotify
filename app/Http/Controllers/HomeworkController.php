@@ -386,7 +386,7 @@ class HomeworkController extends Controller
 
         return view('createHomework')->with(compact('homework','homeworkTypes','subjectClass'));
         }else{
-            return Redirect::to('/');
+            return Redirect::back();
         }
     }
 
@@ -652,6 +652,8 @@ class HomeworkController extends Controller
 
     public function updateHomeworkDetail(Requests\WebRequests\EditHomeworkRequest $request){
 
+if($request->authorize()===true)
+{
 
         $homeworkData= $request->all();
         $homework=array();
@@ -700,6 +702,9 @@ class HomeworkController extends Controller
         }
         Session::flash('message-success','homework updated successfully');
         return Redirect::to('/homework-listing');
+    }else{
+    return Redirect::back();
+}
     }
     public function editDataDiv($id)
     {
