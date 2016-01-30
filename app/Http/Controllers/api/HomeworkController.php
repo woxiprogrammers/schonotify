@@ -19,6 +19,7 @@ use Faker\Provider\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class HomeworkController extends Controller
 {
@@ -325,6 +326,8 @@ class HomeworkController extends Controller
     public function createHomework(Requests\HomeworkRequest $request)
     {
         try{
+            $data=$request->all();
+            Log::info('your data.', ['all data' => $data]);
             $data=array();
             $HomeworkTeacher=array();
             $division=Division::where('id',$request->division_id)->first();
@@ -596,6 +599,12 @@ class HomeworkController extends Controller
                 }
                 $i++;
             }
+            if($finalHomeworkListingSubjectTeacher !=null){
+                foreach ($finalHomeworkListingSubjectTeacher as $key => $part) {
+                    $sort[$key] = strtotime($part['created_at']);
+                }
+                array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
+            }
              $status=200;
              $message = "Successfully Listed";
          }
@@ -794,6 +803,13 @@ class HomeworkController extends Controller
                  }
                  $i++;
              }
+
+             if($finalHomeworkListingSubjectTeacher !=null){
+                 foreach ($finalHomeworkListingSubjectTeacher as $key => $part) {
+                     $sort[$key] = strtotime($part['created_at']);
+                 }
+                 array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
+             }
              $status=200;
              $message = "Successfully Listed";
          }
@@ -808,13 +824,14 @@ class HomeworkController extends Controller
               ];
         return response($response, $status);
     }
-  public function deleteHomework(Requests\deleteHomeworkRequest $request,$homework_id)
+  public function deleteHomework(Requests\deleteHomeworkRequest $request)
   {
      try{
-         $homework_status=Homework::where('id','=',$homework_id)->select('status')->first();
+         $data=$request->all();
+         $homework_status=Homework::where('id','=',$data['homework_id'])->select('status')->first();
         if($homework_status['status']==0)
         {
-            Homework::where('id',$homework_id)->update(array('is_active'=>0)); // 0 is for deleted
+            Homework::where('id',$data['homework_id'])->update(array('is_active'=>0)); // 0 is for deleted
             $status = 200;
             $message = "Homework Successfully deleted";
         }else{
@@ -861,7 +878,7 @@ class HomeworkController extends Controller
                 ->where('homework_teacher.student_id','=',$student_id)
                 ->where('homeworks.status','=',1)//parent ca n see published homework ony
                 ->where('homeworks.is_active','=',1)//0 is for deleted homework
-                ->select('homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','batches.name')
+                ->select('homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','batches.name','homeworks.created_at')
                 ->get();
             $i=0;
             if($studentHomework != null){
@@ -880,6 +897,7 @@ class HomeworkController extends Controller
                     $data[$i]['division_name']=ucfirst($value['division_name']);
                     $data[$i]['batch_name']=ucfirst($value['name']);
                     $data[$i]['class_name']=ucfirst($value['class_name']);
+                    $data[$i]['created_at']=$value['created_at'];
                     $i++;
                 }
 
@@ -888,6 +906,12 @@ class HomeworkController extends Controller
                 $status = 202;
                 $message = "No Homework not found for this user";
             }
+        }
+        if($data !=null){
+            foreach ($data as $key => $part) {
+                $sort[$key] = strtotime($part['created_at']);
+            }
+            array_multisort($sort, SORT_DESC, $data);
         }
         else{
             $status = 202;

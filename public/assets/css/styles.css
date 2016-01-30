@@ -11742,3 +11742,10 @@ a.control_next {
 .batchClassTab tr td {
     border-bottom:none !important;
 }
+.fileDelBtn{
+    background: #666;
+    padding: 4px;
+    border: 1px solid #ccc;
+    width: 31px;
+    top: -10px;
+}

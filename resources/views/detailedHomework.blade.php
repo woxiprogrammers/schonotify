@@ -71,7 +71,8 @@
                     <h4>{!!$row['homework_title']!!}  @if($row['homework_file'] != null) <a href="/download/{!!$row['homework_file']!!}"> Download <i class="fa fa-cloud-download"></i></a> @endif</h4>
                     <br>
                     <p>
-                        {!!$row['homework_description']!!}
+
+                    <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;" readonly="yes" >{!!$row['homework_description']!!}</textarea>
                     </p>
                     <br>
                     <br>
@@ -209,7 +210,11 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input  name="pdfFile" id="pdfFile" size="1" type="file"  value="{!!$row['homework_file']!!}"  />{!!$row['homework_file']!!}
+                        <input  id="input" size="1" type="file" name="pdfFile"  value="{!!$row['homework_file']!!}" />
+                        </br>{!!$row['homework_file']!!}
+                        @if($row['homework_file'] != null )
+                        <a href="/delete-file/{!! $row['homework_file']!!}/{!! $row['homework_id']!!}"  class="btn btn-primary btn-red pull-left fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
+                        @endif
                     </div>
 
                 </div>
@@ -248,19 +253,8 @@
             </div>
             <div class="col-md-10 form-group" id="tableContent2">
                 <label>Select Students to assign homework</label>
-                <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
-                    <thead>
-                    <tr>
-                        <th id="selectAllCheck"><input type="checkbox" class="allCheckedStud1"/><span class="position-absolute padding-left-5"><b>Select all</b></span></th>
-                        <th>Roll No.</th>
-                        <th>Name</th>
-                        <th>Division</th>
-                    </tr>
-                    </thead>
-                    <tbody id="studentList">
-                    </tbody>
-                </table>
             </div>
+            <div id="tableData"></div>
             <div class="col-md-12">
                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnCancel">
                     Cancel <i class="fa fa-times-circle-o"></i>
@@ -314,6 +308,8 @@
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="/assets/js/form-validation.js"></script>
+<script src="/vendor/jquery-validation/additional-methods.js"></script>
+
 <!-- start: JavaScript Event Handlers for this page -->
 <script>
     jQuery(document).ready(function() {
@@ -333,6 +329,7 @@
                 this.checked = true;  //select all checkboxes with class "checkbox1"
             });
         }
+
         var sub=$('#subjectsDropdown').val();
         if(sub!="")
         {
@@ -460,6 +457,16 @@
                                         var route3='/get-edit-division-students';
                                         var hrId=$('#homework_id').val();
                                         var str1="";
+                                    var str1="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>"+
+                                        "<thead>"+
+                                        "<tr>"+
+                                        "<th><input type='checkbox' id='selectAll' class='allCheckedStud1' data-set='#sample_2 .checkedStud1'/> <span class='position-absolute padding-left-5'><b>Select </b></span></th>"+
+                                        "<th>Roll No.</th>"+
+                                        "<th>Name</th>"+
+                                        "<th>Division</th>"+
+                                        "</tr>"+
+                                        "</thead>"+
+                                        "<tbody id='studentList'>";
                                             $.post(route3,{id:sample,homework_id:hrId},function(res2){
 
                                                 var arrStr= $.map(res2,function(value){
@@ -476,7 +483,7 @@
                                                            '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" checked/></td>'+
                                                            '<td>'+res1[i]['roll_number']+'</td>'+
                                                            '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                                                           '<td>'+res1[i]['slug']+'</td>'+
+                                                           '<td>'+res1[i]['division_name']+'</td>'+
                                                            '</tr>';
 
 
@@ -487,12 +494,14 @@
                                                             '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
                                                             '<td>'+res1[i]['roll_number']+'</td>'+
                                                             '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                                                            '<td>'+res1[i]['slug']+'</td>'+
+                                                            '<td>'+res1[i]['division_name']+'</td>'+
                                                             '</tr>';
                                                     }
 
                                                 }
-                                                $('#studentList').html(str1);
+                                                str1 += '</tbody>'+
+                                                    '</table>';
+                                                $('#tableData').html(str1);
                                                 TableData.init();
                                                 if($('.allCheckedStud1').prop('checked') == true)
                                                 {
@@ -500,6 +509,18 @@
                                                         this.checked = true;  //select all checkboxes with class "checkbox1"
                                                     });
                                                 }
+                                                $('.allCheckedStud1').change(function(){
+                                                    if($(this).prop('checked') == true)
+                                                    {
+                                                        $('.checkedStud1').each(function() { //loop through each checkbox
+                                                            this.checked = true;  //select all checkboxes with class "checkbox1"
+                                                        });
+                                                    }else{
+                                                        $('.checkedStud1').each(function() { //loop through each checkbox
+                                                            this.checked = false;  //select all checkboxes with class "checkbox1"
+                                                        });
+                                                    }
+                                                });
 
                                             });
 
@@ -660,6 +681,16 @@
         var route3='/get-edit-division-students';
         var hrId=$('#homework_id').val();
         var str1="";
+            var str1="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>"+
+                "<thead>"+
+                "<tr>"+
+                "<th><input type='checkbox' id='selectAll' class='allCheckedStud1' data-set='#sample_2 .checkedStud1' /> <span class='position-absolute padding-left-5'><b>Select </b></span></th>"+
+                "<th>Roll No.</th>"+
+                "<th>Name</th>"+
+                "<th>Division</th>"+
+                "</tr>"+
+                "</thead>"+
+                "<tbody id='studentList'>";
         $.post(route3,{id:aIds,homework_id:hrId},function(res2){
 
             var arrStr= $.map(res2,function(value){
@@ -676,7 +707,7 @@
                         '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" checked/></td>'+
                         '<td>'+res1[i]['roll_number']+'</td>'+
                         '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                        '<td>'+res1[i]['slug']+'</td>'+
+                        '<td>'+res1[i]['division_name']+'</td>'+
                         '</tr>';
 
 
@@ -687,19 +718,36 @@
                         '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
                         '<td>'+res1[i]['roll_number']+'</td>'+
                         '<td>'+res1[i]['first_name']+' '+res1[i]['last_name']+'</td>'+
-                        '<td>'+res1[i]['slug']+'</td>'+
+                        '<td>'+res1[i]['division_name']+'</td>'+
                         '</tr>';
                 }
 
             }
-            $('#studentList').html(str1);
-            $("#tableData").dataTable().fnDestroy();
+            str1 += '</tbody>'+
+                '</table>';
+            $('#tableData').html(str1);
+
+            $('.allCheckedStud1').change(function(){
+
+                if($(this).prop('checked') == true)
+                {
+                    $('.checkedStud1').each(function() { //loop through each checkbox
+                        this.checked = true;  //select all checkboxes with class "checkbox1"
+                    });
+                }else{
+                    $('.checkedStud1').each(function() { //loop through each checkbox
+                        this.checked = false;  //select all checkboxes with class "checkbox1"
+                    });
+                }
+            });
             if($('.allCheckedStud1').prop('checked') == true)
             {
                 $('.checkedStud1').each(function() { //loop through each checkbox
                     this.checked = true;  //select all checkboxes with class "checkbox1"
                 });
             }
+
+            $("#tableData").dataTable().fnDestroy();
 
         });
         });

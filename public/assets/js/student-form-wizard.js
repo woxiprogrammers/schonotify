@@ -35,6 +35,14 @@ var FormWizard = function () {
     $.validator.addMethod("chkMail", function(value, element) {
         return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
     });
+    jQuery.validator.addMethod("removespace", function(value, element) {
+        if (value.trim().length >=15)
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }, "Address must contain at-least 15 characters");
     var initValidator = function () {
 
         $.validator.setDefaults({
@@ -70,7 +78,8 @@ var FormWizard = function () {
                 },
                 address:{
                     minlength:15,
-                    required:true
+                    required:true,
+                    removespace:true
                 },
                 modules: {
                     required: true,
