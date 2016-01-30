@@ -89,18 +89,15 @@ class UserController extends Controller
                     if($data['users']['role_id']==4)
                     {
                         $i=0;
-                        $userData=User::where('parent_id','=',$data['users']['user_id'])->get();
-                        $userDataArray=$userData->toArray();
-                        foreach($userDataArray as $value ){
-                            $messageCount=Message::where('to_id',$value['id'])
+                        $userData=User::where('parent_id','=',$data['users']['user_id'])->first();
+                            $messageCount=Message::where('to_id',$userData['id'])
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)
                                 ->count();
-                            $data['Badge_count'][$i]['user_id']=$value['id'];
+                            $data['Badge_count'][$i]['user_id']=$userData['id'];
                             $data['Badge_count'][$i]['message_count'] = $messageCount;
                             $data['Badge_count'][$i]['auto_notification_count'] = $messageCount;
-                            $i++;
-                        }
+
                     }else{
                         $messageCount=Message::where('to_id',$user['id'])
                             ->where('read_status','=',0)
@@ -130,16 +127,55 @@ class UserController extends Controller
 
     }
     public function getBatchesTeacher(Request $request){
-           $data=$request->all();
         try{
-            if($data['teacher']['role_id'] == 1){
-                $batchData = Batch::where('body_id',$data['teacher']['body_id'])->select('id','name')->get();
-                $batchList = $batchData->toArray();
-            }elseif($data['teacher']['role_id'] == 2){
-                $divisionList = SubjectClassDivision::where('teacher_id',$data['teacher']['id'])->select('division_id')->get();
-                $divisionInfo = Division::wherein('id',$divisionList)->select('class_id')->distinct()->get();
-                $classInfo = Classes::wherein('id',$divisionInfo)->select('id')->get();
-                $batchInfo = Batch::wherein('id',$classInfo)->select('id','name')->get()->toArray();
+            $data=$request->all();
+            $division=array();
+            $batchInfo=array();
+            $Classes=array();
+            $divisionData=SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])
+                ->select('division_id')
+                ->get()->toArray();
+            $k=0;
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+            $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if(!Empty($divisions)){
+                $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                    ->select('division_id')
+                    ->get()->toArray();
+                if(!Empty($divisionData))
+                {
+                    foreach($divisionData as $value){
+                        $division['id'][$k]=$value['division_id'];
+                        $k++;
+                    }
+                }
+            }
+            $DivisionArray=array_unique($division['id'],SORT_REGULAR);
+            $i=0;
+            foreach ($DivisionArray  as $value)
+            {
+                $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                $className=Classes::where('id','=',$class_id['class_id'])->select('class_name as class_name', 'batch_id as batch_id')->first();
+                if(!Empty($class_id)){
+                    $Classes[$i]['id']=$class_id['class_id'];
+                    $Classes[$i]['name']=$className['class_name'];
+                    $Classes[$i]['batch_id']=$className['batch_id'];
+                    $i++;
+                }
+            }
+            $i=0;
+            foreach($Classes as $row)
+            {
+                $batchName=Batch::where('id',$row['batch_id'])->first();
+                $batchInfo[$i]['id'] = $batchName['id'];
+                $batchInfo[$i]['name'] = $batchName['name'];
+                $i++;
             }
             $message="Successfully Listed";
             $status=200;
@@ -155,8 +191,6 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
-
 
     public function getTeachersList(Request $request , $id )
        {
@@ -187,20 +221,50 @@ class UserController extends Controller
            ];
            return response($response, $status);
      }
-    public function getClassesTeacher(Request $request, $id){
+    public function getClassesTeacher(Request $request, $batch_id){
         try{
             $data=$request->all();
-            if($data['teacher']['role_id'] == 1){
-                $classData = Classes::where('batch_id', $id)->select('id','class_name')->get();
-                $classList = $classData->toArray();
-            }elseif($data['teacher']['role_id']== 2){
-                $divisionList = SubjectClassDivision::where('teacher_id',$data['teacher']['id'])->select('division_id')->get();
-                $divisionInfo = Division::wherein('id',$divisionList)->select('class_id')->distinct()->get();
-                $classInfo = Classes::wherein('id',$divisionInfo)->select('id')->distinct()->get();
-                $classData = Classes::wherein('id', $classInfo)->where('batch_id',$id)->select('id','class_name')->distinct()->get()->toArray();
+            $division=array();
+            $finalClasses=array();
+            $divisionData=SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])
+                ->select('division_id')
+                ->get()->toArray();
+            $k=0;
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+            $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if(!Empty($divisions)){
+                $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                    ->select('division_id')
+                    ->get()->toArray();
+                if(!Empty($divisionData))
+                {
+                    foreach($divisionData as $value){
+                        $division['id'][$k]=$value['division_id'];
+                        $k++;
+                    }
+                }
+            }
+            $DivisionArray=array_unique($division['id'],SORT_REGULAR);
+            $i=0;
+            foreach ($DivisionArray  as $value){
+                $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                $className=Classes::where('id','=',$class_id['class_id'])
+                    ->where('batch_id','=',$batch_id)
+                    ->select('id','class_name as class_name')->first();
+                if(!Empty($class_id)&&!Empty($className)){
+                    $finalClasses[$i]['id']=$class_id['class_id'];
+                    $finalClasses[$i]['class_name']=$className['class_name'];
+                    $i++;
+                }
             }
             $status = 200;
-            $responseData['classList']= $classData;
+            $responseData['classList']= $finalClasses;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
             echo $e->getMessage();
@@ -215,18 +279,50 @@ class UserController extends Controller
         return response($response, $status);
     }
 
-    public function getDivisions(Request $request, $id){
+    public function getDivisions(Request $request, $class_id){
         try{
             $data=$request->all();
-            if($data['teacher']['role_id']  == 1){
-                $divisionData = Division::where('class_id', $id)->select('id','division_name')->get();
-                $divisionList = $divisionData->toArray();
-            }elseif($data['teacher']['role_id'] == 2){
-                $divisionList = SubjectClassDivision::where('teacher_id',$data['teacher']['id'] )->select('division_id')->get();
-                $divisionData = Division::wherein('id', $divisionList)->where('class_id',$id)->select('id','division_name')->get()->toArray();
+            $division=array();
+            $finalDivisions=array();
+            $divisionData=SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])
+                ->select('division_id')
+                ->get()->toArray();
+            $k=0;
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+            $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if(!Empty($divisions)){
+                $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                    ->select('division_id')
+                    ->get()->toArray();
+                if(!Empty($divisionData))
+                {
+                    foreach($divisionData as $value){
+                        $division['id'][$k]=$value['division_id'];
+                        $k++;
+                    }
+                }
+            }
+            $DivisionArray=array_unique($division['id'],SORT_REGULAR);
+            $i=0;
+            foreach($DivisionArray as $division_id){
+                $finalData=Division::join('classes','divisions.class_id', '=', 'classes.id')
+                    ->where('divisions.class_id','=',$class_id)
+                    ->where('divisions.id','=',$division_id)
+                    ->select('divisions.id as id','divisions.division_name as division_name')
+                    ->first();
+                if(!Empty($finalData)){
+                    $finalDivisions[$i]=$finalData;
+                    $i++;
+                }
             }
             $status = 200;
-            $responseData['divisionList']= $divisionData;
+            $responseData['divisionList']= $finalDivisions;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
             echo $e->getMessage();
@@ -240,6 +336,7 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
+
     public function getSwitchingDetails(Request $request){
         try{
             $data=$request->all();
