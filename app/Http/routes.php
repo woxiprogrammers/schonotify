@@ -298,9 +298,9 @@
     Route::get('getteachers',array('uses' => 'api\MessageController@getTeachers'));
     Route::get('gettadmins',array('uses' => 'api\MessageController@getAdmins'));
     Route::get('get-batches-teacher',array('uses' => 'api\UserController@getBatchesTeacher'));
-    Route::get('getclasses/{id}',array('uses' => 'api\UserController@getClassesTeacher'));
-    Route::get('getdivisions/{id}',array('uses' => 'api\UserController@getDivisions'));
-    Route::get('get-students-list/{division}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::get('getclasses/{batch_id}',array('uses' => 'api\UserController@getClassesTeacher'));
+    Route::get('getdivisions/{class_id}',array('uses' => 'api\UserController@getDivisions'));
+    Route::get('get-students-list/{division_id}',array('uses' => 'api\MessageController@getStudentList'));
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');

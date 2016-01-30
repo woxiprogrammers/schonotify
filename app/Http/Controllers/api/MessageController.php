@@ -432,7 +432,7 @@ class MessageController extends Controller
     public function getStudentList(Request $request){
         try{
             $student_id = UserRoles::whereIn('slug', ['student'])->pluck('id');
-            $student = User::where('role_id',$student_id)->where('division_id',$request->division)
+            $student = User::where('role_id',$student_id)->where('division_id',$request->division_id)
                                 ->select('id','first_name', 'last_name')
                                 ->get()->toArray();
             $i=0;
