@@ -94,9 +94,9 @@ class UserController extends Controller
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)
                                 ->count();
-                            $data['Badge_count'][$i]['user_id']=$userData['id'];
-                            $data['Badge_count'][$i]['message_count'] = $messageCount;
-                            $data['Badge_count'][$i]['auto_notification_count'] = $messageCount;
+                            $data['Badge_count']['user_id']=$userData['id'];
+                            $data['Badge_count']['message_count'] = $messageCount;
+                            $data['Badge_count']['auto_notification_count'] = $messageCount;
 
                     }else{
                         $messageCount=Message::where('to_id',$user['id'])
