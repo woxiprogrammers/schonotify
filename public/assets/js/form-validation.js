@@ -860,8 +860,9 @@ var FormValidator = function () {
                     required:true
                 },
                 pdfFile:{
-                    max:25000000,
-                    accept:"pdf"
+                    accept:"pdf",
+                    maxlength: 26214400                                                                                                                                                                                                                                                                              ,
+
                      },
                 classDropdown:{
                     required:true
@@ -881,7 +882,7 @@ var FormValidator = function () {
                 'divisions[]': "Please select at least one division",
                 'studentinfo[]': "There are no student selected",
                 pdfFile:{
-                    max: "select only pdf files of size 25 mb",
+                    maxlength: "select only pdf files of size 25 mb",
                     accept:"Please upload .pdf only"
                 },
                 dueDate: "please select due date ",

@@ -28,7 +28,7 @@
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
-    <form action="/create-homework" method="post" role="form" id="form24" enctype="multipart/form-data">
+    <form action="/create-homework" method="post" role="form" id="form24" enctype="multipart/form-data" onsubmit="return validate();">
         <div class="row">
             <div class="col-md-12">
                 <div class="errorHandler alert alert-danger no-display">
@@ -78,7 +78,7 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input id="input" size="1" accept=".pdf" type="file" name="pdfFile" />
+                        <input id="pdfFile" class="demoInputBox" size="1" onchange="return validate();" accept=".pdf" type="file" name="pdfFile" /><span id="file_error"></span>
 
                     </div>
                     <br>
@@ -227,7 +227,17 @@
     });
 
 
-
+    function validate() {
+        $("#file_error").html("");
+        $(".demoInputBox").css("border-color","#F0F0F0");
+        var file_size = $('#pdfFile')[0].files[0].size;
+        if(file_size>26214400) {
+            $("#file_error").html("File size is greater than 25MB");
+            $(".demoInputBox").css("border-color","#FF0000");
+            return false;
+        }
+        return true;
+    }
 
 
     $('#subjectsDropdown').change(function(){
