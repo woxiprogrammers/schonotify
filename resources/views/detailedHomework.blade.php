@@ -210,11 +210,18 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
+
                         <input  id="input" size="1" type="file" name="pdfFile"  value="{!!$row['homework_file']!!}" />
-                        </br>{!!$row['homework_file']!!}
-                        @if($row['homework_file'] != null )
-                        <a href="/delete-file/{!! $row['homework_file']!!}/{!! $row['homework_id']!!}"  class="btn btn-primary btn-red pull-left fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
-                        @endif
+
+                        </br>
+                        <div id="hwtitle">
+                            <p>{!!$row['homework_file']!!}
+                            @if($row['homework_file'] != null )
+                            <a onclick="deleteFile('{!! $row['homework_file']!!}','{!! $row['homework_id']!!}');"  class="btn btn-primary btn-red fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
+                            @endif
+                            </p>
+                        </div>
+
                     </div>
 
                 </div>
@@ -253,19 +260,9 @@
             </div>
             <div class="col-md-10 form-group" id="tableContent2">
                 <label>Select Students to assign homework</label>
-                <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
-                    <thead>
-                    <tr>
-                        <th id="selectAllCheck"><input type="checkbox" class="allCheckedStud1"/><span class="position-absolute padding-left-5"><b>Select all</b></span></th>
-                        <th>Roll No.</th>
-                        <th>Name</th>
-                        <th>Division</th>
-                    </tr>
-                    </thead>
-                    <tbody id="studentList">
-                    </tbody>
-                </table>
+                <div id="tableData"></div>
             </div>
+
             <div class="col-md-12">
                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnCancel">
                     Cancel <i class="fa fa-times-circle-o"></i>
@@ -340,6 +337,7 @@
                 this.checked = true;  //select all checkboxes with class "checkbox1"
             });
         }
+
         var sub=$('#subjectsDropdown').val();
         if(sub!="")
         {
@@ -467,6 +465,16 @@
                                         var route3='/get-edit-division-students';
                                         var hrId=$('#homework_id').val();
                                         var str1="";
+                                    var str1="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>"+
+                                        "<thead>"+
+                                        "<tr>"+
+                                        "<th><input type='checkbox' id='selectAll' class='allCheckedStud1' data-set='#sample_2 .checkedStud1'/> <span class='position-absolute padding-left-5'><b>Select </b></span></th>"+
+                                        "<th>Roll No.</th>"+
+                                        "<th>Name</th>"+
+                                        "<th>Division</th>"+
+                                        "</tr>"+
+                                        "</thead>"+
+                                        "<tbody id='studentList'>";
                                             $.post(route3,{id:sample,homework_id:hrId},function(res2){
 
                                                 var arrStr= $.map(res2,function(value){
@@ -488,8 +496,6 @@
 
 
                                                    }else{
-
-
                                                         str1+=' <tr>'+
                                                             '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
                                                             '<td>'+res1[i]['roll_number']+'</td>'+
@@ -499,7 +505,9 @@
                                                     }
 
                                                 }
-                                                $('#studentList').html(str1);
+                                                str1 += '</tbody>'+
+                                                    '</table>';
+                                                $('#tableData').html(str1);
                                                 TableData.init();
                                                 if($('.allCheckedStud1').prop('checked') == true)
                                                 {
@@ -507,6 +515,18 @@
                                                         this.checked = true;  //select all checkboxes with class "checkbox1"
                                                     });
                                                 }
+                                                $('.allCheckedStud1').change(function(){
+                                                    if($(this).prop('checked') == true)
+                                                    {
+                                                        $('.checkedStud1').each(function() { //loop through each checkbox
+                                                            this.checked = true;  //select all checkboxes with class "checkbox1"
+                                                        });
+                                                    }else{
+                                                        $('.checkedStud1').each(function() { //loop through each checkbox
+                                                            this.checked = false;  //select all checkboxes with class "checkbox1"
+                                                        });
+                                                    }
+                                                });
 
                                             });
 
@@ -667,6 +687,16 @@
         var route3='/get-edit-division-students';
         var hrId=$('#homework_id').val();
         var str1="";
+            var str1="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>"+
+                "<thead>"+
+                "<tr>"+
+                "<th><input type='checkbox' id='selectAll' class='allCheckedStud1' data-set='#sample_2 .checkedStud1' /> <span class='position-absolute padding-left-5'><b>Select </b></span></th>"+
+                "<th>Roll No.</th>"+
+                "<th>Name</th>"+
+                "<th>Division</th>"+
+                "</tr>"+
+                "</thead>"+
+                "<tbody id='studentList'>";
         $.post(route3,{id:aIds,homework_id:hrId},function(res2){
 
             var arrStr= $.map(res2,function(value){
@@ -699,14 +729,31 @@
                 }
 
             }
-            $('#studentList').html(str1);
-            $("#tableData").dataTable().fnDestroy();
+            str1 += '</tbody>'+
+                '</table>';
+            $('#tableData').html(str1);
+
+            $('.allCheckedStud1').change(function(){
+
+                if($(this).prop('checked') == true)
+                {
+                    $('.checkedStud1').each(function() { //loop through each checkbox
+                        this.checked = true;  //select all checkboxes with class "checkbox1"
+                    });
+                }else{
+                    $('.checkedStud1').each(function() { //loop through each checkbox
+                        this.checked = false;  //select all checkboxes with class "checkbox1"
+                    });
+                }
+            });
             if($('.allCheckedStud1').prop('checked') == true)
             {
                 $('.checkedStud1').each(function() { //loop through each checkbox
                     this.checked = true;  //select all checkboxes with class "checkbox1"
                 });
             }
+
+            $("#tableData").dataTable().fnDestroy();
 
         });
         });
@@ -740,6 +787,16 @@
         FormElements.init();
     });
 
+    function deleteFile(file,homework){
+        var route="/delete-file/"+file+"/"+homework;
+        $.get(route,function(res){
+           if(res=="true")
+           {
+                $('#hwtitle').html("");
+                $('.fileDelBtn').hide();
+           }
+        });
+    }
 
 </script>
 

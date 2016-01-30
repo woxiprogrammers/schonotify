@@ -41,7 +41,7 @@ class CreateHomeworkRequest extends Request
                 } else {
 
                     Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
-                    return Redirect::to('/createHomework');
+                    return Redirect::back();
                 }
 
                 break;
@@ -56,7 +56,7 @@ class CreateHomeworkRequest extends Request
                 } else {
 
                     Session::flash('message-error','You currently do not have permission to access this functionality. Please contact administrator to grant you access');
-                    return Redirect::to('/createHomework');
+                    return Redirect::back();
                 }
                 break;
             default:break;
