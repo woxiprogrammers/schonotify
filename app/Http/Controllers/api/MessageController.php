@@ -282,8 +282,6 @@ class MessageController extends Controller
     }
     public function getDetailMessages(Requests\Message $request ){
         try {
-            $data=$request->all();
-            Log::info('your data.', ['all data' => $data]);
             $finalMessageData=array();
             $MessageData=array();
             $data = $request->all();
