@@ -145,7 +145,7 @@
 </div>
 <div id="update">
 
-    <form action="/edit-homework-detail" role="form" method="post" id="form24" enctype="multipart/form-data">
+    <form action="/edit-homework-detail" role="form" method="post" id="form24" onsubmit="return validate();" enctype="multipart/form-data">
     <input type="hidden" name="homework_id" id="homework_id" value="@foreach($homeworkIdss as $work){!! $work['homework_id']!!}@endforeach"/>
         <div class="row">
             <div class="col-md-12">
@@ -209,10 +209,11 @@
                     <label class="control-label">
                         Upload Document
                     </label>
-                    <div id="wrapper">
+                    <div id="wrapper" class="form-group">
 
-                        <input  id="input" size="1" type="file" name="pdfFile"  value="{!!$row['homework_file']!!}" />
+                        <input  id="pdfFile" size="1" type="file" class="demoInputBox" onchange="return validate();"  name="pdfFile" value="{!!$row['homework_file']!!}" accept=".pdf" /><span id="file_error"></span>
 
+                        </br>
                         </br>
                         <div id="hwtitle">
                             <p>{!!$row['homework_file']!!}
@@ -554,7 +555,17 @@
 
     });
 
-
+    function validate() {
+        $("#file_error").html("");
+        $(".demoInputBox").css("border-color","#F0F0F0");
+        var file_size = $('#pdfFile')[0].files[0].size;
+        if(file_size>26214400) {
+            $("#file_error").html("File size is greater than 25MB");
+            $(".demoInputBox").css("border-color","#FF0000");
+            return false;
+        }
+        return true;
+    }
     $('#btnEdit').click(function(){
         $('#detail').hide();
         $('#update').show();
