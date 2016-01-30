@@ -199,35 +199,15 @@ class MessageController extends Controller
 
     public function getMessageCount(Request $request , $id){
         try {
-         $finalMessageCount=array();
-         $data=$request->all();
-          $userData=User::where('parent_id','=',$data['teacher']['id'])->get();
-        if($data['teacher']['role_id']==4)
-        {
-            $i=0;
-            $userData=User::where('parent_id','=',$data['users']['user_id'])->get();
-            $userDataArray=$userData->toArray();
-            foreach($userDataArray as $value ){
-                $messageCount=Message::where('to_id',$value['id'])
+
+                $finalMessageCount=array();
+                $messageCount=Message::where('to_id',$id)
                     ->where('read_status','=',0)
                     ->where('is_delete','=',0)
                     ->count();
-                $data['Badge_count'][$i]['user_id']=$value['id'];
-                $data['Badge_count'][$i]['message_count'] = $messageCount;
-                $data['Badge_count'][$i]['auto_notification_count'] = $messageCount;
-                $i++;
-            }
-            $status=200;
-            $message="Success";
-        }else{
-            $messageCount=Message::where('to_id',$data['teacher']['id'])
-                ->where('read_status','=',0)
-                ->where('is_delete','=',0)
-                ->count();
             $finalMessageCount['Badge_count']['user_id']=$id;
             $finalMessageCount['Badge_count']['message_count'] = $messageCount;
             $finalMessageCount['Badge_count']['auto_notification_count'] = $messageCount;
-         }
         $status=200;
         $message="Success";
          } catch (\Exception $e) {
