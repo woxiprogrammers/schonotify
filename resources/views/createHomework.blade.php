@@ -78,7 +78,8 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input id="input" size="1" type="file" name="pdfFile" />
+                        <input id="input" size="1" accept=".pdf" type="file" name="pdfFile" />
+
                     </div>
                     <br>
                 </div>
