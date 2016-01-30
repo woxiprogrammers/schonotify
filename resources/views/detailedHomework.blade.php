@@ -210,7 +210,7 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input  id="input" size="1" type="file" name="pdfFile"  value="{!!$row['homework_file']!!}" />
+                        <input  id="input" size="1" type="file"  name="pdfFile" accept=".pdf"  value="{!!$row['homework_file']!!}" />
                         </br>{!!$row['homework_file']!!}
                         @if($row['homework_file'] != null )
                         <a href="/delete-file/{!! $row['homework_file']!!}/{!! $row['homework_id']!!}"  class="btn btn-primary btn-red pull-left fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
@@ -253,8 +253,9 @@
             </div>
             <div class="col-md-10 form-group" id="tableContent2">
                 <label>Select Students to assign homework</label>
+                <div id="tableData"></div>
             </div>
-            <div id="tableData"></div>
+
             <div class="col-md-12">
                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnCancel">
                     Cancel <i class="fa fa-times-circle-o"></i>
@@ -488,8 +489,6 @@
 
 
                                                    }else{
-
-
                                                         str1+=' <tr>'+
                                                             '<td><input type="checkbox"  name="studentinfo[]" class="checkedStud1" value="'+res1[i]['user_id']+'" /></td>'+
                                                             '<td>'+res1[i]['roll_number']+'</td>'+
