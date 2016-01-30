@@ -19,7 +19,6 @@ use Faker\Provider\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
 
 class HomeworkController extends Controller
 {
@@ -53,8 +52,8 @@ class HomeworkController extends Controller
                     ->get();
                 foreach($divisionSubjects as $row)
                 {
-                    $homework[$i]['subject_id']=$row['id'];
-                    $homework[$i]['subject'] = $row ['subject_name'] ;
+                    $homework[$i]['id']=$row['id'];
+                    $homework[$i]['name'] = $row ['subject_name'] ;
                     $i++;
                 }
             }else{
@@ -327,7 +326,6 @@ class HomeworkController extends Controller
     {
         try{
             $data=$request->all();
-            Log::info('your data.', ['all data' => $data]);
             $data=array();
             $HomeworkTeacher=array();
             $division=Division::where('id',$request->division_id)->first();
@@ -701,6 +699,7 @@ class HomeworkController extends Controller
                          ->where('homework_teacher.division_id','=',$division['id'])
                          ->where('homeworks.status','=',0)
                          ->where('homeworks.is_active','=',1)//0 is for deleted homework
+                         ->where('homework_teacher.teacher_id','=',$data['teacher']['id'])
                          ->groupBy('homework_teacher.homework_id')
                          ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','homework_types.id as id ','users.first_name as first_name','users.last_name as last_name','users.id as userId','subjects.slug as subjectName','subjects.id as subject_id','homeworks.status','divisions.division_name','divisions.id as division_id','classes.class_name','classes.id as class_id','homeworks.created_at','batches.name as batch_name','batches.id as batch_id')
                          ->get();

@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Message;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\AcceptHeader;
 
 class MessageController extends Controller
 {
@@ -198,7 +200,8 @@ class MessageController extends Controller
     public function getMessageCount(Request $request , $id){
         try {
          $finalMessageCount=array();
-        $data=$request->all();
+         $data=$request->all();
+          $userData=User::where('parent_id','=',$data['teacher']['id'])->get();
         if($data['teacher']['role_id']==4)
         {
             $i=0;
@@ -206,7 +209,6 @@ class MessageController extends Controller
             $userDataArray=$userData->toArray();
             foreach($userDataArray as $value ){
                 $messageCount=Message::where('to_id',$value['id'])
-                    ->groupBy('from_id')
                     ->where('read_status','=',0)
                     ->where('is_delete','=',0)
                     ->count();
@@ -218,8 +220,8 @@ class MessageController extends Controller
             $status=200;
             $message="Success";
         }else{
-            $messageCount=Message::where('to_id',$id)
-                ->where('read_status',0)
+            $messageCount=Message::where('to_id',$data['teacher']['id'])
+                ->where('read_status','=',0)
                 ->where('is_delete','=',0)
                 ->count();
             $finalMessageCount['Badge_count']['user_id']=$id;
@@ -235,7 +237,7 @@ class MessageController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "Data" => $finalMessageCount
+            "data" => $finalMessageCount
         ];
         return response($response, $status);
 }
@@ -280,6 +282,8 @@ class MessageController extends Controller
     }
     public function getDetailMessages(Requests\Message $request ){
         try {
+            $data=$request->all();
+            Log::info('your data.', ['all data' => $data]);
             $finalMessageData=array();
             $MessageData=array();
             $data = $request->all();
