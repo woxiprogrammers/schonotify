@@ -32,7 +32,7 @@ class EditHomeworkRequest extends Request
         {
             case 'GET':
 
-                if(in_array('create_homework',$resultArr)) {
+                if(in_array('update_homework',$resultArr)) {
                     return true;
                 } else {
 
@@ -66,17 +66,26 @@ class EditHomeworkRequest extends Request
      */
     public function rules()
     {
-        return [
-            'subjectsDropdown' => 'required',
-            'homeworkType' => 'required',
-            'title' => 'required|min:3|max:20',
-            'description' => 'required',
-            'dueDate' =>'required|date',
-            'batch' =>'required',
-            'pdfFile' => 'mimes:pdf|max:25000000',
-            'classDropdown' =>'required',
-            'studentinfo' =>'required|min:1',
-            'divisions' =>'required',
-        ];
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET':return[];
+                        break;
+            case 'POST':
+                        return [
+                            'subjectsDropdown' => 'required',
+                            'homeworkType' => 'required',
+                            'title' => 'required|min:3|max:20',
+                            'description' => 'required',
+                            'dueDate' =>'required|date',
+                            'batch' =>'required',
+                            'pdfFile' => 'mimes:pdf|max:25000000',
+                            'classDropdown' =>'required',
+                            'studentinfo' =>'required|min:1',
+                            'divisions' =>'required',
+                        ];
+                        break;
+
+        }
     }
 }

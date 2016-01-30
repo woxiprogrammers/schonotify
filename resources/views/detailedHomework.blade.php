@@ -210,11 +210,17 @@
                         Upload Document
                     </label>
                     <div id="wrapper">
-                        <input  id="input" size="1" type="file"  name="pdfFile" accept=".pdf"  value="{!!$row['homework_file']!!}" />
-                        </br>{!!$row['homework_file']!!}
-                        @if($row['homework_file'] != null )
-                        <a href="/delete-file/{!! $row['homework_file']!!}/{!! $row['homework_id']!!}"  class="btn btn-primary btn-red pull-left fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
-                        @endif
+
+                        <input  id="input" size="1" type="file" name="pdfFile"  value="{!!$row['homework_file']!!}" />
+
+                        <div id="hwtitle">
+                            <p>{!!$row['homework_file']!!}
+                            @if($row['homework_file'] != null )
+                            <a onclick="deleteFile('{!! $row['homework_file']!!}','{!! $row['homework_id']!!}');"  class="btn btn-primary btn-red fileDelBtn"><i class="glyphicon glyphicon-trash"></i></a>
+                            @endif
+                            </p>
+                        </div>
+
                     </div>
 
                 </div>
@@ -780,6 +786,16 @@
         FormElements.init();
     });
 
+    function deleteFile(file,homework){
+        var route="/delete-file/"+file+"/"+homework;
+        $.get(route,function(res){
+           if(res=="true")
+           {
+                $('#hwtitle').html("");
+                $('.fileDelBtn').hide();
+           }
+        });
+    }
 
 </script>
 

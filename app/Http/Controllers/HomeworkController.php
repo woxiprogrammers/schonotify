@@ -712,14 +712,61 @@ if($request->authorize()===true)
         return $homeworkData->toArray();
 
     }
-    public function deleteFile($file_name,$homework_id)
+
+    public function loadMore(Requests\WebRequests\HomeworkRequest $request)
     {
-     $homework=array();
-     unlink('../public/uploads/homework/' . $file_name);
-     $homework['attachment_file']=null;
-     Homework::where('id',$homework_id)->update($homework);
-        Session::flash('message-success','file deleted successfully');
-        return Redirect::to('/detailedHomework/'.$homework_id);
+        if($request->authorize()===true)
+        {
+            $user=Auth::user();
+            $isClassTeacher=Division::where('class_teacher_id',$user->id)->first();
+
+            if($isClassTeacher){
+                $ClassTeacherAllSubjects=SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
+                    ->join('divisions','divisions.id','=','division_subjects.division_id')
+                    ->join('users','division_subjects.teacher_id','=','users.id')
+                    ->join('homework_teacher','homework_teacher.teacher_id','=','users.id')
+                    ->where('division_subjects.division_id',$isClassTeacher->id)
+                    ->orWhere('homework_teacher.teacher_id',$user->id)
+                    ->select('division_subjects.teacher_id','division_subjects.subject_id','subjects.subject_name','users.last_name as lastname','users.first_name as firstname','divisions.id as division_id','divisions.division_name')
+                    ->skip(0)->take(20)
+                    ->get();
+
+
+            }else{
+                $ClassTeacherAllSubjects=SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
+                    ->join('divisions','divisions.id','=','division_subjects.division_id')
+                    ->join('users','division_subjects.teacher_id','=','users.id')
+                    ->select('division_subjects.teacher_id','division_subjects.subject_id','subjects.subject_name','users.last_name as lastname','users.first_name as firstname','divisions.id as division_id','divisions.division_name')
+                    ->Where('teacher_id',$user->id)
+                    ->skip(0)->take(20)
+                    ->get();
+
+            }
+
+            return $ClassTeacherAllSubjects;
+
+        }else{
+            return Redirect::to('/');
+        }
+    }
+
+    public function deleteFile(Requests\WebRequests\EditHomeworkRequest $request,$file_name,$homework_id)
+    {
+
+        if($request->authorize()===true)
+        {
+            $homework=array();
+            unlink('../public/uploads/homework/' . $file_name);
+            $homework['attachment_file']=null;
+            $delete=Homework::where('id',$homework_id)->update($homework);
+            if($delete)
+            {
+                return "true";
+            }
+        }else{
+            return Redirect::back();
+        }
+
     }
 
 }
