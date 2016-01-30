@@ -213,6 +213,8 @@
 
                         <input  id="input" size="1" type="file" name="pdfFile"  value="{!!$row['homework_file']!!}" />
 
+                    </div>
+                    </br>
                         <div id="hwtitle">
                             <p>{!!$row['homework_file']!!}
                             @if($row['homework_file'] != null )
