@@ -325,7 +325,6 @@ class HomeworkController extends Controller
     public function createHomework(Requests\HomeworkRequest $request)
     {
         try{
-            $data=$request->all();
             $data=array();
             $HomeworkTeacher=array();
             $division=Division::where('id',$request->division_id)->first();
@@ -734,7 +733,7 @@ class HomeworkController extends Controller
                  $finalHomeworkListingSubjectTeacher[$i]['homework_id']=$value['homework_id'];
                  $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle']=$value['homeworkTitle'];
                  $finalHomeworkListingSubjectTeacher[$i]['description']=$value['description'];
-                 $finalHomeworkListingSubjectTeacher[$i]['due_date']=date("M j, g:i a",strtotime( $value['due_date']));
+                 $finalHomeworkListingSubjectTeacher[$i]['due_date']=$value['due_date'];
                  $finalHomeworkListingSubjectTeacher[$i]['attachment_file']=$value['attachment_file'];
                  $teacherName=User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
                  $finalHomeworkListingSubjectTeacher[$i]['teacher_id']=$value['teacher_id'];
@@ -750,7 +749,6 @@ class HomeworkController extends Controller
                  $finalHomeworkListingSubjectTeacher[$i]['division_name']=$value['division_name'];
                  $finalHomeworkListingSubjectTeacher[$i]['batch_name']=$value['batch_name'];
                  $finalHomeworkListingSubjectTeacher[$i]['batch_id']=$value['batch_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['created_at']=date("M j, g:i a",strtotime( $value['created_at']));
                  $studentList=HomeworkTeacher::where('homework_id','=',$value['homework_id'])->select('student_id')->get();
                  $j=0;
                  foreach($studentList as $value)
@@ -765,7 +763,7 @@ class HomeworkController extends Controller
 
              if($finalHomeworkListingSubjectTeacher !=null){
                  foreach ($finalHomeworkListingSubjectTeacher as $key => $part) {
-                     $sort[$key] = strtotime($part['created_at']);
+                     $sort[$key] = strtotime($part['due_date']);
                  }
                  array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
              }
@@ -859,7 +857,6 @@ class HomeworkController extends Controller
                     $data[$i]['created_at']=$value['created_at'];
                     $i++;
                 }
-
             }
             else{
                 $status = 202;
