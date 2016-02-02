@@ -28,6 +28,14 @@ class HomeworkController extends Controller
         $this->middleware('authenticate.user');
     }
 
+    /*
+     * Function Name: getTeacherSubject
+     * Param : Request $request
+     * Return :Return the data of subjects as JSON array
+     * Desc: Display list of subjects to the teacher
+     * Developed By: Amol Rokade
+     * Date: 1/2/2016
+     */
 
     public function getTeacherSubject(Request $request)
     {
@@ -87,6 +95,15 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+     * Function Name: getSubjectBatches
+     * Param : Request $request, $subjectId
+     * Return :Return the data of batches as JSON array
+     * Desc: Display list of subjects to the teacher
+     * Developed By: Amol Rokade
+     * Date: 1/2/2016
+     */
 
     public function getSubjectBatches(Request $requests, $subjectId)
     {
@@ -156,7 +173,16 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
-   public function getBatchesClasses(Request $requests, $subjectId , $batch_id)
+      /*
+    * Function Name: getBatchesClasses
+    * Param : $subjectId $batch_id Request $requests
+    * Return :Return the data of batches as JSON array
+    * Desc: Display list of batches to the teacher for homework creation
+    * Developed By: Amol Rokade
+    * Date: 1/2/2016
+    */
+
+    public function getBatchesClasses(Request $requests, $subjectId , $batch_id)
     {
         try{
             $data=$requests->all();
@@ -214,6 +240,15 @@ class HomeworkController extends Controller
          ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: getClassesDivision
+    * Param :Request $requests $subjectId $batch_id $class_id
+    * Return :Return the data of divisions as JSON array
+    * Desc: Display list of divisions to the teacher for homework creation
+    * Developed By: Amol Rokade
+    * Date: 1/2/2016
+    */
 
     public function getClassesDivision(Request $requests, $subjectId , $batch_id, $class_id)
     {
@@ -274,6 +309,16 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: getDivisionsStudents
+    * Param :Request $requests , $division as JSON array
+    * Return :Return the data of divisions students as JSON array
+    * Desc: Display list of divisions students to the teacher for homework creation
+    * Developed By: Amol Rokade
+    * Date: 1/2/2016
+    */
+
     public function getDivisionsStudents(Request $request)
     {
         $finalStudentsList=array();
@@ -303,6 +348,15 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
+
+    /*
+    * Function Name: getHomeworkType
+    * Param :Request $requests
+    * Return :Return the data of homework type  as JSON array
+    * Desc: Display list of homework type to the teacher for homework creation
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
     public function getHomeworkType(Request $request)
     {
         try{
@@ -322,6 +376,15 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: createHomework
+    * Param :Request $requests
+    * Return :Return the message and status after homework creation.
+    * Desc:Create a homework for specific batch, class, division ,Students
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+     */
     public function createHomework(Requests\HomeworkRequest $request)
     {
         try{
@@ -382,6 +445,15 @@ class HomeworkController extends Controller
 
         return response($response, $status);
     }
+
+    /*
+     * Function Name: updateHomework
+     * Param :Request $requests $homeworkId
+     * Return :Return the message and status after update homework.
+     * Desc:Update a specific homework for specific batch, class, division ,Students
+     * Developed By: Amol Rokade
+     *Date: 1/2/2016
+      */
 
     public function updateHomework(Requests\HomeworkRequest $request)
     {
@@ -455,6 +527,14 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
+    /*
+     * Function Name: publishHomeWork
+     * Param :Request $requests $homeworkId
+     * Return :Return the message and status after Publish homework.
+     * Desc:Publish a specific homework for specific batch, class, division ,Students
+     * Developed By: Amol Rokade
+     *Date: 1/2/2016
+      */
     public function publishHomeWork(Requests\PublishRequest $request)
     {
         try{
@@ -472,6 +552,15 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: viewHomeWork
+    * Param :Request $requests
+    * Return :Homework Array
+    * Desc: Teacher can view published homework related to his/her division.
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+  */
     public function viewHomeWork(Requests\HomeworkRequest $request)
     {
         try{
@@ -616,6 +705,16 @@ class HomeworkController extends Controller
               ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: viewDetailHomeWork
+    * Param :Request $requests $homeWork_id
+    * Return :Detail Homework Array
+    * Desc: Teacher can view published/Unpublished homework.
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
+
     public function viewDetailHomeWork(Requests\HomeworkRequest $request,$homeWork_id)
     {
                try{
@@ -639,6 +738,14 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
+   /*
+   * Function Name: viewUnpublishedHomeWork
+   * Param :Request $requests
+   * Return :Detail Homework Array
+   * Desc: Teacher can view Unpublished homework related o his/her class.
+   * Developed By: Amol Rokade
+   *Date: 1/2/2016
+   */
     public function viewUnpublishedHomeWork(Requests\HomeworkRequest $request)
     {
         try
@@ -781,6 +888,16 @@ class HomeworkController extends Controller
               ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: deleteHomework
+    * Param :Request $requests $homework_id
+    * Return :$message $status
+    * Desc: User can delete a homework which is unpublished created by them.
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
+
   public function deleteHomework(Requests\deleteHomeworkRequest $request)
   {
      try{
@@ -805,7 +922,15 @@ class HomeworkController extends Controller
       ];
         return response($response, $status);
   }
-  public function viewHomeworkParent(Requests\HomeworkRequest $request,$student_id)
+    /*
+    * Function Name: viewHomeworkParent
+    * Param :Request $requests $student_id
+    * Return :$message $status
+    * Desc: Parent can view homework assigned to his/her student
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
+    public function viewHomeworkParent(Requests\HomeworkRequest $request,$student_id)
   {
       $data=array();
     try{
