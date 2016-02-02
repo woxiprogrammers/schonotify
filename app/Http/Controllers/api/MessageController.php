@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Message;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\AcceptHeader;
 
 class MessageController extends Controller
 {

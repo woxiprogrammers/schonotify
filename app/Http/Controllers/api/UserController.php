@@ -30,11 +30,7 @@ class UserController extends Controller
         $this->middleware('authenticate.user',['except' => ['login']]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     protected function login(Requests\LoginRequest $request)
     {
 
