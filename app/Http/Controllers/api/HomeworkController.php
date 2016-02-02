@@ -840,7 +840,7 @@ class HomeworkController extends Controller
                  $finalHomeworkListingSubjectTeacher[$i]['homework_id']=$value['homework_id'];
                  $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle']=$value['homeworkTitle'];
                  $finalHomeworkListingSubjectTeacher[$i]['description']=$value['description'];
-                 $finalHomeworkListingSubjectTeacher[$i]['due_date']=$value['due_date'];
+                 $finalHomeworkListingSubjectTeacher[$i]['due_date'] = $value['due_date'];
                  $finalHomeworkListingSubjectTeacher[$i]['attachment_file']=$value['attachment_file'];
                  $teacherName=User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
                  $finalHomeworkListingSubjectTeacher[$i]['teacher_id']=$value['teacher_id'];
