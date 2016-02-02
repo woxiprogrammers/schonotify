@@ -15,6 +15,7 @@ use App\SubjectClassDivision;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
+use Faker\Provider\DateTime;
 use Faker\Provider\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -837,40 +838,42 @@ class HomeworkController extends Controller
              }
              $i=0;
              foreach($HomeworkListingSubjectTeacher as $value){
-                 $finalHomeworkListingSubjectTeacher[$i]['homework_id']=$value['homework_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle']=$value['homeworkTitle'];
-                 $finalHomeworkListingSubjectTeacher[$i]['description']=$value['description'];
-                 $finalHomeworkListingSubjectTeacher[$i]['due_date'] = $value['due_date'];
-                 $finalHomeworkListingSubjectTeacher[$i]['attachment_file']=$value['attachment_file'];
-                 $teacherName=User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
-                 $finalHomeworkListingSubjectTeacher[$i]['teacher_id']=$value['teacher_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['teacher_name']=$teacherName['first_name']." ".$teacherName['last_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['homeworkType']=ucfirst($value['homeworkType']);
-                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTypeId']=$value['id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['subjectName']=ucfirst($value['subjectName']);
-                 $finalHomeworkListingSubjectTeacher[$i]['subject_id']=$value['subject_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['status']=$value['status'];
-                 $finalHomeworkListingSubjectTeacher[$i]['class_id']=$value['class_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['class_name']=$value['class_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['division_id']=$value['division_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['division_name']=$value['division_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['batch_name']=$value['batch_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['batch_id']=$value['batch_id'];
-                 $studentList=HomeworkTeacher::where('homework_id','=',$value['homework_id'])->select('student_id')->get();
+               $date = date('Y-m-d',strtotime($value['due_date']));
+                 $finalHomeworkListingSubjectTeacher[$i]['homework_id'] = $value['homework_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value['homeworkTitle'];
+                 $finalHomeworkListingSubjectTeacher[$i]['description'] = $value['description'];
+                 $finalHomeworkListingSubjectTeacher[$i]['date'] = $value['due_date'];
+                 $finalHomeworkListingSubjectTeacher[$i]['due_date'] = $date;
+                 $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = $value['attachment_file'];
+                 $teacherName = User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
+                 $finalHomeworkListingSubjectTeacher[$i]['teacher_id'] = $value['teacher_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['teacher_name'] = $teacherName['first_name']." ".$teacherName['last_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['homeworkType'] = ucfirst($value['homeworkType']);
+                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTypeId'] = $value['id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['subjectName'] = ucfirst($value['subjectName']);
+                 $finalHomeworkListingSubjectTeacher[$i]['subject_id'] = $value['subject_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['status'] = $value['status'];
+                 $finalHomeworkListingSubjectTeacher[$i]['class_id'] = $value['class_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['class_name'] = $value['class_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['division_id'] = $value['division_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['division_name'] = $value['division_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['batch_name'] = $value['batch_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['batch_id'] = $value['batch_id'];
+                 $studentList = HomeworkTeacher::where('homework_id','=',$value['homework_id'])->select('student_id')->get();
                  $j=0;
                  foreach($studentList as $value)
                  {
-                     $studentsData=User::where('id',$value['student_id'])->select('first_name','last_name')->first();
-                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['id']=$value['student_id'];
-                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['name']=$studentsData['first_name']." ".$studentsData['last_name'];
+                     $studentsData = User::where('id',$value['student_id'])->select('first_name','last_name')->first();
+                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['id'] = $value['student_id'];
+                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['name'] = $studentsData['first_name']." ".$studentsData['last_name'];
                      $j++;
                  }
                  $i++;
              }
 
-             if($finalHomeworkListingSubjectTeacher !=null){
+             if($finalHomeworkListingSubjectTeacher != null){
                  foreach ($finalHomeworkListingSubjectTeacher as $key => $part) {
-                     $sort[$key] = strtotime($part['due_date']);
+                     $sort[$key] = strtotime($part['date']);
                  }
                  array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
              }
