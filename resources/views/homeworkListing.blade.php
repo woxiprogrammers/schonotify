@@ -189,13 +189,15 @@
                                             "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
                                         ];
 
-                                        var date_ = new Date(data[i]["created_at"]);
+                                        var date=data[i]["created_at"].split(/[- :]/);
 
-                                        var createdAt= date_.getDay()+" "+monthNames[date_.getMonth()]+" "+date_.getFullYear();
+                                        var date_dump = new Date(date[2]+"/"+date[1]+"/"+date[0]);
 
-                                        var due_ = new Date(data[i]["due_date"]);
+                                        var createdAt= date[2]+" "+monthNames[parseInt(date[1],10)-1]+" "+date[0];
 
-                                        var dueDate= due_.getDay()+" "+monthNames[due_.getMonth()]+" "+due_.getFullYear();
+                                        var due_ = data[i]["due_date"].split(/[- :]/);
+
+                                        var dueDate= due_[2]+" "+monthNames[parseInt(due_[1],10)-1]+" "+due_[0];
 
                                         str+='<p>Date:<i>'+createdAt+'</i> <br> Due Date:<i>'+dueDate+' </i></p>'+
 
