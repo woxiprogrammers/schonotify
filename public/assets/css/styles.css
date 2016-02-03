@@ -11756,3 +11756,9 @@ a.control_next {
     width: 31px;
     top: -10px;
 }
+.demoInputBox{padding:10px;
+    border:#F0F0F0 1px solid;
+    border-radius:4px;
+    background-color:#FFF;}
+
+#file_error{color: #FF0000;}

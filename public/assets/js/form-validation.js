@@ -860,8 +860,9 @@ var FormValidator = function () {
                     required:true
                 },
                 pdfFile:{
-                    maxlength:25000000,
-                    accept:"pdf"
+                    accept:"pdf",
+                    maxlength: 26214400                                                                                                                                                                                                                                                                              ,
+
                      },
                 classDropdown:{
                     required:true

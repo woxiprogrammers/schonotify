@@ -15,11 +15,11 @@ use App\SubjectClassDivision;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
+use Faker\Provider\DateTime;
 use Faker\Provider\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
 
 class HomeworkController extends Controller
 {
@@ -29,6 +29,14 @@ class HomeworkController extends Controller
         $this->middleware('authenticate.user');
     }
 
+    /*
+     * Function Name: getTeacherSubject
+     * Param : Request $request
+     * Return :Return the data of subjects as JSON array
+     * Desc: Display list of subjects to the teacher
+     * Developed By: Amol Rokade
+     * Date: 1/2/2016
+     */
 
     public function getTeacherSubject(Request $request)
     {
@@ -43,8 +51,8 @@ class HomeworkController extends Controller
                 foreach($classesSubjects as $row)
                 {
                     $subjects=Subject::where('id','=',$row['subject_id'])->first();
-                    $homework[$i]['subject_id']=$row['subject_id'];
-                    $homework[$i]['subject'] = $subjects ['subject_name'] ;
+                    $homework[$i]['id']=$row['subject_id'];
+                    $homework[$i]['name'] = $subjects ['subject_name'] ;
                     $i++;
                 }
                 $divisionSubjects=SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
@@ -53,8 +61,8 @@ class HomeworkController extends Controller
                     ->get();
                 foreach($divisionSubjects as $row)
                 {
-                    $homework[$i]['subject_id']=$row['id'];
-                    $homework[$i]['subject'] = $row ['subject_name'] ;
+                    $homework[$i]['id']=$row['id'];
+                    $homework[$i]['name'] = $row ['subject_name'] ;
                     $i++;
                 }
             }else{
@@ -88,6 +96,15 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+     * Function Name: getSubjectBatches
+     * Param : Request $request, $subjectId
+     * Return :Return the data of batches as JSON array
+     * Desc: Display list of subjects to the teacher
+     * Developed By: Amol Rokade
+     * Date: 1/2/2016
+     */
 
     public function getSubjectBatches(Request $requests, $subjectId)
     {
@@ -157,7 +174,16 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
-   public function getBatchesClasses(Request $requests, $subjectId , $batch_id)
+      /*
+    * Function Name: getBatchesClasses
+    * Param : $subjectId $batch_id Request $requests
+    * Return :Return the data of batches as JSON array
+    * Desc: Display list of batches to the teacher for homework creation
+    * Developed By: Amol Rokade
+    * Date: 1/2/2016
+    */
+
+    public function getBatchesClasses(Request $requests, $subjectId , $batch_id)
     {
         try{
             $data=$requests->all();
@@ -215,6 +241,15 @@ class HomeworkController extends Controller
          ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: getClassesDivision
+    * Param :Request $requests $subjectId $batch_id $class_id
+    * Return :Return the data of divisions as JSON array
+    * Desc: Display list of divisions to the teacher for homework creation
+    * Developed By: Amol Rokade
+    * Date: 1/2/2016
+    */
 
     public function getClassesDivision(Request $requests, $subjectId , $batch_id, $class_id)
     {
@@ -275,6 +310,16 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: getDivisionsStudents
+    * Param :Request $requests , $division as JSON array
+    * Return :Return the data of divisions students as JSON array
+    * Desc: Display list of divisions students to the teacher for homework creation
+    * Developed By: Amol Rokade
+    * Date: 1/2/2016
+    */
+
     public function getDivisionsStudents(Request $request)
     {
         $finalStudentsList=array();
@@ -304,6 +349,15 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
+
+    /*
+    * Function Name: getHomeworkType
+    * Param :Request $requests
+    * Return :Return the data of homework type  as JSON array
+    * Desc: Display list of homework type to the teacher for homework creation
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
     public function getHomeworkType(Request $request)
     {
         try{
@@ -323,11 +377,18 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: createHomework
+    * Param :Request $requests
+    * Return :Return the message and status after homework creation.
+    * Desc:Create a homework for specific batch, class, division ,Students
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+     */
     public function createHomework(Requests\HomeworkRequest $request)
     {
         try{
-            $data=$request->all();
-            Log::info('your data.', ['all data' => $data]);
             $data=array();
             $HomeworkTeacher=array();
             $division=Division::where('id',$request->division_id)->first();
@@ -385,6 +446,15 @@ class HomeworkController extends Controller
 
         return response($response, $status);
     }
+
+    /*
+     * Function Name: updateHomework
+     * Param :Request $requests $homeworkId
+     * Return :Return the message and status after update homework.
+     * Desc:Update a specific homework for specific batch, class, division ,Students
+     * Developed By: Amol Rokade
+     *Date: 1/2/2016
+      */
 
     public function updateHomework(Requests\HomeworkRequest $request)
     {
@@ -458,6 +528,14 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
+    /*
+     * Function Name: publishHomeWork
+     * Param :Request $requests $homeworkId
+     * Return :Return the message and status after Publish homework.
+     * Desc:Publish a specific homework for specific batch, class, division ,Students
+     * Developed By: Amol Rokade
+     *Date: 1/2/2016
+      */
     public function publishHomeWork(Requests\PublishRequest $request)
     {
         try{
@@ -475,6 +553,15 @@ class HomeworkController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: viewHomeWork
+    * Param :Request $requests
+    * Return :Homework Array
+    * Desc: Teacher can view published homework related to his/her division.
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+  */
     public function viewHomeWork(Requests\HomeworkRequest $request)
     {
         try{
@@ -619,47 +706,20 @@ class HomeworkController extends Controller
               ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: viewDetailHomeWork
+    * Param :Request $requests $homeWork_id
+    * Return :Detail Homework Array
+    * Desc: Teacher can view published/Unpublished homework.
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
+
     public function viewDetailHomeWork(Requests\HomeworkRequest $request,$homeWork_id)
     {
-        try{
-            $finalHomeworkListing=array();
-            $status = 200;
-            $message = "Successfully Listed";
-            $homeworkDetails=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
-                ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
-                ->Join('classes', 'divisions.class_id', '=', 'classes.id')
-                ->Join('batches', 'classes.batch_id', '=', 'batches.id')
-                ->Join('homework_types', 'homeworks.homework_type_id', '=', 'homework_types.id')
-                ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
-                ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
-                ->Join('users as teacher' ,'homework_teacher.teacher_id', '=', 'teacher.id')
-                ->where('homeworks.id','=',$homeWork_id)
-                ->groupBy('homework_teacher.homework_id')
-                ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','homework_types.id as id ','users.first_name as first_name','users.last_name as last_name','users.id as userId','subjects.slug as subjectName','subjects.id as subject_id','homeworks.status','divisions.division_name','divisions.id as division_id','classes.class_name','classes.id as class_id','homeworks.created_at','batches.name as batch_name','batches.id as batch_id','teacher.first_name as teacher_name')
-                ->first();
-
-            if($homeworkDetails != null){
-                $finalHomeworkListing['homework_id']=$homeworkDetails['homework_id'];
-                $finalHomeworkListing['homeworkTitle']=$homeworkDetails['homeworkTitle'];
-                $finalHomeworkListing['description']=$homeworkDetails['description'];
-                $finalHomeworkListing['due_date']=date("M j, g:i a",strtotime( $homeworkDetails['due_date']));
-                $finalHomeworkListing['attachment_file']=$homeworkDetails['attachment_file'];
-                $teacherName=User::where('id',$homeworkDetails['teacher_id'])->select('first_name','last_name')->first();
-                $finalHomeworkListing['teacher_id']=$homeworkDetails['teacher_id'];
-                $finalHomeworkListing['teacher_name']=$teacherName['first_name']." ".$teacherName['last_name'];
-                $finalHomeworkListing['homeworkType']=ucfirst($homeworkDetails['homeworkType']);
-                $finalHomeworkListing['homeworkTypeId']=$homeworkDetails['id'];
-                $finalHomeworkListing['subjectName']=ucfirst($homeworkDetails['subjectName']);
-                $finalHomeworkListing['subject_id']=$homeworkDetails['subject_id'];
-                $finalHomeworkListing['status']=$homeworkDetails['status'];
-                $finalHomeworkListing['class_id']=$homeworkDetails['class_id'];
-                $finalHomeworkListing['class_name']=$homeworkDetails['class_name'];
-                $finalHomeworkListing['division_id']=$homeworkDetails['division_id'];
-                $finalHomeworkListing['division_name']=$homeworkDetails['division_name'];
-                $finalHomeworkListing['batch_name']=$homeworkDetails['batch_name'];
-                $finalHomeworkListing['batch_id']=$homeworkDetails['batch_id'];
-                $finalHomeworkListing['created_at']=date("M j, g:i a",strtotime( $homeworkDetails['created_at']));
-                $studentList=HomeworkTeacher::where('homework_id','=',$homeworkDetails['homework_id'])->select('student_id')->get();
+               try{
+                $studentList=HomeworkTeacher::where('homework_id','=',$homeWork_id)->select('student_id')->get();
                 $j=0;
                 foreach($studentList as $value)
                 {
@@ -668,12 +728,9 @@ class HomeworkController extends Controller
                     $finalHomeworkListing['studentList'][$j]['name']=$studentsData['first_name']." ".$studentsData['last_name'];
                     $j++;
                 }
+                   $status=200;
+                   $message="Sucessfully listed";
             }
-            else{
-                $status = 202;
-                $message = "homework not found";
-            }
-       }
         catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
@@ -682,6 +739,14 @@ class HomeworkController extends Controller
         return response($response, $status);
     }
 
+   /*
+   * Function Name: viewUnpublishedHomeWork
+   * Param :Request $requests
+   * Return :Detail Homework Array
+   * Desc: Teacher can view Unpublished homework related o his/her class.
+   * Developed By: Amol Rokade
+   *Date: 1/2/2016
+   */
     public function viewUnpublishedHomeWork(Requests\HomeworkRequest $request)
     {
         try
@@ -701,6 +766,7 @@ class HomeworkController extends Controller
                          ->where('homework_teacher.division_id','=',$division['id'])
                          ->where('homeworks.status','=',0)
                          ->where('homeworks.is_active','=',1)//0 is for deleted homework
+                         ->where('homework_teacher.teacher_id','=',$data['teacher']['id'])
                          ->groupBy('homework_teacher.homework_id')
                          ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','homework_types.id as id ','users.first_name as first_name','users.last_name as last_name','users.id as userId','subjects.slug as subjectName','subjects.id as subject_id','homeworks.status','divisions.division_name','divisions.id as division_id','classes.class_name','classes.id as class_id','homeworks.created_at','batches.name as batch_name','batches.id as batch_id')
                          ->get();
@@ -772,41 +838,42 @@ class HomeworkController extends Controller
              }
              $i=0;
              foreach($HomeworkListingSubjectTeacher as $value){
-                 $finalHomeworkListingSubjectTeacher[$i]['homework_id']=$value['homework_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle']=$value['homeworkTitle'];
-                 $finalHomeworkListingSubjectTeacher[$i]['description']=$value['description'];
-                 $finalHomeworkListingSubjectTeacher[$i]['due_date']=date("M j, g:i a",strtotime( $value['due_date']));
-                 $finalHomeworkListingSubjectTeacher[$i]['attachment_file']=$value['attachment_file'];
-                 $teacherName=User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
-                 $finalHomeworkListingSubjectTeacher[$i]['teacher_id']=$value['teacher_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['teacher_name']=$teacherName['first_name']." ".$teacherName['last_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['homeworkType']=ucfirst($value['homeworkType']);
-                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTypeId']=$value['id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['subjectName']=ucfirst($value['subjectName']);
-                 $finalHomeworkListingSubjectTeacher[$i]['subject_id']=$value['subject_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['status']=$value['status'];
-                 $finalHomeworkListingSubjectTeacher[$i]['class_id']=$value['class_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['class_name']=$value['class_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['division_id']=$value['division_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['division_name']=$value['division_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['batch_name']=$value['batch_name'];
-                 $finalHomeworkListingSubjectTeacher[$i]['batch_id']=$value['batch_id'];
-                 $finalHomeworkListingSubjectTeacher[$i]['created_at']=date("M j, g:i a",strtotime( $value['created_at']));
-                 $studentList=HomeworkTeacher::where('homework_id','=',$value['homework_id'])->select('student_id')->get();
+               $date = date('Y-m-d',strtotime($value['due_date']));
+                 $finalHomeworkListingSubjectTeacher[$i]['homework_id'] = $value['homework_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value['homeworkTitle'];
+                 $finalHomeworkListingSubjectTeacher[$i]['description'] = $value['description'];
+                 $finalHomeworkListingSubjectTeacher[$i]['date'] = $value['due_date'];
+                 $finalHomeworkListingSubjectTeacher[$i]['due_date'] = $date;
+                 $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = $value['attachment_file'];
+                 $teacherName = User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
+                 $finalHomeworkListingSubjectTeacher[$i]['teacher_id'] = $value['teacher_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['teacher_name'] = $teacherName['first_name']." ".$teacherName['last_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['homeworkType'] = ucfirst($value['homeworkType']);
+                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTypeId'] = $value['id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['subjectName'] = ucfirst($value['subjectName']);
+                 $finalHomeworkListingSubjectTeacher[$i]['subject_id'] = $value['subject_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['status'] = $value['status'];
+                 $finalHomeworkListingSubjectTeacher[$i]['class_id'] = $value['class_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['class_name'] = $value['class_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['division_id'] = $value['division_id'];
+                 $finalHomeworkListingSubjectTeacher[$i]['division_name'] = $value['division_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['batch_name'] = $value['batch_name'];
+                 $finalHomeworkListingSubjectTeacher[$i]['batch_id'] = $value['batch_id'];
+                 $studentList = HomeworkTeacher::where('homework_id','=',$value['homework_id'])->select('student_id')->get();
                  $j=0;
                  foreach($studentList as $value)
                  {
-                     $studentsData=User::where('id',$value['student_id'])->select('first_name','last_name')->first();
-                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['id']=$value['student_id'];
-                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['name']=$studentsData['first_name']." ".$studentsData['last_name'];
+                     $studentsData = User::where('id',$value['student_id'])->select('first_name','last_name')->first();
+                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['id'] = $value['student_id'];
+                     $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['name'] = $studentsData['first_name']." ".$studentsData['last_name'];
                      $j++;
                  }
                  $i++;
              }
 
-             if($finalHomeworkListingSubjectTeacher !=null){
+             if($finalHomeworkListingSubjectTeacher != null){
                  foreach ($finalHomeworkListingSubjectTeacher as $key => $part) {
-                     $sort[$key] = strtotime($part['created_at']);
+                     $sort[$key] = strtotime($part['date']);
                  }
                  array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
              }
@@ -824,6 +891,16 @@ class HomeworkController extends Controller
               ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: deleteHomework
+    * Param :Request $requests $homework_id
+    * Return :$message $status
+    * Desc: User can delete a homework which is unpublished created by them.
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
+
   public function deleteHomework(Requests\deleteHomeworkRequest $request)
   {
      try{
@@ -848,7 +925,15 @@ class HomeworkController extends Controller
       ];
         return response($response, $status);
   }
-  public function viewHomeworkParent(Requests\HomeworkRequest $request,$student_id)
+    /*
+    * Function Name: viewHomeworkParent
+    * Param :Request $requests $student_id
+    * Return :$message $status
+    * Desc: Parent can view homework assigned to his/her student
+    * Developed By: Amol Rokade
+    *Date: 1/2/2016
+    */
+    public function viewHomeworkParent(Requests\HomeworkRequest $request,$student_id)
   {
       $data=array();
     try{
@@ -900,7 +985,6 @@ class HomeworkController extends Controller
                     $data[$i]['created_at']=$value['created_at'];
                     $i++;
                 }
-
             }
             else{
                 $status = 202;
