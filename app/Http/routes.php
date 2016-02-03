@@ -147,6 +147,8 @@
 
     Route::get('get-edit-data/{id}','HomeworkController@editDataDiv');
 
+    Route::get('batch-class-div-homework/{id}','HomeworkController@classBatchDivision');
+
     Route::get('get-subject-divisions/{id}/{subject_id}/{batch_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
     Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
@@ -229,6 +231,7 @@
 
     Route::get('/check-subject','SubjectController@checkSubject');
 
+    Route::get('loadmore-homework/{id}','HomeworkController@loadMore');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));

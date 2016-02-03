@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -32,143 +33,36 @@ class HomeworkController extends Controller
         $this->middleware('auth');
     }
 
-
+    /*
++   * Function Name: homeworkListing
++   * Param: Requests\WebRequests\HomeworkRequest $requests
++   * Return: Homework Listing
++   * Desc: this method returns to view of homework listing.
++   * Developed By: Suraj Bande
++   * Date: 3/2/2016
++   */
 
     public function homeworkListing(Requests\WebRequests\HomeworkRequest $request)
     {
-        if($request->authorize()===true)
-        {
+        if ($request->authorize() === true){
 
+            return view('homeworkListing');
 
-            $user=Auth::user();
-            $homeworkId=array();
-            $homeworkIdss=array();
-            $homeworkDiv=array();
-            $homeworkIdTeacher=array();
-            $i=0;
-            $division=Division::where('class_teacher_id',$user->id)->first();
-            if($division != null){
-               $homeworkDivision=HomeworkTeacher::where('division_id',$division->id)
-                                                  ->select('homework_teacher.homework_id')->get();
-
-                foreach($homeworkDivision as $row)
-                {
-                    $homeworkIdTeacher[]=$row['homework_id'];
-                }
-                $homeworkIdTeacher = array_unique($homeworkIdTeacher, SORT_REGULAR);
-                $homeworkInfoTeacher=Homework::wherein('id',$homeworkIdTeacher)->where('status',1)->select('id')->get()->toArray();
-                foreach($homeworkInfoTeacher as $row)
-                {
-                    $homeworkId[]=$row['id'];
-                }
-                $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
-                foreach($homeworkTeacher as $row)
-                {
-                    $homeworkId[]=$row['homework_id'];
-                }
-                $homeworkId = array_unique($homeworkId, SORT_REGULAR);
-                //above code is for take homeworkids for users
-                $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
-                $i=0;
-                $homeworkInfo=Homework::wherein('id',$homeworkId)->orderby('status')->get()->toArray();
-                $currentDate = new DateTime(Carbon::now());
-
-                foreach($homeworkInfo as $home)
-                {
-                    $homeworkIdss[$home['id']]['homework_id']=$home['id'];
-                    $homeworkIdss[$home['id']]['homework_title']=$home['title'];
-                    $homeworkIdss[$home['id']]['homework_description']=$home['description'];
-                    $homeworkDate=new DateTime($home['homework_timestamp']);
-                    $dateDiff = $currentDate->diff($homeworkDate);
-                    $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
-                    $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
-                    $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
-                    $homeworkIdss[$home['id']]['homework_status']=$home['status'];
-                    $homeworkIdss[$home['id']]['homework_is_active']=$home['is_active'];
-                    $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
-
-                    $i++;
-                }
-                $i=0;
-                foreach($homeworkData as $row)
-                {
-                    $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
-                    $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
-                    $class=Classes::where('id',$division['class_id'])->select('class_name','batch_id')->first()->toArray();
-                    $batch=Batch::where('id',$class['batch_id'])->first();
-                    $homeworkDiv[$i]['div']=$division['division_name'];
-                    $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_division_name'][$i]=$division['division_name'];
-                    $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
-                    $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
-                    $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
-                    $i++;
-
-
-                }
-
-            }else{
-                $homeworkTeacher=HomeworkTeacher::where('teacher_id',$user->id)->select('homework_id')->get();
-                foreach($homeworkTeacher as $row)
-                {
-                    $homeworkId[]=$row['homework_id'];
-                }
-                $homeworkId = array_unique($homeworkId, SORT_REGULAR);
-                //above code is for take homeworkids for users
-                $homeworkData=HomeworkTeacher::wherein('homework_id',$homeworkId)->select('homework_id','division_id','teacher_id','student_id')->get();
-                $i=0;
-                $homeworkInfo=Homework::wherein('id',$homeworkId)->orderby('status')->get()->toArray();
-
-                $currentDate = new DateTime(Carbon::now());
-
-                foreach($homeworkInfo as $home)
-                {
-                    $homeworkIdss[$home['id']]['homework_id']=$home['id'];
-                    $homeworkIdss[$home['id']]['homework_title']=$home['title'];
-                    $homeworkIdss[$home['id']]['homework_description']=$home['description'];
-                    $homeworkDate=new DateTime($home['homework_timestamp']);
-                    $dateDiff = $currentDate->diff($homeworkDate);
-                    $homeworkIdss[$home['id']]['homework_date']=$home['homework_timestamp'];
-                    $homeworkIdss[$home['id']]['homework_dateNow'] = $dateDiff->h;
-                    $homeworkIdss[$home['id']]['homework_due_date']=$home['due_date'];
-                    $homeworkIdss[$home['id']]['homework_status']=$home['status'];
-                    $homeworkIdss[$home['id']]['homework_is_active']=$home['is_active'];
-                    $homeworkIdss[$home['id']]['homework_file']=$home['attachment_file'];
-                    $i++;
-                }
-                $i=0;
-                foreach($homeworkData as $row)
-                {
-                    $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
-                    $division=Division::where('id',$row['division_id'])->select('division_name','class_id')->first()->toArray();
-                    $class=Classes::where('id',$division['class_id'])->select('class_name','batch_id')->first()->toArray();
-                    $batch=Batch::where('id',$class['batch_id'])->first();
-                    $homeworkDiv[$i]['div']=$division['division_name'];
-                    $homeworkIdss[$row['homework_id']]['homework_division']=$row['division_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_division_name'][$i]=$division['division_name'];
-                    $homeworkIdss[$row['homework_id']]['homework_class_name']=$class['class_name'];
-                    $homeworkIdss[$row['homework_id']]['homework_batch_name']=$batch['name'];
-                    $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
-                    $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
-                    $i++;
-
-
-                }
-
-
-            }
-            foreach($homeworkIdss as $row)
-            {
-                $rq= array_unique($row['homework_division_name']);
-                $homeworkIdss[$row['homework_id']]['divs']=$rq;
-
-            }
-         return view('homeworkListing')->with(compact('homeworkIdss','homeworkDiv'));
         }else{
+
             return Redirect::to('/');
+
         }
     }
+
+    /*
++   * Function Name: homeworkListing
++   * Param: $id
++   * Return: Homework id
++   * Desc: it returns the detailedd homework of respective homework id.
++   * Developed By: Manoj Choudhary
++   * Date: 3/2/2016
++   */
 
     public function detailedHomework($id)
     {   $homeworkIdss=array();
@@ -620,7 +514,6 @@ class HomeworkController extends Controller
         return $studentList;
     }
 
-
     public function editHomework($id){
         $homeworkUpdate=array();
 
@@ -650,100 +543,138 @@ class HomeworkController extends Controller
 
 
 
-    public function updateHomeworkDetail(Requests\WebRequests\EditHomeworkRequest $request){
-
-if($request->authorize()===true)
-{
-
-        $homeworkData= $request->all();
-        $homework=array();
-        $homeworkTeacher=array();
-        $i=0;
-        $homework['subject_id']=$homeworkData['subjectsDropdown'];
-        $homework['homework_type_id']=$homeworkData['homeworkType'];
-        $homework['title']=$homeworkData['title'];
-        $homework['description']=$homeworkData['description'];
-        $date = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $homeworkData['dueDate'])));
-        $homework['due_date']=$date;
-        if(Input::hasFile('pdfFile')){
-            $pdfs = $request->file('pdfFile');
-            $name = $request->file('pdfFile')->getClientOriginalName();
-            $filename = time()."_".$name;
-            $path = public_path('uploads/homework/');
-            if (! file_exists($path)) {
-                File::makeDirectory('uploads/homework/', $mode = 0777, true, true);
-            }
-            $pdfs->move($path,$filename);
-            $homework['attachment_file']=$filename;
-
-        }
-        $homework['homework_timestamp']=Carbon::now();
-        $homework['created_at'] = Carbon::now();
-        $homework['updated_at'] = Carbon::now();
-        $homework['is_active'] = 1;
-        $homeworkId=Homework::where('id',$homeworkData['homework_id'])->update($homework);
-        $user=Auth::user();
-        if($homeworkId == 1)
+    public function updateHomeworkDetail(Requests\WebRequests\EditHomeworkRequest $request)
+    {
+        if ($request->authorize() === true)
         {
-            HomeworkTeacher::where('homework_id',$homeworkData['homework_id'])->delete();
+                $homeworkData= $request->all();
+                $homework=array();
+                $homeworkTeacher=array();
+                $i=0;
+                $homework['subject_id']=$homeworkData['subjectsDropdown'];
+                $homework['homework_type_id']=$homeworkData['homeworkType'];
+                $homework['title']=$homeworkData['title'];
+                $homework['description']=$homeworkData['description'];
+                $date = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $homeworkData['dueDate'])));
+                $homework['due_date']=$date;
+                if(Input::hasFile('pdfFile')){
+                    $pdfs = $request->file('pdfFile');
+                    $name = $request->file('pdfFile')->getClientOriginalName();
+                    $filename = time()."_".$name;
+                    $path = public_path('uploads/homework/');
+                    if (! file_exists($path)) {
+                        File::makeDirectory('uploads/homework/', $mode = 0777, true, true);
+                    }
+                    $pdfs->move($path,$filename);
+                    $homework['attachment_file']=$filename;
 
-        }
-        foreach($homeworkData['studentinfo'] as $row)
-        {
-            $division = User::where('id',$row)->select('id','division_id')->first();
-            $HomeworkTeacher['student_id'] = $division->id;
-            $HomeworkTeacher['teacher_id'] = $user->id;
-            $HomeworkTeacher['homework_id'] = $homeworkData['homework_id'];
-            $HomeworkTeacher['division_id'] = $division->division_id;
-            $HomeworkTeacher['created_at']= Carbon::now();
-            $HomeworkTeacher['updated_at']= Carbon::now();
-            HomeworkTeacher::insert($HomeworkTeacher);
+                }
+                $homework['homework_timestamp']=Carbon::now();
+                $homework['created_at'] = Carbon::now();
+                $homework['updated_at'] = Carbon::now();
+                $homework['is_active'] = 1;
+                $homeworkId=Homework::where('id',$homeworkData['homework_id'])->update($homework);
+                $user=Auth::user();
+                if($homeworkId == 1)
+                {
+                    HomeworkTeacher::where('homework_id',$homeworkData['homework_id'])->delete();
 
-        }
-        Session::flash('message-success','homework updated successfully');
-        return Redirect::to('/homework-listing');
-    }else{
-    return Redirect::back();
-}
+                }
+                foreach($homeworkData['studentinfo'] as $row)
+                {
+                    $division = User::where('id',$row)->select('id','division_id')->first();
+                    $HomeworkTeacher['student_id'] = $division->id;
+                    $HomeworkTeacher['teacher_id'] = $user->id;
+                    $HomeworkTeacher['homework_id'] = $homeworkData['homework_id'];
+                    $HomeworkTeacher['division_id'] = $division->division_id;
+                    $HomeworkTeacher['created_at']= Carbon::now();
+                    $HomeworkTeacher['updated_at']= Carbon::now();
+                    HomeworkTeacher::insert($HomeworkTeacher);
+
+                }
+                Session::flash('message-success','homework updated successfully');
+                return Redirect::to('/homework-listing');
+        }else{
+            return Redirect::back();
+         }
     }
+
     public function editDataDiv($id)
     {
         $homeworkData=HomeworkTeacher::where('homework_id',$id)->select('division_id')->distinct()->get();
         return $homeworkData->toArray();
-
     }
 
-    public function loadMore(Requests\WebRequests\HomeworkRequest $request)
+
+    /*
++   * Function Name: loadMore
++   * Param: Requests\WebRequests\HomeworkRequest $request,$id
++   * Return: Listing of homeworks on ajax call
++   * Desc: this function called initially when page load and when page scroll of listing. it returns records with limit provided by $id variable.
++   * Developed By: Suraj Bande
++   * Date: 3/2/2016
++   */
+
+    public function loadMore(Requests\WebRequests\HomeworkRequest $request,$id)
     {
-        if($request->authorize()===true)
+        if ( $request->authorize() === true )
         {
+
             $user=Auth::user();
             $isClassTeacher=Division::where('class_teacher_id',$user->id)->first();
 
             if($isClassTeacher){
-                $ClassTeacherAllSubjects=SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
-                    ->join('divisions','divisions.id','=','division_subjects.division_id')
-                    ->join('users','division_subjects.teacher_id','=','users.id')
-                    ->join('homework_teacher','homework_teacher.teacher_id','=','users.id')
-                    ->where('division_subjects.division_id',$isClassTeacher->id)
-                    ->orWhere('homework_teacher.teacher_id',$user->id)
-                    ->select('division_subjects.teacher_id','division_subjects.subject_id','subjects.subject_name','users.last_name as lastname','users.first_name as firstname','divisions.id as division_id','divisions.division_name')
-                    ->skip(0)->take(20)
+
+                $ownHomeworks=DB::table('homework_teacher')->join('homeworks','homeworks.id','=','homework_teacher.homework_id')
+                    ->join('subjects','homeworks.subject_id','=','subjects.id')
+                    ->join('users','users.id','=','homework_teacher.teacher_id')
+                    ->select('homework_id','teacher_id','homeworks.created_at','homeworks.updated_at','homeworks.title','homeworks.homework_type_id','homeworks.homework_timestamp','homeworks.description','homeworks.due_date','subjects.subject_name','homeworks.attachment_file','homeworks.status','homeworks.is_active','users.first_name','users.last_name')
+                    ->where('homework_teacher.teacher_id','=',$user->id)
+                    ->where('users.id','=',$user->id)
+                    ->where('homeworks.is_active','=',1)
+                    ->distinct('homeworks.id');
+
+                $ClassTeacherAllSubjects=DB::table('homework_teacher')->join('homeworks','homeworks.id','=','homework_teacher.homework_id')
+                    ->join('users','users.id','=','homework_teacher.teacher_id')
+                    ->join('subjects','homeworks.subject_id','=','subjects.id')
+                    ->select('homework_id','teacher_id','homeworks.created_at','homeworks.updated_at','homeworks.title','homeworks.homework_type_id','homeworks.homework_timestamp','homeworks.description','homeworks.due_date','subjects.subject_name','homeworks.attachment_file','homeworks.status','homeworks.is_active','users.first_name','users.last_name')
+                    ->where('homeworks.status','=',1)
+                    ->Where('homework_teacher.division_id','=',$isClassTeacher->id)
+                    ->where('homeworks.is_active','=',1)
+                    ->union($ownHomeworks)
+                    ->distinct('homeworks.id')
+                    ->orderBy('status','asc')
+                    ->skip($id*4)->take(4)
                     ->get();
 
+                if($ClassTeacherAllSubjects){
+                    return $ClassTeacherAllSubjects;
+                }else{
+                    return [];
+                }
 
             }else{
-                $ClassTeacherAllSubjects=SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
-                    ->join('divisions','divisions.id','=','division_subjects.division_id')
-                    ->join('users','division_subjects.teacher_id','=','users.id')
-                    ->select('division_subjects.teacher_id','division_subjects.subject_id','subjects.subject_name','users.last_name as lastname','users.first_name as firstname','divisions.id as division_id','divisions.division_name')
-                    ->Where('teacher_id',$user->id)
-                    ->skip(0)->take(20)
+                $ownHomeworks=DB::table('homework_teacher')->join('homeworks','homeworks.id','=','homework_teacher.homework_id')
+                    ->join('subjects','homeworks.subject_id','=','subjects.id')
+                    ->join('users','users.id','=','homework_teacher.teacher_id')
+                    ->select('homework_id','teacher_id','homeworks.created_at','homeworks.updated_at','homeworks.title','homeworks.homework_type_id','homeworks.homework_timestamp','homeworks.description','homeworks.due_date','subjects.subject_name','homeworks.attachment_file','homeworks.status','homeworks.is_active','users.first_name','users.last_name')
+                    ->where('homework_teacher.teacher_id','=',$user->id)
+                    ->where('users.id','=',$user->id)
+                    ->where('homeworks.is_active','=',1)
+                    ->distinct('homeworks.id')
+                    ->skip($id*4)->take(4)
+                    ->orderBy('status','asc')
                     ->get();
+
+                if($ownHomeworks){
+                    return $ownHomeworks;
+                }else{
+                    return [];
+                }
 
             }
 
-            return $ClassTeacherAllSubjects;
+            return $ownHomeworks;
 
         }else{
             return Redirect::to('/');
@@ -753,7 +684,7 @@ if($request->authorize()===true)
     public function deleteFile(Requests\WebRequests\EditHomeworkRequest $request,$file_name,$homework_id)
     {
 
-        if($request->authorize()===true)
+        if( $request->authorize() === true )
         {
             $homework=array();
             unlink('../public/uploads/homework/' . $file_name);
@@ -767,6 +698,28 @@ if($request->authorize()===true)
             return Redirect::back();
         }
 
+    }
+
+    /*
++   * Function Name: classBatchDivision
++   * Param: $id
++   * Return: returns batch class and divisions to which respective homework is assigned
++   * Desc: it returns batch class divisions and it will appeared on click of subject block in listing.
++   * Developed By: Suraj Bande
++   * Date: 3/2/2016
++   */
+
+    public function classBatchDivision($id)
+    {
+        $divisions=HomeworkTeacher::join('divisions','divisions.id','=','homework_teacher.division_id')
+                ->join('classes','classes.id','=','divisions.class_id')
+                ->join('batches','batches.id','=','classes.batch_id')
+                ->select('divisions.division_name','classes.class_name','batches..name as batch_name')
+                ->where('homework_teacher.homework_id','=',$id)
+                ->distinct()
+                ->get();
+
+        return $divisions;
     }
 
 }
