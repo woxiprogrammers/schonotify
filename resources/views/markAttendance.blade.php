@@ -38,9 +38,40 @@
                                         <i class="fa fa-ok"></i> Your form validation is successful!
                                     </div>
                                 </div>
+
+
                                 <div class="row">
-                                    @include('selectClassDivisionDropdown')
+                                    <div class="form-group col-sm-4">
+                                        <label for="form-field-select-2">
+                                            Select Batch
+                                        </label>
+
+                                        <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                                            <option value="{!!$dropDownData['batch_id']!!}">{!!$dropDownData['batch_name']!!}</option>
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group col-sm-4" id="class-select-div">
+                                        <label for="form-field-select-2">
+                                            Select Class
+                                        </label>
+                                        <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
+                                            <option value="{!!$dropDownData['class_id']!!}">{!!$dropDownData['class_name']!!}</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-4" id="division-select-div">
+                                        <label for="form-field-select-2">
+                                            Select Division
+                                        </label>
+                                        <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
+                                            <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
+
+                                        </select>
+                                    </div>
+
                                 </div>
+
                                 <div class="form-group">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -57,43 +88,23 @@
                                     </div>
                                     <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                                         <thead>
+
                                         <tr>
+
                                             <th><input type="checkbox" class="allCheckedStud" id="allCheckedStud" checked/> <label for="allCheckedStud" id="allCheckedStud-label"><img class="checkbox-img"/></label></th>
                                             <th>Roll No.</th>
                                             <th>Name</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+
+                                        @foreach($dropDownData['student_list'] as $row)
                                         <tr>
-                                            <td><input type="checkbox" class="checkedStud" id="1"/><label for="1"><img id="checkedStud1" class="checkbox-img" for="1"/></label></td>
-                                            <td>102</td>
-                                            <td>Vinit Singh &nbsp; <span class="label label-orange">Leave Approved</span> </td>
+                                            <td><input type="checkbox" value="{!! $row['student_id'] !!}" id="{!! $row['student_id'] !!}"  class="checkedStud" /><label for="{!! $row['student_id'] !!}" id="checkedStud1" ><img class="checkbox-img"/></label></td>
+                                            <td>{!! $row['roll_number'] !!}</td>
+                                            <td>{!! $row['student_name'] !!}  </td>
                                         </tr>
-                                        <tr>
-                                            <td><input type="checkbox" class="checkedStud" id="2"/><label for="2"><img id="checkedStud2" class="checkbox-img"/></label></td>
-                                            <td>103</td>
-                                            <td>Arjun Kale  &nbsp; <span class="label label-orange">Leave Approved</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" class="checkedStud" id="3"/><label for="3"><img id="checkedStud3" class="checkbox-img"/></label></td>
-                                            <td>104</td>
-                                            <td>Yash Patil  &nbsp; <span class="label label-yellow">Leave Applied</span> </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" class="checkedStud" id="4"/><label for="4"><img class="checkbox-img" id="checkedStud4"/></label></td>
-                                            <td>105</td>
-                                            <td>N Yadav</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" class="checkedStud" id="5"/><label for="5"><img class="checkbox-img" id="checkedStud5"/></label></td>
-                                            <td>106</td>
-                                            <td>Sunny Rao</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" class="checkedStud" id="6"/><label for="6"><img class="checkbox-img" id="checkedStud6"/></label></td>
-                                            <td>107</td>
-                                            <td>Karan Sharma</td>
-                                        </tr>
+                                        @endforeach
 
                                         </tbody>
 
@@ -124,41 +135,40 @@
 @include('rightSidebar')
 
 </div>
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
-<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="vendor/switchery/switchery.min.js"></script>
-<script src="vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
-<script src="vendor/autosize/autosize.min.js"></script>
-<script src="vendor/selectFx/selectFx.js"></script>
-<script src="vendor/select2/select2.min.js"></script>
-<script src="vendor/maskedinput/jquery.maskedinput.min.js"></script>
-<script src="vendor/selectFx/classie.js"></script>
-<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-<script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="vendor/DataTables/jquery.dataTables.min.js"></script>
-<script src="assets/js/table-data.js"></script>
-<script src="assets/js/main.js"></script>
-<script src="assets/js/form-elements.js"></script>
-<script src="vendor/ladda-bootstrap/spin.min.js"></script>
-<script src="vendor/ladda-bootstrap/ladda.min.js"></script>
-<script src="assets/js/ui-buttons.js"></script>
-<script src="assets/js/custom-project.js"></script>
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/adapters/jquery.js"></script>
-<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="assets/js/form-validation.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/modernizr/modernizr.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/vendor/switchery/switchery.min.js"></script>
+<script src="/vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+<script src="/vendor/autosize/autosize.min.js"></script>
+<script src="/vendor/selectFx/selectFx.js"></script>
+<script src="/vendor/select2/select2.min.js"></script>
+<script src="/vendor/maskedinput/jquery.maskedinput.min.js"></script>
+<script src="/vendor/selectFx/classie.js"></script>
+<script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+<script src="/assets/js/table-data.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/form-elements.js"></script>
+<script src="/vendor/ladda-bootstrap/spin.min.js"></script>
+<script src="/vendor/ladda-bootstrap/ladda.min.js"></script>
+<script src="/assets/js/ui-buttons.js"></script>
+<script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="/assets/js/form-validation.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
         Main.init();
         FormValidator.init();
-        TableData.init();
         FormElements.init();
         UIButtons.init();
-
+        TableData.init();
         $('#allCheckedStud-label img').css('border','1px solid');
         if($('.allCheckedStud').prop('checked') == true)
         {
