@@ -340,8 +340,11 @@
 
 
         //Timetable
-        Route::get('view-timetable-parent/{day}','api\TimetableController@viewTimetableParent');
-        Route::get('view-timetable-teacher/{batch}/{class}/{div}/{day}','api\TimetableController@viewTimetableTeacher');
+        Route::get('view-timetable-parent/{studentId}/{day}','api\TimetableController@viewTimetableParent');
+        Route::get('view-timetable-teacher/{div_id}/{day}','api\TimetableController@viewTimetableTeacher');
+        Route::get('get-batches','api\TimetableController@getBatches');
+        Route::get('get-classes/{batchId}','api\TimetableController@getClasses');
+        Route::get('get-divisions/{classId}','api\TimetableController@getDivisions');
 
         //Announcement
         Route::post('create-announcement','api\NoticeBoardController@createAnnouncement');

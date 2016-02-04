@@ -9,6 +9,7 @@ use App\Subject;
 use App\SubjectClassDivision;
 use App\timetable;
 use App\User;
+use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -22,36 +23,136 @@ class TimetableController extends Controller
         $this->middleware('authenticate.user');
     }
 
-    public function viewTimetableParent(Requests\viewTimetableRequest $request,$day)
+    /*
+    * Function Name: getBatches
+    * Param :Request $requests
+    * Return :$message $status
+    * Desc: when teacher want to see timetable teacher will get all the batches related to his/her body.
+    * Developed By: Amol Rokade
+    *Date: 4/2/2016
+    */
+    public function getBatches(Request $requests)
     {
-        $userToken=$request->all();
-        foreach($userToken as $userData)
-        {
-            $userId=$userData;
-        }
         try{
-            $timetable=timetable::where('div_id',$userId->division_id)
-                ->where('day', '=', $day)
-                ->orderBy('period_number', 'asc')
-                ->get();
+            $batches = array();
+            $data=$requests->all();
+            $teacherId = UserRoles::where('slug',['teacher'])->pluck('id');
+            if($teacherId != null){
+                if($data['teacher']['role_id'] == $teacherId){
+                    $batches = Batch::select('id as batch_id ','name as batch_name')->get()->toArray();
+                }
+            }
+            $status = 200;
+            $message = "Successfully Listed";
+        }catch (\Exception $e) {
+        $status = 500;
+        $message = "Something went wrong";
+        }
+        $response = [
+         "message" => $message,
+         "status" => $status,
+         "data" => $batches
+        ];
+        return response($response, $status);
+    }
+
+    /*
+   * Function Name: getClasses
+   * Param :Request $requests $batchId
+   * Return :$message $status
+   * Desc: when teacher want to see timetable teacher will get all the classes related to selected batches.
+   * Developed By: Amol Rokade
+   *Date: 4/2/2016
+   */
+    public function getClasses(Request $requests, $batchId)
+    {
+        try{
+            $classes = array();
+            $classes = Classes::where('batch_id','=',$batchId)->select('id as class_id ','class_name')->get()->toArray();
+            $status = 200;
+            $message = "Successfully Listed";
+        }catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $classes
+        ];
+        return response($response, $status);
+    }
+
+    /*
+   * Function Name: getDivisions
+   * Param :Request $requests $classId
+   * Return :$message $status
+   * Desc: when teacher want to see timetable teacher will get all the divisions related to selected classes.
+   * Developed By: Amol Rokade
+   *Date: 4/2/2016
+   */
+    public function getDivisions(Request $requests, $classId)
+    {
+        try{
+            $divisions = array();
+            $divisions = Division::where('class_id','=',$classId)->select('id as division_id ','division_name')->get()->toArray();
+            $status = 200;
+            $message = "Successfully Listed";
+        }catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $divisions
+        ];
+        return response($response, $status);
+    }
+
+    /*
+    * Function Name: viewTimetableParent
+    * Param :Request $requests $studentId $day
+    * Return :$message $status JSON array of timetable
+    * Desc: Parent can see the timetable of his/her students.
+    * Developed By: Amol Rokade
+    *Date: 4/2/2016
+    */
+    public function viewTimetableParent(Requests\viewTimetableRequest $request , $studentId , $day)
+    {
+        try{
+            $responseData=array();
+            $user=User::where('id','=',$studentId)->first();
+            $SubjectClassDivision=SubjectClassDivision::where('division_id','=',$user['division_id'])->get();
+            $SubjectClassDivision1=array();
+            foreach($SubjectClassDivision as $value){
+                 array_push($SubjectClassDivision1,$value['id']);
+            }
+            $timetable=timetable::wherein('division_subject_id',$SubjectClassDivision1)
+                 ->where('day', '=', $day)
+                 ->orderBy('period_number', 'asc')
+                 ->get();
             $i=0;
-            foreach($timetable as $key=>$value)
+            foreach($timetable as $value)
             {
-                $data[$i]['period_number']=$value['period_number'];
+                $responseData[$i]['period_number']=$value['period_number'];
                 $SubjectTeacher=SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
                 $SubjectTeacherArray= $SubjectTeacher->toArray();
                 $Teacher=User::where('id', '=', $SubjectTeacherArray['teacher_id'])->first();
                 $Subject=Subject::where('id', '=', $SubjectTeacherArray['subject_id'])->first();
-                $data[$i]['subject']=$Subject['subject_name'];
-                $data[$i]['teacher']=$Teacher['first_name']." ".$Teacher['last_name'];
-                $data[$i]['is_break']=$value['is_break'];
-                $data[$i]['start_time']=$value['start_time'];
-                $data[$i]['end_time']=$value['end_time'];
+                $responseData[$i]['subject']=$Subject['subject_name'];
+                $responseData[$i]['teacher']=$Teacher['first_name']." ".$Teacher['last_name'];
+                if($value['is_break'] == 1){
+                    $responseData[$i]['is_break'] = "Break";
+                }else{
+                    $responseData[$i]['is_break'] = $value['is_break'];
+                }
+                $responseData[$i]['start_time']=$value['start_time'];
+                $responseData[$i]['end_time']=$value['end_time'];
                 $i++;
             }
             $message = 'success';
             $status = 200;
-            $responseData=$data;
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
@@ -64,40 +165,48 @@ class TimetableController extends Controller
         return response($response, $status);
     }
 
-    public function viewTimetableTeacher(Requests\viewTimetableRequest $request,$batch,$class,$div,$day)
+    /*
+    * Function Name: viewTimetableTeacher
+    * Param :Request $requests $batch $class $div $day
+    * Return :$message $status JSON array of timetable
+    * Desc: Teacher can see the timetable of all bodies divisions based on selection.
+    * Developed By: Amol Rokade
+    *Date: 4/2/2016
+    */
+    public function viewTimetableTeacher(Requests\viewTimetableRequest $request , $div_id,$day)
     {
         try{
-            $teacherBatch = Batch::where('slug',$batch)->first();
-            $teacherClass = Classes::where('slug',$class)
-                ->where('batch_id', '=',$teacherBatch->id)
-                ->first();
-
-            $teacherDivision = Division::where('slug',$div)
-                ->where('class_id', '=',$teacherClass->id)
-                ->first();
-            $timetable=timetable::where('div_id',$teacherDivision->id)
-                ->where('day', '=', $day)
-                ->orderBy('period_number', 'asc')
-                ->get();
-            $viewtimetable=$timetable->toArray();
+            $finalTimetable=array();
+            $SubjectClassDivision=SubjectClassDivision::where('division_id','=',$div_id)->get();
+            $SubjectClassDivision1=array();
+            foreach($SubjectClassDivision as $value){
+                array_push($SubjectClassDivision1,$value['id']);
+            }
+            $timetable=timetable::wherein('division_subject_id',$SubjectClassDivision1)
+                  ->where('day', '=', $day)
+                  ->orderBy('period_number', 'asc')
+                  ->get();
             $i=0;
-            foreach($viewtimetable as $key=>$value)
+            foreach($timetable as $value)
             {
-                $data[$i]['period_number']=$value['period_number'];
-                $SubjectTeacher=SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
+                $finalTimetable[$i]['period_number'] = $value['period_number'];
+                $SubjectTeacher = SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
                 $SubjectTeacherArray= $SubjectTeacher->toArray();
-                $Teacher=User::where('id', '=', $SubjectTeacherArray['teacher_id'])->first();
-                $Subject=Subject::where('id', '=', $SubjectTeacherArray['subject_id'])->first();
-                $data[$i]['subject']=$Subject['subject_name'];
-                $data[$i]['teacher']=$Teacher['first_name']." ".$Teacher['last_name'];
-                $data[$i]['is_break']=$value['is_break'];
-                $data[$i]['start_time']=$value['start_time'];
-                $data[$i]['end_time']=$value['end_time'];
+                $Teacher = User::where('id', '=', $SubjectTeacherArray['teacher_id'])->first();
+                $Subject = Subject::where('id', '=', $SubjectTeacherArray['subject_id'])->first();
+                $finalTimetable[$i]['subject'] = $Subject['subject_name'];
+                $finalTimetable[$i]['teacher'] = $Teacher['first_name']." ".$Teacher['last_name'];
+                if($value['is_break'] == 1){
+                    $finalTimetable[$i]['is_break'] = "Break";
+                }else{
+                    $finalTimetable[$i]['is_break'] = $value['is_break'];
+                }
+                $finalTimetable[$i]['start_time'] = $value['start_time'];
+                $finalTimetable[$i]['end_time'] = $value['end_time'];
                 $i++;
             }
             $message = 'success';
             $status = 200;
-            $responseData=$data;
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
@@ -105,7 +214,7 @@ class TimetableController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $responseData
+            "data" => $finalTimetable
         ];
         return response($response, $status);
     }
