@@ -36,57 +36,16 @@
         </section>
         <!-- end: DASHBOARD TITLE -->
         <div class="container-fluid container-fullw bg-white">
-
+            <a tabindex="0" class="btn btn-primary popover" role="button" data-toggle="popover1" data-trigger="focus" title="" data-content="And here some amazing content. It very engaging. Right?" data-original-title="Dismissible popover">
+                Dismissible popover
+                </a>
 
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
+
                     <div class="panel-body">
-                        <ul class="timeline-xs" id="tmln">
-                            @foreach($homeworkIdss as $row)
-                            @if($row['homework_is_active'] ==1)
-                            <li class="timeline-item">
-                                <div class="leaveSection">
-                                    <div class="text-muted text-small">
+                        <ul class="timeline-xs" id="tmlin">
 
-                                       {!! $row['homework_dateNow']!!} hr ago
-
-                                    </div>
-                                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                                        <h5><small class="label label-sm label-info">{!! $row['homework_teacher_name']!!}</small> {!! $row['homework_title']!!} </h5>
-
-
-                                        <p>Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_date'])));!!} </i> <br> Due Date:<i> {!! date('d M  Y', strtotime(str_replace('-', '/', $row['homework_due_date'])));!!}</i></p>
-
-                                    </div>
-
-                                    @if($row['homework_status'] == 0 && $row['homework_is_active'] ==1)
-                                    <a href="/delete-homework/{!! $row['homework_id']!!}" class="btn btn-primary btn-red pull-left"><i class="glyphicon glyphicon-trash"></i></a>
-                                    @endif
-
-                                    <div class="col-sm-2">
-
-                                        @if($row['homework_status'] == 0 && $row['homework_is_active'] ==1)
-                                        <small class="label label-sm label-danger">saved to draft</small>
-                                        @elseif($row['homework_status'] == 1 &&  $row['homework_is_active'] ==1 )
-                                        <small class="label label-sm label-inverse">Published</small>
-                                        @endif
-                                        <div style="margin-top:10px;">
-                                            @if ($row['homework_file'] != null) <i class="fa fa-paperclip"></i> @endif
-                                            <a class="text-info " href="/detailedHomework/{!!$row['homework_id']!!}">View More</a>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="tmln-div">
-                                    <h5 style="padding: 1px 14px 14px 30px;text-align: center "><small>{!! $row['homework_batch_name']!!}</small> <small >  {!! $row['homework_class_name']!!}   </br>    @foreach($row['divs'] as $r1) {!! $r1 !!}, @endforeach    </small></h5>
-                                </div>
-
-                            </li>
-                            @endif
-                            @endforeach
                         </ul>
                         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                     </div>
@@ -131,22 +90,215 @@
 
 
 <script>
+
     jQuery(document).ready(function() {
+
         getMsgCount();
+
         Main.init();
+
         FormValidator.init();
+
+        $('div#loadmoreajaxloader').show();
+
+        pageCount=0;
+
+        if(loaded){
+            $('div#loadmoreajaxloader').html('<center>No more Homeworks to show.</center>');
+            return;
+        }
+        ajaxCall();
+        pageCount++;
+
     });
 
+    var loaded = false;
 
+    var pageCount=1;
 
+    /*
+     +   * Function Name: $(window).scroll
+     +   * Param: -
+     +   * Return: this is jquery method for scroll action
+     +   * Desc: on each scroll it calls ajaxCall function.
+     +   * Developed By: Suraj Bande
+     +   * Date: 3/2/2016
+     +   */
 
+    $(window).scroll(function()
+    {
+        if ( $(window).scrollTop() == $(document).height() - $(window).height() )
+        {
 
+            $('div#loadmoreajaxloader').show();
 
+            if(loaded){
+                $('div#loadmoreajaxloader').html('<center>No more Homeworks to show.</center>');
+                return;
+            }
 
+            ajaxCall();
+
+            pageCount++;
+
+        }
+
+    });
+
+    /*
+     +   * Function Name: ajaxCall
+     +   * Param: -
+     +   * Return: called to load more listing
+     +   * Desc: on each scroll or initially on loading it returns with records of listing with respective counts.
+     +   * Developed By: Suraj Bande
+     +   * Date: 3/2/2016
+     +   */
+
+    function ajaxCall(){
+
+        $.ajax({
+
+            url: "loadmore-homework/"+pageCount,
+
+            success: function(html)
+            {
+
+                if(html.length!=0)
+                {
+                    var data= $.map(html,function(value,index){
+                        return value;
+                    });
+                    for(var i=0; i<data.length; i++)
+                    {
+
+                        var str="";
+
+                        str+='<li class="timeline-item">'+
+
+                                '<div class="leaveSection">'+
+
+                                    '<div class="text-muted text-small">'+
+
+                                    '</div>'+
+
+                                    '<div class="col-sm-8" style="margin-top: 4px;">'+
+
+                                        '<h5><small class="label label-sm label-info">'+data[i]['first_name']+" "+data[i]['last_name']+'</small>'+" "+data[i]['title']+'</h5>';
+
+                                        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                            "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
+                                        ];
+
+                                        var date=data[i]["created_at"].split(/[- :]/);
+
+                                        var date_dump = new Date(date[2]+"/"+date[1]+"/"+date[0]);
+
+                                        var createdAt= date[2]+" "+monthNames[parseInt(date[1],10)-1]+" "+date[0];
+
+                                        var due_ = data[i]["due_date"].split(/[- :]/);
+
+                                        var dueDate= due_[2]+" "+monthNames[parseInt(due_[1],10)-1]+" "+due_[0];
+
+                                        str+='<p>Date:<i>'+createdAt+'</i> <br> Due Date:<i>'+dueDate+' </i></p>'+
+
+                                    '</div>';
+
+                                    if(data[i]['status']==0)
+                                    {
+                                        str+='<a href="/delete-homework/'+data[i]["homework_id"]+'" class="btn btn-primary btn-red pull-left"><i class="glyphicon glyphicon-trash"></i></a>';
+                                    }
+
+                                str+='<div class="col-sm-2">';
+
+                                    if(data[i]['status']==0)
+                                    {
+                                        str+='<small class="label label-sm label-danger">saved to draft</small>';
+                                    }else{
+                                        str+='<small class="label label-sm label-inverse">Published</small>';
+                                    }
+
+                                    str+='<div style="margin-top:10px;">';
+
+                                    if(data[i]['attachment_file']!=null)
+                                    {
+                                        str+='<i class="fa fa-paperclip"></i>';
+                                    }
+
+                                    str+= '<a class="text-info " href="/detailedHomework/'+data[i]['homework_id']+'">View More</a>'+
+
+                                    '</div>'+
+
+                                '</div>'+
+
+                            '</div>';
+
+                        str+='<div class="tmln-div" id="tmln_id_'+i+'" tabindex="0" data-toggle="popover_'+data[i]['homework_id']+'" data-trigger="focus" title="" content="">'+
+
+                                '<h4 style="padding: 16px 0px 0px 0px;text-align: center ">'+data[i]['subject_name']+'</h4>'+
+
+                             '</div>'+
+
+                        '</li>';
+
+                        $("#tmlin").append(str);
+
+                        popoverHandler(data[i]['homework_id']);
+
+                        $('div#loadmoreajaxloader').hide();
+
+                    }
+
+                }else{
+                    console.log('end');
+                    loaded=true;
+                    $('div#loadmoreajaxloader').html('<center>No more notices to show.</center>');
+                }
+
+            }
+        });
+
+    }
+
+    /*
+     +   * Function Name: popoverHandler
+     +   * Param: id
+     +   * Return: its initialize the popover.
+     +   * Desc: runtime initialize popover.
+     +   * Developed By: Suraj Bande
+     +   * Date: 3/2/2016
+     +   */
+
+    function popoverHandler(id) {
+
+        var route1='/batch-class-div-homework/'+id;
+
+        var divisions="";
+
+        $.get(route1,function(res){
+
+            var batch=res[0]['batch_name'];
+
+            var classes=res[0]['class_name'];
+
+            for ( var i=0; i<res.length; i++)
+            {
+
+                divisions+= res[i]['division_name']+" ";
+
+            }
+
+            $('[data-toggle="popover_'+id+'"]').popover(
+                {
+                    title:batch,
+                    content:classes+" ("+ divisions +")"
+                }
+            );
+
+        });
+
+    }
 
 </script>
-
-
 
 <!-- start: MAIN JAVASCRIPTS -->
 

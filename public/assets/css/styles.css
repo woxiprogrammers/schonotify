@@ -11481,6 +11481,13 @@ td.small-width {
     position: absolute;
     width: 92px;
 }
+.tmln-div:focus{
+    outline:0px;
+}
+.tmln-div:hover{
+    cursor: pointer;
+    background:#ccc;
+}
 .timetable-sect{
     margin-right: 5px; color: #666;
 }
