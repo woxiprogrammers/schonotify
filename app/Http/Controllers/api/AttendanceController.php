@@ -7,6 +7,7 @@ use App\Batch;
 use App\Classes;
 use App\Division;
 use App\Leave;
+use App\SubjectClassDivision;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,6 +24,68 @@ class AttendanceController extends Controller
         $this->middleware('authenticate.user');
     }
 
+
+    public function getAttendanceBatches(Request $requests)
+    {
+        try{
+            $data=$requests->all();
+            $division=array();
+            $batchInfo=array();
+            $classes=array();
+            $divisionArray=array();
+            $k=0;
+            $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if(!Empty($divisions)){
+                $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
+                    ->orwhere('teacher_id','=',$data['teacher']['id'])
+                    ->select('division_id')
+                    ->get()->toArray();
+            }else{
+                $divisionData=SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])
+                    ->select('division_id')
+                    ->get()->toArray();
+            }
+            if(!Empty($divisionData))
+            {
+                foreach($divisionData as $value){
+                    $division['id'][$k]=$value['division_id'];
+                    $k++;
+                }
+            }
+            $divisionArray=array_unique($division['id'],SORT_REGULAR);
+            $i=0;
+            foreach ($divisionArray  as $value)
+            {
+                $classId=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                $className=Classes::where('id','=',$classId['class_id'])->select('class_name as class_name', 'batch_id as batch_id')->first();
+                if(!Empty($classId)){
+                    $classes[$i]['id']=$classId['class_id'];
+                    $classes[$i]['name']=$className['class_name'];
+                    $classes[$i]['batch_id']=$className['batch_id'];
+                    $i++;
+                }
+            }
+            $i=0;
+            foreach($classes as $row)
+            {
+                $batchName=Batch::where('id',$row['batch_id'])->first();
+                $batchInfo[$i]['id'] = $batchName['id'];
+                $batchInfo[$i]['name'] = $batchName['name'];
+                $i++;
+            }
+            $status = 200;
+            $message = "Successfully Listed";
+        }catch (\Exception     $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $batchInfo
+        ];
+        return response($response, $status);
+    }
     public function markAttendance(Requests\AttendanceRequest $request)
     {   $data=array();
         $resultArr=array();

@@ -287,6 +287,7 @@
     Route::post('deatil-leaveinformation',array('uses' => 'api\LeaveController@getDetailLeaveInformation'));
 
     //Attendance Related
+    Route::get('attendance-batches','api\AttendanceController@getAttendanceBatches');
     Route::post('attendance','api\AttendanceController@markAttendance');
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
