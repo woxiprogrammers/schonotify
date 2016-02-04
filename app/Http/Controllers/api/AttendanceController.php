@@ -24,6 +24,14 @@ class AttendanceController extends Controller
         $this->middleware('authenticate.user');
     }
 
+    /*
+   * Function Name: getAttendanceBatches
+   * Param : Request $requests
+   * Return :Return the data of batches as JSON array
+   * Desc: Display list of batches to the teacher  
+   * Developed By: Amol Rokade
+   * Date: 1/2/2016
+   */
 
     public function getAttendanceBatches(Request $requests)
     {
