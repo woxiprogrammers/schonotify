@@ -7,7 +7,7 @@ use App\Classes;
 use App\Division;
 use App\Subject;
 use App\SubjectClassDivision;
-use App\timetable;
+use App\Timetable;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
@@ -128,7 +128,7 @@ class TimetableController extends Controller
             foreach($subjectClassDivision as $value){
                  array_push($finalSubjectClassDivision,$value['id']);
             }
-            $timetable=timetable::wherein('division_subject_id',$finalSubjectClassDivision)
+            $timetable=Timetable::wherein('division_subject_id',$finalSubjectClassDivision)
                  ->where('day_id', '=', $day_id)
                  ->orderBy('period_number', 'asc')
                  ->get();
@@ -178,11 +178,11 @@ class TimetableController extends Controller
         try{
             $finalTimetable=array();
             $subjectClassDivision=SubjectClassDivision::where('division_id','=',$div_id)->get();
-            $finalSubjectClassDivision1=array();
+            $finalSubjectClassDivision=array();
             foreach($subjectClassDivision as $value){
-                array_push($finalSubjectClassDivision1,$value['id']);
+                array_push($finalSubjectClassDivision,$value['id']);
             }
-            $timetable=timetable::wherein('division_subject_id',$finalSubjectClassDivision1)
+            $timetable=Timetable::wherein('division_subject_id',$finalSubjectClassDivision)
                   ->where('day_id', '=', $day_id)
                   ->orderBy('period_number', 'asc')
                   ->get();
@@ -219,5 +219,3 @@ class TimetableController extends Controller
         return response($response, $status);
     }
 }
-
-
