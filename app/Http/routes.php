@@ -175,7 +175,7 @@
 
     Route::get('get-all-division/{id}','AttendanceController@getAllDivision');
 
-    Route::get('get-all-student/{id}','AttendanceController@getAllStudent');
+    Route::get('get-all-student/{id}/{dateValue}','AttendanceController@getAllStudent');
 
     Route::post('mark-attendance','AttendanceController@AttendanceMark');
 

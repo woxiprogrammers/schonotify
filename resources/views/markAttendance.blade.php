@@ -105,7 +105,7 @@
                                             <tr>
                                                 <td><input type="checkbox" class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}"  /><label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label></td>
                                                 <td>{!! $row['roll_number'] !!}</td>
-                                                <td>{!! $row['student_name'] !!}  </td>
+                                                <td>{!! $row['student_name'] !!} &nbsp; &nbsp; @if($row['student_leave_status'] == 1  ) <span class="label label-default label-text-yellow">Leave Applied</span> @elseif($row['student_leave_status'] == 2 )<span class="label label-default label-text-orange">Leave Approved</span> @endif  </td>
                                             </tr>
                                             @endforeach
 
@@ -173,7 +173,6 @@
         TableData.init();
         FormElements.init();
         UIButtons.init();
-
         $('#allCheckedStud-label img').css('border','1px solid');
         if($('.allCheckedStud').prop('checked') == true)
         {
@@ -192,6 +191,7 @@
     $('#btnSubmit').click(function(){
         window.location.href="#";
     });
+
 
     $('.allCheckedStud').change(function(){
 
@@ -223,7 +223,7 @@
         }
     });
 
-    $('.datepicker').datepicker()
+   /* $('.datepicker').datepicker()
         .on('changeDate', function(ev){
 
             //write psudo code here for fetching data from controller using ajax
@@ -232,7 +232,74 @@
 
             $('#tableContent2').fadeIn(1000);
 
+        });*/
+
+    $('.datepicker').datepicker()
+        .on('changeDate', function(ev){
+            var date=$('#datePiker').val();
+            dateChange(date);
         });
+
+    function dateChange(value){
+
+        $.ajax({
+            url: 'mark-attendance',
+            type: "get",
+            data: {value},
+            success: function(data){
+
+                var res= $.map(data,function(value){
+                    return value;
+                });
+                var str='<table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">'+
+                    '<thead>'+
+                    '<tr>'+
+                    '<th>'+
+                    '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
+                    '<label for="allCheckedStud" id="allCheckedStud-label">'+
+                    '<img class="checkbox-img"/>'+
+                    '</label>'+
+                    '</th>'+
+                    '<th> Roll No'+
+                    '</th>'+
+                    '<th> Name'+
+                    '</th>'+
+                    '</tr>'+
+                    '</thead>'+
+                    '<tbody>';
+                for(var i=0; i<res.length; i++)
+                {
+
+                    str +='<tr>'+
+                        '<td>'+
+                        '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
+                        '<label for="'+res[i]['student_id']+'">'+
+                        '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+                        '</label>'+
+                        '</td>'+
+                        '<td>'+res[i]['roll_number']+'</td>'+
+                        '<td>'+res[i]['student_name']+" "+" ";
+
+                    if(res[i]['student_leave_status'] == 1  ) {
+                        str +='<span class="label label-default label-text-yellow"> Leave Applied '+
+                            '</span>';
+                    }
+                    else if(res[i]['student_leave_status'] == 2 ){
+                        str +='<span class="label label-default label-text-orange"> Leave Approved '+
+                            '</span>';
+                    }
+                    str+= '</td>'+
+                        '</tr>';
+                }
+                str +='</tbody>'+
+                    '</table>';
+
+
+                $('#tableContent2').html(str);
+                TableData.init();
+            }
+        });
+    }
 
     $('#batch-select').change(function(){
         var id=this.value;
@@ -279,23 +346,27 @@
 
     $("#division-select").change(function() {
         var id = this.value;
-        var route='get-all-student/'+id;
-        $.get(route,function(html){
+        var data = $('#datePiker').val();
+        var date=data.split("/",3);
+        var date_dump = date[2]+"-"+date[0]+"-"+date[1];
+        var route='get-all-student/'+id+'/'+date_dump;
 
-            var res= $.map(html,function(value,index){
+        $.get(route,function(studentData){
+
+            var res= $.map(studentData,function(value,index){
                 return value;
             });
-
             if(res.length == 0)
             {
                 $('#division-select').html("no record found");
             }
             else{
+
                 var str='<table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">'+
                     '<thead>'+
                     '<tr>'+
                     '<th>'+
-                    '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked/>'+
+                    '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
                     '<label for="allCheckedStud" id="allCheckedStud-label">'+
                     '<img class="checkbox-img"/>'+
                     '</label>'+
@@ -314,16 +385,28 @@
                     '<td>'+
                     '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
                     '<label for="'+res[i]['student_id']+'">'+
-                    '<img id="checkedStud.'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+                    '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
                     '</label>'+
                     '</td>'+
                     '<td>'+res[i]['roll_number']+'</td>'+
-                    '<td>'+res[i]['student_name']+'</td>'+
+                    '<td>'+res[i]['student_name']+" "+" ";
+
+                    if(res[i]['student_leave_status'] == 1  ) {
+                    str +='<span class="label label-default label-text-yellow"> Leave Applied '+
+                    '</span>';
+                    }
+                    else if(res[i]['student_leave_status'] == 2 ){
+                    str +='<span class="label label-default label-text-orange"> Leave Approved '+
+                    '</span>';
+                    }
+                    str+= '</td>'+
                     '</tr>';
                     }
                     str +='</tbody>'+
                     '</table>';
+
                 $('#tableContent2').html(str);
+                TableData.init();
                 $('#allCheckedStud-label img').css('border','1px solid');
                 if($('.allCheckedStud').prop('checked') == true)
                 {
@@ -336,7 +419,35 @@
 
                     });
                 }
+                $('.allCheckedStud').change(function(){
 
+                    if($(this).prop('checked') == true)
+                    {
+                        $('#allCheckedStud-label img').prop('src','assets/images/cross.png');
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = true;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/cross.png');
+                        });
+                    }else{
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = false;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/tick.png');
+
+                        });
+                        $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
+                    }
+                });
+
+                $('.checkedStud').change(function(){
+
+                    if(this.checked==true)
+                    {
+                        $('#'+this.className+this.id).prop('src','assets/images/cross.png');
+
+                    }else{
+                        $('#'+this.className+this.id).prop('src','assets/images/tick.png');
+                    }
+                });
             }
         });
 
@@ -348,8 +459,8 @@
 
         $('#class-select').val('');
         $('#division-select').val('');
-        $('#sample_2').html('');
-        $("#sample_2").dataTable().fnDestroy();
+        $('#tableContent2').html('');
+
     })
 
 </script>
