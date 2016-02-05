@@ -343,8 +343,8 @@
 
 
         //Timetable
-        Route::get('view-timetable-parent/{studentId}/{day}','api\TimetableController@viewTimetableParent');
-        Route::get('view-timetable-teacher/{div_id}/{day}','api\TimetableController@viewTimetableTeacher');
+        Route::get('view-timetable-parent/{studentId}/{day_id}','api\TimetableController@viewTimetableParent');
+        Route::get('view-timetable-teacher/{div_id}/{day_id}','api\TimetableController@viewTimetableTeacher');
         Route::get('get-batches','api\TimetableController@getBatches');
         Route::get('get-classes/{batchId}','api\TimetableController@getClasses');
         Route::get('get-divisions/{classId}','api\TimetableController@getDivisions');
