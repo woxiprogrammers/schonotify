@@ -37,7 +37,7 @@ class CreateAttendanceRequest extends Request
         {
             case 'GET':
 
-                if(in_array('view_attendance',$resultArr)) {
+                if(in_array('create_attendance',$resultArr)) {
                     return true;
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');

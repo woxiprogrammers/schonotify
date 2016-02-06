@@ -177,7 +177,7 @@
 
     Route::get('get-all-student/{id}/{dateValue}','AttendanceController@getAllStudent');
 
-    Route::post('mark-attendance','AttendanceController@AttendanceMark');
+    Route::post('mark-attendance','AttendanceController@attendanceMark');
 
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
