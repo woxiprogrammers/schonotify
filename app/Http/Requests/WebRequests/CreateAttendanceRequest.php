@@ -37,7 +37,7 @@ class CreateAttendanceRequest extends Request
         {
             case 'GET':
 
-                if(in_array('create_attendance',$resultArr)) {
+                if(in_array('view_attendance',$resultArr)) {
                     return true;
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
@@ -47,10 +47,20 @@ class CreateAttendanceRequest extends Request
                 break;
 
             case 'PUT':
-                break;
+                if(in_array('create_attendance',$resultArr)) {
+                    return true;
+                } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::to('/');
+                }
 
             case 'POST':
-                break;
+                if(in_array('create_attendance',$resultArr)) {
+                    return true;
+                } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::to('/');
+                }
 
             default:break;
         }
@@ -68,7 +78,12 @@ class CreateAttendanceRequest extends Request
         {
             case 'GET': return [];
                 break;
-            case 'POST':return [];
+            case 'POST':return [
+                                'datePiker'=>'required|date',
+                                'division-select'=>'required',
+                                'class-select'=>'required',
+                                'batch-select'=>'required',
+                                ];
                 break;
             default:break;
         }
