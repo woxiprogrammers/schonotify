@@ -269,7 +269,10 @@
                 return Redirect::to('/');
             }
         }
-
+        /**
+         * Author:manoj chaudhari
+         *
+         */
         public function markAttendanceAccess()
         {
             $user=Auth::user();

@@ -435,14 +435,8 @@ $('#editEmailParent').on('keyup',function(){
     });
     }
 });
-
-
-
-
-
 //////////registration Js///////
 checkMarkAttendanceAccess();
-
 function checkMarkAttendanceAccess()
 {
     var route="mark-attendance-check";
