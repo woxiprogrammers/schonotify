@@ -222,52 +222,52 @@
                     return value;
                 });
                 var str='<table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">'+
-                    '<thead>'+
-                    '<tr>'+
-                    '<th>'+
-                    '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
-                    '<label for="allCheckedStud" id="allCheckedStud-label">'+
-                    '<img class="checkbox-img"/>'+
-                    '</label>'+
-                    '</th>'+
-                    '<th> Roll No'+
-                    '</th>'+
-                    '<th> Name'+
-                    '</th>'+
-                    '</tr>'+
-                    '</thead>'+
-                    '<tbody>';
-                for(var i=0; i<res.length; i++)
-                {
-                    str +='<tr>'+
-                          '<td>';
-                    if(res[i]['student_attendance_status'] == 1  ){
-                    str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
-                           '<label for="'+res[i]['student_id']+'">'+
-                           '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
-                           '</label>';
-                    }else{
-                    str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
-                           '<label for="'+res[i]['student_id']+'">'+
-                           '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
-                           '</label>';
-                    }
-                    str += '</td>'+
-                           '<td>'+res[i]['roll_number']+'</td>'+
-                           '<td>'+res[i]['student_name']+" "+" ";
-                    if(res[i]['student_leave_status'] == 1  ) {
-                    str += '<span class="label label-default label-text-yellow"> Leave Applied '+
-                           '</span>';
-                    }
-                    else if(res[i]['student_leave_status'] == 2 ){
-                    str += '<span class="label label-default label-text-orange"> Leave Approved '+
-                           '</span>';
-                    }
-                    str+= '</td>'+
-                          '</tr>';
-                }
-                    str +='</tbody>'+
-                          '</table>';
+                         '<thead>'+
+                                 '<tr>'+
+                                    '<th>'+
+                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
+                                              '<label for="allCheckedStud" id="allCheckedStud-label">'+
+                                                '<img class="checkbox-img"/>'+
+                                              '</label>'+
+                                    '</th>'+
+                                    '<th> Roll No'+
+                                    '</th>'+
+                                    '<th> Name'+
+                                    '</th>'+
+                                 '</tr>'+
+                         '</thead>'+
+                         '<tbody>';
+                                for(var i=0; i<res.length; i++)
+                                 {
+                            str +='<tr>'+
+                                    '<td>';
+                                         if(res[i]['student_attendance_status'] == 1  ){
+                                             str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
+                                                       '<label for="'+res[i]['student_id']+'">'+
+                                                       '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+                                                       '</label>';
+                                          }else{
+                                             str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
+                                                    '<label for="'+res[i]['student_id']+'">'+
+                                                    '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+                                                    '</label>';
+                                          }
+                             str += '</td>'+
+                                    '<td>'+res[i]['roll_number']+'</td>'+
+                                    '<td>'+res[i]['student_name']+" "+" ";
+                                          if(res[i]['student_leave_status'] == 1  ) {
+                                                str += '<span class="label label-default label-text-yellow"> Leave Applied '+
+                                                       '</span>';
+                                          }
+                                          else if(res[i]['student_leave_status'] == 2 ){
+                                                str += '<span class="label label-default label-text-orange"> Leave Approved '+
+                                                       '</span>';
+                                          }
+                              str+= '</td>'+
+                                  '</tr>';
+                             }
+                  str +='</tbody>'+
+                '</table>';
                 $('#tableContent2').html(str);
                 TableData.init();
                 $('#allCheckedStud-label img').css('border','1px solid');
@@ -349,56 +349,55 @@
             }
             else{
                 var str='<table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">'+
-                    '<thead>'+
-                    '<tr>'+
-                    '<th>'+
-                    '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
-                    '<label for="allCheckedStud" id="allCheckedStud-label">'+
-                    '<img class="checkbox-img"/>'+
-                    '</label>'+
-                    '</th>'+
-                    '<th> Roll No'+
-                    '</th>'+
-                    '<th> Name'+
-                    '</th>'+
-                    '</tr>'+
-                    '</thead>'+
-                    '<tbody>';
-                for(var i=0; i<res.length; i++)
-                {
-
-                str +='<tr>'+
-                      '<td>';
-                 if(res[i]['student_attendance_status'] == 1  ){
-                str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
-                       '<label for="'+res[i]['student_id']+'">'+
-                       '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
-                       '</label>';
-                 }else{
-                str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
-                       '<label for="'+res[i]['student_id']+'">'+
-                       '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
-                       '</label>';
-                }
-                str += '</td>'+
-                       '<td>'+res[i]['roll_number']+'</td>'+
-                       '<td>'+res[i]['student_name']+" "+" ";
-                 if(res[i]['student_leave_status'] == 1  ) {
-                str +='<span class="label label-default label-text-yellow"> Leave Applied '+
-                            '</span>';
-                }else if(res[i]['student_leave_status'] == 2 ){
-                str +='<span class="label label-default label-text-orange"> Leave Approved '+
-                      '</span>';
-                }
-                str+= '</td>'+
-                      '</tr>';
-                }
-                str +='</tbody>'+
-                      '</table>';
+                            '<thead>'+
+                                '<tr>'+
+                                    '<th>'+
+                                        '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
+                                             '<label for="allCheckedStud" id="allCheckedStud-label">'+
+                                                '<img class="checkbox-img"/>'+
+                                             '</label>'+
+                                    '</th>'+
+                                    '<th> Roll No'+
+                                    '</th>'+
+                                    '<th> Name'+
+                                    '</th>'+
+                                '</tr>'+
+                            '</thead>'+
+                                '<tbody>';
+                                    for(var i=0; i<res.length; i++)
+                                    {
+                                    str +='<tr>'+
+                                                '<td>';
+                                                    if(res[i]['student_attendance_status'] == 1  ){
+                                                    str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
+                                                            '<label for="'+res[i]['student_id']+'">'+
+                                                                '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+                                                            '</label>';
+                                                    } else {
+                                                    str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
+                                                           '<label for="'+res[i]['student_id']+'">'+
+                                                                '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+                                                           '</label>';
+                                                    }
+                                         str += '</td>'+
+                                                '<td>'+res[i]['roll_number']+'</td>'+
+                                                '<td>'+res[i]['student_name']+" "+" ";
+                                                      if(res[i]['student_leave_status'] == 1  ) {
+                                         str +='<span class="label label-default label-text-yellow"> Leave Applied '+
+                                               '</span>';
+                                                      }else if(res[i]['student_leave_status'] == 2 ){
+                                         str +='<span class="label label-default label-text-orange"> Leave Approved '+
+                                                '</span>';
+                                                      }
+                                         str+= '</td>'+
+                                         '</tr>';
+                                    }
+                          str +='</tbody>'+
+                '</table>';
                 $('#tableContent2').html(str);
                 TableData.init();
                 $('#allCheckedStud-label img').css('border','1px solid');
-                if($('.allCheckedStud').prop('checked') == true)
+                if ($('.allCheckedStud').prop('checked') == true)
                 {
                     $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
                     var i=0;
@@ -406,7 +405,7 @@
                         if (this.checked == true)
                         {
                             $('#'+this.className+this.id).prop('src','assets/images/tick.png');
-                        }else{
+                        }else {
                             $('#'+this.className+this.id).prop('src','assets/images/cross.png');
                         }
                         i++;
@@ -416,7 +415,7 @@
                 }
 
                 $('.checkedStud').change(function(){
-                    if(this.checked==true)
+                    if (this.checked==true)
                     {
                         $('#'+this.className+this.id).prop('src','assets/images/tick.png');
 

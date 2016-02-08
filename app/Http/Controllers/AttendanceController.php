@@ -53,7 +53,7 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                             ->first();
-                        if($batchClassData != null){
+                        if ($batchClassData != null) {
                             $studentData=User::where('division_id',$userCheck->id)->where('is_active',1)->select('id','first_name','last_name','roll_number')->get();
                             $dropDownData['division_id'] = $userCheck->id;
                             $dropDownData['division_name'] = $userCheck->division_name;
@@ -93,7 +93,7 @@
                     }
                 }
                 elseif ($user->role_id == 1) {
-                    if($request->ajax()) {
+                    if ($request->ajax()) {
                         $data = Input::all();
                         $division=$data['division'];
                         $batchClassDivisionData=Division::where('divisions.id',$division)->
@@ -101,7 +101,7 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
                             ->first();
-                    }else {
+                    } else {
                         $batchClassDivisionData=Division::
                             join('classes','divisions.class_id','=','classes.id')
                             ->join('batches','classes.batch_id','=','batches.id')
@@ -116,7 +116,7 @@
                                 $dropDownData['class_name'] = $batchClassDivisionData->class_name;
                                 $batch=Batch::get();
                                 $i=0;
-                                foreach ($batch as $row){
+                                foreach ($batch as $row) {
                                     $dropDownData['batch'][$i]['batch_id'] = $row['id'];
                                     $dropDownData['batch'][$i]['batch_name'] = $row['name'];
                                     $i++;
@@ -148,8 +148,8 @@
                     }
                  }
 
-                } else{
-                }
+                } else {
+             }
                 return view('markAttendance');
             } else {
                 return Redirect::to('/');
@@ -162,7 +162,6 @@
          * @return mixed
          */
         public function attendanceMark(CreateAttendanceRequest $request){
-
             $user = Auth::user();
             $saveData = array();
             $userIds=array();
@@ -171,12 +170,12 @@
             $date=date("Y-m-d",strtotime($request->datePiker));
             $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id')->get();
             $i=0;
-            foreach ($userData as $data){
+            foreach ($userData as $data) {
                 $dataList[]=$data['id'];
                 $i++;
             }
             $attendanceCheck=Attendance::whereIn('student_id',$dataList)->where('date',$date)->get();
-                if ($attendanceCheck != null){
+                if ($attendanceCheck != null) {
                     Attendance::whereIn('student_id',$request['student'])->where('date',$date)->delete();
                 }
                     $i=0;
@@ -193,16 +192,12 @@
             Session::flash('message-success','attendance saved successfully');
             return Redirect::to('/mark-attendance');
         }
-
-
         /**
          * @param $id
          * Author:manoj chaudhari
          * @return array
          */
-
         public function getAllClasses($id){
-
             $data=array();
             $classData=Classes::where('batch_id',$id)->get();
             $i=0;
@@ -213,15 +208,12 @@
             }
             return $data;
         }
-
         /**
          * @param $id
          * Author:manoj chaudhari
          * @return array
          */
-
-        public function getAllDivision($id){
-
+        public function getAllDivision($id) {
             $data=array();
             $divisionData=Division::where('class_id',$id)->get();
             $i=0;
@@ -232,16 +224,13 @@
             }
             return $data;
         }
-
         /**
          * @param $id
          * @param $dateValue
          * Author:manoj chaudhari
          * @return array
          */
-
-        public function getAllStudent($id,$dateValue){
-
+        public function getAllStudent($id,$dateValue) {
             $data=array();
             $studentData=User::where('division_id',$id)->select('id','first_name','last_name','roll_number')->get();
             $i=0;
@@ -254,7 +243,7 @@
                     $data['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];
                     $data['student_list'][$i]['student_name'] = $row['first_name'] ." ".$row['last_name'];;
                     $data['student_list'][$i]['roll_number'] = $row['roll_number'];
-                }else{
+                }else {
                     $data['student_list'][$i]['student_id'] = $row['id'];
                     $data['student_list'][$i]['student_leave_status'] = null;
                     $data['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];
@@ -265,22 +254,18 @@
             }
             return $data;
         }
-
         /**
          * @param Requests\WebRequests\ViewAttendanceRequest $request
          * Author:manoj chaudhari
          * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
          */
-
         public function viewAttendance(Requests\WebRequests\ViewAttendanceRequest $request)
         {
-            if($request->authorize()===true)
+            if ($request->authorize()===true)
             {
                 return view('viewAttendance');
-            }else{
+            } else {
                 return Redirect::to('/');
             }
-
-        }
-
+       }
     }
