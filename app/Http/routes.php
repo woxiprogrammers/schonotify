@@ -171,6 +171,14 @@
 
     Route::get('mark-attendance','AttendanceController@markAttendance');
 
+    Route::get('get-all-classes/{id}','AttendanceController@getAllClasses');
+
+    Route::get('get-all-division/{id}','AttendanceController@getAllDivision');
+
+    Route::get('get-all-student/{id}/{dateValue}','AttendanceController@getAllStudent');
+
+    Route::post('mark-attendance','AttendanceController@attendanceMark');
+
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
     Route::get('auto-notification','NotificationController@listNotifications');
