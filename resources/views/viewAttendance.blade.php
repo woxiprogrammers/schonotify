@@ -35,30 +35,26 @@
                                         <label for="form-field-select-2">
                                             Select Batch
                                         </label>
-                                        <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
-                                            <option value="1">morning</option>
-                                            <option value="2">evening</option>
+                                        <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
+                                            @foreach($dropDownData['batch'] as $row)
+                                            <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-4" id="class-select-div">
                                         <label for="form-field-select-2">
                                             Select Class
                                         </label>
-                                        <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
-                                            <option value="1">first</option>
-                                            <option value="2">second</option>
+                                        <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+                                            <option value="{!!$dropDownData['class_id']!!}">{!!$dropDownData['class_name']!!}</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-4" id="division-select-div">
                                         <label for="form-field-select-2">
                                             Select Division
                                         </label>
-                                        <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
-                                            <option value="1">A</option>
-                                            <option value="2">B</option>
-                                            <option value="3">C</option>
-                                            <option value="4">D</option>
-                                            <option value="5">E</option>
+                                        <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
+                                            <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -87,7 +83,7 @@
 
                                     </div>
                                     <div class="form-group">
-                                        <label class="text-bold">
+                                        <label class="text-bold" id="listTitle">
                                             Students
                                         </label>
                                         <div id="stud-list"></div>
@@ -109,7 +105,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
-                                        Cancel
+                                        OK
                                     </button>
 
                                 </div>
@@ -155,6 +151,51 @@
         $('.fc-agendaWeek-button').hide();
         $('.fc-agendaDay-button ').hide();
     });
+
+
+    $('#batch-select').change(function(){
+
+        $('#class-select').val('');
+        $('#division-select').val('');
+        $('#tableContent2').html('');
+
+    });
+    $('#batch-select').change(function(){
+        var id=this.value;
+        var route='get-all-classes/'+id;
+        $.get(route,function(res){
+            if (res.length == 0)
+            {
+                $('#class-select').html("no record found");
+            } else {
+                var str='<option value="">please select class</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                }
+                $('#class-select').html(str);
+            }
+        });
+    });
+
+    $("#class-select").change(function() {
+        var id = this.value;
+        var route='get-all-division/'+id;
+        $.get(route,function(res) {
+            if(res.length == 0)
+            {
+                $('#division-select').html("no record found");
+            } else {
+                var str='<option value="">please select division</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
+                }
+                $('#division-select').html(str);
+            }
+        });
+    });
+
 
 </script>
 

@@ -1,6 +1,7 @@
 var Calendar = function() {"use strict";
     var dateToShow, calendar, demoCalendar, eventClass, eventCategory, subViewElement, subViewContent, $eventDetail;
     var defaultRange = new Object;
+
     defaultRange.start = moment();
     defaultRange.end = moment().add(1, 'days');
 
@@ -24,6 +25,7 @@ var Calendar = function() {"use strict";
         var m = date.getMonth();
         var y = date.getFullYear();
         var form = '';
+
         $('#full-calendar').fullCalendar({
             buttonIcons: {
                 prev: 'fa fa-chevron-left',
@@ -32,7 +34,7 @@ var Calendar = function() {"use strict";
             header: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'month,agendaWeek,agendaDay'
+                right: 'agendaWeek,agendaDay'
             },
             events: demoCalendar,
             editable: true,
@@ -68,15 +70,45 @@ var Calendar = function() {"use strict";
 
                 $(".form-full-event #today").html(days[date.getDay()]+' '+date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear());
 
-                $(".form-full-event #stud-list").html('<ul class="list-group"><li class="list-group-item">101 Suraj Bande <div class="pull-right leave-applied-tag"></div> <div class="pull-right leave-approved-tag"></div><div class="pull-right absent-tag"></div></li><li class="list-group-item">102 Shantanu Acharya <div class="pull-right absent-tag"></div></li><li class="list-group-item">107 Manoj Jadhav <div class="pull-right absent-tag"></div></li></ul>');
-
                 $(".event-categories[value='job']").prop('checked', true);
                 $('#delBtn').hide();
+                var selectedDate=new Date(start).getTime();
+                var currentDate = new Date().getTime();
+                var diff = selectedDate - currentDate;
+                /////////////////////////////////////////////////////////////////
+                /* on date change show absent student*/
+
+                var div=$('#division-select').val();
+                var data = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                var date_dump = year +"-"+month+"-"+data;
+                    $.ajax({
+                        url: 'view-attendance',
+                        type: "get",
+                        data: {date:date_dump,division:div},
+
+                        success: function(data){
+                            console.log(data);
+                        }
+                    });
+                ///////////////////////////////////////////////////////////////////
+                if (diff <= 0) {
+                    $(".form-full-event #stud-list").html('<ul class="list-group"><li class="list-group-item">101 Suraj Bande <div class="pull-right leave-applied-tag"></div> <div class="pull-right leave-approved-tag"></div><div class="pull-right absent-tag"></div></li><li class="list-group-item">102 Shantanu Acharya <div class="pull-right absent-tag"></div></li><li class="list-group-item">107 Manoj Jadhav <div class="pull-right absent-tag"></div></li></ul>');
+                    $('#listTitle').show();
+                }else{
+                    $(".form-full-event #stud-list").html('<h4 class="text-danger"><i class="fa fa-warning"></i> No Attendance found for this date. Please select Current or previous date.</h4>');
+                    $('#listTitle').hide();
+                }
+
                 $('.events-modal').modal();
+
             }
 
         });
         demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
+
+
     };
 
     return {

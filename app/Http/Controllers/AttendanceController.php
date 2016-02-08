@@ -262,13 +262,72 @@
          */
         public function viewAttendance(ViewAttendanceRequest $request)
         {
-            if ($request->authorize()===true)
+            if ($request->authorize() === true)
             {
-                return view('viewAttendance');
-            } else {
+                $division='';
+                $date='';
+                if ($request->ajax()) {
+                    $data = Input::all();
+                    $division = $data['division'];
+                    $batchClassDivisionData=Division::where('divisions.id',$division)->
+                        join('classes','divisions.class_id','=','classes.id')
+                        ->join('batches','classes.batch_id','=','batches.id')
+                        ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
+                        ->first();
+                } else {
+                    $batchClassDivisionData=Division::
+                        join('classes','divisions.class_id','=','classes.id')
+                        ->join('batches','classes.batch_id','=','batches.id')
+                        ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
+                        ->first();
+                }
+                if ($batchClassDivisionData != null) {
+                    $studentData=User::where('division_id',$batchClassDivisionData->division_id)->where('is_active',1)->select('id','first_name','last_name','roll_number')->get();
+                    $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
+                    $dropDownData['division_name'] = $batchClassDivisionData->division_name;
+                    $dropDownData['class_id'] = $batchClassDivisionData->class_id;
+                    $dropDownData['class_name'] = $batchClassDivisionData->class_name;
+                    $batch=Batch::get();
+                    $i=0;
+                        foreach ($batch as $row) {
+                            $dropDownData['batch'][$i]['batch_id'] = $row['id'];
+                            $dropDownData['batch'][$i]['batch_name'] = $row['name'];
+                            $i++;
+                        }
+                    $i=0;
+                        foreach ($studentData as $student) {
+                            $leaveStatus=Leave::where('student_id',$student['id'])->where('from_date',$date)->select('student_id','status')->first();
+                            $attendanceStatus = Attendance::where('student_id',$student['id'])->where('date',$date)->select('student_id','status')->first();
+                            if ($leaveStatus != null) {
+                                $dropDownData['student_list'][$i]['student_id'] = $student['id'];
+                                $dropDownData['student_list'][$i]['student_leave_status'] = $leaveStatus['status'];
+                                $dropDownData['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];
+                                $dropDownData['student_list'][$i]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
+                                $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
+
+                            } else {
+                                $dropDownData['student_list'][$i]['student_id'] = $student['id'];
+                                $dropDownData['student_list'][$i]['student_leave_status'] = null;
+                                $dropDownData['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];
+                                $dropDownData['student_list'][$i]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
+                                $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
+                            }
+                            $i++;
+                        }
+                            if ($request->ajax()) {
+                                return $dropDownData;
+                            } else {
+                                return view('viewAttendance')->with(compact('dropDownData'));
+                            }
+                } else {
+                    Session::flash('message-success','no record found');
+                }
+            /*else {
                 return Redirect::to('/');
+            }*/
             }
         }
+
         /**
          * Author:manoj chaudhari
          *
