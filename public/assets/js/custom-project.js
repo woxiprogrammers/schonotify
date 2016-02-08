@@ -439,4 +439,16 @@ $('#editEmailParent').on('keyup',function(){
 
 
 
+
 //////////registration Js///////
+checkMarkAttendanceAccess();
+
+function checkMarkAttendanceAccess()
+{
+    var route="mark-attendance-check";
+    $.get(route,function(res){
+        if ( res == 0 ) {
+            $('#markAttendanceCheck').hide();
+        }
+    });
+}

@@ -7,6 +7,7 @@
     use App\Classes;
     use App\Division;
     use App\Http\Requests\WebRequests\CreateAttendanceRequest;
+    use App\Http\Requests\WebRequests\ViewAttendanceRequest;
     use App\Leave;
     use App\User;
     use Carbon\Carbon;
@@ -259,7 +260,7 @@
          * Author:manoj chaudhari
          * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
          */
-        public function viewAttendance(Requests\WebRequests\ViewAttendanceRequest $request)
+        public function viewAttendance(ViewAttendanceRequest $request)
         {
             if ($request->authorize()===true)
             {
@@ -267,5 +268,20 @@
             } else {
                 return Redirect::to('/');
             }
-       }
+        }
+
+        public function markAttendanceAccess()
+        {
+            $user=Auth::user();
+            if ($user->role_id == 2) {
+            $divisionChceck = Division::where('class_teacher_id',$user->id)->count();
+                if ($divisionChceck != 0) {
+                   return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 1;
+            }
+        }
     }

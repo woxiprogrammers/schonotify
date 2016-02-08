@@ -179,6 +179,10 @@
 
     Route::post('mark-attendance','AttendanceController@attendanceMark');
 
+    Route::get('mark-attendance-check','AttendanceController@markAttendanceAccess');
+
+
+
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
     Route::get('auto-notification','NotificationController@listNotifications');
