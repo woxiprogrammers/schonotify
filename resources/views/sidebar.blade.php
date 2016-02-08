@@ -180,7 +180,7 @@
         </div>
     </a>
     <ul class="sub-menu">
-        <li>
+        <li id="markAttendanceCheck">
             <a href="/mark-attendance">
                 <span class="title"> Mark Attendance </span>
             </a>
