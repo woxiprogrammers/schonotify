@@ -11618,7 +11618,14 @@ a.control_next {
 {
     background-color:yellow;
 }
-
+.label-text-yellow
+{
+    color:yellow;
+}
+.label-text-orange
+{
+    color:orange;
+}
 .label-orange
 {
     background-color:orange;
