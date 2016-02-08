@@ -569,7 +569,7 @@ class HomeworkController extends Controller
             $data=$request->all();
             $division = Division::where('class_teacher_id',$data['teacher']['id'])->first();
             if ($division != null) {
-                $HomeworkListing = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                $homeworkListing = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                          ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                          ->Join('classes', 'divisions.class_id', '=', 'classes.id')
                          ->Join('batches', 'classes.batch_id', '=', 'batches.id')
@@ -585,7 +585,7 @@ class HomeworkController extends Controller
                          ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','homework_types.id as id ','users.first_name as first_name','users.last_name as last_name','users.id as userId','subjects.slug as subjectName','subjects.id as subject_id','homeworks.status','divisions.division_name','divisions.id as division_id','classes.class_name','classes.id as class_id','homeworks.created_at','batches.name as batch_name','batches.id as batch_id','teacher.first_name as teacher_name')
                          ->get()->toArray();
             } else {
-                $HomeworkListing = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                $homeworkListing = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                         ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                         ->Join('classes', 'divisions.class_id', '=', 'classes.id')
                         ->Join('batches', 'classes.batch_id', '=', 'batches.id')
@@ -601,7 +601,7 @@ class HomeworkController extends Controller
                         ->get();
             }
             $i=0;
-            foreach ($HomeworkListing as $value) {
+            foreach ($homeworkListing as $value) {
                 $finalHomeworkListingSubjectTeacher[$i]['homework_id'] = $value['homework_id'];
                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value['homeworkTitle'];
                 $finalHomeworkListingSubjectTeacher[$i]['description'] = $value['description'];
