@@ -11762,3 +11762,12 @@ a.control_next {
     background-color:#FFF;}
 
 #file_error{color: #FF0000;}
+
+.lato-font{
+    font-family: "Lato", sans-serif;
+    color: #777;
+    display: block;
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 10px;
+}

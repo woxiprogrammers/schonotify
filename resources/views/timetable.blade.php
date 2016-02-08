@@ -13,34 +13,66 @@
     <!-- end: TOP NAVBAR -->
     <div class="main-content" >
         <div class="wrap-content container" id="container">
-            <!-- start: DASHBOARD TITLE -->
+
             @include('alerts.errors')
+
             <div id="message-error-div"></div>
+
             <section id="page-title" class="padding-top-15 padding-bottom-15">
                 <div class="row">
                     <div class="col-sm-7">
                         <h1 class="mainTitle">Timetable</h1>
-
                     </div>
                     <div class="col-sm-5">
-                        <!-- start: MINI STATS WITH SPARKLINE -->
-
-                        <!-- end: MINI STATS WITH SPARKLINE -->
                     </div>
                 </div>
             </section>
-            <!-- end: DASHBOARD TITLE -->
-
 
             <div class="container-fluid container-fullw bg-white">
                 <div class="row">
-                    @include('selectClassDivisionDropdown')
+
+                    <div class="panel panel-transparent">
+
+                        <div class="panel-body">
+
+                            <div class="form-group col-sm-4">
+                                <label for="form-field-select-2">
+                                    Select Batch
+                                </label>
+
+                                <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                                    @foreach($batches as $batch)
+                                    <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group col-sm-4" id="class-select-div">
+                                <label for="form-field-select-2">
+                                    Select Class
+                                </label>
+                                <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
+
+                                </select>
+                            </div>
+
+                            <div class="form-group col-sm-4" id="division-select-div">
+                                <label for="form-field-select-2">
+                                    Select Division
+                                </label>
+                                <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                     <div class="col-sm-8 center" id="timetable-create-btn">
-                        @foreach(session('functionArr') as $row)
-                        @if($row == 'create_timetable')
+
                         <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
-                        @endif
-                        @endforeach
+
                     </div>
                     <div class="row" id="timetable-div">
 
@@ -325,9 +357,86 @@ $(document).ready(function(){
     getMsgCount();
     Main.init();
     FormValidator.init();
-    showTimetable(1);
-    $('#copystr').hide();
+
+    var batchSelected=$('#batch-select').val();
+    if(batchSelected!="")
+    {
+        getClasses(batchSelected);
+    }
+
 });
+
+$('#batch-select').change(function(){
+    var batch=$(this).val();
+    getClasses(batch);
+
+});
+
+$('#class-select').change(function(){
+    var classId=$(this).val();
+    getDivisions(classId);
+});
+
+function getDivisions(classId)
+{
+    var route="/get-divisions/"+classId;
+    $.get(route,function(res){
+
+        var str="";
+
+        if (res.length != 0)
+        {
+
+            for(var i=0;i<res.length; i++)
+            {
+                str+="<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>"
+            }
+
+        } else {
+            str+="<option>No divisions found</option>"
+        }
+
+        $('#division-select').html(str);
+
+        var divisionSelected=$('#division-select').val();
+
+        showTimetable(divisionSelected);
+
+        $('#copystr').hide();
+
+    });
+}
+
+function getClasses(batchId)
+{
+    var route="/get-classes/"+batchId;
+    $.get(route,function(res){
+
+          var str="";
+
+          if (res.length != 0)
+          {
+
+              for(var i=0;i<res.length; i++)
+              {
+                  str+="<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>"
+              }
+
+          } else {
+                  str+="<option>No classes found</option>"
+          }
+
+        $('#class-select').html(str);
+
+        var classSelected=$('#class-select').val();
+
+        if(classSelected!="")
+        {
+            getDivisions(classSelected);
+        }
+
+    });
+}
 
 $('#createPeriod').click(function(){
     $('#createper').show();
@@ -343,7 +452,8 @@ function showTimetable(val)
 {
     $('#division-body').html('');
 
-    var route='timetableShow/'+val;
+    var route='timetableShow/'+val
+
     $.get(route,function(res){
 
         var obj = $.parseJSON(res);

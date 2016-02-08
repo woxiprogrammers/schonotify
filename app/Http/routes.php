@@ -149,6 +149,8 @@
 
     Route::get('batch-class-div-homework/{id}','HomeworkController@classBatchDivision');
 
+    Route::get('get-timetable-subjects/{id}','TimetableController@getSubjects');
+
     Route::get('get-subject-divisions/{id}/{subject_id}/{batch_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
     Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));

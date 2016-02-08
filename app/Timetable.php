@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class timetable extends Model
+class Timetable extends Model
 {
     protected $table="timetables";
 }
