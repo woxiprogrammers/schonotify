@@ -173,7 +173,11 @@
 
     Route::get('get-all-classes/{id}','AttendanceController@getAllClasses');
 
+    Route::get('get-attendance-classes/{id}','AttendanceController@getAttendanceClasses');
+
     Route::get('get-all-division/{id}','AttendanceController@getAllDivision');
+
+    Route::get('get-attendance-division/{id}/{batchId}','AttendanceController@getAttendanceDivision');
 
     Route::get('get-all-student/{id}/{dateValue}','AttendanceController@getAllStudent');
 

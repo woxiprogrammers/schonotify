@@ -67,17 +67,12 @@ var Calendar = function() {"use strict";
                 $(".form-full-event #event-name").val("");
                 var date=new Date(start);
                 var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
                 $(".form-full-event #today").html(days[date.getDay()]+' '+date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear());
-
                 $(".event-categories[value='job']").prop('checked', true);
                 $('#delBtn').hide();
                 var selectedDate=new Date(start).getTime();
                 var currentDate = new Date().getTime();
                 var diff = selectedDate - currentDate;
-                /////////////////////////////////////////////////////////////////
-                /* on date change show absent student*/
-
                 var div=$('#division-select').val();
                 var data = date.getDate();
                 var month = date.getMonth() + 1;
@@ -87,30 +82,49 @@ var Calendar = function() {"use strict";
                         url: 'view-attendance',
                         type: "get",
                         data: {date:date_dump,division:div},
-
                         success: function(data){
-                            console.log(data);
+                           if(data == 0) {
+                               if(diff <= 0) {
+                               $(".form-full-event #stud-list").html('<h4 class="text-danger"><i class="fa fa-warning"></i> No Data found</h4>');
+                                   $('#listTitle').show();
+                               } else {
+                                   $(".form-full-event #stud-list").html('<h4 class="text-danger"><i class="fa fa-warning"></i> No Attendance found for this date. Please select Current or previous date.</h4>');
+                                   $('#listTitle').hide();
+                               }
+                            }
+                           else {
+                               var str="";
+                                  for(var i=0;i<data.length;i++ ) {
+                                       str += '<ul class="list-group">' ;
+                                                  if (data[i]['leave_status']  == 1)
+                                                  {
+                                                      str+='<li class="list-group-item">' + data[i]['roll_number'] +" "+ data[i]['student_name'] +
+                                                        '<div class="pull-right absent-tag"></div><div class="pull-right leave-applied-tag"></div></li>';
+                                                  }
+                                                  else if (data[i]['leave_status'] == 2)
+                                                  {
+                                                        str+='<li class="list-group-item">' + data[i]['roll_number'] +" "+ data[i]['student_name'] +
+                                                            '<div class="pull-right absent-tag"></div><div class="pull-right leave-approved-tag"></div></li>';
+                                                  } else {
+                                                         str+='<li class="list-group-item">' + data[i]['roll_number'] +" "+ data[i]['student_name'] +
+                                                             ' <div class="pull-right absent-tag"></div></li>';
+                                                                      }
+                                            '</ul>';
+                                  }
+                                   $(".form-full-event #stud-list").html(str);
+                                   $('#listTitle').show();
+                           }
+                             if(data == 2){
+                                $(".form-full-event #stud-list").html('<h4 class="text-danger"><i class="fa fa-warning"></i> NO ABSENT STUDENTS </h4>');
+                                $('#listTitle').show();
+                            }
                         }
                     });
-                ///////////////////////////////////////////////////////////////////
-                if (diff <= 0) {
-                    $(".form-full-event #stud-list").html('<ul class="list-group"><li class="list-group-item">101 Suraj Bande <div class="pull-right leave-applied-tag"></div> <div class="pull-right leave-approved-tag"></div><div class="pull-right absent-tag"></div></li><li class="list-group-item">102 Shantanu Acharya <div class="pull-right absent-tag"></div></li><li class="list-group-item">107 Manoj Jadhav <div class="pull-right absent-tag"></div></li></ul>');
-                    $('#listTitle').show();
-                }else{
-                    $(".form-full-event #stud-list").html('<h4 class="text-danger"><i class="fa fa-warning"></i> No Attendance found for this date. Please select Current or previous date.</h4>');
-                    $('#listTitle').hide();
-                }
-
                 $('.events-modal').modal();
-
             }
-
         });
         demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
-
-
     };
-
     return {
         init: function() {
             runFullCalendar();

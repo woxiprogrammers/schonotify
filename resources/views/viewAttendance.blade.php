@@ -46,7 +46,8 @@
                                             Select Class
                                         </label>
                                         <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
-                                            <option value="{!!$dropDownData['class_id']!!}">{!!$dropDownData['class_name']!!}</option>
+                                            <option value=""> please select class </option>
+                                            <option value=""></option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-4" id="division-select-div">
@@ -54,7 +55,8 @@
                                             Select Division
                                         </label>
                                         <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
-                                            <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
+                                            <option value=""> please select division </option>
+                                            <option value=""></option>
                                         </select>
                                     </div>
                                 </div>
@@ -80,7 +82,6 @@
                                         <label>
                                             <h3><span class="label label-danger" id="today"></span></h3>
                                         </label>
-
                                     </div>
                                     <div class="form-group">
                                         <label class="text-bold" id="listTitle">
@@ -101,29 +102,21 @@
                                             </table>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
                                         OK
                                     </button>
-
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
-
     @include('footer')
-
     @include('rightSidebar')
-
-
 </div>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -151,8 +144,6 @@
         $('.fc-agendaWeek-button').hide();
         $('.fc-agendaDay-button ').hide();
     });
-
-
     $('#batch-select').change(function(){
 
         $('#class-select').val('');
@@ -162,16 +153,16 @@
     });
     $('#batch-select').change(function(){
         var id=this.value;
-        var route='get-all-classes/'+id;
+        var route = 'get-attendance-classes/'+id;
         $.get(route,function(res){
             if (res.length == 0)
             {
                 $('#class-select').html("no record found");
             } else {
-                var str='<option value="">please select class</option>';
+                var str = '<option value="">please select class</option>';
                 for(var i=0; i<res.length; i++)
                 {
-                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                    str += '<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                 }
                 $('#class-select').html(str);
             }
@@ -180,16 +171,17 @@
 
     $("#class-select").change(function() {
         var id = this.value;
-        var route='get-all-division/'+id;
+        var batch_id = $('#batch-select').val();
+        var route='get-attendance-division/'+id +'/'+batch_id;
         $.get(route,function(res) {
             if(res.length == 0)
             {
                 $('#division-select').html("no record found");
             } else {
-                var str='<option value="">please select division</option>';
+                var str = '<option value="">please select division</option>';
                 for(var i=0; i<res.length; i++)
                 {
-                    str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
+                    str += '<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
                 }
                 $('#division-select').html(str);
             }
