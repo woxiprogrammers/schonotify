@@ -47,8 +47,6 @@ class ViewRequest extends Request
     public function rules()
     {
         return [
-            'batch_id'=>'required',
-            'class_id'=>'required',
             'division_id'=>'required',
             'date'=>'required|date',
 
