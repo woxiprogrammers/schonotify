@@ -125,9 +125,10 @@ class UserController extends Controller
     public function getBatchesTeacher(Request $request){
         try{
             $data=$request->all();
+            $finalInfo=array();
             $division=array();
             $batchInfo=array();
-            $Classes=array();
+            $classes=array();
             $divisionData=SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])
                 ->select('division_id')
                 ->get()->toArray();
@@ -159,18 +160,23 @@ class UserController extends Controller
                 $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
                 $className=Classes::where('id','=',$class_id['class_id'])->select('class_name as class_name', 'batch_id as batch_id')->first();
                 if(!Empty($class_id)){
-                    $Classes[$i]['id']=$class_id['class_id'];
-                    $Classes[$i]['name']=$className['class_name'];
-                    $Classes[$i]['batch_id']=$className['batch_id'];
+                    $classes[$i]['id']=$class_id['class_id'];
+                    $classes[$i]['name']=$className['class_name'];
+                    $classes[$i]['batch_id']=$className['batch_id'];
                     $i++;
                 }
             }
             $i=0;
-            foreach($Classes as $row)
+            foreach($classes as $row)
             {
                 $batchName=Batch::where('id',$row['batch_id'])->first();
-                $batchInfo[$i]['id'] = $batchName['id'];
-                $batchInfo[$i]['name'] = $batchName['name'];
+                $batchInfo[$batchName['id']]['id'] = $batchName['id'];
+                $batchInfo[$batchName['id']]['name'] = $batchName['name'];
+                $i++;
+            }
+            $i=0;
+            foreach($batchInfo as $value) {
+                $finalInfo[$i]=$value;
                 $i++;
             }
             $message="Successfully Listed";
@@ -183,7 +189,7 @@ class UserController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $batchInfo
+            "data" => $finalInfo
         ];
         return response($response, $status);
     }
