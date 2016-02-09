@@ -43,6 +43,7 @@ class HomeworkRequest extends Request
                 }
                 break;
             case 'PUT':
+
                 if(in_array('Edit_homework',$resultArr) ){
                     return true;
                 }

@@ -29,9 +29,9 @@ class AttendanceController extends Controller
    * Function Name: getAttendanceBatches
    * Param : Request $requests
    * Return :Return the data of batches as JSON array
-   * Desc: Display list of batches to the teacher
-   * Developed By: Amol Rokade
-   * Date: 1/2/2016
+   * Desc : Display list of batches to the teacher to mark attendance
+   * Developed By : Amol Rokade
+   * Date : 6/2/2016
    */
 
     public function getAttendanceBatches(Request $requests)
@@ -96,6 +96,14 @@ class AttendanceController extends Controller
         return response($response, $status);
     }
 
+    /*
+    * Function Name: getAttendanceClasses
+    * Param : Request $requests $batchId
+    * Return : Return the data of classes as JSON array
+    * Desc : Display list of classes to the teacher to mark attendance
+    * Developed By : Amol Rokade
+    * Date : 6/2/2016
+    */
 
     public function getAttendanceClasses(Request $requests , $batchId)
     {
@@ -150,6 +158,16 @@ class AttendanceController extends Controller
         return response($response, $status);
     }
 
+
+    /*
+    * Function Name: getAttendanceDivisions
+    * Param : Request $requests $classId
+    * Return : Return the data of Divisions as JSON array
+    * Desc : Display list of Divisions to the teacher to mark attendance
+    * Developed By : Amol Rokade
+    * Date : 6/2/2016
+    */
+
     public function getAttendanceDivisions(Request $requests , $classId)
     {
         try{
@@ -191,6 +209,16 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+   * Function Name: markAttendance
+   * Param : Request $requests $classId
+   * Return : $status $message
+   * Desc : A class teacher can mark attendance of his/her own class.
+   * Developed By : Amol Rokade
+   * Date : 6/2/2016
+   */
+
     public function markAttendance(Requests\AttendanceRequest $request)
     {   $data=array();
         $resultArr=array();
@@ -210,7 +238,7 @@ class AttendanceController extends Controller
              }
                  $status = 200;
                  $message = "student list";
-                 //$data['teacher_id']=$techer_id->id;
+                 $data['teacher_id']=$techer_id->id;
                  $data['student_list']= $resultArr;
              }
             else{
