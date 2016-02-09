@@ -568,8 +568,8 @@ class HomeworkController extends Controller
             $finalHomeworkListingSubjectTeacher=array();
             $data=$request->all();
             $division = Division::where('class_teacher_id',$data['teacher']['id'])->first();
-            if($division != null){
-                $HomeworkListingClassTeacher = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+            if ($division != null) {
+                $homeworkListingClassTeacher = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                     ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                     ->Join('classes', 'divisions.class_id', '=', 'classes.id')
                     ->Join('batches', 'classes.batch_id', '=', 'batches.id')
@@ -587,9 +587,9 @@ class HomeworkController extends Controller
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
                     ->select('subjects.id as subject_id','division_id')
                     ->get();
-                if($divisionSubjects!=null) {
-                    foreach($divisionSubjects as $value) {
-                        $HomeworkListingSubjectTeacher = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                if ($divisionSubjects!=null) {
+                    foreach ($divisionSubjects as $value) {
+                        $homeworkListingSubjectTeacher = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                             ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                             ->Join('classes', 'divisions.class_id', '=', 'classes.id')
                             ->Join('batches', 'classes.batch_id', '=', 'batches.id')
@@ -607,31 +607,30 @@ class HomeworkController extends Controller
                     }
                 }
                 $flag=0;
-                $count = count($HomeworkListingClassTeacher);
-                foreach($HomeworkListingClassTeacher as $classTeacherValue){
+                $count = count($homeworkListingClassTeacher);
+                foreach ($homeworkListingClassTeacher as $classTeacherValue) {
                     $homework_id=$classTeacherValue['homework_id'];
-                    foreach($HomeworkListingSubjectTeacher as $subjectTeacherValue){
-                        if($subjectTeacherValue['homework_id']==$homework_id){
+                    foreach ($homeworkListingSubjectTeacher as $subjectTeacherValue) {
+                        if ($subjectTeacherValue['homework_id']==$homework_id) {
                             $flag = 1;
                         }
                     }
-                    if($flag == 0)
+                    if ($flag == 0)
                     {
-                        $HomeworkListingSubjectTeacher[$count+1] = $classTeacherValue;
+                        $homeworkListingSubjectTeacher[$count+1] = $classTeacherValue;
                         $count++;
                     }
                     $status = 200;
                     $message = "Successfully Listed";
                 }
-            }
-            else{
+            } else{
                 $divisionSubjects = SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
                     ->select('subjects.id as subject_id','division_id')
                     ->get();
                 if ($divisionSubjects != null) {
                     foreach($divisionSubjects as $value){
-                        $HomeworkListingSubjectTeacher=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                        $homeworkListingSubjectTeacher=HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                             ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                             ->Join('classes', 'divisions.class_id', '=', 'classes.id')
                             ->Join('batches', 'classes.batch_id', '=', 'batches.id')
@@ -648,11 +647,11 @@ class HomeworkController extends Controller
                             ->get();
                     }
                 } else {
-                    $HomeworkListingSubjectTeacher=[];
+                    $homeworkListingSubjectTeacher=[];
                 }
             }
             $i=0;
-            foreach($HomeworkListingSubjectTeacher as $value) {
+            foreach ($homeworkListingSubjectTeacher as $value) {
                 $finalHomeworkListingSubjectTeacher[$i]['homework_id'] = $value['homework_id'];
                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value['homeworkTitle'];
                 $finalHomeworkListingSubjectTeacher[$i]['description'] = $value['description'];
@@ -684,13 +683,13 @@ class HomeworkController extends Controller
                 }
                 $i++;
             }
-            if($finalHomeworkListingSubjectTeacher != null){
+            if ($finalHomeworkListingSubjectTeacher != null) {
                 foreach ($finalHomeworkListingSubjectTeacher as $key => $part) {
                     $sort[$key] = strtotime($part['created_at']);
                 }
                 array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
             }
-            $status=200;
+            $status = 200;
             $message = "Successfully Listed";
         }
         catch (\Exception $e) {
