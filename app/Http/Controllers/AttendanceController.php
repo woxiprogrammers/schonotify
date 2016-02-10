@@ -3,12 +3,14 @@
     namespace App\Http\Controllers;
 
     use App\Attendance;
+    use App\AttendanceStatus;
     use App\Batch;
     use App\Classes;
     use App\Division;
     use App\Http\Requests\WebRequests\CreateAttendanceRequest;
     use App\Http\Requests\WebRequests\ViewAttendanceRequest;
     use App\Leave;
+    use App\SubjectClassDivision;
     use App\User;
     use Carbon\Carbon;
     use Illuminate\Support\Facades\Input;
@@ -26,13 +28,14 @@
             $this->middleware('auth');
         }
 
-       /**
-       * @param CreateAttendanceRequest $request
-       *
-       * @return $this|array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-       * Author:manoj chaudhari
-       */
-
+        /**
+         * Function Name: markAttendance
+         * @param CreateAttendanceRequest $request
+         * @return $this|array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
+        */
         public function markAttendance(CreateAttendanceRequest $request)
         {
             if ($request->authorize() === true)
@@ -156,11 +159,13 @@
                 return Redirect::to('/');
             }
         }
-
         /**
+         * Function Name: attendanceMark
          * @param CreateAttendanceRequest $request
-         * Author:manoj chaudhari
          * @return mixed
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function attendanceMark(CreateAttendanceRequest $request){
             $user = Auth::user();
@@ -168,11 +173,13 @@
             $userIds=array();
             $dataList=array();
             $userIds = $request->student;
+            $division ='';
             $date=date("Y-m-d",strtotime($request->datePiker));
-            $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id')->get();
+            $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
             $i=0;
             foreach ($userData as $data) {
-                $dataList[]=$data['id'];
+                $dataList[] = $data['id'];
+                $division = $data['division_id'];
                 $i++;
             }
             $attendanceCheck=Attendance::whereIn('student_id',$dataList)->where('date',$date)->get();
@@ -182,21 +189,31 @@
                     $i=0;
                     foreach ($userData as $row) {
                         $saveData['teacher_id'] = $user->id;
-                        $saveData['date'] =date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));;
+                        $saveData['date'] =date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
                         $saveData['student_id'] = $row['id'];
                         $saveData['status'] = 1;
+                        $saveData['division_id'] = $row['division_id'];
                         $saveData['created_at'] = Carbon::now();
                         $saveData['updated_at'] = Carbon::now();
                         $i++;
                         Attendance::insert($saveData);
                     }
+            $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
+            $attendanceStatus['division_id'] = $request['division-select'];
+            $attendanceStatus['status'] = 1;
+            $attendanceStatus['created_at'] = Carbon::now();
+            $attendanceStatus['updated_at'] = Carbon::now();
+            AttendanceStatus::insert($attendanceStatus);
             Session::flash('message-success','attendance saved successfully');
             return Redirect::to('/mark-attendance');
         }
         /**
+         * Function Name: getAllClasses
          * @param $id
-         * Author:manoj chaudhari
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function getAllClasses($id){
             $data=array();
@@ -210,9 +227,12 @@
             return $data;
         }
         /**
+         * Function Name: getAllDivision
          * @param $id
-         * Author:manoj chaudhari
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function getAllDivision($id) {
             $data=array();
@@ -225,12 +245,17 @@
             }
             return $data;
         }
+
         /**
+         * Function Name: getAllStudent
          * @param $id
          * @param $dateValue
-         * Author:manoj chaudhari
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
+
         public function getAllStudent($id,$dateValue) {
             $data=array();
             $studentData=User::where('division_id',$id)->select('id','first_name','last_name','roll_number')->get();
@@ -256,22 +281,189 @@
             return $data;
         }
         /**
-         * @param Requests\WebRequests\ViewAttendanceRequest $request
-         * Author:manoj chaudhari
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+         * Function Name: viewAttendance
+         * @param ViewAttendanceRequest $request
+         * @return $this|array|int
+         * Desc:
+         * Date: 3/2/2016
+         * author manoj chaudahri
          */
         public function viewAttendance(ViewAttendanceRequest $request)
         {
-            if ($request->authorize()===true)
+            if ($request->authorize() === true)
             {
-                return view('viewAttendance');
+                $dropDownData = array();
+                $divisionArray = array();
+                $dataArray = array();
+                $user = Auth::user();
+                    if ($request->ajax()) {
+                        $data = Input::all();
+                        $division = $data['division'];
+                        $date = date('Y-m-d',strtotime($data['date']));
+                        $attendanceCount = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->count();
+                        $attendance = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->get();
+                        $attendanceStatus = AttendanceStatus::where('date',$date)->where('division_id',$division)->count();
+                           if($attendanceCount > 0) {
+                               $i = 0;
+                               foreach($attendance as $row) {
+                                        $userData = User::where('id',$row['student_id'])->where('is_active',1)->first();
+                                        $leaveStatus = Leave::where('student_id',$row['student_id'])->where('from_date',$date)->first();
+                                        if($leaveStatus != null) {
+                                            $dataArray[$i]['student_name'] = $userData['first_name'] ." ". $userData['last_name'] ;
+                                            $dataArray[$i]['roll_number'] = $userData['roll_number'];
+                                            $dataArray[$i]['leave_status'] = $leaveStatus['status'];
+                                        } else {
+                                            $dataArray[$i]['student_name'] = $userData['first_name'] ." ". $userData['last_name'] ;
+                                            $dataArray[$i]['roll_number'] = $userData['roll_number'];
+                                            $dataArray[$i]['leave_status'] = null;
+                                        }
+                               $i++;
+                               }
+                               return $dataArray;
+                            } else {
+                               if($attendanceStatus > 0) {
+                                   return 2;
+                               } else {
+                                   return 0;
+                               }
+                            }
+                    }
+                if ($user->role_id == 1) {
+                    $batchClassDivisionData=Division::
+                        join('classes','divisions.class_id','=','classes.id')
+                        ->join('batches','classes.batch_id','=','batches.id')
+                        ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
+                        ->first();
+                    if ($batchClassDivisionData != null) {
+                        $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
+                        $dropDownData['division_name'] = $batchClassDivisionData->division_name;
+                        $dropDownData['class_id'] = $batchClassDivisionData->class_id;
+                        $dropDownData['class_name'] = $batchClassDivisionData->class_name;
+                        $batch=Batch::get();
+                        $i=0;
+                        foreach ($batch as $row) {
+                            $dropDownData['batch'][$i]['batch_id'] = $row['id'];
+                            $dropDownData['batch'][$i]['batch_name'] = $row['name'];
+                            $i++;
+                        }
+                    }
+
+                        return view('viewAttendance')->with(compact('dropDownData'));
+                } elseif ($user->role_id == 2) {
+                    $division = array();
+                    $divsionsData = array();
+                    $divisionCheck = Division::where('class_teacher_id',$user->id)->first();
+                       if ($divisionCheck != null) {
+                            $divisionData = SubjectClassDivision::where('division_id','=',$divisionCheck['id'])
+                                ->select('division_id')
+                                ->get()->toArray();
+                           $k = 0;
+                            if (!Empty($divisionData))
+                            {
+                                foreach($divisionData as $value){
+                                    $division['id'][$k]=$value['division_id'];
+                                    $k++;
+                                }
+                            }
+                            $divisionData = SubjectClassDivision::where('teacher_id','=',$user->id)
+                                ->select('division_id')
+                                ->get()->toArray();
+                                $k = 0;
+                                if (!Empty($divisionData))
+                                {
+                                    foreach($divisionData as $value){
+                                        $division['id'][$k]=$value['division_id'];
+                                        $k++;
+                                    }
+                                }
+                            $divisionArray=array_unique($division['id'],SORT_REGULAR);
+                            foreach ($divisionArray as $division_id) {
+                                $finalData[]=Division::join('classes','divisions.class_id', '=', 'classes.id')
+                                    ->join('batches','classes.batch_id','=','batches.id')
+                                    ->where('divisions.id','=',$division_id)
+                                    ->select('batches.name as batch_name','batches.id as batch_id')
+                                    ->first();
+                                $divsionsData[] = Division::join('classes','divisions.class_id', '=', 'classes.id')
+                                    ->join('batches','classes.batch_id','=','batches.id')
+                                    ->where('divisions.id','=',$division_id)
+                                    ->select('batches.name as batch_name','batches.id as batch_id','classes.id as class_id','classes.class_name','divisions.id as division_id','divisions.division_name')
+                                    ->first();
+                            }
+                           $finalData=array_unique($finalData,SORT_REGULAR);
+                                if (!Empty($finalData)) {
+                                    $i = 0;
+                                    foreach ($finalData as $row) {
+                                        $dropDownData['batch'][$i]['batch_id'] = $row['batch_id'];
+                                        $dropDownData['batch'][$i]['batch_name'] = $row['batch_name'];
+                                        $i++;
+                                    }
+                                    $dropDownData =array_unique($dropDownData,SORT_REGULAR);
+                                    foreach ($divsionsData as $row) {
+                                        $dropDownData['class_id'] = $row['class_id'];
+                                        $dropDownData['class_name'] = $row['class_name'];
+                                        $dropDownData['division_id'] =  $row['division_id'];
+                                        $dropDownData['division_name'] = $row['division_name'];
+                                    }
+                                }
+                           return view('viewAttendance')->with(compact('dropDownData'));
+                        }   else {
+                           $divisionData = SubjectClassDivision::where('teacher_id','=',$user->id)
+                               ->select('division_id')
+                               ->get()->toArray();
+                           $k = 0;
+                           if (!Empty($divisionData))
+                           {
+                               foreach($divisionData as $value){
+                                   $division['id'][$k]=$value['division_id'];
+                                   $k++;
+                               }
+                           }
+                           $divisionArray=array_unique($division['id'],SORT_REGULAR);
+                           $i=0;
+                           foreach ($divisionArray as $division_id) {
+                               $finalData[]=Division::join('classes','divisions.class_id', '=', 'classes.id')
+                                   ->join('batches','classes.batch_id','=','batches.id')
+                                   ->where('divisions.id','=',$division_id)
+                                   ->select('batches.name as batch_name','batches.id as batch_id')
+                                   ->first();
+                               $divsionsData[] = Division::join('classes','divisions.class_id', '=', 'classes.id')
+                                   ->join('batches','classes.batch_id','=','batches.id')
+                                   ->where('divisions.id','=',$division_id)
+                                   ->select('batches.name as batch_name','batches.id as batch_id','classes.id as class_id','classes.class_name','divisions.id as division_id','divisions.division_name')
+                                   ->first();
+                           }
+                           $finalData=array_unique($finalData,SORT_REGULAR);
+                           if (!Empty($finalData)) {
+                               foreach ($finalData as $row) {
+                                   $dropDownData['batch'][$i]['batch_id'] = $row['batch_id'];
+                                   $dropDownData['batch'][$i]['batch_name'] = $row['batch_name'];
+                                   $i++;
+                               }
+                               $dropDownData=array_unique($dropDownData,SORT_REGULAR);
+                               foreach ($divsionsData as $row) {
+                                   $dropDownData['class_id'] = $row['class_id'];
+                                   $dropDownData['class_name'] = $row['class_name'];
+                                   $dropDownData['division_id'] =  $row['division_id'];
+                                   $dropDownData['division_name'] = $row['division_name'];
+                               }
+                           }
+                           return view('viewAttendance')->with(compact('dropDownData'));
+                        }
+                } else {
+                    Session::flash('message-success','no data found');
+                }
             } else {
                 return Redirect::to('/');
             }
         }
+
         /**
-         * Author:manoj chaudhari
-         *
+         * Function Name: markAttendanceAccess
+         * @param:
+         * @return int
+         * Desc:
+         * Date: 3/2/2016
+         * author manoj chaudahri
          */
         public function markAttendanceAccess()
         {
@@ -285,6 +477,217 @@
                 }
             } else {
                 return 1;
+            }
+        }
+
+        /**
+         * Function Name: getAttendanceClasses
+         * @param: $id
+         * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
+         */
+        public function getAttendanceClasses($id) {
+            $data = array();
+            $division=array();
+            $user = Auth::user();
+            if ($user->role_id == 1) {
+                $classData=Classes::where('batch_id',$id)->get();
+                $i=0;
+                foreach ($classData as $row) {
+                    $data[$i]['class_id'] = $row['id'] ;
+                    $data[$i]['class_name']= $row['class_name'] ;
+                    $i++;
+                }
+                return $data;
+            } elseif($user->role_id == 2) {
+                $divisionCheck = Division::where('class_teacher_id',$user->id)->first();
+                $k = 0;
+                if ($divisionCheck != null) {
+                    // data for class teacher
+                    $divisionData=SubjectClassDivision::where('division_id','=',$divisionCheck['id'])
+                        ->select('division_id')
+                        ->get()->toArray();
+                    if (!Empty($divisionData))
+                    {
+                        foreach($divisionData as $value){
+                            $division['id'][$k]=$value['division_id'];
+                            $k++;
+                        }
+                    }
+                    // data for subject teacher
+                    $divisionData=SubjectClassDivision::
+                        where('teacher_id','=',$user->id)
+                        ->select('division_id')
+                        ->get()->toArray();
+                    $k=0;
+                    if (!Empty($divisionData))
+                    {
+                        foreach($divisionData as $value){
+                            $division['id'][$k]=$value['division_id'];
+                            $k++;
+                        }
+                    }
+                    $divisionArray=array_unique($division['id'],SORT_REGULAR);
+                    $i=0;
+                        foreach ($divisionArray  as $value) {
+                            $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                            $className=Classes::where('id','=',$class_id['class_id'])
+                                ->where('batch_id','=',$id)
+                                ->select('id','class_name as class_name')->first();
+                            if(!Empty($class_id)&&!Empty($className)){
+                                $data[$i]['class_id']=$class_id['class_id'];
+                                $data[$i]['class_name']=$className['class_name'];
+                                $i++;
+                            }
+                        }
+                            $data=array_unique($data,SORT_REGULAR);
+                        return $data;
+
+                } else {
+
+                    $divisionData=SubjectClassDivision::
+                        where('teacher_id','=',$user->id)
+                        ->select('division_id')
+                        ->get()->toArray();
+                    $k=0;
+                    if (!Empty($divisionData))
+                    {
+                        foreach($divisionData as $value){
+                            $division['id'][$k]=$value['division_id'];
+                            $k++;
+                        }
+                    }
+                    $divisionArray=array_unique($division['id'],SORT_REGULAR);
+                    $i=0;
+                    foreach ($divisionArray  as $value) {
+                        $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                        $className=Classes::where('id','=',$class_id['class_id'])
+                            ->where('batch_id','=',$id)
+                            ->select('id','class_name as class_name')->first();
+                        if (!Empty($class_id)&&!Empty($className)) {
+                            $data[$i]['class_id']=$class_id['class_id'];
+                            $data[$i]['class_name']=$className['class_name'];
+                            $i++;
+                        }
+                    }
+                    $data=array_unique($data,SORT_REGULAR);
+                    return $data;
+                }
+            }
+
+        }
+
+        /**
+         * Function Name: getAttendanceDivision
+         * @param: $id,$batch_id
+         * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
+         */
+        public function getAttendanceDivision($id,$batch_id) {
+            $data=array();
+            $user = Auth::user();
+            $division=array();
+            $finalData = array();
+            if ($user->role_id == 1) {
+                $divisionData=Division::where('class_id',$id)->get();
+                $i=0;
+                foreach ($divisionData as $row) {
+                    $data[$i]['division_id'] = $row['id'] ;
+                    $data[$i]['division_name']= $row['division_name'] ;
+                    $i++;
+                }
+                return $data;
+            } elseif($user->role_id == 2) {
+                $divisionCheck = Division::where('class_teacher_id',$user->id)->first();
+                if ($divisionCheck != null) {
+                    //data for class teacher
+                    $divisionData=SubjectClassDivision::where('division_id','=',$divisionCheck['id'])
+                        ->select('division_id')
+                        ->get()->toArray();
+                    $divisionData=array_unique($divisionData,SORT_REGULAR);
+                    $k = 0;
+                    if (!Empty($divisionData))
+                    {
+                        foreach($divisionData as $value){
+                            $division['id'][$k]=$value['division_id'];
+                            $k++;
+                        }
+                    }
+                    //data for subject teacher
+                    $divisionData=SubjectClassDivision::
+                        where('teacher_id','=',$user->id)
+                        ->select('division_id')
+                        ->get()->toArray();
+                        $divisionData=array_unique($divisionData,SORT_REGULAR);
+                         $k=0;
+                        if (!Empty($divisionData))
+                        {
+                            foreach($divisionData as $value){
+                                $division['id'][$k]=$value['division_id'];
+                                $k++;
+                            }
+                        }
+                        $divisionArray=array_unique($division['id'],SORT_REGULAR);
+                        $i=0;
+                        foreach($divisionArray as $division_id) {
+                            $finalData[] = Division::join('classes','divisions.class_id', '=', 'classes.id')
+                                ->where('divisions.class_id','=',$id)
+                                ->where('classes.batch_id','=',$batch_id)
+                                ->where('divisions.id','=',$division_id)
+                                ->select('divisions.id as div_id','divisions.division_name')
+                                ->first();
+                            $i++;
+                        }
+
+                             $i = 0;
+                             foreach ($finalData as $row) {
+
+                                 $data[$i]['division_id'] = $row['div_id'] ;
+                                 $data[$i]['division_name']= $row['division_name'] ;
+                                 $i++;
+                             }
+
+                    $data=array_unique($data,SORT_REGULAR);
+                    return $data;
+
+                } else {
+                    $divisionData=SubjectClassDivision::
+                        where('teacher_id','=',$user->id)
+                        ->select('division_id')
+                        ->get()->toArray();
+                    $k=0;
+                    if (!Empty($divisionData))
+                    {
+                        foreach($divisionData as $value){
+                            $division['id'][$k]=$value['division_id'];
+                            $k++;
+                        }
+                    }
+                    $divisionArray=array_unique($division['id'],SORT_REGULAR);
+                    $i=0;
+                    foreach($divisionArray as $division_id) {
+                        $finalData[] = Division::join('classes','divisions.class_id', '=', 'classes.id')
+                            ->where('divisions.class_id','=',$id)
+                            ->where('classes.batch_id','=',$batch_id)
+                            ->where('divisions.id','=',$division_id)
+                            ->select('divisions.id as div_id','divisions.division_name')
+                            ->first();
+                    }
+                        if (!Empty($finalData)) {
+                            foreach ($finalData as $row) {
+                                $data[$i]['division_id'] = $row['div_id'] ;
+                                $data[$i]['division_name']= $row['division_name'] ;
+                                $i++;
+                            }
+                        }
+
+                    $data=array_unique($data,SORT_REGULAR);
+                    return $data;
+                }
             }
         }
     }
