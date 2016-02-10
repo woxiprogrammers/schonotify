@@ -28,13 +28,14 @@
             $this->middleware('auth');
         }
 
-       /**
-       * @param CreateAttendanceRequest $request
-       *
-       * @return $this|array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-       * Author:manoj chaudhari
-       */
-
+        /**
+         * Function Name: markAttendance
+         * @param CreateAttendanceRequest $request
+         * @return $this|array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
+        */
         public function markAttendance(CreateAttendanceRequest $request)
         {
             if ($request->authorize() === true)
@@ -158,11 +159,13 @@
                 return Redirect::to('/');
             }
         }
-
         /**
+         * Function Name: attendanceMark
          * @param CreateAttendanceRequest $request
-         * Author:manoj chaudhari
          * @return mixed
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function attendanceMark(CreateAttendanceRequest $request){
             $user = Auth::user();
@@ -205,9 +208,12 @@
             return Redirect::to('/mark-attendance');
         }
         /**
+         * Function Name: getAllClasses
          * @param $id
-         * Author:manoj chaudhari
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function getAllClasses($id){
             $data=array();
@@ -221,9 +227,12 @@
             return $data;
         }
         /**
+         * Function Name: getAllDivision
          * @param $id
-         * Author:manoj chaudhari
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function getAllDivision($id) {
             $data=array();
@@ -236,12 +245,17 @@
             }
             return $data;
         }
+
         /**
+         * Function Name: getAllStudent
          * @param $id
          * @param $dateValue
-         * Author:manoj chaudhari
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
+
         public function getAllStudent($id,$dateValue) {
             $data=array();
             $studentData=User::where('division_id',$id)->select('id','first_name','last_name','roll_number')->get();
@@ -267,9 +281,12 @@
             return $data;
         }
         /**
-         * @param Requests\WebRequests\ViewAttendanceRequest $request
-         * Author:manoj chaudhari
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+         * Function Name: viewAttendance
+         * @param ViewAttendanceRequest $request
+         * @return $this|array|int
+         * Desc:
+         * Date: 3/2/2016
+         * author manoj chaudahri
          */
         public function viewAttendance(ViewAttendanceRequest $request)
         {
@@ -439,9 +456,14 @@
                 return Redirect::to('/');
             }
         }
+
         /**
-         * Author:manoj chaudhari
-         *
+         * Function Name: markAttendanceAccess
+         * @param:
+         * @return int
+         * Desc:
+         * Date: 3/2/2016
+         * author manoj chaudahri
          */
         public function markAttendanceAccess()
         {
@@ -457,10 +479,14 @@
                 return 1;
             }
         }
+
         /**
-         * @param $id
-         * Author:manoj chaudhari
+         * Function Name: getAttendanceClasses
+         * @param: $id
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function getAttendanceClasses($id) {
             $data = array();
@@ -552,10 +578,14 @@
             }
 
         }
+
         /**
-         * @param $id
-         * Author:manoj chaudhari
+         * Function Name: getAttendanceDivision
+         * @param: $id,$batch_id
          * @return array
+         * Desc:
+         * Date: 10/2/2016
+         * author manoj chaudahri
          */
         public function getAttendanceDivision($id,$batch_id) {
             $data=array();
