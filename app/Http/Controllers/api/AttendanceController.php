@@ -224,33 +224,18 @@ class AttendanceController extends Controller
             if (!Empty($role)) {
                 $studentData=$data['student_id'];
                 if (!Empty($studentData)) {
-                    $markedAttendance=Attendance::where('teacher_id','=',$data['teacher']['id'])
-                        ->where('date','=',$data['date'])
-                        ->wherein('student_id',$studentData)->get()->toArray();
-                    if (!Empty($markedAttendance)) {
-                        foreach($studentData as $value) {
-                            $attendanceData['teacher_id']=$data['teacher']['id'];
-                            $attendanceData['date']=$data['date'];
-                            $attendanceData['student_id']=$value;
-                            $attendanceData['status']=1;
-                            Attendance::where('student_id',$value)->delete();
-                            Attendance::insert($attendanceData);
-                            $status = 200;
-                            $message = "Attendance Successfully updated";
-                        }
-                    } else {
-                        foreach($studentData as $value) {
-                            $attendanceData['teacher_id']=$data['teacher']['id'];
-                            $attendanceData['date']=$data['date'];
-                            $attendanceData['student_id']=$value;
-                            $attendanceData['status']=1;
-                            Attendance::insert($attendanceData);
-                        }
+                    $status = 200;
+                    $message = "Attendance Successfully marked";
+                    foreach($studentData as $value) {
+                        $attendanceData['teacher_id']=$data['teacher']['id'];
+                        $attendanceData['date']=$data['date'];
+                        $attendanceData['student_id']=$value;
+                        $attendanceData['status']=1;
+                        Attendance::insert($attendanceData);
                     }
                 }
             } else {
                 $status=404;
-                $message="Sorry!! Only class teacher can mark attendance";
             }
         }
         catch (\Exception $e) {
