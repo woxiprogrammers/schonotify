@@ -74,173 +74,23 @@
 </div>
     <div class="panel-body">
         <ul class="timeline-xs" id="tmln">
+           @foreach($leaveArray as $row)
             <li class="timeline-item success">
                 <div class="leaveSection">
                     <div class="text-muted text-small">
-                        2 minutes ago
+                        {!! $row['created_date'] !!}
+
                     </div>
                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
-                        <p>Leave Application for next 2 days...  <a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p>
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-danger pull-right">Pending</small>
-                    </div>
-
-
-                </div>
-
-                    <img src="assets/images/avatar-6.jpg" class="img img-circle tmln-img" alt="Peter">
-
-            </li>
-            <li class="timeline-item">
-                <div class="leaveSection">
-                    <div class="text-muted text-small">
-                        12:00
-                    </div>
-                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                        <h5><small class="label label-sm label-info">Mrs. Sharma</small> Seek Leave for two days</h5>
-
-                        <p>This is to applying for seek leave. ...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p>
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-danger pull-right">Pending</small>
+                        <h5><small class="label label-sm label-info">{!! $row['parent'] !!}</small>  {!! $row['title'] !!}</h5>
+                        <p>{!! $row['reason'] !!}...  <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}">More</a></p>
+                        <p>Leave From:<i>{!! $row['from_date'] !!}</i><br>Leave To:<i> {!! $row['end_date'] !!}</i></p>
                     </div>
                 </div>
-
-                <img src="assets/images/avatar-2.jpg" class="img img-circle tmln-img" alt="Peter">
-
+                    <img src="/uploads/profile-picture/{!! $row['avatar'] !!}" class="img img-circle tmln-img" alt="Peter">
             </li>
-            <li class="timeline-item danger">
-                <div class="leaveSection">
-                    <div class="text-muted text-small">
-                        11:11
-                    </div>
-                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                        <h5><small class="label label-sm label-info">Mr. Aanand</small> Seek Leave for two days</h5>
-
-                        <p>This is to applying for seek leave. ...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Leave From:<i> 1 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p>
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-inverse pull-right">Approved</small>
-                    </div>
-                </div>
-                <img src="assets/images/1.jpg" class="img img-circle tmln-img" alt="Peter">
-
-            </li>
-            <li class="timeline-item info">
-                <div class="leaveSection">
-                    <div class="text-muted text-small">
-                        Thus, 12 Jun
-                    </div>
-                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                        <h5><small class="label label-sm label-info">Mr. Yadav</small> Half day leave</h5>
-
-                        <p>Due to official work  i have to ove my native....<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Leave From:<i> 2 Nov, 2015</i><br> Leave To<i> 4 Nov, 2015</i></p>
-
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-inverse pull-right">Approved</small>
-                    </div>
-                </div>
-
-                <img src="assets/images/avatar-1.jpg" class="img img-circle tmln-img" alt="Peter">
-
-            </li>
-            <li class="timeline-item">
-                <div class="leaveSection">
-                    <div class="text-muted text-small">
-                        Thus, 10 Jun
-                    </div>
-                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
-
-                        <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
-
-                        <p>Leave From: <i> 21 Jun, 2015 </i><br>Leave To: <i> 22 Jun, 2015</i></p>
-
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-inverse pull-right">Approved</small>
-                    </div>
-                </div>
-
-
-                <img src="assets/images/avatar-6.jpg" class="img img-circle tmln-img" alt="Peter">
-
-            </li>
-            <li class="timeline-item">
-                <div class="leaveSection">
-                    <div class="text-muted text-small">
-                        Sun, 11 Apr
-                    </div>
-                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
-
-                        <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Leave From: <i> 20 Apr, 2015</i><br><i>Leave To: 22 Apr, 2015</i></p>
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-inverse pull-right">Approved</small>
-                    </div>
-                </div>
-
-
-                <img src="assets/images/avatar-3.jpg" class="img img-circle tmln-img" alt="Peter">
-
-            </li>
-            <li class="timeline-item warning">
-                <div class="leaveSection">
-                    <div class="text-muted text-small">
-                        Wed, 25 Mar
-                    </div>
-                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
-
-                        <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Leave From: <i> 2 Apr, 2015</i><br><i>Leave To: 4 Apr, 2015</i></p>
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-inverse pull-right">Approved</small>
-                    </div>
-                </div>
-
-
-                <img src="assets/images/avatar-4.jpg" class="img img-circle tmln-img" alt="Peter">
-
-            </li>
-            <li class="timeline-item">
-                <div class="leaveSection">
-                    <div class="text-muted text-small">
-                        Fri, 20 Mar
-                    </div>
-                    <div class="col-sm-8" style="margin-top: 4px;">
-
-                        <h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>
-
-                        <p>Leave Application for next 2 days...<a class="text-info" href="detailedLeave">More</a></p>
-                        <p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To: <i> 4 Nov, 2015</i></p>
-                    </div>
-                    <div class="col-sm-2">
-                        <small class="label label-sm label-inverse pull-right">Approved</small>
-                    </div>
-                </div>
-
-
-                <img src="assets/images/avatar-9.jpg" class="img img-circle tmln-img" alt="Peter">
-
-            </li>
+          @endforeach
         </ul>
         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
     </div>
@@ -374,6 +224,45 @@
 
 
     });
+    $('#batch-select').change(function(){
+        var id=this.value;
+        var route='get-all-classes/'+id;
+        $.get(route,function(res){
+            if (res.length == 0)
+            {
+                $('#class-select').html("no record found");
+            } else {
+                var str='<option value="">please select class</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                }
+                $('#class-select').html(str);
+            }
+        });
+    });
+
+    $("#class-select").change(function() {
+        var id = this.value;
+        var route='get-all-division/'+id;
+        $.get(route,function(res) {
+            if(res.length == 0)
+            {
+                $('#division-select').html("no record found");
+            } else {
+                var str='<option value="">please select division</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
+                }
+                $('#division-select').html(str);
+            }
+        });
+    });
+    $('#batch-select').change(function(){
+        $('#class-select').val('');
+        $('#division-select').val('');
+    })
 
 
 </script>

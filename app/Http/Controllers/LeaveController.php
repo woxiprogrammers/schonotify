@@ -40,12 +40,14 @@ class LeaveController extends Controller
                             $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->get();
                             $i = 0;
                             foreach ($leaveStatus as $row) {
-                                $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number')->first();
+                                $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
+                                $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
                                 $leaveArray[$i]['student_id'] = $row['student_id'];
-                                $leaveArray[$i]['student_name'] = $studentData['first_name'] ." ".$studentData['last_name'];
+                                $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
                                 $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
-                                $leaveArray[$i]['avatar'] = $studentData['avatar'];
+                                $leaveArray[$i]['avatar'] = $parentData['avatar'];
                                 $leaveArray[$i]['title'] = $row['title'];
+                                $leaveArray[$i]['leave_id'] = $row['id'];
                                 $leaveArray[$i]['leave_type'] = $row['leave_type'];
                                 $leaveArray[$i]['reason'] = $row['reason'];
                                 $leaveArray[$i]['from_date'] = $row['from_date'];
@@ -79,12 +81,14 @@ class LeaveController extends Controller
                          $leaveStatus = Leave::where('division_id',$batchClassDivisionData['division_id'])->where('status',2)->get();
                         $i = 0;
                         foreach ($leaveStatus as $row) {
-                            $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number')->first();
+                            $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
+                            $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
                             $leaveArray[$i]['student_id'] = $row['student_id'];
-                            $leaveArray[$i]['student_name'] = $studentData['first_name'] ." ".$studentData['last_name'];
+                            $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
                             $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
-                            $leaveArray[$i]['avatar'] = $studentData['avatar'];
+                            $leaveArray[$i]['avatar'] = $parentData['avatar'];
                             $leaveArray[$i]['title'] = $row['title'];
+                            $leaveArray[$i]['leave_id'] = $row['id'];
                             $leaveArray[$i]['leave_type'] = $row['leave_type'];
                             $leaveArray[$i]['reason'] = $row['reason'];
                             $leaveArray[$i]['from_date'] = $row['from_date'];
