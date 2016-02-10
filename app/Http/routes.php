@@ -346,7 +346,7 @@
 
     Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
 
-    Route::get('view-homework-parent/{$student_id}','api\HomeworkController@viewHomeworkParent');
+    Route::get('view-homework-parent/{student_id}','api\HomeworkController@viewHomeworkParent');
 
     Route::get('view-homework','api\HomeworkController@viewHomeWork');
 
