@@ -44,7 +44,8 @@ class HomeworkController extends Controller
        try{
             $data=$request->all();
             $homework=array();
-           $finalSubjectList=array();
+           $finalSubjectList=array();            $status = 200;
+           $message = "Success";
             $i=0;
             $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
             if($division != null){
@@ -667,6 +668,10 @@ class HomeworkController extends Controller
                 }
                 array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
             }
+            if(Empty($finalHomeworkListingSubjectTeacher)){
+                $status=200;
+                $message="Sorry!! No homeworks found";
+            }
         }
         catch (\Exception $e) {
             $status = 500;
@@ -746,7 +751,7 @@ class HomeworkController extends Controller
              if (!Empty($homeworkListingSubjectTeacher)) {
                  $status = 200;
                  $message = "Successfully Listed";
-                 $i = 0;
+                 $i =0;
                  foreach ($homeworkListingSubjectTeacher as $value) {
                      $date = date('Y-m-d',strtotime($value['due_date']));
                      $finalHomeworkListingSubjectTeacher[$i]['homework_id'] = $value['homework_id'];
@@ -770,7 +775,7 @@ class HomeworkController extends Controller
                      $finalHomeworkListingSubjectTeacher[$i]['batch_name'] = $value['batch_name'];
                      $finalHomeworkListingSubjectTeacher[$i]['batch_id'] = $value['batch_id'];
                      $studentList = HomeworkTeacher::where('homework_id','=',$value['homework_id'])->select('student_id')->get();
-                     $j = 0;
+                     $j=0;
                      foreach ($studentList as $value) {
                          $studentsData = User::where('id',$value['student_id'])->select('first_name','last_name')->first();
                          $finalHomeworkListingSubjectTeacher[$i]['studentList'][$j]['id'] = $value['student_id'];
@@ -785,6 +790,10 @@ class HomeworkController extends Controller
                      }
                      array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
                  }
+             }
+             if(Empty($finalHomeworkListingSubjectTeacher)){
+                 $status=200;
+                 $message="Sorry!! No homeworks found";
              }
          }
         catch (\Exception $e) {
@@ -865,7 +874,7 @@ class HomeworkController extends Controller
                         $data[$i]['title']=$value['homeworkTitle'];
                         $data[$i]['description']=$value['description'];
                         $data[$i]['due_date']=date("M j",strtotime($value['due_date']));
-                        $data[$i]['created_At']=date("M j",strtotime($value['created_At']));
+                        $data[$i]['created_At']=date("M j",strtotime($value['created_at']));
                         $data[$i]['attachment_file']=$value['attachment_file'];
                         $data[$i]['homeworkType']=$value['homeworkType'];
                         $teacherName=User::where('id','=',$value['teacher_id'])->first();

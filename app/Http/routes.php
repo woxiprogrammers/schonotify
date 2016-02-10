@@ -300,7 +300,7 @@
     Route::get('attendance-batches','api\AttendanceController@getAttendanceBatches');
     Route::get('attendance-classes/{batchId}','api\AttendanceController@getAttendanceClasses');
     Route::get('get-attendance-divisions/{classId}','api\AttendanceController@getAttendanceDivisions');
-    Route::post('attendance','api\AttendanceController@markAttendance');
+    Route::post('markAttendance','api\AttendanceController@markAttendance');
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
     Route::post('view-attendance-teacher','api\AttendanceController@viewAttendance');
@@ -346,7 +346,7 @@
 
     Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
 
-    Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
+    Route::get('view-homework-parent/{$student_id}','api\HomeworkController@viewHomeworkParent');
 
     Route::get('view-homework','api\HomeworkController@viewHomeWork');
 

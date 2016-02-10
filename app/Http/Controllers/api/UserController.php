@@ -125,6 +125,7 @@ class UserController extends Controller
     public function getBatchesTeacher(Request $request){
         try{
             $data=$request->all();
+            $finalInfo=array();
             $division=array();
             $batchInfo=array();
             $Classes=array();
@@ -169,8 +170,13 @@ class UserController extends Controller
             foreach($Classes as $row)
             {
                 $batchName=Batch::where('id',$row['batch_id'])->first();
-                $batchInfo[$i]['id'] = $batchName['id'];
-                $batchInfo[$i]['name'] = $batchName['name'];
+                $batchInfo[$batchName['id']]['id'] = $batchName['id'];
+                $batchInfo[$batchName['id']]['name'] = $batchName['name'];
+                $i++;
+            }
+            $i=0;
+            foreach($batchInfo as $value) {
+                $finalInfo[$i]=$value;
                 $i++;
             }
             $message="Successfully Listed";
@@ -183,7 +189,7 @@ class UserController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $batchInfo
+            "data" => $finalInfo
         ];
         return response($response, $status);
     }

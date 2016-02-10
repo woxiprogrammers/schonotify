@@ -36,6 +36,8 @@ class MessageController extends Controller
 
             $i=0;
             if($messages!=null){
+                $status = 200;
+                $message = "Success";
                 foreach($messages as $value)
                 {
                     if($data['teacher']['id']==$value['from_id'])
@@ -93,11 +95,10 @@ class MessageController extends Controller
                 }
                 array_multisort($sort, SORT_DESC, $finalMessageData);
             }else{
+                $status = 200;
+                $message = "No Messages Found";
                 $finalMessageData=[];
             }
-
-            $status = 200;
-            $message = "Success";
         } catch (\Exception $e) {
             $status = 500;
             $message = "something went wrong". $e->getMessage();
@@ -122,6 +123,8 @@ class MessageController extends Controller
                 })->get()->toArray();
             $i=0;
             if($messages!=null){
+            $status = 200;
+            $message = "Success";
             foreach($messages as $value)
             {
                 if($student_id == $value['from_id'])
@@ -179,10 +182,10 @@ class MessageController extends Controller
             }
             array_multisort($sort, SORT_DESC, $finalMessageData);
             }else{
+                $status = 200;
+                $message = "No Messages Found";
                 $finalMessageData=[];
             }
-            $status = 200;
-            $message = "Success";
         } catch (\Exception $e) {
             $status = 500;
             $message = "something went wrong". $e->getMessage();
