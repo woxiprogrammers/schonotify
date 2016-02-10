@@ -185,6 +185,8 @@
 
     Route::get('mark-attendance-check','AttendanceController@markAttendanceAccess');
 
+    Route::get('leave-check','LeaveController@leaveAccess');
+
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
     Route::get('auto-notification','NotificationController@listNotifications');
