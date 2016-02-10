@@ -728,6 +728,8 @@ class HomeworkController extends Controller
              $finalHomeworkListingSubjectTeacher=array();
              $HomeworkListingSubjectTeacher=array();
              $data=$request->all();
+             $status=200;
+             $message="Successfully Listed";
              $HomeworkListingSubjectTeacher = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                         ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                         ->Join('classes', 'divisions.class_id', '=', 'classes.id')
@@ -783,14 +785,11 @@ class HomeworkController extends Controller
                      }
                      array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
                  }
-             } else {
-                 $status = 404;
-                 $message = "Sorry! No homeworks found for this user";
              }
          }
         catch (\Exception $e) {
             $status = 500;
-            $message = "Something went wrong" .  $e->getMessage();
+            $message = "Something went wrong";
         }
         $response = [
              "message" => $message,
