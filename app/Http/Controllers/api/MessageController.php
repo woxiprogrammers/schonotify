@@ -125,46 +125,46 @@ class MessageController extends Controller
             if($messages!=null){
             $status = 200;
             $message = "Success";
-            foreach($messages as $value)
+            foreach($messages as $messagesValue)
             {
-                if($student_id == $value['from_id'])
+                if($student_id == $messagesValue['from_id'])
                 {
-                    $receiverName = User::where('id','=',$value['to_id'])
+                    $receiverName = User::where('id','=',$messagesValue['to_id'])
                         ->select('first_name', 'last_name')->first();
                 }else{
-                    $receiverName = User::where('id','=',$value['from_id'])
+                    $receiverName = User::where('id','=',$messagesValue['from_id'])
                         ->select('first_name', 'last_name')->first();
                 }
                 $receiver= $receiverName['first_name']." ".$receiverName['last_name'];
-                $messageData['MessageList'][$receiver]['message_id']=$value['id'];
+                $messageData['MessageList'][$receiver]['message_id']=$messagesValue['id'];
                 $messageData['MessageList'][$receiver]['user_id']=$data['teacher']['id'];
-                $messageData['MessageList'][$receiver]['from_id']=$value['from_id'];
-                $messageData['MessageList'][$receiver]['to_id']=$value['to_id'];
-                $messageData['MessageList'][$receiver]['description']=$value['description'];
-                $finalSender=User::where('id','=',$value['from_id'])->select('first_name', 'last_name')->first();
+                $messageData['MessageList'][$receiver]['from_id']=$messagesValue['from_id'];
+                $messageData['MessageList'][$receiver]['to_id']=$messagesValue['to_id'];
+                $messageData['MessageList'][$receiver]['description']=$messagesValue['description'];
+                $finalSender=User::where('id','=',$messagesValue['from_id'])->select('first_name', 'last_name')->first();
                 $finalSenderName=$finalSender['first_name']." ".$finalSender['last_name'];
-                $finalReceiver = User::where('id','=',$value['to_id'])->select('first_name', 'last_name')->first();
+                $finalReceiver = User::where('id','=',$messagesValue['to_id'])->select('first_name', 'last_name')->first();
                 $finalReceiverName =$finalReceiver['first_name']." ".$finalReceiver['last_name'];
                 if($student_id == $messageData['MessageList'][$receiver]['from_id']){
                     $title=$finalReceiverName;
-                    $title_id=$value['to_id'];
+                    $title_id=$messagesValue['to_id'];
                 }else{
                     $title=$finalSenderName;
-                    $title_id=$value['from_id'];
+                    $title_id=$messagesValue['from_id'];
                 }
                 $messageData['MessageList'][$receiver]['sender_name']=$finalSenderName;
                 $messageData['MessageList'][$receiver]['title_id']=$title_id;
                 $messageData['MessageList'][$receiver]['receiver_name']=$finalReceiverName;
                 $messageData['MessageList'][$receiver]['title']=$title;
-                $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($value['timestamp']));
-                if($data['teacher']['id']==$value['from_id'])
+                $messageData['MessageList'][$receiver]['timestamp'] = date("M j, g:i a",strtotime($messagesValue['timestamp']));
+                if($data['teacher']['id']==$messagesValue['from_id'])
                 {
                     $messageData['MessageList'][$receiver]['read_status']=1;
 
                 }else{
-                    $messageData['MessageList'][$receiver]['read_status']=$value['read_status'];
+                    $messageData['MessageList'][$receiver]['read_status']=$messagesValue['read_status'];
                 }
-                $messageData['MessageList'][$receiver]['created_at']=$value['timestamp'];
+                $messageData['MessageList'][$receiver]['created_at']=$messagesValue['timestamp'];
                 $i++;
 
             }

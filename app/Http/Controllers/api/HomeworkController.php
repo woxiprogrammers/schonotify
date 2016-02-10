@@ -44,8 +44,7 @@ class HomeworkController extends Controller
        try{
             $data=$request->all();
             $homework=array();
-           $finalSubjectList=array();            $status = 200;
-           $message = "Success";
+            $finalSubjectList=array();        
             $i=0;
             $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
             if($division != null){
@@ -668,7 +667,7 @@ class HomeworkController extends Controller
                 }
                 array_multisort($sort, SORT_DESC, $finalHomeworkListingSubjectTeacher);
             }
-            if(Empty($finalHomeworkListingSubjectTeacher)){
+            if (Empty($finalHomeworkListingSubjectTeacher)) {
                 $status=200;
                 $message="Sorry!! No homeworks found";
             }
