@@ -45,19 +45,19 @@
                                         <label for="form-field-select-2">
                                             Select Class
                                         </label>
-                                        <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
-                                            <option value=""> please select class </option>
-                                            <option value=""></option>
-                                        </select>
+
+                                            <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+                                                <option value="{!!$dropDownData['class_id']!!}">{!!$dropDownData['class_name']!!}</option>
+                                            </select>
+
                                     </div>
                                     <div class="form-group col-sm-4" id="division-select-div">
                                         <label for="form-field-select-2">
                                             Select Division
                                         </label>
-                                        <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
-                                            <option value=""> please select division </option>
-                                            <option value=""></option>
-                                        </select>
+                                            <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
+                                                <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
+                                            </select>
                                     </div>
                                 </div>
                             </div>
