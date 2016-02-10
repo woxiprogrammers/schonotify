@@ -22,7 +22,6 @@
             <h1 class="mainTitle">Leaves</h1>
 
         </div>
-
     </div>
 </section>
 <!-- end: DASHBOARD TITLE -->
@@ -30,6 +29,49 @@
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
+<div class="panel-body">
+
+    @if(Auth::User()->role_id != 2)
+    <div class="form-group col-sm-4">
+        <label for="form-field-select-2">
+            Select Batch
+        </label>
+
+        <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
+            @foreach($dropDownData['batch'] as $row)
+            <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group col-sm-4"  id="class-select-div">
+        <label for="form-field-select-2">
+            Select Class
+        </label>
+        <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+            <option value="{!!$dropDownData['class_id']!!}">{!!$dropDownData['class_name']!!}</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-4" id="division-select-div">
+        <label for="form-field-select-2">
+            Select Division
+        </label>
+        <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
+            <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
+        </select>
+    </div>
+    @endif
+    <div class="form-group col-sm-4" id="class-select-div">
+        <label for="form-field-select-2">
+            Leave Status
+        </label>
+
+        <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+            <option value="2">Approved</option>
+            <option value="1">Pending</option>
+        </select>
+
+    </div>
+</div>
     <div class="panel-body">
         <ul class="timeline-xs" id="tmln">
             <li class="timeline-item success">

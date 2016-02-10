@@ -446,3 +446,13 @@ function checkMarkAttendanceAccess()
         }
     });
 }
+checkLeaveAccess();
+function checkLeaveAccess()
+{
+    var route="leave-check";
+    $.get(route,function(res){
+        if ( res == 0 ) {
+            $('#leaveCheck').hide();
+        }
+    });
+}
