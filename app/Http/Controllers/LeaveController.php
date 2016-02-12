@@ -38,7 +38,14 @@ class LeaveController extends Controller
                         ->select('classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                         ->first();
                     if ($batchClassData != null) {
-                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->get();
+                        if ($request->ajax()) {
+                            $data = Input::all();
+                            $pageCount = $data['pageCount'];
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->skip($pageCount*4)->take(4)->get();
+                        } else {
+                            $pageCount = 0;
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->skip($pageCount*4)->take(4)->get();
+                        }
                             $i = 0;
                             foreach ($leaveStatus as $row) {
                                 $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
@@ -63,17 +70,18 @@ class LeaveController extends Controller
                                 $dropDownData['class_name'] = $batchClassData->class_name;
                                 $dropDownData['batch_id'] = $batchClassData->batch_id;
                                 $dropDownData['batch_name'] = $batchClassData->batch_name;*/
-                           return view('leaveListing')->with(compact('leaveArray'));
+                        if ($request->ajax()) {
+                            return $leaveArray;
+                        } else {
+                            return view('leaveListing')->with(compact('leaveArray'));
+                        }
                     } else {
                         Session::flash('message-success','no record found');
                     }
-
                 } else {
                     Session::flash('message-success','no record found');
                 }
             } elseif ($user->role_id == 1) {
-
-
                     $batchClassDivisionData = Division::
                     join('classes','divisions.class_id','=','classes.id')
                     ->join('batches','classes.batch_id','=','batches.id')
@@ -123,19 +131,15 @@ class LeaveController extends Controller
                             } else {
                                 return view('leaveListing')->with(compact('leaveArray','dropDownData'));
                             }
-
                         } else {
                             return view('leaveListing')->with(compact('leaveArray','dropDownData'));
                         }
-
-
             }
         } else {
             return Redirect::to('/');
         }
 
     }
-
     public function detailedLeave(Requests\WebRequests\LeaveRequest $request)
     {
         if($request->authorize()===true)
