@@ -28,38 +28,67 @@
                     <div class="row">
                         <div>
                             <div class="panel panel-transparent">
+                                    @if($dropDownData != null)
+                                    <div class="panel-body">
+                                        <div class="form-group col-sm-4">
+                                            <label for="form-field-select-2">
+                                                Select Batch
+                                            </label>
 
-                                <div class="panel-body">
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="form-field-select-2">
-                                            Select Batch
-                                        </label>
-                                        <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
-                                            @foreach($dropDownData['batch'] as $row)
-                                            <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-sm-4" id="class-select-div">
-                                        <label for="form-field-select-2">
-                                            Select Class
-                                        </label>
-
+                                            <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
+                                                @foreach($dropDownData['batch'] as $row)
+                                                <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-4"  id="class-select-div">
+                                            <label for="form-field-select-2">
+                                                Select Class
+                                            </label>
                                             <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
                                                 <option value="{!!$dropDownData['class_id']!!}">{!!$dropDownData['class_name']!!}</option>
                                             </select>
-
-                                    </div>
-                                    <div class="form-group col-sm-4" id="division-select-div">
-                                        <label for="form-field-select-2">
-                                            Select Division
-                                        </label>
+                                        </div>
+                                        <div class="form-group col-sm-4" id="division-select-div">
+                                            <label for="form-field-select-2">
+                                                Select Division
+                                            </label>
                                             <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
                                                 <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
                                             </select>
+                                        </div>
                                     </div>
-                                </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="form-group col-sm-4">
+                                            <label for="form-field-select-2">
+                                                Select Batch
+                                            </label>
+
+                                            <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
+
+                                                <option value="" >no record found</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-4"  id="class-select-div">
+                                            <label for="form-field-select-2">
+                                                Select Class
+                                            </label>
+                                            <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+                                                <option value="">no record found</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-4" id="division-select-div">
+                                            <label for="form-field-select-2">
+                                                Select Division
+                                            </label>
+                                            <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
+                                                <option value="">no record found</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @endif
                             </div>
                         </div>
 

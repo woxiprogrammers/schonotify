@@ -38,6 +38,7 @@
         */
         public function markAttendance(CreateAttendanceRequest $request)
         {
+
             if ($request->authorize() === true)
             {
                 $user=Auth::user();
@@ -84,6 +85,7 @@
                                 }
                                 $i++;
                             }
+
                             if ($request->ajax()) {
                                 return $dropDownData;
                             } else {
@@ -111,6 +113,7 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
                             ->first();
+
                     }
                             if ($batchClassDivisionData != null) {
                                 $studentData=User::where('division_id',$batchClassDivisionData->division_id)->where('is_active',1)->select('id','first_name','last_name','roll_number')->get();
@@ -144,14 +147,17 @@
                                         $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
                                     }
                                     $i++;
-                             }
+
+                                }
+
                     if ($request->ajax()) {
                          return $dropDownData;
                     } else {
-                         return view('markAttendance')->with(compact('dropDownData'));
+
+                        return view('markAttendance')->with(compact('dropDownData'));
                     }
                  }
-
+                    return view('markAttendance')->with(compact('dropDownData'));
                 } else {
              }
                 return view('markAttendance');
@@ -405,18 +411,22 @@
                                         $dropDownData['division_name'] = $row['division_name'];
                                     }
                                 }
+
                            return view('viewAttendance')->with(compact('dropDownData'));
                         }   else {
                            $divisionData = SubjectClassDivision::where('teacher_id','=',$user->id)
                                ->select('division_id')
                                ->get()->toArray();
                            $k = 0;
+
                            if (!Empty($divisionData))
                            {
                                foreach($divisionData as $value){
                                    $division['id'][$k]=$value['division_id'];
                                    $k++;
                                }
+                           } else {
+                               return view('viewAttendance')->with(compact('dropDownData'));
                            }
                            $divisionArray=array_unique($division['id'],SORT_REGULAR);
                            $i=0;
