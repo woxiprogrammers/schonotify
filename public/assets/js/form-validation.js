@@ -1523,16 +1523,11 @@ var FormValidator = function () {
 
                         });
 
-
-
                     }
 
                 }
 
-
-
                 $('.timepicker').each(function(){
-
 
                     $('.timepicker1').timepicker();
 
@@ -1553,7 +1548,7 @@ var FormValidator = function () {
 
                     $.get(route,function(res){
 
-                        if(res.length != 0)
+                        if( res.length != 0 )
                         {
                             for(var i=0; i<res.length; i++)
                             {

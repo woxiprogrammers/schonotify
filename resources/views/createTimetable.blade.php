@@ -205,24 +205,27 @@
                 var endTime=$("#endTime"+num).val();
 
                 var st = minFromMidnight(startTime);
+
                 var et = minFromMidnight(endTime);
 
-                 if(st>=et){
+                 if ( st >= et )
+                 {
 
                      $("#startTimeError"+num).show();
                      $("#startTimeError"+num).html('End time must be greater than start time.');
                      flag=0;
                      return false;
 
-                }else{
+                 }else{
 
-                     if(num>1){
+                     if ( num > 1 )
+                     {
 
                          var prevEndTime=$("#endTime"+(num-1)).val();
 
                          var prevet=minFromMidnight(prevEndTime);
 
-                         if(st < prevet)
+                         if ( st < prevet )
                          {
 
                              $("#startTimeError"+num).show();
@@ -258,7 +261,8 @@
 
             });
 
-            if(flag == 1){
+            if ( flag == 1 )
+            {
                 $('#timeTableForm').submit();
             }
         });

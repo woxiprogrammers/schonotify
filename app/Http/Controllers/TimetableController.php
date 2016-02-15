@@ -21,6 +21,16 @@ class TimetableController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
+
+    /*
++   * Function Name: index
++   * Param: Requests\WebRequests\TimetableRequest $requests
++   * Return: Timetable view
++   * Desc: this method returns to view of timetable.
++   * Developed By: Suraj Bande
++   * Date: 10/2/2016
++   */
+
     public function index(Requests\WebRequests\TimetableRequest $request)
     {
         if ($request->authorize() === true) {
@@ -34,6 +44,14 @@ class TimetableController extends Controller
         }
 
     }
+    /*
++   * Function Name: timetableShow
++   * Param: Requests\WebRequests\TimetableRequest $requests, $id
++   * Return: Timetable view on the basis of division selection
++   * Desc: this method returns to view of timetable for perticular division.
++   * Developed By: Suraj Bande
++   * Date: 10/2/2016
++   */
     public function timetableShow(Requests\WebRequests\TimetableRequest $request,$id)
     {
 
@@ -135,22 +153,41 @@ class TimetableController extends Controller
 
     }
 
+    /*
++   * Function Name: create
++   * Param:
++   * Return: Timetable structure create page
++   * Desc: this method returns to view of timetable create.
++   * Developed By: Suraj Bande
++   * Date: 10/2/2016
++   */
+
     public function create()
     {
         $divisions=session('timetable_batch_class_division_id');
+
         $days=DayMaster::get();
 
         return view('createTimetable')->with(compact('divisions','days'));
     }
 
+    /*
++   * Function Name: createTimetable
++   * Param: $requests, $id
++   * Return: Timetable create
++   * Desc: this method returns to the successful creation of timetable.
++   * Developed By: Suraj Bande
++   * Date: 15/2/2016
++   */
     public function createTimetable(Request $request)
     {
         $data=$request->all();
+
         $insertdata=array();
+
         $timetableData=array();
 
         $length=count($data['subjects']);
-
 
         for($i=0; $i<$length; $i++)
         {
