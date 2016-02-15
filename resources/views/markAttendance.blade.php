@@ -38,6 +38,7 @@
                                             <i class="fa fa-ok"></i> Your form validation is successful!
                                         </div>
                                     </div>
+                                    @if($dropDownData != null)
                                     <div class="row">
                                         <div class="form-group col-sm-4">
                                             <label for="form-field-select-2">
@@ -67,13 +68,44 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="form-group col-sm-4">
+                                            <label for="form-field-select-2">
+                                                Select Batch
+                                            </label>
+
+                                            <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
+
+                                                <option value="" >no record found</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-4"  id="class-select-div">
+                                            <label for="form-field-select-2">
+                                                Select Class
+                                            </label>
+                                            <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+                                                <option value="">no record found</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-4" id="division-select-div">
+                                            <label for="form-field-select-2">
+                                                Select Division
+                                            </label>
+                                            <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
+                                                <option value="">no record found</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @endif
                                     <div class="form-group">
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Select Date <span class="symbol required"></span>
                                                 </label>
-                                                <input class="form-control datepicker" type="text" name="datePiker" id="datePiker" value="{!! date('m/d/Y', time());!!}" readonly>
+                                                <input class="form-control datepicker" type="text" name="datePiker" id="datePiker" value="{!! date('m/d/Y', time());!!}" >
                                             </div>
                                         </div>
                                     </div>
@@ -90,6 +122,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            @if(isset($dropDownData['student_list']) )
                                             @foreach($dropDownData['student_list'] as $row)
                                             <tr>
                                                 <td>@if($row['student_attendance_status'] == 1  ) <input type="checkbox" class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}"  /> <label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @else <input type="checkbox"  class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}" checked /><label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @endif</td>
@@ -97,6 +130,7 @@
                                                 <td>{!! $row['student_name'] !!} &nbsp; &nbsp; @if($row['student_leave_status'] == 1  ) <span class="label label-default label-text-yellow">Leave Applied</span> @elseif($row['student_leave_status'] == 2 )<span class="label label-default label-text-orange">Leave Approved</span> @endif  </td>
                                             </tr>
                                             @endforeach
+                                            @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -104,7 +138,7 @@
                                         <button class="btn btn-primary btn-wide" type="button" id="btnSubmit">
                                             Cancel
                                         </button>
-                                        <button class="btn btn-wide btn-primary ladda-button pull-right" data-style="expand-left" type="submit">
+                                        <button class="btn btn-wide btn-primary ladda-button pull-right"  data-style="expand-left" id="saveButton" type="submit">
                                             <span class="ladda-label">Save</span>
                                             <span class="ladda-spinner"></span><span class="ladda-spinner"></span>
                                         </button>
@@ -154,6 +188,14 @@
         TableData.init();
         FormElements.init();
         UIButtons.init();
+        $(document).ready(function () {
+            $('#datePiker').on('change', function(){
+                $('#datePiker').datepicker("hide");
+            });
+
+        });
+        var endDate = new Date();
+        $('#datePiker').datepicker('setEndDate', endDate);
         $('#allCheckedStud-label img').css('border','1px solid');
         if ($('.allCheckedStud').prop('checked') == true)
         {
@@ -169,14 +211,32 @@
             });
         }
     });
-
     $('#btnSubmit').click(function(){
         var date=$('#datePiker').val();
         var division=$('#division-select').val();
         dateChange(date,division);
     });
-
-    $('.allCheckedStud').change(function(){
+    $("#markAttendance").submit(function(e)
+    {
+        var postData = $(this).serializeArray();
+        var formURL = $(this).attr("action");
+        $.ajax(
+            {
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR)
+                {
+                    //data: return data from server
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    //if fails
+                }
+            });
+        e.preventDefault(); //STOP default action
+    });
+     $('.allCheckedStud').change(function(){
         if ($(this).prop('checked') == true)
         {
             $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
@@ -333,99 +393,13 @@
             }
         });
     });
-   $("#division-select").change(function() {
-        var id = this.value;
-        var data = $('#datePiker').val();
-        var date=data.split("/",3);
-        var date_dump = date[2]+"-"+date[0]+"-"+date[1];
-        var route='get-all-student/'+id+'/'+date_dump;
-        $.get(route,function(studentData){
-            var res= $.map(studentData,function(value,index){
-                return value;
-            });
-            if(res.length == 0)
-            {
-                $('#division-select').html("no record found");
-            }
-            else{
-                var str='<table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">'+
-                            '<thead>'+
-                                '<tr>'+
-                                    '<th>'+
-                                        '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
-                                             '<label for="allCheckedStud" id="allCheckedStud-label">'+
-                                                '<img class="checkbox-img"/>'+
-                                             '</label>'+
-                                    '</th>'+
-                                    '<th> Roll No'+
-                                    '</th>'+
-                                    '<th> Name'+
-                                    '</th>'+
-                                '</tr>'+
-                            '</thead>'+
-                                '<tbody>';
-                                    for(var i=0; i<res.length; i++)
-                                    {
-                                    str +='<tr>'+
-                                                '<td>';
-                                                    if(res[i]['student_attendance_status'] == 1  ){
-                                                    str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
-                                                            '<label for="'+res[i]['student_id']+'">'+
-                                                                '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
-                                                            '</label>';
-                                                    } else {
-                                                    str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
-                                                           '<label for="'+res[i]['student_id']+'">'+
-                                                                '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
-                                                           '</label>';
-                                                    }
-                                         str += '</td>'+
-                                                '<td>'+res[i]['roll_number']+'</td>'+
-                                                '<td>'+res[i]['student_name']+" "+" ";
-                                                      if(res[i]['student_leave_status'] == 1  ) {
-                                         str +='<span class="label label-default label-text-yellow"> Leave Applied '+
-                                               '</span>';
-                                                      }else if(res[i]['student_leave_status'] == 2 ){
-                                         str +='<span class="label label-default label-text-orange"> Leave Approved '+
-                                                '</span>';
-                                                      }
-                                         str+= '</td>'+
-                                         '</tr>';
-                                    }
-                          str +='</tbody>'+
-                '</table>';
-                $('#tableContent2').html(str);
-                TableData.init();
-                $('#allCheckedStud-label img').css('border','1px solid');
-                if ($('.allCheckedStud').prop('checked') == true)
-                {
-                    $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
-                    var i=0;
-                    $('.checkedStud').each(function() { //loop through each checkbox
-                        if (this.checked == true)
-                        {
-                            $('#'+this.className+this.id).prop('src','assets/images/tick.png');
-                        }else {
-                            $('#'+this.className+this.id).prop('src','assets/images/cross.png');
-                        }
-                        i++;
-                    });
 
-
-                }
-
-                $('.checkedStud').change(function(){
-                    if (this.checked==true)
-                    {
-                        $('#'+this.className+this.id).prop('src','assets/images/tick.png');
-
-                    } else {
-                        $('#'+this.className+this.id).prop('src','assets/images/cross.png');
-                    }
-                });
-            }
-        });
+    $("#division-select").change(function() {
+        var date=$('#datePiker').val();
+        var division=$('#division-select').val();
+        dateChange(date,division);
     });
+
     $('#batch-select').change(function(){
 
         $('#class-select').val('');

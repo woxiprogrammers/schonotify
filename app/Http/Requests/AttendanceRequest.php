@@ -49,9 +49,7 @@ class AttendanceRequest extends Request
     public function rules()
     {
         return [
-            'batch_id'=>'required',
-            'class_id'=>'required',
-            'division_id'=>'required',
+            'student_id'=>'array',
         ];
     }
 }

@@ -180,7 +180,7 @@
         </div>
     </a>
     <ul class="sub-menu">
-        <li>
+        <li id="markAttendanceCheck">
             <a href="/mark-attendance">
                 <span class="title"> Mark Attendance </span>
             </a>
@@ -190,10 +190,12 @@
                 <span class="title"> View Attendance  </span>
             </a>
         </li>
-        <li>
+        <li id="leaveCheck">
             <a href="/leaveListing">
                 <span class="title"> Leaves </span>
+                @if(Auth::User()->role_id != 1)
                 <span class="badge pull-right">9</span>
+                @endif
             </a>
         </li>
     </ul>

@@ -177,11 +177,19 @@
 
     Route::get('get-all-classes/{id}','AttendanceController@getAllClasses');
 
+    Route::get('get-attendance-classes/{id}','AttendanceController@getAttendanceClasses');
+
     Route::get('get-all-division/{id}','AttendanceController@getAllDivision');
+
+    Route::get('get-attendance-division/{id}/{batchId}','AttendanceController@getAttendanceDivision');
 
     Route::get('get-all-student/{id}/{dateValue}','AttendanceController@getAllStudent');
 
     Route::post('mark-attendance','AttendanceController@attendanceMark');
+
+    Route::get('mark-attendance-check','AttendanceController@markAttendanceAccess');
+
+    Route::get('leave-check','LeaveController@leaveAccess');
 
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
@@ -300,10 +308,12 @@
 
     //Attendance Related
     Route::get('attendance-batches','api\AttendanceController@getAttendanceBatches');
-    Route::post('attendance','api\AttendanceController@markAttendance');
+    Route::get('attendance-classes/{batchId}','api\AttendanceController@getAttendanceClasses');
+    Route::get('get-attendance-divisions/{classId}','api\AttendanceController@getAttendanceDivisions');
+    Route::post('markAttendance','api\AttendanceController@markAttendance');
     Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
     Route::post('submitAttendance','api\AttendanceController@submitAttendance');
-    Route::post('viewAttendance','api\AttendanceController@viewAttendance');
+    Route::post('view-attendance-teacher','api\AttendanceController@viewAttendance');
 
     //Message Related
     Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
@@ -346,7 +356,7 @@
 
     Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
 
-    Route::get('view-homework-parent/{id}','api\HomeworkController@viewHomeworkParent');
+    Route::get('view-homework-parent/{student_id}','api\HomeworkController@viewHomeworkParent');
 
     Route::get('view-homework','api\HomeworkController@viewHomeWork');
 

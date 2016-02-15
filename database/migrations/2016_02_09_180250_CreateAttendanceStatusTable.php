@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLeavesTable extends Migration
+class CreateAttendanceStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,11 @@ class CreateLeavesTable extends Migration
      */
     public function up()
     {
-        Schema::create('leaves', function (Blueprint $table) {
+        Schema::create('attendance_status', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('student_id')->unsigned();
-            $table->boolean('status');
-            $table->text('reason');
-            $table->date('from_date');
-            $table->date('end_date');
+            $table->text('division_id');
+            $table->date('date');
+            $table->text('status');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateLeavesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('leaves');
+        Schema::drop('attendance_status');
     }
 }

@@ -435,8 +435,24 @@ $('#editEmailParent').on('keyup',function(){
     });
     }
 });
-
-
-
-
 //////////registration Js///////
+checkMarkAttendanceAccess();
+function checkMarkAttendanceAccess()
+{
+    var route="mark-attendance-check";
+    $.get(route,function(res){
+        if ( res == 0 ) {
+            $('#markAttendanceCheck').hide();
+        }
+    });
+}
+checkLeaveAccess();
+function checkLeaveAccess()
+{
+    var route="leave-check";
+    $.get(route,function(res){
+        if ( res == 0 ) {
+            $('#leaveCheck').hide();
+        }
+    });
+}
