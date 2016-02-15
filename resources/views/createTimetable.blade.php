@@ -44,6 +44,7 @@
 
                                         @foreach($divisions as $division)
                                             <span class="lato-font">Batch : {!! $division->batch_name !!}   Class : {!! $division->class_name !!}  Division : {!! $division->division_name !!}
+                                                <input type="hidden" id="hiddenDivId" value="{!! $division->division_id !!}">
                                         @endforeach
 
                                     </div>
@@ -74,13 +75,9 @@
                                                         </label>
                                                         <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
                                                             <option value="">Select Days</option>
-                                                            <option value="monday">Monday</option>
-                                                            <option value="tuesday">Tuesday</option>
-                                                            <option value="wednesday">Wednesday</option>
-                                                            <option value="thursday">Thursday</option>
-                                                            <option value="friday">Friday</option>
-                                                            <option value="saturday">Saturday</option>
-                                                            <option value="sunday">Sunday</option>
+                                                            @foreach($days as $day)
+                                                                <option value="{!! $day->id !!}">{!! $day->name !!}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
 
@@ -102,32 +99,34 @@
                                             </div>
 
                                             <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="errorHandler alert alert-danger no-display">
-                                                <i class="fa fa-times-sign"></i> You have some form errors. Please check below.
-                                            </div>
-                                            <div class="successHandler alert alert-success no-display">
-                                                <i class="fa fa-ok"></i> Your form validation is successful!
-                                            </div>
-
-                                            <div class="col-md-12">
-
-                                                <div class="col-md-12" id="main-div-periods">
-                                                   <form role="form" id="createTimetableForm">
-
-                                                        <div id="periods-rows"></div>
-                                                        <div class="col-md-3" id="periods-structure-save-btn">
-                                                            <button class="btn btn-primary" style="margin:22px 0px 0px 0px;" type="button">
-                                                                Create <i class="fa fa-arrow-circle-right"></i>
-                                                            </button>
+                                                <div class="col-md-12">
+                                                        <div class="errorHandler alert alert-danger no-display">
+                                                            <i class="fa fa-times-sign"></i> You have some form errors. Please check below.
+                                                        </div>
+                                                        <div class="successHandler alert alert-success no-display">
+                                                            <i class="fa fa-ok"></i> Your form validation is successful!
                                                         </div>
 
-                                                    </form>
+                                                        <div class="col-md-12">
+
+                                                            <div class="col-md-12" id="main-div-periods">
+                                                               <form action="create-timetable" method="post" role="form" id="timeTableForm">
+
+                                                                    <div id="periods-rows"></div>
+                                                                    <input type="hidden" name="day" id="hiddenDay">
+                                                                    <div class="col-md-3" id="periods-structure-save-btn">
+                                                                        <button class="btn btn-primary" style="margin:22px 0px 0px 0px;" type="button" id="btnSubmitStructure">
+                                                                            Create <i class="fa fa-arrow-circle-right"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                </form>
+                                                            </div>
+
+                                                        </div>
                                                 </div>
 
                                             </div>
-                                        </div>
-                                    </div>
 
                                         </div>
 
@@ -182,7 +181,89 @@
 
             });
 
+
+        $('#btnSubmitStructure').click(function(){
+
+            var num=1;
+
+            var flag=0;
+
+            $('input[name="endTime[]"]').each(function(){
+
+                if($('#subjects_'+num).val()=="unavailable")
+                {
+                    $("#subjectError"+num).show();
+                    $("#subjectError"+num).html('There are no subjects available for this division.');
+                    return false;
+                }else{
+                    $("#subjectError"+num).hide();
+                    $("#subjectError"+num).html('');
+                }
+
+                var startTime=$("#startTime"+num).val();
+
+                var endTime=$("#endTime"+num).val();
+
+                var st = minFromMidnight(startTime);
+                var et = minFromMidnight(endTime);
+
+                 if(st>=et){
+
+                     $("#startTimeError"+num).show();
+                     $("#startTimeError"+num).html('End time must be greater than start time.');
+                     flag=0;
+                     return false;
+
+                }else{
+
+                     if(num>1){
+
+                         var prevEndTime=$("#endTime"+(num-1)).val();
+
+                         var prevet=minFromMidnight(prevEndTime);
+
+                         if(st < prevet)
+                         {
+
+                             $("#startTimeError"+num).show();
+                             $("#startTimeError"+num).html('Start time must be greater than previous end time.');
+                             flag=0;
+                             return false;
+
+                         }
+                         flag=1;
+                         $("#startTimeError"+num).hide();
+                         $("#startTimeError"+num).html('');
+                     }else{
+                         $("#startTimeError"+num).hide();
+                         $("#startTimeError"+num).html('');
+                     }
+
+                }
+
+
+                function minFromMidnight(tm){
+
+                    var ampm= tm.substr(-2);
+
+                    var clk = tm.substr(0, 4);
+
+                    var m  = parseInt(clk.match(/\d+$/)[0], 10);
+                    var h  = parseInt(clk.match(/^\d+/)[0], 10);
+                    h += (ampm.match(/pm/i))? ((h==12)? 0 :12 ): 0;
+                    return (h*60+m);
+                }
+                num++;
+
+
+            });
+
+            if(flag == 1){
+                $('#timeTableForm').submit();
+            }
+        });
     </script>
+
 
 </div>
 @stop

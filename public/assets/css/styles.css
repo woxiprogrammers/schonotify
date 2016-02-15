@@ -11778,3 +11778,10 @@ a.control_next {
     font-weight: 300;
     margin-top: 10px;
 }
+
+.checkboxLabelTimetable{
+
+    position: absolute;
+    left:32px;
+}
+

@@ -117,6 +117,8 @@
 
     Route::get('createTimetable','TimetableController@create');
 
+    Route::post('create-timetable','TimetableController@createTimetable');
+
     Route::get('noticeBoard','NoticeBoardController@show');
 
     Route::get('loadMore','NoticeBoardController@loadMore');

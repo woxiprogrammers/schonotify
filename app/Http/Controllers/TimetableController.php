@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Batch;
 use App\Classes;
+use App\DayMaster;
 use App\Division;
 use App\SubjectClassDivision;
 use App\Timetable;
@@ -56,13 +57,14 @@ class TimetableController extends Controller
 
             }
 
-            $timetables=Timetable::join('division_subjects','division_subject_id','=','division_subjects.id')
+            $timetables=Timetable::join('division_subjects','timetables.division_subject_id','=','division_subjects.id')
                 ->join('subjects','subjects.id','=','division_subjects.subject_id')
                 ->join('divisions','divisions.id','=','division_subjects.division_id')
                 ->join('users','users.id','=','division_subjects.teacher_id')
-                ->join('day_master','day_id','=','day_master.id')
-                ->select('day_master.name as day','period_number','subjects.subject_name as subject','is_break','start_time','end_time','users.username as teacher')
-                ->wherein('division_subject_id',$divArray)
+                ->join('day_master','timetables.day_id','=','day_master.id')
+                ->select('day_master.name as day','subjects.subject_name as subject','is_break','start_time','end_time','users.username as teacher')
+                ->wherein('timetables.division_subject_id',$divArray)
+                ->orderBy('start_time','ASC')
                 ->get();
 
 
@@ -136,12 +138,48 @@ class TimetableController extends Controller
     public function create()
     {
         $divisions=session('timetable_batch_class_division_id');
+        $days=DayMaster::get();
 
-        return view('createTimetable')->with(compact('divisions'));
+        return view('createTimetable')->with(compact('divisions','days'));
+    }
+
+    public function createTimetable(Request $request)
+    {
+        $data=$request->all();
+        $insertdata=array();
+        $timetableData=array();
+
+        $length=count($data['subjects']);
+
+
+        for($i=0; $i<$length; $i++)
+        {
+            $insertdata['division_subject_id']=$data['subjects'][$i];
+            $insertdata['is_break']=$data['check'][$i];
+            $insertdata['start_time']=$data['startTime'][$i];
+            $insertdata['end_time']=$data['endTime'][$i];
+            $insertdata['day_id']=$data['day'];
+
+            array_push($timetableData,$insertdata);
+
+        }
+
+        $status=Timetable::insert($timetableData);
+
+        if($status){
+            Session::flash('message-success','Timetable created successfully !');
+            return Redirect::to('timetable');
+        }
+
     }
 
     public function getSubjects($id)
     {
-        console.log($id);
+        $subjects=SubjectClassDivision::where('division_id','=',$id)
+            ->join('subjects','subjects.id','=','division_subjects.subject_id')
+            ->select('subjects.subject_name','division_subjects.id')
+            ->get();
+
+        return $subjects;
     }
 }
