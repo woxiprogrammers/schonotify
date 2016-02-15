@@ -229,17 +229,9 @@
                     }else{
                         $('div#loadmoreajaxloader').html('<center>No more leaves to show.</center>');
                         return;
-
-
                     }
-
-
-
             }});
-
         }
-
-
     });
     $('#batch-select').change(function(){
         var id=this.value;
