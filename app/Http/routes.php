@@ -117,6 +117,8 @@
 
     Route::get('createTimetable','TimetableController@create');
 
+    Route::post('create-timetable','TimetableController@createTimetable');
+
     Route::get('noticeBoard','NoticeBoardController@show');
 
     Route::get('loadMore','NoticeBoardController@loadMore');
@@ -148,6 +150,8 @@
     Route::get('get-edit-data/{id}','HomeworkController@editDataDiv');
 
     Route::get('batch-class-div-homework/{id}','HomeworkController@classBatchDivision');
+
+    Route::get('get-timetable-subjects/{id}','TimetableController@getSubjects');
 
     Route::get('get-subject-divisions/{id}/{subject_id}/{batch_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
