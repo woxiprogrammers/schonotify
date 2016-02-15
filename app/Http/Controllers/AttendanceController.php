@@ -45,7 +45,7 @@
                 $dropDownData=array();
                 if ($request->ajax()) {
                     $data = Input::all();
-                    $division=$data['division'];
+                    $division = $data['division'];
                     $date=date('Y-m-d',strtotime($data['value']));
                 } else {
                     $date=date('Y-m-d', time());
@@ -181,8 +181,12 @@
             $userIds = $request->student;
             $division ='';
             $date=date("Y-m-d",strtotime($request->datePiker));
+            if($userIds != null) {
             $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
-            $i=0;
+            } else {
+                $userData = User::where('division_id',$request['division-select'])->select('id','division_id')->get();
+            }
+                $i=0;
             foreach ($userData as $data) {
                 $dataList[] = $data['id'];
                 $division = $data['division_id'];
@@ -212,6 +216,7 @@
             AttendanceStatus::insert($attendanceStatus);
             Session::flash('message-success','attendance saved successfully');
             return Redirect::to('/mark-attendance');
+
         }
         /**
          * Function Name: getAllClasses
@@ -398,6 +403,7 @@
                            $finalData=array_unique($finalData,SORT_REGULAR);
                                 if (!Empty($finalData)) {
                                     $i = 0;
+
                                     foreach ($finalData as $row) {
                                         $dropDownData['batch'][$i]['batch_id'] = $row['batch_id'];
                                         $dropDownData['batch'][$i]['batch_name'] = $row['batch_name'];
@@ -405,12 +411,16 @@
                                     }
                                     $dropDownData =array_unique($dropDownData,SORT_REGULAR);
                                     foreach ($divsionsData as $row) {
+                                        $dropDownData['batch_id'] = $row['batch_id'];
+                                        $dropDownData['batch_name'] = $row['batch_name'];
                                         $dropDownData['class_id'] = $row['class_id'];
                                         $dropDownData['class_name'] = $row['class_name'];
                                         $dropDownData['division_id'] =  $row['division_id'];
                                         $dropDownData['division_name'] = $row['division_name'];
                                     }
+
                                 }
+
 
                            return view('viewAttendance')->with(compact('dropDownData'));
                         }   else {
@@ -451,6 +461,8 @@
                                }
                                $dropDownData=array_unique($dropDownData,SORT_REGULAR);
                                foreach ($divsionsData as $row) {
+                                   $dropDownData['batch_id'] = $row['batch_id'];
+                                   $dropDownData['batch_name'] = $row['batch_name'];
                                    $dropDownData['class_id'] = $row['class_id'];
                                    $dropDownData['class_name'] = $row['class_name'];
                                    $dropDownData['division_id'] =  $row['division_id'];
@@ -552,7 +564,7 @@
                                 $i++;
                             }
                         }
-                            $data=array_unique($data,SORT_REGULAR);
+                        $data=array_unique($data,SORT_REGULAR);
                         return $data;
 
                 } else {
@@ -627,13 +639,13 @@
                             $k++;
                         }
                     }
+                    $divisionArray=array_unique($division['id'],SORT_REGULAR);
                     //data for subject teacher
                     $divisionData=SubjectClassDivision::
                         where('teacher_id','=',$user->id)
                         ->select('division_id')
                         ->get()->toArray();
                         $divisionData=array_unique($divisionData,SORT_REGULAR);
-                         $k=0;
                         if (!Empty($divisionData))
                         {
                             foreach($divisionData as $value){
@@ -652,15 +664,14 @@
                                 ->first();
                             $i++;
                         }
-
-                             $i = 0;
+                        $finalData = array_filter($finalData);
+                        $i = 0;
                              foreach ($finalData as $row) {
 
                                  $data[$i]['division_id'] = $row['div_id'] ;
                                  $data[$i]['division_name']= $row['division_name'] ;
                                  $i++;
                              }
-
                     $data=array_unique($data,SORT_REGULAR);
                     return $data;
 
@@ -687,6 +698,7 @@
                             ->select('divisions.id as div_id','divisions.division_name')
                             ->first();
                     }
+                    $finalData = array_filter($finalData);
                         if (!Empty($finalData)) {
                             foreach ($finalData as $row) {
                                 $data[$i]['division_id'] = $row['div_id'] ;

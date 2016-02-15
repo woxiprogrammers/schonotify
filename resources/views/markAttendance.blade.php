@@ -105,7 +105,7 @@
                                                 <label class="control-label">
                                                     Select Date <span class="symbol required"></span>
                                                 </label>
-                                                <input class="form-control datepicker" type="text" name="datePiker" id="datePiker" value="{!! date('m/d/Y', time());!!}" readonly>
+                                                <input class="form-control datepicker" type="text" name="datePiker" id="datePiker" value="{!! date('m/d/Y', time());!!}" >
                                             </div>
                                         </div>
                                     </div>
@@ -138,7 +138,7 @@
                                         <button class="btn btn-primary btn-wide" type="button" id="btnSubmit">
                                             Cancel
                                         </button>
-                                        <button class="btn btn-wide btn-primary ladda-button pull-right" data-style="expand-left" type="submit">
+                                        <button class="btn btn-wide btn-primary ladda-button pull-right"  data-style="expand-left" id="saveButton" type="submit">
                                             <span class="ladda-label">Save</span>
                                             <span class="ladda-spinner"></span><span class="ladda-spinner"></span>
                                         </button>
@@ -188,6 +188,12 @@
         TableData.init();
         FormElements.init();
         UIButtons.init();
+        $(document).ready(function () {
+            $('#datePiker').on('change', function(){
+                $('#datePiker').datepicker("hide");
+            });
+
+        });
         var endDate = new Date();
         $('#datePiker').datepicker('setEndDate', endDate);
         $('#allCheckedStud-label img').css('border','1px solid');
@@ -210,8 +216,27 @@
         var division=$('#division-select').val();
         dateChange(date,division);
     });
-
-    $('.allCheckedStud').change(function(){
+    $("#markAttendance").submit(function(e)
+    {
+        var postData = $(this).serializeArray();
+        var formURL = $(this).attr("action");
+        $.ajax(
+            {
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR)
+                {
+                    //data: return data from server
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    //if fails
+                }
+            });
+        e.preventDefault(); //STOP default action
+    });
+     $('.allCheckedStud').change(function(){
         if ($(this).prop('checked') == true)
         {
             $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
