@@ -115,8 +115,9 @@
                             ->first();
 
                     }
-                            if ($batchClassDivisionData != null) {
+                    if ($batchClassDivisionData != null) {
                                 $studentData=User::where('division_id',$batchClassDivisionData->division_id)->where('is_active',1)->select('id','first_name','last_name','roll_number')->get();
+
                                 $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
                                 $dropDownData['division_name'] = $batchClassDivisionData->division_name;
                                 $dropDownData['class_id'] = $batchClassDivisionData->class_id;
@@ -147,6 +148,7 @@
                                         $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
                                     }
                                     $i++;
+
 
                                 }
 
