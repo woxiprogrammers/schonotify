@@ -138,7 +138,7 @@
                                         <button class="btn btn-primary btn-wide" type="button" id="btnSubmit">
                                             Cancel
                                         </button>
-                                        <button class="btn btn-wide btn-primary ladda-button pull-right" data-style="expand-left" id="saveButton" type="submit">
+                                        <button class="btn btn-wide btn-primary ladda-button pull-right"  data-style="expand-left" id="saveButton" type="submit">
                                             <span class="ladda-label">Save</span>
                                             <span class="ladda-spinner"></span><span class="ladda-spinner"></span>
                                         </button>
@@ -211,18 +211,32 @@
             });
         }
     });
-
     $('#btnSubmit').click(function(){
         var date=$('#datePiker').val();
         var division=$('#division-select').val();
         dateChange(date,division);
     });
-    $('#saveButton').click(function(){
-        var date=$('#datePiker').val();
-        var division=$('#division-select').val();
-        dateChange(date,division);
+    $("#markAttendance").submit(function(e)
+    {
+        var postData = $(this).serializeArray();
+        var formURL = $(this).attr("action");
+        $.ajax(
+            {
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus, jqXHR)
+                {
+                    //data: return data from server
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    //if fails
+                }
+            });
+        e.preventDefault(); //STOP default action
     });
-    $('.allCheckedStud').change(function(){
+     $('.allCheckedStud').change(function(){
         if ($(this).prop('checked') == true)
         {
             $('#allCheckedStud-label img').prop('src','assets/images/tick.png');

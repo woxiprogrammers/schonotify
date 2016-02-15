@@ -45,7 +45,7 @@
                 $dropDownData=array();
                 if ($request->ajax()) {
                     $data = Input::all();
-                    $division=$data['division'];
+                    $division = $data['division'];
                     $date=date('Y-m-d',strtotime($data['value']));
                 } else {
                     $date=date('Y-m-d', time());
@@ -216,6 +216,7 @@
             AttendanceStatus::insert($attendanceStatus);
             Session::flash('message-success','attendance saved successfully');
             return Redirect::to('/mark-attendance');
+
         }
         /**
          * Function Name: getAllClasses
