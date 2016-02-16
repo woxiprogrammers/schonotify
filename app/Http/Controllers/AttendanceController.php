@@ -197,7 +197,6 @@
             }
             $attendanceCheck = Attendance::whereIn('student_id',$dataList)->where('date',$date)->get();
             if (!$attendanceCheck->isEmpty()) {
-                dd(1);
                  if($userIds != null) {
                    Attendance::whereIn('student_id',$request['student'])->where('date',$date)->delete();
                  } else {
