@@ -117,6 +117,8 @@
 
     Route::get('createTimetable','TimetableController@create');
 
+    Route::post('create-timetable','TimetableController@createTimetable');
+
     Route::get('noticeBoard','NoticeBoardController@show');
 
     Route::get('loadMore','NoticeBoardController@loadMore');
@@ -149,6 +151,8 @@
 
     Route::get('batch-class-div-homework/{id}','HomeworkController@classBatchDivision');
 
+    Route::get('get-timetable-subjects/{id}','TimetableController@getSubjects');
+
     Route::get('get-subject-divisions/{id}/{subject_id}/{batch_id}',array('uses' => 'HomeworkController@getSubjectDiv'));
 
     Route::post('get-division-students',array('uses' => 'HomeworkController@getStudentData'));
@@ -173,13 +177,19 @@
 
     Route::get('get-all-classes/{id}','AttendanceController@getAllClasses');
 
+    Route::get('get-attendance-classes/{id}','AttendanceController@getAttendanceClasses');
+
     Route::get('get-all-division/{id}','AttendanceController@getAllDivision');
+
+    Route::get('get-attendance-division/{id}/{batchId}','AttendanceController@getAttendanceDivision');
 
     Route::get('get-all-student/{id}/{dateValue}','AttendanceController@getAllStudent');
 
     Route::post('mark-attendance','AttendanceController@attendanceMark');
 
     Route::get('mark-attendance-check','AttendanceController@markAttendanceAccess');
+
+    Route::get('leave-check','LeaveController@leaveAccess');
 
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
