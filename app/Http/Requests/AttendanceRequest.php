@@ -49,6 +49,7 @@ class AttendanceRequest extends Request
     public function rules()
     {
         return [
+            'date' => 'required',
             'student_id'=>'array',
         ];
     }
