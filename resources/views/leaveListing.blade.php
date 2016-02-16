@@ -97,8 +97,8 @@
             Leave Status
         </label>
 
-        <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
-            <option value="2">Approved</option>
+        <select class="form-control" name="leave-status" id="leave-status" style="-webkit-appearance: menulist;">
+            <option value="2" selected>Approved</option>
             <option value="1">Pending</option>
         </select>
 
@@ -115,8 +115,10 @@
                     </div>
                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                        <h5><small class="label label-sm label-info">{!! $row['parent'] !!}</small>  {!! $row['title'] !!}</h5>
-                        <p>{!! $row['reason'] !!}...  <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}">More</a></p>
+                        <h5><small class="label label-sm label-info">{!! $row['parent'] !!}</small>  {!! $row['title'] !!}
+                            ...  <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}">More</a>
+                        </h5>
+                        <p>{!! $row['reason'] !!}</p>
                         <p>Leave From:<i>{!! $row['from_date'] !!}</i><br>Leave To:<i> {!! $row['end_date'] !!}</i></p>
                     </div>
                 </div>
@@ -179,9 +181,11 @@
     {
         if($(window).scrollTop() == $(document).height() - $(window).height())
         {   $('div#loadmoreajaxloader').show();
+            var leave_status = $('#leave-status').val();
+            var division = $('#division-select').val();
             $.ajax({ url: "leaveListing",
                 type: "get",
-                data: { pageCount:id},
+                data: { pageCount:id,leave_status:leave_status,division:division},
                 success: function(data){
                     var res= $.map(data,function(value){
                         return value;
@@ -189,7 +193,6 @@
                     });
                     id++;
                     if(res.length > 0){
-                        console.log(res);
                         var str = '';
                         for(var i=0; i<res.length; i++)
                         {
@@ -203,13 +206,14 @@
                                 res[i]['parent'] +
                                 '</small>'
                                 +res[i]['title']+
+                                '......'+
+                                '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'">'+
+                                'More'+
+                                '</a>'+
                                 '</h5>'+
                                 '<p>'
                                 + res[i]['reason']+
-                                '......'+
-                                '<a class="text-info" href="detailedLeave/"'+ res[i]['leave_id'] +'"">'+
-                                'More'+
-                                '</a></p>'+
+                                '</p>'+
                                 '<p>Leave From:'+
                                 '<i>'+
                                 res[i]['from_date']+
@@ -268,10 +272,59 @@
             }
         });
     });
+    $('#leave-status').change(function(){
+        var leave_status = $('#leave-status').val();
+        var division = $('#division-select').val();
+        var route='leave-status-listing/'+ leave_status +'/'+ division;
+        $.get(route,function(res) {
+            console.log(res);
+            if(res.length == 0)
+            {
+                $('#leave-status').html("no record found");
+            } else {
+                var str = '';
+                for(var i=0; i<res.length; i++)
+                {
+                    str += '<li class="timeline-item success">'+
+                        '<div class="leaveSection">'+
+                        '<div class="text-muted text-small">'
+                        +res[i]['created_date']['date'] +
+                        '</div>'+
+                        '<div class="col-sm-8" style="margin-top: 4px;">'+
+                        '<h5><small class="label label-sm label-info">'+
+                        res[i]['parent'] +
+                        '</small>'
+                        +res[i]['title']+
+                        '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'">'+
+                        '.......'+
+                        'More'+
+                        '</a>'+
+                        '</h5>'+
+                        '<p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+
+                         res[i]['reason']+
+                        '</p>'+
+                        '<p>Leave From:'+
+                        '<i>'+
+                        res[i]['from_date']+
+                        '</i><br>'+
+                        'Leave To:'+
+                        '<i>'+
+                        res[i]['end_date']+
+                        '</i></p>'+
+                        '</div>'+
+                        '</div>'+
+                        '<img src="/uploads/profile-picture/'+res[i]['avatar']+'" class="img img-circle tmln-img" alt="Peter">'+
+                        '</li>';
+                }
+                $('#tmln').html(str);
+            }
+        });
+
+    });
     $('#batch-select').change(function(){
         $('#class-select').val('');
         $('#division-select').val('');
-    })
+    });
 
 
 </script>
