@@ -44,7 +44,7 @@ class HomeworkController extends Controller
        try{
             $data=$request->all();
             $homework=array();
-            $finalSubjectList=array();        
+            $finalSubjectList=array();
             $i=0;
             $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
             if($division != null){
