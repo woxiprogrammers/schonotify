@@ -15,11 +15,10 @@ class CreateTimetablesTable extends Migration
         Schema::create('timetables', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('day_id');
-            $table->integer('period_number');
-            $table->integer('division_subject_id')->unsigned();
+            $table->integer('division_subject_id');
             $table->boolean('is_break');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->Time('start_time');
+            $table->Time('end_time');
             $table->timestamps();
         });
     }

@@ -300,10 +300,9 @@
     Route::get('attendance-batches','api\AttendanceController@getAttendanceBatches');
     Route::get('attendance-classes/{batchId}','api\AttendanceController@getAttendanceClasses');
     Route::get('get-attendance-divisions/{classId}','api\AttendanceController@getAttendanceDivisions');
-    Route::post('markAttendance','api\AttendanceController@markAttendance');
-    Route::post('previousAttendance','api\AttendanceController@markPreviousAttendance');
-    Route::post('submitAttendance','api\AttendanceController@submitAttendance');
-    Route::post('view-attendance-teacher','api\AttendanceController@viewAttendance');
+    Route::post('mark-attendance','api\AttendanceController@markAttendance');
+    Route::post('view-attendance-teacher','api\AttendanceController@viwAttendanceTeacher');
+    Route::post('students-list','api\AttendanceController@getStudentsList');
 
     //Message Related
     Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
@@ -358,6 +357,7 @@
         //Timetable
         Route::get('view-timetable-parent/{studentId}/{day_id}','api\TimetableController@viewTimetableParent');
         Route::get('view-timetable-teacher/{div_id}/{day_id}','api\TimetableController@viewTimetableTeacher');
+        Route::get('default-timetable-teacher','api\TimetableController@defaultTimetableTeacher');
         Route::get('get-batches','api\TimetableController@getBatches');
         Route::get('get-classes/{batchId}','api\TimetableController@getClasses');
         Route::get('get-divisions/{classId}','api\TimetableController@getDivisions');
