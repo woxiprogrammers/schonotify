@@ -77,8 +77,13 @@ class AttendanceController extends Controller
             $i = 0;
             foreach ($classes as $row) {
                 $batchName = Batch::where('id',$row['batch_id'])->first();
-                $batchInfo[$i]['id'] = $batchName['id'];
-                $batchInfo[$i]['name'] = $batchName['name'];
+                $batchInfo[$batchName['id']]['id'] = $batchName['id'];
+                $batchInfo[$batchName['id']]['name'] = $batchName['name'];
+                $i++;
+            }
+            $i=0;
+            foreach($batchInfo as $value) {
+                $finalBatchInfo[$i]=$value;
                 $i++;
             }
             $status = 200;
@@ -90,7 +95,7 @@ class AttendanceController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $batchInfo
+            "data" => $finalBatchInfo
         ];
         return response($response, $status);
     }
@@ -137,8 +142,8 @@ class AttendanceController extends Controller
                     ->select('class_name as class_name')
                     ->first();
                 if ($className!=null) {
-                    $classes[$i]['class_id'] = $classId['class_id'];
-                    $classes[$i]['class_name'] = $className['class_name'];
+                    $classes[$i]['id'] = $classId['class_id'];
+                    $classes[$i]['name'] = $className['class_name'];
                     $i++;
                 }
             }
@@ -192,7 +197,7 @@ class AttendanceController extends Controller
             $divisionArray = array_unique($division['id'],SORT_REGULAR);
             $finalDivisions = Division::where('class_id','=',$classId)
                 ->wherein('id',$divisionArray)
-                ->select('divisions.id as division_id','division_name')->get();
+                ->select('divisions.id as id','division_name as name')->get()->toArray();
             $status = 200;
             $message = "Successfully Listed";
         } catch (\Exception     $e) {
