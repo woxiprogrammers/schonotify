@@ -115,6 +115,7 @@ class AttendanceController extends Controller
             $data = $requests->all();
             $division = array();
             $classes = array();
+            $finalClasses = array();
             $k = 0;
             $divisions = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
             if (!Empty($divisions)) {
@@ -142,10 +143,15 @@ class AttendanceController extends Controller
                     ->select('class_name as class_name')
                     ->first();
                 if ($className!=null) {
-                    $classes[$i]['id'] = $classId['class_id'];
-                    $classes[$i]['name'] = $className['class_name'];
+                    $classes[$classId['class_id']]['id'] = $classId['class_id'];
+                    $classes[$classId['class_id']]['name'] = $className['class_name'];
                     $i++;
                 }
+            }
+            $i=0;
+            foreach($classes as $value) {
+                $finalClasses[$i]=$value;
+                $i++;
             }
             $status = 200;
             $message = "Successfully Listed";
@@ -156,7 +162,7 @@ class AttendanceController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $classes
+            "data" => $finalClasses
         ];
         return response($response, $status);
     }
