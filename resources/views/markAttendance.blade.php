@@ -285,7 +285,7 @@
                          '<thead>'+
                                  '<tr>'+
                                     '<th>'+
-                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
+                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud"  checked/>'+
                                               '<label for="allCheckedStud" id="allCheckedStud-label">'+
                                                 '<img class="checkbox-img"/>'+
                                               '</label>'+
@@ -333,19 +333,20 @@
                 $('#allCheckedStud-label img').css('border','1px solid');
                 if ($('.allCheckedStud').prop('checked') == true)
                 {
+
                     $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
                     var i=0;
                     $('.checkedStud').each(function() { //loop through each checkbox
-                        if (this.checked == true)
-                        {
+                        if (this.checked == true){
                             $('#'+this.className+this.id).prop('src','assets/images/tick.png');
-                        } else {
+                        }else{
                             $('#'+this.className+this.id).prop('src','assets/images/cross.png');
                         }
                         i++;
                     });
                 }
                 $('.checkedStud').change(function(){
+
                     if(this.checked==true)
                     {
                         $('#'+this.className+this.id).prop('src','assets/images/tick.png');
@@ -354,8 +355,27 @@
                         $('#'+this.className+this.id).prop('src','assets/images/cross.png');
                     }
                 });
+                $('.allCheckedStud').change(function(){
+                    if ($(this).prop('checked') == true)
+                    {
+                        $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = true;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/tick.png');
+                        });
+                    } else {
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = false;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/cross.png');
+
+                        });
+                        $('#allCheckedStud-label img').prop('src','assets/images/cross.png');
+                    }
+                });
             }
+
         });
+
     }
 
     $('#batch-select').change(function(){
