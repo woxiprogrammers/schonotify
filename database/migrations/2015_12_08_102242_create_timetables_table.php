@@ -15,7 +15,7 @@ class CreateTimetablesTable extends Migration
         Schema::create('timetables', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('day_id');
-            $table->integer('division_subject_id');
+            $table->integer('division_subject_id')->unsinged();
             $table->boolean('is_break');
             $table->Time('start_time');
             $table->Time('end_time');

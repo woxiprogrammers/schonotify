@@ -312,6 +312,7 @@
     Route::get('get-attendance-divisions/{classId}','api\AttendanceController@getAttendanceDivisions');
     Route::post('mark-attendance','api\AttendanceController@markAttendance');
     Route::post('view-attendance-teacher','api\AttendanceController@viwAttendanceTeacher');
+    Route::post('view-attendance-parent','api\AttendanceController@viewAttendanceParent');
     Route::post('students-list','api\AttendanceController@getStudentsList');
 
     //Message Related

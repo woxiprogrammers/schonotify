@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Attendance;
+use App\AttendanceStatus;
 use App\Batch;
 use App\Classes;
 use App\Division;
@@ -219,12 +220,12 @@ class AttendanceController extends Controller
     {
         try{
             $data=$request->all();
-            $attendanceData=array();
-            $role=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            $attendanceData = array();
+            $role = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
             if (!Empty($role)) {
                 $studentData=$data['student_id'];
                 if (!Empty($studentData)) {
-                    $markedAttendance=Attendance::where('teacher_id','=',$data['teacher']['id'])
+                    $markedAttendance = Attendance::where('teacher_id','=',$data['teacher']['id'])
                         ->where('date','=',$data['date'])->get()->toArray();
                     if (!Empty($markedAttendance)) {
                         Attendance::where('date',$data['date'])->delete();
@@ -232,7 +233,6 @@ class AttendanceController extends Controller
                             $attendanceData['teacher_id']=$data['teacher']['id'];
                             $attendanceData['date']=$data['date'];
                             $attendanceData['student_id']=$value;
-                            $attendanceData['status']=1;
                             $attendanceData['created_at']= Carbon::now();
                             $attendanceData['updated_at']= Carbon::now();
                             Attendance::insert($attendanceData);
@@ -240,25 +240,29 @@ class AttendanceController extends Controller
                             $message = "Attendance Successfully updated";
                         }
                     } else {
-                        $status=404;
-                        $message="Attendance Successfully Marked";
+                        $status = 200;
+                        $message = "Attendance Successfully Marked";
                         foreach($studentData as $value) {
                             $attendanceData['teacher_id']=$data['teacher']['id'];
                             $attendanceData['date']=$data['date'];
                             $attendanceData['student_id']=$value;
-                            $attendanceData['status']=1;
                             $attendanceData['created_at']= Carbon::now();
                             $attendanceData['updated_at']= Carbon::now();
                             Attendance::insert($attendanceData);
                         }
+                        $attendanceStatus['division_id']=$role['id'];
+                        $attendanceStatus['date']=$data['date'];
+                        $attendanceStatus['status']=1;
+                        $attendanceStatus['created_at']= Carbon::now();
+                        $attendanceStatus['updated_at']= Carbon::now();
+                        AttendanceStatus::insert($attendanceStatus);
                     }
                 }
             } else {
                 $status=404;
                 $message="Sorry!! Only class teacher can mark attendance";
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
@@ -292,6 +296,107 @@ class AttendanceController extends Controller
                     ->where('division_id','=',$data['teacher']['division_id'])
                     ->select('id')
                     ->get();
+                $attendanceStatus = AttendanceStatus::where('date','=',$data['date'])
+                    ->where('division_id','=',$data['teacher']['division_id'])
+                    ->where('status','=',1)
+                    ->first();
+                if(!Empty($attendanceStatus)) {
+                    if (!Empty($studentList)) {
+                        $status = 200;
+                        $message = "Successfully listed";
+                        $markedAttendance = Attendance::where('teacher_id','=',$data['teacher']['id'])
+                            ->where('date','=',$data['date'])
+                            ->select('student_id')
+                            ->get()->toArray();
+                        $date = $data['date'];
+                        $leaveApplied = Leave::select('*')->whereRaw("('$date' between from_date and end_date)")
+                            ->wherein('student_id',$studentList)
+                            ->get()->toArray();
+                    }
+                    $i = 0;
+                    foreach ($studentList as $students) {
+                        $flag = 0;
+                        foreach ($markedAttendance as $absents) {
+                            if (in_array ($students['id'] , $absents)) {
+                                $finalList[$i]['id'] = $students['id'];
+                                $finalList[$i]['absent_status'] = 1;
+                                $flag = 1;
+                                $i++;
+                            }
+                        }
+                        if ($flag == 0) {
+                            $finalList[$i]['id'] = $students['id'];
+                            $finalList[$i]['absent_status'] = 0;
+                            $i++;
+                        }
+                    }
+                    if (Empty($markedAttendance)) {
+                        $status = 200;
+                        $message = "All students were present on this day";
+                    }
+                    $i=0;
+                    foreach ($studentList as $students) {
+                        $flag = 0;
+                        foreach ($leaveApplied as $absents) {
+                            if (in_array($students['id'],$absents)) {
+                                $finalList[$i]['id']=$students['id'];
+                                $finalList[$i]['leave_status']=1;
+                                $flag=1;
+                                $i++;
+                            }
+                        }
+                        if ($flag == 0) {
+                            $finalList[$i]['id']=$students['id'];
+                            $finalList[$i]['leave_status']=0;
+                            $i++;
+                        }
+                    }
+                } else {
+                    $status = 406;
+                    $message = "No attendance found for this instance";
+                }
+            }else {
+                $status = 404;
+                $message = "Sorry!! Only class teacher can edit attendance";
+            }
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "status" => $status,
+            "message" => $message,
+            "data" => $finalList
+        ];
+        return response($response, $status);
+    }
+
+    /*
+    * Function Name: viwAttendanceTeacher
+    * Param : Request $requests $date
+    * Return : $status $message
+    * Desc : A teacher related to division i.e. class teacher/subject teacher can view attendance of perticular day.
+    * Developed By : Amol Rokade
+    * Date : 15/2/2016
+    */
+
+    public function viwAttendanceTeacher(Requests\ViewRequest $request )
+    {
+        try{
+            $data = $request->all();
+            $finalList = array();
+            $markedAttendance = array();
+            $leaveApplied = array();
+            $studentRole = UserRoles::where('slug',['student'])->pluck('id');
+            $studentList = User::where('role_id','=',$studentRole)
+                    ->where('division_id','=',$data['teacher']['division_id'])
+                    ->select('id')
+                    ->get();
+            $attendanceStatus = AttendanceStatus::where('date','=',$data['date'])
+                ->where('division_id','=',$data['division_id'])
+                ->where('status','=',1)
+                ->first();
+            if (!Empty($attendanceStatus)) {
                 if (!Empty($studentList)) {
                     $status = 200;
                     $message = "Successfully listed";
@@ -303,6 +408,10 @@ class AttendanceController extends Controller
                     $leaveApplied = Leave::select('*')->whereRaw("('$date' between from_date and end_date)")
                         ->wherein('student_id',$studentList)
                         ->get()->toArray();
+                }
+                if(Empty($markedAttendance)) {
+                    $status = 200;
+                    $message = "All students were present on this day";
                 }
                 $i=0;
                 foreach($studentList as $students) {
@@ -339,8 +448,8 @@ class AttendanceController extends Controller
                     }
                 }
             } else {
-                $status=404;
-                $message="Sorry!! Only class teacher can edit attendance";
+                $status = 406;
+                $message = "No attendance found for this instance";
             }
         } catch (\Exception $e) {
             $status = 500;
@@ -352,125 +461,69 @@ class AttendanceController extends Controller
             "data" => $finalList
         ];
         return response($response, $status);
-
     }
 
     /*
-    * Function Name: viwAttendanceTeacher
-    * Param : Request $requests $date
+    * Function Name: viewAttendanceParent
+    * Param : Request $requests  $student_id $date
     * Return : $status $message
-    * Desc : A teacher related to division i.e. class teacher/subject teacher can view attendance of perticular day.
+    * Desc : A parent can view attendance of his/her child of perticular day requested by user.
     * Developed By : Amol Rokade
-    * Date : 15/2/2016
+    * Date : 16/2/2016
     */
 
-    public function viwAttendanceTeacher(Requests\AttendanceRequest $request )
+    public function viewAttendanceParent(Requests\viewAttendanceParent $request)
     {
-        try{
-            $data = $request->all();
-            $finalList = array();
-            $markedAttendance = array();
-            $leaveApplied = array();
-                $studentRole = UserRoles::where('slug',['student'])->pluck('id');
-                $studentList = User::where('role_id','=',$studentRole)
-                    ->where('division_id','=',$data['teacher']['division_id'])
-                    ->select('id')
-                    ->get();
-                if (!Empty($studentList)) {
-                    $status = 200;
-                    $message = "Successfully listed";
-                    $markedAttendance = Attendance::where('teacher_id','=',$data['teacher']['id'])
-                        ->where('date','=',$data['date'])
-                        ->select('student_id')
-                        ->get()->toArray();
-                    $date=$data['date'];
-                    $leaveApplied = Leave::select('*')->whereRaw("('$date' between from_date and end_date)")
-                        ->wherein('student_id',$studentList)
-                        ->get()->toArray();
-                }
-                $i=0;
-                foreach($studentList as $students) {
-                    $flag = 0;
-                    foreach ($markedAttendance as $absents) {
-                        if (in_array ($students['id'] , $absents)) {
-                            $finalList[$i]['id'] = $students['id'];
-                            $finalList[$i]['absent_status'] = 1;
-                            $flag = 1;
-                            $i++;
-                        }
-                    }
-                    if($flag == 0) {
-                        $finalList[$i]['id'] = $students['id'];
-                        $finalList[$i]['absent_status'] = 0;
-                        $i++;
-                    }
-                }
-                $i=0;
-                foreach($studentList as $students) {
-                    $flag=0;
-                    foreach($leaveApplied as $absents) {
-                        if(in_array($students['id'],$absents)) {
-                            $finalList[$i]['id']=$students['id'];
-                            $finalList[$i]['leave_status']=1;
-                            $flag=1;
-                            $i++;
-                        }
-                    }
-                    if($flag==0) {
-                        $finalList[$i]['id']=$students['id'];
-                        $finalList[$i]['leave_status']=0;
-                        $i++;
-                    }
-                }
-        } catch (\Exception $e) {
-            $status = 500;
-            $message = "Something went wrong";
-        }
-        $response = [
-            "status" => $status,
-            "message" => $message,
-            "data" => $finalList
-        ];
-        return response($response, $status);
-    }
-
-    public function viewAttendanceParent(Requests\ViewRequest $request)
-    {
-        try{
+       try{
             $data=$request->all();
-            $roleId=UserRoles::where('slug','=',['student'])->pluck('id');
-            $division=Division::where('id',$request->division_id)->first();
-            $studentArray = User::where('division_id',$division->id)
-                ->where('role_id','=',$roleId)->lists('id');
-            $absentList = Attendance::wherein('student_id',$studentArray)
-                ->where('date',$request->date)
-                ->
-                lists('student_id');
-            return $absentList;
-            $absentStudentInfo = User::wherein('id',$absentList)->select('id','first_name','last_name','roll_number')->get();
-            $leaveApplied= Leave::where('division_id',$division->id)->where('from date',$request->date)->lists('student_id');
-            $leaveAppliedStudentInfo = User::wherein('id',$leaveApplied)->select('id','first_name','last_name','roll_number')->get();
-            $leaveApproved= Leave::where('division_id',$division->id)
-                ->where('from date',$request->date)
-                ->where('status',1)
-                ->lists('student_id');
-            $leaveApprovedStudentInfo = User::wherein('id',$leaveApproved)->select('id','first_name','last_name','roll_number')->get();
-            if($absentStudentInfo->toArray() != null || $leaveAppliedStudentInfo->toArray() != null || $leaveApprovedStudentInfo->toArray() != null){
-                $data['absent-list'] =$absentStudentInfo->toArray();
-                $data['leaveApplied-list'] =$leaveAppliedStudentInfo->toArray();
-                $data['leaveApproved-list'] =$leaveApprovedStudentInfo->toArray();
-                $status = 200;
-                $message = "successfully";
-            }
-            else{
-                $status = 404;
-                $message = "list not found";
+           $attendanceData = array();
+            $studentDivisionId=User::where('id','=',$data['student_id'])->select('division_id')->first();
+            $attendanceStatus=AttendanceStatus::where('date','=',$data['date'])
+                ->where('division_id','=',$studentDivisionId['division_id'])
+                ->where('status','=',1)
+                ->first();
+            if(!Empty($attendanceStatus)) {
+                $studentAttendance = Attendance::where('student_id','=',$data['student_id'])
+                    ->where('date','=',$data['date'])
+                    ->get()->toArray();
+                $date=$data['date'];
+                $leaveApplied = Leave::select('*')->whereRaw("('$date' between from_date and end_date)")
+                    ->where('student_id','=',$data['student_id'])
+                    ->first();
+                if(!Empty($studentAttendance)) {
+                    if(!Empty($leaveApplied)) {
+                        $status = 200;
+                        $message = "Your child was absent for this day";
+                        $attendanceData['leaveStatus']=$leaveApplied['status'];
+                    } else {
+                        $status = 200;
+                        $message = "Your child was absent for this day";
+                        $attendanceData['leaveStatus']=null;
+                    }
+                } else {
+                    if(!Empty($leaveApplied)) {
+                        $status = 200;
+                        $message = "Your child was present for this day";
+                        $attendanceData['leaveStatus']=$leaveApplied['status'];
+                    } else {
+                        $status = 200;
+                        $message = "Your child was present for this day";
+                        $attendanceData['leaveStatus']=null;
+                    }
+                }
+            } else {
+                $status = 406;
+                $message = "No attendance found for this instance";
             }
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
-        $response = ["message" => $message,"data" =>$data];
+        $response = [
+            "status" => $status,
+            "message" => $message,
+            "data" => $attendanceData
+        ];
         return response($response, $status);
     }
 
