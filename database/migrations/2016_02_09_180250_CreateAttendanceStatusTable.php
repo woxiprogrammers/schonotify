@@ -14,9 +14,9 @@ class CreateAttendanceStatusTable extends Migration
     {
         Schema::create('attendance_status', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('division_id');
+            $table->integer('division_id');
             $table->date('date');
-            $table->text('status');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

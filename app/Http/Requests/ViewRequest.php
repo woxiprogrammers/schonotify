@@ -49,7 +49,6 @@ class ViewRequest extends Request
         return [
             'division_id'=>'required',
             'date'=>'required|date',
-
         ];
     }
 }

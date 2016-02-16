@@ -128,12 +128,14 @@
 
                 if($cnt>=1)
                 {
-                    $delQuery=SubjectClassDivision::where('subject_id',$relation['subject_id'])
+                    $query=SubjectClassDivision::where('subject_id',$relation['subject_id'])
                         ->where('division_id',$relation['division_id'])
-                        ->delete();
+                        ->update($relation);
+                }else{
+                    $query=SubjectClassDivision::insert($relation);
                 }
 
-                $query=SubjectClassDivision::insert($relation);
+
                 if($query)
                 {
                     Session::flash('message-success','Subject assigned to teacher successfully !');
