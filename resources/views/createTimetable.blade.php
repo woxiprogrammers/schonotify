@@ -249,7 +249,10 @@
 
                     var ampm= tm.substr(-2);
 
-                    var clk = tm.substr(0, 4);
+
+                   var time= $.trim(tm).length === 7 ? "0" + tm : tm;
+
+                    var clk = time.substr(0, 5);
 
                     var m  = parseInt(clk.match(/\d+$/)[0], 10);
                     var h  = parseInt(clk.match(/^\d+/)[0], 10);

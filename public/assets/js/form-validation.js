@@ -1484,7 +1484,7 @@ var FormValidator = function () {
                                     '<td class="col-sm-3">'+
                                         '<div class="form-group">' +
                                             '<div class=" bootstrap-timepicker timepicker">'+
-                                                '<input id="startTime'+(i+1)+'" type="text" class="form-control input-small timepicker1" name="startTime[]">'+
+                                                '<input id="startTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="startTime[]">'+
                                                 '<span id="startTimeError'+(i+1)+'" class="has-error" style="display:none; color:#a94442;"></span>'+
                                             '</div>'+
                                         '</div>'+
@@ -1492,7 +1492,7 @@ var FormValidator = function () {
                                     '<td class="col-sm-3">' +
                                         '<div class="form-group">' +
                                             '<div class=" bootstrap-timepicker timepicker">'+
-                                                '<input id="endTime'+(i+1)+'" type="text" class="form-control input-small timepicker1" name="endTime[]">'+
+                                                '<input id="endTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="endTime[]">'+
                                             '</div>'+
                                         '</div>' +
                                     '</td>';
