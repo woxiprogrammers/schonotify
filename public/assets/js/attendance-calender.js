@@ -67,7 +67,7 @@ var Calendar = function() {"use strict";
                 $(".form-full-event #event-name").val("");
                 var date=new Date(start);
                 var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-                $(".form-full-event #today").html(days[date.getDay()]+' '+date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear());
+                $(".form-full-event #today").html(days[date.getDay()]+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear());
                 $(".event-categories[value='job']").prop('checked', true);
                 $('#delBtn').hide();
                 var selectedDate=new Date(start).getTime();

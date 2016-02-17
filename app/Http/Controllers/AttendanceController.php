@@ -180,26 +180,32 @@
             $saveData = array();
             $userIds=array();
             $dataList=array();
-            $userIds = $request->student;
-            $division ='';
+            $division = array();
+
             $date=date("Y-m-d",strtotime($request->datePiker));
-            if($userIds != null) {
-            $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
+            if(isset($request->student)) {
+                $userIds = $request->student;
+                $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
+
             } else {
                 $userData = User::where('division_id',$request['division-select'])->select('id','division_id')->get();
             }
-                $i=0;
+            $i=0;
             foreach ($userData as $data) {
                 $dataList[] = $data['id'];
-                $division = $data['division_id'];
                 $i++;
             }
-            $attendanceCheck=Attendance::whereIn('student_id',$dataList)->where('date',$date)->get();
-                if ($attendanceCheck != null) {
-                    Attendance::whereIn('student_id',$request['student'])->where('date',$date)->delete();
-                }
-                    $i=0;
-                    foreach ($userData as $row) {
+            $attendanceCheck = Attendance::whereIn('student_id',$dataList)->where('date',$date)->get();
+            if (!$attendanceCheck->isEmpty()) {
+                 if($userIds != null) {
+                   Attendance::whereIn('student_id',$request['student'])->where('date',$date)->delete();
+                 } else {
+                   Attendance::whereIn('division_id',$request['division-select'])->where('date',$date)->delete();
+                 }
+
+            }
+                        $i=0;
+                       foreach ($userData as $row) {
                         $saveData['teacher_id'] = $user->id;
                         $saveData['date'] =date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
                         $saveData['student_id'] = $row['id'];
@@ -207,8 +213,8 @@
                         $saveData['division_id'] = $row['division_id'];
                         $saveData['created_at'] = Carbon::now();
                         $saveData['updated_at'] = Carbon::now();
-                        $i++;
                         Attendance::insert($saveData);
+                        $i++;
                     }
             $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
             $attendanceStatus['division_id'] = $request['division-select'];
