@@ -304,11 +304,11 @@ class AttendanceController extends Controller
             if (!Empty($divisionId)) {
                 $studentRole = UserRoles::where('slug',['student'])->pluck('id');
                 $studentList = User::where('role_id','=',$studentRole)
-                    ->where('division_id','=',$data['teacher']['division_id'])
+                    ->where('division_id','=', $divisionId['id'])
                     ->select('id')
                     ->get();
                 $attendanceStatus = AttendanceStatus::where('date','=',$data['date'])
-                    ->where('division_id','=',$data['teacher']['division_id'])
+                    ->where('division_id','=',$divisionId['id'])
                     ->where('status','=',1)
                     ->first();
                 if(!Empty($attendanceStatus)) {
@@ -400,7 +400,7 @@ class AttendanceController extends Controller
             $leaveApplied = array();
             $studentRole = UserRoles::where('slug',['student'])->pluck('id');
             $studentList = User::where('role_id','=',$studentRole)
-                    ->where('division_id','=',$data['teacher']['division_id'])
+                    ->where('division_id','=',$data['division_id'])
                     ->select('id')
                     ->get();
             $attendanceStatus = AttendanceStatus::where('date','=',$data['date'])
