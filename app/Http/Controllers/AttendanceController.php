@@ -187,7 +187,7 @@
                 $i++;
             }
             $attendanceCheck = Attendance::where('division_id',$request['division-select'])->where('date',$date)->get()->toArray();
-            if (!Empty($attendanceCheck)) {
+            if ($attendanceCheck != null) {
                  Attendance::where('division_id',$request['division-select'])->where('date',$date)->delete();
             }
                         $i=0;
