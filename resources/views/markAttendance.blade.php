@@ -220,13 +220,25 @@
     {
         var postData = $(this).serializeArray();
         var formURL = $(this).attr("action");
+
         $.ajax(
             {
                 url : formURL,
                 type: "POST",
                 data : postData,
-                success:function(data, textStatus, jqXHR)
+                success:function(res)
                 {
+                    if(res=="1")
+                    {
+                        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+                            'Attendance successfully saved .'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                    '</button>';
+
+                        $('#message-error-div').html(str);
+
+                    }
                     //data: return data from server
                 },
                 error: function(jqXHR, textStatus, errorThrown)
@@ -267,6 +279,7 @@
 
       $('.datepicker').datepicker()
         .on('changeDate', function(ev){
+              $('#message-error-div').html('');
             var date=$('#datePiker').val();
             var division=$('#division-select').val();
             dateChange(date,division);
