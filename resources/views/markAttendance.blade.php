@@ -220,10 +220,8 @@
     {
         var postData = $(this).serializeArray();
         var formURL = $(this).attr("action");
-
-        $.ajax(
-            {
-                url : formURL,
+git         $.ajax(
+            {   url : formURL,
                 type: "POST",
                 data : postData,
                 success:function(res)
@@ -239,14 +237,9 @@
                         $('#message-error-div').html(str);
 
                     }
-                    //data: return data from server
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    //if fails
                 }
             });
-        e.preventDefault(); //STOP default action
+        e.preventDefault();
     });
      $('.allCheckedStud').change(function(){
         if ($(this).prop('checked') == true)
