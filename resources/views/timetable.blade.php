@@ -501,12 +501,14 @@ function showTimetable(val)
 
                 $(".timetable-div-table").each(function () {
 
+
                     var tds = '<tr>';
 
                     tds+='<td class="center">'+(j+1)+'</td>';
 
                     if ( arr[0].length > j )
                     {
+
                         if( arr[0][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" ><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[0][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-info">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
@@ -525,7 +527,7 @@ function showTimetable(val)
                     {
                         if ( arr[1][j]["is_break"] == 0 )
                         {
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><h5 class="center"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                         }else{
                             tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                         }
