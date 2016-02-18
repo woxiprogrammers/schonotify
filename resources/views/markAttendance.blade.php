@@ -220,22 +220,29 @@
     {
         var postData = $(this).serializeArray();
         var formURL = $(this).attr("action");
-git         $.ajax(
+        $.ajax(
             {   url : formURL,
                 type: "POST",
                 data : postData,
                 success:function(res)
                 {
-                    if(res=="1")
+                    if (res == "1" )
                     {
+                        $('#message-error-div').html('');
                         var str='<div class="alert alert-success alert-dismissible" role="alert">'+
                             'Attendance successfully saved .'+
                     '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
                         '<span area-hidden="true">&times;</span>'+
                     '</button>';
-
                         $('#message-error-div').html(str);
-
+                    } else {
+                        $('#message-error-div').html('');
+                        var str='<div class="alert alert-error alert-dismissible" role="alert">'+
+                            'Something went wrong .'+
+                            '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                            '<span area-hidden="true">&times;</span>'+
+                            '</button>';
+                        $('#message-error-div').html(str);
                     }
                 }
             });
