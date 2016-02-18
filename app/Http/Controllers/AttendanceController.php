@@ -181,7 +181,6 @@
             $userIds=array();
             $dataList=array();
             $division = array();
-
             $date=date("Y-m-d",strtotime($request->datePiker));
             if(isset($request->student)) {
                 $userIds = $request->student;
@@ -196,11 +195,13 @@
                 $i++;
             }
             $attendanceCheck = Attendance::whereIn('student_id',$dataList)->where('date',$date)->get();
+
             if (!$attendanceCheck->isEmpty()) {
                  if($userIds != null) {
-                   Attendance::whereIn('student_id',$request['student'])->where('date',$date)->delete();
+                 Attendance::where('division_id',$request['division-select'])->where('date',$date)->delete();
+
                  } else {
-                   Attendance::whereIn('division_id',$request['division-select'])->where('date',$date)->delete();
+                 Attendance::where('division_id',$request['division-select'])->where('date',$date)->delete();
                  }
 
             }
