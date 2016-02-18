@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use App\User;
 
-class ViewRequest extends Request
+class viewAttendanceParent extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,11 +30,10 @@ class ViewRequest extends Request
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
-
         }
-        if(in_array('View_attendance',$resultArr) ){
-            return true;}
-        else{
+        if (in_array('View_attendance',$resultArr) ){
+            return true;
+        } else {
             return false;
         }
     }
@@ -47,7 +46,7 @@ class ViewRequest extends Request
     public function rules()
     {
         return [
-            'division_id'=>'required',
+            'student_id'=>'required',
             'date'=>'required|date',
         ];
     }

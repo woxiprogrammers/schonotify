@@ -13,7 +13,7 @@ class AddDivIdToTimetableTable extends Migration
     public function up()
     {
         Schema::table('timetables', function (Blueprint $table) {
-            $table->integer('div_id')->unsigned()->after('period_number');
+            $table->integer('div_id')->unsigned()->after('division_subject_id');
         });
     }
 

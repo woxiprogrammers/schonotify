@@ -27,7 +27,6 @@
             $this->middleware('db');
             $this->middleware('auth');
         }
-
         /**
          * Function Name: markAttendance
          * @param CreateAttendanceRequest $request
@@ -38,13 +37,13 @@
         */
         public function markAttendance(CreateAttendanceRequest $request)
         {
-
             if ($request->authorize() === true)
             {
                 $user=Auth::user();
                 $dropDownData=array();
                 if ($request->ajax()) {
                     $data = Input::all();
+
                     $division = $data['division'];
                     $date=date('Y-m-d',strtotime($data['value']));
                 } else {
@@ -85,7 +84,6 @@
                                 }
                                 $i++;
                             }
-
                             if ($request->ajax()) {
                                 return $dropDownData;
                             } else {
@@ -101,6 +99,7 @@
                 elseif ($user->role_id == 1) {
                     if ($request->ajax()) {
                         $data = Input::all();
+
                         $division=$data['division'];
                         $batchClassDivisionData=Division::where('divisions.id',$division)->
                             join('classes','divisions.class_id','=','classes.id')
@@ -113,11 +112,9 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
                             ->first();
-
                     }
                     if ($batchClassDivisionData != null) {
                                 $studentData=User::where('division_id',$batchClassDivisionData->division_id)->where('is_active',1)->select('id','first_name','last_name','roll_number')->get();
-
                                 $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
                                 $dropDownData['division_name'] = $batchClassDivisionData->division_name;
                                 $dropDownData['class_id'] = $batchClassDivisionData->class_id;
@@ -148,14 +145,10 @@
                                         $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
                                     }
                                     $i++;
-
-
                                 }
-
                     if ($request->ajax()) {
                          return $dropDownData;
                     } else {
-
                         return view('markAttendance')->with(compact('dropDownData'));
                     }
                  }
@@ -180,26 +173,25 @@
             $saveData = array();
             $userIds=array();
             $dataList=array();
-            $userIds = $request->student;
-            $division ='';
+            $division = array();
             $date=date("Y-m-d",strtotime($request->datePiker));
-            if($userIds != null) {
-            $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
+            if(isset($request->student)) {
+                $userIds = $request->student;
+                $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
             } else {
                 $userData = User::where('division_id',$request['division-select'])->select('id','division_id')->get();
             }
-                $i=0;
+            $i=0;
             foreach ($userData as $data) {
                 $dataList[] = $data['id'];
-                $division = $data['division_id'];
                 $i++;
             }
-            $attendanceCheck=Attendance::whereIn('student_id',$dataList)->where('date',$date)->get();
-                if ($attendanceCheck != null) {
-                    Attendance::whereIn('student_id',$request['student'])->where('date',$date)->delete();
-                }
-                    $i=0;
-                    foreach ($userData as $row) {
+            $attendanceCheck = Attendance::where('division_id',$request['division-select'])->where('date',$date)->get()->toArray();
+            if (!Empty($attendanceCheck)) {
+                 Attendance::where('division_id',$request['division-select'])->where('date',$date)->delete();
+            }
+                        $i=0;
+                       foreach ($userData as $row) {
                         $saveData['teacher_id'] = $user->id;
                         $saveData['date'] =date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
                         $saveData['student_id'] = $row['id'];
@@ -207,18 +199,21 @@
                         $saveData['division_id'] = $row['division_id'];
                         $saveData['created_at'] = Carbon::now();
                         $saveData['updated_at'] = Carbon::now();
+                           Attendance::insert($saveData);
                         $i++;
-                        Attendance::insert($saveData);
                     }
             $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
             $attendanceStatus['division_id'] = $request['division-select'];
             $attendanceStatus['status'] = 1;
             $attendanceStatus['created_at'] = Carbon::now();
             $attendanceStatus['updated_at'] = Carbon::now();
-            AttendanceStatus::insert($attendanceStatus);
-            Session::flash('message-success','attendance saved successfully');
-            return Redirect::to('/mark-attendance');
-
+            $result=AttendanceStatus::insert($attendanceStatus);
+            if($result==true)
+            {
+                return "1";
+            }else{
+                return "0";
+            }
         }
         /**
          * Function Name: getAllClasses

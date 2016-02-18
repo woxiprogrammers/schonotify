@@ -221,20 +221,32 @@
         var postData = $(this).serializeArray();
         var formURL = $(this).attr("action");
         $.ajax(
-            {
-                url : formURL,
+            {   url : formURL,
                 type: "POST",
                 data : postData,
-                success:function(data, textStatus, jqXHR)
+                success:function(res)
                 {
-                    //data: return data from server
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    //if fails
+                    if (res == "1" )
+                    {
+                        $('#message-error-div').html('');
+                        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+                            'Attendance successfully saved .'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                    '</button>';
+                        $('#message-error-div').html(str);
+                    } else {
+                        $('#message-error-div').html('');
+                        var str='<div class="alert alert-error alert-dismissible" role="alert">'+
+                            'Something went wrong .'+
+                            '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                            '<span area-hidden="true">&times;</span>'+
+                            '</button>';
+                        $('#message-error-div').html(str);
+                    }
                 }
             });
-        e.preventDefault(); //STOP default action
+        e.preventDefault();
     });
      $('.allCheckedStud').change(function(){
         if ($(this).prop('checked') == true)
@@ -267,6 +279,7 @@
 
       $('.datepicker').datepicker()
         .on('changeDate', function(ev){
+              $('#message-error-div').html('');
             var date=$('#datePiker').val();
             var division=$('#division-select').val();
             dateChange(date,division);
@@ -285,7 +298,7 @@
                          '<thead>'+
                                  '<tr>'+
                                     '<th>'+
-                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
+                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud"  checked/>'+
                                               '<label for="allCheckedStud" id="allCheckedStud-label">'+
                                                 '<img class="checkbox-img"/>'+
                                               '</label>'+
@@ -333,19 +346,20 @@
                 $('#allCheckedStud-label img').css('border','1px solid');
                 if ($('.allCheckedStud').prop('checked') == true)
                 {
+
                     $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
                     var i=0;
                     $('.checkedStud').each(function() { //loop through each checkbox
-                        if (this.checked == true)
-                        {
+                        if (this.checked == true){
                             $('#'+this.className+this.id).prop('src','assets/images/tick.png');
-                        } else {
+                        }else{
                             $('#'+this.className+this.id).prop('src','assets/images/cross.png');
                         }
                         i++;
                     });
                 }
                 $('.checkedStud').change(function(){
+
                     if(this.checked==true)
                     {
                         $('#'+this.className+this.id).prop('src','assets/images/tick.png');
@@ -354,8 +368,27 @@
                         $('#'+this.className+this.id).prop('src','assets/images/cross.png');
                     }
                 });
+                $('.allCheckedStud').change(function(){
+                    if ($(this).prop('checked') == true)
+                    {
+                        $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = true;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/tick.png');
+                        });
+                    } else {
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = false;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/cross.png');
+
+                        });
+                        $('#allCheckedStud-label img').prop('src','assets/images/cross.png');
+                    }
+                });
             }
+
         });
+
     }
 
     $('#batch-select').change(function(){
