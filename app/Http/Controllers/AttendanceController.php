@@ -27,7 +27,6 @@
             $this->middleware('db');
             $this->middleware('auth');
         }
-
         /**
          * Function Name: markAttendance
          * @param CreateAttendanceRequest $request
@@ -187,16 +186,10 @@
                 $dataList[] = $data['id'];
                 $i++;
             }
-            $attendanceCheck = Attendance::where('division_id',$request['division-select'])->where('date',$date)->get();
-            if (!$attendanceCheck->isEmpty()) {
-                 if($userIds != null) {
+            $attendanceCheck = Attendance::where('division_id',$request['division-select'])->where('date',$date)->get()->toArray();
+            if (!Empty($attendanceCheck)) {
                  Attendance::where('division_id',$request['division-select'])->where('date',$date)->delete();
-
-                 } else {
-                 Attendance::where('division_id',$request['division-select'])->where('date',$date)->delete();
-                 }
             }
-
                         $i=0;
                        foreach ($userData as $row) {
                         $saveData['teacher_id'] = $user->id;
