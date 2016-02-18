@@ -221,20 +221,32 @@
         var postData = $(this).serializeArray();
         var formURL = $(this).attr("action");
         $.ajax(
-            {
-                url : formURL,
+            {   url : formURL,
                 type: "POST",
                 data : postData,
-                success:function(data, textStatus, jqXHR)
+                success:function(res)
                 {
-                    //data: return data from server
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    //if fails
+                    if (res == "1" )
+                    {
+                        $('#message-error-div').html('');
+                        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+                            'Attendance successfully saved .'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                    '</button>';
+                        $('#message-error-div').html(str);
+                    } else {
+                        $('#message-error-div').html('');
+                        var str='<div class="alert alert-error alert-dismissible" role="alert">'+
+                            'Something went wrong .'+
+                            '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                            '<span area-hidden="true">&times;</span>'+
+                            '</button>';
+                        $('#message-error-div').html(str);
+                    }
                 }
             });
-        e.preventDefault(); //STOP default action
+        e.preventDefault();
     });
      $('.allCheckedStud').change(function(){
         if ($(this).prop('checked') == true)
@@ -267,6 +279,7 @@
 
       $('.datepicker').datepicker()
         .on('changeDate', function(ev){
+              $('#message-error-div').html('');
             var date=$('#datePiker').val();
             var division=$('#division-select').val();
             dateChange(date,division);
