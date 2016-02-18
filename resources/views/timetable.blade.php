@@ -70,8 +70,7 @@
                     </div>
 
                     <div class="col-sm-8 center" id="timetable-create-btn">
-
-                        <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
+                        <center><img src="assets/images/loader1.gif" /></center>
 
                     </div>
                     <div class="row" id="timetable-div">
@@ -475,12 +474,12 @@ function showTimetable(val)
 
         });
 
+        $('#timetable-create-btn').show();
+
         if(arr[0]!=="unavailable")
         {
 
             $('#timetable-div').show();
-
-            $('#timetable-create-btn').hide();
 
             var maxlength=0;
 
@@ -629,14 +628,20 @@ function showTimetable(val)
 
                     if ( $('tbody', this).length > 0 ) {
                         $('tbody', this).append(tds);
+
+                        $('#timetable-create-btn').hide();
                     } else {
                         $(this).append(tds);
+
+                        $('#timetable-create-btn').hide();
                     }
                 });
 
             }
         }else{
             $('#timetable-create-btn').show();
+            $('#timetable-create-btn').html('<h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
+
             $('#timetable-div').hide();
         }
     });

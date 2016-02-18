@@ -184,7 +184,6 @@
 
         $('#btnSubmitStructure').click(function(){
 
-
             var num=1;
 
             var flag=1;
