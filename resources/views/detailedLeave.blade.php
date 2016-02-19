@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="panel-body">
                                         <div class="panel-scroll height-280 ps-container ps-active-y">
-                                            <h4>Description:</h4>
+                                            <h4>Reason :</h4>
                                             <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 100px; margin-bottom: 8px;" readonly="yes" >{!! $leaveArray['reason'] !!}</textarea>
                                             <br>
                                             <br>
