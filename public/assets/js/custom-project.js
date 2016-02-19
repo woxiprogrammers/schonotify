@@ -456,8 +456,8 @@ function checkLeaveAccess()
         }
     });
 }
-LeaveCount();
-function LeaveCount()
+leaveCount();
+function leaveCount()
 {
     var route="leave-count";
     $.get(route,function(res){

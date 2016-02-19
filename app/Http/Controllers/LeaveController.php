@@ -22,7 +22,14 @@ class LeaveController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
-
+    /**
+     * Function Name: leaveListing
+     * @param:
+     * @return leave list
+     * Desc:
+     * Date: 18/2/2016
+     * author manoj chaudahri
+     */
     public function leaveListing(Requests\WebRequests\LeaveRequest $request)
     {
         if ($request->authorize() === true)
@@ -133,10 +140,19 @@ class LeaveController extends Controller
             return Redirect::to('/');
         }
     }
+    /**
+     * Function Name: detailedLeave
+     * @param: leave_id
+     * @return detail leave
+     * Desc:
+     * Date: 18/2/2016
+     * author manoj chaudahri
+     */
     public function detailedLeave(Requests\WebRequests\LeaveRequest $request,$leaveId)
     {
         if($request->authorize()===true)
-        {   $leaveStatus = Leave::where('id',$leaveId)->first();
+        {
+            $leaveStatus = Leave::where('id',$leaveId)->first();
             $studentData = User::where('users.id',$leaveStatus->student_id)
                               ->where('users.is_active',1)
                               ->join('divisions','users.division_id','=','divisions.id')
@@ -144,27 +160,27 @@ class LeaveController extends Controller
                               ->join('batches','classes.batch_id','=','batches.id')
                               ->select('users.id as user_id','first_name','last_name','roll_number','avatar','parent_id','divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
                               ->first();
-            $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
-            $leaveArray['student_id'] = $studentData['user_id'];
-            $leaveArray['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
-            $leaveArray['student'] = $studentData['first_name'] ." ".$studentData['last_name'];
-            $leaveArray['roll_number'] = $studentData['roll_number'];
-            $leaveArray['avatar'] = $parentData['avatar'];
-            $leaveArray['title'] = $leaveStatus['title'];
-            $leaveArray['leave_status'] = $leaveStatus['status'];
-            $leaveArray['leave_id'] = $leaveStatus['id'];
-            $leaveArray['batch_id'] = $studentData['batch_id'];
-            $leaveArray['batch_name'] = $studentData['batch_name'];
-            $leaveArray['class_id'] = $studentData['class_id'];
-            $leaveArray['class_name'] = $studentData['class_name'];
-            $leaveArray['division_id'] = $studentData['division_id'];
-            $leaveArray['division_name'] = $studentData['division_name'];
-            $leaveArray['leave_type'] = $leaveStatus['leave_type'];
-            $leaveArray['reason'] = $leaveStatus['reason'];
-            $leaveArray['from_date'] = $leaveStatus['from_date'];
-            $leaveArray['end_date'] = $leaveStatus['end_date'];
-            $leaveArray['created_date'] = $leaveStatus['created_at'];
-            return view('detailedLeave')->with(compact('leaveArray'));
+                $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
+                $leaveArray['student_id'] = $studentData['user_id'];
+                $leaveArray['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                $leaveArray['student'] = $studentData['first_name'] ." ".$studentData['last_name'];
+                $leaveArray['roll_number'] = $studentData['roll_number'];
+                $leaveArray['avatar'] = $parentData['avatar'];
+                $leaveArray['title'] = $leaveStatus['title'];
+                $leaveArray['leave_status'] = $leaveStatus['status'];
+                $leaveArray['leave_id'] = $leaveStatus['id'];
+                $leaveArray['batch_id'] = $studentData['batch_id'];
+                $leaveArray['batch_name'] = $studentData['batch_name'];
+                $leaveArray['class_id'] = $studentData['class_id'];
+                $leaveArray['class_name'] = $studentData['class_name'];
+                $leaveArray['division_id'] = $studentData['division_id'];
+                $leaveArray['division_name'] = $studentData['division_name'];
+                $leaveArray['leave_type'] = $leaveStatus['leave_type'];
+                $leaveArray['reason'] = $leaveStatus['reason'];
+                $leaveArray['from_date'] = $leaveStatus['from_date'];
+                $leaveArray['end_date'] = $leaveStatus['end_date'];
+                $leaveArray['created_date'] = $leaveStatus['created_at'];
+                return view('detailedLeave')->with(compact('leaveArray'));
         }else{
             return Redirect::to('/');
         }

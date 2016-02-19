@@ -283,10 +283,9 @@
         var division = $('#division-select').val();
         var route='leave-status-listing/'+ leave_status +'/'+ division;
         $.get(route,function(res) {
-            console.log(res);
             if(res.length == 0)
             {
-                $('#leave-status').html("no record found");
+                $('#tmln').html("no record found");
             } else {
                 var str = '';
                 for(var i=0; i<res.length; i++)
