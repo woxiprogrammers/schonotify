@@ -119,7 +119,7 @@
                                     <th>Division</th>
                                     <th>Subject</th>
                                     <th>Teacher Name (Username)</th>
-                                    <th>Action</th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -130,7 +130,7 @@
                                         <td>{!! $association->division !!}</td>
                                         <td>{!! $association->subject !!}</td>
                                         <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
-                                        <td><a onclick="deleteConfirm({!! $association->id !!});">Delete</a></td>
+                                        
                                     </tr>
 
                                 @endforeach
