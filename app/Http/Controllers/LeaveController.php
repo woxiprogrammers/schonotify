@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Input;
 
 class LeaveController extends Controller
 {
@@ -37,7 +38,15 @@ class LeaveController extends Controller
                         ->select('classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                         ->first();
                     if ($batchClassData != null) {
-                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->get();
+                        if ($request->ajax()) {
+                            $data = Input::all();
+                            $status = $data['leave_status'];
+                            $pageCount = $data['pageCount'];
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$status)->skip($pageCount*4)->take(4)->get();
+                        } else {
+                            $pageCount = 0;
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->skip($pageCount*4)->take(4)->get();
+                        }
                             $i = 0;
                             foreach ($leaveStatus as $row) {
                                 $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
@@ -56,74 +65,111 @@ class LeaveController extends Controller
                                 $i++;
                             }
                                 $leaveArray = array_unique($leaveArray,SORT_REGULAR);
-                                /*$dropDownData['division_id'] = $userCheck->id;
-                                $dropDownData['division_name'] = $userCheck->division_name;
-                                $dropDownData['class_id'] = $batchClassData->class_id;
-                                $dropDownData['class_name'] = $batchClassData->class_name;
-                                $dropDownData['batch_id'] = $batchClassData->batch_id;
-                                $dropDownData['batch_name'] = $batchClassData->batch_name;*/
-                           return view('leaveListing')->with(compact('leaveArray'));
+                        if ($request->ajax()) {
+                            return $leaveArray;
+                        } else {
+                            return view('leaveListing')->with(compact('leaveArray'));
+                        }
                     } else {
                         Session::flash('message-success','no record found');
                     }
-
                 } else {
                     Session::flash('message-success','no record found');
                 }
             } elseif ($user->role_id == 1) {
-
-                $batchClassDivisionData = Division::
+                    $batchClassDivisionData = Division::
                     join('classes','divisions.class_id','=','classes.id')
                     ->join('batches','classes.batch_id','=','batches.id')
                     ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
                     ->first();
-                    if ($batchClassDivisionData != null) {
-                         $leaveStatus = Leave::where('division_id',$batchClassDivisionData['division_id'])->where('status',2)->get();
-                        $i = 0;
-                        foreach ($leaveStatus as $row) {
-                            $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
-                            $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
-                            $leaveArray[$i]['student_id'] = $row['student_id'];
-                            $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
-                            $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
-                            $leaveArray[$i]['avatar'] = $parentData['avatar'];
-                            $leaveArray[$i]['title'] = $row['title'];
-                            $leaveArray[$i]['leave_id'] = $row['id'];
-                            $leaveArray[$i]['leave_type'] = $row['leave_type'];
-                            $leaveArray[$i]['reason'] = $row['reason'];
-                            $leaveArray[$i]['from_date'] = $row['from_date'];
-                            $leaveArray[$i]['end_date'] = $row['end_date'];
-                            $leaveArray[$i]['created_date'] = $row['created_at'];
-                            $i++;
+                        if ($batchClassDivisionData != null) {
+                            if ($request->ajax()) {
+                                $data = Input::all();
+                                $pageCount = $data['pageCount'];
+                                $status = $data['leave_status'];
+                                $division_id = $data['division'];
+                                $leaveStatus = Leave::where('division_id',$division_id)->where('status',$status)->skip($pageCount*4)->take(4)->get();
+                            } else {
+                            $pageCount = 0;
+                            $leaveStatus = Leave::where('division_id',$batchClassDivisionData['division_id'])->where('status',2)->skip($pageCount*4)->take(4)->get();
+                            }
+                            $i = 0;
+                                foreach ($leaveStatus as $row) {
+                                    $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
+                                    $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
+                                    $leaveArray[$i]['student_id'] = $row['student_id'];
+                                    $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                                    $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
+                                    $leaveArray[$i]['avatar'] = $parentData['avatar'];
+                                    $leaveArray[$i]['title'] = $row['title'];
+                                    $leaveArray[$i]['leave_id'] = $row['id'];
+                                    $leaveArray[$i]['leave_type'] = $row['leave_type'];
+                                    $leaveArray[$i]['reason'] = $row['reason'];
+                                    $leaveArray[$i]['from_date'] = $row['from_date'];
+                                    $leaveArray[$i]['end_date'] = $row['end_date'];
+                                    $leaveArray[$i]['created_date'] = $row['created_at'];
+                                    $i++;
+                                }
+                                $leaveArray = array_unique($leaveArray,SORT_REGULAR);
+                                $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
+                                $dropDownData['division_name'] = $batchClassDivisionData->division_name;
+                                $dropDownData['class_id'] = $batchClassDivisionData->class_id;
+                                $dropDownData['class_name'] = $batchClassDivisionData->class_name;
+                                $batch=Batch::get();
+                                $i=0;
+                            foreach ($batch as $row) {
+                                $dropDownData['batch'][$i]['batch_id'] = $row['id'];
+                                $dropDownData['batch'][$i]['batch_name'] = $row['name'];
+                                $i++;
+                            }
+                            if ($request->ajax()) {
+                                return $leaveArray;
+
+                            } else {
+                                return view('leaveListing')->with(compact('leaveArray','dropDownData'));
+                            }
+                        } else {
+                            return view('leaveListing')->with(compact('leaveArray','dropDownData'));
                         }
-                            $leaveArray = array_unique($leaveArray,SORT_REGULAR);
-                            $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
-                            $dropDownData['division_name'] = $batchClassDivisionData->division_name;
-                            $dropDownData['class_id'] = $batchClassDivisionData->class_id;
-                            $dropDownData['class_name'] = $batchClassDivisionData->class_name;
-                            $batch=Batch::get();
-                            $i=0;
-                        foreach ($batch as $row) {
-                            $dropDownData['batch'][$i]['batch_id'] = $row['id'];
-                            $dropDownData['batch'][$i]['batch_name'] = $row['name'];
-                            $i++;
-                        }
-                        return view('leaveListing')->with(compact('leaveArray','dropDownData'));
-                    } else {
-                        Session::flash('message-success','no record found');
-            }
             }
         } else {
             return Redirect::to('/');
         }
 
     }
-
-    public function detailedLeave(Requests\WebRequests\LeaveRequest $request)
+    public function detailedLeave(Requests\WebRequests\LeaveRequest $request,$leaveId)
     {
         if($request->authorize()===true)
         {
-            return view('detailedLeave');
+            $leaveStatus = Leave::where('id',$leaveId)->first();
+            $studentData = User::where('users.id',$leaveStatus->student_id)
+                              ->where('users.is_active',1)
+                              ->join('divisions','users.division_id','=','divisions.id')
+                              ->join('classes','divisions.class_id','=','classes.id')
+                              ->join('batches','classes.batch_id','=','batches.id')
+                              ->select('users.id as user_id','first_name','last_name','roll_number','avatar','parent_id','divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
+                              ->first();
+            $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
+            $leaveArray['student_id'] = $studentData['user_id'];
+            $leaveArray['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+            $leaveArray['student'] = $studentData['first_name'] ." ".$studentData['last_name'];
+            $leaveArray['roll_number'] = $studentData['roll_number'];
+            $leaveArray['avatar'] = $parentData['avatar'];
+            $leaveArray['title'] = $leaveStatus['title'];
+            $leaveArray['leave_status'] = $leaveStatus['status'];
+            $leaveArray['leave_id'] = $leaveStatus['id'];
+            $leaveArray['batch_id'] = $studentData['batch_id'];
+            $leaveArray['batch_name'] = $studentData['batch_name'];
+            $leaveArray['class_id'] = $studentData['class_id'];
+            $leaveArray['class_name'] = $studentData['class_name'];
+            $leaveArray['division_id'] = $studentData['division_id'];
+            $leaveArray['division_name'] = $studentData['division_name'];
+            $leaveArray['leave_type'] = $leaveStatus['leave_type'];
+            $leaveArray['reason'] = $leaveStatus['reason'];
+            $leaveArray['from_date'] = $leaveStatus['from_date'];
+            $leaveArray['end_date'] = $leaveStatus['end_date'];
+            $leaveArray['created_date'] = $leaveStatus['created_at'];
+            return view('detailedLeave')->with(compact('leaveArray'));
         }else{
             return Redirect::to('/');
         }
@@ -150,5 +196,105 @@ class LeaveController extends Controller
         } else {
             return 1;
         }
+    }
+
+    /**
+     * Function Name: leaveStatusListing
+     * @param:
+     * @return int
+     * Desc:
+     * Date: 16/2/2016
+     * author manoj chaudahri
+     */
+    public function leaveStatusListing(Requests\WebRequests\LeaveRequest $request,$leaveStatus,$divisionId)
+    {
+        if ($request->authorize() === true)
+        {
+            $user = Auth::user();
+            $dropDownData = array();
+            $leaveArray = array();
+            if ($user->role_id == 2) {
+                $userCheck = Division::where('class_teacher_id',$user->id)->first();
+                if ($userCheck != null) {
+                    $batchClassData=Classes::where('classes.id',$userCheck->class_id)
+                        ->join('batches','classes.batch_id','=','batches.id')
+                        ->select('classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
+                        ->first();
+                    if ($batchClassData != null) {
+                        $pageCount = 0;
+                        $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->get();
+                        $i = 0;
+                        foreach ($leaveStatus as $row) {
+                            $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
+                            $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
+                            $leaveArray[$i]['student_id'] = $row['student_id'];
+                            $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                            $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
+                            $leaveArray[$i]['avatar'] = $parentData['avatar'];
+                            $leaveArray[$i]['title'] = $row['title'];
+                            $leaveArray[$i]['leave_id'] = $row['id'];
+                            $leaveArray[$i]['leave_type'] = $row['leave_type'];
+                            $leaveArray[$i]['reason'] = $row['reason'];
+                            $leaveArray[$i]['from_date'] = $row['from_date'];
+                            $leaveArray[$i]['end_date'] = $row['end_date'];
+                            $leaveArray[$i]['created_date'] = $row['created_at'];
+                            $i++;
+                        }
+                        $leaveArray = array_unique($leaveArray,SORT_REGULAR);
+                        return $leaveArray;
+
+                    } else {
+                        Session::flash('message-success','no record found');
+                    }
+                } else {
+                    Session::flash('message-success','no record found');
+                }
+            } elseif ($user->role_id == 1) {
+                $batchClassDivisionData = Division::
+                    join('classes','divisions.class_id','=','classes.id')
+                    ->join('batches','classes.batch_id','=','batches.id')
+                    ->select('divisions.id as division_id','divisions.division_name','classes.id as class_id','classes.class_name','batches.id as batch_id','batches.name as batch_name')
+                    ->first();
+                if ($batchClassDivisionData != null) {
+                    $pageCount = 0;
+                    $leaveStatus = Leave::where('division_id',$divisionId)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->get();
+                    $i = 0;
+                    foreach ($leaveStatus as $row) {
+                        $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
+                        $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
+                        $leaveArray[$i]['student_id'] = $row['student_id'];
+                        $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                        $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
+                        $leaveArray[$i]['avatar'] = $parentData['avatar'];
+                        $leaveArray[$i]['title'] = $row['title'];
+                        $leaveArray[$i]['leave_id'] = $row['id'];
+                        $leaveArray[$i]['leave_type'] = $row['leave_type'];
+                        $leaveArray[$i]['reason'] = $row['reason'];
+                        $leaveArray[$i]['from_date'] = $row['from_date'];
+                        $leaveArray[$i]['end_date'] = $row['end_date'];
+                        $leaveArray[$i]['created_date'] = $row['created_at'];
+                        $i++;
+                    }
+                    $leaveArray = array_unique($leaveArray,SORT_REGULAR);
+                    $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
+                    $dropDownData['division_name'] = $batchClassDivisionData->division_name;
+                    $dropDownData['class_id'] = $batchClassDivisionData->class_id;
+                    $dropDownData['class_name'] = $batchClassDivisionData->class_name;
+                    $batch=Batch::get();
+                    $i=0;
+                    foreach ($batch as $row) {
+                        $dropDownData['batch'][$i]['batch_id'] = $row['id'];
+                        $dropDownData['batch'][$i]['batch_name'] = $row['name'];
+                        $i++;
+                    }
+                    return $leaveArray;
+                } else {
+                    return $leaveArray;
+                }
+            }
+        } else {
+            return Redirect::to('/');
+        }
+
     }
 }

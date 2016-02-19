@@ -37,22 +37,22 @@
 
                                         <div class="timeline_title">
                                             <i class="fa fa-pencil-square-o fa-2x pull-left fa-border"></i>
-                                            <h4 class="panel-title no-margin text-primary" style="padding: 14px;">Applying leave for two days</h4>
+                                            <h4 class="panel-title no-margin text-primary" style="padding: 14px;">{!! $leaveArray['title'] !!}</h4>
                                             <h5 style=" background-color: rgb(0, 122, 255);color: #fff;padding: 10px;">
                                                 <strong>Student Name:</strong>
-                                                    <i> Aadarsh Varma</i>
-                                                <small class="label label-sm label-white">Roll No. : 202</small>
+                                                    <i> {!! $leaveArray['student'] !!}</i>
+                                                <small class="label label-sm label-white">Roll No. : {!! $leaveArray['roll_number'] !!}</small>
 
                                                     <p class="pull-right">
-                                                        <strong>Batch :</strong> <i>Morning</i>
-                                                        <strong>Class :</strong> <i>Fourth </i>
-                                                        <strong>Div : </strong> <i> A</i>
+                                                        <strong>Batch :</strong> <i>{!! $leaveArray['batch_name'] !!}</i>
+                                                        <strong>Class :</strong> <i>{!! $leaveArray['class_name'] !!} </i>
+                                                        <strong>Div : </strong> <i> {!! $leaveArray['division_name'] !!}</i>
                                                     </p>
                                             </h5>
                                         </div>
                                         <div class="panel-tools">
-                                            <i class="fa fa-clock-o"></i> Wednesday 12 Nov, 2015 12:00 PM
-                                            <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="ti-reload"></i></a>
+                                            <i class="fa fa-clock-o"></i>{!! $leaveArray['created_date'] !!}
+
                                         </div>
                                     </div>
                                     <div class="panel-body">
@@ -60,29 +60,31 @@
 
 
                                             <h4>Description:</h4>
-                                            Due to my official work we are decided to move my native for 2 days. so, I am applying this leave for my son Sumit studying in forth standard A division.
+                                            <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;" readonly="yes" >{!! $leaveArray['reason'] !!}</textarea>
 
                                             <br>
                                             <br>
 
                                             <address>
-                                                <span class="text-bold">Leave From:</span> 12 Nov, 2015 12:00 PM
+                                                <span class="text-bold">Leave From:</span>{!! $leaveArray['from_date'] !!}
                                                 <br>
-                                                <span class="text-bold">Leave To:</span> 14 Nov, 2015 6:00 PM
+                                                <span class="text-bold">Leave To:</span> {!! $leaveArray['end_date'] !!}
                                                 <br>
-                                                <span class="text-bold">Leave Type:</span> Full Day Leave
+                                                <span class="text-bold">Leave Type:</span> {!! $leaveArray['leave_type'] !!}
                                             </address>
 
                                             <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
                                     </div>
                                     <div class="panel-footer col-sm-12">
 
-                                        Applicant :<h4>Mr. Naveen Sharma </h4>
+                                        Applicant :<h4>{!! $leaveArray['parent'] !!} </h4>
 
                                         <div class="col-md-12">
+                                            @if($leaveArray['leave_status'] == 1)
                                             <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
                                                 <i class="fa fa-cloud-upload"></i> Approve
                                             </button>
+                                            @endif
                                         </div>
                                         <div class="col-md-12" id="btnStatus">
 

@@ -131,7 +131,9 @@
 
     Route::get('leaveListing','LeaveController@leaveListing');
 
-    Route::get('detailedLeave','LeaveController@detailedLeave');
+    Route::get('leave-status-listing/{leaveStatus}/{division_id}','LeaveController@leaveStatusListing');
+
+    Route::get('detailedLeave/{leave_id}','LeaveController@detailedLeave');
 
     Route::get('homework-listing','HomeworkController@homeworkListing');
 
