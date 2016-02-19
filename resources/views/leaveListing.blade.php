@@ -32,6 +32,7 @@
 <div class="panel-body">
 
     @if(Auth::User()->role_id != 2)
+    @if($dropDownData != null)
     <div class="form-group col-sm-4">
         <label for="form-field-select-2">
             Select Batch
@@ -59,14 +60,45 @@
             <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
         </select>
     </div>
+    @else
+    <div class="row">
+        <div class="form-group col-sm-4">
+            <label for="form-field-select-2">
+                Select Batch
+            </label>
+
+            <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
+
+                <option value="" >no record found</option>
+
+            </select>
+        </div>
+        <div class="form-group col-sm-4"  id="class-select-div">
+            <label for="form-field-select-2">
+                Select Class
+            </label>
+            <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+                <option value="">no record found</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-4" id="division-select-div">
+            <label for="form-field-select-2">
+                Select Division
+            </label>
+            <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
+                <option value="">no record found</option>
+            </select>
+        </div>
+    </div>
+    @endif
     @endif
     <div class="form-group col-sm-4" id="class-select-div">
         <label for="form-field-select-2">
             Leave Status
         </label>
 
-        <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
-            <option value="2">Approved</option>
+        <select class="form-control" name="leave-status" id="leave-status" style="-webkit-appearance: menulist;">
+            <option value="2" selected>Approved</option>
             <option value="1">Pending</option>
         </select>
 
@@ -74,7 +106,11 @@
 </div>
     <div class="panel-body">
         <ul class="timeline-xs" id="tmln">
-           @foreach($leaveArray as $row)
+            @if ($leaveArray ==null)
+            <div class="col-sm-8" style="margin-top: 4px;">No Record Found</div>
+            @else
+            @foreach($leaveArray as $row)
+
             <li class="timeline-item success">
                 <div class="leaveSection">
                     <div class="text-muted text-small">
@@ -83,14 +119,18 @@
                     </div>
                     <div class="col-sm-8" style="margin-top: 4px;">
 
-                        <h5><small class="label label-sm label-info">{!! $row['parent'] !!}</small>  {!! $row['title'] !!}</h5>
-                        <p>{!! $row['reason'] !!}...  <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}">More</a></p>
+                        <h5><small class="label label-sm label-info">{!! $row['parent'] !!}</small>  {!! $row['title'] !!}
+                            ...  <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}">More</a>
+                        </h5>
+                        <p>{!! $row['reason'] !!}</p>
                         <p>Leave From:<i>{!! $row['from_date'] !!}</i><br>Leave To:<i> {!! $row['end_date'] !!}</i></p>
                     </div>
                 </div>
                     <img src="/uploads/profile-picture/{!! $row['avatar'] !!}" class="img img-circle tmln-img" alt="Peter">
             </li>
+
           @endforeach
+            @endif
         </ul>
         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
     </div>
@@ -136,93 +176,72 @@
         getMsgCount();
         Main.init();
         FormValidator.init();
+
+
     });
 
 
     var loaded = false;
+    var id = 1;
     $(window).scroll(function()
     {
         if($(window).scrollTop() == $(document).height() - $(window).height())
-        {
-            $('div#loadmoreajaxloader').show();
+        {   $('div#loadmoreajaxloader').show();
+            var leave_status = $('#leave-status').val();
+            var division = $('#division-select').val();
+            $.ajax({ url: "leaveListing",
+                type: "get",
+                data: { pageCount:id,leave_status:leave_status,division:division},
+                success: function(data){
+                    var res= $.map(data,function(value){
+                        return value;
 
-
-            if(loaded){
-                $('div#loadmoreajaxloader').html('<center>No more leaves to show.</center>');
-                return;
-            }else{
-
-                var str='<li class="timeline-item">'+
-                            '<div class="leaveSection">'+
-                                '<div class="text-muted text-small">'+
-                                "Thus, 10 Jun"+
+                    });
+                    id++;
+                    if(res.length > 0){
+                        var str = '';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str += '<li class="timeline-item success">'+
+                                '<div class="leaveSection">'+
+                                '<div class="text-muted text-small">'
+                                +res[i]['created_date']['date'] +
                                 '</div>'+
                                 '<div class="col-sm-8" style="margin-top: 4px;">'+
-
-                    '<h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>'+
-
-                        "<p>Leave Application for next 2 days..."+
-                    '<a class="text-info" href="">More</a></p>'+
-                    '<p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To: <i> 4 Nov, 2015</i></p></div>'+
-                '<div class="col-sm-2">'+
-                    '<small class="label label-sm label-inverse pull-right">Approved</small>'+
-                '</div>'+
-                '</div>'+
-
-                '<img src="assets/images/avatar-6.jpg" class="img img-circle tmln-img" alt="Peter">'+
-
-                    '</li>'+'<li class="timeline-item">'+
-                    '<div class="leaveSection">'+
-                    '<div class="text-muted text-small">'+
-                    "Thus, 10 Jun"+
-                    '</div>'+
-                    '<div class="col-sm-8" style="margin-top: 4px;">'+
-
-                    '<h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>'+
-
-                    "<p>Leave Application for next 2 days..."+
-                    '<a class="text-info" href="">More</a></p>'+
-                    '<p>Leave From:<i> 2 Nov, 2015 </i><br>Leave To:<i> 4 Nov, 2015</i></p></div>'+
-                    '<div class="col-sm-2">'+
-                    '<small class="label label-sm label-inverse pull-right">Approved</small>'+
-                    '</div>'+
-                    '</div>'+
-
-                    '<img src="assets/images/avatar-6.jpg" class="img img-circle tmln-img" alt="Peter">'+
-
-                    '</li>'+
-                    '<li class="timeline-item">'+
-                    '<div class="leaveSection">'+
-                    '<div class="text-muted text-small">'+
-                    "Thus, 10 Jun"+
-                    '</div>'+
-                    '<div class="col-sm-8" style="margin-top: 4px;">'+
-
-                    '<h5><small class="label label-sm label-info">Mr. Vishnu</small> Applying leave for two days</h5>'+
-
-                    "Leave Application for next 2 days..."+
-                    '<a class="text-info" href="">More</a>'+
-                    '</div>'+
-                    '<div class="col-sm-2">'+
-                    '<small class="label label-sm label-inverse pull-right">Approved</small>'+
-                    '</div>'+
-                    '</div>'+
-
-                    '<img src="assets/images/avatar-6.jpg" class="img img-circle tmln-img" alt="Peter">'+
-
-                    '</li>';
-
+                                '<h5><small class="label label-sm label-info">'+
+                                res[i]['parent'] +
+                                '</small>'
+                                +res[i]['title']+
+                                '......'+
+                                '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'">'+
+                                'More'+
+                                '</a>'+
+                                '</h5>'+
+                                '<p>'
+                                + res[i]['reason']+
+                                '</p>'+
+                                '<p>Leave From:'+
+                                '<i>'+
+                                res[i]['from_date']+
+                                '</i><br>'+
+                                'Leave To:'+
+                                '<i>'+
+                                res[i]['end_date']+
+                                '</i></p>'+
+                                '</div>'+
+                                '</div>'+
+                                '<img src="/uploads/profile-picture/'+res[i]['avatar']+'" class="img img-circle tmln-img" alt="Peter">'+
+                                '</li>';
+                        }
                         $("#tmln").append(str);
                         $('div#loadmoreajaxloader').hide();
 
-                }
-
-
-            loaded=true;
-
+                    }else{
+                        $('div#loadmoreajaxloader').html('<center>No more leaves to show.</center>');
+                        return;
+                    }
+            }});
         }
-
-
     });
     $('#batch-select').change(function(){
         var id=this.value;
@@ -259,10 +278,58 @@
             }
         });
     });
+    $('#leave-status').change(function(){
+        var leave_status = $('#leave-status').val();
+        var division = $('#division-select').val();
+        var route='leave-status-listing/'+ leave_status +'/'+ division;
+        $.get(route,function(res) {
+            if(res.length == 0)
+            {
+                $('#tmln').html("no record found");
+            } else {
+                var str = '';
+                for(var i=0; i<res.length; i++)
+                {
+                    str += '<li class="timeline-item success">'+
+                        '<div class="leaveSection">'+
+                        '<div class="text-muted text-small">'
+                        +res[i]['created_date']['date'] +
+                        '</div>'+
+                        '<div class="col-sm-8" style="margin-top: 4px;">'+
+                        '<h5><small class="label label-sm label-info">'+
+                        res[i]['parent'] +
+                        '</small>'
+                        +res[i]['title']+
+                        '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'">'+
+                        '.......'+
+                        'More'+
+                        '</a>'+
+                        '</h5>'+
+                        '<p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+
+                         res[i]['reason']+
+                        '</p>'+
+                        '<p>Leave From:'+
+                        '<i>'+
+                        res[i]['from_date']+
+                        '</i><br>'+
+                        'Leave To:'+
+                        '<i>'+
+                        res[i]['end_date']+
+                        '</i></p>'+
+                        '</div>'+
+                        '</div>'+
+                        '<img src="/uploads/profile-picture/'+res[i]['avatar']+'" class="img img-circle tmln-img" alt="Peter">'+
+                        '</li>';
+                }
+                $('#tmln').html(str);
+            }
+        });
+
+    });
     $('#batch-select').change(function(){
         $('#class-select').val('');
         $('#division-select').val('');
-    })
+    });
 
 
 </script>
