@@ -175,7 +175,7 @@
             $dataList=array();
             $division = array();
             $date=date("Y-m-d",strtotime($request->datePiker));
-            if(isset($request->student)) {
+            if($request->student) {
                 $userIds = $request->student;
                 $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
             } else {
