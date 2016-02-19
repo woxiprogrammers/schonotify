@@ -145,7 +145,7 @@ class LeaveController extends Controller
      * Function Name: detailedLeave
      * @param: leave_id
      * @return detail leave
-     * Desc:
+     * Desc:it will return deatial info. of perticular leave
      * Date: 18/2/2016
      * author manoj chaudahri
      */
@@ -190,7 +190,7 @@ class LeaveController extends Controller
      * Function Name: leaveAccess
      * @param:
      * @return int
-     * Desc:
+     * Desc:it will check wheather leave access available for perticular user
      * Date: 10/2/2016
      * author manoj chaudahri
      */
@@ -212,7 +212,7 @@ class LeaveController extends Controller
      * Function Name: leaveCount
      * @param:
      * @return int
-     * Desc:
+     * Desc:it will return count of all pending leaves for perticular divsion of class teacher
      * Date: 18/2/2016
      * author manoj chaudahri
      */
@@ -243,7 +243,7 @@ class LeaveController extends Controller
         $leaveUpdate=array();
         $leaveUpdate['status'] = 2;
         $leaveStatus= Leave::where('id',$id)->update($leaveUpdate);
-        if($leaveStatus ==1)
+        if ($leaveStatus ==1)
         {
             Session::flash('message-success','Leave published successfully');
             return Redirect::to('/leaveListing');
