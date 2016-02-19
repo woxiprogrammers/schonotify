@@ -372,6 +372,15 @@ class TimetableController extends Controller
 
     }
 
+    /*
+ +   * Function Name: checkSubjectTeacher
+ +   * Param:
+ +   * Return: it will returns if the user is subject teacher or not.
+ +   * Desc:  if teacher is subject teacher then he cant get link to create timetable.
+ +   * Developed By: Suraj Bande
+ +   * Date: 18/2/2016
+ +   */
+
     public function checkSubjectTeacher()
     {
         $user=Auth::user();
