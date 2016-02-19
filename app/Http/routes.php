@@ -261,6 +261,9 @@
 
     Route::get('loadmore-homework/{id}','HomeworkController@loadMore');
 
+    Route::get('/check-subject-teacher','TimetableController@checkSubjectTeacher');
+
+
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
     Route::get('get-parents',array('uses' => 'UsersController@getParents'));
