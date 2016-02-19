@@ -44,13 +44,13 @@
                                             </h5>
                                         </div>
                                         <div class="panel-tools">
-                                            <i class="fa fa-clock-o"></i>{!! $leaveArray['created_date'] !!}
+                                            <i class="fa fa-clock-o"></i>{!! date('m-d-Y',strtotime($leaveArray['created_date'])) !!}
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="panel-scroll height-280 ps-container ps-active-y">
                                             <h4>Description:</h4>
-                                            <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;" readonly="yes" >{!! $leaveArray['reason'] !!}</textarea>
+                                            <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 100px; margin-bottom: 8px;" readonly="yes" >{!! $leaveArray['reason'] !!}</textarea>
                                             <br>
                                             <br>
                                             <address>

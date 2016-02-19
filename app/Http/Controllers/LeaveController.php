@@ -6,6 +6,7 @@ use App\Batch;
 use App\Classes;
 use App\Division;
 use App\Leave;
+use App\LeaveType;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -155,6 +156,7 @@ class LeaveController extends Controller
         {
             $leaveStatus = Leave::where('id',$leaveId)->first();
             $approvePerson = User::where('id',$leaveStatus['approved_by	'])->first();
+            $leavetype = LeaveType::where('id',$leaveStatus['leave_type'])->first();
             $studentData = User::where('users.id',$leaveStatus->student_id)
                               ->where('users.is_active',1)
                               ->join('divisions','users.division_id','=','divisions.id')
@@ -178,7 +180,7 @@ class LeaveController extends Controller
                 $leaveArray['class_name'] = $studentData['class_name'];
                 $leaveArray['division_id'] = $studentData['division_id'];
                 $leaveArray['division_name'] = $studentData['division_name'];
-                $leaveArray['leave_type'] = $leaveStatus['leave_type'];
+                $leaveArray['leave_type'] = $leavetype['name'];
                 $leaveArray['reason'] = $leaveStatus['reason'];
                 $leaveArray['from_date'] = $leaveStatus['from_date'];
                 $leaveArray['end_date'] = $leaveStatus['end_date'];
