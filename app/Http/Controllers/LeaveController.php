@@ -33,7 +33,8 @@ class LeaveController extends Controller
     public function leaveListing(Requests\WebRequests\LeaveRequest $request)
     {
         if ($request->authorize() === true)
-        {   $user = Auth::user();
+        {
+            $user = Auth::user();
             $dropDownData = array();
             $leaveArray = array();
             if ($user->role_id == 2) {
