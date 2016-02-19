@@ -26,8 +26,7 @@ class LeaveController extends Controller
     public function leaveListing(Requests\WebRequests\LeaveRequest $request)
     {
         if ($request->authorize() === true)
-        {
-            $user = Auth::user();
+        {   $user = Auth::user();
             $dropDownData = array();
             $leaveArray = array();
             if ($user->role_id == 2) {
@@ -42,19 +41,18 @@ class LeaveController extends Controller
                             $data = Input::all();
                             $status = $data['leave_status'];
                             $pageCount = $data['pageCount'];
-                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$status)->skip($pageCount*4)->take(4)->get();
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$status)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
                         } else {
                             $pageCount = 0;
-                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->skip($pageCount*4)->take(4)->get();
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
                         }
                             $i = 0;
                             foreach ($leaveStatus as $row) {
                                 $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
-                                $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
                                 $leaveArray[$i]['student_id'] = $row['student_id'];
-                                $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                                $leaveArray[$i]['parent'] = $studentData['first_name'] ." ".$studentData['last_name'];
                                 $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
-                                $leaveArray[$i]['avatar'] = $parentData['avatar'];
+                                $leaveArray[$i]['avatar'] = $studentData['avatar'];
                                 $leaveArray[$i]['title'] = $row['title'];
                                 $leaveArray[$i]['leave_id'] = $row['id'];
                                 $leaveArray[$i]['leave_type'] = $row['leave_type'];
@@ -88,19 +86,18 @@ class LeaveController extends Controller
                                 $pageCount = $data['pageCount'];
                                 $status = $data['leave_status'];
                                 $division_id = $data['division'];
-                                $leaveStatus = Leave::where('division_id',$division_id)->where('status',$status)->skip($pageCount*4)->take(4)->get();
+                                $leaveStatus = Leave::where('division_id',$division_id)->where('status',$status)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
                             } else {
                             $pageCount = 0;
-                            $leaveStatus = Leave::where('division_id',$batchClassDivisionData['division_id'])->where('status',2)->skip($pageCount*4)->take(4)->get();
+                            $leaveStatus = Leave::where('division_id',$batchClassDivisionData['division_id'])->where('status',2)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
                             }
                             $i = 0;
                                 foreach ($leaveStatus as $row) {
                                     $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
-                                    $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
                                     $leaveArray[$i]['student_id'] = $row['student_id'];
-                                    $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                                    $leaveArray[$i]['parent'] = $studentData['first_name'] ." ".$studentData['last_name'];
                                     $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
-                                    $leaveArray[$i]['avatar'] = $parentData['avatar'];
+                                    $leaveArray[$i]['avatar'] = $studentData['avatar'];
                                     $leaveArray[$i]['title'] = $row['title'];
                                     $leaveArray[$i]['leave_id'] = $row['id'];
                                     $leaveArray[$i]['leave_type'] = $row['leave_type'];
@@ -135,13 +132,11 @@ class LeaveController extends Controller
         } else {
             return Redirect::to('/');
         }
-
     }
     public function detailedLeave(Requests\WebRequests\LeaveRequest $request,$leaveId)
     {
         if($request->authorize()===true)
-        {
-            $leaveStatus = Leave::where('id',$leaveId)->first();
+        {   $leaveStatus = Leave::where('id',$leaveId)->first();
             $studentData = User::where('users.id',$leaveStatus->student_id)
                               ->where('users.is_active',1)
                               ->join('divisions','users.division_id','=','divisions.id')
@@ -174,7 +169,6 @@ class LeaveController extends Controller
             return Redirect::to('/');
         }
     }
-
     /**
      * Function Name: leaveAccess
      * @param:
@@ -197,7 +191,48 @@ class LeaveController extends Controller
             return 1;
         }
     }
+    /**
+     * Function Name: leaveCount
+     * @param:
+     * @return int
+     * Desc:
+     * Date: 18/2/2016
+     * author manoj chaudahri
+     */
+    public function leaveCount()
+    {
+        $user=Auth::user();
+        if ($user->role_id == 2) {
+            $divisionChceck = Division::where('class_teacher_id',$user->id)->first();
+            if ($divisionChceck != null) {
+                $leaveCount = Leave::where('division_id',$divisionChceck->id)->where('status',1)->count();
+                return $leaveCount;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+    /**
+     * Function Name: publishLeave
+     * @param: leave_id
+     * @return int
+     * Desc:it will publish leave on basis of leave id
+     * Date: 18/2/2016
+     * author manoj chaudahri
+     */
+    public function publishLeave($id) {
+        $leaveUpdate=array();
+        $leaveUpdate['status'] = 2;
+        $leaveStatus= Leave::where('id',$id)->update($leaveUpdate);
+        if($leaveStatus ==1)
+        {
+            Session::flash('message-success','Leave published successfully');
+            return Redirect::to('/leaveListing');
+        }
 
+    }
     /**
      * Function Name: leaveStatusListing
      * @param:
@@ -222,15 +257,14 @@ class LeaveController extends Controller
                         ->first();
                     if ($batchClassData != null) {
                         $pageCount = 0;
-                        $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->get();
+                        $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
                         $i = 0;
                         foreach ($leaveStatus as $row) {
                             $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
-                            $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
                             $leaveArray[$i]['student_id'] = $row['student_id'];
-                            $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                            $leaveArray[$i]['parent'] = $studentData['first_name'] ." ".$studentData['last_name'];
                             $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
-                            $leaveArray[$i]['avatar'] = $parentData['avatar'];
+                            $leaveArray[$i]['avatar'] = $studentData['avatar'];
                             $leaveArray[$i]['title'] = $row['title'];
                             $leaveArray[$i]['leave_id'] = $row['id'];
                             $leaveArray[$i]['leave_type'] = $row['leave_type'];
@@ -242,7 +276,6 @@ class LeaveController extends Controller
                         }
                         $leaveArray = array_unique($leaveArray,SORT_REGULAR);
                         return $leaveArray;
-
                     } else {
                         Session::flash('message-success','no record found');
                     }
@@ -257,15 +290,14 @@ class LeaveController extends Controller
                     ->first();
                 if ($batchClassDivisionData != null) {
                     $pageCount = 0;
-                    $leaveStatus = Leave::where('division_id',$divisionId)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->get();
+                    $leaveStatus = Leave::where('division_id',$divisionId)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
                     $i = 0;
                     foreach ($leaveStatus as $row) {
                         $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
-                        $parentData = User::where('id',$studentData['parent_id'])->select('id','first_name','last_name','roll_number','avatar')->first();
                         $leaveArray[$i]['student_id'] = $row['student_id'];
-                        $leaveArray[$i]['parent'] = $parentData['first_name'] ." ".$parentData['last_name'];
+                        $leaveArray[$i]['parent'] = $studentData['first_name'] ." ".$studentData['last_name'];
                         $leaveArray[$i]['roll_number'] = $studentData['roll_number'];
-                        $leaveArray[$i]['avatar'] = $parentData['avatar'];
+                        $leaveArray[$i]['avatar'] = $studentData['avatar'];
                         $leaveArray[$i]['title'] = $row['title'];
                         $leaveArray[$i]['leave_id'] = $row['id'];
                         $leaveArray[$i]['leave_type'] = $row['leave_type'];

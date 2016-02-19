@@ -106,7 +106,11 @@
 </div>
     <div class="panel-body">
         <ul class="timeline-xs" id="tmln">
-           @foreach($leaveArray as $row)
+            @if ($leaveArray ==null)
+            <div class="col-sm-8" style="margin-top: 4px;">No Record Found</div>
+            @else
+            @foreach($leaveArray as $row)
+
             <li class="timeline-item success">
                 <div class="leaveSection">
                     <div class="text-muted text-small">
@@ -124,7 +128,9 @@
                 </div>
                     <img src="/uploads/profile-picture/{!! $row['avatar'] !!}" class="img img-circle tmln-img" alt="Peter">
             </li>
+
           @endforeach
+            @endif
         </ul>
         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
     </div>

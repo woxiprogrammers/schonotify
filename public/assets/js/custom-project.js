@@ -456,3 +456,16 @@ function checkLeaveAccess()
         }
     });
 }
+LeaveCount();
+function LeaveCount()
+{
+    var route="leave-count";
+    $.get(route,function(res){
+        if ( res == 0 ) {
+            $('#leaveCount').val('');
+        } else {
+           var str ='<small>' +res+ '</small>';
+            $('#leaveCount').html(str);
+        }
+    });
+}

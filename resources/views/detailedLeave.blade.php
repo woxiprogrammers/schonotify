@@ -21,20 +21,14 @@
                     <div class="col-sm-7">
                         <h1 class="mainTitle">Leave</h1>
                     </div>
-
-
                 </div>
             </section>
             <!-- end: DASHBOARD TITLE -->
             <div class="container-fluid container-fullw bg-white">
-
                 <div class="row">
-
                         <div class="col-sm-12" id="detail">
-
                                 <div class="panel panel-white load1" id="panel6">
                                     <div class="panel-heading">
-
                                         <div class="timeline_title">
                                             <i class="fa fa-pencil-square-o fa-2x pull-left fa-border"></i>
                                             <h4 class="panel-title no-margin text-primary" style="padding: 14px;">{!! $leaveArray['title'] !!}</h4>
@@ -42,7 +36,6 @@
                                                 <strong>Student Name:</strong>
                                                     <i> {!! $leaveArray['student'] !!}</i>
                                                 <small class="label label-sm label-white">Roll No. : {!! $leaveArray['roll_number'] !!}</small>
-
                                                     <p class="pull-right">
                                                         <strong>Batch :</strong> <i>{!! $leaveArray['batch_name'] !!}</i>
                                                         <strong>Class :</strong> <i>{!! $leaveArray['class_name'] !!} </i>
@@ -52,19 +45,14 @@
                                         </div>
                                         <div class="panel-tools">
                                             <i class="fa fa-clock-o"></i>{!! $leaveArray['created_date'] !!}
-
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="panel-scroll height-280 ps-container ps-active-y">
-
-
                                             <h4>Description:</h4>
                                             <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;" readonly="yes" >{!! $leaveArray['reason'] !!}</textarea>
-
                                             <br>
                                             <br>
-
                                             <address>
                                                 <span class="text-bold">Leave From:</span>{!! $leaveArray['from_date'] !!}
                                                 <br>
@@ -72,44 +60,31 @@
                                                 <br>
                                                 <span class="text-bold">Leave Type:</span> {!! $leaveArray['leave_type'] !!}
                                             </address>
-
                                             <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
                                     </div>
                                     <div class="panel-footer col-sm-12">
-
                                         Applicant :<h4>{!! $leaveArray['parent'] !!} </h4>
-
                                         <div class="col-md-12">
                                             @if($leaveArray['leave_status'] == 1)
-                                            <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                            <a href="/publish-leave/{!! $leaveArray['leave_id'] !!}" class="btn btn-primary btn-wide pull-right" type="submit" id="btnPublish" name="btnPublish" >
                                                 <i class="fa fa-cloud-upload"></i> Approve
-                                            </button>
+                                            </a>
                                             @endif
                                         </div>
                                         <div class="col-md-12" id="btnStatus">
-
                                         </div>
-
                                     </div>
                                 </div>
-
                         </div>
-
                 </div>
             </div>
-
-
-
         </div>
     </div>
-
 </div>
 
 @include('footer')
 
 @include('rightSidebar')
-
-
 </div>
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -135,18 +110,10 @@
         $('#btnStatus').html('<h5> Status :<i class="fa fa-warning"></i> <i>Pending</i></h5>');
 
     });
-
-
     $('#btnPublish').click(function(){
         $('#btnPublish').hide();
         $('#btnStatus').html('<h5> Status :<i class="fa fa-flag"></i> <i>Approved</i></h5>');
     });
-
-
-
 </script>
-
-
 <!-- start: MAIN JAVASCRIPTS -->
-
 @stop

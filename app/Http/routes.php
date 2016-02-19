@@ -131,6 +131,8 @@
 
     Route::get('leave-status-listing/{leaveStatus}/{division_id}','LeaveController@leaveStatusListing');
 
+    Route::get('publish-leave/{id}','LeaveController@publishLeave');
+
     Route::get('detailedLeave/{leave_id}','LeaveController@detailedLeave');
 
     Route::get('homework-listing','HomeworkController@homeworkListing');
@@ -188,6 +190,8 @@
     Route::get('mark-attendance-check','AttendanceController@markAttendanceAccess');
 
     Route::get('leave-check','LeaveController@leaveAccess');
+
+    Route::get('leave-count','LeaveController@leaveCount');
 
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
