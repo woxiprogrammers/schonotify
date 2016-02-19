@@ -251,6 +251,8 @@
 
     Route::get('/check-subject','SubjectController@checkSubject');
 
+    Route::post('/teacher-check','TimetableController@teacherCheck');
+
     Route::get('loadmore-homework/{id}','HomeworkController@loadMore');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
