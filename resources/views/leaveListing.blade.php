@@ -120,7 +120,7 @@
                     <div class="col-sm-8" style="margin-top: 4px;">
 
                         <h5><small class="label label-sm label-info">{!! $row['parent'] !!}</small>  {!! $row['title'] !!}
-                        <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}" style="color: blue">...More</a>
+                        <a href="detailedLeave/{!! $row['leave_id'] !!}" >...More</a>
                         </h5>
                         <p>{!! $row['reason'] !!}</p>
                         <p>Leave From:<i>{!! date('d M,Y',strtotime($row['from_date'])) !!}</i><br>Leave To:<i> {!! date('d M,Y',strtotime($row['end_date'])) !!}</i></p>
@@ -215,7 +215,7 @@
                                 '</small>'
                                 +res[i]['title']+
                                 '......'+
-                                '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'" style="color: blue">'+
+                                '<a href="detailedLeave/'+ res[i]['leave_id'] +'" >'+
                                 'More'+
                                 '</a>'+
                                 '</h5>'+
@@ -310,7 +310,7 @@
                         res[i]['parent'] +
                         '</small>'
                         +res[i]['title']+
-                        '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'" style="color: blue">'+
+                        '<a href="detailedLeave/'+ res[i]['leave_id'] +'" >'+
                         '.......'+
                         'More'+
                         '</a>'+
