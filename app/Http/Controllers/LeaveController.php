@@ -26,7 +26,7 @@ class LeaveController extends Controller
      * Function Name: leaveListing
      * @param:
      * @return leave list
-     * Desc:
+     * Desc:it will return list of approved leave on load ,there will lazy load on scroll of window
      * Date: 18/2/2016
      * author manoj chaudahri
      */
@@ -254,7 +254,7 @@ class LeaveController extends Controller
      * Function Name: leaveStatusListing
      * @param:
      * @return int
-     * Desc:
+     * Desc:it will return list of approved or pending leave on chnage of dropdown ,there will lazy load on scroll of window
      * Date: 16/2/2016
      * author manoj chaudahri
      */
