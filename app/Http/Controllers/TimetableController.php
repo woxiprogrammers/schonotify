@@ -307,7 +307,6 @@ class TimetableController extends Controller
             $endTime=$request->endTime;
             $day=$request->day;
 
-
             $startTime=$this::formatedTime($startTime);
 
             $endTime=$this::formatedTime($endTime);
