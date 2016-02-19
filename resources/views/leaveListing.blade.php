@@ -114,16 +114,16 @@
             <li class="timeline-item success">
                 <div class="leaveSection">
                     <div class="text-muted text-small">
-                        {!! $row['created_date'] !!}
+                       {!! date('m-d-Y',strtotime($row['created_date'])) !!}
 
                     </div>
                     <div class="col-sm-8" style="margin-top: 4px;">
 
                         <h5><small class="label label-sm label-info">{!! $row['parent'] !!}</small>  {!! $row['title'] !!}
-                            ...  <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}">More</a>
+                        <a class="text-info" href="detailedLeave/{!! $row['leave_id'] !!}" style="color: blue">...More</a>
                         </h5>
                         <p>{!! $row['reason'] !!}</p>
-                        <p>Leave From:<i>{!! $row['from_date'] !!}</i><br>Leave To:<i> {!! $row['end_date'] !!}</i></p>
+                        <p>Leave From:<i>{!! date('d M,Y',strtotime($row['from_date'])) !!}</i><br>Leave To:<i> {!! date('d M,Y',strtotime($row['end_date'])) !!}</i></p>
                     </div>
                 </div>
                     <img src="/uploads/profile-picture/{!! $row['avatar'] !!}" class="img img-circle tmln-img" alt="Peter">
@@ -204,8 +204,10 @@
                         {
                             str += '<li class="timeline-item success">'+
                                 '<div class="leaveSection">'+
-                                '<div class="text-muted text-small">'
-                                +res[i]['created_date']['date'] +
+                                '<div class="text-muted text-small">';
+                            var date=res[i]['created_date']['date'].split(/[- :]/);
+                            var createdAt= date[2]+"-"+date[1]+"-"+date[0];
+                            str += createdAt+
                                 '</div>'+
                                 '<div class="col-sm-8" style="margin-top: 4px;">'+
                                 '<h5><small class="label label-sm label-info">'+
@@ -213,7 +215,7 @@
                                 '</small>'
                                 +res[i]['title']+
                                 '......'+
-                                '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'">'+
+                                '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'" style="color: blue">'+
                                 'More'+
                                 '</a>'+
                                 '</h5>'+
@@ -221,12 +223,18 @@
                                 + res[i]['reason']+
                                 '</p>'+
                                 '<p>Leave From:'+
-                                '<i>'+
-                                res[i]['from_date']+
+                                '<i>';
+                                    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                                "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
+                                    var from_date = res[i]['from_date'].split(/[- :]/);
+                                    var end_date = res[i]['from_date'].split(/[- :]/);
+                                    var fromDate= from_date[2]+" "+monthNames[parseInt(from_date[1],10)-1]+" "+from_date[0];
+                                    var endDate= end_date[2]+" "+monthNames[parseInt(end_date[1],10)-1]+" "+end_date[0];
+                            str +=fromDate+
                                 '</i><br>'+
                                 'Leave To:'+
                                 '<i>'+
-                                res[i]['end_date']+
+                                endDate+
                                 '</i></p>'+
                                 '</div>'+
                                 '</div>'+
@@ -292,15 +300,17 @@
                 {
                     str += '<li class="timeline-item success">'+
                         '<div class="leaveSection">'+
-                        '<div class="text-muted text-small">'
-                        +res[i]['created_date']['date'] +
+                        '<div class="text-muted text-small">';
+                    var date=res[i]['created_date']['date'].split(/[- :]/);
+                    var createdAt= date[2]+"-"+date[1]+"-"+date[0];
+                    str +=createdAt +
                         '</div>'+
                         '<div class="col-sm-8" style="margin-top: 4px;">'+
                         '<h5><small class="label label-sm label-info">'+
                         res[i]['parent'] +
                         '</small>'
                         +res[i]['title']+
-                        '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'">'+
+                        '<a class="text-info" href="detailedLeave/'+ res[i]['leave_id'] +'" style="color: blue">'+
                         '.......'+
                         'More'+
                         '</a>'+
@@ -309,12 +319,18 @@
                          res[i]['reason']+
                         '</p>'+
                         '<p>Leave From:'+
-                        '<i>'+
-                        res[i]['from_date']+
+                        '<i>';
+                            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                 "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
+                                var from_date = res[i]['from_date'].split(/[- :]/);
+                                var end_date = res[i]['from_date'].split(/[- :]/);
+                                var fromDate= from_date[2]+" "+monthNames[parseInt(from_date[1],10)-1]+" "+from_date[0];
+                                var endDate= end_date[2]+" "+monthNames[parseInt(end_date[1],10)-1]+" "+end_date[0];
+                    str +=fromDate+
                         '</i><br>'+
                         'Leave To:'+
                         '<i>'+
-                        res[i]['end_date']+
+                        endDate+
                         '</i></p>'+
                         '</div>'+
                         '</div>'+

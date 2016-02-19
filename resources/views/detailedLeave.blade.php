@@ -69,6 +69,13 @@
                                             <a href="/publish-leave/{!! $leaveArray['leave_id'] !!}" class="btn btn-primary btn-wide pull-right" type="submit" id="btnPublish" name="btnPublish" >
                                                 <i class="fa fa-cloud-upload"></i> Approve
                                             </a>
+                                            @else
+                                            <div class="col-md-22" style="padding-left: 520px">
+                                                <span class="text-bold">Approved By:</span>{!! $leaveArray['approved_by'] !!}
+                                            </div>
+                                            <div class="col-md-22" style="padding-left: 520px">
+                                                <span class="text-bold">Approved Date:</span>{!! date('m-d-Y',strtotime($leaveArray['updated_date'])) !!}
+                                            </div>
                                             @endif
                                         </div>
                                         <div class="col-md-12" id="btnStatus">

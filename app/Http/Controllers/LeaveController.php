@@ -154,6 +154,7 @@ class LeaveController extends Controller
         if($request->authorize()===true)
         {
             $leaveStatus = Leave::where('id',$leaveId)->first();
+            $approvePerson = User::where('id',$leaveStatus['approved_by	'])->first();
             $studentData = User::where('users.id',$leaveStatus->student_id)
                               ->where('users.is_active',1)
                               ->join('divisions','users.division_id','=','divisions.id')
@@ -168,6 +169,7 @@ class LeaveController extends Controller
                 $leaveArray['roll_number'] = $studentData['roll_number'];
                 $leaveArray['avatar'] = $parentData['avatar'];
                 $leaveArray['title'] = $leaveStatus['title'];
+                $leaveArray['approved_by'] = $approvePerson['first_name'] ." ".$approvePerson['last_name'];
                 $leaveArray['leave_status'] = $leaveStatus['status'];
                 $leaveArray['leave_id'] = $leaveStatus['id'];
                 $leaveArray['batch_id'] = $studentData['batch_id'];
@@ -181,6 +183,7 @@ class LeaveController extends Controller
                 $leaveArray['from_date'] = $leaveStatus['from_date'];
                 $leaveArray['end_date'] = $leaveStatus['end_date'];
                 $leaveArray['created_date'] = $leaveStatus['created_at'];
+                $leaveArray['updated_date'] = $leaveStatus['updated_at'];
                 return view('detailedLeave')->with(compact('leaveArray'));
         }else{
             return Redirect::to('/');
@@ -239,16 +242,22 @@ class LeaveController extends Controller
      * Date: 18/2/2016
      * author manoj chaudahri
      */
-    public function publishLeave($id) {
-        $leaveUpdate=array();
-        $leaveUpdate['status'] = 2;
-        $leaveStatus= Leave::where('id',$id)->update($leaveUpdate);
-        if ($leaveStatus ==1)
+    public function publishLeave(Requests\WebRequests\PublishLeaveRequest $request , $id)
+    {   if($request->authorize() === true)
         {
-            Session::flash('message-success','Leave published successfully');
-            return Redirect::to('/leaveListing');
+            $leaveUpdate = array();
+            $user = Auth::user();
+            $leaveUpdate['status'] = 2;
+            $leaveUpdate['approved_by'] = $user->id;
+            $leaveStatus= Leave::where('id',$id)->update($leaveUpdate);
+            if ($leaveStatus ==1)
+            {
+                Session::flash('message-success','Leave published successfully');
+                return Redirect::to('/leaveListing');
+            }
+        } else {
+            return Redirect::to('/');
         }
-
     }
     /**
      * Function Name: leaveStatusListing
