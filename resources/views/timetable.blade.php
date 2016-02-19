@@ -675,8 +675,17 @@ function showTimetable(val)
             var val1=$('#division-select').val();
             if(val1!= 0)
             {
-                $('#timetable-create-btn').show();
-                $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
+                $.get('/check-subject-teacher',function(res)
+                {
+                    if(res == 0)
+                    {
+                        $('#timetable-create-btn').show();
+                        $('#timetable-create-btn').html(' <p>No timetable has been created for this division...</p>');
+                    }else{
+                        $('#timetable-create-btn').show();
+                        $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
+                    }
+                });
 
             }else{
              $('#timetable-create-btn').hide();

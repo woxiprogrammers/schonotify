@@ -11,6 +11,7 @@ use App\Timetable;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -369,5 +370,35 @@ class TimetableController extends Controller
 
         return $time;
 
+    }
+
+    /*
+ +   * Function Name: checkSubjectTeacher
+ +   * Param:
+ +   * Return: it will returns if the user is subject teacher or not.
+ +   * Desc:  if teacher is subject teacher then he cant get link to create timetable.
+ +   * Developed By: Suraj Bande
+ +   * Date: 18/2/2016
+ +   */
+
+    public function checkSubjectTeacher()
+    {
+        $user=Auth::user();
+        $roleId=$user->role_id;
+
+        if($roleId!=1)
+        {
+            $classTeacher= Division::where('class_teacher_id','=',$user->id)->count();
+
+
+            if($classTeacher == 0)
+            {
+                return 0;
+            }else{
+                return 1;
+            }
+        }else{
+            return 1;
+        }
     }
 }
