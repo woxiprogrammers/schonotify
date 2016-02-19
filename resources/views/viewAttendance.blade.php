@@ -37,7 +37,7 @@
 
                                             <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
                                                 @foreach($dropDownData['batch'] as $row)
-                                                <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
+                                                <option value="{!!$row['batch_id']!!}"  @if(Auth::User()->role_id == 2) @if ($dropDownData['batch_id'] == $row['batch_id']) selected @endif @endif>{!!$row['batch_name']!!}</option>
                                                 @endforeach
                                             </select>
                                         </div>

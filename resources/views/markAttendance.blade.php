@@ -105,7 +105,7 @@
                                                 <label class="control-label">
                                                     Select Date <span class="symbol required"></span>
                                                 </label>
-                                                <input class="form-control datepicker" type="text" name="datePiker" id="datePiker" value="{!! date('m/d/Y', time());!!}" readonly>
+                                                <input class="form-control datepicker" type="text" name="datePiker" id="datePiker" value="{!! date('m/d/Y', time());!!}" >
                                             </div>
                                         </div>
                                     </div>
@@ -122,7 +122,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($dropDownData != null)
+                                            @if(isset($dropDownData['student_list']) )
                                             @foreach($dropDownData['student_list'] as $row)
                                             <tr>
                                                 <td>@if($row['student_attendance_status'] == 1  ) <input type="checkbox" class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}"  /> <label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @else <input type="checkbox"  class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}" checked /><label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @endif</td>
@@ -138,7 +138,7 @@
                                         <button class="btn btn-primary btn-wide" type="button" id="btnSubmit">
                                             Cancel
                                         </button>
-                                        <button class="btn btn-wide btn-primary ladda-button pull-right" data-style="expand-left" type="submit">
+                                        <button class="btn btn-wide btn-primary ladda-button pull-right"  data-style="expand-left" id="saveButton" type="submit">
                                             <span class="ladda-label">Save</span>
                                             <span class="ladda-spinner"></span><span class="ladda-spinner"></span>
                                         </button>
@@ -188,6 +188,12 @@
         TableData.init();
         FormElements.init();
         UIButtons.init();
+        $(document).ready(function () {
+            $('#datePiker').on('change', function(){
+                $('#datePiker').datepicker("hide");
+            });
+
+        });
         var endDate = new Date();
         $('#datePiker').datepicker('setEndDate', endDate);
         $('#allCheckedStud-label img').css('border','1px solid');
@@ -210,8 +216,39 @@
         var division=$('#division-select').val();
         dateChange(date,division);
     });
-
-    $('.allCheckedStud').change(function(){
+    $("#markAttendance").submit(function(e)
+    {
+        var postData = $(this).serializeArray();
+        var formURL = $(this).attr("action");
+        $.ajax(
+            {   url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(res)
+                {
+                    if (res == "1" )
+                    {
+                        $('#message-error-div').html('');
+                        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+                            'Attendance successfully saved .'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                    '</button>';
+                        $('#message-error-div').html(str);
+                    } else {
+                        $('#message-error-div').html('');
+                        var str='<div class="alert alert-error alert-dismissible" role="alert">'+
+                            'Something went wrong .'+
+                            '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                            '<span area-hidden="true">&times;</span>'+
+                            '</button>';
+                        $('#message-error-div').html(str);
+                    }
+                }
+            });
+        e.preventDefault();
+    });
+     $('.allCheckedStud').change(function(){
         if ($(this).prop('checked') == true)
         {
             $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
@@ -242,6 +279,7 @@
 
       $('.datepicker').datepicker()
         .on('changeDate', function(ev){
+              $('#message-error-div').html('');
             var date=$('#datePiker').val();
             var division=$('#division-select').val();
             dateChange(date,division);
@@ -260,7 +298,7 @@
                          '<thead>'+
                                  '<tr>'+
                                     '<th>'+
-                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked="checked"/>'+
+                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud"  checked/>'+
                                               '<label for="allCheckedStud" id="allCheckedStud-label">'+
                                                 '<img class="checkbox-img"/>'+
                                               '</label>'+
@@ -308,19 +346,20 @@
                 $('#allCheckedStud-label img').css('border','1px solid');
                 if ($('.allCheckedStud').prop('checked') == true)
                 {
+
                     $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
                     var i=0;
                     $('.checkedStud').each(function() { //loop through each checkbox
-                        if (this.checked == true)
-                        {
+                        if (this.checked == true){
                             $('#'+this.className+this.id).prop('src','assets/images/tick.png');
-                        } else {
+                        }else{
                             $('#'+this.className+this.id).prop('src','assets/images/cross.png');
                         }
                         i++;
                     });
                 }
                 $('.checkedStud').change(function(){
+
                     if(this.checked==true)
                     {
                         $('#'+this.className+this.id).prop('src','assets/images/tick.png');
@@ -329,8 +368,27 @@
                         $('#'+this.className+this.id).prop('src','assets/images/cross.png');
                     }
                 });
+                $('.allCheckedStud').change(function(){
+                    if ($(this).prop('checked') == true)
+                    {
+                        $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = true;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/tick.png');
+                        });
+                    } else {
+                        $('.checkedStud').each(function() { //loop through each checkbox
+                            this.checked = false;  //select all checkboxes with class "checkbox1"
+                            $('#'+this.className+this.id).prop('src','assets/images/cross.png');
+
+                        });
+                        $('#allCheckedStud-label img').prop('src','assets/images/cross.png');
+                    }
+                });
             }
+
         });
+
     }
 
     $('#batch-select').change(function(){

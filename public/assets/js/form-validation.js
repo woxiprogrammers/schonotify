@@ -456,7 +456,7 @@ var FormValidator = function () {
         CKEDITOR.disableAutoInline = true;
         $('textarea.ckeditor').ckeditor();
     };
-   var runValidator4 = function () {
+    var runValidator4 = function () {
         var form4 = $('#form4');
         var errorHandler2 = $('.errorHandler', form4);
         var successHandler2 = $('.successHandler', form4);
@@ -1364,8 +1364,221 @@ var FormValidator = function () {
         $('textarea.ckeditor').ckeditor();
     };
 
+    var runValidatorCreateStructure = function () {
+        var form2 = $('#createStructureForm');
+        var errorHandler2 = $('.errorHandler', form2);
+        var successHandler2 = $('.successHandler', form2);
+        $.validator.addMethod("getEditorValue", function () {
+            $("#editor1").val($('#form2 .summernote').code());
+            if ($("#editor1").val() != "" && $("#editor1").val().replace(/(<([^>]+)>)/ig, "") != "") {
+                $('#editor1').val('');
+                return true;
+            } else {
+                return false;
+            }
+        }, 'This field is required.');
+        form2.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+
+                dropdown: {
+                    required: true
+                },
+                periods:{
+                    required:true,
+                    number: true,
+                    maxlength: 2,
+                    min:1,
+                    max:15
+                }
+
+            },
+            messages: {
+
+                periods:{
+                    maxlength: "You can not enter more than 2 digits",
+                    max: "Your number of period should not be exceed than 15"
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler2.hide();
+                errorHandler2.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler2.show();
+                errorHandler2.hide();
+
+                if($('#dropdown').val() !== "")
+                {
+                    if($('#periods').val() !== "")
+                    {
+
+                        $('#periods-structure-save-btn').show();
+                        $('#main-div-periods').show();
+
+                        var str="<table class='table'>" +
+                                 "<tr>" +
+                                     "<th><h4>Periods</h4></th>"+
+                                     "<th><h4>Subjects</h4></th>"+
+                                     "<th><h4>Break</h4></th>"+
+                                     "<th><h4>Start time</h4></th>"+
+                                     "<th><h4>End time</h4></th>"+
+                                 "</tr>" +
+                                 "<tbody>";
+
+                        var period=$('#periods').val();
+                        for(var i=0; i<period; i++)
+                        {
+                            str+='<tr>' +
+                                    '<td class="col-sm-2">' +
+                                        '<div class="form-group"><input type="text" class="form-control center" id="period_'+(i+1)+'" name="period[]" value="Period '+(i+1)+'" disabled>' +
+                                        '</div>' +
+                                    '</td>'+
+                                    '<td class="col-sm-2">' +
+                                        '<div class="form-group">' +
+                                            '<select class="form-control subjectsDropdown" name="subjects[]" id="subjects_'+(i+1)+'" style="-webkit-appearance: menulist;">' +
+
+                                            '</select>' +
+                                            '<div class="hiddenDropdown'+(i+1)+'"></div>'+
+                                            '<div id="subjectError'+(i+1)+'" style="display:none; color:#a94442;"></div>'+
+                                        '</div>' +
+                                    '</td>' +
+                                    '<td class="col-sm-2">'+
+                                        '<div class="form-group">' +
+                                            '<div class="checkbox clip-check check-primary">' +
+                                                '<input type="checkbox" class="check" id="'+(i+1)+'"/>'+
+                                                '<label for="'+(i+1)+'"></label>' +
+                                                '<span class="checkboxLabelTimetable">Is A Break?</span>'+
+                                            '</div>' +
+                                            '<input type="hidden" id="hiddenCheck'+(i+1)+'" name="check[]" value="0">'+
+                                        '</div>'+
+                                    '</td>' +
+                                    '<td class="col-sm-3">'+
+                                        '<div class="form-group">' +
+                                            '<div class=" bootstrap-timepicker timepicker">'+
+                                                '<input id="startTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="startTime[]">'+
+                                                '<span id="startTimeError'+(i+1)+'" class="has-error" style="display:none; color:#a94442;"></span>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>'+
+                                    '<td class="col-sm-3">' +
+                                        '<div class="form-group">' +
+                                            '<div class=" bootstrap-timepicker timepicker">'+
+                                                '<input id="endTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="endTime[]">'+
+                                            '</div>'+
+                                        '</div>' +
+                                    '</td>';
+
+                        }
+
+                        str+="</tbody></table>";
+
+
+                        $('#periods-rows').fadeIn('slow').html(str);
+
+
+                        $('.check').change(function(){
+
+                            if ( (this).checked == true)
+                            {
+                                var subjectId=$('#subjects_'+this.id).val();
+                                $('#subjects_'+this.id).prop('disabled',true);
+                                $('#hiddenCheck'+this.id).prop('value','1');
+                                $('.hiddenDropdown'+this.id).html('<input type="hidden" name="subjects[]" value="'+subjectId+'">');
+
+                            } else {
+                                $('#subjects_'+this.id).prop('disabled',false);
+                                $('#hiddenCheck'+this.id).prop('value','0');
+                                $('.hiddenDropdown'+this.id).html('');
+                            }
+
+
+                        });
+
+                    }
+
+                }
+
+                $('.timepicker').each(function(){
+
+                    $('.timepicker1').timepicker();
+
+                });
+                var day=$('#dropdown').val();
+
+                $('#hiddenDay').prop('value',day);
+
+                var count=0;
+
+                $('.subjectsDropdown').each(function(){
+
+                    var subjects="";
+
+                    var division=$('#hiddenDivId').val();
+
+                    var route="get-timetable-subjects/"+division;
+
+                    $.get(route,function(res){
+
+                        if( res.length != 0 )
+                        {
+                            for(var i=0; i<res.length; i++)
+                            {
+                                subjects+="<option value='"+res[i]['id']+"'>"+res[i]['subject_name']+"</option>";
+                            }
+                        }else{
+                            subjects+="<option value='unavailable'>No subjects available.</option>";
+                        }
+
+                        var dropId='#subjects_'+(count+1);
+
+                        $(dropId).html(subjects);
+
+                        count++;
+                    });
+
+
+                });
+
+
+            }
+        });
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+    };
+
+
+
     return {
-        //main function to initiate template pages
+
         init: function () {
         	validateCheckRadio();
             runValidator1();
@@ -1381,7 +1594,9 @@ var FormValidator = function () {
             runValidatorSubject();
             runValidatorclassCreate();
             runValidatorSubjectTeacher();
+            runValidatorCreateStructure();
             runValidatorMarkAttendance();
+
         }
     };
 }();

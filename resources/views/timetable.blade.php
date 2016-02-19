@@ -13,34 +13,65 @@
     <!-- end: TOP NAVBAR -->
     <div class="main-content" >
         <div class="wrap-content container" id="container">
-            <!-- start: DASHBOARD TITLE -->
+
             @include('alerts.errors')
+
             <div id="message-error-div"></div>
+
             <section id="page-title" class="padding-top-15 padding-bottom-15">
                 <div class="row">
                     <div class="col-sm-7">
                         <h1 class="mainTitle">Timetable</h1>
-
                     </div>
                     <div class="col-sm-5">
-                        <!-- start: MINI STATS WITH SPARKLINE -->
-
-                        <!-- end: MINI STATS WITH SPARKLINE -->
                     </div>
                 </div>
             </section>
-            <!-- end: DASHBOARD TITLE -->
-
 
             <div class="container-fluid container-fullw bg-white">
                 <div class="row">
-                    @include('selectClassDivisionDropdown')
+
+                    <div class="panel panel-transparent">
+
+                        <div class="panel-body">
+
+                            <div class="form-group col-sm-4">
+                                <label for="form-field-select-2">
+                                    Select Batch
+                                </label>
+
+                                <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                                    @foreach($batches as $batch)
+                                    <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group col-sm-4" id="class-select-div">
+                                <label for="form-field-select-2">
+                                    Select Class
+                                </label>
+                                <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
+
+                                </select>
+                            </div>
+
+                            <div class="form-group col-sm-4" id="division-select-div">
+                                <label for="form-field-select-2">
+                                    Select Division
+                                </label>
+                                <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                     <div class="col-sm-8 center" id="timetable-create-btn">
-                        @foreach(session('functionArr') as $row)
-                        @if($row == 'create_timetable')
-                        <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
-                        @endif
-                        @endforeach
+                        <center><img src="assets/images/loader1.gif" /></center>
+
                     </div>
                     <div class="row" id="timetable-div">
 
@@ -296,7 +327,6 @@
 </div>
 
 
-
 @include('footer')
 
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -320,42 +350,167 @@
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/form-elements.js"></script>
 <script src="assets/js/custom-project.js"></script>
+
 <script>
 $(document).ready(function(){
     getMsgCount();
     Main.init();
     FormValidator.init();
-    showTimetable(1);
-    $('#copystr').hide();
+
+    var batchSelected=$('#batch-select').val();
+    if(batchSelected!="")
+    {
+        getClasses(batchSelected);
+    }
+
 });
 
+$('#batch-select').change(function(){
+    var batch=$(this).val();
+    getClasses(batch);
+
+});
+
+$('#class-select').change(function(){
+    var classId=$(this).val();
+    getDivisions(classId);
+});
+
+/*
+ +   * Function Name: getDivisions
+ +   * Param: classId
+ +   * Return: it will returns divisions respect to class id
+ +   * Desc: it will returns divisions respect to class id and on this basis we will get timetable view.
+ +   * Developed By: Suraj Bande
+ +   * Date: 15/2/2016
+ +   */
+
+function getDivisions(classId)
+{
+    var route="/get-divisions/"+classId;
+
+    $.get(route,function(res){
+
+        var str="";
+
+        if (res.length != 0)
+        {
+
+            for(var i=0;i<res.length; i++)
+            {
+                str+="<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>"
+            }
+
+        } else {
+
+            str+="<option value='0'>No divisions found</option>"
+
+        }
+
+        $('#division-select').html(str);
+
+        var divisionSelected=$('#division-select').val();
+
+        showTimetable(divisionSelected);
+
+        $('#copystr').hide();
+
+    });
+}
+
+/*
+ +   * Function Name: getDivisions
+ +   * Param: batchId
+ +   * Return: it will returns classes respect to batch id selected
+ +   * Desc: it will returns classes respect to batch id and on this basis we will get divisions.
+ +   * Developed By: Suraj Bande
+ +   * Date: 15/2/2016
+ +   */
+
+
+function getClasses(batchId)
+{
+    var route="/get-classes/"+batchId;
+
+    $.get(route,function(res){
+
+          var str="";
+
+          if (res.length != 0)
+          {
+
+              for(var i=0;i<res.length; i++)
+              {
+                  str+="<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>"
+              }
+
+          } else {
+
+                  str+="<option>No classes found</option>"
+
+          }
+
+        $('#class-select').html(str);
+
+        var classSelected=$('#class-select').val();
+
+        if(classSelected!="")
+        {
+            getDivisions(classSelected);
+        }
+
+    });
+}
+
 $('#createPeriod').click(function(){
+
     $('#createper').show();
+
     $('#copystr').hide();
+
 });
 
 $('#copyStructure').click(function(){
+
     $('#createper').hide();
+
     $('#copystr').show();
+
 });
+
+/*
+ +   * Function Name: showTimetable
+ +   * Param: val
+ +   * Return: this returns the table view of timetable.
+ +   * Desc: This is the main logic of timetable where on the basis of days and periods (time) we append cells to table.
+ +   * Developed By: Suraj Bande
+ +   * Date: 15/2/2016
+ +   */
+
 
 function showTimetable(val)
 {
     $('#division-body').html('');
 
     var route='timetableShow/'+val;
+
     $.get(route,function(res){
 
         var obj = $.parseJSON(res);
 
         var arr = $.map(obj, function(value, index) {
+
             return [value]
+
         });
+
+        $('#timetable-create-btn').show();
 
         if(arr[0]!=="unavailable")
         {
+
             $('#timetable-div').show();
-            $('#timetable-create-btn').hide();
+
             var maxlength=0;
 
             for(var i=0; i<arr.length; i++)
@@ -372,55 +527,56 @@ function showTimetable(val)
 
             for(var j=0; j<=maxlength; j++)
             {
+
                 $(".timetable-div-table").each(function () {
 
                     var tds = '<tr>';
+
                     tds+='<td class="center">'+(j+1)+'</td>';
 
-
-                    if(arr[0].length > j)
+                    if ( arr[0].length > j )
                     {
-                        if(arr[0][j]["is_break"]==0)
+
+                        if( arr[0][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" ><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[0][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-info">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
                         }else{
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
-                        if(arr[0].length==j)
+                        if ( arr[0].length == j )
                         {
                             tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
                         }else{
                             tds+='<td></td>';
                         }
                     }
-                    if(arr[1].length > j)
+                    if ( arr[1].length > j )
                     {
-                        if(arr[1][j]["is_break"]==0)
+                        if ( arr[1][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                         }else{
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
-                        if(arr[1].length==j)
+                        if ( arr[1].length == j )
                         {
                             tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
                         }else{
                             tds+='<td></td>';
                         }
                     }
-
-                    if(arr[2].length > j)
+                    if( arr[2].length > j )
                     {
-                        if(arr[2][j]["is_break"]==0)
+                        if( arr[2][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[2][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[2][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
                         }else{
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[2][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
-                        if(arr[2].length==j)
+                        if( arr[2].length == j )
                         {
                             tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
                         }else{
@@ -428,16 +584,16 @@ function showTimetable(val)
                         }
                     }
 
-                    if(arr[3].length > j)
+                    if ( arr[3].length > j )
                     {
-                        if(arr[3][j]["is_break"]==0)
+                        if ( arr[3][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[3][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[3][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
                         }else{
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[3][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
-                        if(arr[3].length==j)
+                        if( arr[3].length == j )
                         {
                             tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
                         }else{
@@ -445,33 +601,33 @@ function showTimetable(val)
                         }
                     }
 
-                    if(arr[4].length > j)
+                    if ( arr[4].length > j )
                     {
-                        if(arr[4][j]["is_break"]==0)
+                        if( arr[4][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[4][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[4][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
                         }else{
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[4][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
-                        if(arr[4].length==j)
+                        if ( arr[4].length== j )
                         {
                             tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
                         }else{
                             tds+='<td></td>';
                         }
                     }
-                    if(arr[5].length > j)
+                    if ( arr[5].length > j )
                     {
 
-                        if(arr[5][j]["is_break"]==0)
+                        if( arr[5][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[5][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[5][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
                         }else{
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[5][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
-                        if(arr[5].length==j)
+                        if ( arr[5].length == j )
                         {
                             tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
                         }else{
@@ -479,17 +635,17 @@ function showTimetable(val)
                         }
                     }
 
-                    if(arr[6].length > j)
+                    if ( arr[6].length > j )
                     {
 
-                        if(arr[6][j]["is_break"]==0)
+                        if ( arr[6][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[6][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
                         }else{
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
-                        if(arr[6].length==j)
+                        if ( arr[6].length == j )
                         {
                             tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
                         }else{
@@ -499,16 +655,32 @@ function showTimetable(val)
 
                     tds += '</tr>';
 
-                    if ($('tbody', this).length > 0) {
+                    if ( $('tbody', this).length > 0 ) {
+
                         $('tbody', this).append(tds);
+
+                        $('#timetable-create-btn').hide();
+
                     } else {
+
                         $(this).append(tds);
+
+                        $('#timetable-create-btn').hide();
+
                     }
                 });
 
             }
         }else{
-            $('#timetable-create-btn').show();
+            var val1=$('#division-select').val();
+            if(val1!= 0)
+            {
+                $('#timetable-create-btn').show();
+                $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
+
+            }else{
+             $('#timetable-create-btn').hide();
+            }
             $('#timetable-div').hide();
         }
     });
@@ -519,6 +691,7 @@ $('#division-select').change(function()
 {
 
     var val1=$(this).val();
+
     showTimetable(val1);
 
 });
