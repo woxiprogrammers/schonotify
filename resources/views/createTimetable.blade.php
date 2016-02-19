@@ -338,9 +338,17 @@
 
         });
 
+        /*
+         +   * Function Name: minFromMidnight
+         +   * Param: tm
+         +   * Return: it will returns formatted time in AM PM format (Meridian)
+         +   * Desc: this method converts 24 hrs timestamp into meredian timestamp.
+         +   * Developed By: Suraj Bande
+         +   * Date: 15/2/2016
+         +   */
+
         function minFromMidnight(tm){
 
-           // debugger;
             var ampm= tm.substr(-2);
 
             var time= $.trim(tm).length === 7 ? "0" + tm : tm;

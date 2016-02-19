@@ -271,6 +271,15 @@ class TimetableController extends Controller
 
     }
 
+    /*
+ +   * Function Name: getSubjects
+ +   * Param: $id
+ +   * Return: it returns subjects
+ +   * Desc: it will returns subjects array respect to division_subject_id .
+ +   * Developed By: Suraj Bande
+ +   * Date: 16/2/2016
+ +   */
+
     public function getSubjects($id)
     {
         $subjects=SubjectClassDivision::where('division_id','=',$id)
@@ -280,6 +289,15 @@ class TimetableController extends Controller
 
         return $subjects;
     }
+
+    /*
+ +   * Function Name: teacherCheck
+ +   * Param: $request
+ +   * Return: it will returns count of availability of teachers.
+ +   * Desc:  It checks teacher availability on the same day and same time.
+ +   * Developed By: Suraj Bande
+ +   * Date: 17/2/2016
+ +   */
 
     public function teacherCheck(Request $request)
     {
@@ -309,6 +327,15 @@ class TimetableController extends Controller
             return $teacherAvailability;
 
     }
+
+    /*
+ +   * Function Name: formatedTime
+ +   * Param: $time
+ +   * Return: it will returns formated time.
+ +   * Desc:  It returns formated time in 24 hrs format.
+ +   * Developed By: Suraj Bande
+ +   * Date: 17/2/2016
+ +   */
 
     public function formatedTime($time){
 

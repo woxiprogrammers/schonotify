@@ -1578,7 +1578,7 @@ var FormValidator = function () {
 
 
     return {
-        //main function to initiate template pages
+
         init: function () {
         	validateCheckRadio();
             runValidator1();
