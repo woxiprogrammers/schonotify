@@ -11,6 +11,7 @@ use App\Timetable;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -369,5 +370,26 @@ class TimetableController extends Controller
 
         return $time;
 
+    }
+
+    public function checkSubjectTeacher()
+    {
+        $user=Auth::user();
+        $roleId=$user->role_id;
+
+        if($roleId!=1)
+        {
+            $classTeacher= Division::where('class_teacher_id','=',$user->id)->count();
+
+
+            if($classTeacher == 0)
+            {
+                return 0;
+            }else{
+                return 1;
+            }
+        }else{
+            return 1;
+        }
     }
 }
