@@ -44,13 +44,13 @@
                                             </h5>
                                         </div>
                                         <div class="panel-tools">
-                                            <i class="fa fa-clock-o"></i>{!! $leaveArray['created_date'] !!}
+                                            <i class="fa fa-clock-o"></i>{!! date('m-d-Y',strtotime($leaveArray['created_date'])) !!}
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="panel-scroll height-280 ps-container ps-active-y">
-                                            <h4>Description:</h4>
-                                            <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 180px; margin-bottom: 8px;" readonly="yes" >{!! $leaveArray['reason'] !!}</textarea>
+                                            <h4>Reason :</h4>
+                                            <textarea class="form-control col-sm-8" id="description" name="description" style="min-height: 100px; margin-bottom: 8px;" readonly="yes" >{!! $leaveArray['reason'] !!}</textarea>
                                             <br>
                                             <br>
                                             <address>
@@ -69,6 +69,13 @@
                                             <a href="/publish-leave/{!! $leaveArray['leave_id'] !!}" class="btn btn-primary btn-wide pull-right" type="submit" id="btnPublish" name="btnPublish" >
                                                 <i class="fa fa-cloud-upload"></i> Approve
                                             </a>
+                                            @else
+                                            <div class="col-md-22" style="padding-left: 520px">
+                                                <span class="text-bold">Approved By:</span>{!! $leaveArray['approved_by'] !!}
+                                            </div>
+                                            <div class="col-md-22" style="padding-left: 520px">
+                                                <span class="text-bold">Approved Date:</span>{!! date('m-d-Y',strtotime($leaveArray['updated_date'])) !!}
+                                            </div>
                                             @endif
                                         </div>
                                         <div class="col-md-12" id="btnStatus">
