@@ -70,8 +70,7 @@
                     </div>
 
                     <div class="col-sm-8 center" id="timetable-create-btn">
-
-                        <h4><i class="fa fa-meh-o"></i></h4> <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>
+                        <center><img src="assets/images/loader1.gif" /></center>
 
                     </div>
                     <div class="row" id="timetable-div">
@@ -351,6 +350,7 @@
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/form-elements.js"></script>
 <script src="assets/js/custom-project.js"></script>
+
 <script>
 $(document).ready(function(){
     getMsgCount();
@@ -376,6 +376,15 @@ $('#class-select').change(function(){
     getDivisions(classId);
 });
 
+/*
+ +   * Function Name: getDivisions
+ +   * Param: classId
+ +   * Return: it will returns divisions respect to class id
+ +   * Desc: it will returns divisions respect to class id and on this basis we will get timetable view.
+ +   * Developed By: Suraj Bande
+ +   * Date: 15/2/2016
+ +   */
+
 function getDivisions(classId)
 {
     var route="/get-divisions/"+classId;
@@ -394,7 +403,7 @@ function getDivisions(classId)
 
         } else {
 
-            str+="<option>No divisions found</option>"
+            str+="<option value='0'>No divisions found</option>"
 
         }
 
@@ -408,6 +417,16 @@ function getDivisions(classId)
 
     });
 }
+
+/*
+ +   * Function Name: getDivisions
+ +   * Param: batchId
+ +   * Return: it will returns classes respect to batch id selected
+ +   * Desc: it will returns classes respect to batch id and on this basis we will get divisions.
+ +   * Developed By: Suraj Bande
+ +   * Date: 15/2/2016
+ +   */
+
 
 function getClasses(batchId)
 {
@@ -459,11 +478,21 @@ $('#copyStructure').click(function(){
 
 });
 
+/*
+ +   * Function Name: showTimetable
+ +   * Param: val
+ +   * Return: this returns the table view of timetable.
+ +   * Desc: This is the main logic of timetable where on the basis of days and periods (time) we append cells to table.
+ +   * Developed By: Suraj Bande
+ +   * Date: 15/2/2016
+ +   */
+
+
 function showTimetable(val)
 {
     $('#division-body').html('');
 
-    var route='timetableShow/'+val
+    var route='timetableShow/'+val;
 
     $.get(route,function(res){
 
@@ -475,12 +504,12 @@ function showTimetable(val)
 
         });
 
+        $('#timetable-create-btn').show();
+
         if(arr[0]!=="unavailable")
         {
 
             $('#timetable-div').show();
-
-            $('#timetable-create-btn').hide();
 
             var maxlength=0;
 
@@ -507,6 +536,7 @@ function showTimetable(val)
 
                     if ( arr[0].length > j )
                     {
+
                         if( arr[0][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" ><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[0][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-info">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
@@ -525,7 +555,7 @@ function showTimetable(val)
                     {
                         if ( arr[1][j]["is_break"] == 0 )
                         {
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><h5 class="center"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                         }else{
                             tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
                         }
@@ -626,15 +656,40 @@ function showTimetable(val)
                     tds += '</tr>';
 
                     if ( $('tbody', this).length > 0 ) {
+
                         $('tbody', this).append(tds);
+
+                        $('#timetable-create-btn').hide();
+
                     } else {
+
                         $(this).append(tds);
+
+                        $('#timetable-create-btn').hide();
+
                     }
                 });
 
             }
         }else{
-            $('#timetable-create-btn').show();
+            var val1=$('#division-select').val();
+            if(val1!= 0)
+            {
+                $.get('/check-subject-teacher',function(res)
+                {
+                    if(res == 0)
+                    {
+                        $('#timetable-create-btn').show();
+                        $('#timetable-create-btn').html(' <p>No timetable has been created for this division...</p>');
+                    }else{
+                        $('#timetable-create-btn').show();
+                        $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
+                    }
+                });
+
+            }else{
+             $('#timetable-create-btn').hide();
+            }
             $('#timetable-div').hide();
         }
     });
@@ -645,6 +700,7 @@ $('#division-select').change(function()
 {
 
     var val1=$(this).val();
+
     showTimetable(val1);
 
 });

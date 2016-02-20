@@ -131,7 +131,11 @@
 
     Route::get('leaveListing','LeaveController@leaveListing');
 
-    Route::get('detailedLeave','LeaveController@detailedLeave');
+    Route::get('leave-status-listing/{leaveStatus}/{division_id}','LeaveController@leaveStatusListing');
+
+    Route::get('publish-leave/{id}','LeaveController@publishLeave');
+
+    Route::get('detailedLeave/{leave_id}','LeaveController@detailedLeave');
 
     Route::get('homework-listing','HomeworkController@homeworkListing');
 
@@ -190,6 +194,8 @@
     Route::get('mark-attendance-check','AttendanceController@markAttendanceAccess');
 
     Route::get('leave-check','LeaveController@leaveAccess');
+
+    Route::get('leave-count','LeaveController@leaveCount');
 
     Route::get('view-attendance','AttendanceController@viewAttendance');
 
@@ -251,7 +257,12 @@
 
     Route::get('/check-subject','SubjectController@checkSubject');
 
+    Route::post('/teacher-check','TimetableController@teacherCheck');
+
     Route::get('loadmore-homework/{id}','HomeworkController@loadMore');
+
+    Route::get('/check-subject-teacher','TimetableController@checkSubjectTeacher');
+
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
