@@ -224,8 +224,6 @@
                      $("#startTimeError"+num).show();
                      $("#startTimeError"+num).html('');
 
-
-
                      var startTime=$("#startTime"+num).val();
 
                      var endTime=$("#endTime"+num).val();
@@ -294,35 +292,39 @@
 
                     var day=$("#dropdown").val();
 
+                    var checkValue=$('#hiddenCheck'+num).val();
 
-                    var route="/teacher-check";
-
-                    $.ajax({
-                        url:route,
-                        async:false,
-                        type:"post",
-                        data:{id:id,day:day,startTime:startTime,endTime:endTime},
-                        success:function(res){
-                            if( res != 0 ){
-
-                                flag=0;
-
-                            }else{
-                                flag=1;
-                            }
-                        }
-
-                    });
-
-                    if(flag==0)
+                    if(checkValue == 0)
                     {
-                        $('#subjectError'+num).show();
-                        $('#subjectError'+num).html('This teacher subject is not available for this time interval.');
-                        return false;
-                    }else{
-                        $('#subjectError'+num).hide();
-                        $('#subjectError'+num).html('');
+                        var route="/teacher-check";
 
+                        $.ajax({
+                            url:route,
+                            async:false,
+                            type:"post",
+                            data:{id:id,day:day,startTime:startTime,endTime:endTime},
+                            success:function(res){
+                                if( res != 0 ){
+
+                                    flag=0;
+
+                                }else{
+                                    flag=1;
+                                }
+                            }
+
+                        });
+
+                        if(flag==0)
+                        {
+                            $('#subjectError'+num).show();
+                            $('#subjectError'+num).html('This teacher subject is not available for this time interval.');
+                            return false;
+                        }else{
+                            $('#subjectError'+num).hide();
+                            $('#subjectError'+num).html('');
+
+                        }
                     }
 
                     num++;

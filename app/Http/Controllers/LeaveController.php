@@ -155,7 +155,7 @@ class LeaveController extends Controller
         if($request->authorize()===true)
         {
             $leaveStatus = Leave::where('id',$leaveId)->first();
-            $approvePerson = User::where('id',$leaveStatus['approved_by	'])->first();
+            $approvePerson = User::where('id',$leaveStatus['approved_by'])->first();
             $leavetype = LeaveType::where('id',$leaveStatus['leave_type'])->first();
             $studentData = User::where('users.id',$leaveStatus->student_id)
                               ->where('users.is_active',1)
