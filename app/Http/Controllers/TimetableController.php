@@ -317,12 +317,11 @@ class TimetableController extends Controller
             $teacherArray=$teacher->toArray();
 
             $teacherAvailability=SubjectClassDivision::join('timetables','timetables.division_subject_id','=','division_subjects.id')
-
                                         ->select('start_time','end_time','timetables.division_subject_id')
                                         ->whereRaw("('$startTime' between start_time and end_time)")
                                         ->orwhereRaw("('$endTime' between start_time and end_time)")
-                                        ->where('timetables.day_id','==',$day)
-                                        ->wherein('teacher_id',$teacherArray)->count();
+                                        ->where('timetables.day_id','=',$day)
+                                        ->wherein('teacher_id',$teacherArray)->get();
 
             return $teacherAvailability;
 
@@ -388,14 +387,15 @@ class TimetableController extends Controller
 
         if($roleId!=1)
         {
-            $classTeacher= Division::where('class_teacher_id','=',$user->id)->count();
+            $classTeacher= Division::where('class_teacher_id','=',$user->id)->get();
 
-
-            if($classTeacher == 0)
+            if($classTeacher->isEmpty() == true)
             {
                 return 0;
             }else{
-                return 1;
+
+               $result=array('division_id'=>$classTeacher[0]->id);
+                return $result;
             }
         }else{
             return 1;

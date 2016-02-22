@@ -32,13 +32,34 @@ class Leave extends Request
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
         }
-        //dd($resultArr);
-        if(in_array('View_leave',$resultArr) )
+        switch ($this->method()) {
 
-        {return true;}
-        else{
-            return false;
-
+            case 'GET':
+                if(in_array('View_leave',$resultArr) ){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+                break;
+            case 'PUT':
+                if(in_array('Update_leave',$resultArr) ){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+                break;
+            case 'POST':
+                if(in_array('Create_leave',$resultArr) ){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -49,8 +70,22 @@ class Leave extends Request
      */
     public function rules()
     {
-        return [
-            //'leave_id'=>'required|integer',
-        ];
+        switch ($this->method()) {
+            case 'GET':
+                return [];
+                break;
+            case 'POST':
+                return [
+                    'student_id' => 'required|integer',
+                    'title' => 'required',
+                    'leave_type_id' => 'required|integer',
+                    'reason' => 'required',
+                    'from_date' => 'required|date',
+                    'end_date' => 'required|date',
+                ];
+                break;
+            default:
+                break;
+        }
     }
 }

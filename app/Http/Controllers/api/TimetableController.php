@@ -39,7 +39,7 @@ class TimetableController extends Controller
             $teacherId = UserRoles::where('slug',['teacher'])->pluck('id');
             if($teacherId != null){
                 if($data['teacher']['role_id'] == $teacherId){
-                    $batches = Batch::select('id as batch_id ','name as batch_name')->get()->toArray();
+                    $batches = Batch::select('id as id ','name as name')->get()->toArray();
                 }
             }
             $status = 200;
@@ -68,7 +68,7 @@ class TimetableController extends Controller
     {
         try{
             $classes = array();
-            $classes = Classes::where('batch_id','=',$batchId)->select('id as class_id ','class_name')->get()->toArray();
+            $classes = Classes::where('batch_id','=',$batchId)->select('id as id ','class_name as name')->get()->toArray();
             $status = 200;
             $message = "Successfully Listed";
         }catch (\Exception $e) {
@@ -95,7 +95,7 @@ class TimetableController extends Controller
     {
         try{
             $divisions = array();
-            $divisions = Division::where('class_id','=',$classId)->select('id as division_id ','division_name')->get()->toArray();
+            $divisions = Division::where('class_id','=',$classId)->select('id ','division_name as name')->get()->toArray();
             $status = 200;
             $message = "Successfully Listed";
         }catch (\Exception $e) {
@@ -131,12 +131,51 @@ class TimetableController extends Controller
             $timetable=Timetable::wherein('division_subject_id',$finalSubjectClassDivision)
                  ->where('day_id', '=', $day_id)
                  ->orderBy('start_time', 'asc')
-                 ->get()->toArray();
+                 ->get();
+            $timetables=array();
+            foreach($timetable as $row)
+            {
+                $startTime=trim($row->start_time);
+                $subStartHours=substr($startTime,0,2);
+                $subStartMins=substr($startTime,3,2);
+                if($subStartHours>=12)
+                {
+                    if($subStartHours!=12)
+                    {
+                        $subStartHours=$subStartHours-12;
+                    }
+                    $row->start_time=$subStartHours.":".$subStartMins." PM";
+                }else{
+                    if($subStartHours==00)
+                    {
+                        $subStartHours=12;
+                    }
+                    $row->start_time=$subStartHours.":".$subStartMins." AM";
+                }
+                $endTime=trim($row->end_time);
+                $subEndHours=substr($endTime,0,2);
+                $subEndMins=substr($endTime,3,2);
+                if($subEndHours>=12)
+                {
+                    if($subEndHours!=12)
+                    {
+                        $subEndHours=$subEndHours-12;
+                    }
+                    $row->end_time=$subEndHours.":"."$subEndMins"." PM";
+                }else{
+                    if($subEndHours==00)
+                    {
+                        $subEndHours=12;
+                    }
+                    $row->end_time=$subEndHours.":"."$subEndMins"." AM";
+                }
+                array_push($timetables,$row);
+            }
             $i=0;
-            if(!Empty($timetable)) {
+            if(!Empty($timetables)) {
                 $message = 'success';
                 $status = 200;
-            foreach($timetable as $value)
+            foreach($timetables as $value)
             {
                 $subjectTeacher = SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
                 $subjectTeacherArray= $subjectTeacher->toArray();
@@ -190,9 +229,48 @@ class TimetableController extends Controller
             $timetable=Timetable::wherein('division_subject_id',$finalSubjectClassDivision)
                   ->where('day_id', '=', $day_id)
                   ->orderBy('start_time', 'asc')
-                  ->get()->toArray();
+                  ->get();
+            $timetables=array();
+            foreach($timetable as $row)
+            {
+                $startTime=trim($row->start_time);
+                $subStartHours=substr($startTime,0,2);
+                $subStartMins=substr($startTime,3,2);
+                if($subStartHours>=12)
+                {
+                    if($subStartHours!=12)
+                    {
+                        $subStartHours=$subStartHours-12;
+                    }
+                    $row->start_time=$subStartHours.":".$subStartMins." PM";
+                }else{
+                    if($subStartHours==00)
+                    {
+                        $subStartHours=12;
+                    }
+                    $row->start_time=$subStartHours.":".$subStartMins." AM";
+                }
+                $endTime=trim($row->end_time);
+                $subEndHours=substr($endTime,0,2);
+                $subEndMins=substr($endTime,3,2);
+                if($subEndHours>=12)
+                {
+                    if($subEndHours!=12)
+                    {
+                        $subEndHours=$subEndHours-12;
+                    }
+                    $row->end_time=$subEndHours.":"."$subEndMins"." PM";
+                }else{
+                    if($subEndHours==00)
+                    {
+                        $subEndHours=12;
+                    }
+                    $row->end_time=$subEndHours.":"."$subEndMins"." AM";
+                }
+                array_push($timetables,$row);
+            }
             $i=0;
-            if(!Empty($timetable)) {
+            if(!Empty($timetables)) {
                 $message = 'success';
                 $status = 200;
                 foreach($timetable as $value)
