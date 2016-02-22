@@ -186,7 +186,7 @@
 
             var num=1;
 
-            var flag=0;
+            var flag=1;
 
             $('input[name="endTime[]"]').each(function(){
 
@@ -194,10 +194,12 @@
                 {
                     $("#subjectError"+num).show();
                     $("#subjectError"+num).html('There are no subjects available for this division.');
+                    flag=0;
                     return false;
                 }else{
                     $("#subjectError"+num).hide();
                     $("#subjectError"+num).html('');
+
                 }
 
                 var startTime=$("#startTime"+num).val();
@@ -208,6 +210,8 @@
 
                 var et = minFromMidnight(endTime);
 
+
+
                  if ( st >= et )
                  {
 
@@ -217,55 +221,166 @@
                      return false;
 
                  }else{
+                     $("#startTimeError"+num).show();
+                     $("#startTimeError"+num).html('');
 
-                     if ( num > 1 )
-                     {
 
-                         var prevEndTime=$("#endTime"+(num-1)).val();
 
-                         var prevet=minFromMidnight(prevEndTime);
+                     var startTime=$("#startTime"+num).val();
 
-                         if ( st < prevet )
+                     var endTime=$("#endTime"+num).val();
+
+                     var st = minFromMidnight(startTime);
+
+                     var et = minFromMidnight(endTime);
+
+                     var numInner=1;
+
+                     $('input[name="endTime[]"]').each(function(){
+
+                         if(num!=numInner)
                          {
+                             var startTime1=$("#startTime"+numInner).val();
 
-                             $("#startTimeError"+num).show();
-                             $("#startTimeError"+num).html('Start time must be greater than previous end time.');
-                             flag=0;
-                             return false;
+                             var endTime1=$("#endTime"+numInner).val();
 
+                             var st1 = minFromMidnight(startTime1);
+
+                             var et1 = minFromMidnight(endTime1);
+
+                             if(st1<st && et1>st)
+                             {
+                                 $("#startTimeError"+num).show();
+                                 $("#startTimeError"+num).html('Periods never be in same time interval or in between any other time interval. ');
+
+                                 flag=0;
+                                 return false;
+                             }else if(st1<et && et1>et){
+                                 $("#startTimeError"+num).show();
+                                 $("#startTimeError"+num).html('Periods never be in same time interval or in between any other time interval. ');
+
+                                 flag=0;
+                                 return false;
+                             }else if(st == st1){
+                                 $("#startTimeError"+num).show();
+                                 $("#startTimeError"+num).html('Periods never be in same time interval or in between any other time interval. ');
+
+                                 flag=0;
+                                 return false;
+                             }
                          }
-                         flag=1;
-                         $("#startTimeError"+num).hide();
-                         $("#startTimeError"+num).html('');
-                     }else{
-                         $("#startTimeError"+num).hide();
-                         $("#startTimeError"+num).html('');
-                     }
+                         numInner++;
 
-                }
+                     });
 
+                 }
 
-                function minFromMidnight(tm){
-
-                    var ampm= tm.substr(-2);
-
-                    var clk = tm.substr(0, 4);
-
-                    var m  = parseInt(clk.match(/\d+$/)[0], 10);
-                    var h  = parseInt(clk.match(/^\d+/)[0], 10);
-                    h += (ampm.match(/pm/i))? ((h==12)? 0 :12 ): 0;
-                    return (h*60+m);
-                }
                 num++;
-
 
             });
 
-            if ( flag == 1 )
+
+            if(flag==1)
             {
-                $('#timeTableForm').submit();
+                var num=1;
+                $('input[name="endTime[]"]').each(function(){
+
+
+                    var startTime=$("#startTime"+num).val();
+
+                    var endTime=$("#endTime"+num).val();
+
+                    var id=$("#subjects_"+num).val();
+
+                    var day=$("#dropdown").val();
+
+
+                    var route="/teacher-check";
+
+                    $.ajax({
+                        url:route,
+                        async:false,
+                        type:"post",
+                        data:{id:id,day:day,startTime:startTime,endTime:endTime},
+                        success:function(res){
+                            if( res != 0 ){
+
+                                flag=0;
+
+                            }else{
+                                flag=1;
+                            }
+                        }
+
+                    });
+
+                    if(flag==0)
+                    {
+                        $('#subjectError'+num).show();
+                        $('#subjectError'+num).html('This teacher subject is not available for this time interval.');
+                        return false;
+                    }else{
+                        $('#subjectError'+num).hide();
+                        $('#subjectError'+num).html('');
+
+                    }
+
+                    num++;
+
+                });
+
+                if(flag==1)
+                {
+                    $('#timeTableForm').submit();
+                }
+
             }
+
         });
+
+        /*
+         +   * Function Name: minFromMidnight
+         +   * Param: tm
+         +   * Return: it will returns formatted time in AM PM format (Meridian)
+         +   * Desc: this method converts 24 hrs timestamp into meredian timestamp.
+         +   * Developed By: Suraj Bande
+         +   * Date: 15/2/2016
+         +   */
+
+        function minFromMidnight(tm){
+
+            var ampm= tm.substr(-2);
+
+            var time= $.trim(tm).length === 7 ? "0" + tm : tm;
+
+            var clk = time.substr(0, 5);
+
+            var m  = parseInt(clk.match(/\d+$/)[0], 10);
+            var h  = parseInt(clk.match(/^\d+/)[0], 10);
+
+            if((ampm.match(/pm/i)) == "PM")
+            {
+                if(h==12)
+                {
+                    h+=0;
+                }else{
+                    h+=12;
+                }
+
+            }else{
+                if(h==12)
+                {
+                    h=0;
+                }else{
+                    h+=0;
+                }
+
+            }
+
+            return (h*60+m);
+        }
+
+
     </script>
 
 

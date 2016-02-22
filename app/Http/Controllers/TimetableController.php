@@ -11,6 +11,7 @@ use App\Timetable;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -75,7 +76,7 @@ class TimetableController extends Controller
 
             }
 
-            $timetables=Timetable::join('division_subjects','timetables.division_subject_id','=','division_subjects.id')
+            $timetable=Timetable::join('division_subjects','timetables.division_subject_id','=','division_subjects.id')
                 ->join('subjects','subjects.id','=','division_subjects.subject_id')
                 ->join('divisions','divisions.id','=','division_subjects.division_id')
                 ->join('users','users.id','=','division_subjects.teacher_id')
@@ -85,8 +86,58 @@ class TimetableController extends Controller
                 ->orderBy('start_time','ASC')
                 ->get();
 
+            $timetables=array();
+            foreach($timetable as $row)
+            {
 
-            if (sizeof($timetables->toArray()) != 0) {
+                $startTime=trim($row->start_time);
+
+                $subStartHours=substr($startTime,0,2);
+
+                $subStartMins=substr($startTime,3,2);
+
+                if($subStartHours>=12)
+                {
+                    if($subStartHours!=12)
+                    {
+                        $subStartHours=$subStartHours-12;
+                    }
+                    $row->start_time=$subStartHours.":".$subStartMins." PM";
+                }else{
+                    if($subStartHours==00)
+                    {
+                        $subStartHours=12;
+                    }
+                    $row->start_time=$subStartHours.":".$subStartMins." AM";
+                }
+
+
+                $endTime=trim($row->end_time);
+
+                $subEndHours=substr($endTime,0,2);
+
+                $subEndMins=substr($endTime,3,2);
+
+                if($subEndHours>=12)
+                {
+                    if($subEndHours!=12)
+                    {
+                        $subEndHours=$subEndHours-12;
+                    }
+                    $row->end_time=$subEndHours.":"."$subEndMins"." PM";
+                }else{
+                    if($subEndHours==00)
+                    {
+                        $subEndHours=12;
+                    }
+                    $row->end_time=$subEndHours.":"."$subEndMins"." AM";
+                }
+
+                array_push($timetables,$row);
+            }
+
+
+            if (sizeof($timetables) != 0) {
 
                 $mondays=array();
 
@@ -191,10 +242,21 @@ class TimetableController extends Controller
 
         for($i=0; $i<$length; $i++)
         {
+
+            ///////////Formatting start time to 24 hrs format
+
+            $startTime=$data['startTime'][$i];
+            $startTime=$this::formatedTime($startTime);
+
+            ///////////Formatting end time to 24 hrs format
+
+            $endTime=$data['endTime'][$i];
+            $endTime=$this::formatedTime($endTime);
+
             $insertdata['division_subject_id']=$data['subjects'][$i];
             $insertdata['is_break']=$data['check'][$i];
-            $insertdata['start_time']=$data['startTime'][$i];
-            $insertdata['end_time']=$data['endTime'][$i];
+            $insertdata['start_time']=$startTime;
+            $insertdata['end_time']=$endTime;
             $insertdata['day_id']=$data['day'];
 
             array_push($timetableData,$insertdata);
@@ -210,6 +272,15 @@ class TimetableController extends Controller
 
     }
 
+    /*
+ +   * Function Name: getSubjects
+ +   * Param: $id
+ +   * Return: it returns subjects
+ +   * Desc: it will returns subjects array respect to division_subject_id .
+ +   * Developed By: Suraj Bande
+ +   * Date: 16/2/2016
+ +   */
+
     public function getSubjects($id)
     {
         $subjects=SubjectClassDivision::where('division_id','=',$id)
@@ -218,5 +289,116 @@ class TimetableController extends Controller
             ->get();
 
         return $subjects;
+    }
+
+    /*
+ +   * Function Name: teacherCheck
+ +   * Param: $request
+ +   * Return: it will returns count of availability of teachers.
+ +   * Desc:  It checks teacher availability on the same day and same time.
+ +   * Developed By: Suraj Bande
+ +   * Date: 17/2/2016
+ +   */
+
+    public function teacherCheck(Request $request)
+    {
+
+            $id=$request->id;
+            $startTime=$request->startTime;
+            $endTime=$request->endTime;
+            $day=$request->day;
+
+            $startTime=$this::formatedTime($startTime);
+
+            $endTime=$this::formatedTime($endTime);
+
+            $teacher=SubjectClassDivision::where('id',$id)->select('teacher_id')->first();
+
+            $teacherArray=$teacher->toArray();
+
+            $teacherAvailability=SubjectClassDivision::join('timetables','timetables.division_subject_id','=','division_subjects.id')
+
+                                        ->select('start_time','end_time','timetables.division_subject_id')
+                                        ->whereRaw("('$startTime' between start_time and end_time)")
+                                        ->orwhereRaw("('$endTime' between start_time and end_time)")
+                                        ->where('timetables.day_id','==',$day)
+                                        ->wherein('teacher_id',$teacherArray)->count();
+
+            return $teacherAvailability;
+
+    }
+
+    /*
+ +   * Function Name: formatedTime
+ +   * Param: $time
+ +   * Return: it will returns formated time.
+ +   * Desc:  It returns formated time in 24 hrs format.
+ +   * Developed By: Suraj Bande
+ +   * Date: 17/2/2016
+ +   */
+
+    public function formatedTime($time){
+
+        $subStartAmpm=substr($time,-2);
+        $subStartTime=substr($time,0,5);
+        $time=trim($subStartTime);
+        $subStartMinutes=substr($time,-2);
+        $subStartHours=substr($time,-5,-2);
+
+        if($subStartAmpm=="PM")
+        {
+
+            if($subStartHours != "12")
+            {
+                $subStartHours=$time+12;
+                $time=$subStartHours.":".$subStartMinutes;
+            }
+
+        }else{
+            if($subStartHours == "12")
+            {
+                $time="00:".$subStartMinutes;
+            }
+        }
+
+        if(strlen($time)!=5)
+        {
+
+            $time="0".$time;
+
+        }
+
+        return $time;
+
+    }
+
+    /*
+ +   * Function Name: checkSubjectTeacher
+ +   * Param:
+ +   * Return: it will returns if the user is subject teacher or not.
+ +   * Desc:  if teacher is subject teacher then he cant get link to create timetable.
+ +   * Developed By: Suraj Bande
+ +   * Date: 18/2/2016
+ +   */
+
+    public function checkSubjectTeacher()
+    {
+        $user=Auth::user();
+        $roleId=$user->role_id;
+
+        if($roleId!=1)
+        {
+            $classTeacher= Division::where('class_teacher_id','=',$user->id)->count();
+
+
+            if($classTeacher == 0)
+            {
+                return 0;
+            }else{
+                return 1;
+            }
+        }else{
+            return 1;
+        }
     }
 }
