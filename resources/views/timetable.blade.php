@@ -116,14 +116,14 @@
                     @foreach(session('functionArr') as $row)
                     @if($row == 'create_timetable')
                     <div id="createper">
-                        <div class="form-group">
+                        <div class="form-group" id="copyStructureDiv">
 
                             <h4>Do you want <a id="copyStructure" class="btn btn-primary">Copy Structure</a></h4>
                             <p class="center">OR</p>
-                            <h4>Create Period</h4>
+
                         </div>
                         <div class="form-group">
-
+                            <h4>Create Period</h4>
                             <label>
                                 Enter Period Number
                             </label>
@@ -536,7 +536,6 @@ function showTimetable(val)
 
                     if ( arr[0].length > j )
                     {
-
                         if( arr[0][j]["is_break"] == 0 )
                         {
                             tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" ><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[0][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-info">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
@@ -546,7 +545,12 @@ function showTimetable(val)
                     }else{
                         if ( arr[0].length == j )
                         {
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
+                            if(arr[0].length == 0)
+                            {
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[0].length+'"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[0].length+'"><i class="ti-plus"></i></a></td>';
+                            }
                         }else{
                             tds+='<td></td>';
                         }
@@ -562,7 +566,17 @@ function showTimetable(val)
                     }else{
                         if ( arr[1].length == j )
                         {
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
+                            if(arr[1].length == 0)
+                            {
+                                if(arr[1].length == 0)
+                                {
+                                    tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[1].length+'"><i class="ti-plus"></i></a></td>';
+                                }else{
+                                    tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[1].length+'"><i class="ti-plus"></i></a></td>';
+                                }
+                            }else{
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[1].length+'"><i class="ti-plus"></i></a></td>';
+                            }
                         }else{
                             tds+='<td></td>';
                         }
@@ -578,7 +592,12 @@ function showTimetable(val)
                     }else{
                         if( arr[2].length == j )
                         {
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
+                            if(arr[2].length == 0)
+                            {
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[2].length+'"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[2].length+'"><i class="ti-plus"></i></a></td>';
+                            }
                         }else{
                             tds+='<td></td>';
                         }
@@ -595,7 +614,12 @@ function showTimetable(val)
                     }else{
                         if( arr[3].length == j )
                         {
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
+                            if(arr[3].length == 0)
+                            {
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[3].length+'"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[3].length+'"><i class="ti-plus"></i></a></td>';
+                            }
                         }else{
                             tds+='<td></td>';
                         }
@@ -612,7 +636,12 @@ function showTimetable(val)
                     }else{
                         if ( arr[4].length== j )
                         {
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
+                            if(arr[4].length == 0)
+                            {
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[4].length+'"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[4].length+'"><i class="ti-plus"></i></a></td>';
+                            }
                         }else{
                             tds+='<td></td>';
                         }
@@ -629,7 +658,12 @@ function showTimetable(val)
                     }else{
                         if ( arr[5].length == j )
                         {
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
+                            if(arr[5].length == 0)
+                            {
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[5].length+'"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[5].length+'"><i class="ti-plus"></i></a></td>';
+                            }
                         }else{
                             tds+='<td></td>';
                         }
@@ -640,14 +674,19 @@ function showTimetable(val)
 
                         if ( arr[6][j]["is_break"] == 0 )
                         {
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[6][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
+                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" ><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[6][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
                         }else{
                             tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
                         }
                     }else{
                         if ( arr[6].length == j )
                         {
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus"><i class="ti-plus"></i></a></td>';
+                            if(arr[6].length == 0)
+                            {
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[6].length+'"><i class="ti-plus"></i></a></td>';
+                            }else{
+                                tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[6].length+'"><i class="ti-plus"></i></a></td>';
+                            }
                         }else{
                             tds+='<td></td>';
                         }
@@ -681,10 +720,18 @@ function showTimetable(val)
                     {
                         $('#timetable-create-btn').show();
                         $('#timetable-create-btn').html(' <p>No timetable has been created for this division...</p>');
-                    }else{
+                    }else if(res == 1){
                         $('#timetable-create-btn').show();
                         $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
-                    }
+                    }else if(res['division_id'] == $('#division-select').val())
+                        {
+                            $('#timetable-create-btn').show();
+                            $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
+                        }else{
+                            $('#timetable-create-btn').show();
+                            $('#timetable-create-btn').html(' <p>No timetable has been created for this division...</p>');
+                        }
+
                 });
 
             }else{
@@ -692,6 +739,17 @@ function showTimetable(val)
             }
             $('#timetable-div').hide();
         }
+
+        $('.btn-plus').click(function(){
+            $('#createper').show();
+            $('#copystr').hide();
+            if(this.id=="modal0")
+            {
+                $('#copyStructureDiv').show();
+            }else{
+                $('#copyStructureDiv').hide();
+            }
+        });
     });
 
 }
@@ -709,6 +767,7 @@ $('#timepicker1').timepicker();
 $('#timepicker2').timepicker();
 $('#timepicker3').timepicker();
 $('#timepicker4').timepicker();
+
 
 </script>
 
