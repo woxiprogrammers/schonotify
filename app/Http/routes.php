@@ -312,10 +312,11 @@
     Route::post('auth','api\UserController@login');
 
     //leave Related
-    Route::get('approvedleaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
-    Route::get('pendingleaves',array('uses' => 'api\LeaveController@getPendingLeaveList'));
-    Route::put('approveleaves',array('uses' => 'api\LeaveController@approveLeave'));
-    Route::post('deatil-leaveinformation',array('uses' => 'api\LeaveController@getDetailLeaveInformation'));
+    Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
+    Route::get('approved-leaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
+    Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
+    Route::get('leaves-parent/{flag}/{student_id}',array('uses' => 'api\LeaveController@getLeaveListParent'));
+    Route::put('approve-leaves',array('uses' => 'api\LeaveController@approveLeave'));
 
     //Attendance Related
     Route::get('attendance-batches','api\AttendanceController@getAttendanceBatches');
