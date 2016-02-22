@@ -320,7 +320,14 @@
             var division=$('#division-select').val();
             dateChange(date,division);
         });
-
+    /**
+     * Function Name: dateChange
+     * @param:date,division
+     * @return retrun all student related to division on date change event
+     * Desc:it will retrun all student related to division on date change event
+     * Date: 22/2/2016
+     * author manoj chaudahri
+     */
     function dateChange(value,division){
         $.ajax({
             url: 'mark-attendance',
@@ -445,6 +452,7 @@
         });
     });
 
+
     $("#class-select").change(function() {
         var id = this.value;
         var route='get-all-division/'+id;
@@ -487,6 +495,14 @@
         var classId=$(this).val();
         getDivisions(classId);
     });
+    /**
+     * Function Name: getDivisions
+     * @param:classId
+     * @return retrun all divisions related user
+     * Desc:it will return list of divisions of releated user
+     * Date: 22/2/2016
+     * author manoj chaudahri
+     */
     function getDivisions(classId)
     {
         var route="/get-all-division/"+classId;
@@ -515,6 +531,14 @@
 
         });
     }
+    /**
+     * Function Name: getClasses
+     * @param:batchId
+     * @return retrun all classes related user
+     * Desc:it will return list of classes of releated user
+     * Date: 22/2/2016
+     * author manoj chaudahri
+     */
     function getClasses(batchId)
     {
         var route="/get-all-classes/"+batchId;

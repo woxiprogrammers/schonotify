@@ -218,6 +218,14 @@
         var classId=$(this).val();
         getDivisions(classId);
     });
+    /**
+     * Function Name: getDivisions
+     * @param:classId
+     * @return retrun all divisions related user
+     * Desc:it will return list of divisions of releated user
+     * Date: 22/2/2016
+     * author manoj chaudahri
+     */
     function getDivisions(classId)
     {
         var route="/get-divisions/"+classId;
@@ -246,6 +254,14 @@
 
         });
     }
+    /**
+     * Function Name: getClasses
+     * @param:batchId
+     * @return retrun all classes related user
+     * Desc:it will return list of classes of releated user
+     * Date: 22/2/2016
+     * author manoj chaudahri
+     */
     function getClasses(batchId)
     {
         var route="/get-classes/"+batchId;
