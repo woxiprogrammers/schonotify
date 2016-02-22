@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(ModulesAclsTableSeeder::class);
         $this->call(DayTableSeeder::class);
+        $this->call(LeaveTypesSeeder::class);
 
         Model::reguard();
     }

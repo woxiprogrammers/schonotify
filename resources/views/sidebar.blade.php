@@ -192,9 +192,9 @@
         </li>
         <li id="leaveCheck">
             <a href="/leaveListing">
-                <span class="title"> Leaves </span>
+                <span class="title" > Leaves </span>
                 @if(Auth::User()->role_id != 1)
-                <span class="badge pull-right">9</span>
+                <span class="badge pull-right" id="leaveCount"></span>
                 @endif
             </a>
         </li>

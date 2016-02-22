@@ -447,12 +447,41 @@ function checkMarkAttendanceAccess()
     });
 }
 checkLeaveAccess();
+/**
+ * Function Name: checkLeaveAccess
+ * @param:
+ * @return int
+ * Desc:it will check wheather leave access available for perticular user
+ * Date: 10/2/2016
+ * author manoj chaudahri
+ */
 function checkLeaveAccess()
 {
     var route="leave-check";
     $.get(route,function(res){
         if ( res == 0 ) {
             $('#leaveCheck').hide();
+        }
+    });
+}
+leaveCount();
+/**
+ * Function Name: leaveCount
+ * @param:
+ * @return int
+ * Desc:it will return count of all pending leaves for perticular divsion of class teacher
+ * Date: 18/2/2016
+ * author manoj chaudahri
+ */
+function leaveCount()
+{
+    var route="leave-count";
+    $.get(route,function(res){
+        if ( res == 0 ) {
+            $('#leaveCount').val('');
+        } else {
+           var str ='<small>' +res+ '</small>';
+            $('#leaveCount').html(str);
         }
     });
 }
