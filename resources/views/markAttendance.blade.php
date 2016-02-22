@@ -38,8 +38,8 @@
                                             <i class="fa fa-ok"></i> Your form validation is successful!
                                         </div>
                                     </div>
-                                    @if($dropDownData != null)
-                                      @if(Auth::User()->role_id == 2)
+                                    @if ($dropDownData != null)
+                                      @if (Auth::User()->role_id == 2)
                                             <div class="row">
                                                 <div class="form-group col-sm-4">
                                                     <label for="form-field-select-2">

@@ -28,8 +28,8 @@
                     <div class="row">
                         <div>
                             <div class="panel panel-transparent">
-                                @if($dropDownData != null)
-                                @if(Auth::User()->role_id == 2)
+                                @if ($dropDownData != null)
+                                @if (Auth::User()->role_id == 2)
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label for="form-field-select-2">
