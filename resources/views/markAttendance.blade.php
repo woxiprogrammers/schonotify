@@ -516,7 +516,7 @@
 
                 for(var i=0;i<res.length; i++)
                 {
-                    str+="<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>"
+                    str+="<option value='"+res[i]['division_id']+"'>"+res[i]['division_name']+"</option>"
                 }
 
             } else {
@@ -552,7 +552,7 @@
 
                 for(var i=0;i<res.length; i++)
                 {
-                    str+="<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>"
+                    str+="<option value='"+res[i]['class_id']+"'>"+res[i]['class_name']+"</option>"
                 }
 
             } else {

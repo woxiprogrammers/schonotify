@@ -267,7 +267,6 @@
         var route="/get-classes/"+batchId;
 
         $.get(route,function(res){
-
             var str="";
 
             if (res.length != 0)
