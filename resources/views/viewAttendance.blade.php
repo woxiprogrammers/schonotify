@@ -228,8 +228,8 @@
      */
     function getDivisions(classId)
     {
-        var route="/get-divisions/"+classId;
-
+        var batch = $('#batch-select').val();
+        var route="/get-attendance-division/"+classId+'/'+batch;
         $.get(route,function(res){
 
             var str="";
@@ -239,7 +239,7 @@
 
                 for(var i=0;i<res.length; i++)
                 {
-                    str+="<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>"
+                    str+="<option value='"+res[i]['division_id']+"'>"+res[i]['division_name']+"</option>"
                 }
 
             } else {
@@ -264,8 +264,7 @@
      */
     function getClasses(batchId)
     {
-        var route="/get-classes/"+batchId;
-
+        var route="/get-attendance-classes/"+batchId;
         $.get(route,function(res){
             var str="";
 
@@ -274,7 +273,7 @@
 
                 for(var i=0;i<res.length; i++)
                 {
-                    str+="<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>"
+                    str+="<option value='"+res[i]['class_id']+"'>"+res[i]['class_name']+"</option>"
                 }
 
             } else {

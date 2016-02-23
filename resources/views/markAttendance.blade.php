@@ -75,24 +75,24 @@
                                                     <label for="form-field-select-2">
                                                         Select Batch
                                                     </label>
-                                                    <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                                                    <select class="form-control" id="batch-select"  name="batch-select" style="-webkit-appearance: menulist;">
                                                         @foreach($dropDownData['batch'] as $row)
                                                         <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-sm-4" id="class-select-div">
+                                                <div class="form-group col-sm-4" id="class-select-div" >
                                                     <label for="form-field-select-2">
                                                         Select Class
                                                     </label>
-                                                    <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
+                                                    <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-4" id="division-select-div">
                                                     <label for="form-field-select-2">
                                                         Select Division
                                                     </label>
-                                                    <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
+                                                    <select class="form-control" id="division-select"  name="division-select" style="-webkit-appearance: menulist;">
                                                     </select>
                                                 </div>
                                             </div>
@@ -221,7 +221,8 @@
             $('#datePiker').on('change', function(){
                 $('#datePiker').datepicker("hide");
             });
-         if({!! Auth::User()->role_id == 1 !!}) {
+          var role = {!! Auth::User()->role_id !!};
+        if( role == 1 ) {
 
             var batchSelected=$('#batch-select').val();
             if(batchSelected!="")
@@ -504,8 +505,8 @@
      * author manoj chaudahri
      */
     function getDivisions(classId)
-    {
-        var route="/get-all-division/"+classId;
+    {   var batch = $('#batch-select').val();
+        var route="/get-attendance-division/"+classId+'/'+batch;
 
         $.get(route,function(res){
 
@@ -541,10 +542,9 @@
      */
     function getClasses(batchId)
     {
-        var route="/get-all-classes/"+batchId;
+        var route="/get-attendance-classes/"+batchId;
 
         $.get(route,function(res){
-
             var str="";
 
             if (res.length != 0)
