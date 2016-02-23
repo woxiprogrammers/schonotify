@@ -24,10 +24,42 @@ class DivisionSubjectsTableSeeder extends Seeder
                 'division_id' => 2,
                 'class_id'=>1,
                 'teacher_id'=>2,
-                'subject_id'=>1,
+                'subject_id'=>4,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
+            [
+                'division_id' => 3,
+                'class_id'=>2,
+                'teacher_id'=>3,
+                'subject_id'=>2,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'division_id' => 4,
+                'class_id'=>2,
+                'teacher_id'=>3,
+                'subject_id'=>3,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'division_id' => 5,
+                'class_id'=>3,
+                'teacher_id'=>4,
+                'subject_id'=>5,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'division_id' => 6,
+                'class_id'=>3,
+                'teacher_id'=>4,
+                'subject_id'=>6,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
         ]);
     }
 }

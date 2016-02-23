@@ -48,7 +48,7 @@ class SubjectsClassTableSeeder extends Seeder
                 'subject_id'=>6,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
-            ],
+            ]
 
 
         ]);

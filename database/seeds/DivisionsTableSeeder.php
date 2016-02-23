@@ -34,7 +34,7 @@ class DivisionsTableSeeder extends Seeder
             [
                 'division_name' => 'C',
                 'class_id'=>2,
-                'class_teacher_id'=>4,
+                'class_teacher_id'=>0,
                 'operational_days'=>6,
                 'slug'=>'c',
                 'created_at' => Carbon::now(),
