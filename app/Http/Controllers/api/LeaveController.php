@@ -30,7 +30,7 @@ class LeaveController extends Controller
        * Desc : if the leave id is 1 the it returns the pending leaves and if leave_id is 2 then
        *        it returns approved leave list to parent of the students only.
        * Developed By : Amol Rokade
-       * Date : 18/2/2016
+       * Date : 20/2/2016
        */
 
     public function getLeaveListParent(Requests\Leave $request , $flag , $student_id)
@@ -232,6 +232,33 @@ class LeaveController extends Controller
         $response = [
             "status" => $status,
             "message" => $message
+        ];
+        return response($response, $status);
+    }
+
+    /*
+   * Function Name : leaveTypes
+   * Param : Request $requests
+   * Return : message , status and JSON array of Leaves Types  .
+   * Desc :  Parent will get leaves types to apply i.e. full day or half day
+   * Developed By : Amol Rokade
+   * Date : 22 /2/2016
+    */
+
+    public function leaveTypes(Requests\Leave $request){
+        try{
+            $message = "Successfully Listed";
+            $status = 200;
+            $leaveTypes = array();
+            $leaveTypes = LeaveType::select('id','name')->get()->toArray();
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "something went wrong";
+        }
+        $response = [
+            "status" => $status,
+            "message" => $message,
+            "data" => $leaveTypes
         ];
         return response($response, $status);
     }
