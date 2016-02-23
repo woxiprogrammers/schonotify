@@ -79,7 +79,7 @@ class TimetableController extends Controller
 
             $timetable=Timetable::join('day_master','timetables.day_id','=','day_master.id')
                 ->select('timetables.id','day_master.id as day_id','day_master.name as day','is_break','start_time','end_time','division_subject_id')
-                ->where('timetables.division_id',$id)
+                ->where('timetables.div_id',$id)
                 ->orderBy('start_time','ASC')
                 ->get();
 
@@ -294,7 +294,7 @@ class TimetableController extends Controller
             $insertdata['start_time']=$startTime;
             $insertdata['end_time']=$endTime;
             $insertdata['day_id']=$data['day'];
-            $insertdata['division_id']=$data['hiddenFormDivId'];
+            $insertdata['div_id']=$data['hiddenFormDivId'];
             $insertdata['created_at']=Carbon::now();
             $insertdata['updated_at']=Carbon::now();
 
@@ -456,7 +456,7 @@ class TimetableController extends Controller
 
     public function copyStructureDays($id)
     {
-        $days=Timetable::where('division_id','=',$id)
+        $days=Timetable::where('div_id','=',$id)
             ->select('day_id')
             ->distinct()
             ->get();
@@ -530,7 +530,7 @@ class TimetableController extends Controller
 
         $copyStructure=Timetable::select('start_time','end_time')
             ->where('day_id','=',$day)
-            ->where('division_id','=',$division)
+            ->where('div_id','=',$division)
             ->get();
 
         $arrayStructure=array();
@@ -541,7 +541,7 @@ class TimetableController extends Controller
             $structure['division_subject_id']=0;
             $structure['is_break']=0;
             $structure['day_id']=$selectedDay;
-            $structure['division_id']=$division;
+            $structure['div_id']=$division;
             $structure['created_at']=Carbon::now();
             $structure['updated_at']=Carbon::now();
 
