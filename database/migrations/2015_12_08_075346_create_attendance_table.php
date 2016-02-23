@@ -17,6 +17,7 @@ class CreateAttendanceTable extends Migration
             $table->integer('teacher_id')->unsigned();
             $table->date('date');
             $table->integer('student_id')->unsigned();
+            $table->integer('status');
             $table->timestamps();
         });
     }
