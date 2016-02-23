@@ -320,10 +320,10 @@
 
     //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
-    Route::get('approved-leaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
     Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
     Route::get('leaves-parent/{flag}/{student_id}',array('uses' => 'api\LeaveController@getLeaveListParent'));
     Route::put('approve-leaves',array('uses' => 'api\LeaveController@approveLeave'));
+    Route::get('leave-types',array('uses' => 'api\LeaveController@leaveTypes'));
 
     //Attendance Related
     Route::get('attendance-batches','api\AttendanceController@getAttendanceBatches');

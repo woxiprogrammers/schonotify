@@ -15,7 +15,7 @@ class CreateLeavesTable extends Migration
         Schema::create('leaves', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('student_id')->unsigned();
-            $table->integer('division_id');
+            $table->integer('division_id')->unsigned();
             $table->integer('approved_by');
             $table->boolean('status');
             $table->text('reason');
