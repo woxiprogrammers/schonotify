@@ -44,7 +44,7 @@
 
                                         @foreach($divisions as $division)
                                             <span class="lato-font">Batch : {!! $division->batch_name !!}   Class : {!! $division->class_name !!}  Division : {!! $division->division_name !!}
-                                                <input type="hidden" id="hiddenDivId" value="{!! $division->division_id !!}">
+                                                <input type="hidden" id="hiddenDivId" name="hiddenDivId" value="{!! $division->division_id !!}">
                                         @endforeach
 
                                     </div>
@@ -111,6 +111,12 @@
 
                                                             <div class="col-md-12" id="main-div-periods">
                                                                <form action="create-timetable" method="post" role="form" id="timeTableForm">
+
+                                                                   @foreach($divisions as $division)
+
+                                                                   <input type="hidden" id="hiddenFormDivId" name="hiddenFormDivId" value="{!! $division->division_id !!}">
+
+                                                                   @endforeach
 
                                                                     <div id="periods-rows"></div>
                                                                     <input type="hidden" name="day" id="hiddenDay">
@@ -210,8 +216,6 @@
 
                 var et = minFromMidnight(endTime);
 
-
-
                  if ( st >= et )
                  {
 
@@ -278,11 +282,12 @@
             });
 
 
-            if(flag==1)
+            if( flag == 1 )
             {
-                var num=1;
-                $('input[name="endTime[]"]').each(function(){
 
+                var num = 1;
+
+                $('input[name="endTime[]"]').each(function(){
 
                     var startTime=$("#startTime"+num).val();
 
@@ -306,16 +311,16 @@
                             success:function(res){
                                 if( res != 0 ){
 
-                                    flag=0;
+                                    flag = 0;
 
-                                }else{
-                                    flag=1;
+                                } else {
+                                    flag = 1;
                                 }
                             }
 
                         });
 
-                        if(flag==0)
+                        if( flag == 0 )
                         {
                             $('#subjectError'+num).show();
                             $('#subjectError'+num).html('This teacher subject is not available for this time interval.');
@@ -358,23 +363,25 @@
             var clk = time.substr(0, 5);
 
             var m  = parseInt(clk.match(/\d+$/)[0], 10);
+
             var h  = parseInt(clk.match(/^\d+/)[0], 10);
 
             if((ampm.match(/pm/i)) == "PM")
             {
-                if(h==12)
+                if( h == 12 )
                 {
-                    h+=0;
-                }else{
-                    h+=12;
+                    h += 0;
+                } else {
+                    h += 12;
                 }
 
-            }else{
-                if(h==12)
+            } else {
+
+                if( h == 12 )
                 {
-                    h=0;
-                }else{
-                    h+=0;
+                    h = 0;
+                } else {
+                    h += 0;
                 }
 
             }

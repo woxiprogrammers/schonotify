@@ -263,6 +263,13 @@
 
     Route::get('/check-subject-teacher','TimetableController@checkSubjectTeacher');
 
+    Route::get('/copy-structure-day/{id}','TimetableController@copyStructureDays');
+
+    Route::get('/edit-period/{id}','TimetableController@editPeriod');
+
+    Route::get('/delete-period/{id}','TimetableController@deletePeriod');
+
+    Route::get('/create-copy-structure/{division}/{day}/{selectedDay}','TimetableController@copyStructure');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));

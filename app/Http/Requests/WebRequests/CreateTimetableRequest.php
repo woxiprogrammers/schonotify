@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class TimetableRequest extends Request
+class CreateTimetableRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -37,20 +37,6 @@ class TimetableRequest extends Request
         {
             case 'GET':
 
-                if(in_array('view_timetable',$resultArr)) {
-                    return true;
-                } else {
-                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
-                    return Redirect::to('/');
-                }
-
-                break;
-
-            case 'PUT':
-                dd('put');
-                break;
-
-            case 'POST':
                 if(in_array('create_timetable',$resultArr)) {
                     return true;
                 } else {
@@ -74,12 +60,8 @@ class TimetableRequest extends Request
         $ch=Request::method();
         switch($ch)
         {
-            case 'GET': return [];
-                break;
-            case 'POST':return [
-                'subject_name'=>'required|min:1|unique:subjects',
-                'class'=>'required|min:1'
-            ];
+
+            case 'GET':return [];
                 break;
             default:break;
         }
