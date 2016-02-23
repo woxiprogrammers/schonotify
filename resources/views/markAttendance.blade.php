@@ -222,14 +222,13 @@
                 $('#datePiker').datepicker("hide");
             });
           var role = {!! Auth::User()->role_id !!};
-        if( role == 1 ) {
-
-            var batchSelected=$('#batch-select').val();
-            if(batchSelected!="")
-            {
-                getClasses(batchSelected);
-            }
-        }
+          if( role == 1 ) {
+                var batchSelected=$('#batch-select').val();
+                if(batchSelected!="")
+                {
+                    getClasses(batchSelected);
+                }
+          }
         });
         var endDate = new Date();
         $('#datePiker').datepicker('setEndDate', endDate);
@@ -452,8 +451,6 @@
             }
         });
     });
-
-
     $("#class-select").change(function() {
         var id = this.value;
         var route='get-all-division/'+id;
@@ -505,31 +502,22 @@
      * author manoj chaudahri
      */
     function getDivisions(classId)
-    {   var batch = $('#batch-select').val();
+    {
+        var batch = $('#batch-select').val();
         var route="/get-attendance-division/"+classId+'/'+batch;
-
         $.get(route,function(res){
-
             var str="";
-
             if (res.length != 0)
             {
-
                 for(var i=0;i<res.length; i++)
                 {
                     str+="<option value='"+res[i]['division_id']+"'>"+res[i]['division_name']+"</option>"
                 }
-
             } else {
-
                 str+="<option value='0'>No divisions found</option>"
-
             }
-
             $('#division-select').html(str);
-
             var divisionSelected=$('#division-select').val();
-
         });
     }
     /**
@@ -543,33 +531,23 @@
     function getClasses(batchId)
     {
         var route="/get-attendance-classes/"+batchId;
-
         $.get(route,function(res){
             var str="";
-
             if (res.length != 0)
             {
-
                 for(var i=0;i<res.length; i++)
                 {
                     str+="<option value='"+res[i]['class_id']+"'>"+res[i]['class_name']+"</option>"
                 }
-
             } else {
-
                 str+="<option>No classes found</option>"
-
             }
-
             $('#class-select').html(str);
-
             var classSelected=$('#class-select').val();
-
             if(classSelected!="")
             {
                 getDivisions(classSelected);
             }
-
         });
     }
 </script>
