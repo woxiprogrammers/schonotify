@@ -16,7 +16,6 @@ class CreateTimetablesTable extends Migration
             $table->increments('id');
             $table->integer('day_id');
             $table->integer('division_subject_id')->unsinged();
-            $table->integer('division_id');
             $table->boolean('is_break');
             $table->Time('start_time');
             $table->Time('end_time');
