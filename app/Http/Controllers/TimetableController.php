@@ -8,6 +8,7 @@ use App\DayMaster;
 use App\Division;
 use App\SubjectClassDivision;
 use App\Timetable;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -76,21 +77,46 @@ class TimetableController extends Controller
 
             }
 
-            $timetable=Timetable::join('division_subjects','timetables.division_subject_id','=','division_subjects.id')
-                ->join('subjects','subjects.id','=','division_subjects.subject_id')
-                ->join('divisions','divisions.id','=','division_subjects.division_id')
-                ->join('users','users.id','=','division_subjects.teacher_id')
-                ->join('day_master','timetables.day_id','=','day_master.id')
-                ->select('day_master.name as day','subjects.subject_name as subject','is_break','start_time','end_time','users.username as teacher')
-                ->wherein('timetables.division_subject_id',$divArray)
+            $timetable=Timetable::join('day_master','timetables.day_id','=','day_master.id')
+                ->select('timetables.id','day_master.id as day_id','day_master.name as day','is_break','start_time','end_time','division_subject_id')
+                ->where('timetables.division_id',$id)
                 ->orderBy('start_time','ASC')
                 ->get();
 
+            $arrayTimetable=array();
+
+            foreach($timetable->toArray() as $row)
+            {
+                if( $row['division_subject_id'] != 0 )
+                {
+                    $subject=SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
+                        ->join('users','users.id','=','division_subjects.teacher_id')
+                        ->select('users.username as teacher','subjects.subject_name')
+                        ->where('division_subjects.id',$row['division_subject_id'])
+                        ->get()->toArray();
+
+                    $row['teacher']=$subject[0]['teacher'];
+
+                    $row['subject']=$subject[0]['subject_name'];
+
+                }else{
+
+                    $row['teacher']="";
+
+                    $row['subject']="";
+
+                }
+
+                array_push($arrayTimetable,$row);
+            }
+
+
             $timetables=array();
-            foreach($timetable as $row)
+
+            foreach($arrayTimetable as $row)
             {
 
-                $startTime=trim($row->start_time);
+                $startTime=trim($row['start_time']);
 
                 $subStartHours=substr($startTime,0,2);
 
@@ -102,17 +128,17 @@ class TimetableController extends Controller
                     {
                         $subStartHours=$subStartHours-12;
                     }
-                    $row->start_time=$subStartHours.":".$subStartMins." PM";
+                    $row['start_time']=$subStartHours.":".$subStartMins." PM";
                 }else{
                     if($subStartHours==00)
                     {
                         $subStartHours=12;
                     }
-                    $row->start_time=$subStartHours.":".$subStartMins." AM";
+                    $row['start_time']=$subStartHours.":".$subStartMins." AM";
                 }
 
 
-                $endTime=trim($row->end_time);
+                $endTime=trim($row['end_time']);
 
                 $subEndHours=substr($endTime,0,2);
 
@@ -124,18 +150,17 @@ class TimetableController extends Controller
                     {
                         $subEndHours=$subEndHours-12;
                     }
-                    $row->end_time=$subEndHours.":"."$subEndMins"." PM";
+                    $row['end_time']=$subEndHours.":"."$subEndMins"." PM";
                 }else{
                     if($subEndHours==00)
                     {
                         $subEndHours=12;
                     }
-                    $row->end_time=$subEndHours.":"."$subEndMins"." AM";
+                    $row['end_time']=$subEndHours.":"."$subEndMins"." AM";
                 }
 
                 array_push($timetables,$row);
             }
-
 
             if (sizeof($timetables) != 0) {
 
@@ -155,31 +180,31 @@ class TimetableController extends Controller
 
                 foreach ($timetables as $day) {
 
-                    if ($day->day == "Monday") {
+                    if ($day['day'] == "Monday") {
 
                         array_push($mondays,$day);
 
-                    } elseif ($day->day == "Tuesday") {
+                    } elseif ($day['day'] == "Tuesday") {
 
                         array_push($tuesdays,$day);
 
-                    } elseif ($day->day == "Wednesday") {
+                    } elseif ($day['day'] == "Wednesday") {
 
                         array_push($wednesdays,$day);
 
-                    } elseif ($day->day == "Thursday") {
+                    } elseif ($day['day'] == "Thursday") {
 
                         array_push($thursdays,$day);
 
-                    } elseif ($day->day == "Friday") {
+                    } elseif ($day['day'] == "Friday") {
 
                         array_push($fridays,$day);
 
-                    } elseif ($day->day == "Saturday") {
+                    } elseif ($day['day'] == "Saturday") {
 
                         array_push($saturdays,$day);
 
-                    } elseif ($day->day == "Sunday") {
+                    } elseif ($day['day'] == "Sunday") {
 
                         array_push($sundays,$day);
 
@@ -213,13 +238,22 @@ class TimetableController extends Controller
 +   * Date: 10/2/2016
 +   */
 
-    public function create()
+    public function create(Requests\WebRequests\CreateTimetableRequest $request)
     {
-        $divisions=session('timetable_batch_class_division_id');
+        if ( $request->authorize() === true )
+        {
+            $divisions=session('timetable_batch_class_division_id');
 
-        $days=DayMaster::get();
+            $days=DayMaster::get();
 
-        return view('createTimetable')->with(compact('divisions','days'));
+            return view('createTimetable')->with(compact('divisions','days'));
+
+        }else{
+
+            return Redirect::to('/');
+
+        }
+
     }
 
     /*
@@ -230,8 +264,10 @@ class TimetableController extends Controller
 +   * Developed By: Suraj Bande
 +   * Date: 15/2/2016
 +   */
+
     public function createTimetable(Request $request)
     {
+
         $data=$request->all();
 
         $insertdata=array();
@@ -258,6 +294,9 @@ class TimetableController extends Controller
             $insertdata['start_time']=$startTime;
             $insertdata['end_time']=$endTime;
             $insertdata['day_id']=$data['day'];
+            $insertdata['division_id']=$data['hiddenFormDivId'];
+            $insertdata['created_at']=Carbon::now();
+            $insertdata['updated_at']=Carbon::now();
 
             array_push($timetableData,$insertdata);
 
@@ -382,23 +421,149 @@ class TimetableController extends Controller
 
     public function checkSubjectTeacher()
     {
+
         $user=Auth::user();
+
         $roleId=$user->role_id;
 
-        if($roleId!=1)
+        if( $roleId != 1 )
         {
+
             $classTeacher= Division::where('class_teacher_id','=',$user->id)->get();
 
-            if($classTeacher->isEmpty() == true)
+            if( $classTeacher->isEmpty() == true )
             {
                 return 0;
-            }else{
-
+            } else {
                $result=array('division_id'=>$classTeacher[0]->id);
                 return $result;
             }
+
         }else{
             return 1;
         }
+
     }
+
+    /*
+ +   * Function Name: copyStructureDays
+ +   * Param: $id
+ +   * Return: it will returns available days to copy structure.
+ +   * Desc:  it will returns available days to copy structure with respect to division id.
+ +   * Developed By: Suraj Bande
+ +   * Date: 23/2/2016
+ +   */
+
+    public function copyStructureDays($id)
+    {
+        $days=Timetable::where('division_id','=',$id)
+            ->select('day_id')
+            ->distinct()
+            ->get();
+
+        return $days;
+    }
+
+    /*
+ +   * Function Name: editPeriod
+ +   * Param: $id
+ +   * Return: it will returns editable data of periods.
+ +   * Desc:  it will returns editable data with respect to period id.
+ +   * Developed By: Suraj Bande
+ +   * Date: 23/2/2016
+ +   */
+
+    public function editPeriod($id)
+    {
+
+        $period=Timetable::where('id',$id)->get();
+
+        $periods=$period->toArray();
+
+        if($periods[0]['division_subject_id'] == "0")
+        {
+            $periods[0]['subject_name']="";
+        }else{
+            $subject=SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
+                    ->select('subjects.subject_name')
+                    ->where('division_subjects.id','=',$periods[0]['division_subject_id'])
+                    ->get()->toArray();
+
+            $periods[0]['subject_name']=$subject[0]['subject_name'];
+        }
+
+        return $periods;
+
+    }
+
+    /*
+ +   * Function Name: deletePeriod
+ +   * Param: $id
+ +   * Return: it will delete period.
+ +   * Desc:  it will delete period with respect to period id.
+ +   * Developed By: Suraj Bande
+ +   * Date: 23/2/2016
+ +   */
+
+    public function deletePeriod($id)
+    {
+        $delete=Timetable::where('id',$id)->delete();
+
+        if( $delete )
+        {
+            Session::flash('message-success','Period deleted successfully !');
+            return Redirect::to('timetable');
+        }
+    }
+
+    /*
+ +   * Function Name: copyStructure
+ +   * Param: $division,$day,$selectedDay
+ +   * Return: it will create another structure of the another day.
+ +   * Desc:  it will create timetable structure for selected day and division with respect to available structure.
+ +   * Developed By: Suraj Bande
+ +   * Date: 23/2/2016
+ +   */
+
+    public function copyStructure($division,$day,$selectedDay)
+    {
+
+        $copyStructure=Timetable::select('start_time','end_time')
+            ->where('day_id','=',$day)
+            ->where('division_id','=',$division)
+            ->get();
+
+        $arrayStructure=array();
+
+        foreach($copyStructure->toArray() as $structure)
+        {
+
+            $structure['division_subject_id']=0;
+            $structure['is_break']=0;
+            $structure['day_id']=$selectedDay;
+            $structure['division_id']=$division;
+            $structure['created_at']=Carbon::now();
+            $structure['updated_at']=Carbon::now();
+
+            array_push($arrayStructure,$structure);
+
+        }
+
+        $status=Timetable::insert($arrayStructure);
+
+        if( $status ){
+
+            Session::flash('message-success','Timetable structure copied successfully !');
+
+            return 1;
+
+        } else {
+
+            Session::flash('message-error','Something went wrong !');
+
+            return 0;
+        }
+
+    }
+
 }
