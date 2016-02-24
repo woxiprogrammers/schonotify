@@ -47,6 +47,14 @@
                                 </select>
                             </div>
 
+                            @foreach(session('timetable_batch_class_division_id') as $batchClassDivision)
+
+                            <input type="hidden" id="sessionBatchId" value="{!! $batchClassDivision->batch_id !!}"/>
+                            <input type="hidden" id="sessionClassId" value="{!! $batchClassDivision->class_id !!}"/>
+                            <input type="hidden" id="sessionDivisionId" value="{!! $batchClassDivision->division_id !!}"/>
+
+                            @endforeach
+
                             <div class="form-group col-sm-4" id="class-select-div">
                                 <label for="form-field-select-2">
                                     Select Class
@@ -383,11 +391,13 @@ $(document).ready(function(){
 
     $('.timepicker1').timepicker();
 
+
     var batchSelected=$('#batch-select').val();
 
     if(batchSelected!="")
     {
         getClasses(batchSelected);
+
     }
 
 });
@@ -449,6 +459,7 @@ function getDivisions(classId)
         $('#copystr').hide();
 
     });
+
 }
 
 /*
@@ -487,6 +498,7 @@ function getClasses(batchId)
         $('#class-select').html(str);
 
         var classSelected=$('#class-select').val();
+
 
         if( classSelected != "" )
         {
@@ -540,6 +552,8 @@ function showTimetable(val)
         });
 
         $('#timetable-create-btn').show();
+
+        $('tbody .timetable-div-table').html('');
 
         if(arr[0]!=="unavailable")
         {
@@ -885,8 +899,6 @@ function showTimetable(val)
 
                 var divisionSelected=$('#division-select').val();
 
-                showTimetable(divisionSelected);
-
                 var route="/copy-structure-day/"+divisionSelected;
 
                 $.get(route,function(res){
@@ -960,7 +972,7 @@ function editPeriod(id)
 
             $('.loading').prop('disabled',false);
 
-            $('#del-period-btn').prop('href','/delete-period/'+id);
+            $('#del-period-btn').attr('onclick','deletePeriod('+id+')');
 
             $('#subject-select-edit').html('<option>'+res[0]['subject_name']+'</option>');
 
@@ -981,6 +993,41 @@ function editPeriod(id)
 
 }
 
+/*
+ +   * Function Name: deletePeriod
+ +   * Param: id
+ +   * Return: it will returns delete period
+ +   * Desc: it will delete timetable period with respect to period id.
+ +   * Developed By: Suraj Bande
+ +   * Date: 23/2/2016
+ +   */
+
+function deletePeriod(id)
+{
+    var route="/delete-period/"+id;
+
+    $.get(route,function(res){
+
+        var div_id=$('#division-select').val();
+
+        showTimetable(div_id);
+
+        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+            'Period deleted successfully !'+
+            '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+            '<span area-hidden="true">&times;</span>'+
+            '</button>'+
+
+            '</div>';
+
+        $('#message-error-div').html(str);
+
+        $('#myModal1').modal('toggle');
+
+    });
+
+}
+
 
 $('#copyStructureBtn').click(function(){
 
@@ -994,7 +1041,20 @@ $('#copyStructureBtn').click(function(){
 
     $.get(route,function(res){
 
-            window.location.href="/timetable";
+        showTimetable(div_id);
+
+
+        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+                'Timetable structure copied successfully !'+
+                '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                '<span area-hidden="true">&times;</span>'+
+            '</button>'+
+
+            '</div>';
+
+        $('#message-error-div').html(str);
+
+            $('#myModal').modal('toggle');
 
     });
 
