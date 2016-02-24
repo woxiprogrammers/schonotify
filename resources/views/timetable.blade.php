@@ -47,14 +47,6 @@
                                 </select>
                             </div>
 
-                            @foreach(session('timetable_batch_class_division_id') as $batchClassDivision)
-
-                            <input type="hidden" id="sessionBatchId" value="{!! $batchClassDivision->batch_id !!}"/>
-                            <input type="hidden" id="sessionClassId" value="{!! $batchClassDivision->class_id !!}"/>
-                            <input type="hidden" id="sessionDivisionId" value="{!! $batchClassDivision->division_id !!}"/>
-
-                            @endforeach
-
                             <div class="form-group col-sm-4" id="class-select-div">
                                 <label for="form-field-select-2">
                                     Select Class

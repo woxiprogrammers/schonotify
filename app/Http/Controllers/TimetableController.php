@@ -67,8 +67,6 @@ class TimetableController extends Controller
 
             Session::put('timetable_batch_class_division_id',$divisions);
 
-            //dd(session('timetable_batch_class_division_id'));
-
             $subjectClassDiv=SubjectClassDivision::where('division_id',$id)->get();
 
             $divArray=array();
