@@ -29,6 +29,7 @@
             </section>
 
             <div class="container-fluid container-fullw bg-white">
+
                 <div class="row">
 
                     <div class="panel panel-transparent">
@@ -113,7 +114,6 @@
         <div class="modal-content">
 
                 <div class="modal-body">
-
 
                     <div id="createper">
 
@@ -324,8 +324,8 @@
                         </div>
                     </div>
 
-
                 </div>
+
                 <div class="modal-footer">
                     @foreach(session('functionArr') as $row)
                     @if($row == 'delete_timetable')
@@ -589,7 +589,6 @@ function showTimetable(val)
 
                         }
                     }else{
-
                         if ( arr[0].length == j )
                         {
 
@@ -1034,7 +1033,6 @@ $('#copyStructureBtn').click(function(){
     $.get(route,function(res){
 
         showTimetable(div_id);
-
 
         var str='<div class="alert alert-success alert-dismissible" role="alert">'+
                 'Timetable structure copied successfully !'+
