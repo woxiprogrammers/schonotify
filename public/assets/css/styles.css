@@ -11785,3 +11785,12 @@ a.control_next {
     left:32px;
 }
 
+.align-loader{
+    margin-top: -41px;
+    left: 119px;
+    position: absolute;
+}
+
+.loading-css{
+    color: #ccc !important;
+}
