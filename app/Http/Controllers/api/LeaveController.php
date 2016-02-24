@@ -62,7 +62,7 @@ class LeaveController extends Controller
                         $studentName = User::where('id',$leave['student_id'])->first();
                         $leaveData[$i]['leave_id'] = $leave['id'];
                         $leaveData[$i]['student_id'] = $leave['student_id'];
-                        $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type_id'])->pluck('name');
+                        $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type'])->pluck('name');
                         $leaveData[$i]['title'] = $leave['title'];
                         $leaveData[$i]['applied_on'] = date("Y-m-d ",strtotime($leave['created_at']));
                         $leaveData[$i]['form_date'] = $leave['from_date'];
@@ -111,7 +111,7 @@ class LeaveController extends Controller
                     $message = 'Successfully Listed';
                     $status = 200;
                     $leaves = Leave::where('division_id', $division['id'])
-                        ->where('status', '1') //1 is for pending leaves and 2 for approved leaves.
+                        ->where('status', 1) //1 is for pending leaves and 2 for approved leaves.
                         ->orderBy('created_at', 'ASC')
                         ->get()->toArray();
                 } else if( $flag == 2 ) {
@@ -131,7 +131,7 @@ class LeaveController extends Controller
                         $studentName = User::where('id',$leave['student_id'])->first();
                         $leaveData[$i]['leave_id'] = $leave['id'];
                         $leaveData[$i]['student_id'] = $leave['student_id'];
-                        $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type_id'])->pluck('name');
+                        $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type'])->pluck('name');
                         $leaveData[$i]['title'] = $leave['title'];
                         $leaveData[$i]['applied_on'] =  date("Y-m-d ",strtotime($leave['created_at']));
                         $leaveData[$i]['form_date'] = $leave['from_date'];
@@ -177,7 +177,7 @@ class LeaveController extends Controller
             if(Leave::where('id', $data['leave_id'])->first()!=null) {
                 $status=Leave::where('id', $data['leave_id'])->pluck('status');
                 if ( $status == 1 ) {
-                    Leave::where('id', $data['leave_id'])->update(['status' => 2]);
+                    Leave::where('id', $data['leave_id'])->update(['status' => 2,'approved_by' => $data['teacher']['id']]);
                     $message = 'Leave Approved Successfully';
                     $status = 200;
                 } else {
@@ -218,7 +218,7 @@ class LeaveController extends Controller
             $createData['division_id'] = User::where('id','=',$data['student_id'])->pluck('division_id');
             $createData['status'] = 1;
             $createData['title'] = $data['title'];
-            $createData['leave_type_id'] = $data['leave_type_id'];
+            $createData['leave_type'] = $data['leave_type_id'];
             $createData['reason'] = $data['reason'];
             $createData['from_date'] = $data['from_date'];
             $createData['end_date'] = $data['end_date'];
