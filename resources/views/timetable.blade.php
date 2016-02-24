@@ -491,7 +491,6 @@ function getClasses(batchId)
 
         var classSelected=$('#class-select').val();
 
-
         if( classSelected != "" )
         {
             getDivisions(classSelected);
