@@ -263,6 +263,13 @@
 
     Route::get('/check-subject-teacher','TimetableController@checkSubjectTeacher');
 
+    Route::get('/copy-structure-day/{id}','TimetableController@copyStructureDays');
+
+    Route::get('/edit-period/{id}','TimetableController@editPeriod');
+
+    Route::get('/delete-period/{id}','TimetableController@deletePeriod');
+
+    Route::get('/create-copy-structure/{division}/{day}/{selectedDay}','TimetableController@copyStructure');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
@@ -313,10 +320,10 @@
 
     //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
-    Route::get('approved-leaves',array('uses' => 'api\LeaveController@getApprovedLeaveList'));
     Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
     Route::get('leaves-parent/{flag}/{student_id}',array('uses' => 'api\LeaveController@getLeaveListParent'));
     Route::put('approve-leaves',array('uses' => 'api\LeaveController@approveLeave'));
+    Route::get('leave-types',array('uses' => 'api\LeaveController@leaveTypes'));
 
     //Attendance Related
     Route::get('attendance-batches','api\AttendanceController@getAttendanceBatches');
