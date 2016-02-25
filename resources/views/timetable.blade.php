@@ -445,24 +445,8 @@ function getDivisions(classId)
 
         var divisionSelected=$('#division-select').val();
 
-        if (sessionStorage.getItem('flagToReload') == 1)
-        {
+        showTimetable(divisionSelected);
 
-            var sessionBatchVal = sessionStorage.getItem('batch');
-            var sessionClassVal = sessionStorage.getItem('class');
-            var sessionDivisionVal = sessionStorage.getItem('division');
-
-            sessionStorage.setItem('flagToReload',0);
-
-            $('#batch-select').val(sessionBatchVal);
-            $('#class-select').val(sessionClassVal);
-            $('#division-select').val(sessionDivisionVal);
-
-            showTimetable(sessionDivisionVal);
-
-        } else {
-            showTimetable(divisionSelected);
-        }
         $('#copystr').hide();
 
     });
