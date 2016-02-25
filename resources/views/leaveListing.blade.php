@@ -208,7 +208,7 @@
                                 '<div class="leaveSection">'+
                                 '<div class="text-muted text-small">';
                             var date=res[i]['created_date']['date'].split(/[- :]/);
-                            var createdAt= date[2]+"-"+date[1]+"-"+date[0];
+                            var createdAt = date[2]+"-"+date[1]+"-"+date[0];
                             str += createdAt+
                                 '</div>'+
                                 '<div class="col-sm-8" style="margin-top: 4px;">'+
@@ -229,9 +229,9 @@
                                     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                                 "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
                                     var from_date = res[i]['from_date'].split(/[- :]/);
-                                    var end_date = res[i]['from_date'].split(/[- :]/);
-                                    var fromDate= from_date[2]+" "+monthNames[parseInt(from_date[1],10)-1]+" "+from_date[0];
-                                    var endDate= end_date[2]+" "+monthNames[parseInt(end_date[1],10)-1]+" "+end_date[0];
+                                    var end_date = res[i]['end_date'].split(/[- :]/);
+                                    var fromDate = from_date[2]+" "+monthNames[parseInt(from_date[1],10)-1]+" "+from_date[0];
+                                    var endDate = end_date[2]+" "+monthNames[parseInt(end_date[1],10)-1]+" "+end_date[0];
                             str +=fromDate+
                                 '</i><br>'+
                                 'Leave To:'+
@@ -303,8 +303,8 @@
                     str += '<li class="timeline-item success">'+
                         '<div class="leaveSection">'+
                         '<div class="text-muted text-small">';
-                    var date=res[i]['created_date']['date'].split(/[- :]/);
-                    var createdAt= date[2]+"-"+date[1]+"-"+date[0];
+                    var date = res[i]['created_date']['date'].split(/[- :]/);
+                    var createdAt = date[2]+"-"+date[1]+"-"+date[0];
                     str +=createdAt +
                         '</div>'+
                         '<div class="col-sm-8" style="margin-top: 4px;">'+
@@ -325,9 +325,9 @@
                             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                  "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
                                 var from_date = res[i]['from_date'].split(/[- :]/);
-                                var end_date = res[i]['from_date'].split(/[- :]/);
-                                var fromDate= from_date[2]+" "+monthNames[parseInt(from_date[1],10)-1]+" "+from_date[0];
-                                var endDate= end_date[2]+" "+monthNames[parseInt(end_date[1],10)-1]+" "+end_date[0];
+                                var end_date = res[i]['end_date'].split(/[- :]/);
+                                var fromDate = from_date[2]+" "+monthNames[parseInt(from_date[1],10)-1]+" "+from_date[0];
+                                var endDate = end_date[2]+" "+monthNames[parseInt(end_date[1],10)-1]+" "+end_date[0];
                     str +=fromDate+
                         '</i><br>'+
                         'Leave To:'+
