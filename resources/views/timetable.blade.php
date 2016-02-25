@@ -385,9 +385,16 @@ $(document).ready(function(){
 
     $('.timepicker1').timepicker();
 
+    var sessionBatchVal = sessionStorage.getItem('batch');
+
+    if (sessionStorage.getItem('flagToReload') == 1)
+    {
+        $('#batch-select').val(sessionBatchVal);
+    }
     var batchSelected=$('#batch-select').val();
 
     if(batchSelected != "") {
+
         getClasses(batchSelected);
 
     }
@@ -432,7 +439,18 @@ function getDivisions(classId)
 
             for(var i = 0; i < res.length; i++)
             {
-                str += "<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>"
+                var sessionDivisionVal = sessionStorage.getItem('division');
+
+                if (sessionStorage.getItem('flagToReload') == 1 && res[i]['id']==sessionDivisionVal)
+                {
+
+                    str += "<option value='"+res[i]['id']+"' selected>"+res[i]['division_name']+"</option>";
+
+                    sessionStorage.setItem('flagToReload', 0);
+
+                }else{
+                    str += "<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>";
+                }
             }
 
         } else {
@@ -477,7 +495,16 @@ function getClasses(batchId)
 
               for( var i = 0; i < res.length; i++ )
               {
-                  str += "<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>"
+                  var sessionClassVal = sessionStorage.getItem('class');
+
+                  if (sessionStorage.getItem('flagToReload') == 1 && res[i]['id'] == sessionClassVal)
+                  {
+
+                      str += "<option value='"+res[i]['id']+"' selected>"+res[i]['class_name']+"</option>";
+
+                  }else{
+                      str += "<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>";
+                  }
               }
 
           } else {
