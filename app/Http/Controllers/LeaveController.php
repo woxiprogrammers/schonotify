@@ -255,10 +255,10 @@ class LeaveController extends Controller
             if ($leaveStatus ==1)
             {
                 Session::flash('message-success','Leave published successfully');
-                return Redirect::to('/leaveListing');
+                return Redirect::back();
             }
         } else {
-            return Redirect::to('/');
+            return Redirect::back();
         }
     }
     /**
