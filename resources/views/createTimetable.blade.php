@@ -43,7 +43,9 @@
                                         <label>Create Timetable For :</label>
 
                                         @foreach($divisions as $division)
-                                            <span class="lato-font">Batch : {!! $division->batch_name !!}   Class : {!! $division->class_name !!}  Division : {!! $division->division_name !!}
+                                            <span class="lato-font">Batch : {!! $division->batch_name !!}   Class : {!! $division->class_name !!}  Division : {!! $division->division_name !!}</span>
+                                                <input type="hidden" id="hiddenBatchId" name="hiddenBatchId" value="{!! $division->batch_id !!}">
+                                                <input type="hidden" id="hiddenClassId" name="hiddenClassId" value="{!! $division->class_id !!}">
                                                 <input type="hidden" id="hiddenDivId" name="hiddenDivId" value="{!! $division->division_id !!}">
                                         @endforeach
 
@@ -187,87 +189,82 @@
 
             });
 
-
         $('#btnSubmitStructure').click(function(){
 
-            var num=1;
+            var num = 1;
 
-            var flag=1;
+            var flag = 1;
 
             $('input[name="endTime[]"]').each(function(){
 
-                if($('#subjects_'+num).val()=="unavailable")
-                {
+                if($('#subjects_'+num).val() == "unavailable") {
                     $("#subjectError"+num).show();
                     $("#subjectError"+num).html('There are no subjects available for this division.');
-                    flag=0;
+                    flag = 0;
                     return false;
-                }else{
+                } else {
                     $("#subjectError"+num).hide();
                     $("#subjectError"+num).html('');
 
                 }
 
-                var startTime=$("#startTime"+num).val();
+                var startTime = $("#startTime"+num).val();
 
-                var endTime=$("#endTime"+num).val();
+                var endTime = $("#endTime"+num).val();
 
                 var st = minFromMidnight(startTime);
 
                 var et = minFromMidnight(endTime);
 
-                 if ( st >= et )
-                 {
+                 if ( st >= et ) {
 
                      $("#startTimeError"+num).show();
                      $("#startTimeError"+num).html('End time must be greater than start time.');
-                     flag=0;
+                     flag = 0;
                      return false;
 
-                 }else{
+                 } else {
                      $("#startTimeError"+num).show();
                      $("#startTimeError"+num).html('');
 
-                     var startTime=$("#startTime"+num).val();
+                     var startTime = $("#startTime"+num).val();
 
-                     var endTime=$("#endTime"+num).val();
+                     var endTime = $("#endTime"+num).val();
 
                      var st = minFromMidnight(startTime);
 
                      var et = minFromMidnight(endTime);
 
-                     var numInner=1;
+                     var numInner = 1;
 
                      $('input[name="endTime[]"]').each(function(){
 
-                         if(num!=numInner)
-                         {
-                             var startTime1=$("#startTime"+numInner).val();
+                         if(num != numInner) {
+                             var startTime1 = $("#startTime"+numInner).val();
 
-                             var endTime1=$("#endTime"+numInner).val();
+                             var endTime1 = $("#endTime"+numInner).val();
 
                              var st1 = minFromMidnight(startTime1);
 
                              var et1 = minFromMidnight(endTime1);
 
-                             if(st1<st && et1>st)
-                             {
+                             if(st1 < st && et1 > st) {
                                  $("#startTimeError"+num).show();
                                  $("#startTimeError"+num).html('Periods never be in same time interval or in between any other time interval. ');
 
-                                 flag=0;
+                                 flag = 0;
                                  return false;
-                             }else if(st1<et && et1>et){
+                             } else if(st1 < et && et1 > et) {
                                  $("#startTimeError"+num).show();
                                  $("#startTimeError"+num).html('Periods never be in same time interval or in between any other time interval. ');
 
-                                 flag=0;
+                                 flag = 0;
                                  return false;
-                             }else if(st == st1){
+                             } else if (st == st1) {
                                  $("#startTimeError"+num).show();
                                  $("#startTimeError"+num).html('Periods never be in same time interval or in between any other time interval. ');
 
-                                 flag=0;
+                                 flag = 0;
                                  return false;
                              }
                          }
@@ -282,26 +279,24 @@
             });
 
 
-            if( flag == 1 )
-            {
+            if( flag == 1 ) {
 
                 var num = 1;
 
                 $('input[name="endTime[]"]').each(function(){
 
-                    var startTime=$("#startTime"+num).val();
+                    var startTime = $("#startTime"+num).val();
 
-                    var endTime=$("#endTime"+num).val();
+                    var endTime = $("#endTime"+num).val();
 
-                    var id=$("#subjects_"+num).val();
+                    var id = $("#subjects_"+num).val();
 
-                    var day=$("#dropdown").val();
+                    var day = $("#dropdown").val();
 
-                    var checkValue=$('#hiddenCheck'+num).val();
+                    var checkValue = $('#hiddenCheck'+num).val();
 
-                    if(checkValue == 0)
-                    {
-                        var route="/teacher-check";
+                    if(checkValue == 0) {
+                        var route = "/teacher-check";
 
                         $.ajax({
                             url:route,
@@ -309,7 +304,7 @@
                             type:"post",
                             data:{id:id,day:day,startTime:startTime,endTime:endTime},
                             success:function(res){
-                                if( res != 0 ){
+                                if( res != 0 ) {
 
                                     flag = 0;
 
@@ -320,12 +315,11 @@
 
                         });
 
-                        if( flag == 0 )
-                        {
+                        if( flag == 0 ) {
                             $('#subjectError'+num).show();
                             $('#subjectError'+num).html('This teacher subject is not available for this time interval.');
                             return false;
-                        }else{
+                        } else {
                             $('#subjectError'+num).hide();
                             $('#subjectError'+num).html('');
 
@@ -336,8 +330,12 @@
 
                 });
 
-                if(flag==1)
-                {
+                if(flag == 1) {
+                    sessionStorage.setItem('batch',$('#hiddenBatchId').val());
+                    sessionStorage.setItem('class',$('#hiddenClassId').val());
+                    sessionStorage.setItem('division',$('#hiddenDivId').val());
+                    sessionStorage.setItem('flagToReload',1);
+
                     $('#timeTableForm').submit();
                 }
 
@@ -356,9 +354,9 @@
 
         function minFromMidnight(tm){
 
-            var ampm= tm.substr(-2);
+            var ampm = tm.substr(-2);
 
-            var time= $.trim(tm).length === 7 ? "0" + tm : tm;
+            var time = $.trim(tm).length === 7 ? "0" + tm : tm;
 
             var clk = time.substr(0, 5);
 
@@ -366,10 +364,8 @@
 
             var h  = parseInt(clk.match(/^\d+/)[0], 10);
 
-            if((ampm.match(/pm/i)) == "PM")
-            {
-                if( h == 12 )
-                {
+            if((ampm.match(/pm/i)) == "PM") {
+                if( h == 12 ) {
                     h += 0;
                 } else {
                     h += 12;
@@ -377,8 +373,7 @@
 
             } else {
 
-                if( h == 12 )
-                {
+                if( h == 12 ) {
                     h = 0;
                 } else {
                     h += 0;
