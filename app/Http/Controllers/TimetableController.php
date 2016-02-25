@@ -352,6 +352,7 @@ class TimetableController extends Controller
 
             $flagCheckForTeacher = 1;
 
+
             foreach($teacherAvailability as $arr)
             {
                 if($arr->start_time == $startTime) {
@@ -366,7 +367,7 @@ class TimetableController extends Controller
 
                     $flagCheckForTeacher = 0;
 
-                } elseif ($arr->start_time < $endTime && $arr->end_time > $startTime) {
+                } elseif ($arr->start_time < $endTime && $arr->end_time > $endTime) {
 
                     $flagCheckForTeacher = 0;
 
@@ -376,10 +377,6 @@ class TimetableController extends Controller
 
                 }
 
-                if($flagCheckForTeacher == 0) {
-                    break;
-                }
-                
             }
 
         return $flagCheckForTeacher;

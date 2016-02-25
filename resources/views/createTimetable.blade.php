@@ -305,8 +305,6 @@
                             data:{id:id,day:day,startTime:startTime,endTime:endTime},
                             success:function(res){
 
-                                debugger;
-
                                 if( res == 0 ) {
 
                                     flag = 0;
