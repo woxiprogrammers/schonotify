@@ -252,13 +252,13 @@ class LeaveController extends Controller
             $leaveUpdate['status'] = 2;
             $leaveUpdate['approved_by'] = $user->id;
             $leaveStatus= Leave::where('id',$id)->update($leaveUpdate);
-            if ($leaveStatus ==1)
+            if ($leaveStatus == 1)
             {
                 Session::flash('message-success','Leave published successfully');
-                return Redirect::to('/leaveListing');
+                return Redirect::back();
             }
         } else {
-            return Redirect::to('/');
+            return Redirect::back();
         }
     }
     /**
