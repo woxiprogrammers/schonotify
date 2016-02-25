@@ -50,6 +50,8 @@
             </label>
             <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
             </select>
+            <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+
         </div>
         <div class="form-group col-sm-4" id="division-select-div">
             <label for="form-field-select-2">
@@ -57,6 +59,7 @@
             </label>
             <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
             </select>
+            <div id="loadmoreajaxloaderDivision" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
         </div>
     </div>
     @else
@@ -256,10 +259,14 @@
     $('#batch-select').change(function(){
         var id=this.value;
         var route='get-all-classes/'+id;
+        $('div#loadmoreajaxloaderClass').show();
         $.get(route,function(res){
             if (res.length == 0)
             {
+                $('div#loadmoreajaxloaderClass').hide();
                 $('#class-select').html("no record found");
+
+
             } else {
                 var str='<option value="">please select class</option>';
                 for(var i=0; i<res.length; i++)
@@ -267,16 +274,20 @@
                     str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                 }
                 $('#class-select').html(str);
+                $('div#loadmoreajaxloaderClass').hide();
             }
         });
+
     });
 
     $("#class-select").change(function() {
         var id = this.value;
         var route='get-all-division/'+id;
+        $('div#loadmoreajaxloaderDivision').show();
         $.get(route,function(res) {
             if(res.length == 0)
             {
+                $('div#loadmoreajaxloaderDivision').hide();
                 $('#division-select').html("no record found");
             } else {
                 var str='<option value="">please select division</option>';
@@ -285,17 +296,21 @@
                     str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
                 }
                 $('#division-select').html(str);
+                $('div#loadmoreajaxloaderDivision').hide();
             }
         });
     });
     $('#leave-status').change(function(){
         var leave_status = $('#leave-status').val();
         var division = $('#division-select').val();
+        $('div#loadmoreajaxloader').show();
         var route='leave-status-listing/'+ leave_status +'/'+ division;
         $.get(route,function(res) {
             if(res.length == 0)
             {
                 $('#tmln').html("no record found");
+                $('div#loadmoreajaxloader').hide();
+
             } else {
                 var str = '';
                 for(var i=0; i<res.length; i++)
@@ -340,6 +355,8 @@
                         '</li>';
                 }
                 $('#tmln').html(str);
+                $('div#loadmoreajaxloader').hide();
+
             }
         });
 
@@ -364,9 +381,8 @@
      */
     function getDivisions(classId)
     {   var route="/get-all-division/"+classId;
-
+        $('div#loadmoreajaxloaderDivision').show();
         $.get(route,function(res){
-            console.log(res);
             var str="";
 
             if (res.length != 0)
@@ -379,12 +395,12 @@
 
             } else {
 
-                str+="<option value='0'>No divisions found</option>"
-
+                str+="<option value='0'>No divisions found</option>";
+                $('div#loadmoreajaxloaderDivision').hide();
             }
 
             $('#division-select').html(str);
-
+            $('div#loadmoreajaxloaderDivision').hide();
             var divisionSelected=$('#division-select').val();
 
         });
@@ -400,7 +416,7 @@
     function getClasses(batchId)
     {
         var route="/get-all-classes/"+batchId;
-
+        $('div#loadmoreajaxloaderClass').show();
         $.get(route,function(res){
             var str="";
             if (res.length != 0)
@@ -412,12 +428,13 @@
                 }
 
             } else {
-
-                str+="<option>No classes found</option>"
+                $('div#loadmoreajaxloaderClass').hide();
+                str+="<option>No classes found</option>";
 
             }
 
             $('#class-select').html(str);
+            $('div#loadmoreajaxloaderClass').hide();
 
             var classSelected=$('#class-select').val();
 
