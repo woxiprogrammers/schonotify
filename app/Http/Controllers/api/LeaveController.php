@@ -211,20 +211,27 @@ class LeaveController extends Controller
 
     public function createLeave(Requests\Leave $request){
         try{
-            $data=$request->all();
-            $status = 200;
-            $message = 'Leave Applied Successfully.';
-            $createData['student_id'] = $data['student_id'];
-            $createData['division_id'] = User::where('id','=',$data['student_id'])->pluck('division_id');
-            $createData['status'] = 1;
-            $createData['title'] = $data['title'];
-            $createData['leave_type'] = $data['leave_type_id'];
-            $createData['reason'] = $data['reason'];
-            $createData['from_date'] = $data['from_date'];
-            $createData['end_date'] = $data['end_date'];
-            $createData['created_at'] = Carbon::now();
-            $createData['updated_at'] = Carbon::now();
-            Leave::insert($createData);
+            $data = $request->all();
+            $fromDate = strtotime($data['from_date']);
+            $endDate = strtotime($data['end_date']);
+            if ($fromDate > $endDate) {
+                $status = 406;
+                $message = 'Sorry ! End date should be greater than From Date ';
+            } else {
+                $status = 200;
+                $message = 'Leave Applied Successfully.';
+                $createData['student_id'] = $data['student_id'];
+                $createData['division_id'] = User::where('id','=',$data['student_id'])->pluck('division_id');
+                $createData['status'] = 1;
+                $createData['title'] = $data['title'];
+                $createData['leave_type'] = $data['leave_type_id'];
+                $createData['reason'] = $data['reason'];
+                $createData['from_date'] = $data['from_date'];
+                $createData['end_date'] = $data['end_date'];
+                $createData['created_at'] = Carbon::now();
+                $createData['updated_at'] = Carbon::now();
+                Leave::insert($createData);
+            }
         } catch (\Exception $e) {
             $status = 500;
             $message = "something went wrong";
