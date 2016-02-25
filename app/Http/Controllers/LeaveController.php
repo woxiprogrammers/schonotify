@@ -50,10 +50,10 @@ class LeaveController extends Controller
                             $data = Input::all();
                             $status = $data['leave_status'];
                             $pageCount = $data['pageCount'];
-                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$status)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$status)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
                         } else {
                             $pageCount = 0;
-                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
+                            $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',2)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
                         }
                             $i = 0;
                             foreach ($leaveStatus as $row) {
@@ -95,10 +95,10 @@ class LeaveController extends Controller
                                 $pageCount = $data['pageCount'];
                                 $status = $data['leave_status'];
                                 $division_id = $data['division'];
-                                $leaveStatus = Leave::where('division_id',$division_id)->where('status',$status)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
+                                $leaveStatus = Leave::where('division_id',$division_id)->where('status',$status)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
                             } else {
                             $pageCount = 0;
-                            $leaveStatus = Leave::where('division_id',$batchClassDivisionData['division_id'])->where('status',2)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
+                            $leaveStatus = Leave::where('division_id',$batchClassDivisionData['division_id'])->where('status',2)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
                             }
                             $i = 0;
                                 foreach ($leaveStatus as $row) {
@@ -285,7 +285,7 @@ class LeaveController extends Controller
                         ->first();
                     if ($batchClassData != null) {
                         $pageCount = 0;
-                        $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
+                        $leaveStatus = Leave::where('division_id',$userCheck->id)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
                         $i = 0;
                         foreach ($leaveStatus as $row) {
                             $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
@@ -318,7 +318,7 @@ class LeaveController extends Controller
                     ->first();
                 if ($batchClassDivisionData != null) {
                     $pageCount = 0;
-                    $leaveStatus = Leave::where('division_id',$divisionId)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->orderBy('from_date', 'desc')->get();
+                    $leaveStatus = Leave::where('division_id',$divisionId)->where('status',$leaveStatus)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
                     $i = 0;
                     foreach ($leaveStatus as $row) {
                         $studentData = User::where('id',$row['student_id'])->where('is_active',1)->select('id','first_name','last_name','roll_number','avatar','parent_id')->first();
