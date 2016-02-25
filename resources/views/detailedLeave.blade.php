@@ -70,10 +70,10 @@
                                                 <i class="fa fa-cloud-upload"></i> Approve
                                             </a>
                                             @else
-                                            <div class="col-md-22" style="padding-left: 700px">
+                                            <div class="col-md-4 col-md-offset-9  padding-left-30">
                                                 <span class="text-bold">Approved By:</span>{!! $leaveArray['approved_by'] !!}
                                             </div>
-                                            <div class="col-md-22" style="padding-left: 700px">
+                                            <div class="col-md-4 col-md-offset-9  padding-left-30" >
                                                 <span class="text-bold">Approved Date:</span>{!! date('m-d-Y',strtotime($leaveArray['updated_date'])) !!}
                                             </div>
                                             @endif
