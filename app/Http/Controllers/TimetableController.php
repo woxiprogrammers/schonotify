@@ -511,8 +511,7 @@ class TimetableController extends Controller
 
         if( $delete )
         {
-            Session::flash('message-success','Period deleted successfully !');
-            return Redirect::to('timetable');
+            return 1;
         }
     }
 

@@ -70,10 +70,10 @@
                                                 <i class="fa fa-cloud-upload"></i> Approve
                                             </a>
                                             @else
-                                            <div class="col-md-22" style="padding-left: 520px">
+                                            <div class="col-md-4 col-md-offset-9  padding-left-30">
                                                 <span class="text-bold">Approved By:</span>{!! $leaveArray['approved_by'] !!}
                                             </div>
-                                            <div class="col-md-22" style="padding-left: 520px">
+                                            <div class="col-md-4 col-md-offset-9  padding-left-30" >
                                                 <span class="text-bold">Approved Date:</span>{!! date('m-d-Y',strtotime($leaveArray['updated_date'])) !!}
                                             </div>
                                             @endif
@@ -117,10 +117,7 @@
         $('#btnStatus').html('<h5> Status :<i class="fa fa-warning"></i> <i>Pending</i></h5>');
 
     });
-    $('#btnPublish').click(function(){
-        $('#btnPublish').hide();
-        $('#btnStatus').html('<h5> Status :<i class="fa fa-flag"></i> <i>Approved</i></h5>');
-    });
+
 </script>
 <!-- start: MAIN JAVASCRIPTS -->
 @stop
