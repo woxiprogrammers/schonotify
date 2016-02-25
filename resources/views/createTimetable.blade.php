@@ -304,7 +304,8 @@
                             type:"post",
                             data:{id:id,day:day,startTime:startTime,endTime:endTime},
                             success:function(res){
-                                if( res != 0 ) {
+
+                                if( res == 0 ) {
 
                                     flag = 0;
 

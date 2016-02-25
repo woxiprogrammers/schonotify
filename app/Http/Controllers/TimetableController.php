@@ -345,14 +345,41 @@ class TimetableController extends Controller
 
             $teacherArray = $teacher->toArray();
 
-            $teacherAvailability = SubjectClassDivision::join('timetables','timetables.division_subject_id','=','division_subjects.id')
-                                        ->select('start_time','end_time','timetables.division_subject_id')
-                                        ->whereRaw("('$startTime' between start_time and end_time)")
-                                        ->orwhereRaw("('$endTime' between start_time and end_time)")
-                                        ->where('timetables.day_id','=',$day)
-                                        ->wherein('teacher_id',$teacherArray)->get();
+            $teacherAvailability = Timetable::join('division_subjects','division_subjects.id','=','timetables.division_subject_id')
+                                            ->where('timetables.day_id','=',$day)
+                                            ->wherein('teacher_id',$teacherArray)
+                                            ->get();
 
-            return $teacherAvailability;
+            $flagCheckForTeacher = 1;
+
+
+            foreach($teacherAvailability as $arr)
+            {
+                if($arr->start_time == $startTime) {
+
+                    $flagCheckForTeacher = 0;
+
+                } elseif ($arr->end_time == $endTime) {
+
+                    $flagCheckForTeacher = 0;
+
+                } elseif ($arr->start_time < $startTime && $arr->end_time > $startTime) {
+
+                    $flagCheckForTeacher = 0;
+
+                } elseif ($arr->start_time < $endTime && $arr->end_time > $endTime) {
+
+                    $flagCheckForTeacher = 0;
+
+                } else {
+
+                    $flagCheckForTeacher = 1;
+
+                }
+
+            }
+
+        return $flagCheckForTeacher;
 
     }
 
