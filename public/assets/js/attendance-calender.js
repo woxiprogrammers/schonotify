@@ -78,6 +78,7 @@ var Calendar = function() {"use strict";
                 var month = date.getMonth() + 1;
                 var year = date.getFullYear();
                 var date_dump = year +"-"+month+"-"+data;
+                $('div#loadmoreajaxloader1').show();
                     $.ajax({
                         url: 'view-attendance',
                         type: "get",
@@ -91,6 +92,7 @@ var Calendar = function() {"use strict";
                                    $(".form-full-event #stud-list").html('<h4 class="text-danger"><i class="fa fa-warning"></i> No Attendance found for this date. Please select Current or previous date.</h4>');
                                    $('#listTitle').hide();
                                }
+                               $('div#loadmoreajaxloader1').hide();
                             }
                            else {
                                var str="";
@@ -113,6 +115,7 @@ var Calendar = function() {"use strict";
                                   }
                                    $(".form-full-event #stud-list").html(str);
                                    $('#listTitle').show();
+                               $('div#loadmoreajaxloader1').hide();
                            }
                              if(data == 2){
                                 $(".form-full-event #stud-list").html('<h4 class="text-danger"><i class="fa fa-warning"></i> NO ABSENT STUDENTS </h4>');

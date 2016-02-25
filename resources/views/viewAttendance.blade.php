@@ -77,6 +77,7 @@
                                         </label>
                                         <select class="form-control" id="class-select" style="-webkit-appearance: menulist;">
                                         </select>
+                                        <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                                     </div>
                                     <div class="form-group col-sm-4" id="division-select-div">
                                         <label for="form-field-select-2">
@@ -84,6 +85,7 @@
                                         </label>
                                         <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
                                         </select>
+                                        <div id="loadmoreajaxloaderDivision" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                                     </div>
                                 </div>
                                 @endif
@@ -146,6 +148,7 @@
                                             Students
                                         </label>
                                         <div id="stud-list"></div>
+                                        <div id="loadmoreajaxloader1" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                                         <div>
                                             <table class="table">
                                                 <tr>
@@ -230,6 +233,7 @@
     {
         var batch = $('#batch-select').val();
         var route="/get-attendance-division/"+classId+'/'+batch;
+        $('div#loadmoreajaxloaderDivision').show();
         $.get(route,function(res){
 
             var str="";
@@ -244,11 +248,12 @@
 
             } else {
 
-                str+="<option value='0'>No divisions found</option>"
-
+                str+="<option value='0'>No divisions found</option>";
+                $('div#loadmoreajaxloaderDivision').hide();
             }
 
             $('#division-select').html(str);
+            $('div#loadmoreajaxloaderDivision').hide();
 
             var divisionSelected=$('#division-select').val();
 
@@ -265,6 +270,7 @@
     function getClasses(batchId)
     {
         var route="/get-attendance-classes/"+batchId;
+        $('div#loadmoreajaxloaderClass').show();
         $.get(route,function(res){
             var str="";
 
@@ -278,11 +284,13 @@
 
             } else {
 
-                str+="<option>No classes found</option>"
+                str+="<option>No classes found</option>";
+                $('div#loadmoreajaxloaderClass').hide();
 
             }
 
             $('#class-select').html(str);
+            $('div#loadmoreajaxloaderClass').hide();
 
             var classSelected=$('#class-select').val();
 
@@ -303,10 +311,12 @@
     $('#batch-select').change(function(){
         var id=this.value;
         var route = 'get-attendance-classes/'+id;
+        $('div#loadmoreajaxloaderClass').show();
         $.get(route,function(res){
             if (res.length == 0)
             {
                 $('#class-select').html("no record found");
+                $('div#loadmoreajaxloaderClass').hide();
             } else {
                 var str = '<option value="">please select class</option>';
                 for(var i=0; i<res.length; i++)
@@ -314,6 +324,7 @@
                     str += '<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                 }
                 $('#class-select').html(str);
+                $('div#loadmoreajaxloaderClass').hide();
             }
         });
     });
@@ -322,10 +333,12 @@
         var id = this.value;
         var batch_id = $('#batch-select').val();
         var route='get-attendance-division/'+id +'/'+batch_id;
+        $('div#loadmoreajaxloaderDivision').show();
         $.get(route,function(res) {
             if(res.length == 0)
             {
                 $('#division-select').html("no record found");
+                $('div#loadmoreajaxloaderDivision').hide();
             } else {
                 var str = '<option value="">please select division</option>';
                 for(var i=0; i<res.length; i++)
@@ -333,6 +346,7 @@
                     str += '<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
                 }
                 $('#division-select').html(str);
+                $('div#loadmoreajaxloaderDivision').hide();
             }
         });
     });

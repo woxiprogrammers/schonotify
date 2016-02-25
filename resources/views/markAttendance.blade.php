@@ -87,6 +87,7 @@
                                                     </label>
                                                     <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
                                                     </select>
+                                                    <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                                                 </div>
                                                 <div class="form-group col-sm-4" id="division-select-div">
                                                     <label for="form-field-select-2">
@@ -94,6 +95,8 @@
                                                     </label>
                                                     <select class="form-control" id="division-select"  name="division-select" style="-webkit-appearance: menulist;">
                                                     </select>
+                                                    <div id="loadmoreajaxloaderDivision" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+
                                                 </div>
                                             </div>
                                     @endif
@@ -142,6 +145,8 @@
                                         <div class="row" style="margin-bottom: 4px;">
                                             <label>Unmark Students Who Are absent:</label>
                                         </div>
+                                        <div id="loadmoreajaxloaderStudent" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+
                                         <table  class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                                             <thead>
                                             <tr>
@@ -329,6 +334,7 @@
      * author manoj chaudahri
      */
     function dateChange(value,division){
+        $('div#loadmoreajaxloaderStudent').show();
         $.ajax({
             url: 'mark-attendance',
             type: "get",
@@ -385,6 +391,7 @@
                   str +='</tbody>'+
                 '</table>';
                 $('#tableContent2').html(str);
+                $('div#loadmoreajaxloaderStudent').hide();
                 TableData.init();
                 $('#allCheckedStud-label img').css('border','1px solid');
                 if ($('.allCheckedStud').prop('checked') == true)
@@ -437,10 +444,12 @@
     $('#batch-select').change(function(){
         var id=this.value;
         var route='get-all-classes/'+id;
+        $('div#loadmoreajaxloaderClass').show();
         $.get(route,function(res){
             if (res.length == 0)
             {
                 $('#class-select').html("no record found");
+                $('div#loadmoreajaxloaderClass').hide();
             } else {
                 var str='<option value="">please select class</option>';
                 for(var i=0; i<res.length; i++)
@@ -448,16 +457,19 @@
                     str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                 }
                 $('#class-select').html(str);
+                $('div#loadmoreajaxloaderClass').hide();
             }
         });
     });
     $("#class-select").change(function() {
         var id = this.value;
         var route='get-all-division/'+id;
+        $('div#loadmoreajaxloaderDivision').show();
         $.get(route,function(res) {
             if(res.length == 0)
             {
                     $('#division-select').html("no record found");
+                    $('div#loadmoreajaxloaderDivision').hide();
             } else {
                     var str='<option value="">please select division</option>';
                     for(var i=0; i<res.length; i++)
@@ -465,6 +477,7 @@
                         str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
                     }
                     $('#division-select').html(str);
+                    $('div#loadmoreajaxloaderDivision').hide();
             }
         });
     });
@@ -505,6 +518,7 @@
     {
         var batch = $('#batch-select').val();
         var route="/get-attendance-division/"+classId+'/'+batch;
+        $('div#loadmoreajaxloaderDivision').show();
         $.get(route,function(res){
             var str="";
             if (res.length != 0)
@@ -514,9 +528,11 @@
                     str+="<option value='"+res[i]['division_id']+"'>"+res[i]['division_name']+"</option>"
                 }
             } else {
-                str+="<option value='0'>No divisions found</option>"
+                str+="<option value='0'>No divisions found</option>";
+                $('div#loadmoreajaxloaderDivision').hide();
             }
             $('#division-select').html(str);
+            $('div#loadmoreajaxloaderDivision').hide();
             var divisionSelected=$('#division-select').val();
         });
     }
@@ -531,6 +547,7 @@
     function getClasses(batchId)
     {
         var route="/get-attendance-classes/"+batchId;
+        $('div#loadmoreajaxloaderClass').show();
         $.get(route,function(res){
             var str="";
             if (res.length != 0)
@@ -540,9 +557,11 @@
                     str+="<option value='"+res[i]['class_id']+"'>"+res[i]['class_name']+"</option>"
                 }
             } else {
-                str+="<option>No classes found</option>"
+                str+="<option>No classes found</option>";
+                $('div#loadmoreajaxloaderClass').hide();
             }
             $('#class-select').html(str);
+            $('div#loadmoreajaxloaderClass').hide();
             var classSelected=$('#class-select').val();
             if(classSelected!="")
             {
