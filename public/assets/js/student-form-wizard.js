@@ -258,8 +258,7 @@ var FormWizard = function () {
     };
     var onFinish = function (obj, context) {
         if (validateAllSteps()) {
-
-
+            $('div#loadmoreajaxloader').show();
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
             var form=$('#student-registration-form').serialize();
             $.ajax({
@@ -271,6 +270,7 @@ var FormWizard = function () {
 
                 success: function(data){
                     $('#error-div').html('');
+                    $('div#loadmoreajaxloader').hide();
 
                     wizardContent.smartWizard("goForward");
                     $('.stepNumber').click(false);
@@ -287,6 +287,7 @@ var FormWizard = function () {
                     errorsHtml += '</ul></di>';
 
                     $('#error-div').html(errorsHtml);
+                    $('div#loadmoreajaxloader').hide();
                 }
             });
 

@@ -234,11 +234,12 @@
                 <button class="btn btn-primary btn-o back-step btn-wide pull-left">
                     <i class="fa fa-circle-arrow-left"></i> Back
                 </button>
-                <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                 <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep" onclick="this.disabled = true">
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
+            <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+
         </div>
      </div>
  </div>
