@@ -136,7 +136,7 @@
                                 <label>
                                     Select Subject
                                 </label>
-                                <select class="form-control" id="division-select" style="-webkit-appearance: menulist;">
+                                <select class="form-control" id="subject-edit-copy-structure" style="-webkit-appearance: menulist;">
                                     <option value="1">Marathi</option>
                                     <option value="2">History</option>
                                     <option value="3">Hindi</option>
@@ -151,7 +151,7 @@
                                 </label>
 
                                 <div class="input-group bootstrap-timepicker timepicker">
-                                    <input id="timepicker1" type="text" class="form-control input-small timepicker1">
+                                    <input id="timepicker3" type="text" class="form-control input-small timepicker1">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>
 
@@ -162,7 +162,7 @@
                                 </label>
 
                                 <div class="input-group bootstrap-timepicker timepicker">
-                                    <input id="timepicker2" type="text" class="form-control input-small timepicker1">
+                                    <input id="timepicker4" type="text" class="form-control input-small timepicker1">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>
                             </div>
@@ -171,8 +171,8 @@
                                     Resses
                                 </label>
                                 <div class="checkbox clip-check check-primary">
-                                    <input type="checkbox" id="">
-                                    <label for="">
+                                    <input type="checkbox" id="isBreakCheck">
+                                    <label for="isBreakCheck">
                                         Is A Break
                                     </label>
 
@@ -273,9 +273,11 @@
                     </div>
 
                     <div class="form-group">
+
                         <label>
                             Subject Title
                         </label>
+
                         <select class="form-control loading" id="subject-select-edit" style="-webkit-appearance: menulist;">
 
                         </select>
@@ -317,8 +319,8 @@
                             Recess
                         </label>
                         <div class="checkbox clip-check check-primary">
-                            <input type="checkbox" id="isBreakCheck" name="checkbox8">
-                            <label for="isBreakCheck">
+                            <input type="checkbox" id="isBreakCheckEdit" name="isBreakCheckEdit">
+                            <label for="isBreakCheckEdit">
                                 Is A Break
                             </label>
                         </div>
@@ -383,11 +385,16 @@ $(document).ready(function(){
 
     $('.timepicker1').timepicker();
 
+    var sessionBatchVal = sessionStorage.getItem('batch');
 
+    if (sessionStorage.getItem('flagToReload') == 1)
+    {
+        $('#batch-select').val(sessionBatchVal);
+    }
     var batchSelected=$('#batch-select').val();
 
-    if(batchSelected!="")
-    {
+    if(batchSelected != "") {
+
         getClasses(batchSelected);
 
     }
@@ -396,7 +403,7 @@ $(document).ready(function(){
 
 $('#batch-select').change(function(){
 
-    var batch=$(this).val();
+    var batch = $(this).val();
 
     getClasses(batch);
 
@@ -404,7 +411,7 @@ $('#batch-select').change(function(){
 
 $('#class-select').change(function(){
 
-    var classId=$(this).val();
+    var classId = $(this).val();
 
     getDivisions(classId);
 
@@ -426,19 +433,29 @@ function getDivisions(classId)
 
     $.get(route,function(res){
 
-        var str="";
+        var str = "";
 
-        if (res.length != 0)
-        {
+        if (res.length != 0) {
 
-            for(var i=0;i<res.length; i++)
+            for(var i = 0; i < res.length; i++)
             {
-                str+="<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>"
+                var sessionDivisionVal = sessionStorage.getItem('division');
+
+                if (sessionStorage.getItem('flagToReload') == 1 && res[i]['id']==sessionDivisionVal)
+                {
+
+                    str += "<option value='"+res[i]['id']+"' selected>"+res[i]['division_name']+"</option>";
+
+                    sessionStorage.setItem('flagToReload', 0);
+
+                }else{
+                    str += "<option value='"+res[i]['id']+"'>"+res[i]['division_name']+"</option>";
+                }
             }
 
         } else {
 
-            str+="<option value='0'>No divisions found</option>"
+            str += "<option value='0'>No divisions found</option>"
 
         }
 
@@ -471,19 +488,28 @@ function getClasses(batchId)
 
     $.get(route,function(res){
 
-          var str="";
+          var str = "";
 
           if (res.length != 0)
           {
 
-              for(var i=0;i<res.length; i++)
+              for( var i = 0; i < res.length; i++ )
               {
-                  str+="<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>"
+                  var sessionClassVal = sessionStorage.getItem('class');
+
+                  if (sessionStorage.getItem('flagToReload') == 1 && res[i]['id'] == sessionClassVal)
+                  {
+
+                      str += "<option value='"+res[i]['id']+"' selected>"+res[i]['class_name']+"</option>";
+
+                  }else{
+                      str += "<option value='"+res[i]['id']+"'>"+res[i]['class_name']+"</option>";
+                  }
               }
 
           } else {
 
-                  str+="<option>No classes found</option>";
+                  str += "<option>No classes found</option>";
 
                  }
 
@@ -491,8 +517,7 @@ function getClasses(batchId)
 
         var classSelected=$('#class-select').val();
 
-        if( classSelected != "" )
-        {
+        if( classSelected != "" ) {
             getDivisions(classSelected);
         }
 
@@ -530,7 +555,7 @@ function showTimetable(val)
 
     $('#division-body').html('');
 
-    var route='timetableShow/'+val;
+    var route = 'timetableShow/'+val;
 
     $.get(route,function(res){
 
@@ -546,230 +571,223 @@ function showTimetable(val)
 
         $('tbody .timetable-div-table').html('');
 
-        if(arr[0]!=="unavailable")
-        {
+        if( arr[0] !== "unavailable" ) {
 
             $('#timetable-div').show();
 
-            var maxlength=0;
+            var divId = $('#division-select').val();
 
-            for(var i=0; i<arr.length; i++)
+            var getSubjectPath = "/get-timetable-subjects/"+divId;
+
+            $.get(getSubjectPath,function(res){
+                var subjects = "";
+                for( var i = 0; i < res.length; i++ )
+                {
+                    subjects += "<option value='"+res[i]['id']+"'>"+res[i]['subject_name']+"</option>";
+                }
+
+                $('#subject-edit-copy-structure').html(subjects);
+
+                $('#subject-select-edit').html(subjects);
+            });
+
+            var maxlength = 0;
+
+            for( var i = 0; i < arr.length; i++ )
             {
 
-                var len=arr[i].length;
+                var len = arr[i].length;
 
-                if(maxlength < len)
-                {
-                    maxlength=len;
+                if(maxlength < len) {
+                    maxlength = len;
                 }
 
             }
 
-            for(var j=0; j<=maxlength; j++)
+            for(var j = 0; j <= maxlength; j++)
             {
 
                 $(".timetable-div-table").each(function () {
 
                     var tds = '<tr>';
 
-                    tds+='<td class="center">'+(j+1)+'</td>';
+                    tds += '<td class="center">'+(j+1)+'</td>';
 
-                    if ( arr[0].length > j )
-                    {
+                    if ( arr[0].length > j ) {
 
-                        if( arr[0][j]["is_break"] == 0 )
-                        {
+                        if( arr[0][j]["is_break"] == 0 ) {
 
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[0][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[0][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-info">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[0][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[0][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[0][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-info">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[0][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[0][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[0][j]["start_time"]+ '-' +arr[0][j]["end_time"]+'</span></div></td>';
 
                         }
-                    }else{
-                        if ( arr[0].length == j )
-                        {
+                    } else {
 
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[0].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+1+'" /></td>';
+                        if ( arr[0].length == j ) {
 
-                        }else{
+                            tds += '<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[0].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+1+'" /></td>';
 
-                            tds+='<td></td>';
+                        } else {
+
+                            tds += '<td></td>';
 
                         }
 
                     }
-                    if ( arr[1].length > j )
-                    {
+                    if ( arr[1].length > j ) {
 
-                        if ( arr[1][j]["is_break"] == 0 )
-                        {
+                        if ( arr[1][j]["is_break"] == 0 ) {
 
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[1][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[1][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[1][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[1][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[1][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[1][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[1][j]["start_time"]+ '-' +arr[1][j]["end_time"]+'</span></div></td>';
 
                         }
 
-                    }else{
+                    } else {
 
-                        if ( arr[1].length == j )
-                        {
+                        if ( arr[1].length == j ) {
 
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[1].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+2+'" /></td>';
+                            tds += '<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[1].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+2+'" /></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td></td>';
+                            tds += '<td></td>';
 
                         }
 
                     }
 
-                    if( arr[2].length > j )
-                    {
+                    if( arr[2].length > j ) {
 
-                        if( arr[2][j]["is_break"] == 0 )
-                        {
+                        if( arr[2][j]["is_break"] == 0 ) {
 
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[2][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[2][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[2][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[2][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[2][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[2][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[2][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[2][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[2][j]["start_time"]+ '-' +arr[2][j]["end_time"]+'</span></div></td>';
 
                         }
 
-                    }else{
+                    } else {
 
-                        if( arr[2].length == j )
-                        {
+                        if( arr[2].length == j ) {
 
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[2].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+3+'" /></td>';
+                            tds += '<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[2].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+3+'" /></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td></td>';
+                            tds += '<td></td>';
 
                         }
 
                     }
 
-                    if ( arr[3].length > j )
-                    {
+                    if ( arr[3].length > j ) {
 
-                        if ( arr[3][j]["is_break"] == 0 )
-                        {
+                        if ( arr[3][j]["is_break"] == 0 ) {
 
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[3][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[3][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[3][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[3][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[3][j]["subject"] +'</h4><h5 style="text-align: center;"><small>'+ arr[3][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[3][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[3][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[3][j]["start_time"]+ '-' +arr[3][j]["end_time"]+'</span></div></td>';
 
                         }
 
-                    }else{
+                    } else {
 
-                        if( arr[3].length == j )
-                        {
+                        if( arr[3].length == j ) {
 
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[3].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+4+'" /></td>';
+                            tds += '<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[3].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+4+'" /></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td></td>';
+                            tds += '<td></td>';
 
                         }
 
                     }
 
-                    if ( arr[4].length > j )
-                    {
+                    if ( arr[4].length > j ) {
 
-                        if( arr[4][j]["is_break"] == 0 )
-                        {
+                        if( arr[4][j]["is_break"] == 0 ) {
 
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[4][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[4][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[4][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[4][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[4][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[4][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[4][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[4][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[4][j]["start_time"]+ '-' +arr[4][j]["end_time"]+'</span></div></td>';
 
                         }
 
-                    }else{
+                    } else {
 
-                        if ( arr[4].length== j )
-                        {
+                        if ( arr[4].length== j ) {
 
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[4].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+5+'" /></td>';
+                            tds += '<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[4].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+5+'" /></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td></td>';
+                            tds += '<td></td>';
 
                         }
 
                     }
 
-                    if ( arr[5].length > j )
-                    {
+                    if ( arr[5].length > j ) {
 
-                        if( arr[5][j]["is_break"] == 0 )
-                        {
+                        if( arr[5][j]["is_break"] == 0 ) {
 
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[5][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[5][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[5][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[5][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[5][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[5][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[5][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[5][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[5][j]["start_time"]+ '-' +arr[5][j]["end_time"]+'</span></div></td>';
 
                         }
 
-                    }else{
+                    } else {
 
-                        if ( arr[5].length == j )
+                        if ( arr[5].length == j ) {
 
-                        {
+                            tds += '<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[5].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+6+'" /></td>';
 
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[5].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+6+'" /></td>';
+                        } else {
 
-                        }else{
-
-                            tds+='<td></td>';
+                            tds += '<td></td>';
 
                         }
 
                     }
 
-                    if ( arr[6].length > j )
-                    {
+                    if ( arr[6].length > j ) {
 
-                        if ( arr[6][j]["is_break"] == 0 )
-                        {
+                        if ( arr[6][j]["is_break"] == 0 ) {
 
-                            tds+='<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[6][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[6][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[6][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">'+ arr[6][j]["subject"] +'</h4><h5 class="center"><small>'+ arr[6][j]["teacher"] +'</small></h5><div class="center"><span class="label label-sm label-default">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[6][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
+                            tds += '<td><div class="outer-div-tm lunch"><a data-target="#myModal1" data-toggle="modal" class="show-tab pull-right timetable-sect" onclick="editPeriod('+arr[6][j]['id']+')"><i class="fa fa-pencil edit-user-info"></i></a><h4 class="center">Break</h4><div class="center"><span class="label label-sm label-danger">'+arr[6][j]["start_time"]+ '-' +arr[6][j]["end_time"]+'</span></div></td>';
 
                         }
 
-                    }else{
+                    } else {
 
-                        if ( arr[6].length == j )
-                        {
+                        if ( arr[6].length == j ) {
 
-                            tds+='<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[6].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+7+'" /></td>';
+                            tds += '<td class="center"><a data-target="#myModal" data-toggle="modal" class="btn btn-default btn-plus" id="modal'+arr[6].length+'"><i class="ti-plus"></i></a><input type="hidden" value="'+7+'" /></td>';
 
-                        }else{
+                        } else {
 
-                            tds+='<td></td>';
+                            tds += '<td></td>';
 
                         }
 
@@ -795,23 +813,19 @@ function showTimetable(val)
 
             }
 
-            var val1=$('#division-select').val();
+            var divisionSelectedId = $('#division-select').val();
 
-            if(val1!= 0)
-            {
+            if(divisionSelectedId != 0) {
 
                 $.get('/check-subject-teacher',function(res)
                 {
 
-                    if(res != 1)
-                    {
+                    if(res != 1) {
 
-                        if(res == 0)
-                        {
+                        if(res == 0) {
                             $('.btn-plus').remove();
                             $('.timetable-sect').remove();
-                        }else if(res['division_id'] != $('#division-select').val())
-                        {
+                        } else if(res['division_id'] != $('#division-select').val()) {
                             $('.btn-plus').remove();
                             $('.timetable-sect').remove();
                         }
@@ -822,37 +836,34 @@ function showTimetable(val)
 
             }
 
-        }else{
+        } else {
 
-            var val1=$('#division-select').val();
+            var val1 = $('#division-select').val();
 
-            if(val1!= 0)
-            {
+            if(val1 != 0) {
 
                 $.get('/check-subject-teacher',function(res)
                 {
 
-                    if(res == 0)
-                    {
+                    if(res == 0) {
 
                         $('#timetable-create-btn').show();
 
                         $('#timetable-create-btn').html(' <p>No timetable has been created for this division...</p>');
 
-                    }else if(res == 1){
+                    } else if(res == 1) {
 
                         $('#timetable-create-btn').show();
 
                         $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
 
-                    }else if(res['division_id'] == $('#division-select').val())
-                        {
+                    } else if(res['division_id'] == $('#division-select').val()) {
 
                             $('#timetable-create-btn').show();
 
                             $('#timetable-create-btn').html(' <p>No timetable has been created for this division...<a href="createTimetable">Create New Timetable</a></p>');
 
-                        }else{
+                        } else {
 
                             $('#timetable-create-btn').show();
 
@@ -862,7 +873,7 @@ function showTimetable(val)
 
                 });
 
-            }else{
+            } else {
 
              $('#timetable-create-btn').hide();
 
@@ -878,37 +889,35 @@ function showTimetable(val)
 
             $('#copystr').hide();
 
-            if(this.id=="modal0")
-            {
+            if( this.id == "modal0" ) {
 
-                var dom=$(this).next();
+                var dom = $(this).next();
 
                 $('#hiddenSelectedDay').val(dom.val());
 
                 $('#copyStructureDiv').show();
 
-                var divisionSelected=$('#division-select').val();
+                var divisionSelected = $('#division-select').val();
 
-                var route="/copy-structure-day/"+divisionSelected;
+                var route = "/copy-structure-day/"+divisionSelected;
 
                 $.get(route,function(res){
 
-                    var str="";
+                    var str = "";
 
                     var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
-                    if(res.length != 0)
-                    {
-                        for(var i=0; i<res.length; i++)
+                    if(res.length != 0) {
+                        for(var i = 0; i < res.length; i++)
                         {
-                            str+="<option value='"+res[i]['day_id']+"'>"+days[(res[i]['day_id']-1)]+"</option>"
+                            str += "<option value='"+res[i]['day_id']+"'>"+days[(res[i]['day_id']-1)]+"</option>"
                         }
                         $('#day-select').html(str);
                     }
 
                 });
 
-            }else{
+            } else {
 
                 $('#copyStructureDiv').hide();
 
@@ -922,10 +931,9 @@ function showTimetable(val)
 
 $('#division-select').change(function()
 {
+    var divisionId = $(this).val();
 
-    var val1=$(this).val();
-
-    showTimetable(val1);
+    showTimetable(divisionId);
 
 });
 
@@ -953,8 +961,7 @@ function editPeriod(id)
 
     $.get(route,function(res){
 
-        if(res.length != 0)
-        {
+        if(res.length != 0) {
 
             $('.timetable-dropdown-load').hide();
 
@@ -964,17 +971,32 @@ function editPeriod(id)
 
             $('#del-period-btn').attr('onclick','deletePeriod('+id+')');
 
-            $('#subject-select-edit').html('<option>'+res[0]['subject_name']+'</option>');
+            $('#subject-select-edit option').each(function(){
+
+                var subjectDivId=res[0]['division_subject_id'];
+
+                var selectedSubjectId=$(this).val();
+
+                if(subjectDivId == selectedSubjectId) {
+
+                    $('#subject-select-edit').val(selectedSubjectId);
+
+                }
+
+            });
 
             $('#startTimeEdit').val(res[0]['start_time']);
 
             $('#endTimeEdit').val(res[0]['end_time']);
 
-            if(res[0]['is_break'] == 1)
-            {
-                $('#isBreakCheck').prop('checked',true);
-            }else{
-                $('#isBreakCheck').prop('checked',false);
+            if(res[0]['is_break'] == 1) {
+
+                $('#isBreakCheckEdit').prop('checked',true);
+
+            } else {
+
+                $('#isBreakCheckEdit').prop('checked',false);
+
             }
 
         }
@@ -994,15 +1016,16 @@ function editPeriod(id)
 
 function deletePeriod(id)
 {
-    var route="/delete-period/"+id;
+
+    var route = "/delete-period/"+id;
 
     $.get(route,function(res){
 
-        var div_id=$('#division-select').val();
+        var div_id = $('#division-select').val();
 
         showTimetable(div_id);
 
-        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+        var str = '<div class="alert alert-success alert-dismissible" role="alert">'+
             'Period deleted successfully !'+
             '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
             '<span area-hidden="true">&times;</span>'+
@@ -1018,22 +1041,21 @@ function deletePeriod(id)
 
 }
 
-
 $('#copyStructureBtn').click(function(){
 
-    var day_id=$('#day-select').val();
+    var day_id = $('#day-select').val();
 
-    var div_id=$('#division-select').val();
+    var div_id = $('#division-select').val();
 
     var selected_day_id=$('#hiddenSelectedDay').val();
 
-    var route="/create-copy-structure/"+div_id+"/"+day_id+"/"+selected_day_id;
+    var route = "/create-copy-structure/"+div_id+"/"+day_id+"/"+selected_day_id;
 
     $.get(route,function(res){
 
         showTimetable(div_id);
 
-        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+        var str = '<div class="alert alert-success alert-dismissible" role="alert">'+
                 'Timetable structure copied successfully !'+
                 '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
                 '<span area-hidden="true">&times;</span>'+
@@ -1048,8 +1070,6 @@ $('#copyStructureBtn').click(function(){
     });
 
 });
-
-
 
 </script>
 
