@@ -52,7 +52,7 @@
                 if ($user->role_id == 2){
                     $userCheck=Division::where('class_teacher_id',$user->id)->first();
                     if ($userCheck != null) {
-                        $i=0;
+                        $count=0;
                         $batchClassData=Classes::where('classes.id',$userCheck->class_id)
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
@@ -63,26 +63,26 @@
                             $dropDownData['division_name'] = $userCheck->division_name;
                             $dropDownData['class_id'] = $batchClassData->class_id;
                             $dropDownData['class_name'] = $batchClassData->class_name;
-                            $dropDownData['batch'][$i]['batch_id'] = $batchClassData->batch_id;
-                            $dropDownData['batch'][$i]['batch_name'] = $batchClassData->batch_name;
-                            $i=0;
+                            $dropDownData['batch'][$count]['batch_id'] = $batchClassData->batch_id;
+                            $dropDownData['batch'][$count]['batch_name'] = $batchClassData->batch_name;
+                            $count=0;
                             foreach ($studentData as $student) {
                                 $leaveStatus = Leave::where('student_id',$student['id'])->where('from_date',$date)->select('student_id','status')->first();
                                 $attendanceStatus = Attendance::where('student_id',$student['id'])->where('date',$date)->select('student_id','status')->first();
                                 if ($leaveStatus != null) {
-                                    $dropDownData['student_list'][$i]['student_id'] = $student['id'];
-                                    $dropDownData['student_list'][$i]['student_leave_status'] = $leaveStatus['status'];
-                                    $dropDownData['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];
-                                    $dropDownData['student_list'][$i]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
-                                    $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
+                                    $dropDownData['student_list'][$count]['student_id'] = $student['id'];
+                                    $dropDownData['student_list'][$count]['student_leave_status'] = $leaveStatus['status'];
+                                    $dropDownData['student_list'][$count]['student_attendance_status'] = $attendanceStatus['status'];
+                                    $dropDownData['student_list'][$count]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
+                                    $dropDownData['student_list'][$count]['roll_number'] = $student['roll_number'];
                                 } else {
-                                    $dropDownData['student_list'][$i]['student_id'] = $student['id'];
-                                    $dropDownData['student_list'][$i]['student_leave_status'] = null;
-                                    $dropDownData['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];;
-                                    $dropDownData['student_list'][$i]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
-                                    $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
+                                    $dropDownData['student_list'][$count]['student_id'] = $student['id'];
+                                    $dropDownData['student_list'][$count]['student_leave_status'] = null;
+                                    $dropDownData['student_list'][$count]['student_attendance_status'] = $attendanceStatus['status'];;
+                                    $dropDownData['student_list'][$count]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
+                                    $dropDownData['student_list'][$count]['roll_number'] = $student['roll_number'];
                                 }
-                                $i++;
+                                $count++;
                             }
                             if ($request->ajax()) {
                                 return $dropDownData;
@@ -120,32 +120,32 @@
                                 $dropDownData['class_id'] = $batchClassDivisionData->class_id;
                                 $dropDownData['class_name'] = $batchClassDivisionData->class_name;
                                 $batch=Batch::get();
-                                $i=0;
+                                $count=0;
                                 foreach ($batch as $row) {
-                                    $dropDownData['batch'][$i]['batch_id'] = $row['id'];
-                                    $dropDownData['batch'][$i]['batch_name'] = $row['name'];
-                                    $i++;
+                                    $dropDownData['batch'][$count]['batch_id'] = $row['id'];
+                                    $dropDownData['batch'][$count]['batch_name'] = $row['name'];
+                                    $count++;
                                 }
-                                $i=0;
+                                $count=0;
                                if($studentData->toArray() != null) {
                                 foreach ($studentData as $student) {
                                     $leaveStatus=Leave::where('student_id',$student['id'])->where('from_date',$date)->select('student_id','status')->first();
                                     $attendanceStatus = Attendance::where('student_id',$student['id'])->where('date',$date)->select('student_id','status')->first();
                                     if ($leaveStatus != null) {
-                                        $dropDownData['student_list'][$i]['student_id'] = $student['id'];
-                                        $dropDownData['student_list'][$i]['student_leave_status'] = $leaveStatus['status'];
-                                        $dropDownData['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];
-                                        $dropDownData['student_list'][$i]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
-                                        $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
+                                        $dropDownData['student_list'][$count]['student_id'] = $student['id'];
+                                        $dropDownData['student_list'][$count]['student_leave_status'] = $leaveStatus['status'];
+                                        $dropDownData['student_list'][$count]['student_attendance_status'] = $attendanceStatus['status'];
+                                        $dropDownData['student_list'][$count]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
+                                        $dropDownData['student_list'][$count]['roll_number'] = $student['roll_number'];
 
                                     } else {
-                                        $dropDownData['student_list'][$i]['student_id'] = $student['id'];
-                                        $dropDownData['student_list'][$i]['student_leave_status'] = null;
-                                        $dropDownData['student_list'][$i]['student_attendance_status'] = $attendanceStatus['status'];
-                                        $dropDownData['student_list'][$i]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
-                                        $dropDownData['student_list'][$i]['roll_number'] = $student['roll_number'];
+                                        $dropDownData['student_list'][$count]['student_id'] = $student['id'];
+                                        $dropDownData['student_list'][$count]['student_leave_status'] = null;
+                                        $dropDownData['student_list'][$count]['student_attendance_status'] = $attendanceStatus['status'];
+                                        $dropDownData['student_list'][$count]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
+                                        $dropDownData['student_list'][$count]['roll_number'] = $student['roll_number'];
                                     }
-                                    $i++;
+                                    $count++;
                                 }
                                } else {
                                          $dropDownData['student_list'] = '';
