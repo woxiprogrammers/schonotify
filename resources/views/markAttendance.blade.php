@@ -343,6 +343,7 @@
                 var res= $.map(data['student_list'],function(value){
                     return value;
                 });
+                if(data['student_list'] != null) {
                 var str='<table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">'+
                          '<thead>'+
                                  '<tr>'+
@@ -390,8 +391,14 @@
                              }
                   str +='</tbody>'+
                 '</table>';
-                $('#tableContent2').html(str);
-                $('div#loadmoreajaxloaderStudent').hide();
+                    $('#tableContent2').html(str);
+                    $('div#loadmoreajaxloaderStudent').hide();
+                } else {
+                    $('#tableContent2').html('');
+                    $('div#loadmoreajaxloaderStudent').hide();
+                }
+
+
                 TableData.init();
                 $('#allCheckedStud-label img').css('border','1px solid');
                 if ($('.allCheckedStud').prop('checked') == true)
