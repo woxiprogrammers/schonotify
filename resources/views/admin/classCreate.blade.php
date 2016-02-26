@@ -48,6 +48,7 @@
                                                 <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
 
                                                 </select>
+                                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                                             </div>
 
                                             <div class="form-group">
@@ -220,6 +221,7 @@
 
     function getbatches()
     {
+        $('div#loadmoreajaxloader').show();
         var route="get-batches";
         $.get(route,function(res){
             var str="<option value=''>Select Batch</option>";
@@ -228,6 +230,7 @@
                 str+="<option value='"+res[i]['id']+"'>"+res[i]['name']+"</option>"
             }
             $('#dropdown').html(str);
+            $('div#loadmoreajaxloader').hide();
         });
     }
 

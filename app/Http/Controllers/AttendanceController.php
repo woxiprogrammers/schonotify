@@ -97,9 +97,9 @@
                     }
                 }
                 elseif ($user->role_id == 1) {
+
                     if ($request->ajax()) {
                         $data = Input::all();
-
                         $division=$data['division'];
                         $batchClassDivisionData=Division::where('divisions.id',$division)->
                             join('classes','divisions.class_id','=','classes.id')
@@ -127,6 +127,7 @@
                                     $i++;
                                 }
                                 $i=0;
+                               if($studentData->toArray() != null) {
                                 foreach ($studentData as $student) {
                                     $leaveStatus=Leave::where('student_id',$student['id'])->where('from_date',$date)->select('student_id','status')->first();
                                     $attendanceStatus = Attendance::where('student_id',$student['id'])->where('date',$date)->select('student_id','status')->first();
@@ -146,6 +147,10 @@
                                     }
                                     $i++;
                                 }
+                               } else {
+                                         $dropDownData['student_list'] = '';
+
+                               }
                     if ($request->ajax()) {
                          return $dropDownData;
                     } else {
