@@ -59,6 +59,7 @@
                                             <select class="form-control" id="classDropdown" name="classDropdown" style="-webkit-appearance: menulist;">
                                                 <option value="">Select Class</option>
                                             </select>
+                                            <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
@@ -124,6 +125,7 @@
     $('#division').css('text-transform','uppercase');
 
     $('#dropdown').change(function(){
+        $('div#loadmoreajaxloader').show();
         var route="/get-classes/"+this.value;
         $.get(route,function(res){
             var str="";
@@ -132,6 +134,7 @@
                 str+='<option value="'+res[i]['id']+'">'+res[i]['class_name']+'</option>';
             }
             $('#classDropdown').html(str);
+            $('div#loadmoreajaxloader').hide();
         });
     });
 
