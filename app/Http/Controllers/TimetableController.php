@@ -352,7 +352,6 @@ class TimetableController extends Controller
 
             $flagCheckForTeacher = 1;
 
-
             foreach($teacherAvailability as $arr)
             {
                 if($arr->start_time == $startTime) {
@@ -399,7 +398,8 @@ class TimetableController extends Controller
         $subStartTime = substr($time,0,5);
         $time = trim($subStartTime);
         $subStartMinutes = substr($time,-2);
-        $subStartHours = substr($time,-5,-2);
+
+        $subStartHours = substr($time,-5,-3);
 
         if($subStartAmpm == "PM") {
 
