@@ -238,6 +238,8 @@
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
             </div>
+            <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+
         </div>
      </div>
  </div>
@@ -327,6 +329,7 @@
 
     function userAclModule()
     {
+        $('div#loadmoreajaxloader').show();
         var route='user-module-acl';
         $.get(route,function(res){
 
@@ -375,6 +378,7 @@
             }
 
             $('#aclModCreate').html(str);
+            $('div#loadmoreajaxloader').hide();
         });
     }
 
