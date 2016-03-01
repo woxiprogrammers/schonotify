@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AclMaster;
+use App\Attendance;
 use App\Batch;
 use App\ClassData;
 use App\Classes;
@@ -646,12 +647,12 @@ class UsersController extends Controller
         if($checkRollNumber){
            User::where('id',$checkRollNumber->id)->update(['roll_number'=>'0']);
         }
-
         HomeworkTeacher::where('student_id',$request->id)->update($homework);
-        $leaves['division_id']=$request->division;
+        Attendance::where('student_id',$request->id)->update($homework);
+        $leaves['division_id'] = $request->division;
         Leave::where('student_id',$request->id)->update($leaves);
         $userUpdate=User::where('id',$id)->update($userData);
-        if($userUpdate == 1){
+        if ($userUpdate == 1) {
             Session::flash('message-success','student updated successfully');
             return Redirect::back();
         }
