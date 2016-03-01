@@ -271,6 +271,8 @@
                     <div class="form-group">
                         <h4>Edit Period</h4>
                     </div>
+                    <input type="hidden" id="hiddenDay">
+                    <input type="hidden" id="hiddenPeriodId">
 
                     <div class="form-group">
 
@@ -283,6 +285,7 @@
                         </select>
 
                     </div>
+                    <div id="subjectErrorEdit" style="display:none; color:#a94442;"></div>
                     <div class="align-loader timetable-dropdown-load">
                         <center><img width="50" class="img-responsive" src="assets/images/loader1.gif" /></center>
                     </div>
@@ -295,6 +298,7 @@
                         <div class=" bootstrap-timepicker timepicker" >
                             <input id="startTimeEdit" type="text" class="form-control input-small timepicker1 loading" name="startTime">
                         </div>
+                        <div id="timeErrorEdit" style="display:none; color:#a94442;"></div>
 
                     </div>
                     <div class="align-loader timetable-dropdown-load">
@@ -324,6 +328,7 @@
                                 Is A Break
                             </label>
                         </div>
+
                     </div>
 
                 </div>
@@ -341,7 +346,7 @@
                     </button>
                     @foreach(session('functionArr') as $row)
                     @if($row == 'update_timetable')
-                    <button class="btn btn-primary btn-o " data-dismiss="modal" type="button" onclick="confirm('would you like to change this period?')">
+                    <button class="btn btn-primary btn-o " data-dismiss="modal" type="button" id="editPeriodSaveBtn">
                         Save
                     </button>
                     @endif
@@ -957,6 +962,10 @@ function editPeriod(id)
 
     $('#del-period-btn').prop('href','javascript:void(0)');
 
+    $('#subjectErrorEdit').html('');
+
+    $('#timeErrorEdit').html('');
+
     var route="/edit-period/"+id;
 
     $.get(route,function(res){
@@ -970,6 +979,10 @@ function editPeriod(id)
             $('.loading').prop('disabled',false);
 
             $('#del-period-btn').attr('onclick','deletePeriod('+id+')');
+
+            $('#hiddenPeriodId').val(id);
+
+            $('#hiddenDay').val(res[0]['day_id']);
 
             $('#subject-select-edit option').each(function(){
 
@@ -993,9 +1006,17 @@ function editPeriod(id)
 
                 $('#isBreakCheckEdit').prop('checked',true);
 
+                $('#subject-select-edit').prop('disabled',true);
+
+                $('#isBreakCheckEdit').prop('value','1');
+
             } else {
 
                 $('#isBreakCheckEdit').prop('checked',false);
+
+                $('#subject-select-edit').prop('disabled',false);
+
+                $('#isBreakCheckEdit').prop('value','0');
 
             }
 
@@ -1005,6 +1026,16 @@ function editPeriod(id)
 
 }
 
+
+$('#isBreakCheckEdit').change(function(){
+    if(this.checked == true){
+        $(this).val('1');
+        $('#subject-select-edit').prop('disabled',true);
+    }else{
+        $(this).val('0');
+        $('#subject-select-edit').prop('disabled',false);
+    }
+});
 /*
  +   * Function Name: deletePeriod
  +   * Param: id
@@ -1065,12 +1096,146 @@ $('#copyStructureBtn').click(function(){
 
         $('#message-error-div').html(str);
 
-            $('#myModal').modal('toggle');
+        $('#myModal').modal('toggle');
 
     });
 
 });
 
+
+$('#editPeriodSaveBtn').click(function(){
+
+    var subject = $('#subject-select-edit').val();
+    var startTime = $('#startTimeEdit').val();
+    var endTime = $('#endTimeEdit').val();
+    var checkValue = $('#isBreakCheckEdit').val();
+    var period = $('#hiddenPeriodId').val();
+    var day = $('#hiddenDay').val();
+    var division = $('#division-select').val();
+
+    var flag = 1;
+
+        var route = "/teacher-check-edit";
+
+        $.ajax({
+            url:route,
+            async:false,
+            type:"post",
+            data:{id:subject,day:day,startTime:startTime,endTime:endTime,period:period,checkValue:checkValue,division:division},
+            success:function(res){
+
+                if ( res == 0 ) {
+                    if (checkValue == 0) {
+                        flag = 0;
+                    } else if ( res == 2 ) {
+                        flag = 2;
+                    } else {
+                        flag = 1;
+                    }
+
+                } else if ( res == 2 ) {
+                    flag = 2;
+                } else {
+                    flag = 1;
+                }
+
+            }
+
+        });
+
+        if ( flag == 0 ) {
+            $('#subjectErrorEdit').show();
+            $('#subjectErrorEdit').html('This teacher subject is not available for this time interval.');
+            return false;
+        } else if( flag == 2 ) {
+            $('#subjectErrorEdit').hide();
+            $('#subjectErrorEdit').html('');
+            $('#timeErrorEdit').show();
+            $('#timeErrorEdit').html('This time is not available.');
+            return false;
+        } else {
+            $('#subjectErrorEdit').hide();
+            $('#subjectErrorEdit').html('');
+            $('#timeErrorEdit').hide();
+            var st = minFromMidnight(startTime);
+            var et = minFromMidnight(endTime);
+
+            if(st >= et) {
+                $('#timeErrorEdit').show();
+                $('#timeErrorEdit').html('End time must be greater than start time.');
+                return false;
+            } else {
+                var route = "/update-period";
+
+                $.ajax({
+                    url:route,
+                    async:false,
+                    type:"post",
+                    data:{id:subject,day:day,startTime:startTime,endTime:endTime,period:period,check:checkValue},
+                    success:function(res){
+                        if(res == 1) {
+
+                            showTimetable(division);
+
+                            var str = '<div class="alert alert-success alert-dismissible" role="alert">'+
+                                'Timetable period updated successfully !'+
+                                '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                                '<span area-hidden="true">&times;</span>'+
+                                '</button>'+
+
+                                '</div>';
+
+                            $('#message-error-div').html(str);
+
+                        }
+                    }
+
+                });
+            }
+
+        }
+
+});
+
+/*
+ +   * Function Name: minFromMidnight
+ +   * Param: tm
+ +   * Return: it will returns formatted time in AM PM format (Meridian)
+ +   * Desc: this method converts 24 hrs timestamp into meredian timestamp.
+ +   * Developed By: Suraj Bande
+ +   * Date: 25/2/2016
+ +   */
+function minFromMidnight(tm){
+
+    var ampm = tm.substr(-2);
+
+    var time = $.trim(tm).length === 7 ? "0" + tm : tm;
+
+    var clk = time.substr(0, 5);
+
+    var m  = parseInt(clk.match(/\d+$/)[0], 10);
+
+    var h  = parseInt(clk.match(/^\d+/)[0], 10);
+
+    if((ampm.match(/pm/i)) == "PM") {
+        if( h == 12 ) {
+            h += 0;
+        } else {
+            h += 12;
+        }
+
+    } else {
+
+        if( h == 12 ) {
+            h = 0;
+        } else {
+            h += 0;
+        }
+
+    }
+
+    return (h*60+m);
+}
 </script>
 
 </div>

@@ -11794,3 +11794,7 @@ a.control_next {
 .loading-css{
     color: #ccc !important;
 }
+
+.bootstrap-timepicker-widget{
+    z-index: 99999999;
+}
