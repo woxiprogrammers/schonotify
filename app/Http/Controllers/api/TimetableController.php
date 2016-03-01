@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Batch;
 use App\Classes;
+use App\DayMaster;
 use App\Division;
 use App\Subject;
 use App\SubjectClassDivision;
@@ -45,13 +46,13 @@ class TimetableController extends Controller
             $status = 200;
             $message = "Successfully Listed";
         }catch (\Exception $e) {
-        $status = 500;
-        $message = "Something went wrong";
+            $status = 500;
+            $message = "Something went wrong";
         }
         $response = [
-         "message" => $message,
-         "status" => $status,
-         "data" => $batches
+            "message" => $message,
+            "status" => $status,
+            "data" => $batches
         ];
         return response($response, $status);
     }
@@ -95,17 +96,24 @@ class TimetableController extends Controller
     {
         try{
             $divisions = array();
-            $divisions = Division::where('class_id','=',$classId)->select('id ','division_name as name')->get()->toArray();
+            $divisions = Division::where('class_id','=',$classId)->get()->toArray();
+            $i=0;
+            foreach ($divisions as $division) {
+                $finalDivisions[$i]['id'] = $division['id'];
+                $finalDivisions[$i]['name'] = $division['division_name'];
+                $i++;
+            }
             $status = 200;
             $message = "Successfully Listed";
         }catch (\Exception $e) {
+            echo $e->getMessage();
             $status = 500;
             $message = "Something went wrong";
         }
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $divisions
+            "data" => $finalDivisions
         ];
         return response($response, $status);
     }
@@ -126,12 +134,12 @@ class TimetableController extends Controller
             $subjectClassDivision=SubjectClassDivision::where('division_id','=',$user['division_id'])->get();
             $finalSubjectClassDivision=array();
             foreach($subjectClassDivision as $value){
-                 array_push($finalSubjectClassDivision,$value['id']);
+                array_push($finalSubjectClassDivision,$value['id']);
             }
             $timetable=Timetable::wherein('division_subject_id',$finalSubjectClassDivision)
-                 ->where('day_id', '=', $day_id)
-                 ->orderBy('start_time', 'asc')
-                 ->get();
+                ->where('day_id', '=', $day_id)
+                ->orderBy('start_time', 'asc')
+                ->get();
             $timetables=array();
             foreach($timetable as $row)
             {
@@ -175,24 +183,27 @@ class TimetableController extends Controller
             if(!Empty($timetables)) {
                 $message = 'success';
                 $status = 200;
-            foreach($timetables as $value)
-            {
-                $subjectTeacher = SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
-                $subjectTeacherArray= $subjectTeacher->toArray();
-                if( $value['is_break'] == 1) {
-                    $finalTimetable[$i]['subject'] = "Break";
-                    $finalTimetable[$i]['teacher'] = "";
-                } else {
-                    $teacher = User::where('id', '=', $subjectTeacherArray['teacher_id'])->first();
-                    $subject = Subject::where('id', '=', $subjectTeacherArray['subject_id'])->first();
-                    $finalTimetable[$i]['subject'] = $subject['subject_name'];
-                    $finalTimetable[$i]['teacher'] = $teacher['first_name']." ".$teacher['last_name'];
+                $day = DayMaster::where('id','=',$day_id)->pluck('name');
+                $finalTimetable['day'] = $day;
+                foreach($timetables as $value)
+                {
+                    $subjectTeacher = SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
+                    $subjectTeacherArray= $subjectTeacher->toArray();
+                    if( $value['is_break'] == 1) {
+                        $finalTimetable['timetable'][$i]['subject'] = "Break";
+                        $finalTimetable['timetable'][$i]['teacher'] = "";
+                    } else {
+                        $teacher = User::where('id', '=', $subjectTeacherArray['teacher_id'])->first();
+                        $subject = Subject::where('id', '=', $subjectTeacherArray['subject_id'])->first();
+                        $finalTimetable['timetable'][$i]['subject'] = $subject['subject_name'];
+                        $finalTimetable['timetable'][$i]['teacher'] = $teacher['first_name']." ".$teacher['last_name'];
+                    }
+                    $finalTimetable['timetable'][$i]['is_break'] = $value['is_break'];
+                    $finalTimetable['timetable'][$i]['start_time'] = $value['start_time'];
+                    $finalTimetable['timetable'][$i]['end_time'] = $value['end_time'];
+                    $i++;
                 }
-                $finalTimetable[$i]['is_break'] = $value['is_break'];
-                $finalTimetable[$i]['start_time'] = $value['start_time'];
-                $finalTimetable[$i]['end_time'] = $value['end_time'];
-                $i++;
-            }
+                $finalTimetable['div_id'] = $user['division_id'];
             }else {
                 $status=406;
                 $message = 'Sorry ! No timetable found for this instance';
@@ -227,9 +238,9 @@ class TimetableController extends Controller
                 array_push($finalSubjectClassDivision,$value['id']);
             }
             $timetable=Timetable::wherein('division_subject_id',$finalSubjectClassDivision)
-                  ->where('day_id', '=', $day_id)
-                  ->orderBy('start_time', 'asc')
-                  ->get();
+                ->where('day_id', '=', $day_id)
+                ->orderBy('start_time', 'asc')
+                ->get();
             $timetables=array();
             foreach($timetable as $row)
             {
@@ -273,24 +284,27 @@ class TimetableController extends Controller
             if(!Empty($timetables)) {
                 $message = 'success';
                 $status = 200;
+                $day = DayMaster::where('id','=',$day_id)->pluck('name');
+                $finalTimetable['day'] = $day;
                 foreach($timetable as $value)
                 {
                     $subjectTeacher = SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
                     $subjectTeacherArray= $subjectTeacher->toArray();
                     if( $value['is_break'] == 1) {
-                        $finalTimetable[$i]['subject'] = "Break";
-                        $finalTimetable[$i]['teacher'] = "";
+                        $finalTimetable['timetable'][$i]['subject'] = "Break";
+                        $finalTimetable['timetable'][$i]['teacher'] = "";
                     } else {
                         $teacher = User::where('id', '=', $subjectTeacherArray['teacher_id'])->first();
                         $subject = Subject::where('id', '=', $subjectTeacherArray['subject_id'])->first();
-                        $finalTimetable[$i]['subject'] = $subject['subject_name'];
-                        $finalTimetable[$i]['teacher'] = $teacher['first_name']." ".$teacher['last_name'];
+                        $finalTimetable['timetable'][$i]['subject'] = $subject['subject_name'];
+                        $finalTimetable['timetable'][$i]['teacher'] = $teacher['first_name']." ".$teacher['last_name'];
                     }
-                    $finalTimetable[$i]['is_break'] = $value['is_break'];
-                    $finalTimetable[$i]['start_time'] = $value['start_time'];
-                    $finalTimetable[$i]['end_time'] = $value['end_time'];
+                    $finalTimetable['timetable'][$i]['is_break'] = $value['is_break'];
+                    $finalTimetable['timetable'][$i]['start_time'] = $value['start_time'];
+                    $finalTimetable['timetable'][$i]['end_time'] = $value['end_time'];
                     $i++;
                 }
+                $finalTimetable['div_id'] = $div_id;
             }else {
                 $status=406;
                 $message = 'Sorry ! No timetable found for this instance';
@@ -302,8 +316,7 @@ class TimetableController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $finalTimetable,
-            "div_id" => $div_id
+            "data" => $finalTimetable
         ];
         return response($response, $status);
     }
