@@ -354,11 +354,11 @@ class TimetableController extends Controller
 
             foreach($teacherAvailability as $arr)
             {
-                if($arr->start_time == $startTime) {
+                if($arr->start_time == $startTime.":00") {
 
                     $flagCheckForTeacher = 0;
 
-                } elseif ($arr->end_time == $endTime) {
+                } elseif ($arr->end_time == $endTime.":00") {
 
                     $flagCheckForTeacher = 0;
 
@@ -494,6 +494,8 @@ class TimetableController extends Controller
 
         $periods = $period->toArray();
 
+        $periodsArray=array();
+
         if($periods[0]['division_subject_id'] == "0") {
 
             $periods[0]['subject_name'] = "";
@@ -505,9 +507,52 @@ class TimetableController extends Controller
                     ->get()->toArray();
 
             $periods[0]['subject_name'] = $subject[0]['subject_name'];
+
         }
 
-        return $periods;
+        foreach($periods as $row)
+        {
+            $startTime = trim($row['start_time']);
+
+            $subStartHours = substr($startTime,0,2);
+
+            $subStartMins = substr($startTime,3,2);
+
+            if($subStartHours >= 12) {
+                if($subStartHours != 12) {
+                    $subStartHours = $subStartHours-12;
+                }
+                $row['start_time'] = $subStartHours.":".$subStartMins." PM";
+            } else {
+                if($subStartHours == 00) {
+                    $subStartHours = 12;
+                }
+                $row['start_time'] = $subStartHours.":".$subStartMins." AM";
+            }
+
+            $endTime = trim($row['end_time']);
+
+            $subEndHours = substr($endTime,0,2);
+
+            $subEndMins = substr($endTime,3,2);
+
+            if($subEndHours >= 12) {
+                if($subEndHours != 12) {
+                    $subEndHours = $subEndHours-12;
+                }
+                $row['end_time'] = $subEndHours.":"."$subEndMins"." PM";
+            } else {
+                if($subEndHours == 00) {
+                    $subEndHours = 12;
+                }
+                $row['end_time'] = $subEndHours.":"."$subEndMins"." AM";
+            }
+
+            array_push($periodsArray,$row);
+
+        }
+
+        return $periodsArray;
 
     }
 
@@ -577,6 +622,188 @@ class TimetableController extends Controller
 
             return 0;
         }
+
+    }
+
+    /*
+         +   * Function Name: updatePeriod
+         +   * Param: $request
+         +   * Return: it will check teacher and time availability for  period.
+         +   * Desc: this method checks wheather the teacher or time is available to modified period with respect to period id.
+         +   * Developed By: Suraj Bande
+         +   * Date: 28/2/2016
+         +   */
+
+    public function teacherCheckEdit(Request $request)
+    {
+
+        $id = $request->id;
+        $startTime = $request->startTime;
+        $endTime = $request->endTime;
+        $day = $request->day;
+        $period=$request->period;
+        $isBreak=$request->checkValue;
+        $division=$request->division;
+
+        $startTime = $this::formatedTime($startTime);
+
+        $endTime = $this::formatedTime($endTime);
+
+        $teacher = SubjectClassDivision::where('id',$id)->select('teacher_id')->first();
+
+        $teacherArray = $teacher->toArray();
+
+        $teacherAvailabilityObj = Timetable::join('division_subjects','division_subjects.id','=','timetables.division_subject_id')
+            ->where('timetables.day_id','=',$day)
+            ->wherein('teacher_id',$teacherArray)
+            ->where('timetables.id','!=',$period)
+            ->orwhere('timetables.is_break','=',1)
+            ->get();
+
+        $timeAvailabilityObj = Timetable::where('div_id','=',$division)->where('timetables.day_id','=',$day)
+            ->where('timetables.id','!=',$period)
+            ->get();
+
+        $flagCheckForTeacher = 1;
+
+        $teacherAvailability=$teacherAvailabilityObj->toArray();
+
+        $timeAvailability=$timeAvailabilityObj->toArray();
+
+        $startTime=$startTime.":00";
+
+        $endTime=$endTime.":00";
+
+
+            foreach($timeAvailabilityObj as $arr)
+            {
+                if($arr->start_time == $startTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ($arr->end_time == $endTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ($arr->start_time < $startTime && $arr->end_time > $startTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ($arr->start_time < $endTime && $arr->end_time > $endTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ( $startTime < $arr->start_time && $endTime > $arr->start_time) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ( $startTime < $arr->end_time && $endTime > $arr->end_time) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } else {
+
+                    if( $isBreak == 1 ) {
+
+                        $flagCheckForTeacher = 1;
+
+                    } else {
+
+                        foreach($teacherAvailabilityObj as $arr)
+                        {
+
+                            if($arr->start_time == $startTime) {
+
+                                $flagCheckForTeacher = 0;
+                                break;
+
+                            } elseif ($arr->end_time == $endTime) {
+
+                                $flagCheckForTeacher = 0;
+                                break;
+
+                            } elseif ($arr->start_time < $startTime && $arr->end_time > $startTime) {
+
+                                $flagCheckForTeacher = 0;
+                                break;
+
+                            } elseif ($arr->start_time < $endTime && $arr->end_time > $endTime) {
+
+                                $flagCheckForTeacher = 0;
+                                break;
+
+                            } elseif ( $startTime < $arr->start_time && $endTime > $arr->start_time) {
+
+                                $flagCheckForTeacher = 0;
+                                break;
+
+                            } elseif ( $startTime < $arr->end_time && $endTime > $arr->end_time) {
+
+                                $flagCheckForTeacher = 0;
+                                break;
+
+                            } else{
+                                $flagCheckForTeacher = 1;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+
+       return $flagCheckForTeacher;
+
+    }
+
+    /*
+         +   * Function Name: updatePeriod
+         +   * Param: $request
+         +   * Return: it will update period.
+         +   * Desc: this method update period with respect to period id.
+         +   * Developed By: Suraj Bande
+         +   * Date: 28/2/2016
+         +   */
+
+    public function updatePeriod(Request $request)
+    {
+        $data = $request->all();
+
+        $updateData = array();
+
+        $timetableData = array();
+
+            ///////////Formatting start time to 24 hrs format
+
+            $startTime = $data['startTime'];
+            $startTime = $this::formatedTime($startTime);
+
+            ///////////Formatting end time to 24 hrs format
+
+            $endTime = $data['endTime'];
+            $endTime = $this::formatedTime($endTime);
+
+            $timetable = Timetable::find($data['period']);
+            $timetable->start_time = $startTime;
+            $timetable->end_time = $endTime;
+
+            if($data['check'] == 0) {
+                $timetable->division_subject_id = $data['id'];
+            }
+
+            $timetable->is_break = $data['check'];
+
+            $isUpdate = $timetable->save();
+
+            if( $isUpdate ) {
+                return 1;
+            }
 
     }
 
