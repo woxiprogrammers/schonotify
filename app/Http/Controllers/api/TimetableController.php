@@ -154,9 +154,9 @@ class TimetableController extends Controller
                     }
                     $row->start_time=$subStartHours.":".$subStartMins." PM";
                 }else{
-                    if($subStartHours==00)
+                    if($subStartHours == 00)
                     {
-                        $subStartHours=12;
+                        $subStartHours = 12;
                     }
                     $row->start_time=$subStartHours.":".$subStartMins." AM";
                 }
