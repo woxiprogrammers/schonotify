@@ -807,4 +807,228 @@ class TimetableController extends Controller
 
     }
 
+    /*
+             +   * Function Name: teacherCheckAdd
+             +   * Param: $request
+             +   * Return: it will returns teacher avilability.
+             +   * Desc: this method will return teacher availabilty with respect to teacher division id.
+             +   * Developed By: Suraj Bande
+             +   * Date: 28/2/2016
+             +   */
+
+    public function teacherCheckAdd(Request $request)
+    {
+
+        $id = $request->id;
+        $startTime = $request->startTime;
+        $endTime = $request->endTime;
+        $day = $request->day;
+        $isBreak = $request->checkValue;
+        $division = $request->division;
+
+        $startTime = $this::formatedTime($startTime);
+
+        $endTime = $this::formatedTime($endTime);
+
+        $teacher = SubjectClassDivision::where('id',$id)->select('teacher_id')->first();
+
+        $teacherArray = $teacher->toArray();
+
+        $teacherAvailabilityObj = Timetable::join('division_subjects','division_subjects.id','=','timetables.division_subject_id')
+            ->where('timetables.day_id','=',$day)
+            ->wherein('teacher_id',$teacherArray)
+            ->get();
+
+        $timeAvailabilityObj = Timetable::where('div_id','=',$division)
+            ->where('timetables.day_id','=',$day)
+            ->get();
+
+        $flagCheckForTeacher = 1;
+
+        $teacherAvailability=$teacherAvailabilityObj->toArray();
+
+        $timeAvailability=$timeAvailabilityObj->toArray();
+
+        $startTime=$startTime.":00";
+
+        $endTime=$endTime.":00";
+
+        if(!empty($timeAvailability))
+        {
+
+            foreach($timeAvailabilityObj as $arr)
+            {
+
+                if($arr->start_time == $startTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ($arr->end_time == $endTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ($arr->start_time < $startTime && $arr->end_time > $startTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ($arr->start_time < $endTime && $arr->end_time > $endTime) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ( $startTime < $arr->start_time && $endTime > $arr->start_time) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } elseif ( $startTime < $arr->end_time && $endTime > $arr->end_time) {
+
+                    $flagCheckForTeacher = 2;
+                    break;
+
+                } else{
+
+                    foreach($teacherAvailabilityObj as $arr){
+                        if($arr->start_time == $startTime) {
+
+                            $flagCheckForTeacher = 0;
+                            break;
+
+                        } elseif ($arr->end_time == $endTime) {
+
+                            $flagCheckForTeacher = 0;
+                            break;
+
+                        } elseif ($arr->start_time < $startTime && $arr->end_time > $startTime) {
+
+                            $flagCheckForTeacher = 0;
+                            break;
+
+                        } elseif ($arr->start_time < $endTime && $arr->end_time > $endTime) {
+
+                            $flagCheckForTeacher = 0;
+                            break;
+
+                        } elseif ( $startTime < $arr->start_time && $endTime > $arr->start_time) {
+
+                            $flagCheckForTeacher = 0;
+                            break;
+
+                        } elseif ( $startTime < $arr->end_time && $endTime > $arr->end_time) {
+
+                            $flagCheckForTeacher = 0;
+                            break;
+
+                        }else{
+                            $flagCheckForTeacher = 1;
+                        }
+
+                    }
+
+                }
+            }
+
+        }else{
+            if($isBreak == 1) {
+                $flagCheckForTeacher = 1;
+            }else{
+                foreach($teacherAvailabilityObj as $arr){
+                    if($arr->start_time == $startTime) {
+
+                        $flagCheckForTeacher = 0;
+                        break;
+
+                    } elseif ($arr->end_time == $endTime) {
+
+                        $flagCheckForTeacher = 0;
+                        break;
+
+                    } elseif ($arr->start_time < $startTime && $arr->end_time > $startTime) {
+
+                        $flagCheckForTeacher = 0;
+                        break;
+
+                    } elseif ($arr->start_time < $endTime && $arr->end_time > $endTime) {
+
+                        $flagCheckForTeacher = 0;
+                        break;
+
+                    } elseif ( $startTime < $arr->start_time && $endTime > $arr->start_time) {
+
+                        $flagCheckForTeacher = 0;
+                        break;
+
+                    } elseif ( $startTime < $arr->end_time && $endTime > $arr->end_time) {
+
+                        $flagCheckForTeacher = 0;
+                        break;
+
+                    }else{
+                        $flagCheckForTeacher=1;
+                    }
+
+                }
+            }
+        }
+        return $flagCheckForTeacher;
+
+    }
+
+    /*
+             +   * Function Name: addPeriod
+             +   * Param: $request
+             +   * Return: it will add period.
+             +   * Desc: this method will create period.
+             +   * Developed By: Suraj Bande
+             +   * Date: 28/2/2016
+             +   */
+
+    public function addPeriod(Request $request)
+    {
+
+        $id = $request->id;
+
+        $startTime = $request->startTime;
+
+        $endTime = $request->endTime;
+
+        $day = $request->day;
+
+        $isBreak = $request->check;
+
+        $division = $request->division;
+
+        $startTime = $this::formatedTime($startTime);
+
+        $endTime = $this::formatedTime($endTime);
+
+        $timetablePeriods['division_subject_id'] = $id;
+
+        $timetablePeriods['div_id'] = $division;
+
+        $timetablePeriods['day_id'] = $day;
+
+        $timetablePeriods['start_time'] = $startTime;
+
+        $timetablePeriods['end_time'] = $endTime;
+
+        $timetablePeriods['is_break'] = $isBreak;
+
+        $timetablePeriods['created_at'] = Carbon::now();
+
+        $timetablePeriods['updated_at'] = Carbon::now();
+
+        $timetable = Timetable::insert($timetablePeriods);
+
+        if($timetable){
+            return 1;
+        }else{
+            return 0;
+        }
+
+    }
+
 }

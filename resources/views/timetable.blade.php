@@ -125,9 +125,7 @@
                             <p class="center">OR</p>
 
                         </div>
-
-                        <form class="form-full-event">
-
+                        <input type="hidden" id="hiddenSelectedDayAddPeriod" />
                             <div class="form-group">
                                 <h4>Create Period</h4>
                             </div>
@@ -136,25 +134,28 @@
                                 <label>
                                     Select Subject
                                 </label>
-                                <select class="form-control" id="subject-edit-copy-structure" style="-webkit-appearance: menulist;">
-                                    <option value="1">Marathi</option>
-                                    <option value="2">History</option>
-                                    <option value="3">Hindi</option>
-                                    <option value="4">Maths</option>
-                                    <option value="5">English</option>
+                                <select class="form-control" id="subject-add-copy-structure" style="-webkit-appearance: menulist;">
+
                                 </select>
                             </div>
-
+                            <div id="subjectErrorAdd" style="display:none; color:#a94442;"></div>
+                            <div class="align-loader timetable-dropdown-load">
+                                <center><img width="50" class="img-responsive" src="assets/images/loader1.gif" /></center>
+                            </div>
                             <div class="form-group">
                                 <label>
                                     Start Time
                                 </label>
 
                                 <div class="input-group bootstrap-timepicker timepicker">
-                                    <input id="timepicker3" type="text" class="form-control input-small timepicker1">
+                                    <input  id="startTimeAddPeriod" type="text" class="form-control input-small timepicker1">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>
 
+                            </div>
+                            <div id="timeErrorAdd" style="display:none; color:#a94442;"></div>
+                            <div class="align-loader timetable-dropdown-load">
+                                <center><img width="50" class="img-responsive" src="assets/images/loader1.gif" /></center>
                             </div>
                             <div class="form-group">
                                 <label>
@@ -162,9 +163,12 @@
                                 </label>
 
                                 <div class="input-group bootstrap-timepicker timepicker">
-                                    <input id="timepicker4" type="text" class="form-control input-small timepicker1">
+                                    <input id="endTimeAddPeriod" type="text" class="form-control input-small timepicker1">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>
+                            </div>
+                            <div class="align-loader timetable-dropdown-load">
+                                <center><img width="50" class="img-responsive" src="assets/images/loader1.gif" /></center>
                             </div>
                             <div class="form-group">
                                 <label>
@@ -185,14 +189,12 @@
                                 </button>
                                 @foreach(session('functionArr') as $row)
                                 @if($row == 'create_timetable')
-                                <button class="btn btn-primary btn-o save-event" type="submit">
+                                <button class="btn btn-primary btn-o save-event" type="button" id="addPeriodBtn">
                                     Create
                                 </button>
                                 @endif
                                 @endforeach
                             </div>
-
-                        </form>
 
                         @else
                         <p class="text-danger">
@@ -295,8 +297,9 @@
                             Start Time
                         </label>
 
-                        <div class=" bootstrap-timepicker timepicker" >
+                        <div class="input-group bootstrap-timepicker timepicker" >
                             <input id="startTimeEdit" type="text" class="form-control input-small timepicker1 loading" name="startTime">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
                         <div id="timeErrorEdit" style="display:none; color:#a94442;"></div>
 
@@ -310,8 +313,9 @@
                             End Time
                         </label>
 
-                        <div class=" bootstrap-timepicker timepicker" >
+                        <div class="input-group bootstrap-timepicker timepicker" >
                             <input id="endTimeEdit" type="text" class="form-control input-small timepicker1 loading" name="endTime">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
 
                     </div>
@@ -841,6 +845,8 @@ function showTimetable(val)
 
             }
 
+
+
         } else {
 
             var val1 = $('#division-select').val();
@@ -894,6 +900,10 @@ function showTimetable(val)
 
             $('#copystr').hide();
 
+            var dom = $(this).next();
+
+            $('#hiddenSelectedDayAddPeriod').val(dom.val());
+
             if( this.id == "modal0" ) {
 
                 var dom = $(this).next();
@@ -928,11 +938,173 @@ function showTimetable(val)
 
             }
 
+            addPeriod();
+
         });
 
     });
 
 }
+
+function addPeriod(){
+
+    $('.timetable-dropdown-load').show();
+
+    $('.loading').addClass('loading-css');
+
+    $('.loading').prop('disabled',true);
+
+    $('#addPeriodBtn').prop('disabled','true');
+
+    $('#subjectErrorAdd').html('');
+
+    $('#timeErrorAdd').html('');
+
+    var div_id=$('#division-select').val();
+
+    var route="/get-timetable-subjects/"+div_id;
+
+    $.get(route,function(res){
+
+        if(res.length != 0) {
+
+            var str="";
+
+            for(var i=0; i<res.length; i++)
+            {
+                str+="<option value='"+res[i]['id']+"'>"+res[i]['subject_name']+"</option>";
+            }
+
+            $('#subject-add-copy-structure').html(str);
+
+            $('.timetable-dropdown-load').hide();
+
+            $('.loading').removeClass('loading-css');
+
+            $('.loading').prop('disabled',false);
+
+            $('#addPeriodBtn').prop('disabled',false);
+
+        }else{
+            var str="<option>No subjects available</option>";
+
+            $('#subject-add-copy-structure').html(str);
+
+            $('.timetable-dropdown-load').hide();
+
+            $('.loading').removeClass('loading-css');
+
+            $('.loading').prop('disabled',false);
+        }
+
+        if($('#isBreakCheck').checked == true) {
+            $('#isBreakCheck').val('1');
+        }else{
+            $('#isBreakCheck').val('0');
+        }
+
+    });
+
+}
+
+    $('#addPeriodBtn').click(function(){
+        var subject = $('#subject-add-copy-structure').val();
+        var startTime = $('#startTimeAddPeriod').val();
+        var endTime = $('#endTimeAddPeriod').val();
+        var checkValue = $('#isBreakCheck').val();
+        var day = $('#hiddenSelectedDayAddPeriod').val();
+
+        var division = $('#division-select').val();
+
+        var flag = 1;
+
+        var route = "/teacher-check-add";
+
+        $.ajax({
+            url:route,
+            async:false,
+            type:"post",
+            data:{id:subject,day:day,startTime:startTime,endTime:endTime,checkValue:checkValue,division:division},
+            success:function(res){
+
+                if ( res == 0 ) {
+                    if (checkValue == 0) {
+                        flag = 0;
+                    } else if ( res == 2 ) {
+                        flag = 2;
+                    } else {
+                        flag = 1;
+                    }
+
+                } else if ( res == 2 ) {
+                    flag = 2;
+                } else {
+                    flag = 1;
+                }
+
+            }
+
+        });
+
+        if(flag == 2) {
+            $('#subjectErrorAdd').hide();
+            $('#subjectErrorAdd').html('');
+            $('#timeErrorAdd').show();
+            $('#timeErrorAdd').html('This time is not available.');
+        } else if(flag == 0) {
+            $('#timeErrorAdd').hide();
+            $('#timeErrorAdd').html('');
+            $('#subjectErrorAdd').show();
+            $('#subjectErrorAdd').html('This teacher subject is not available for this time interval.');
+        } else {
+            $('#timeErrorAdd').hide();
+            $('#timeErrorAdd').html('');
+            $('#subjectErrorAdd').hide();
+            $('#subjectErrorAdd').html('');
+
+            var st = minFromMidnight(startTime);
+            var et = minFromMidnight(endTime);
+
+            if(st >= et) {
+                $('#timeErrorAdd').show();
+                $('#timeErrorAdd').html('End time must be greater than start time.');
+                return false;
+            } else {
+
+                var route = "/add-period";
+
+                $.ajax({
+                    url:route,
+                    async:false,
+                    type:"post",
+                    data:{id:subject,day:day,startTime:startTime,endTime:endTime,check:checkValue,division:division},
+                    success:function(res){
+
+                        if(res == 1) {
+
+                            showTimetable(division);
+
+                            $('#myModal').modal('toggle');
+
+                            var str = '<div class="alert alert-success alert-dismissible" role="alert">'+
+                                'Timetable period created successfully !'+
+                                '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                                '<span area-hidden="true">&times;</span>'+
+                                '</button>'+
+
+                                '</div>';
+
+                            $('#message-error-div').html(str);
+
+                        }
+                    }
+
+                });
+            }
+
+        }
+
+});
 
 $('#division-select').change(function()
 {
@@ -1026,6 +1198,16 @@ function editPeriod(id)
 
 }
 
+
+$('#isBreakCheck').change(function(){
+    if(this.checked == true){
+        $(this).val('1');
+        $('#subject-add-copy-structure').prop('disabled',true);
+    }else{
+        $(this).val('0');
+        $('#subject-add-copy-structure').prop('disabled',false);
+    }
+});
 
 $('#isBreakCheckEdit').change(function(){
     if(this.checked == true){
@@ -1157,6 +1339,7 @@ $('#editPeriodSaveBtn').click(function(){
             $('#subjectErrorEdit').hide();
             $('#subjectErrorEdit').html('');
             $('#timeErrorEdit').hide();
+
             var st = minFromMidnight(startTime);
             var et = minFromMidnight(endTime);
 
