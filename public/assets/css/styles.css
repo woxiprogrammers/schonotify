@@ -11789,6 +11789,7 @@ a.control_next {
     margin-top: -41px;
     left: 119px;
     position: absolute;
+    z-index: 9999;
 }
 
 .loading-css{

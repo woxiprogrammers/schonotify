@@ -261,6 +261,10 @@
 
     Route::post('/teacher-check-edit','TimetableController@teacherCheckEdit');
 
+    Route::post('/teacher-check-add','TimetableController@teacherCheckAdd');
+
+    Route::post('/add-period','TimetableController@addPeriod');
+
     Route::get('loadmore-homework/{id}','HomeworkController@loadMore');
 
     Route::get('/check-subject-teacher','TimetableController@checkSubjectTeacher');
@@ -268,6 +272,8 @@
     Route::get('/copy-structure-day/{id}','TimetableController@copyStructureDays');
 
     Route::get('/edit-period/{id}','TimetableController@editPeriod');
+
+    Route::get('/add-period/{id}','TimetableController@addPeriod');
 
     Route::post('/update-period','TimetableController@updatePeriod');
 
