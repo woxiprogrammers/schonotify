@@ -95,6 +95,7 @@ class TimetableController extends Controller
     public function getDivisions(Request $requests, $classId)
     {
         try{
+            $finalDivisions = array();
             $divisions = array();
             $divisions = Division::where('class_id','=',$classId)->get()->toArray();
             $i=0;
@@ -275,11 +276,10 @@ class TimetableController extends Controller
                 array_push($timetables,$row);
             }
             $i = 0;
+            $finalTimetable['timetable'] = array();
             if(!Empty($timetables)) {
                 $message = 'success';
                 $status = 200;
-                $day = DayMaster::where('id','=',$day_id)->pluck('name');
-                $finalTimetable['day'] = $day;
                 foreach($timetable as $value)
                 {
                     $subjectTeacher = SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
@@ -298,11 +298,13 @@ class TimetableController extends Controller
                     $finalTimetable['timetable'][$i]['end_time'] = $value['end_time'];
                     $i++;
                 }
-                $finalTimetable['div_id'] = $div_id;
-            }else {
+            } else {
                 $status = 406;
                 $message = 'Sorry ! No timetable found for this instance';
             }
+            $day = DayMaster::where('id','=',$day_id)->pluck('name');
+            $finalTimetable['div_id'] = $div_id;
+            $finalTimetable['day'] = $day;
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
@@ -310,7 +312,7 @@ class TimetableController extends Controller
         $response = [
             "message" => $message,
             "status" => $status,
-            "data" => $finalTimetable
+            "data" => $finalTimetable,
         ];
         return response($response, $status);
     }
@@ -326,19 +328,15 @@ class TimetableController extends Controller
     public function defaultTimetableTeacher(Requests\viewTimetableRequest $request )
     {
         try{
-            $timetable=array();
-            $data = $request->all();
-            $divisionId = array();
-            $divisionId = SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])->select('division_id')->first();
-            if(!Empty($divisionId)) {
-                $day_id = date("N");
-                $timetable = $this->viewTimetableTeacher($request,$divisionId['division_id'],$day_id);
-                return $timetable;
-            }else {
+            $timetableDivisions = Timetable::select('div_id', 'day_id')->first();
+            if (!Empty($timetableDivisions)) {
+                 $timetable = $this->viewTimetableTeacher($request,$timetableDivisions['div_id'],$timetableDivisions['day_id']);
+                 return $timetable;
+            } else {
                 $message = "Sorry ! No timetable found for this instance";
                 $status = 406;
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
@@ -346,7 +344,7 @@ class TimetableController extends Controller
             "message" => $message,
             "status" => $status,
             "data" => [],
-            "div_id" => $divisionId
+            "div_id" => $timetableDivisions['div_id']
         ];
         return response($response, $status);
     }

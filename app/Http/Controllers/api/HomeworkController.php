@@ -719,7 +719,10 @@ class HomeworkController extends Controller
             $status = 500;
             $message = "Something went wrong";
         }
-        $response = ["message" => $message,"data" =>$finalHomeworkListing];
+        $response = [
+            "message" => $message,
+            "data" =>$finalHomeworkListing
+        ];
         return response($response, $status);
     }
 
