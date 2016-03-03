@@ -16,7 +16,16 @@ class EventController extends Controller
         $this->middleware('authenticate.user');
     }
 
-    public function viewFiveEvent(Requests\Result $request)
+    /*
+  * Function Name : viewFiveEvent
+  * Param : Request $requests
+  * Return : $message $status , recent 5 event array
+  * Desc : when teacher want to see events then by default he/she can able to see latest five events.
+  * Developed By : Amol Rokade
+  * Date : 3/3/2016
+  */
+
+    public function viewFiveEvent(Request $request)
     {
         try {
             $recentFiveEvents = array();
@@ -38,7 +47,16 @@ class EventController extends Controller
         return response($response, $status);
     }
 
-    public function viewMonthsEvent(Requests\Result $request , $month_id)
+    /*
+    * Function Name : viewFiveEvent
+    * Param : Request $requests , $month_id
+    * Return : $message $status , event array of current month
+    * Desc : when teacher want to see events then by default he/she can able to see latest five events.
+    * Developed By : Amol Rokade
+    * Date : 3/3/2016
+    */
+
+    public function viewMonthsEvent(Request $request , $month_id)
     {
         try {
             $monthsEvents = array();
@@ -60,4 +78,13 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name : createEvent
+    * Param : Request $requests
+    * Return : $message $status
+    * Desc : when teacher can create event if he/she have an ACL.
+    * Developed By : Amol Rokade
+    * Date : 3/3/2016
+    */
 }
