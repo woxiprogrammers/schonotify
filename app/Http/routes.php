@@ -414,4 +414,11 @@
         Route::post('create-achievement','api\NoticeBoardController@createAchievement');
         Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
 
+
+        //Event
+        Route::get('view-top-five-event','api\EventController@viewFiveEvent');
+        Route::get('view-months-event/{month_id}','api\EventController@viewMonthsEvent');
+        Route::post('create-event','api\EventController@createEvent');
+
+
     });
