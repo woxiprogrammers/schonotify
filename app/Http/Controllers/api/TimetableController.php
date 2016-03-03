@@ -304,6 +304,12 @@ class TimetableController extends Controller
             }
             $day = DayMaster::where('id','=',$day_id)->pluck('name');
             $finalTimetable['div_id'] = $div_id;
+            $divisionName = Division::where('id',$div_id)->select('division_name','class_id')->first();
+            $class = Classes::where('id','=',$divisionName['class_id'])->select('class_name','batch_id')->first();
+            $batch = Batch::where('id','=',$class['batch_id'])->pluck('name');
+            $finalTimetable['batchName'] = $batch;
+            $finalTimetable['className'] = $class['class_name'];
+            $finalTimetable['divisionName'] =  $divisionName['division_name'];
             $finalTimetable['day'] = $day;
         }catch (\Exception $e) {
             $status = 500;
@@ -328,9 +334,9 @@ class TimetableController extends Controller
     public function defaultTimetableTeacher(Requests\viewTimetableRequest $request )
     {
         try{
-            $timetableDivisions = Timetable::select('div_id', 'day_id')->first();
+            $timetableDivisions = Timetable::select('div_id')->first();
             if (!Empty($timetableDivisions)) {
-                 $timetable = $this->viewTimetableTeacher($request,$timetableDivisions['div_id'],$timetableDivisions['day_id']);
+                 $timetable = $this->viewTimetableTeacher($request,$timetableDivisions['div_id'],date('N'));
                  return $timetable;
             } else {
                 $message = "Sorry ! No timetable found for this instance";
