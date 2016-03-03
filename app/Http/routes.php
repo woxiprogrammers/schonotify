@@ -129,6 +129,8 @@
 
     Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
 
+    Route::get('get-all-teachers','NoticeBoardController@getAllTeachers');
+
     Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
 
     Route::get('detailAchievement','NoticeBoardController@detailAchievement');

@@ -73,6 +73,24 @@ class NoticeBoardController extends Controller
 
     }
 
+    /**
+     * Function Name: getAllTeachers
+     * @param
+     * @return mixed
+     * Desc: will show all teachers of body
+     * Date: 03/03/2016
+     * author manoj chaudahri
+     */
+
+    public function getAllTeachers()
+    {
+        $user = Auth::user();
+        $teacherList = User::where('role_id',2)->where('is_active',1)->where('body_id',$user->body_id)->select('id','first_name','last_name')->get();
+        return $teacherList;
+
+    }
+
+
     public function createNoticeBoard()
     {
         return view('createNoticeBoard');

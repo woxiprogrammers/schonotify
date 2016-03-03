@@ -93,7 +93,7 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="adminList">
-                                                        <select multiple="multiple"  id="form-field-select-2" class="form-control">
+                                                        <select multiple="multiple"  id="adminList" class="form-control">
                                                         </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
@@ -109,13 +109,8 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="teacherList">
-                                                        <select multiple="multiple" id="form-field-select-2" class="form-control">
-                                                            <option value="1">Mr. Sawant</option>
-                                                                <option value="2">Mr. Kamble</option>
-                                                                <option value="3">Mr. Patel</option>
-                                                                <option value="4">Mr. Kamble</option>
-                                                                <option value="5">Mr. Rane</option>
-                                                        </select>
+                                                        <select multiple="multiple" id="teacherList" class="form-control">
+                                                                                                                                                                              </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
                                                 </div>
@@ -557,13 +552,34 @@
             });
             if (res.length == 0)
             {
-                $('#form-field-select-2').html("no record found");
+                $('#adminList').html("no record found");
             } else {
+                var str = "";
                 for(var i=0; i<res.length; i++)
                 {
-                  var str = '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
+                   str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
                 }
-                $('#form-field-select-2').html(str);
+                $('#adminList').html(str);
+            }
+        });
+
+    });
+    $('#service1').click(function(){
+        var route='get-all-teachers/';
+        $.get(route,function(data){
+            var res= $.map(data,function(value){
+                return value;
+            });
+            if (res.length == 0)
+            {
+                $('#teacherList').html("no record found");
+            } else {
+                var str = "";
+                for(var i=0; i<res.length; i++)
+                {
+                    str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
+                }
+                $('#teacherList').html(str);
             }
         });
 
