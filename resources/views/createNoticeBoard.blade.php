@@ -85,7 +85,7 @@
                                                 User Roles <em>(select at least one)</em> <span class="symbol required"></span>
                                             </label>
                                             <div class="checkbox clip-check check-primary">
-                                                <input type="checkbox" value="" name="userrole" id="service4" class="adminChk">
+                                                <input type="checkbox" value="1" name="userrole" id="service4" class="adminChk">
                                                 <label for="service4">
                                                     Admin
                                                 </label>
@@ -93,11 +93,7 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="adminList">
-
                                                         <select multiple="multiple" id="form-field-select-2" class="form-control">
-                                                            <option value="1">Mr. Sharma</option>
-                                                            <option value="2">Mr. Sali</option>
-                                                            <option value="3">Mr. Rao</option>
                                                         </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
@@ -553,6 +549,21 @@
         }
     });
 
+    $('#service4').click(function(){
+        var route='get-all-admins/';
+        $.get(route,function(res){
+            if (res.length == 0)
+            {
+                $('#form-field-select-2').html("no record found");
+            } else {
+                for(var i=0; i<res.length; i++)
+                {
+                  var str = '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
+                }
+                $('#form-field-select-2').html(str);
+            }
+        });
+    });
 
 </script>
 

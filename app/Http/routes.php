@@ -125,6 +125,10 @@
 
     Route::get('createNoticeBoard','NoticeBoardController@createNoticeBoard');
 
+    Route::get('show-create-announcement','NoticeBoardController@showCreateAnnouncement');
+
+    Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
+
     Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
 
     Route::get('detailAchievement','NoticeBoardController@detailAchievement');

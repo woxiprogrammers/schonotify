@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class NoticeBoardController extends Controller
 {
@@ -35,6 +37,42 @@ class NoticeBoardController extends Controller
 
         return $str;
     }
+    /**
+     * Function Name: showCreateAnnouncement
+     * @param
+     * @return mixed
+     * Desc: will show all user to create announcement page
+     * Date: 03/03/2016
+     * author manoj chaudahri
+     */
+    public function showCreateAnnouncement()
+    {
+        $user = Auth::user();
+        if ($user->role_id == 1) {
+
+        } elseif ($user->role_id == 2 ){
+
+        }
+        return view('createNoticeBoard');
+    }
+
+    /**
+     * Function Name: getAllAdmins
+     * @param
+     * @return mixed
+     * Desc: will show all admins of body
+     * Date: 03/03/2016
+     * author manoj chaudahri
+     */
+
+    public function getAllAdmins()
+    {
+        $user = Auth::user();
+        $adminList = User::where('role_id',1)->where('is_active',1)->where('body_id',$user->body_id)->select('id','first_name','last_name')->get();
+        return $adminList->toArray();
+
+    }
+
     public function createNoticeBoard()
     {
         return view('createNoticeBoard');
