@@ -48,10 +48,10 @@ class EventController extends Controller
     }
 
     /*
-    * Function Name : viewFiveEvent
+    * Function Name : viewMonthsEvent
     * Param : Request $requests , $month_id
     * Return : $message $status , event array of current month
-    * Desc : when teacher want to see events then by default he/she can able to see latest five events.
+    * Desc : when user want to see events the months from Jan to Dec of current month selected by user.
     * Developed By : Amol Rokade
     * Date : 3/3/2016
     */

@@ -98,11 +98,11 @@ class TimetableController extends Controller
             $finalDivisions = array();
             $divisions = array();
             $divisions = Division::where('class_id','=',$classId)->get()->toArray();
-            $i=0;
+            $counter = 0;
             foreach ($divisions as $division) {
-                $finalDivisions[$i]['id'] = $division['id'];
-                $finalDivisions[$i]['name'] = $division['division_name'];
-                $i++;
+                $finalDivisions[$counter]['id'] = $division['id'];
+                $finalDivisions[$counter]['name'] = $division['division_name'];
+                $counter++;
             }
             $status = 200;
             $message = "Successfully Listed";
