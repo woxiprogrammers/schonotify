@@ -20,7 +20,7 @@ class CreateEventTable extends Migration
             $table->integer('published_by')->nullable();
             $table->string('title',255);
             $table->integer('status');
-            $table->string('detail',255);
+            $table->text('detail');
             $table->integer('priority');
             $table->dateTime('start_date');
             $table->dateTime('end_date');

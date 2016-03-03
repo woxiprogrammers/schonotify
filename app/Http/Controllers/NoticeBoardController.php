@@ -69,7 +69,7 @@ class NoticeBoardController extends Controller
     {
         $user = Auth::user();
         $adminList = User::where('role_id',1)->where('is_active',1)->where('body_id',$user->body_id)->select('id','first_name','last_name')->get();
-        return $adminList->toArray();
+        return $adminList;
 
     }
 

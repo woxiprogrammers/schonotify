@@ -93,7 +93,7 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="adminList">
-                                                        <select multiple="multiple" id="form-field-select-2" class="form-control">
+                                                        <select multiple="multiple"  id="form-field-select-2" class="form-control">
                                                         </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
@@ -551,7 +551,10 @@
 
     $('#service4').click(function(){
         var route='get-all-admins/';
-        $.get(route,function(res){
+        $.get(route,function(data){
+            var res= $.map(data,function(value){
+                return value;
+            });
             if (res.length == 0)
             {
                 $('#form-field-select-2').html("no record found");
@@ -563,6 +566,7 @@
                 $('#form-field-select-2').html(str);
             }
         });
+
     });
 
 </script>
