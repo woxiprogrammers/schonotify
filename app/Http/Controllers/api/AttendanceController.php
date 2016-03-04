@@ -538,6 +538,15 @@ class AttendanceController extends Controller
         return response($response, $status);
     }
 
+    /*
+    * Function Name: viewDefaultAttendanceParent
+    * Param : Request $requests  $student_id
+    * Return : $status $message $studentAttendance
+    * Desc : A parent can view default months attendance of his/her child.
+    * Developed By : Amol Rokade
+    * Date : 04/03/2016
+    */
+
     public function viewDefaultAttendanceParent(Requests\viewAttendanceParent $request ,$student_id )
     {
         try{
@@ -556,6 +565,16 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: viewDefaultAttendanceTeacher
+    * Param : Request $requests
+    * Return : $status $message $studentAttendance
+    * Desc : A teacher can view default months attendance of division.
+    * Developed By : Amol Rokade
+    * Date : 04/03/2016
+    */
+
     public function viewDefaultAttendanceTeacher(Requests\ViewRequest $request )
     {
         try{
