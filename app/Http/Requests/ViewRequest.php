@@ -46,9 +46,20 @@ class ViewRequest extends Request
      */
     public function rules()
     {
-        return [
-            'division_id'=>'required',
-            'date'=>'required|date',
-        ];
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET':
+                return [
+                ];
+                break;
+            case 'POST':
+                return [
+                    'division_id'=>'required',
+                    'date'=>'required|date',
+                ];
+                break;
+            default:break;
+        }
     }
 }

@@ -45,9 +45,21 @@ class viewAttendanceParent extends Request
      */
     public function rules()
     {
-        return [
-            'student_id'=>'required',
-            'date'=>'required|date',
-        ];
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET':
+                return [
+                ];
+                break;
+            case 'POST':
+                return [
+                    'student_id'=>'required',
+                    'date'=>'required|date',
+                ];
+                break;
+            default:break;
+        }
+
     }
 }
