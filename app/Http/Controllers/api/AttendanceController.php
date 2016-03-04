@@ -537,4 +537,70 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name: viewDefaultAttendanceParent
+    * Param : Request $requests  $student_id
+    * Return : $status $message $studentAttendance
+    * Desc : A parent can view default months attendance of his/her child.
+    * Developed By : Amol Rokade
+    * Date : 04/03/2016
+    */
+
+    public function viewDefaultAttendanceParent(Requests\viewAttendanceParent $request ,$student_id )
+    {
+        try{
+            $studentAttendance = array();
+            $studentAttendance = Attendance::where('student_id','=',$student_id)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
+            $status = 200;
+            $message = "Successfully Listed";
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "status" => $status,
+            "message" => $message,
+            "data" => $studentAttendance
+        ];
+        return response($response, $status);
+    }
+
+    /*
+    * Function Name: viewDefaultAttendanceTeacher
+    * Param : Request $requests
+    * Return : $status $message $studentAttendance
+    * Desc : A teacher can view default months attendance of division.
+    * Developed By : Amol Rokade
+    * Date : 04/03/2016
+    */
+
+    public function viewDefaultAttendanceTeacher(Requests\ViewRequest $request )
+    {
+        try{
+            $data = $request->all();
+            $division = array();
+            $status = 200;
+            $message = "Successfully Listed";
+            $studentAttendance = array();
+            $division = Division::where('class_teacher_id' , '=' , $data['teacher']['id'])->pluck('id');
+            if (Empty($division)) {
+                $division = SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])->pluck('division_id');
+            }
+            $roleId = UserRoles::where('slug','=',['student'])->pluck('id');
+            $students = User::where('division_id',$division)
+                ->where('role_id','=',$roleId)
+                ->lists('id');
+            $studentAttendance = Attendance::wherein('student_id',$students)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "status" => $status,
+            "message" => $message,
+            "data" => $studentAttendance
+        ];
+        return response($response, $status);
+    }
 }
