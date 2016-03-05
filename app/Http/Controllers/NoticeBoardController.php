@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class NoticeBoardController extends Controller
 {
@@ -251,8 +252,7 @@ class NoticeBoardController extends Controller
     public function createNoticeBoard(CreateAnnouncementRequest $request)
     {
         if ($request->authorize() === true)
-        {
-            $annoucement =array();
+        {    $annoucement =array();
             $userEntry =array();
             $user = Auth::user();
             $annoucement['event_type_id'] = 1;
@@ -314,16 +314,18 @@ class NoticeBoardController extends Controller
                         dd(1);
                     } elseif(!($request->FirstDiv) && $request->classFirst && $request['batch-select'] ) {
                         dd(2);
-                    } elseif($request->FirstDiv && $request->classFirst && $request['batch-select'] ) {
-
+                    } elseif(($request->FirstDiv) && ($request->classFirst) && ($request['batch-select'])) {
+                        dd(3);
                     }
 
                 }
+            Session::flash('message-success','announcement created successfully');
+            return view('noticeBoard');
         } else {
             return Redirect::back();
         }
 
-        return view('createNoticeBoard');
+
     }
 
     public function detailAnnouncement()

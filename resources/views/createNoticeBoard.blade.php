@@ -143,15 +143,18 @@
                                                         Select Batch
                                                     </label>
                                                     <select class="form-control"  name="batch-select[]" id="batch-select" style="-webkit-appearance: menulist;">
+                                                       @if(isset($batchList))
                                                         @foreach($batchList as $row)
                                                         <option value="{!! $row['id']!!}">{!! $row['name']!!}</option>
                                                         @endforeach
+                                                       @endif
                                                     </select>
                                                 </div>
                                                 <div class="form-group" id="batch-class-div-data">
                                                     <label class="control-label">
                                                         Class <em>(select at least one)</em> <span class="symbol required"></span>
                                                     </label>
+                                                    @if(isset($classDivision))
                                                     @foreach($classDivision as $row)
                                                     <div class="checkbox clip-check check-primary">
 
@@ -171,6 +174,7 @@
                                                         @endif
                                                     </div> <p>
                                                     @endforeach
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
