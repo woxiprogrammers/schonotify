@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Batch;
 use App\Classes;
 use App\Division;
+use App\Event;
+use App\EventUserRoles;
+use App\Http\Requests\WebRequests\CreateAnnouncementRequest;
 use App\SubjectClassDivision;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 class NoticeBoardController extends Controller
 {
@@ -128,7 +133,7 @@ class NoticeBoardController extends Controller
                          $classDivision[$countClass]['class_id'] = $row['class_id'];
                          $classDivision[$countClass]['class_name'] = $row['class_name'];
                         if ($userCheck != null) {
-                        $divisionData1[] = Division::where('class_id',$row['class_id'])->where('class_teacher_id',$user->id)->select('id','division_name')->get()->toArray();
+                        $divisionData1[] = Division::where('class_id',$classDivision[$countClass]['class_id'])->where('class_teacher_id',$user->id)->select('id','division_name')->get()->toArray();
                         }
                         $divisionSubject = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get()->toArray();
                         $divisionSubject = array_unique($divisionSubject, SORT_REGULAR);
@@ -151,7 +156,8 @@ class NoticeBoardController extends Controller
                               }
                         $i++;
                         }
-                       $countClass++;
+                        $countClass++;
+
                     }
                     $classDivision = array_unique($classDivision, SORT_REGULAR);
             } else {
@@ -242,8 +248,81 @@ class NoticeBoardController extends Controller
     }
 
 
-    public function createNoticeBoard()
+    public function createNoticeBoard(CreateAnnouncementRequest $request)
     {
+        if ($request->authorize() === true)
+        {
+            $annoucement =array();
+            $userEntry =array();
+            $user = Auth::user();
+            $annoucement['event_type_id'] = 1;
+            $annoucement['title'] = $request->title;
+            $annoucement['priority'] = $request->priority;
+            $annoucement['detail'] = $request->announcement;
+            $annoucement['created_at'] = Carbon::now();
+            $annoucement['updated_at'] = Carbon::now();
+
+            if($request->buttons == 'publish') {
+                if($user->role_id == 1) {
+                    $annoucement['created_by'] = $user->id;
+                    $annoucement['published_by'] = $user->id;
+                    $annoucement['status'] = 2;
+                } elseif($user->role_id == 2){
+                    $annoucement['created_by'] = $user->id;
+                    $annoucement['status'] = 1;
+                }
+            } elseif($request->buttons == 'save'){
+                $annoucement['created_by'] = $user->id;
+                $annoucement['status'] = 1;
+            }
+            $eventId = Event::insertGetId($annoucement);
+                if($eventId != null) {
+                    if($request->adminList) {
+                        $count = 0;
+                        foreach($request->adminList as $row) {
+                            $userEntry['event_id'] = $eventId;
+                            $userEntry['user_id'] = $row;
+                            $userEntry['created_at'] = Carbon::now();
+                            $userEntry['updated_at'] = Carbon::now();
+                            EventUserRoles::insert($userEntry);
+                            $count++;
+                        }
+                    }
+                    if($request->teacherList) {
+                        $count = 0;
+                        foreach($request->teacherList as $row) {
+                            $userEntry['event_id'] = $eventId;
+                            $userEntry['user_id'] = $row;
+                            $userEntry['created_at'] = Carbon::now();
+                            $userEntry['updated_at'] = Carbon::now();
+                            EventUserRoles::insert($userEntry);
+                            $count++;
+                        }
+                    }
+                    if($request->FirstDiv){
+                        $count = 0;
+                        foreach($request->FirstDiv as $row) {
+                            $userEntry['event_id'] = $eventId;
+                            $userEntry['division_id'] = $row;
+                            $userEntry['created_at'] = Carbon::now();
+                            $userEntry['updated_at'] = Carbon::now();
+                            EventUserRoles::insert($userEntry);
+                            $count++;
+                        }
+                    } elseif(!($request->FirstDiv) && !($request->classFirst) && $request['batch-select'] ) {
+
+                        dd(1);
+                    } elseif(!($request->FirstDiv) && $request->classFirst && $request['batch-select'] ) {
+                        dd(2);
+                    } elseif($request->FirstDiv && $request->classFirst && $request['batch-select'] ) {
+
+                    }
+
+                }
+        } else {
+            return Redirect::back();
+        }
+
         return view('createNoticeBoard');
     }
 

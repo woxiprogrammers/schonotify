@@ -51,7 +51,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="myTab2_example1">
 
-                            <form action="#" role="form" id="form2">
+                            <form action="/createNoticeBoard" role="form" method="post" id="form2">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -74,6 +74,22 @@
                                             </label>
                                             <textarea class="form-control" id="announcement" name="announcement"></textarea>
                                         </div>
+                                        <div class="">
+                                            <label>
+                                                Priority
+                                            </label>
+                                            <div class="form-group">
+                                                <br>
+                                                <div class="priority">
+                                                    <select  name="priority" id="priority" class="form-control">
+                                                          <option value="1" > High</option>
+                                                          <option value="2">Medium</option>
+                                                          <option value="3">Low</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                      </div>
 
 
@@ -93,7 +109,7 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="adminList">
-                                                        <select multiple="multiple"  id="adminList" class="form-control">
+                                                        <select multiple="multiple" name="adminList[]" id="adminList" class="form-control">
                                                         </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
@@ -109,7 +125,7 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="teacherList">
-                                                        <select multiple="multiple" id="teacherList" class="form-control">
+                                                        <select multiple="multiple" name="teacherList[]" id="teacherList" class="form-control">
                                                                                                                                                                               </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
@@ -126,7 +142,7 @@
                                                     <label for="form-field-select-2">
                                                         Select Batch
                                                     </label>
-                                                    <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                                                    <select class="form-control"  name="batch-select[]" id="batch-select" style="-webkit-appearance: menulist;">
                                                         @foreach($batchList as $row)
                                                         <option value="{!! $row['id']!!}">{!! $row['name']!!}</option>
                                                         @endforeach
@@ -139,18 +155,20 @@
                                                     @foreach($classDivision as $row)
                                                     <div class="checkbox clip-check check-primary">
 
-                                                        <input type="checkbox" value="{!! $row['class_id']!!}" class="classFirst" id="{!! $row['class_id']!!}">
+                                                        <input type="checkbox" value="{!! $row['class_id']!!}" name="classFirst[]" class="classFirst" id="{!! $row['class_id']!!}">
                                                         <label for="{!! $row['class_id']!!}">
                                                             {!! $row['class_name']!!}
                                                         </label>
                                                     </div>
                                                     <div class="checkbox clip-check check-primary checkbox-inline">
+                                                        @if(isset($row['division']))
                                                         @foreach($row['division'] as $division)
-                                                        <input type="checkbox" value="{!! $division['division_id']!!}" class="FirstDiv" id="{!! $division['division_id']!!}" >
+                                                        <input type="checkbox" value="{!! $division['division_id']!!}"  name = "FirstDiv[]" class="FirstDiv" id="{!! $division['division_id']!!}" >
                                                         <label for="{!! $division['division_id']!!}">
                                                             {!! $division['division_name']!!}
                                                         </label>
                                                         @endforeach
+                                                        @endif
                                                     </div> <p>
                                                     @endforeach
                                                 </div>
@@ -159,10 +177,13 @@
 
 
                                     </div>
+                                    <div class="col-md-12">
 
-                                        <div class="col-md-12">
-                                        <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                            Create <i class="fa fa-arrow-circle-right"></i>
+                                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save">
+                                            <span class="">Save</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="buttons" value="publish">
+                                            Publish
                                         </button>
                                     </div>
                                  </div>
