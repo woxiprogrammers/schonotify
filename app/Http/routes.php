@@ -347,6 +347,8 @@
     Route::post('view-attendance-teacher','api\AttendanceController@viwAttendanceTeacher');
     Route::post('view-attendance-parent','api\AttendanceController@viewAttendanceParent');
     Route::post('students-list','api\AttendanceController@getStudentsList');
+    Route::get('default-attendance-parent/{student_id}','api\AttendanceController@viewDefaultAttendanceParent');
+    Route::get('default-attendance-teacher','api\AttendanceController@viewDefaultAttendanceTeacher');
 
     //Message Related
     Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
@@ -417,5 +419,12 @@
         Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
         Route::post('create-achievement','api\NoticeBoardController@createAchievement');
         Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
+
+
+        //Event
+        Route::get('view-top-five-event','api\EventController@viewFiveEvent');
+        Route::get('view-months-event/{month_id}','api\EventController@viewMonthsEvent');
+        Route::post('create-event','api\EventController@createEvent');
+
 
     });

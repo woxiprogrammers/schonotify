@@ -701,24 +701,28 @@ class HomeworkController extends Controller
 
     public function viewDetailHomeWork(Requests\HomeworkRequest $request,$homeWork_id)
     {
-               try{
-                $studentList=HomeworkTeacher::where('homework_id','=',$homeWork_id)->select('student_id')->get();
-                $j=0;
+         try{
+                $finalHomeworkListing = array();
+                $studentList = HomeworkTeacher::where('homework_id','=',$homeWork_id)->select('student_id')->get();
+                $counter = 0;
                 foreach($studentList as $value)
                 {
-                    $studentsData=User::where('id',$value['student_id'])->select('first_name','last_name')->first();
-                    $finalHomeworkListing['studentList'][$j]['id']=$value['student_id'];
-                    $finalHomeworkListing['studentList'][$j]['name']=$studentsData['first_name']." ".$studentsData['last_name'];
-                    $j++;
+                    $studentsData = User::where('id',$value['student_id'])->select('first_name','last_name')->first();
+                    $finalHomeworkListing['studentList'][$counter]['id'] = $value['student_id'];
+                    $finalHomeworkListing['studentList'][$counter]['name'] = $studentsData['first_name']." ".$studentsData['last_name'];
+                    $counter++;
                 }
-                   $status=200;
-                   $message="Sucessfully listed";
+                   $status = 200;
+                   $message = "Successfully listed";
             }
         catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
-        $response = ["message" => $message,"data" =>$finalHomeworkListing];
+        $response = [
+            "message" => $message,
+            "data" =>$finalHomeworkListing
+        ];
         return response($response, $status);
     }
 
