@@ -109,7 +109,7 @@
 
     Route::post('class-create','ClassController@create');
 
-    Route::get('event','EventController@index');
+    Route::get('/event/{id}','EventController@index');
 
     Route::get('timetable','TimetableController@index');
 
@@ -280,6 +280,10 @@
     Route::get('/delete-period/{id}','TimetableController@deletePeriod');
 
     Route::get('/create-copy-structure/{division}/{day}/{selectedDay}','TimetableController@copyStructure');
+
+    Route::get('/get-events/{id}','EventController@getEvents');
+
+    Route::get('/get-user-event/{id}','EventController@getUserEvent');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));

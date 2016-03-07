@@ -1,49 +1,79 @@
 var Calendar = function() {"use strict";
 	var dateToShow, calendar, demoCalendar, eventClass, eventCategory, subViewElement, subViewContent, $eventDetail;
+
+
 	var defaultRange = new Object;
 	defaultRange.start = moment();
 	defaultRange.end = moment().add(1, 'days');
 	//Calendar
-	var setFullCalendarEvents = function() {
-		var date = new Date();
-		dateToShow = date;
-		var d = date.getDate();
-		var m = date.getMonth();
-		var y = date.getFullYear();
 
-		demoCalendar = [{
-			title: 'Networking',
-			start: new Date(y, m, d, 20, 0),
-			end: new Date(y, m, d, 21, 0),
-			className: 'event-job',
-			category: 'job',
-			allDay: false,
-			content: 'Out to design conference'
-		}, {
-			title: 'Bootstrap Seminar',
-			start: new Date(y, m, d - 5),
-			end: new Date(y, m, d - 2),
-			className: 'event-off-site-work',
-			category: 'off-site-work',
-			allDay: true
-		}, {
-			title: 'Lunch with Nicole',
-			start: new Date(y, m, d - 3, 12, 0),
-			end: new Date(y, m, d - 3, 12, 30),
-			className: 'event-generic',
-			category: 'generic',
-			allDay: false
-		}, {
-			title: 'Corporate Website Redesign',
-			start: new Date(y, m, d + 5),
-			end: new Date(y, m, d + 10),
-			className: 'event-to-do',
-			category: 'to-do',
-			allDay: true
-		}];
+	var setFullCalendarEvents = function() {
+
+        $('#loadmoreajaxloader').show();
+
+        demoCalendar="";
+
+        var currentDate=new Date();
+
+        dateToShow = currentDate;
+
+        var val=$('#event-select-dropdown').val();
+
+        var route="/get-events/"+val;
+
+        $.ajax({
+            url:route,
+            async:false,
+            success:function(res){
+
+            for(var i=0; i<res.length; i++)
+            {
+
+                var startDate=new Date(res[i]['start']);
+                var  dst = startDate.getDate();
+                var  mst = startDate.getMonth();
+                var  yst = startDate.getFullYear();
+                var  hst = startDate.getHours();
+                var  minst = startDate.getMinutes();
+
+                var stDate=new Date(yst, mst, dst,hst,minst);
+
+                var  endDate=new Date(res[i]['end']);
+                var  det = endDate.getDate();
+                var  met = endDate.getMonth();
+                var  yet = endDate.getFullYear();
+                var  het = endDate.getHours();
+                var  minet = endDate.getMinutes();
+
+                var etDate=new Date(yet, met, det,het,minet);
+
+                res[i]['start']=stDate;
+                res[i]['end']=etDate;
+                if(res[i]['status']==0)
+                {
+                    res[i]['className']='event-to-do';
+                }else if(res[i]['status']==1){
+                    res[i]['className']='event-off-site-work';
+                }else{
+                    res[i]['className']='event-job';
+                }
+
+                res[i]['allDay']='false';
+
+            }
+
+                demoCalendar=res;
+
+        }
+        }).done(function(){
+             runFullCalendar();
+
+        });
+
 	};
 	//function to initiate Full Calendar
 	var runFullCalendar = function() {
+
 		$(".add-event").off().on("click", function() {
 			eventInputDateHandler();
 			$(".form-full-event #event-id").val("");
@@ -64,6 +94,7 @@ var Calendar = function() {"use strict";
 		});
 
 		$('#event-categories div.event-category').each(function() {
+
 			// create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
 			// it doesn't need to have a start or end
 			var eventObject = {
@@ -85,7 +116,9 @@ var Calendar = function() {"use strict";
 		var m = date.getMonth();
 		var y = date.getFullYear();
 		var form = '';
-		$('#full-calendar').fullCalendar({
+
+        $('#full-calendar').fullCalendar({
+
 			buttonIcons: {
 				prev: 'fa fa-chevron-left',
 				next: 'fa fa-chevron-right'
@@ -105,7 +138,7 @@ var Calendar = function() {"use strict";
 				var originalEventObject = $(this).data('eventObject');
 
 				var $category = $(this).attr('data-class');
-				
+
 				// we need to copy it, so that multiple events don't have a reference to the same object
 
 				var newEvent = new Object;
@@ -113,11 +146,11 @@ var Calendar = function() {"use strict";
 				newEvent.start = new Date(date);
 				newEvent.end = moment(new Date(date)).add(1, 'hours');
 				newEvent.allDay = true;
+                //newEvent.content=$description;
 				newEvent.category = $category;
 				newEvent.className = 'event-' + $category;
 
 				$('#full-calendar').fullCalendar('renderEvent', newEvent, true);
-
 				// is the "remove after drop" checkbox checked?
 				if($('#drop-remove').is(':checked')) {
 					// if so, remove the element from the "Draggable Events" list
@@ -130,6 +163,7 @@ var Calendar = function() {"use strict";
 				eventInputDateHandler();
 				$(".form-full-event #event-id").val("");
 				$(".form-full-event #event-name").val("");
+                $(".form-full-event #event-description").val('');
 				$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
 				$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
 				$(".event-categories[value='job']").prop('checked', true);
@@ -142,13 +176,17 @@ var Calendar = function() {"use strict";
 				$('.events-modal').modal();
 			},
 			eventClick: function(calEvent, jsEvent, view) {
-				eventInputDateHandler();
+
+                eventInputDateHandler();
+
 				var eventId = calEvent._id;
+
 				for(var i = 0; i < demoCalendar.length; i++) {
 
 					if(demoCalendar[i]._id == eventId) {
 						$(".form-full-event #event-id").val(eventId);
 						$(".form-full-event #event-name").val(demoCalendar[i].title);
+						$(".form-full-event #event-description").val(demoCalendar[i].content);
 						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start));
 						$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end));
 						if(demoCalendar[i].category == "" || typeof demoCalendar[i].category == "undefined") {
@@ -160,14 +198,55 @@ var Calendar = function() {"use strict";
                         var date=new Date(demoCalendar[i].start._d);
                         var date1=new Date(demoCalendar[i].end._d);
                         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-                        var start_date=days[date.getDay()]+' '+date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear();
-                        var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+date1.getMonth()+'/'+date1.getFullYear();
+                        var start_date=days[date.getDay()]+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear();
+                        var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+(date1.getMonth()+1)+'/'+date1.getFullYear();
 
                         $("#event-title").html(demoCalendar[i].title);
-                        $("#event-description").html('This event is organized in our school.');
+
+                        $("#event-detail").html(demoCalendar[i].content);
+
+                        if(demoCalendar[i].status == 0) {
+                            $("#status-show").html('<span class="label label-danger">Draft</span>');
+                        } else if(demoCalendar[i].status == 1) {
+                            $("#status-show").html('<span class="label label-info">Pending</span>');
+                        } else {
+                            $("#status-show").html('<span class="label label-default">Published</span>');
+                        }
+
+                        if(demoCalendar[i].image == null || demoCalendar[i].image == "") {
+                            $("#event-image").prop('src','/uploads/events/picture.svg');
+                        } else {
+                            $("#event-image").prop('src','/uploads/events/'+demoCalendar[i].image);
+                        }
+
+                        var date2 = new Date(demoCalendar[i].created_at);
+
+                        var created_at = days[date2.getDay()]+' '+date2.getDate()+'/'+(date2.getMonth()+1)+'/'+date2.getFullYear();
+
+                        $("#created_time").html(created_at);
                         $("#event-start-time").html(start_date);
                         $("#event-end-time").html(end_date);
 
+                        var route = "/get-user-event/"+demoCalendar[i].created_by;
+
+                        $.get(route,function(res){
+                            if(res.length != 0) {
+                                $("#event-created-by").html(res[0]['first_name']+" "+res[0]['last_name']);
+                            } else {
+                                $("#event-created-by").html(' --')
+                            }
+                        });
+
+                        var route1 = "/get-user-event/"+demoCalendar[i].published_by;
+
+                        $.get(route1,function(res){
+                            if(res.length != 0) {
+                                $("#event-published-by").html(res[0]['first_name']+" "+res[0]['last_name']);
+                            } else {
+                                $("#event-published-by").html(' --')
+                            }
+
+                        });
 
                         $('#showEvent').show();
                         $('#editEvent').hide();
@@ -180,15 +259,23 @@ var Calendar = function() {"use strict";
 
 					}
 				}
+
 				$('.events-modal').modal();
+
 			}
+
 		});
-		demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
+
+        $('#loadmoreajaxloader').hide();
+
+        demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
+
+        $('.fc-toolbar .fc-right').hide();
 	};
 
 	var runFullCalendarValidation = function(el) {
 
-		var formEvent = $('.form-full-event');
+		var formEvent = $('#create_event_form');
 
 		formEvent.validate({
 			errorElement: "span", // contain the error msg in a span tag
@@ -201,6 +288,7 @@ var Calendar = function() {"use strict";
 					required: true
 				},
                 eventDescription: {
+                    minlength:15,
                     required: true
                 },
 				eventStartDate: {
@@ -210,17 +298,16 @@ var Calendar = function() {"use strict";
 				eventEndDate: {
 					required: true,
 					date: true
-				},
-                roles: {
-                    required: true,
-                    minlength: 1
-                }
+
+				}
+
 			},
 			messages: {
 				eventName: "* Please specify the event title",
 
-                roles: {
-                    minlength: jQuery.validator.format("Please select at least {0} types of user role")
+                eventDescription: {
+                    required:"* Please specify the event description.",
+                    minlength:"* Please select at least 15 characters."
                 }
 			},
 			highlight: function(element) {
@@ -245,7 +332,6 @@ var Calendar = function() {"use strict";
 				newEvent.end = new Date($('.form-full-event #end-date-time').val());
 				newEvent.category = $(".form-full-event .event-categories:checked").val();
 				newEvent.className = 'event-' + $(".form-full-event .event-categories:checked").val();
-				
 
 				if($(".form-full-event #event-id").val() !== "") {
 					el = $(".form-full-event #event-id").val();
@@ -263,13 +349,13 @@ var Calendar = function() {"use strict";
 
 					demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
 
-					
-
 				} else {
 
 					$('#full-calendar').fullCalendar('renderEvent', newEvent, true);
 					demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
+
 				}
+
 				$('.events-modal').modal('hide');
 
 			}
@@ -290,9 +376,11 @@ var Calendar = function() {"use strict";
 	};
 	return {
 		init: function() {
-			setFullCalendarEvents();
-			runFullCalendar();
+
+            setFullCalendarEvents();
+
 			runFullCalendarValidation();
 		}
 	};
+
 }();
