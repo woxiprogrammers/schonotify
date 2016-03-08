@@ -184,8 +184,7 @@ class TimetableController extends Controller
             if(!Empty($timetables)) {
                 $message = 'success';
                 $status = 200;
-                $day = DayMaster::where('id','=',$day_id)->pluck('name');
-                $finalTimetable['day'] = $day;
+                $finalTimetable['timetable'] = array();
                 foreach($timetables as $value)
                 {
                     $subjectTeacher = SubjectClassDivision::where('id', '=', $value['division_subject_id'])->first();
@@ -204,11 +203,19 @@ class TimetableController extends Controller
                     $finalTimetable['timetable'][$i]['end_time'] = $value['end_time'];
                     $i++;
                 }
-                $finalTimetable['div_id'] = $user['division_id'];
             }else {
                 $status=406;
                 $message = 'Sorry ! No timetable found for this instance';
             }
+            $day = DayMaster::where('id','=',$day_id)->pluck('name');
+            $finalTimetable['div_id'] = $user['division_id'];
+            $divisionName = Division::where('id',$user['division_id'])->select('division_name','class_id')->first();
+            $class = Classes::where('id','=',$divisionName['class_id'])->select('class_name','batch_id')->first();
+            $batch = Batch::where('id','=',$class['batch_id'])->pluck('name');
+            $finalTimetable['batchName'] = $batch;
+            $finalTimetable['className'] = $class['class_name'];
+            $finalTimetable['divisionName'] =  $divisionName['division_name'];
+            $finalTimetable['day'] = $day;
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";

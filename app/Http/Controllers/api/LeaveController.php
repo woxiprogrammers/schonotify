@@ -56,6 +56,7 @@ class LeaveController extends Controller
                 $i=0;
                 if(!Empty($leaves)) {
                     foreach($leaves as $leave){
+
                         $studentDivision = Division::where('id',$leave['division_id'])->first();
                         $studentClass = Classes::where('id',$studentDivision['class_id'])->first();
                         $studentBatch = Batch::where('id',$studentClass['batch_id'])->first();
@@ -64,9 +65,11 @@ class LeaveController extends Controller
                         $leaveData[$i]['student_id'] = $leave['student_id'];
                         $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type'])->pluck('name');
                         $leaveData[$i]['title'] = $leave['title'];
-                        $leaveData[$i]['applied_on'] = date("Y-m-d ",strtotime($leave['created_at']));
-                        $leaveData[$i]['form_date'] = $leave['from_date'];
-                        $leaveData[$i]['end_date'] = $leave['end_date'];
+                        $leaveData[$i]['reason'] = $leave['reason'];
+                        $leaveData[$i]['reason'] = $leave['reason'];
+                        $leaveData[$i]['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leave['created_at']))));
+                        $leaveData[$i]['form_date'] = date("M j",strtotime($leave['from_date']));
+                        $leaveData[$i]['end_date'] = date("M j",strtotime($leave['end_date']));
                         $leaveData[$i]['name'] = $studentName['first_name']." ".$studentName['last_name'];
                         $leaveData[$i]['batch'] = $studentBatch['name'];
                         $leaveData[$i]['class'] = $studentClass['class_name'];
@@ -133,9 +136,10 @@ class LeaveController extends Controller
                         $leaveData[$i]['student_id'] = $leave['student_id'];
                         $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type'])->pluck('name');
                         $leaveData[$i]['title'] = $leave['title'];
-                        $leaveData[$i]['applied_on'] =  date("Y-m-d ",strtotime($leave['created_at']));
-                        $leaveData[$i]['form_date'] = $leave['from_date'];
-                        $leaveData[$i]['end_date'] = $leave['end_date'];
+                        $leaveData[$i]['reason'] = $leave['reason'];
+                        $leaveData[$i]['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leave['created_at']))));
+                        $leaveData[$i]['form_date'] = date("M j",strtotime($leave['from_date']));
+                        $leaveData[$i]['end_date'] = date("M j",strtotime($leave['end_date']));
                         $leaveData[$i]['name'] = $studentName['first_name']." ".$studentName['last_name'];
                         $leaveData[$i]['batch'] = $studentBatch['name'];
                         $leaveData[$i]['class'] = $studentClass['class_name'];
