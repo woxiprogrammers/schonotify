@@ -76,6 +76,8 @@ class SearchController extends Controller
 
         $str.="<th>Status</th>";
 
+        $str.="<th>Action</th>";
+
         $str.="</tr></thead><tbody>";
 
         foreach($result as $row)
