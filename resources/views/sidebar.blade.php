@@ -142,7 +142,7 @@
 </li>
 
 <li>
-    <a href="/event">
+    <a href="/event/1">
         <div class="item-content">
             <div class="item-media">
                 <i class="fa fa-calendar-o"></i>
