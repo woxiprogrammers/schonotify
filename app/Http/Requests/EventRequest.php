@@ -14,19 +14,19 @@ class EventRequest extends Request
      */
     public function authorize()
     {
-        $userToken=$this->request->all();
-        $userId='';
+        $userToken = $this->request->all();
+        $userId = '';
         foreach($userToken as $userData)
         {
             $userId=$userData;
         }
-        $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+        $val1 = User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
             ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
             ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
             ->where('users.id','=',$userId->id)
             ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
             ->get();
-        $resultArr=array();
+        $resultArr = array();
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
@@ -36,30 +36,26 @@ class EventRequest extends Request
             case 'GET':
                 if(in_array('View_event',$resultArr) ){
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
                 break;
             case 'PUT':
-                if(in_array('Update_event',$resultArr) ){
+                if (in_array('Update_event',$resultArr) ) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
                 break;
             case 'POST':
                 if(in_array('Create_event',$resultArr) ){
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
                 break;
             default:
                 break;
-
         }
     }
 

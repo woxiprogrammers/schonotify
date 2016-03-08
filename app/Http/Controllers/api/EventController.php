@@ -190,6 +190,15 @@ class EventController extends Controller
         return response($response, $status);
     }
 
+    /*
+    * Function Name : editEvent
+    * Param : Request $requests
+    * Return : $message $status
+    * Desc : Teacher can edit unpublished events if he/she have an ACL.
+    * Developed By : Amol Rokade
+    * Date : 8/3/2016
+    */
+
     public function editEvent(Requests\EventRequest $request)
     {
         try {
@@ -204,6 +213,15 @@ class EventController extends Controller
         ];
         return response($response, $status);
         }
+
+    /*
+    * Function Name : sendForPublishEventTeacher
+    * Param : Request $requests , $event_id
+    * Return : $message $status
+    * Desc : Teacher can send to publish unpublished events if he/she have an ACL of publish.
+    * Developed By : Amol Rokade
+    * Date : 8/3/2016
+    */
     public function sendForPublishEventTeacher(Requests\SendForPublishEventRequest $request)
     {
         try {
@@ -232,6 +250,16 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
+
+        /*
+    * Function Name : deleteEventTeacher
+    * Param : Request $requests
+    * Return : $message $status
+    * Desc : Teacher can delete his/her own unpublished events if he/she have an ACL.
+    * Developed By : Amol Rokade
+    * Date : 8/3/2016
+    */
+
     public function deleteEventTeacher(Requests\DeleteEventRequest $request)
     {
         try {
@@ -255,6 +283,16 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
+
+    /*
+    * Function Name : detailView
+    * Param : Request $requests, $event_id
+    * Return : $message $status
+    * Desc : Teacher can view detail event . required only image as in listing all data all ready passed
+    * Developed By : Amol Rokade
+    * Date : 8/3/2016
+    */
+
     public function detailView(Requests\EventRequest $request ,$event_id)
     {
         try {
