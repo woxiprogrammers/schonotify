@@ -13,11 +13,6 @@ class AddFkToEventsTable extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade');
-
             $table->foreign('event_type_id')
                 ->references('id')
                 ->on('event_types')
@@ -33,7 +28,6 @@ class AddFkToEventsTable extends Migration
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropForeign('events_user_id_foreign');
             $table->dropForeign('events_event_type_id_foreign');
         });
     }
