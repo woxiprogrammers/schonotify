@@ -183,7 +183,7 @@ class LeaveController extends Controller
     public function approveLeave(Requests\LeaveApproveRequest $request){
         try{
             $data = $request->all();
-            Log::info('data',$data);
+              Log::info('data',$data);
             if(Leave::where('id', $data['leave_id'])->first()!=null) {
                 $status=Leave::where('id', $data['leave_id'])->pluck('status');
                 if ( $status == 1 ) {
