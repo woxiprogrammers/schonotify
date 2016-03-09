@@ -217,6 +217,8 @@
 
     Route::post('save-event','EventController@saveEvent');
 
+    Route::get('save-event-check-acl','EventController@saveEventCheckAcl');
+
     Route::get('user-module-acl','UsersController@userModuleAcls');
 
     Route::post('save-user','UsersController@store');
