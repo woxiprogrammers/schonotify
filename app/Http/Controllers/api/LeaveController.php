@@ -53,28 +53,29 @@ class LeaveController extends Controller
                         ->orderBy('created_at', 'ASC')
                         ->get()->toArray();
                 }
-                $i=0;
+                $counter = 0;
                 if(!Empty($leaves)) {
-                    foreach($leaves as $leave){
-
+                    foreach ($leaves as $leave) {
                         $studentDivision = Division::where('id',$leave['division_id'])->first();
                         $studentClass = Classes::where('id',$studentDivision['class_id'])->first();
                         $studentBatch = Batch::where('id',$studentClass['batch_id'])->first();
                         $studentName = User::where('id',$leave['student_id'])->first();
-                        $leaveData[$i]['leave_id'] = $leave['id'];
-                        $leaveData[$i]['student_id'] = $leave['student_id'];
-                        $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type'])->pluck('name');
-                        $leaveData[$i]['title'] = $leave['title'];
-                        $leaveData[$i]['reason'] = $leave['reason'];
-                        $leaveData[$i]['reason'] = $leave['reason'];
-                        $leaveData[$i]['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leave['created_at']))));
-                        $leaveData[$i]['form_date'] = date("M j",strtotime($leave['from_date']));
-                        $leaveData[$i]['end_date'] = date("M j",strtotime($leave['end_date']));
-                        $leaveData[$i]['name'] = $studentName['first_name']." ".$studentName['last_name'];
-                        $leaveData[$i]['batch'] = $studentBatch['name'];
-                        $leaveData[$i]['class'] = $studentClass['class_name'];
-                        $leaveData[$i]['division'] = $studentDivision['division_name'];
-                        $i++;
+                        $leaveData[$counter]['leave_id'] = $leave['id'];
+                        $leaveData[$counter]['student_id'] = $leave['student_id'];
+                        $approvedBy = User::where('id','=',$leave['approved_by'])->select('first_name','last_name')->first();
+                        $leaveData[$counter]['approved_by'] = $approvedBy['first_name']." ".$approvedBy['last_name'];
+                        $leaveData[$counter]['approved_at'] =date("M j ",strtotime(date("Y-m-d ",strtotime($leave['updated_at']))));
+                        $leaveData[$counter]['leave_type'] = LeaveType::where('id','=',$leave['leave_type'])->pluck('name');
+                        $leaveData[$counter]['title'] = $leave['title'];
+                        $leaveData[$counter]['reason'] = $leave['reason'];
+                        $leaveData[$counter]['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leave['created_at']))));
+                        $leaveData[$counter]['form_date'] = date("M j",strtotime($leave['from_date']));
+                        $leaveData[$counter]['end_date'] = date("M j",strtotime($leave['end_date']));
+                        $leaveData[$counter]['name'] = $studentName['first_name']." ".$studentName['last_name'];
+                        $leaveData[$counter]['batch'] = $studentBatch['name'];
+                        $leaveData[$counter]['class'] = $studentClass['class_name'];
+                        $leaveData[$counter]['division'] = $studentDivision['division_name'];
+                        $counter++;
                     }
                 } else {
                     $status = 404;
@@ -134,6 +135,9 @@ class LeaveController extends Controller
                         $studentName = User::where('id',$leave['student_id'])->first();
                         $leaveData[$i]['leave_id'] = $leave['id'];
                         $leaveData[$i]['student_id'] = $leave['student_id'];
+                        $approvedBy = User::where('id','=',$leave['approved_by'])->select('first_name','last_name')->first();
+                        $leaveData[$i]['approved_by'] = $approvedBy['first_name']." ".$approvedBy['last_name'];
+                        $leaveData[$i]['approved_at'] =date("M j ",strtotime(date("Y-m-d ",strtotime($leave['updated_at']))));
                         $leaveData[$i]['leave_type'] = LeaveType::where('id','=',$leave['leave_type'])->pluck('name');
                         $leaveData[$i]['title'] = $leave['title'];
                         $leaveData[$i]['reason'] = $leave['reason'];

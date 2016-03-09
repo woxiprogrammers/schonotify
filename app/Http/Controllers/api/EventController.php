@@ -202,7 +202,41 @@ class EventController extends Controller
     public function editEvent(Requests\EventRequest $request)
     {
         try {
-
+            $data = $request -> all();
+            $event_id = Event::where('id','=',$data['event_id'])->get()->toArray();
+            if(!Empty($event_id)) {
+                $eventData['title'] = $data['title'];
+                $eventData['detail'] = $data['detail'];
+                $eventData['priority'] = 0;
+                $eventData['start_date'] = $data['start_date'];
+                $eventData['end_date'] = $data['end_date'];
+                $eventData['updated_at'] = Carbon::now();
+                Event::where('id','=',$data['event_id'])->update($eventData);
+                $image = EventImages::where('event_id','=',$data['event_id'])->pluck('image');
+                if(!Empty($image)) {
+                    unlink('uploads/events/'."".$image);
+                }
+                if ($request->hasFile('image')) {
+                    $image = $request->file('image');
+                    $name = $request->file('image')->getClientOriginalName();
+                    $filename = time()."_".$name;
+                    $path = public_path('uploads/events/');
+                    if (!file_exists($path)) {
+                        File::makeDirectory('uploads/events/', $mode = 0777, true,true);
+                    }
+                    $image->move($path,$filename);
+                } else {
+                    $filename = null;
+                }
+                $eventImageData['image'] = $filename;
+                $eventImageData['updated_at'] = Carbon::now();
+                EventImages::where('event_id','=',$data['event_id'])->update($eventImageData);
+                $status = 200;
+                $message = 'Event Successfully updated';
+            } else {
+                $status = 406;
+                $message = 'Event Not Found';
+            }
         } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
@@ -299,7 +333,7 @@ class EventController extends Controller
             $imageData = array();
             $eventImages = array();
             $eventId = Event::where('id','=',$event_id)->first();
-            if (!Empty($event_id)) {
+            if (!Empty($eventId)) {
                 $message = "Successfully Listed";
                 $status = 200;
                 $eventImages = EventImages::where('event_id','=',$eventId['id'])->pluck('image');
