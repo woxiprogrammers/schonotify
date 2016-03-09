@@ -13,6 +13,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Leave;
+use Illuminate\Support\Facades\Log;
 
 
 class LeaveController extends Controller
@@ -182,6 +183,7 @@ class LeaveController extends Controller
     public function approveLeave(Requests\LeaveApproveRequest $request){
         try{
             $data = $request->all();
+            Log::info('data',$data);
             if(Leave::where('id', $data['leave_id'])->first()!=null) {
                 $status=Leave::where('id', $data['leave_id'])->pluck('status');
                 if ( $status == 1 ) {
