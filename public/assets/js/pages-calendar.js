@@ -29,26 +29,12 @@ var Calendar = function() {"use strict";
             for(var i=0; i<res.length; i++)
             {
 
-                var startDate=new Date(res[i]['start']);
-                var  dst = startDate.getDate();
-                var  mst = startDate.getMonth();
-                var  yst = startDate.getFullYear();
-                var  hst = startDate.getHours();
-                var  minst = startDate.getMinutes();
+                var startDate=new moment(res[i]['start']);
 
-                var stDate=new Date(yst, mst, dst,hst,minst);
+                var  endDate=new moment(res[i]['end']);
 
-                var  endDate=new Date(res[i]['end']);
-                var  det = endDate.getDate();
-                var  met = endDate.getMonth();
-                var  yet = endDate.getFullYear();
-                var  het = endDate.getHours();
-                var  minet = endDate.getMinutes();
-
-                var etDate=new Date(yet, met, det,het,minet);
-
-                res[i]['start']=stDate;
-                res[i]['end']=etDate;
+                res[i]['start']=startDate._i;
+                res[i]['end']=endDate._i;
                 if(res[i]['status']==0)
                 {
                     res[i]['className']='event-to-do';
@@ -64,7 +50,7 @@ var Calendar = function() {"use strict";
 
                 demoCalendar=res;
 
-        }
+            }
         }).done(function(){
 
              runFullCalendar();
@@ -189,7 +175,6 @@ var Calendar = function() {"use strict";
                 var check1=new Date(check);
                 var today = new Date();
 
-
                 if(check1.getTime() < today.getTime())
                 {
 
@@ -300,9 +285,8 @@ var Calendar = function() {"use strict";
 							eventCategory = demoCalendar[i].category;
 						}
 
-
-                        var date=new Date(demoCalendar[i].start._d);
-                        var date1=new Date(demoCalendar[i].end._d);
+                        var date=new moment(demoCalendar[i]._start)._d;
+                        var date1=new moment(demoCalendar[i]._end)._d;
                         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
                         var start_date=days[date.getDay()]+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear();
                         var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+(date1.getMonth()+1)+'/'+date1.getFullYear();
@@ -325,7 +309,7 @@ var Calendar = function() {"use strict";
                             $("#event-image").prop('src','/uploads/events/'+demoCalendar[i].image);
                         }
 
-                        var date2 = new Date(demoCalendar[i].created_at);
+                        var date2 = new moment(demoCalendar[i].created_at)._d;
 
                         var created_at = days[date2.getDay()]+' '+date2.getDate()+'/'+(date2.getMonth()+1)+'/'+date2.getFullYear();
 
