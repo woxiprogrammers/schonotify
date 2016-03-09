@@ -123,7 +123,13 @@
 
     Route::get('loadMore','NoticeBoardController@loadMore');
 
-    Route::get('createNoticeBoard','NoticeBoardController@createNoticeBoard');
+    Route::get('show-create-announcement','NoticeBoardController@showCreateAnnouncement');
+
+    Route::post('createNoticeBoard','NoticeBoardController@createNoticeBoard');
+
+    Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
+
+    Route::get('get-all-teachers','NoticeBoardController@getAllTeachers');
 
     Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
 
