@@ -51,7 +51,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="myTab2_example1">
 
-                            <form action="#" role="form" id="form2">
+                            <form action="/createNoticeBoard" role="form" method="post" id="form2">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -74,6 +74,22 @@
                                             </label>
                                             <textarea class="form-control" id="announcement" name="announcement"></textarea>
                                         </div>
+                                        <div class="">
+                                            <label>
+                                                Priority
+                                            </label>
+                                            <div class="form-group">
+                                                <br>
+                                                <div class="priority">
+                                                    <select  name="priority" id="priority" class="form-control">
+                                                          <option value="1" > High</option>
+                                                          <option value="2">Medium</option>
+                                                          <option value="3">Low</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                      </div>
 
 
@@ -85,7 +101,7 @@
                                                 User Roles <em>(select at least one)</em> <span class="symbol required"></span>
                                             </label>
                                             <div class="checkbox clip-check check-primary">
-                                                <input type="checkbox" value="" name="userrole" id="service4" class="adminChk">
+                                                <input type="checkbox" value="1" name="userrole" id="service4" class="adminChk">
                                                 <label for="service4">
                                                     Admin
                                                 </label>
@@ -93,11 +109,7 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="adminList">
-
-                                                        <select multiple="multiple" id="form-field-select-2" class="form-control">
-                                                            <option value="1">Mr. Sharma</option>
-                                                            <option value="2">Mr. Sali</option>
-                                                            <option value="3">Mr. Rao</option>
+                                                        <select multiple="multiple" name="adminList[]" id="adminList" class="form-control">
                                                         </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
@@ -113,13 +125,8 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="teacherList">
-                                                        <select multiple="multiple" id="form-field-select-2" class="form-control">
-                                                            <option value="1">Mr. Sawant</option>
-                                                                <option value="2">Mr. Kamble</option>
-                                                                <option value="3">Mr. Patel</option>
-                                                                <option value="4">Mr. Kamble</option>
-                                                                <option value="5">Mr. Rane</option>
-                                                        </select>
+                                                        <select multiple="multiple" name="teacherList[]" id="teacherList" class="form-control">
+                                                                                                                                                                              </select>
                                                         <em>Please Use CTRL Button to select multiple options.</em>
                                                     </div>
                                                 </div>
@@ -135,86 +142,52 @@
                                                     <label for="form-field-select-2">
                                                         Select Batch
                                                     </label>
-                                                    <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
-                                                        <option value="1">morning</option>
-                                                        <option value="2">evening</option>
+                                                    <select class="form-control"  name="batch-select[]" id="batch-select" style="-webkit-appearance: menulist;">
+                                                       @if(isset($batchList))
+                                                        @foreach($batchList as $row)
+                                                        <option value="{!! $row['id']!!}">{!! $row['name']!!}</option>
+                                                        @endforeach
+                                                       @endif
                                                     </select>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" id="batch-class-div-data">
                                                     <label class="control-label">
                                                         Class <em>(select at least one)</em> <span class="symbol required"></span>
                                                     </label>
+                                                    @if(isset($classDivision))
+                                                    @foreach($classDivision as $row)
+                                                    <div class="checkbox clip-check check-primary">
 
-                                                    <div class="checkbox clip-check check-primary">
-                                                        <input type="checkbox" value="" class="classFirst" id="service5">
-                                                        <label for="service5">
-                                                            First
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        <input type="checkbox" value="" class="FirstDiv" id="service6" >
-                                                        <label for="service6">
-                                                            A
+                                                        <input type="checkbox" value="{!! $row['class_id']!!}" name="classFirst[]" class="classFirst" id="{!! $row['class_id']!!}">
+                                                        <label for="{!! $row['class_id']!!}">
+                                                            {!! $row['class_name']!!}
                                                         </label>
                                                     </div>
                                                     <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        <input type="checkbox" value="" class="FirstDiv" id="service7" >
-                                                        <label for="service7">
-                                                            B
+                                                        @if(isset($row['division']))
+                                                        @foreach($row['division'] as $division)
+                                                        <input type="checkbox" value="{!! $division['division_id']!!}"  name = "FirstDiv[]" class="FirstDiv" id="{!! $division['division_id']!!}" >
+                                                        <label for="{!! $division['division_id']!!}">
+                                                            {!! $division['division_name']!!}
                                                         </label>
-                                                    </div>
-                                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        <input type="checkbox" value="" class="FirstDiv" id="service8">
-                                                        <label for="service8">
-                                                            C
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="checkbox clip-check check-primary">
-                                                        <input type="checkbox" value="" class="classSecond" id="service9">
-                                                        <label for="service9">
-                                                            Second
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        <input type="checkbox" value="" class="SecondDiv" id="service10" >
-                                                        <label for="service10">
-                                                            A
-                                                        </label>
-                                                    </div>
-                                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        <input type="checkbox" value="" class="SecondDiv"  id="service11" >
-                                                        <label for="service11">
-                                                            B
-                                                        </label>
-                                                    </div>
-                                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        <input type="checkbox" value="" class="SecondDiv"  id="service12">
-                                                        <label for="service12">
-                                                            C
-                                                        </label>
-                                                    </div>
-                                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        <input type="checkbox" value="" class="SecondDiv"  id="service13">
-                                                        <label for="service13">
-                                                            D
-                                                        </label>
-                                                    </div>
+                                                        @endforeach
+                                                        @endif
+                                                    </div> <p>
+                                                    @endforeach
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
 
 
                                     </div>
+                                    <div class="col-md-12">
 
-                                        <div class="col-md-12">
-                                        <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                            Create <i class="fa fa-arrow-circle-right"></i>
+                                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save">
+                                            <span class="">Save</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="buttons" value="publish">
+                                            Publish
                                         </button>
                                     </div>
                                  </div>
@@ -553,6 +526,91 @@
         }
     });
 
+    $('#service4').click(function(){
+        var route='get-all-admins/';
+        $.get(route,function(data){
+            var res= $.map(data,function(value){
+                return value;
+            });
+            if (res.length == 0)
+            {
+                $('#adminList').html("no record found");
+            } else {
+                var str = "";
+                for(var i=0; i<res.length; i++)
+                {
+                   str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
+                }
+                $('#adminList').html(str);
+            }
+        });
+
+    });
+    $('#service1').click(function(){
+        var route='get-all-teachers/';
+        $.get(route,function(data){
+            var res= $.map(data,function(value){
+                return value;
+            });
+            if (res.length == 0)
+            {
+                $('#teacherList').html("no record found");
+            } else {
+                var str = "";
+                for(var i=0; i<res.length; i++)
+                {
+                    str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
+                }
+                $('#teacherList').html(str);
+            }
+        });
+
+    });
+
+    $('#batch-select').change(function(){
+        $('#batch-class-div-data').html('');
+        var id=this.value;
+        batchChange(id);
+
+    });
+    function batchChange(batch_id) {
+
+        $.ajax({
+            url: 'show-create-announcement',
+            type: "get",
+            data: {batch_id},
+            success: function(data){
+                var res= $.map(data,function(value){
+                    return value;
+                });
+                    var str = "";
+                    str += '<label class="control-label">'+
+                        'Class <em>(select at least one)</em> <span class="symbol required"></span></label>'+
+                             '<div class="checkbox clip-check check-primary">';
+                             for(var i=0; i<res.length; i++)
+                             {
+                               str +='<input type="checkbox" value="'+res[i]['class_id']+'" class="classFirst" id="'+res[i]['class_id']+'">'+
+                                         '<label for="'+res[i]['class_id']+'">'
+                                            + res[i]['class_name'] +
+                                         '</label>'+
+                             '</div>'+
+                             '<div class="checkbox clip-check check-primary checkbox-inline">';
+                               for(var j=0; j<res[i]['division'].length; j++) {
+                                   var res1= $.map(res[j]['division'],function(value){
+                                       return value;
+                                   });
+                                   str += '<input type="checkbox" value="'+res1[j]['division_id']+'" class="FirstDiv" id="'+res1[j]['division_id']+'" >'+
+                                       '<label for="'+res1[j]['division_id']+'">'
+                                        +res1[j]['division_name']+
+                                       '</label>';
+                               }
+                       str +='</div> <p>';
+                             }
+                $('#batch-class-div-data').html(str);
+
+                }
+        });
+    }
 
 </script>
 

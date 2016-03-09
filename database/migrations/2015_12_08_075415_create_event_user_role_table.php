@@ -16,8 +16,7 @@ class CreateEventUserRoleTable extends Migration
         Schema::create('event_user_roles', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id')->unsigned();
-            $table->integer('user_role_id')->unsigned();
-            $table->boolean('status');
+            $table->integer('user_id')->nullable();
             $table->integer('division_id')->nullable();
             $table->timestamps();
         });

@@ -18,12 +18,6 @@ class AddFkToEventUserRolesTable extends Migration
                 ->references('id')
                 ->on('events')
                 ->onUpdate('cascade');
-
-            $table->foreign('user_role_id')
-                ->references('id')
-                ->on('user_roles')
-                ->onUpdate('cascade');
-
         });
     }
 
@@ -36,7 +30,6 @@ class AddFkToEventUserRolesTable extends Migration
     {
         Schema::table('event_user_roles', function (Blueprint $table) {
             $table->dropForeign('event_user_roles_event_id_foreign');
-            $table->dropForeign('event_user_roles_user_role_id_foreign');
         });
     }
 }

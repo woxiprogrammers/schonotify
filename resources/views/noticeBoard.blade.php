@@ -25,7 +25,7 @@
 
                     <li>
                         <div class="values">
-                            <a href="/createNoticeBoard" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
+                            <a href="/show-create-announcement" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
                         </div>
                     </li>
 
