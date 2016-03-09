@@ -66,6 +66,7 @@ var Calendar = function() {"use strict";
 
         }
         }).done(function(){
+
              runFullCalendar();
 
         });
@@ -75,19 +76,42 @@ var Calendar = function() {"use strict";
 	var runFullCalendar = function() {
 
 		$(".add-event").off().on("click", function() {
-			eventInputDateHandler();
-			$(".form-full-event #event-id").val("");
-			$('.events-modal').modal();
-            $('#showEvent').hide();
-            $('#editEvent').show();
-            $('.save-event').show();
-            $('.edit-event').hide();
-            $('#delBtn').hide();
-            $('#error-div').html('');
+
+            $.ajax({
+                url:"/save-event-check-acl",
+                type:'GET',
+                success:function(res){
+                    if(res==0){
+                        var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                            '<span area-hidden="true">&times;</span>'+
+                            '</button>'+
+                            '<p>Currently you do not have permission to access this functionality. Please contact administrator to grant you access !</p>'+
+                            '</div>';
+
+                        $('#message-error-div').html(str);
+                    }else{
+                        eventInputDateHandler();
+
+                        $(".form-full-event #event-id").val("");
+                        $('.events-modal').modal();
+                        $('#showEvent').hide();
+                        $('#editEvent').show();
+                        $('.save-event').show();
+                        $('.edit-event').hide();
+                        $('#delBtn').hide();
+                        $('#error-div').html('');
+                    }
+                }
+            });
+
 		});
+
 		$('.events-modal').on('hide.bs.modal', function(event) {
+
 			$(".form-full-event #event-id").val("");
 			$(".form-full-event #event-name").val("");
+            $(".form-full-event #event-description").val("");
 			$(".form-full-event #start-date-time").val("").data("DateTimePicker").destroy();
 			$(".form-full-event #end-date-time").val("").data("DateTimePicker").destroy();
 			$(".event-categories[value='job']").prop('checked', true);
@@ -131,7 +155,7 @@ var Calendar = function() {"use strict";
 			events: demoCalendar,
 			editable: true,
 			eventLimit: true, // allow "more" link when too many events
-			droppable: true, // this allows things to be dropped onto the calendar !!!
+			droppable: false, // this allows things to be dropped onto the calendar !!!
 			drop: function(date, allDay) {// this function is called when something is dropped
 
 				// retrieve the dropped element's stored Event Object
@@ -160,20 +184,101 @@ var Calendar = function() {"use strict";
 			selectable: true,
 			selectHelper: true,
 			select: function(start, end, allDay) {
-				eventInputDateHandler();
-				$(".form-full-event #event-id").val("");
-				$(".form-full-event #event-name").val("");
-                $(".form-full-event #event-description").val('');
-				$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
-				$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
-				$(".event-categories[value='job']").prop('checked', true);
-                $('#showEvent').hide();
-                $('#editEvent').show();
-                $('#delBtn').hide();
-                $('.save-event').show();
-                $('.edit-event').hide();
-                $('#error-div').html('');
-				$('.events-modal').modal();
+
+                var check = moment(start).format('YYYY-MM-DD hh:mm:ss');
+                var check1=new Date(check);
+                var today = new Date();
+
+
+                if(check1.getTime() < today.getTime())
+                {
+
+                    if(check1.getDate() == today.getDate() && check1.getMonth()==today.getMonth() && check1.getYear()==today.getYear())
+                    {
+                        $.ajax({
+                            url:"/save-event-check-acl",
+                            type:'GET',
+                            success:function(res){
+
+                                if(res==0){
+                                    var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                                        '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                                        '<span area-hidden="true">&times;</span>'+
+                                        '</button>'+
+                                        '<p>Currently you do not have permission to access this functionality. Please contact administrator to grant you access !</p>'+
+                                        '</div>';
+
+                                    $('#message-error-div').html(str);
+
+                                }else{
+                                    eventInputDateHandler();
+                                    $(".form-full-event #event-id").val("");
+                                    $(".form-full-event #event-name").val("");
+                                    $(".form-full-event #event-description").val("");
+                                    $(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
+                                    $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
+                                    $(".event-categories[value='job']").prop('checked', true);
+                                    $('#showEvent').hide();
+                                    $('#editEvent').show();
+                                    $('#delBtn').hide();
+                                    $('.save-event').show();
+                                    $('.edit-event').hide();
+                                    $('#error-div').html('');
+                                    $('.events-modal').modal();
+                                }
+
+                            }
+                        });
+                    }else{
+
+                        eventInputDateHandler();
+                        $(".form-full-event #event-id").val("");
+                        $(".form-full-event #event-name").val("");
+                        $(".form-full-event #event-description").val("");
+                        $(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
+                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
+                        alert('You cant create event for previous date.');
+                    }
+
+                } else {
+                    $.ajax({
+                        url:"/save-event-check-acl",
+                        type:'GET',
+                        success:function(res){
+
+                            if(res==0){
+                                var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                                    '<span area-hidden="true">&times;</span>'+
+                                    '</button>'+
+                                    '<p>Currently you do not have permission to access this functionality. Please contact administrator to grant you access !</p>'+
+                                    '</div>';
+
+                                $('#message-error-div').html(str);
+
+                            }else{
+                                eventInputDateHandler();
+                                $(".form-full-event #event-id").val("");
+                                $(".form-full-event #event-name").val("");
+                                $(".form-full-event #event-description").val("");
+                                $(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
+                                $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
+                                $(".event-categories[value='job']").prop('checked', true);
+                                $('#showEvent').hide();
+                                $('#editEvent').show();
+                                $('#delBtn').hide();
+                                $('.save-event').show();
+                                $('.edit-event').hide();
+                                $('#error-div').html('');
+                                $('.events-modal').modal();
+                            }
+
+                        }
+                    });
+                }
+
+
+
 			},
 			eventClick: function(calEvent, jsEvent, view) {
 
@@ -194,6 +299,7 @@ var Calendar = function() {"use strict";
 						} else {
 							eventCategory = demoCalendar[i].category;
 						}
+
 
                         var date=new Date(demoCalendar[i].start._d);
                         var date1=new Date(demoCalendar[i].end._d);
@@ -298,8 +404,8 @@ var Calendar = function() {"use strict";
 				eventEndDate: {
 					required: true,
 					date: true
-
 				}
+
 
 			},
 			messages: {
@@ -326,52 +432,70 @@ var Calendar = function() {"use strict";
 				$(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
 			},
 			submitHandler: function(form) {
-				var newEvent = new Object;
-				newEvent.title = $(".form-full-event #event-name ").val();
-				newEvent.start = new Date($('.form-full-event #start-date-time').val());
-				newEvent.end = new Date($('.form-full-event #end-date-time').val());
-				newEvent.category = $(".form-full-event .event-categories:checked").val();
-				newEvent.className = 'event-' + $(".form-full-event .event-categories:checked").val();
 
-				if($(".form-full-event #event-id").val() !== "") {
-					el = $(".form-full-event #event-id").val();
-					var actual_event = $('#full-calendar').fullCalendar('clientEvents', el);
-					actual_event = actual_event[0];
-					for(var i = 0; i < demoCalendar.length; i++) {
-						if(demoCalendar[i]._id == el) {
-							newEvent._id = el;
-							var eventIndex = i;
-						}
-					}
+                var file=$(form);
 
-					$('#full-calendar').fullCalendar('removeEvents', actual_event._id);
-					$('#full-calendar').fullCalendar('renderEvent', newEvent, true);
-
-					demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
-
-				} else {
-
-					$('#full-calendar').fullCalendar('renderEvent', newEvent, true);
-					demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
-
-				}
-
-				$('.events-modal').modal('hide');
+                uploadImage(file);
 
 			}
 		});
 	};
+
+    /*
+     +   * Function Name: uploadImage
+     +   * Param: file
+     +   * Return: 1 or error.
+     +   * Desc: it will call ajax to save event.
+     +   * Developed By: Suraj Bande
+     +   * Date: 5/3/2016
+     +   */
+
+    function uploadImage(file)
+    {
+        var formData=new FormData(file[0]);
+
+        $.ajax({
+            url:'/save-event',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data){
+
+                if(data==1){
+                    window.location.href="/event/1";
+                }
+                $('.events-modal').modal('hide');
+            },
+            error: function(data){
+                // Error...
+                var errors = $.parseJSON(data.responseText);
+
+                var errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                $.each( errors, function( key, value ) {
+                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                });
+                errorsHtml += '</ul></di>';
+
+                $('#error-div').html(errorsHtml);
+            }
+
+        });
+
+    }
 
 	var eventInputDateHandler = function() {
 		var startInput = $('#start-date-time');
 		var endInput = $('#end-date-time');
 		startInput.datetimepicker();
 		endInput.datetimepicker();
+        var dateToday=new Date();
 		startInput.on("dp.change", function(e) {
-			endInput.data("DateTimePicker").minDate(e.date);
+			endInput.data("DateTimePicker").minDate(dateToday);
 		});
 		endInput.on("dp.change", function(e) {
-			startInput.data("DateTimePicker").maxDate(e.date);
+            startInput.data("DateTimePicker").minDate(dateToday);
 		});
 	};
 	return {
@@ -380,6 +504,7 @@ var Calendar = function() {"use strict";
             setFullCalendarEvents();
 
 			runFullCalendarValidation();
+
 		}
 	};
 
