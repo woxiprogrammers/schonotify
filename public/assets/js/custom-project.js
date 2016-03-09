@@ -212,7 +212,7 @@ function alertError()
 ////////////Compose Message JS Start///////////
 
 $("#message").click(function() {
-    var route='get-user-roles';
+    var route='/get-user-roles';
     $.get(route,function(res){
     var str = "<option value=''>Please Select User Role</option>";
     for(var i=0; i<res.length; i++){
@@ -230,7 +230,7 @@ $("#user-role").change(function() {
         $("#compose-message-teacher").hide();
         $("#compose-message-admin").show();
         $("#compose-message-student").hide();
-    var route='get-admins';
+    var route='/get-admins';
     $.get(route,function(res){
     var str = "<option value=''>Please Select Admin</option>";
     for(var i=0; i<res.length; i++){
@@ -244,7 +244,7 @@ else if ( this.value == '2')
             $("#compose-message-teacher").show();
             $("#compose-message-admin").hide();
             $("#compose-message-student").hide();
-            var route='get-teachers';
+            var route='/get-teachers';
             $.get(route,function(res){
             var str = "<option value=''>Please Select Teacher</option>";
             for(var i=0; i<res.length; i++){
@@ -271,7 +271,7 @@ else if ( this.value == '3')
 
 
 $("#user-role").change(function() {
-    var route='get-batches-teacher';
+    var route='/get-batches-teacher';
     $.get(route,function(res){
     var str = "<option value=''>Please Select Batch</option>";
     for(var i=0; i<res.length; i++){
@@ -284,7 +284,7 @@ $('#msgbatch').html(str);
 
 $("#msgbatch").change(function() {
     var id = this.value;
-    var route='get-classes-teacher/'+id;
+    var route='/get-classes-teacher/'+id;
     $.get(route,function(res){
     var str = "<option value=''>Please Select Class</option>";
     for(var i=0; i<res.length; i++){
@@ -296,7 +296,7 @@ $('#msgclass').html(str);
 
 $("#msgclass").change(function() {
     var id = this.value;
-    var route='get-divisions-teacher/'+id;
+    var route='/get-divisions-teacher/'+id;
     $.get(route,function(res){
     var str = "<option value=''>Please Select Division</option>";
     for(var i=0; i<res.length; i++){
@@ -308,7 +308,7 @@ $('#msgdivision').html(str);
 
 $("#msgdivision").change(function() {
     var id = this.value;
-    var route='get-students/'+id;
+    var route='/get-students/'+id;
     $.get(route,function(res){
     var str = "<option value=''>Please Select Student</option>";
     for(var i=0; i<res.length; i++){
@@ -325,7 +325,7 @@ $('#student-list').html(str);
 //////registration js/////////////////
 $('#userName').on('keyup',function(){
     var username = $(this).val();
-    var route='check-user';
+    var route='/check-user';
     $.post(route,{name:username},function(res){
         if(res == 0 ) {
             $('#feedback').removeClass("alert alert-danger ");
@@ -347,7 +347,7 @@ $('#email').on('keyup',function(){
         $('#emailfeedback').html("Email Id Already Exists");
         $('#checkUser').attr('disabled','disabled');
     }else{
-    var route='check-email';
+    var route='/check-email';
     $.post(route,{email:email},function(res){
         if(res == 0 ) {
             $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
@@ -368,7 +368,7 @@ $('#stud_email').on('keyup',function(){
     if(email.length == 0){
         $('#checkUser').removeAttr('disabled');
     }else{
-        var route='check-email';
+        var route='/check-email';
         $.post(route,{email:email},function(res){
             if(res == 0 ) {
                 $('#emailfeedback').removeClass("alert alert-danger alert-dismissible");
@@ -457,7 +457,7 @@ checkLeaveAccess();
  */
 function checkLeaveAccess()
 {
-    var route="leave-check";
+    var route="/leave-check";
     $.get(route,function(res){
         if ( res == 0 ) {
             $('#leaveCheck').hide();
@@ -475,7 +475,7 @@ leaveCount();
  */
 function leaveCount()
 {
-    var route="leave-count";
+    var route="/leave-count";
     $.get(route,function(res){
         if ( res == 0 ) {
             $('#leaveCount').val('');
