@@ -44,7 +44,7 @@ class EventController extends Controller
 
             Session::put('event_selection_id',$id);
 
-            $eventSelectionId=session('event_selection_id');
+            $eventSelectionId = session('event_selection_id');
 
             return view('admin.event')->with(compact('eventSelectionId'));
 
@@ -66,7 +66,6 @@ class EventController extends Controller
     public function saveEvent(Requests\WebRequests\EventRequest $request)
     {
         if($request->authorize()){
-
 
             $user=Auth::User();
 
@@ -113,11 +112,20 @@ class EventController extends Controller
 
     }
 
+    /*
+     +   * Function Name: saveEventCheckAcl
+     +   * Param: $request
+     +   * Return: access true or false.
+     +   * Desc: it will check acl to create event.
+     +   * Developed By: Suraj Bande
+     +   * Date: 8/3/2016
+     +   */
+
     public function saveEventCheckAcl(Requests\WebRequests\EventCreateRequest $request)
     {
-        if($request->authorize()===true){
+        if($request->authorize() === true) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }

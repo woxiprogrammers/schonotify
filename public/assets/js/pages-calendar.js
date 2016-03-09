@@ -441,6 +441,15 @@ var Calendar = function() {"use strict";
 		});
 	};
 
+    /*
+     +   * Function Name: uploadImage
+     +   * Param: file
+     +   * Return: 1 or error.
+     +   * Desc: it will call ajax to save event.
+     +   * Developed By: Suraj Bande
+     +   * Date: 5/3/2016
+     +   */
+
     function uploadImage(file)
     {
         var formData=new FormData(file[0]);
