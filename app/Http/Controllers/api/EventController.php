@@ -333,7 +333,7 @@ class EventController extends Controller
             $imageData = array();
             $eventImages = array();
             $eventId = Event::where('id','=',$event_id)->first();
-            if (!Empty($event_id)) {
+            if (!Empty($eventId)) {
                 $message = "Successfully Listed";
                 $status = 200;
                 $eventImages = EventImages::where('event_id','=',$eventId['id'])->pluck('image');
