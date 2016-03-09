@@ -16,6 +16,7 @@
             <div class="wrap-content container" id="container">
                 <!-- start: DASHBOARD TITLE -->
                 @include('alerts.errors')
+
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
@@ -23,6 +24,8 @@
                         </div>
                     </div>
                 </section>
+
+                <div id="message-error-div"></div>
                 <!-- end: DASHBOARD TITLE -->
                 <div class="container-fluid container-fullw bg-white">
                     <div class="row">
@@ -240,45 +243,9 @@
         window.location.href="/event/"+val;
     });
 
-    $('#form').on('submit',function(e){
+    $('#create_event_form').on('submit',function(e){
 
-        e.preventDefault();
-
-        var file=$(this);
-
-        uploadImage(file);
     });
-
-    function uploadImage(file)
-    {
-        var formData=new FormData(file[0]);
-
-        $.ajax({
-            url:'save-event',
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            success: function(data){
-                console.log(data);
-            },
-            error: function(data){
-                // Error...
-                var errors = $.parseJSON(data.responseText);
-
-                errorsHtml = '<div class="alert alert-danger"><ul>';
-
-                $.each( errors, function( key, value ) {
-                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
-                });
-                errorsHtml += '</ul></di>';
-
-                $('#error-div').html(errorsHtml);
-            }
-
-        });
-
-    }
 
     $('#editEventBtn').click(function(){
         $('.save-event').show();
