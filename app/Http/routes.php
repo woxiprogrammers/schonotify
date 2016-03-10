@@ -109,7 +109,7 @@
 
     Route::post('class-create','ClassController@create');
 
-    Route::get('event','EventController@index');
+    Route::get('/event/{id}','EventController@index');
 
     Route::get('timetable','TimetableController@index');
 
@@ -217,6 +217,8 @@
 
     Route::post('save-event','EventController@saveEvent');
 
+    Route::get('save-event-check-acl','EventController@saveEventCheckAcl');
+
     Route::get('user-module-acl','UsersController@userModuleAcls');
 
     Route::post('save-user','UsersController@store');
@@ -286,6 +288,10 @@
     Route::get('/delete-period/{id}','TimetableController@deletePeriod');
 
     Route::get('/create-copy-structure/{division}/{day}/{selectedDay}','TimetableController@copyStructure');
+
+    Route::get('/get-events/{id}','EventController@getEvents');
+
+    Route::get('/get-user-event/{id}','EventController@getUserEvent');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
@@ -425,8 +431,13 @@
 
         //Event
         Route::get('view-top-five-event','api\EventController@viewFiveEvent');
-        Route::get('view-months-event/{month_id}','api\EventController@viewMonthsEvent');
+        Route::get('view-months-event/{month_id}','api\EventController@viewMonthsEvent');// BOTH FOR PARENT AND TEACHER
         Route::post('create-event','api\EventController@createEvent');
+        Route::put('send-for-publish-event','api\EventController@sendForPublishEventTeacher');
+        Route::put('delete-event','api\EventController@deleteEventTeacher');
+        Route::get('detail-view/{event_id}','api\EventController@detailView');
+        Route::put('edit-event','api\EventController@editEvent');
+
 
 
     });

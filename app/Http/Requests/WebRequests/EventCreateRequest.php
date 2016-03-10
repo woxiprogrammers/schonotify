@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 
-class EventRequest extends Request
+class EventCreateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,22 +38,6 @@ class EventRequest extends Request
         {
             case 'GET':
 
-                if(in_array('view_event',$resultArr)) {
-                    return true;
-                } else {
-
-                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
-                    return Redirect::to('/');
-                }
-
-            break;
-
-            case 'PUT':
-                    dd('put');
-                break;
-
-            case 'POST':
-
                 if(in_array('create_event',$resultArr)) {
                     return true;
                 } else {
@@ -62,8 +46,9 @@ class EventRequest extends Request
                     return Redirect::to('/');
                 }
 
-                    break;
-             default:break;
+                break;
+
+            default:break;
         }
 
     }
@@ -76,17 +61,7 @@ class EventRequest extends Request
     public function rules()
     {
 
-        if(Request::method()=="POST")
-        {
-            return [
-                'eventName' => 'required',
-                'eventDescription' => 'required|string',
-                'eventStartDate' => 'required|date',
-                'eventEndDate' => 'required|date',
-                'image' => 'mimes:jpeg,jpg,png,gif|max:10000'
-            ];
-        }else{
             return [];
-        }
+
     }
 }

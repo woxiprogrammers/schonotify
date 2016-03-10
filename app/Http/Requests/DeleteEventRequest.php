@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use App\User;
 
-class LeaveApproveRequest extends Request
+class DeleteEventRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,25 +14,25 @@ class LeaveApproveRequest extends Request
      */
     public function authorize()
     {
-        $userToken=$this->request->all();
-        $userId='';
-        foreach($userToken as $userData)
+        $userToken = $this->request->all();
+        $userId = '';
+        foreach ($userToken as $userData)
         {
-            $userId=$userData;
+            $userId = $userData;
         }
-        $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+        $val1 = User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
             ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
             ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
             ->where('users.id','=',$userId->id)
             ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
             ->get();
-        $resultArr=array();
+        $resultArr = array();
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
         }
-        if(in_array('Publish_leave',$resultArr)) {
+        if (in_array('Delete_event',$resultArr) ) {
             return true;
         } else {
             return false;
@@ -47,8 +47,7 @@ class LeaveApproveRequest extends Request
     public function rules()
     {
         return [
-            'leave_id' => 'required|integer',
-            'token' => 'required',
+            'event_id'=>'required|integer'
         ];
     }
 }
