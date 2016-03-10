@@ -438,8 +438,8 @@ var Calendar = function() {"use strict";
 			submitHandler: function(form) {
 
                 var file=$(form);
-debugger;
-               // uploadImage(file);
+
+                uploadImage(file);
 
 			}
 		});
