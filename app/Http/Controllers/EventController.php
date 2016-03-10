@@ -156,13 +156,13 @@ class EventController extends Controller
                     ->wherein('status',$statusArray)
                     ->where('created_by','=',$user->id)
                     ->where('event_type_id','=',1)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by');
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by');
 
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',['2'])
                     ->where('event_type_id','=',1)
                     ->union($selfEvents)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
 
             } else if($status == 2) {
@@ -171,14 +171,14 @@ class EventController extends Controller
                     ->wherein('status',['1'])
                     ->where('event_type_id','=',1)
                     ->where('created_by','=',$user->id)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
 
             } else {
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',['2'])
                     ->where('event_type_id','=',1)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
             }
 
@@ -190,13 +190,13 @@ class EventController extends Controller
                     ->wherein('status',$statusArray)
                     ->where('created_by','=',$user->id)
                     ->where('event_type_id','=',1)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by');
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by');
 
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',['1','2'])
                     ->where('event_type_id','=',1)
                     ->union($selfEvents)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
 
             } else if( $status == 2 ) {
@@ -204,7 +204,7 @@ class EventController extends Controller
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->where('status',1)
                     ->where('event_type_id','=',1)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
 
             } else {
@@ -212,7 +212,7 @@ class EventController extends Controller
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->where('status',2)
                     ->where('event_type_id','=',1)
-                    ->select('title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
+                    ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
             }
 

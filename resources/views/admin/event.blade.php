@@ -64,6 +64,7 @@
                     <div class="modal-dialog modal-dialog modal-md">
                         <div class="modal-content">
                             <form class="form-full-event" id="create_event_form">
+                                <input type="hidden" id="hiddenEventId">
                                 <div class="modal-body">
                                     <div id="editEvent">
                                         <div class="form-group ">
@@ -115,38 +116,43 @@
                                             <div class="panel-heading">
                                                 <div class="timeline_title">
 
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-9">
                                                         <h4 class="panel-title no-margin text-primary" id="event-title"></h4>
                                                     </div>
-                                                    <div class="panel-tools col-sm-6">
+                                                    <div class="panel-tools col-sm-3">
                                                         <div id="status-show" class="col-sm-4"></div>
-                                                        <div class="col-sm-8"><i class="fa fa-clock-o"></i> <span id="created_time"></span></div>
                                                     </div>
                                                 </div>
-
+                                                <div class="col-sm-12">
+                                                    <em class="text-bold">Created by </em><em class="text-bold" id="event-created-by"></em> <em class="text-bold"> on <span id="created_time"></span></em>
+                                                </div>
                                             </div>
+
+
                                             <div class="panel-body">
                                                 <div class="col-sm-12">
-                                                    <p id="event-detail">
+                                                    <textarea id="event-detail" readonly class="col-sm-12" style="min-height:180px">
 
-                                                    </p>
+                                                    </textarea>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-12">
                                                     <address>
                                                         Event Start: <em class="text-bold" id="event-start-time"></em>
                                                         <br>
                                                         Event End: <em class="text-bold" id="event-end-time"></em>
                                                     </address>
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    Created By:<em class="text-bold" id="event-created-by"></em>
-                                                    <br>
-                                                    Published By:<em class="text-bold" id="event-published-by"></em>
-                                                </div>
+
                                                 <div class="col-sm-12">
                                                     <img class="thumbnail" id="event-image"  width="200">
                                                 </div>
+                                                <div class="col-sm-12">
 
+                                                    <span id="published-by-div">
+                                                        <em class="text-bold">Published by</em> <em class="text-bold" id="event-published-by"></em>
+                                                    </span>
+
+                                                </div>
                                             </div>
 
                                         </div>
@@ -154,37 +160,28 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'publish_event')
                                     <button class="btn btn-info btn-o delete-event pull-left" onclick="confirm('Are you sure to publish this event?')">
                                         Publish
                                     </button>
-                                    @endif
-                                    @endforeach
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
                                         Cancel
                                     </button>
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'delete_event')
                                     <button class="btn btn-danger btn-o delete-event" id="delBtn">
                                         Delete
                                     </button>
-                                    @endif
-                                    @endforeach
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'create_event')
+
                                     <button class="btn btn-primary btn-o save-event" type="submit" id="upload">
                                         Save
                                     </button>
-                                    @endif
-                                    @endforeach
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'update_event')
+
+                                    <button class="btn btn-primary btn-o save-edit-event" type="submit" id="saveEdit">
+                                        Save
+                                    </button>
+
                                     <a class="btn btn-primary btn-o edit-event" id="editEventBtn">
                                         Edit
                                     </a>
-                                    @endif
-                                    @endforeach
+
                                 </div>
                             </form>
                         </div>
@@ -233,7 +230,6 @@
         getMsgCount();
         Main.init();
         FormValidator.init();
-
         Calendar.init();
     });
 
@@ -243,15 +239,37 @@
         window.location.href="/event/"+val;
     });
 
-    $('#create_event_form').on('submit',function(e){
+    $('#saveEdit').on('click',function(e){
+        var formData=new FormData(file[0]);
 
     });
 
     $('#editEventBtn').click(function(){
-        $('.save-event').show();
+
+        var formData=$('#create_event_form')
+        $.ajax({
+            url:'/edit-event',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(res){
+
+                if(res==1){
+                    console.log(res);
+                }else{
+                    $('#error-div').html(errorsHtml);
+                }
+
+            }
+
+        });
+
+        $('.save-event').hide();
         $('#delBtn').show();
         $('.edit-event').hide();
         $('#showEvent').hide();
+        $('.save-edit-event').show();
         $('#editEvent').show();
     });
 
