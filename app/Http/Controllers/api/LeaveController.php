@@ -261,7 +261,7 @@ class LeaveController extends Controller
    * Date : 22 /2/2016
     */
 
-    public function leaveTypes(Requests\LeaveRequest $request){
+    public function leaveTypes(Request $request){
         try{
             $message = "Successfully Listed";
             $status = 200;
