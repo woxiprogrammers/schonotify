@@ -78,13 +78,14 @@ var Calendar = function() {"use strict";
                         $('#message-error-div').html(str);
                     }else{
                         eventInputDateHandler();
-
+                        $("#hiddenEventId").val("edit");
                         $(".form-full-event #event-id").val("");
                         $('.events-modal').modal();
                         $('#showEvent').hide();
                         $('#editEvent').show();
                         $('.save-event').show();
                         $('.edit-event').hide();
+                        $('.save-edit-event').hide();
                         $('#delBtn').hide();
                         $('#error-div').html('');
                     }
@@ -95,6 +96,7 @@ var Calendar = function() {"use strict";
 
 		$('.events-modal').on('hide.bs.modal', function(event) {
             eventInputDateHandler();
+            $("#hiddenEventId").val("edit");
 			$(".form-full-event #event-id").val("");
 			$(".form-full-event #event-name").val("");
             $(".form-full-event #event-description").val("");
@@ -200,6 +202,7 @@ var Calendar = function() {"use strict";
 
                                 }else{
                                     eventInputDateHandler();
+                                    $("#hiddenEventId").val("edit");
                                     $(".form-full-event #event-id").val("");
                                     $(".form-full-event #event-name").val("");
                                     $(".form-full-event #event-description").val("");
@@ -213,6 +216,7 @@ var Calendar = function() {"use strict";
                                     $('.edit-event').hide();
                                     $('#error-div').html('');
                                     $('.events-modal').modal();
+                                    $('.save-edit-event').hide();
                                 }
 
                             }
@@ -246,6 +250,7 @@ var Calendar = function() {"use strict";
 
                             }else{
                                 eventInputDateHandler();
+                                $("#hiddenEventId").val("edit");
                                 $(".form-full-event #event-id").val("");
                                 $(".form-full-event #event-name").val("");
                                 $(".form-full-event #event-description").val("");
@@ -259,6 +264,7 @@ var Calendar = function() {"use strict";
                                 $('.edit-event').hide();
                                 $('#error-div').html('');
                                 $('.events-modal').modal();
+                                $('.save-edit-event').hide();
                             }
 
                         }
@@ -276,6 +282,7 @@ var Calendar = function() {"use strict";
 				for(var i = 0; i < demoCalendar.length; i++) {
 
 					if(demoCalendar[i]._id == eventId) {
+                        $("#hiddenEventId").val(demoCalendar[i].id);
 						$(".form-full-event #event-id").val(eventId);
 						$(".form-full-event #event-name").val(demoCalendar[i].title);
 						$(".form-full-event #event-description").val(demoCalendar[i].content);
@@ -356,6 +363,7 @@ var Calendar = function() {"use strict";
                         $('.edit-event').show();
                         $('#error-div').html('');
                         $('#delBtn').hide();
+                        $('.save-edit-event').hide();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
 
@@ -430,8 +438,8 @@ var Calendar = function() {"use strict";
 			submitHandler: function(form) {
 
                 var file=$(form);
-
-                uploadImage(file);
+debugger;
+               // uploadImage(file);
 
 			}
 		});
