@@ -83,7 +83,9 @@ class Leave extends Request
                 ];
                 break;
             case 'PUT':
-                return [];
+                return [
+                    'leave_id' => 'required|integer',
+                ];
             break;
             default:
                 break;
