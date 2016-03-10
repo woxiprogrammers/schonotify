@@ -79,23 +79,24 @@
                                                 Priority
                                             </label>
                                             <div class="form-group">
-                                                <br>
-                                                <div class="priority">
-                                                    <select  name="priority" id="priority" class="form-control">
-                                                          <option value="1" > High</option>
-                                                          <option value="2">Medium</option>
-                                                          <option value="3">Low</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
+                                                <div class="radio clip-radio radio-primary">
+                                                        <input type="radio" id="priority1" name="priority" value="1" class="event-categories">
+                                                        <label for="priority1">
+                                                            <span class="fa fa-circle text-red"></span> High
+                                                        </label>
+                                                        <input type="radio" id="priority2" name="priority" value="2" class="event-categories">
+                                                        <label for="priority2">
+                                                            <span class="fa fa-circle text-green"></span> Medium
+                                                        </label>
+                                                        <input type="radio" id="priority3" name="priority" value="3" class="event-categories">
+                                                        <label for="priority3">
+                                                            <span class="fa fa-circle text-yellow"></span> Low
+                                                        </label>
+                                                    </div>
+                                                 </div>
                                         </div>
                                      </div>
-
-
-
-                                    <div class="col-md-12">
-
+                                   <div class="col-md-12">
                                         <div class="form-group col-sm-6">
                                             <label class="control-label">
                                                 User Roles <em>(select at least one)</em> <span class="symbol required"></span>
@@ -585,26 +586,31 @@
                 });
                     var str = "";
                     str += '<label class="control-label">'+
-                        'Class <em>(select at least one)</em> <span class="symbol required"></span></label>'+
-                             '<div class="checkbox clip-check check-primary">';
+                        'Class <em>(select at least one)</em> <span class="symbol required"></span></label>';
+
                              for(var i=0; i<res.length; i++)
                              {
-                               str +='<input type="checkbox" value="'+res[i]['class_id']+'" class="classFirst" id="'+res[i]['class_id']+'">'+
+                               str +='<div class="checkbox clip-check check-primary">' +
+                                   '<input type="checkbox" value="'+res[i]['class_id']+'" class="classFirst" id="'+res[i]['class_id']+'">'+
                                          '<label for="'+res[i]['class_id']+'">'
                                             + res[i]['class_name'] +
                                          '</label>'+
-                             '</div>'+
-                             '<div class="checkbox clip-check check-primary checkbox-inline">';
-                               for(var j=0; j<res[i]['division'].length; j++) {
-                                   var res1= $.map(res[j]['division'],function(value){
-                                       return value;
-                                   });
-                                   str += '<input type="checkbox" value="'+res1[j]['division_id']+'" class="FirstDiv" id="'+res1[j]['division_id']+'" >'+
+                             '</div>';
+
+                                 var res1= $.map(res[i]['division'],function(value){
+                                     return value;
+                                 });
+                               for(var j=0; j<res1.length; j++) {
+
+                                   str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
+                                       '<input type="checkbox" value="'+res1[j]['division_id']+'" class="FirstDiv" id="'+res1[j]['division_id']+'" >'+
                                        '<label for="'+res1[j]['division_id']+'">'
                                         +res1[j]['division_name']+
                                        '</label>';
+                                   str +='</div> ';
                                }
-                       str +='</div> <p>';
+                               str+="<p></p>"
+
                              }
                 $('#batch-class-div-data').html(str);
 
