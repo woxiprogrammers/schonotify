@@ -180,10 +180,9 @@ class LeaveController extends Controller
     * Date : 17 /2/2016
      */
 
-    public function approveLeave(Requests\LeaveApproveRequest $request){
+    public function approveLeave(Requests\Leave $request){
         try{
             $data = $request->all();
-              Log::info('data',$data);
             if(Leave::where('id', $data['leave_id'])->first()!=null) {
                 $status=Leave::where('id', $data['leave_id'])->pluck('status');
                 if ( $status == 1 ) {

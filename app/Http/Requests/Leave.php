@@ -14,7 +14,7 @@ class Leave extends Request
      */
     public function authorize()
     {
-        $userToken=$this->request->all();
+        $userToken = $this->request->all();
         $userId='';
         foreach($userToken as $userData)
         {
@@ -30,10 +30,8 @@ class Leave extends Request
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
-
         }
         switch ($this->method()) {
-
             case 'GET':
                 if(in_array('View_leave',$resultArr) ){
                     return true;
@@ -43,7 +41,7 @@ class Leave extends Request
                 }
                 break;
             case 'PUT':
-                if(in_array('Update_leave',$resultArr) ){
+                if(in_array('Publish_leave',$resultArr) ){
                     return true;
                 }
                 else{
@@ -84,6 +82,9 @@ class Leave extends Request
                     'end_date' => 'required|date',
                 ];
                 break;
+            case 'PUT':
+                return [];
+            break;
             default:
                 break;
         }
