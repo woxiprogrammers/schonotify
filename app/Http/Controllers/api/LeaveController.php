@@ -34,7 +34,7 @@ class LeaveController extends Controller
        * Date : 20/2/2016
        */
 
-    public function getLeaveListParent(Requests\Leave $request , $flag , $student_id)
+    public function getLeaveListParent(Requests\LeaveRequest $request , $flag , $student_id)
     {
         try {
             $leaveData = array();
@@ -104,7 +104,7 @@ class LeaveController extends Controller
      * Developed By : Amol Rokade
      *Date : 18/2/2016
       */
-    public function getLeaveListTeacher(Requests\Leave $request , $flag)
+    public function getLeaveListTeacher(Requests\LeaveRequest $request , $flag)
     {
         try {
             $data = $request->all();
@@ -180,10 +180,9 @@ class LeaveController extends Controller
     * Date : 17 /2/2016
      */
 
-    public function approveLeave(Requests\LeaveApproveRequest $request){
+    public function approveLeave(Requests\LeaveRequest $request){
         try{
             $data = $request->all();
-              Log::info('data',$data);
             if(Leave::where('id', $data['leave_id'])->first()!=null) {
                 $status=Leave::where('id', $data['leave_id'])->pluck('status');
                 if ( $status == 1 ) {
@@ -219,7 +218,7 @@ class LeaveController extends Controller
      * Date : 17 /2/2016
       */
 
-    public function createLeave(Requests\Leave $request){
+    public function createLeave(Requests\LeaveRequest $request){
         try{
             $data = $request->all();
             $fromDate = strtotime($data['from_date']);
@@ -262,7 +261,7 @@ class LeaveController extends Controller
    * Date : 22 /2/2016
     */
 
-    public function leaveTypes(Requests\Leave $request){
+    public function leaveTypes(Requests\LeaveRequest $request){
         try{
             $message = "Successfully Listed";
             $status = 200;
