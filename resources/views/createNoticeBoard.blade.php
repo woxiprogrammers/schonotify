@@ -93,14 +93,10 @@
                                                             <span class="fa fa-circle text-yellow"></span> Low
                                                         </label>
                                                     </div>
-                                            </div>
+                                                 </div>
                                         </div>
                                      </div>
-
-
-
-                                    <div class="col-md-12">
-
+                                   <div class="col-md-12">
                                         <div class="form-group col-sm-6">
                                             <label class="control-label">
                                                 User Roles <em>(select at least one)</em> <span class="symbol required"></span>
