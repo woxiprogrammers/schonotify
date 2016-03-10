@@ -44,7 +44,7 @@ var Calendar = function() {"use strict";
                     res[i]['className']='event-job';
                 }
 
-                res[i]['allDay']='false';
+                res[i]['allDay']=true;
 
             }
 
@@ -94,7 +94,7 @@ var Calendar = function() {"use strict";
 		});
 
 		$('.events-modal').on('hide.bs.modal', function(event) {
-
+            eventInputDateHandler();
 			$(".form-full-event #event-id").val("");
 			$(".form-full-event #event-name").val("");
             $(".form-full-event #event-description").val("");
@@ -109,6 +109,7 @@ var Calendar = function() {"use strict";
 			// it doesn't need to have a start or end
 			var eventObject = {
 				title: $.trim($(this).text()) // use the element's text as the event title
+
 			};
 			// store the Event Object in the DOM element so we can get to it later
 			$(this).data('eventObject', eventObject);
@@ -139,7 +140,7 @@ var Calendar = function() {"use strict";
 				right: 'month,agendaWeek,agendaDay'
 			},
 			events: demoCalendar,
-			editable: true,
+			editable: false,
 			eventLimit: true, // allow "more" link when too many events
 			droppable: false, // this allows things to be dropped onto the calendar !!!
 			drop: function(date, allDay) {// this function is called when something is dropped
@@ -166,7 +167,9 @@ var Calendar = function() {"use strict";
 					// if so, remove the element from the "Draggable Events" list
 					$(this).remove();
 				}
+
 			},
+
 			selectable: true,
 			selectHelper: true,
 			select: function(start, end, allDay) {
@@ -263,7 +266,6 @@ var Calendar = function() {"use strict";
                 }
 
 
-
 			},
 			eventClick: function(calEvent, jsEvent, view) {
 
@@ -279,6 +281,7 @@ var Calendar = function() {"use strict";
 						$(".form-full-event #event-description").val(demoCalendar[i].content);
 						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start));
 						$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end));
+
 						if(demoCalendar[i].category == "" || typeof demoCalendar[i].category == "undefined") {
 							eventCategory = "Generic";
 						} else {
@@ -287,6 +290,10 @@ var Calendar = function() {"use strict";
 
                         var date=new moment(demoCalendar[i]._start)._d;
                         var date1=new moment(demoCalendar[i]._end)._d;
+                        if(date1=="Invalid Date")
+                        {
+                            date1=date;
+                        }
                         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
                         var start_date=days[date.getDay()]+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear();
                         var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+(date1.getMonth()+1)+'/'+date1.getFullYear();
@@ -321,7 +328,7 @@ var Calendar = function() {"use strict";
 
                         $.get(route,function(res){
                             if(res.length != 0) {
-                                $("#event-created-by").html(res[0]['first_name']+" "+res[0]['last_name']);
+                                $("#event-created-by").html(res[0]['first_name']+" "+res[0]['last_name'] + ' on ' );
                             } else {
                                 $("#event-created-by").html(' --')
                             }
@@ -329,11 +336,16 @@ var Calendar = function() {"use strict";
 
                         var route1 = "/get-user-event/"+demoCalendar[i].published_by;
 
+                        var pubDate = new moment(demoCalendar[i].published_at)._d;
+
+                        var published_at = days[pubDate.getDay()]+' '+pubDate.getDate()+'/'+(pubDate.getMonth()+1)+'/'+pubDate.getFullYear();
+
                         $.get(route1,function(res){
                             if(res.length != 0) {
-                                $("#event-published-by").html(res[0]['first_name']+" "+res[0]['last_name']);
+                                $("#published-by-div").show();
+                                $("#event-published-by").html(res[0]['first_name']+" "+res[0]['last_name']+" on "+published_at);
                             } else {
-                                $("#event-published-by").html(' --')
+                                $("#published-by-div").hide();
                             }
 
                         });
@@ -476,10 +488,10 @@ var Calendar = function() {"use strict";
 		endInput.datetimepicker();
         var dateToday=new Date();
 		startInput.on("dp.change", function(e) {
-			endInput.data("DateTimePicker").minDate(dateToday);
+            startInput.data("DateTimePicker").minDate(dateToday);
 		});
 		endInput.on("dp.change", function(e) {
-            startInput.data("DateTimePicker").minDate(dateToday);
+            endInput.data("DateTimePicker").minDate(dateToday);
 		});
 	};
 	return {
