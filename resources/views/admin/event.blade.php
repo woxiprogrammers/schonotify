@@ -120,7 +120,6 @@
                                                     </div>
                                                     <div class="panel-tools col-sm-6">
                                                         <div id="status-show" class="col-sm-4"></div>
-                                                        <div class="col-sm-8"><i class="fa fa-clock-o"></i> <span id="created_time"></span></div>
                                                     </div>
                                                 </div>
 
@@ -131,22 +130,25 @@
 
                                                     </p>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-12">
                                                     <address>
                                                         Event Start: <em class="text-bold" id="event-start-time"></em>
                                                         <br>
                                                         Event End: <em class="text-bold" id="event-end-time"></em>
                                                     </address>
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    Created By:<em class="text-bold" id="event-created-by"></em>
-                                                    <br>
-                                                    Published By:<em class="text-bold" id="event-published-by"></em>
-                                                </div>
+
                                                 <div class="col-sm-12">
                                                     <img class="thumbnail" id="event-image"  width="200">
                                                 </div>
+                                                <div class="col-sm-12">
+                                                    Created By:<em class="text-bold" id="event-created-by"> On </em><em class="text-bold"><span id="created_time"></span></em>
+                                                    <br>
+                                                    <span id="published-by-div">
+                                                         Published By:<em class="text-bold" id="event-published-by"></em>
+                                                    </span>
 
+                                                </div>
                                             </div>
 
                                         </div>
@@ -154,37 +156,24 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'publish_event')
                                     <button class="btn btn-info btn-o delete-event pull-left" onclick="confirm('Are you sure to publish this event?')">
                                         Publish
                                     </button>
-                                    @endif
-                                    @endforeach
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
                                         Cancel
                                     </button>
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'delete_event')
                                     <button class="btn btn-danger btn-o delete-event" id="delBtn">
                                         Delete
                                     </button>
-                                    @endif
-                                    @endforeach
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'create_event')
+
                                     <button class="btn btn-primary btn-o save-event" type="submit" id="upload">
                                         Save
                                     </button>
-                                    @endif
-                                    @endforeach
-                                    @foreach(session('functionArr') as $row)
-                                    @if($row == 'update_event')
+
                                     <a class="btn btn-primary btn-o edit-event" id="editEventBtn">
                                         Edit
                                     </a>
-                                    @endif
-                                    @endforeach
+
                                 </div>
                             </form>
                         </div>
