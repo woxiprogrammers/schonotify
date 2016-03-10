@@ -612,7 +612,6 @@
                                str+="<p></p>"
 
                              }
-                    console.log(str);
                 $('#batch-class-div-data').html(str);
 
                 }
