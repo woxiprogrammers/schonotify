@@ -177,7 +177,7 @@ var Calendar = function() {"use strict";
 			select: function(start, end, allDay) {
 
                 var check = moment(start).format('YYYY-MM-DD hh:mm:ss');
-                var check1=new Date(check);
+                var check1=new moment(check)._d;
                 var today = new Date();
 
                 if(check1.getTime() < today.getTime())
@@ -301,9 +301,28 @@ var Calendar = function() {"use strict";
                         {
                             date1=date;
                         }
+
+                        var hoursStart = date.getHours();
+
+                        var suffixStart = (hoursStart >= 12)? 'pm' : 'am';
+                        hoursStart = (hoursStart > 12)? hoursStart -12 : hoursStart;
+                        hoursStart = (hoursStart == '00')? 12 : hoursStart;
+
+                        var minutesStart = date.getMinutes();
+
+
+                        var hoursEnd = date1.getHours();
+
+                        var suffixEnd = (hoursEnd >= 12)? 'pm' : 'am';
+                        hoursEnd = (hoursEnd > 12)? hoursEnd -12 : hoursEnd;
+                        hoursEnd = (hoursEnd == '00')? 12 : hoursEnd;
+
+                        var minutesEnd = date1.getMinutes();
+
+
                         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-                        var start_date=days[date.getDay()]+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear();
-                        var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+(date1.getMonth()+1)+'/'+date1.getFullYear();
+                        var start_date=days[date.getDay()]+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+hoursStart+':'+minutesStart+' '+suffixStart;
+                        var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+(date1.getMonth()+1)+'/'+date1.getFullYear()+' '+hoursEnd+':'+minutesEnd+' '+suffixEnd;
 
                         $("#event-title").html(demoCalendar[i].title);
 
@@ -325,7 +344,15 @@ var Calendar = function() {"use strict";
 
                         var date2 = new moment(demoCalendar[i].created_at)._d;
 
-                        var created_at = days[date2.getDay()]+' '+date2.getDate()+'/'+(date2.getMonth()+1)+'/'+date2.getFullYear();
+                        var hoursCreatedAt = date2.getHours();
+
+                        var suffixCreatedAt = (hoursCreatedAt >= 12)? 'pm' : 'am';
+                        hoursCreatedAt = (hoursCreatedAt > 12)? hoursCreatedAt -12 : hoursCreatedAt;
+                        hoursCreatedAt = (hoursCreatedAt == '00')? 12 : hoursCreatedAt;
+
+                        var minutesCreatedAt = date2.getMinutes();
+
+                        var created_at = days[date2.getDay()]+' '+date2.getDate()+'/'+(date2.getMonth()+1)+'/'+date2.getFullYear()+' '+hoursCreatedAt+':'+minutesCreatedAt+' '+suffixCreatedAt;
 
                         $("#created_time").html(created_at);
                         $("#event-start-time").html(start_date);
@@ -335,7 +362,7 @@ var Calendar = function() {"use strict";
 
                         $.get(route,function(res){
                             if(res.length != 0) {
-                                $("#event-created-by").html(res[0]['first_name']+" "+res[0]['last_name'] + ' on ' );
+                                $("#event-created-by").html(res[0]['first_name']+" "+res[0]['last_name']  );
                             } else {
                                 $("#event-created-by").html(' --')
                             }
@@ -345,7 +372,15 @@ var Calendar = function() {"use strict";
 
                         var pubDate = new moment(demoCalendar[i].published_at)._d;
 
-                        var published_at = days[pubDate.getDay()]+' '+pubDate.getDate()+'/'+(pubDate.getMonth()+1)+'/'+pubDate.getFullYear();
+                        var hours = pubDate.getHours();
+
+                        var suffix = (hours >= 12)? 'pm' : 'am';
+                        hours = (hours > 12)? hours -12 : hours;
+                        hours = (hours == '00')? 12 : hours;
+
+                        var minutes = pubDate.getMinutes();
+
+                        var published_at = days[pubDate.getDay()]+' '+pubDate.getDate()+'/'+(pubDate.getMonth()+1)+'/'+pubDate.getFullYear() +' '+hours+':'+minutes+' '+suffix;
 
                         $.get(route1,function(res){
                             if(res.length != 0) {
