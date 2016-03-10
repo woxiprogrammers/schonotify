@@ -105,18 +105,18 @@ class NoticeBoardController extends Controller
                     $count++;
                 }
             }
-        } elseif ($user->role_id == 2 ){
-            $userCheck=Division::where('class_teacher_id',$user->id)->first();
+        } elseif ($user->role_id == 2 ) {
+            $userCheck = Division::where('class_teacher_id',$user->id)->first();
             if ($userCheck != null) {
                     $count=0;
                 if ($request->ajax()) {
-                    $batchClassData=Division::where('divisions.class_teacher_id',$user->id)
+                    $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
                         ->join('classes','divisions.class_id','=','classes.id')
                         ->join('batches','classes.batch_id','=','batches.id')
                         ->where('classes.batch_id',$request->batch_id)
                         ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                         ->get()->toArray();
-                    $divisionSubjects=SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                    $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                         ->join('divisions','division_subjects.division_id','=','divisions.id')
                         ->join('classes','divisions.class_id','=','classes.id')
                         ->join('batches','classes.batch_id','=','batches.id')
@@ -166,12 +166,12 @@ class NoticeBoardController extends Controller
                     }
                     $classDivision = array_unique($classDivision, SORT_REGULAR);
                 } else {
-                    $batchClassData=Division::where('divisions.class_teacher_id',$user->id)
+                    $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
                         ->join('classes','divisions.class_id','=','classes.id')
                         ->join('batches','classes.batch_id','=','batches.id')
                         ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                         ->get()->toArray();
-                    $divisionSubjects=SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                    $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                         ->join('divisions','division_subjects.division_id','=','divisions.id')
                         ->join('classes','divisions.class_id','=','classes.id')
                         ->join('batches','classes.batch_id','=','batches.id')
@@ -199,7 +199,7 @@ class NoticeBoardController extends Controller
                         $divisionSubject = array_unique($divisionSubject, SORT_REGULAR);
                         $count = 0;
                          foreach($divisionSubject as $divs ) {
-                             $divisionData2[$count] =Division::where('class_id',$row['class_id'])->where('id',$divs['division_id'])
+                             $divisionData2[$count] = Division::where('class_id',$row['class_id'])->where('id',$divs['division_id'])
                                                                  ->select('id','division_name')->get()->toArray();
                              $count++;
                          }
@@ -358,7 +358,7 @@ class NoticeBoardController extends Controller
     {
         if ($request->authorize() === true)
         {    $annoucement =array();
-            $userEntry =array();
+            $userEntry = array();
             $user = Auth::user();
             $annoucement['event_type_id'] = 1;
             $annoucement['title'] = $request->title;
