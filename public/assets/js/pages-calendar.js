@@ -229,8 +229,8 @@ var Calendar = function() {"use strict";
                         $(".form-full-event #event-id").val("");
                         $(".form-full-event #event-name").val("");
                         $(".form-full-event #event-description").val("");
-                        $(".form-full-event #start-date-time").data("DateTimePicker").date(moment(start));
-                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(start).add(1, 'hours'));
+                        $(".form-full-event #start-date-time").data("DateTimePicker").destroy();
+                        $(".form-full-event #end-date-time").data("DateTimePicker").destroy();
                         alert('You cant create event for previous date.');
                     }
 
@@ -297,34 +297,29 @@ var Calendar = function() {"use strict";
 							eventCategory = demoCalendar[i].category;
 						}
 
-                        var date=new moment(demoCalendar[i]._start)._d;
-                        var date1=new moment(demoCalendar[i]._end)._d;
-                        if(date1=="Invalid Date")
-                        {
-                            date1=date;
-                        }
+                        var date=new moment(demoCalendar[i].start);
+                        var date1=new moment(demoCalendar[i].end);
 
-                        var hoursStart = date.getHours();
+                        var hoursStart = (date._i.split(' '))[1].split(':')[0];
 
                         var suffixStart = (hoursStart >= 12)? 'pm' : 'am';
                         hoursStart = (hoursStart > 12)? hoursStart -12 : hoursStart;
                         hoursStart = (hoursStart == '00')? 12 : hoursStart;
 
-                        var minutesStart = date.getMinutes();
+                        var minutesStart = (date._i.split(' '))[1].split(':')[1];
 
 
-                        var hoursEnd = date1.getHours();
+                        var hoursEnd = (date1._i.split(' '))[1].split(':')[0];
 
                         var suffixEnd = (hoursEnd >= 12)? 'pm' : 'am';
                         hoursEnd = (hoursEnd > 12)? hoursEnd -12 : hoursEnd;
                         hoursEnd = (hoursEnd == '00')? 12 : hoursEnd;
 
-                        var minutesEnd = date1.getMinutes();
-
+                        var minutesEnd = (date1._i.split(' '))[1].split(':')[1];
 
                         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-                        var start_date=days[date.getDay()]+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+hoursStart+':'+minutesStart+' '+suffixStart;
-                        var end_date=days[date1.getDay()]+' '+date1.getDate()+'/'+(date1.getMonth()+1)+'/'+date1.getFullYear()+' '+hoursEnd+':'+minutesEnd+' '+suffixEnd;
+                        var start_date=days[date.day()]+' '+date.date()+'/'+(date.month()+1)+'/'+date.year()+' '+hoursStart+':'+minutesStart+' '+suffixStart;
+                        var end_date=days[date1.day()]+' '+date1.date()+'/'+(date1.month()+1)+'/'+date1.year()+' '+hoursEnd+':'+minutesEnd+' '+suffixEnd;
 
                         $("#event-title").html(demoCalendar[i].title);
 
