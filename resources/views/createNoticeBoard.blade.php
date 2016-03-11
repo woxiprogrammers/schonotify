@@ -76,11 +76,11 @@
                                         </div>
                                         <div class="">
                                             <label>
-                                                Priority
+                                                Priority <span class="symbol required"></span>
                                             </label>
                                             <div class="form-group">
                                                 <div class="radio clip-radio radio-primary">
-                                                        <input type="radio" id="priority1" name="priority" value="1" class="event-categories">
+                                                        <input type="radio" checked id="priority1" name="priority" value="1" class="event-categories">
                                                         <label for="priority1">
                                                             <span class="fa fa-circle text-red"></span> High
                                                         </label>
@@ -156,24 +156,24 @@
                                                         Class <em>(select at least one)</em> <span class="symbol required"></span>
                                                     </label>
                                                     @if(isset($classDivision))
-                                                    @foreach($classDivision as $row)
+                                                     @foreach($classDivision as $row)
                                                     <div class="checkbox clip-check check-primary">
 
-                                                        <input type="checkbox" value="{!! $row['class_id']!!}" name="classFirst[]" class="classFirst" id="{!! $row['class_id']!!}">
-                                                        <label for="{!! $row['class_id']!!}">
+                                                        <input type="checkbox" value="{!! $row['class_id']!!}" name="classFirst[]" class="classFirst" id="class_{!! $row['class_id']!!}">
+                                                        <label for="class_{!! $row['class_id']!!}">
                                                             {!! $row['class_name']!!}
                                                         </label>
                                                     </div>
                                                     <div class="checkbox clip-check check-primary checkbox-inline">
                                                         @if(isset($row['division']))
                                                         @foreach($row['division'] as $division)
-                                                        <input type="checkbox" value="{!! $division['division_id']!!}"  name = "FirstDiv[]" class="FirstDiv" id="{!! $division['division_id']!!}" >
-                                                        <label for="{!! $division['division_id']!!}">
+                                                        <input type="checkbox" value="{!! $division['division_id']!!}"  name = "FirstDiv[]" class="FirstDiv" id="class_{!! $row['class_id']!!}_{!! $division['division_id']!!}" >
+                                                        <label for="class_{!! $row['class_id']!!}_{!! $division['division_id']!!}">
                                                             {!! $division['division_name']!!}
                                                         </label>
                                                         @endforeach
                                                         @endif
-                                                    </div> <p>
+                                                    </div> <p></p>
                                                     @endforeach
                                                     @endif
                                                 </div>
@@ -502,32 +502,37 @@
     });
 
     $('.classFirst').change(function(){
+        var classId = this.id;
         if($(this).prop('checked') == true)
         {
             $('.FirstDiv').each(function() { //loop through each checkbox
-                this.checked = true;  //select all checkboxes with class "checkbox1"
+                var divId = this.id;
+                var req = new RegExp(classId, 'g');
+                var check =  divId.match(req);
+                if(check != null)
+                {
+                    this.checked = true;
+                }
             });
         }else{
             $('.FirstDiv').each(function() { //loop through each checkbox
-                this.checked = false;  //select all checkboxes with class "checkbox1"
+                var divId = this.id;
+                var req = new RegExp(classId, 'g');
+                var check =  divId.match(req);
+                if(check != null)
+                {
+                    this.checked = false;
+                }
             });
         }
+
+
     });
 
-    $('.classSecond').change(function(){
-        if($(this).prop('checked') == true)
-        {
-            $('.SecondDiv').each(function() { //loop through each checkbox
-                this.checked = true;  //select all checkboxes with class "checkbox1"
-            });
-        }else{
-            $('.SecondDiv').each(function() { //loop through each checkbox
-                this.checked = false;  //select all checkboxes with class "checkbox1"
-            });
-        }
-    });
 
-    $('#service4').click(function(){
+
+
+   $('#service4').click(function(){
         var route='get-all-admins/';
         $.get(route,function(data){
             var res= $.map(data,function(value){
@@ -591,8 +596,8 @@
                              for(var i=0; i<res.length; i++)
                              {
                                str +='<div class="checkbox clip-check check-primary">' +
-                                   '<input type="checkbox" value="'+res[i]['class_id']+'" class="classFirst" id="'+res[i]['class_id']+'">'+
-                                         '<label for="'+res[i]['class_id']+'">'
+                                   '<input type="checkbox" value="'+res[i]['class_id']+'" class="classFirst" id="class_'+res[i]['class_id']+'">'+
+                                         '<label for="class_'+res[i]['class_id']+'">'
                                             + res[i]['class_name'] +
                                          '</label>'+
                              '</div>';
@@ -603,8 +608,8 @@
                                for(var j=0; j<res1.length; j++) {
 
                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
-                                       '<input type="checkbox" value="'+res1[j]['division_id']+'" class="FirstDiv" id="'+res1[j]['division_id']+'" >'+
-                                       '<label for="'+res1[j]['division_id']+'">'
+                                       '<input type="checkbox" value="'+res1[j]['division_id']+'" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
+                                       '<label for="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'">'
                                         +res1[j]['division_name']+
                                        '</label>';
                                    str +='</div> ';
@@ -613,7 +618,31 @@
 
                              }
                 $('#batch-class-div-data').html(str);
-
+                $('.classFirst').change(function(){
+                    var classId = this.id;
+                    if($(this).prop('checked') == true)
+                    {
+                        $('.FirstDiv').each(function() { //loop through each checkbox
+                            var divId = this.id;
+                            var req = new RegExp(classId, 'g');
+                            var check =  divId.match(req);
+                            if(check != null)
+                            {
+                                this.checked = true;
+                            }
+                        });
+                    }else{
+                        $('.FirstDiv').each(function() { //loop through each checkbox
+                            var divId = this.id;
+                            var req = new RegExp(classId, 'g');
+                            var check =  divId.match(req);
+                            if(check != null)
+                            {
+                                this.checked = false;
+                            }
+                        });
+                    }
+                });
                 }
         });
     }
