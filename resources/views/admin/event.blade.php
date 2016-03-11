@@ -111,7 +111,7 @@
                                         </div>
                                     </div>
                                     <div id="showEvent">
-
+                                        <div id="error-div-edit"></div>
                                         <div class="panel panel-white">
                                             <div class="panel-heading">
                                                 <div class="timeline_title">
@@ -246,31 +246,35 @@
 
     $('#editEventBtn').click(function(){
 
-        var formData=$('#create_event_form')
         $.ajax({
-            url:'/edit-event',
-            data: formData,
+            url:'/check-acl-edit-event',
             processData: false,
             contentType: false,
-            type: 'POST',
+            type: 'GET',
             success: function(res){
 
                 if(res==1){
-                    console.log(res);
+                    $('.save-event').hide();
+                    $('#delBtn').show();
+                    $('.edit-event').hide();
+                    $('#showEvent').hide();
+                    $('.save-edit-event').show();
+                    $('#editEvent').show();
                 }else{
-                    $('#error-div').html(errorsHtml);
+                    var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                    '</button>'+
+                    "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                "</div>";
+
+                    $('#error-div-edit').html(str);
                 }
 
             }
 
         });
 
-        $('.save-event').hide();
-        $('#delBtn').show();
-        $('.edit-event').hide();
-        $('#showEvent').hide();
-        $('.save-edit-event').show();
-        $('#editEvent').show();
     });
 
 </script>

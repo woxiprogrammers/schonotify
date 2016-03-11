@@ -78,7 +78,7 @@ var Calendar = function() {"use strict";
                         $('#message-error-div').html(str);
                     }else{
                         eventInputDateHandler();
-                        $("#hiddenEventId").val("edit");
+                        $("#hiddenEventId").val("create");
                         $(".form-full-event #event-id").val("");
                         $('.events-modal').modal();
                         $('#showEvent').hide();
@@ -96,7 +96,7 @@ var Calendar = function() {"use strict";
 
 		$('.events-modal').on('hide.bs.modal', function(event) {
             eventInputDateHandler();
-            $("#hiddenEventId").val("edit");
+            $("#hiddenEventId").val("create");
 			$(".form-full-event #event-id").val("");
 			$(".form-full-event #event-name").val("");
             $(".form-full-event #event-description").val("");
@@ -173,6 +173,7 @@ var Calendar = function() {"use strict";
 			},
 
 			selectable: true,
+            intervalDuration:64,
 			selectHelper: true,
 			select: function(start, end, allDay) {
 
@@ -202,7 +203,7 @@ var Calendar = function() {"use strict";
 
                                 }else{
                                     eventInputDateHandler();
-                                    $("#hiddenEventId").val("edit");
+                                    $("#hiddenEventId").val("create");
                                     $(".form-full-event #event-id").val("");
                                     $(".form-full-event #event-name").val("");
                                     $(".form-full-event #event-description").val("");
@@ -224,6 +225,7 @@ var Calendar = function() {"use strict";
                     }else{
 
                         eventInputDateHandler();
+                        $("#hiddenEventId").val("create");
                         $(".form-full-event #event-id").val("");
                         $(".form-full-event #event-name").val("");
                         $(".form-full-event #event-description").val("");
@@ -250,7 +252,7 @@ var Calendar = function() {"use strict";
 
                             }else{
                                 eventInputDateHandler();
-                                $("#hiddenEventId").val("edit");
+                                $("#hiddenEventId").val("create");
                                 $(".form-full-event #event-id").val("");
                                 $(".form-full-event #event-name").val("");
                                 $(".form-full-event #event-description").val("");
@@ -473,8 +475,14 @@ var Calendar = function() {"use strict";
 			submitHandler: function(form) {
 
                 var file=$(form);
+;               var isEdit=$('#hiddenEventId').val();
+                if(isEdit=="create")
+                {
+                    uploadImage(file);
+                }else{
 
-                uploadImage(file);
+
+                }
 
 			}
 		});
@@ -523,6 +531,43 @@ var Calendar = function() {"use strict";
         });
 
     }
+
+    function uploadImageEdit(file)
+    {
+        var formData=new FormData(file[0]);
+
+        $.ajax({
+            url:'/save-edit-event',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data){
+
+                if(data==1){
+                    window.location.href="/event/1";
+                }
+                $('.events-modal').modal('hide');
+            },
+            error: function(data){
+                // Error...
+                var errors = $.parseJSON(data.responseText);
+
+                var errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                $.each( errors, function( key, value ) {
+                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                });
+                errorsHtml += '</ul></di>';
+
+                $('#error-div').html(errorsHtml);
+            }
+
+        });
+
+    }
+
+
 
 	var eventInputDateHandler = function() {
 		var startInput = $('#start-date-time');
