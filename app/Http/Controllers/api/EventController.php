@@ -51,6 +51,7 @@ class EventController extends Controller
                 $publishedUser = User::where ('id','=', $event['published_by'])->select('first_name','last_name')->first();
                 $finalFiveEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
                 $finalFiveEvents[$counter]['status'] = $event['status'];
+                $finalFiveEvents[$counter]['title'] = $event['title'];
                 $finalFiveEvents[$counter]['detail'] = $event['detail'];
                 $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
                 $finalFiveEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event['end_date']));
@@ -84,25 +85,30 @@ class EventController extends Controller
         try {
             $data = $request->all();
             $monthsEvents = array();
-            $events = array();
+            $pendingEvents = array();
+            $publishedEvents = array();
             $finalMonthsEvents = array();
             $year = date('Y');
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $startDate = $year."-".$month_id ."-"."01"." 00".":"."00".":"."00";
             $endDate = $year."-".$month_id ."-"."31"." 23".":"."59".":"."59";
-            $events = DB::table('events')->where('event_type_id','=',$eventTypesId)
+            $pendingEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('created_by',$data['teacher']['id'])
                 ->where('status','=',1) //1 is for pending events i.e. Not published and not in draft
+                ->where('start_date','>=',$startDate)
+                ->where('start_date','<=',$endDate);
+            $publishedEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
+                ->where('status','=',2) //1 is for pending events i.e. Not published.
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate);
             $monthsEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('created_by',$data['teacher']['id'])
                 ->where('status','=',0) // 0 is for draft
-                ->orwhere('status','=',2) //2 is for published events
-                ->union($events)
+                ->union($pendingEvents)
+                ->union($publishedEvents)
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate)
-                ->orderBy('start_date','desc')
+                ->orderBy('id','desc')
                 ->get();
             $counter = 0;
             foreach ($monthsEvents as $event) {
@@ -112,6 +118,7 @@ class EventController extends Controller
                 $publishedUser = User::where ('id','=', $event->published_by)->select('first_name','last_name')->first();
                 $finalMonthsEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
                 $finalMonthsEvents[$counter]['status'] = $event->status;
+                $finalMonthsEvents[$counter]['title'] = $event->title;
                 $finalMonthsEvents[$counter]['detail'] = $event->detail;
                 $finalMonthsEvents[$counter]['start_date'] =  date("j M y, g:i a",strtotime( $event->start_date));
                 $finalMonthsEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event->end_date));
@@ -299,7 +306,8 @@ class EventController extends Controller
         try {
             $data = $request->all();
             $eventStatus = Event::where('id','=',$data['event_id'])->pluck('status');
-            if($eventStatus == "0" | (!Empty($eventStatus))) {
+            $createdBy = Event::where('id','=',$data['event_id'])->pluck('created_by');
+            if($eventStatus == "0" || (!Empty($eventStatus)) && $eventStatus != "2" && $eventStatus != "1") {
                 Event::where('id', '=' , $data['event_id'])->delete();
                 $message = "Event Successfully Deleted";
                 $status = 200;

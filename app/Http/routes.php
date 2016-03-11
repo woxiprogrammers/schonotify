@@ -291,6 +291,8 @@
 
     Route::get('/get-events/{id}','EventController@getEvents');
 
+    Route::get('/check-acl-edit-event/','EventController@editEventAcl');
+
     Route::get('/get-user-event/{id}','EventController@getUserEvent');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
@@ -356,7 +358,7 @@
     Route::post('view-attendance-parent','api\AttendanceController@viewAttendanceParent');
     Route::post('students-list','api\AttendanceController@getStudentsList');
     Route::get('default-attendance-parent/{student_id}','api\AttendanceController@viewDefaultAttendanceParent');
-    Route::get('default-attendance-teacher','api\AttendanceController@viewDefaultAttendanceTeacher');
+    Route::get('default-attendance-teacher/{div_id}','api\AttendanceController@viewDefaultAttendanceTeacher');
 
     //Message Related
     Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)

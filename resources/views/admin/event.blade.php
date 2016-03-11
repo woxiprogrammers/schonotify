@@ -64,6 +64,7 @@
                     <div class="modal-dialog modal-dialog modal-md">
                         <div class="modal-content">
                             <form class="form-full-event" id="create_event_form">
+                                <input type="hidden" id="hiddenEventId">
                                 <div class="modal-body">
                                     <div id="editEvent">
                                         <div class="form-group ">
@@ -110,25 +111,29 @@
                                         </div>
                                     </div>
                                     <div id="showEvent">
-
+                                        <div id="error-div-edit"></div>
                                         <div class="panel panel-white">
                                             <div class="panel-heading">
                                                 <div class="timeline_title">
 
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-9">
                                                         <h4 class="panel-title no-margin text-primary" id="event-title"></h4>
                                                     </div>
-                                                    <div class="panel-tools col-sm-6">
+                                                    <div class="panel-tools col-sm-3">
                                                         <div id="status-show" class="col-sm-4"></div>
                                                     </div>
                                                 </div>
-
+                                                <div class="col-sm-12">
+                                                    <em class="text-bold">Created by </em><em class="text-bold" id="event-created-by"></em> <em class="text-bold"> on <span id="created_time"></span></em>
+                                                </div>
                                             </div>
+
+
                                             <div class="panel-body">
                                                 <div class="col-sm-12">
-                                                    <p id="event-detail">
+                                                    <textarea id="event-detail" readonly class="col-sm-12" style="min-height:180px">
 
-                                                    </p>
+                                                    </textarea>
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <address>
@@ -142,10 +147,9 @@
                                                     <img class="thumbnail" id="event-image"  width="200">
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    Created By:<em class="text-bold" id="event-created-by"> On </em><em class="text-bold"><span id="created_time"></span></em>
-                                                    <br>
+
                                                     <span id="published-by-div">
-                                                         Published By:<em class="text-bold" id="event-published-by"></em>
+                                                        <em class="text-bold">Published by</em> <em class="text-bold" id="event-published-by"></em>
                                                     </span>
 
                                                 </div>
@@ -167,6 +171,10 @@
                                     </button>
 
                                     <button class="btn btn-primary btn-o save-event" type="submit" id="upload">
+                                        Save
+                                    </button>
+
+                                    <button class="btn btn-primary btn-o save-edit-event" type="submit" id="saveEdit">
                                         Save
                                     </button>
 
@@ -222,7 +230,6 @@
         getMsgCount();
         Main.init();
         FormValidator.init();
-
         Calendar.init();
     });
 
@@ -232,16 +239,42 @@
         window.location.href="/event/"+val;
     });
 
-    $('#create_event_form').on('submit',function(e){
+    $('#saveEdit').on('click',function(e){
+        var formData=new FormData(file[0]);
 
     });
 
     $('#editEventBtn').click(function(){
-        $('.save-event').show();
-        $('#delBtn').show();
-        $('.edit-event').hide();
-        $('#showEvent').hide();
-        $('#editEvent').show();
+
+        $.ajax({
+            url:'/check-acl-edit-event',
+            processData: false,
+            contentType: false,
+            type: 'GET',
+            success: function(res){
+
+                if(res==1){
+                    $('.save-event').hide();
+                    $('#delBtn').show();
+                    $('.edit-event').hide();
+                    $('#showEvent').hide();
+                    $('.save-edit-event').show();
+                    $('#editEvent').show();
+                }else{
+                    var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                    '</button>'+
+                    "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                "</div>";
+
+                    $('#error-div-edit').html(str);
+                }
+
+            }
+
+        });
+
     });
 
 </script>
