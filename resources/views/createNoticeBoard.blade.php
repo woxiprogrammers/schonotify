@@ -155,7 +155,8 @@
                                                     <label class="control-label">
                                                         Class <em>(select at least one)</em> <span class="symbol required"></span>
                                                     </label>
-                                                    @if(isset($classDivision))
+                                                    @if($classDivision)
+                                                    <input type="hidden" name="hidenValue" id="hidenValue" value="1">
                                                      @foreach($classDivision as $row)
                                                     <div class="checkbox clip-check check-primary">
 
@@ -175,16 +176,19 @@
                                                         @endif
                                                     </div> <p></p>
                                                     @endforeach
+                                                    @else
+                                                    <input type="hidden" name="hidenValue" id="hidenValue" value="0">
+
                                                     @endif
+
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
+
                                     <div class="col-md-12">
 
-                                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save">
+                                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save" id="save">
                                             <span class="">Save</span>
                                         </button>
                                         <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="buttons" value="publish">
@@ -540,6 +544,8 @@
             });
             if (res.length == 0)
             {
+                $('#save').prop('disabled',true);
+                $('#btnSubmit').prop('disabled',true);
                 $('#adminList').html("no record found");
             } else {
                 var str = "";
@@ -560,6 +566,8 @@
             });
             if (res.length == 0)
             {
+                $('#save').prop('disabled',true);
+                $('#btnSubmit').prop('disabled',true);
                 $('#teacherList').html("no record found");
             } else {
                 var str = "";
@@ -589,6 +597,11 @@
                 var res= $.map(data,function(value){
                     return value;
                 });
+
+                    if (res.length == 0) {
+                        $('#save').prop('disabled',true);
+                        $('#btnSubmit').prop('disabled',true);}
+                    else{
                     var str = "";
                     str += '<label class="control-label">'+
                         'Class <em>(select at least one)</em> <span class="symbol required"></span></label>';
@@ -617,6 +630,7 @@
                                str+="<p></p>"
 
                              }
+                    }
                 $('#batch-class-div-data').html(str);
                 $('.classFirst').change(function(){
                     var classId = this.id;
@@ -646,6 +660,19 @@
                 }
         });
     }
+
+    $('#service2').click(function(){
+        if(this.checked == true) {
+            if($('#hidenValue').val() == 0) {
+                $('#save').prop('disabled',true);
+                $('#btnSubmit').prop('disabled',true);
+            } else {
+                $('#save').prop('disabled',false);
+                $('#btnSubmit').prop('disabled',false);
+            }
+        }
+    });
+
 
 </script>
 
