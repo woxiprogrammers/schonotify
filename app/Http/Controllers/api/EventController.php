@@ -122,6 +122,13 @@ class EventController extends Controller
                 $finalMonthsEvents[$counter]['detail'] = $event->detail;
                 $finalMonthsEvents[$counter]['start_date'] =  date("j M y, g:i a",strtotime( $event->start_date));
                 $finalMonthsEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event->end_date));
+                $finalMonthsEvents[$counter]['created_at'] =  date("j M y, g:i a",strtotime( $event->created_at));
+                if($event->status == 2) {
+                    $finalMonthsEvents[$counter]['published_at'] =  date("j M y, g:i a",strtotime( $event->updated_at));
+                } else {
+                    $finalMonthsEvents[$counter]['published_at'] = ' ';
+                }
+
                 $counter++;
             }
             $status = 200;
