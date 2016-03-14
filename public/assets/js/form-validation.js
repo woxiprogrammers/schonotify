@@ -1737,17 +1737,6 @@ var FormValidator = function () {
             submitHandler: function (form) {
                 successHandler2.show();
                 errorHandler2.hide();
-                if($('#service1').prop('checked', true))
-                {
-                    var count = $("#teacherList :selected").length;
-                    if(count == 0)
-                    {
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                }
                 if($('#service4').prop('checked', true))
                 {
                     var counts = $("#adminList :selected").length;
@@ -1759,6 +1748,18 @@ var FormValidator = function () {
                         return true;
                     }
                 }
+                if($('#service1').prop('checked', true))
+                {
+                    var count = $("#teacherList :selected").length;
+                    if(count == 0)
+                    {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+
             }
         });
         CKEDITOR.disableAutoInline = true;
