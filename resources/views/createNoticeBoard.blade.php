@@ -51,7 +51,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="myTab2_example1">
 
-                            <form action="/createNoticeBoard" role="form" method="post" id="form2">
+                            <form action="/createNoticeBoard" role="form" method="post" id="createAnnouncemnt">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -112,7 +112,7 @@
                                                     <div class="adminList">
                                                         <select multiple="multiple" name="adminList[]" id="adminList" class="form-control">
                                                         </select>
-                                                        <em>Please Use CTRL Button to select multiple options.</em>
+                                                        <em id="">Please Use CTRL Button to select multiple options.</em>
                                                     </div>
 
                                                 </div>
@@ -126,9 +126,9 @@
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="teacherList">
-                                                        <select multiple="multiple" name="teacherList[]" id="teacherList" class="form-control">
+                                                        <select multiple="multiple" name="teacherList[]" id="teacherList" class="form-control teacherList">
                                                                                                                                                                               </select>
-                                                        <em>Please Use CTRL Button to select multiple options.</em>
+                                                        <em id="teacherSelect" class="teacherSelect">Please Use CTRL Button to select multiple options.</em>
                                                     </div>
                                                 </div>
                                             </div>
