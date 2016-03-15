@@ -402,17 +402,16 @@ var Calendar = function() {"use strict";
                         if(demoCalendar[i].status == 2)
                         {
                             $('.edit-event').hide();
+                            $('#publishBtn').hide();
                             $('#delBtn').hide();
                         }else{
                             $('.edit-event').show();
                             $('#delBtn').show();
                         }
 
-                        if(demoCalendar[i].status == 0)
+                        if(demoCalendar[i].status == 1)
                         {
                             $('#publishBtn').show();
-                        }else{
-                            $('#publishBtn').hide();
                         }
 
                         $('.save-edit-event').hide();
