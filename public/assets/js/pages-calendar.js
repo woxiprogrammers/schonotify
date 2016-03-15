@@ -406,8 +406,12 @@ var Calendar = function() {"use strict";
                             $('#delBtn').hide();
                         }else{
                             $('.edit-event').show();
-                            $('#publishBtn').show();
                             $('#delBtn').show();
+                        }
+
+                        if(demoCalendar[i].status == 1)
+                        {
+                            $('#publishBtn').show();
                         }
 
                         $('.save-edit-event').hide();

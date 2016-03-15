@@ -59,7 +59,7 @@ class EventController extends Controller
      +   * Function Name: saveEvent
      +   * Param: $request
      +   * Return: save event.
-     +   * Desc: it will save event data in database.
+     +   * Desc: it will save event data in database or save and publish event.
      +   * Developed By: Suraj Bande
      +   * Date: 5/3/2016
      +   */
@@ -144,6 +144,15 @@ class EventController extends Controller
 
     }
 
+    /*
+         +   * Function Name: publishEditEvent
+         +   * Param: $request,$id
+         +   * Return: status of event publish.
+         +   * Desc: it will return published event if it is already created.
+         +   * Developed By: Suraj Bande
+         +   * Date: 13/3/2016
+         +   */
+
     public function publishEditEvent(Requests\WebRequests\EventCreateRequest $request,$id)
     {
         $user=Auth::User();
@@ -151,18 +160,33 @@ class EventController extends Controller
         if($request->authorize() === true) {
 
             $publish=Event::find($id);
-            if($user->role_id != 1) {
-                $publish->published_by = 0;
-                $publish->status=1;
-            }else{
-                $publish->published_by = $user->id;
-                $publish->status=2;
-            }
-            $publish->updated_at = Carbon::now();
 
-            $publish->save();
-            Session::flash('message-success','Event published successfully !');
-            return 1;
+            if($publish->status == 0)
+            {
+                if($user->role_id != 1) {
+                    $publish->published_by = 0;
+                    $publish->status=1;
+                }else{
+                    $publish->published_by = $user->id;
+                    $publish->status=2;
+                }
+                $publish->updated_at = Carbon::now();
+
+                $publish->save();
+                if($user->role_id != 1)
+                {
+                    Session::flash('message-success','Event sent for publish successfully !');
+                    return 1;
+                } else {
+                    Session::flash('message-success','Event published successfully !');
+                    return 1;
+                }
+            }else{
+
+                    Session::flash('message-success','Event already sent for publish successfully !');
+                    return 1;
+            }
+
         }
 
     }
@@ -185,6 +209,15 @@ class EventController extends Controller
             return 0;
         }
     }
+
+    /*
+         +   * Function Name: editEventAcl
+         +   * Param: $request
+         +   * Return: access true or false.
+         +   * Desc: it will check acl to edit event.
+         +   * Developed By: Suraj Bande
+         +   * Date: 8/3/2016
+         +   */
 
     public function editEventAcl(Requests\WebRequests\EditEventRequest $request)
     {
