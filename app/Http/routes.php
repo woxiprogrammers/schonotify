@@ -297,6 +297,8 @@
 
     Route::get('/get-user-event/{id}','EventController@getUserEvent');
 
+    Route::get('/publish-edit-event/{id}','EventController@publishEditEvent');
+
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
     Route::get('get-parents',array('uses' => 'UsersController@getParents'));

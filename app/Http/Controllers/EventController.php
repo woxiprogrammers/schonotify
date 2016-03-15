@@ -128,14 +128,32 @@ class EventController extends Controller
 
     }
 
-    /*
-     +   * Function Name: saveEventCheckAcl
-     +   * Param: $request
-     +   * Return: access true or false.
-     +   * Desc: it will check acl to create event.
-     +   * Developed By: Suraj Bande
-     +   * Date: 8/3/2016
-     +   */
+    public function publishEditEvent(Requests\WebRequests\EventCreateRequest $request,$id)
+    {
+        $user=Auth::User();
+
+        if($request->authorize() === true) {
+
+            $publish=Event::find($id);
+            $publish->published_by = $user->id;
+            $publish->updated_at = Carbon::now();
+            $publish->status=2;
+            $publish->save();
+            Session::flash('message-success','Event published successfully !');
+            return 1;
+        }
+
+    }
+
+
+        /*
+         +   * Function Name: saveEventCheckAcl
+         +   * Param: $request
+         +   * Return: access true or false.
+         +   * Desc: it will check acl to create event.
+         +   * Developed By: Suraj Bande
+         +   * Date: 8/3/2016
+         +   */
 
     public function saveEventCheckAcl(Requests\WebRequests\EventCreateRequest $request)
     {

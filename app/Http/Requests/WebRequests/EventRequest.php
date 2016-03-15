@@ -49,7 +49,7 @@ class EventRequest extends Request
             break;
 
             case 'PUT':
-                    dd('put');
+
                 break;
 
             case 'POST':
