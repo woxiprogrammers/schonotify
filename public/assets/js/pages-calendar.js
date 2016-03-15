@@ -406,8 +406,12 @@ var Calendar = function() {"use strict";
                             $('#delBtn').hide();
                         }else{
                             $('.edit-event').show();
-                            $('#publishBtn').show();
                             $('#delBtn').show();
+                        }
+
+                        if(demoCalendar[i].status == 1)
+                        {
+                            $('#publishBtn').show();
                         }
 
                         $('.save-edit-event').hide();
@@ -502,23 +506,24 @@ var Calendar = function() {"use strict";
                 var isEdit=$('#hiddenEventId').val();
                 if(isEdit=="create")
                 {
-
                     var obj = $("input[type=hidden]");
 
-                    if(obj[1]=="Publish")
-                    {
+                    obj[1].name='hiddenField';
 
-                        savePublish(file)
-
-                    }else{
-                        uploadImage(file);
-                    }
+                    uploadImage(file);
 
                 }else{
 
+                    var obj = $("input[type=hidden]");
+
+                    obj[1].name='hiddenField';
+                    if(obj[1].value=="Publish")
+                    {
+                        saveEditPublish(file);
+                    }
+
                     $('#error-div-edit').html("");
                     $('#error-div-edit').hide();
-
                 }
 
 			}
@@ -569,16 +574,15 @@ var Calendar = function() {"use strict";
 
     }
 
-    function savePublish(file)
+    function saveEditPublish(file)
     {
-        var formData=new FormData(file[0]);
 
+        var id = $('#hiddenEventId').val();
         $.ajax({
-            url:'/save-event',
-            data: formData,
+            url:'/publish-edit-event/'+id,
             processData: false,
             contentType: false,
-            type: 'POST',
+            type: 'get',
             success: function(data){
 
                 if(data==1){
@@ -603,7 +607,6 @@ var Calendar = function() {"use strict";
         });
 
     }
-
 
     function uploadImageEdit(file)
     {
