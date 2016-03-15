@@ -161,31 +161,34 @@ class EventController extends Controller
 
             $publish=Event::find($id);
 
-            if($publish->status == 0)
-            {
-                if($user->role_id != 1) {
-                    $publish->published_by = 0;
-                    $publish->status=1;
-                }else{
-                    $publish->published_by = $user->id;
-                    $publish->status=2;
-                }
-                $publish->updated_at = Carbon::now();
 
-                $publish->save();
-                if($user->role_id != 1)
+            if($user->role_id != 1) {
+                $publish->published_by = 0;
+
+                if($publish->status == 0)
                 {
-                    Session::flash('message-success','Event sent for publish successfully !');
-                    return 1;
-                } else {
-                    Session::flash('message-success','Event published successfully !');
+                    $publish->status = 1;
+                }else{
+                    Session::flash('message-success','Event already sent for publish !');
                     return 1;
                 }
-            }else{
 
-                    Session::flash('message-success','Event already sent for publish successfully !');
-                    return 1;
+            } else {
+                $publish->published_by = $user->id;
+                $publish->status = 2;
             }
+            $publish->updated_at = Carbon::now();
+
+            $publish->save();
+            if($user->role_id != 1)
+            {
+                Session::flash('message-success','Event sent for publish successfully !');
+                return 1;
+            } else {
+                Session::flash('message-success','Event published successfully !');
+                return 1;
+            }
+
 
         }
 
