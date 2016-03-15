@@ -30,6 +30,7 @@
         {
             $data = array();
             $pageCount = 0;
+            $user = Auth::user();
             $val1 = User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
                 ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
                 ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
@@ -42,7 +43,16 @@
                 array_push($resultArr,$val->acl.'_'.$val->module_slug);
             }
             if(in_array('view_announcement',$resultArr) && in_array('view_achivement',$resultArr)) {
+              if($user->role_id == 1) {
                 $data = Event::where('event_type_id',1)->orWhere('event_type_id',2)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
+              } elseif ($user->role_id == 2) {
+                  $divisionCheck = Division::where('class_teacher_id',$user->id)->get();
+                    if($divisionCheck !== null) {
+                        //class teacher
+                    } else{
+                        // subject teacher
+                    }
+              }
             } elseif(in_array('view_announcement',$resultArr)) {
                 $data = Event::where('event_type_id',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
             } elseif(in_array('view_achivement',$resultArr)){

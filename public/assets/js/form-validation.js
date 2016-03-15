@@ -1737,7 +1737,7 @@ var FormValidator = function () {
             submitHandler: function (form) {
                 successHandler2.show();
                 errorHandler2.hide();
-                if($('#service4').prop('checked', true))
+                if($('#service4').prop('checked'))
                 {
                     var counts = $("#adminList :selected").length;
                     if(counts == 0)
@@ -1748,7 +1748,7 @@ var FormValidator = function () {
                         return true;
                     }
                 }
-                if($('#service1').prop('checked', true))
+                if($('#service1').prop('checked'))
                 {
                     var count = $("#teacherList :selected").length;
                     if(count == 0)
