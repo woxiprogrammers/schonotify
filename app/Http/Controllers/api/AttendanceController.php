@@ -228,10 +228,11 @@ class AttendanceController extends Controller
    * Date : 6/2/2016
    */
 
-    public function markAttendance(Requests\AttendanceRequest $request)
+    public function markAttendance(Requests\CreateAttendnce $request)
     {
         try{
-            $data=$request->all();
+            $data = $request->all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $attendanceData = array();
             $role = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
             if (!Empty($role)) {
@@ -294,10 +295,11 @@ class AttendanceController extends Controller
     * Date : 15/2/2016
     */
 
-    public function getStudentsList(Requests\AttendanceRequest $request )
+    public function getStudentsList(Requests\CreateAttendnce $request )
     {
         try{
             $data = $request->all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $finalList = array();
             $markedAttendance = array();
             $leaveApplied = array();
@@ -306,8 +308,9 @@ class AttendanceController extends Controller
                 $studentRole = UserRoles::where('slug',['student'])->pluck('id');
                 $studentList = User::where('role_id','=',$studentRole)
                     ->where('division_id','=', $divisionId['id'])
-                    ->select('id')
+                    ->select('id','first_name','last_name','roll_number')
                     ->get();
+                $i = 0;
                 if (!Empty($studentList)) {
                     $status = 200;
                     $message = "Successfully listed";
@@ -322,13 +325,12 @@ class AttendanceController extends Controller
                 }
                 $i = 0;
                 foreach ($studentList as $students) {
-                    $user =  User::where('id','=',$students['id'])->select('roll_number','first_name','last_name')->first();
-                    $finalList['studentList'][$i]['roll_number'] = $user['roll_number'];
-                    $finalList['studentList'][$i]['name'] = $user['first_name']." ".$user['last_name'];
                     $flag = 0;
                     foreach ($markedAttendance as $absents) {
                         if (in_array ($students['id'] , $absents)) {
                             $finalList['studentList'][$i]['id'] = $students['id'];
+                            $finalList['studentList'][$i]['name'] = $students['first_name']." ".$students['last_name'];
+                            $finalList['studentList'][$i]['roll_number'] = $students['roll_number'];
                             $finalList['studentList'][$i]['absent_status'] = 1;
                             $flag = 1;
                             $i++;
@@ -336,6 +338,8 @@ class AttendanceController extends Controller
                     }
                     if ($flag == 0) {
                         $finalList['studentList'][$i]['id'] = $students['id'];
+                        $finalList['studentList'][$i]['name'] = $students['first_name']." ".$students['last_name'];
+                        $finalList['studentList'][$i]['roll_number'] = $students['roll_number'];
                         $finalList['studentList'][$i]['absent_status'] = 0;
                         $i++;
                     }
@@ -350,6 +354,8 @@ class AttendanceController extends Controller
                     foreach ($leaveApplied as $absents) {
                         if (in_array($students['id'],$absents)) {
                             $finalList['studentList'][$i]['id']=$students['id'];
+                            $finalList['studentList'][$i]['name'] = $students['first_name']." ".$students['last_name'];
+                            $finalList['studentList'][$i]['roll_number'] = $students['roll_number'];
                             $finalList['studentList'][$i]['leave_status']=1;
                             $flag=1;
                             $i++;
@@ -357,6 +363,8 @@ class AttendanceController extends Controller
                     }
                     if ($flag == 0) {
                         $finalList['studentList'][$i]['id']=$students['id'];
+                        $finalList['studentList'][$i]['name'] = $students['first_name']." ".$students['last_name'];
+                        $finalList['studentList'][$i]['roll_number'] = $students['roll_number'];
                         $finalList['studentList'][$i]['leave_status']=0;
                         $i++;
                     }
@@ -394,6 +402,7 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $finalList = array();
             $markedAttendance = array();
             $leaveApplied = array();
@@ -468,7 +477,8 @@ class AttendanceController extends Controller
     public function viewAttendanceParent(Requests\viewAttendanceParent $request)
     {
        try{
-            $data=$request->all();
+           $data=$request->all();
+           $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
            $attendanceData = array();
             $studentDivisionId=User::where('id','=',$data['student_id'])->select('division_id')->first();
             $attendanceStatus=AttendanceStatus::where('date','=',$data['date'])
@@ -571,6 +581,8 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
+            $studentAttendance = array();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $division = array();
             $status = 200;
             $message = "Successfully Listed";
