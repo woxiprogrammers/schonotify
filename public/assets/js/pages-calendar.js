@@ -523,13 +523,9 @@ var Calendar = function() {"use strict";
                     var obj = $("input[type=hidden]");
 
                     obj[1].name='hiddenField';
-                    if(obj[1].value=="Publish")
-                    {
-                        saveEditPublish(file);
-                    }
 
-                    $('#error-div-edit').html("");
-                    $('#error-div-edit').hide();
+                    saveEditPublish(file);
+
                 }
 
 			}
@@ -593,8 +589,17 @@ var Calendar = function() {"use strict";
 
                 if(data==1){
                     window.location.href="/event/1";
+                }else{
+                    var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                        '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                        '</button>'+
+                        "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                        "</div>";
+                    $('#error-div-edit').show();
+                    $('#error-div-edit').html(str);
                 }
-                $('.events-modal').modal('hide');
+
             },
             error: function(data){
                 // Error...
@@ -607,7 +612,7 @@ var Calendar = function() {"use strict";
                 });
                 errorsHtml += '</ul></di>';
 
-                $('#error-div').html(errorsHtml);
+                $('#error-edit-div').html(errorsHtml);
             }
 
         });
