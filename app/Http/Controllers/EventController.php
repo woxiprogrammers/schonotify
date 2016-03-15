@@ -92,9 +92,18 @@ class EventController extends Controller
             }
 
             $insertData['created_by'] = $user->id;
+
             if($request->hiddenField == "Publish") {
-                $insertData['published_by'] = $user->id;
-                $insertData['status'] = 2;
+                if($user->role_id != 1)
+                {
+                    $insertData['published_by'] = 0;
+                    $insertData['status'] = 1;
+
+                }else{
+                    $insertData['published_by'] = $user->id;
+                    $insertData['status'] = 2;
+                }
+
             }else{
                 $insertData['published_by'] = 0;
                 $insertData['status'] = 0;
@@ -115,8 +124,15 @@ class EventController extends Controller
             if($result){
                 if($request->hiddenField == "Publish")
                 {
-                    Session::flash('message-success','Event created and published successfully !');
-                    return 1;
+                    if($user->role_id != 1)
+                    {
+                        Session::flash('message-success','Event created and sent for publish successfully !');
+                        return 1;
+                    } else {
+                        Session::flash('message-success','Event created and published successfully !');
+                        return 1;
+                    }
+
                 }else{
                     Session::flash('message-success','Event created successfully !');
                     return 1;
@@ -135,9 +151,15 @@ class EventController extends Controller
         if($request->authorize() === true) {
 
             $publish=Event::find($id);
-            $publish->published_by = $user->id;
+            if($user->role_id != 1) {
+                $publish->published_by = 0;
+                $publish->status=1;
+            }else{
+                $publish->published_by = $user->id;
+                $publish->status=2;
+            }
             $publish->updated_at = Carbon::now();
-            $publish->status=2;
+
             $publish->save();
             Session::flash('message-success','Event published successfully !');
             return 1;
