@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 
-class EditEventRequest extends Request
+class DeleteEventRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,16 +38,14 @@ class EditEventRequest extends Request
         {
             case 'GET':
 
-                if(in_array('update_event',$resultArr)) {
+                if(in_array('delete_event',$resultArr)) {
                     return true;
                 } else {
+
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
 
-                break;
-            case 'POST':
-                return true;
                 break;
 
             default:break;
@@ -63,18 +61,7 @@ class EditEventRequest extends Request
     public function rules()
     {
 
-        if(Request::method()=="POST")
-        {
-            return [
-                'eventName' => 'required',
-                'eventDescription' => 'required|string',
-                'eventStartDate' => 'required|date',
-                'eventEndDate' => 'required|date',
-                'image' => 'mimes:jpeg,jpg,png,gif|max:10000'
-            ];
-        }else{
-            return [];
-        }
+        return [];
 
     }
 }

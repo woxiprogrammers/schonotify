@@ -1575,7 +1575,196 @@ var FormValidator = function () {
         $('textarea.ckeditor').ckeditor();
     };
 
+    var runValidatorCreateAnnouncement = function () {
+        var form2 = $('#createAnnouncemnt');
+        var errorHandler2 = $('.errorHandler', form2);
+        var successHandler2 = $('.successHandler', form2);
+        $.validator.addMethod("getEditorValue", function () {
+            $("#editor1").val($('#createAnnouncemnt .summernote').code());
+            if ($("#editor1").val() != "" && $("#editor1").val().replace(/(<([^>]+)>)/ig, "") != "") {
+                $('#editor1').val('');
+                return true;
+            } else {
+                return false;
+            }
+        }, 'This field is required.');
+        form2.validate({
+            errorElement: "span", // contain the error msg in a small tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.hasClass("ckeditor")) {
+                    error.appendTo($(element).closest('.form-group'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                firstname2: {
+                    minlength: 2,
+                    required: true
+                },
+                lastname2: {
+                    minlength: 2,
+                    required: true
+                },
+                email2: {
+                    required: true,
+                    email: true
+                },
+                occupation: {
+                    required: true
+                },
+                dropdown: {
+                    required: true
+                },
+                classDropdown:{
+                    required:true
+                },
+                division:{
+                    required:true
+                },
+                services: {
+                    required: true,
+                    minlength: 2
+                },
+                creditcard: {
+                    required: true,
+                    creditcard: true
+                },
+                url: {
+                    required: true,
+                    url: true
+                },
+                zipcode2: {
+                    required: true,
+                    number: true,
+                    minlength: 5
+                },
+                city2: {
+                    required: true
+                },
+                editor1: "getEditorValue",
+                editor2: {
+                    required: true
+                },
+                class: {
+                    minlength: 2,
+                    required: true,
+                    remote: {
+                        url: "/check-class",
+                        type: "GET",
+                        data: {
+                            batch_id: function() {
+                                return $( "#dropdown" ).val();
+                            },
+                            classname:function() {
+                                return $( "#class" ).val();
+                            }
+                        }
+                    }
+                },
+                periods:{
+                    required:true,
+                    number: true,
+                    maxlength: 2,
+                    min:1,
+                    max:15
 
+                },
+                title: {
+                    minlength: 2,
+                    required: true
+                },
+                announcement:{
+                    minlength:15,
+                    required:true
+                },
+                userrole:{
+                    required: true,
+                    minlength: 1
+                }
+
+            },
+            messages: {
+                firstname: "Please specify your first name",
+                lastname: "Please specify your last name",
+                email: {
+                    required: "We need your email address to contact you",
+                    email: "Your email address must be in the format of name@domain.com"
+                },
+                services: {
+                    minlength: jQuery.validator.format("Please select  at least {0} types of Service")
+                },
+                periods:{
+                    maxlength: "You can not enter more than 2 digits",
+                    max: "Your number of period should not be exceed than 15"
+                },
+                announcement:{
+                    minlength:"Please enter more words."
+                },
+                userrole: {
+                    minlength: jQuery.validator.format("Please select  at least {0} user role"),
+                    required: "Please select at least one User Role"
+                },
+                class:{
+
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler2.hide();
+                errorHandler2.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form) {
+                successHandler2.show();
+                errorHandler2.hide();
+                if($('#service4').prop('checked'))
+                {
+                    var counts = $("#adminList :selected").length;
+                    if(counts == 0)
+                    {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                if($('#service1').prop('checked'))
+                {
+                    var count = $("#teacherList :selected").length;
+                    if(count == 0)
+                    {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+
+            }
+        });
+        CKEDITOR.disableAutoInline = true;
+        $('textarea.ckeditor').ckeditor();
+    };
 
     return {
 
@@ -1596,6 +1785,7 @@ var FormValidator = function () {
             runValidatorSubjectTeacher();
             runValidatorCreateStructure();
             runValidatorMarkAttendance();
+            runValidatorCreateAnnouncement();
 
         }
     };
