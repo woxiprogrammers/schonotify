@@ -293,6 +293,8 @@
 
     Route::get('/check-acl-edit-event/','EventController@editEventAcl');
 
+    Route::get('/delete-event/{id}','EventController@deleteEvent');
+
     Route::get('/get-user-event/{id}','EventController@getUserEvent');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));

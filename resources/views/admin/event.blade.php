@@ -160,9 +160,8 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button class="btn btn-info btn-o delete-event pull-left" onclick="confirm('Are you sure to publish this event?')">
-                                        Publish
-                                    </button>
+                                    <input class="btn btn-info btn-o delete-event pull-left" type="submit" value="Publish" id="publishBtn">
+
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
                                         Cancel
                                     </button>
@@ -170,9 +169,8 @@
                                         Delete
                                     </button>
 
-                                    <button class="btn btn-primary btn-o save-event" type="submit" id="upload">
-                                        Save
-                                    </button>
+                                    <input class="btn btn-primary btn-o save-event" type="submit" value="Save" id="upload">
+
 
                                     <button class="btn btn-primary btn-o save-edit-event" type="submit" id="saveEdit">
                                         Save
@@ -212,7 +210,7 @@
 <script src="/vendor/jquery-ui/jquery-ui-1.10.2.custom.min.js"></script>
 <script src="/vendor/moment/moment.min.js"></script>
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="/vendor/fullcalendar/fullcalendar.min.js"></script>
+<script src="/vendor/fullcalendar/fullcalendar.js"></script>
 <script src="/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
@@ -239,10 +237,40 @@
         window.location.href="/event/"+val;
     });
 
-    $('#saveEdit').on('click',function(e){
-        var formData=new FormData(file[0]);
+    $('#delBtn').click(function(){
+
+        var val=$('#hiddenEventId').val();
+
+        $.ajax({
+            url:'/delete-event/'+val,
+            processData: false,
+            contentType: false,
+            type: 'GET',
+            success: function(res){
+
+                if(res==1){
+
+                        window.location.href="/event/1";
+
+                    $('.events-modal').modal('hide');
+                }else{
+                    var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                        '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                        '</button>'+
+                        "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                        "</div>";
+                    $('#error-div-edit').show();
+                    $('#error-div-edit').html(str);
+                }
+
+            }
+
+        });
 
     });
+
+
 
     $('#editEventBtn').click(function(){
 
@@ -260,6 +288,8 @@
                     $('#showEvent').hide();
                     $('.save-edit-event').show();
                     $('#editEvent').show();
+                    $('#error-div-edit').html("");
+                    $('#error-div-edit').hide();
                 }else{
                     var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
                     '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
@@ -267,7 +297,7 @@
                     '</button>'+
                     "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
                 "</div>";
-
+                    $('#error-div-edit').show();
                     $('#error-div-edit').html(str);
                 }
 
@@ -276,6 +306,7 @@
         });
 
     });
+
 
 </script>
 
