@@ -51,6 +51,7 @@
                         </div>
 
                         <div class="col-sm-12">
+                            <input type="hidden" id="hiddenUserRole" value="{!! Auth::User()->role_id !!}">
                             <div id='full-calendar'>
 
                             </div>
