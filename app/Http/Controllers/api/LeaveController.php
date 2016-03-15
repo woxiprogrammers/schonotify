@@ -183,6 +183,7 @@ class LeaveController extends Controller
     public function approveLeave(Requests\LeaveRequest $request){
         try{
             $data = $request->all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             if(Leave::where('id', $data['leave_id'])->first()!=null) {
                 $status=Leave::where('id', $data['leave_id'])->pluck('status');
                 if ( $status == 1 ) {
@@ -221,6 +222,7 @@ class LeaveController extends Controller
     public function createLeave(Requests\LeaveRequest $request){
         try{
             $data = $request->all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $fromDate = strtotime($data['from_date']);
             $endDate = strtotime($data['end_date']);
             if ($fromDate > $endDate) {

@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 use App\User;
+use Illuminate\Contracts\Logging\Log;
 
-class PreviousAttendance extends Request
+class CreateAttendnce extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,30 +15,27 @@ class PreviousAttendance extends Request
      */
     public function authorize()
     {
-        $userToken=$this->request->all();
-        $userId='';
-        foreach($userToken as $userData)
-        {
-            $userId=$userData;
+        $userToken = $this->request->all();
+        $userId = '';
+        foreach ($userToken as $userData) {
+            $userId = $userData;
         }
-        $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
+        $val1 = User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
             ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
             ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
             ->where('users.id','=',$userId->id)
             ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
             ->get();
-        $resultArr=array();
+        $resultArr = array();
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
-
         }
-        if(in_array('Edit_attendance',$resultArr) ) {
-            return true;}
-        else{
+        if(in_array('Create_attendance',$resultArr) ){
+            return true;
+        } else {
             return false;
-
-        }
+          }
     }
 
     /**
@@ -48,10 +46,7 @@ class PreviousAttendance extends Request
     public function rules()
     {
         return [
-            'batch_id'=>'required',
-            'class_id'=>'required',
-            'division_id'=>'required',
-            'date'=>'required|date',
-        ];
-    }
+              'date'=>'required|date',
+              ];
+        }
 }
