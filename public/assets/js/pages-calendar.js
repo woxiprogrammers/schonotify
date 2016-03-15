@@ -304,7 +304,7 @@ var Calendar = function() {"use strict";
                         if(date1._d == "Invalid Date")
                         {
                             date1=date;
-                            $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start));
+                            $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start).add(1, 'hours'));
                         }
 
                         var hoursStart = (date._i.split(' '))[1].split(':')[0];
@@ -407,17 +407,22 @@ var Calendar = function() {"use strict";
                             $('#delBtn').hide();
                         }else{
                             $('.edit-event').show();
+                            var val = $('#hiddenUserRole').val();
+                            if(val == 2 && demoCalendar[i].status == 1) {
+                                $('#publishBtn').hide();
+                            }else{
+                                $('#publishBtn').show();
+                            }
                             $('#delBtn').show();
-                        }
-
-                        if(demoCalendar[i].status == 1)
-                        {
-                            $('#publishBtn').show();
                         }
 
                         $('.save-edit-event').hide();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
+
+                        $('#error-div-edit').html("");
+
+                        $('#error-div-edit').hide();
 
 					}
 				}
