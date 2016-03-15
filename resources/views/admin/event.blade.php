@@ -64,7 +64,7 @@
                     <div class="modal-dialog modal-dialog modal-md">
                         <div class="modal-content">
                             <form class="form-full-event" id="create_event_form">
-                                <input type="hidden" id="hiddenEventId">
+                                <input type="hidden" name="hiddenEventId" id="hiddenEventId">
                                 <div class="modal-body">
                                     <div id="editEvent">
                                         <div class="form-group ">
@@ -170,7 +170,6 @@
                                     </button>
 
                                     <input class="btn btn-primary btn-o save-event" type="submit" value="Save" id="upload">
-
 
                                     <button class="btn btn-primary btn-o save-edit-event" type="submit" id="saveEdit">
                                         Save
