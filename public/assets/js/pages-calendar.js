@@ -1,7 +1,6 @@
 var Calendar = function() {"use strict";
 	var dateToShow, calendar, demoCalendar, eventClass, eventCategory, subViewElement, subViewContent, $eventDetail;
 
-
 	var defaultRange = new Object;
 	defaultRange.start = moment();
 	defaultRange.end = moment().add(1, 'days');
@@ -275,6 +274,7 @@ var Calendar = function() {"use strict";
 
 
 			},
+
 			eventClick: function(calEvent, jsEvent, view) {
 
                 eventInputDateHandler();
@@ -284,6 +284,7 @@ var Calendar = function() {"use strict";
 				for(var i = 0; i < demoCalendar.length; i++) {
 
 					if(demoCalendar[i]._id == eventId) {
+
                         $("#hiddenEventId").val(demoCalendar[i].id);
 						$(".form-full-event #event-id").val(eventId);
 						$(".form-full-event #event-name").val(demoCalendar[i].title);
@@ -300,6 +301,11 @@ var Calendar = function() {"use strict";
                         var date=new moment(demoCalendar[i].start);
                         var date1=new moment(demoCalendar[i].end);
 
+                        if(date1._d == "Invalid Date")
+                        {
+                            date1=date;
+                        }
+
                         var hoursStart = (date._i.split(' '))[1].split(':')[0];
 
                         var suffixStart = (hoursStart >= 12)? 'pm' : 'am';
@@ -307,7 +313,6 @@ var Calendar = function() {"use strict";
                         hoursStart = (hoursStart == '00')? 12 : hoursStart;
 
                         var minutesStart = (date._i.split(' '))[1].split(':')[1];
-
 
                         var hoursEnd = (date1._i.split(' '))[1].split(':')[0];
 
@@ -392,9 +397,19 @@ var Calendar = function() {"use strict";
                         $('#showEvent').show();
                         $('#editEvent').hide();
                         $('.save-event').hide();
-                        $('.edit-event').show();
+
                         $('#error-div').html('');
-                        $('#delBtn').hide();
+                        if(demoCalendar[i].status == 2)
+                        {
+                            $('.edit-event').hide();
+                            $('#publishBtn').hide();
+                            $('#delBtn').hide();
+                        }else{
+                            $('.edit-event').show();
+                            $('#publishBtn').show();
+                            $('#delBtn').show();
+                        }
+
                         $('.save-edit-event').hide();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
@@ -408,9 +423,9 @@ var Calendar = function() {"use strict";
 
 		});
 
-        $('#loadmoreajaxloader').hide();
+        demoCalendar = $("#full-calendar").fullCalendar( 'clientEvents');
 
-        demoCalendar = $("#full-calendar").fullCalendar("clientEvents");
+        $('#loadmoreajaxloader').hide();
 
         $('.fc-toolbar .fc-right').hide();
 	};
@@ -418,6 +433,18 @@ var Calendar = function() {"use strict";
 	var runFullCalendarValidation = function(el) {
 
 		var formEvent = $('#create_event_form');
+
+        $.validator.addMethod("greaterThan",
+            function(value, element, params) {
+
+                if (!/Invalid|NaN/.test(new moment(value)._i)) {
+                    return new moment(value)._i > new moment($(params).val())._i;
+                }
+
+                return isNaN(value) && isNaN($(params).val())
+                    || (Number(value) > Number($(params).val()));
+
+            },'Must be greater than {0}.');
 
 		formEvent.validate({
 			errorElement: "span", // contain the error msg in a span tag
@@ -439,7 +466,8 @@ var Calendar = function() {"use strict";
 				},
 				eventEndDate: {
 					required: true,
-					date: true
+					date: true,
+                    greaterThan:'#start-date-time'
 				}
 
 
@@ -450,7 +478,8 @@ var Calendar = function() {"use strict";
                 eventDescription: {
                     required:"* Please specify the event description.",
                     minlength:"* Please select at least 15 characters."
-                }
+                },
+                eventEndDate:{greaterThan:"Please select end date time must be greater than start time."}
 			},
 			highlight: function(element) {
 				$(element).closest('.help-block').removeClass('valid');
@@ -470,12 +499,25 @@ var Calendar = function() {"use strict";
 			submitHandler: function(form) {
 
                 var file=$(form);
-;               var isEdit=$('#hiddenEventId').val();
+                var isEdit=$('#hiddenEventId').val();
                 if(isEdit=="create")
                 {
-                    uploadImage(file);
+
+                    var obj = $("input[type=hidden]");
+
+                    if(obj[1]=="Publish")
+                    {
+
+                        savePublish(file)
+
+                    }else{
+                        uploadImage(file);
+                    }
+
                 }else{
 
+                    $('#error-div-edit').html("");
+                    $('#error-div-edit').hide();
 
                 }
 
@@ -527,6 +569,42 @@ var Calendar = function() {"use strict";
 
     }
 
+    function savePublish(file)
+    {
+        var formData=new FormData(file[0]);
+
+        $.ajax({
+            url:'/save-event',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data){
+
+                if(data==1){
+                    window.location.href="/event/1";
+                }
+                $('.events-modal').modal('hide');
+            },
+            error: function(data){
+                // Error...
+                var errors = $.parseJSON(data.responseText);
+
+                var errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                $.each( errors, function( key, value ) {
+                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                });
+                errorsHtml += '</ul></di>';
+
+                $('#error-div').html(errorsHtml);
+            }
+
+        });
+
+    }
+
+
     function uploadImageEdit(file)
     {
         var formData=new FormData(file[0]);
@@ -562,8 +640,6 @@ var Calendar = function() {"use strict";
 
     }
 
-
-
 	var eventInputDateHandler = function() {
 		var startInput = $('#start-date-time');
 		var endInput = $('#end-date-time');
@@ -576,7 +652,10 @@ var Calendar = function() {"use strict";
 		endInput.on("dp.change", function(e) {
             endInput.data("DateTimePicker").minDate(dateToday);
 		});
+
 	};
+
+
 	return {
 		init: function() {
 
