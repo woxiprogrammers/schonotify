@@ -67,9 +67,6 @@ class EventController extends Controller
     public function saveEvent(Requests\WebRequests\EventRequest $request)
     {
 
-
-        dd($request);
-
         if($request->authorize()){
 
             $user=Auth::User();
@@ -95,7 +92,14 @@ class EventController extends Controller
             }
 
             $insertData['created_by'] = $user->id;
-            $insertData['published_by'] = 0;
+            if($request->hiddenField == "Publish") {
+                $insertData['published_by'] = $user->id;
+                $insertData['status'] = 2;
+            }else{
+                $insertData['published_by'] = 0;
+                $insertData['status'] = 0;
+            }
+
             $insertData['created_at'] = Carbon::now();
             $insertData['updated_at'] = Carbon::now();
 
@@ -109,8 +113,15 @@ class EventController extends Controller
             $result=EventImages::insert($insertImageData);
 
             if($result){
-                Session::flash('message-success','Event created successfully !');
-                return 1;
+                if($request->hiddenField == "Publish")
+                {
+                    Session::flash('message-success','Event created and published successfully !');
+                    return 1;
+                }else{
+                    Session::flash('message-success','Event created successfully !');
+                    return 1;
+                }
+
             }
 
         }

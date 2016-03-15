@@ -502,20 +502,17 @@ var Calendar = function() {"use strict";
                 var isEdit=$('#hiddenEventId').val();
                 if(isEdit=="create")
                 {
-
                     var obj = $("input[type=hidden]");
 
-                    if(obj[1]=="Publish")
+                    obj[1].name='hiddenField';
+                    if(obj[1].value=="Publish")
                     {
-
-                        savePublish(file)
-
+                        savePublish(file);
                     }else{
                         uploadImage(file);
                     }
 
                 }else{
-
                     $('#error-div-edit').html("");
                     $('#error-div-edit').hide();
 
