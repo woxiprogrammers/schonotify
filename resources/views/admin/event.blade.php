@@ -160,9 +160,9 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    @if(Auth::User()->role_id == 1)
+
                                     <input class="btn btn-info btn-o pull-left" type="submit" value="Publish" id="publishBtn">
-                                    @endif
+
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
                                         Cancel
                                     </button>
