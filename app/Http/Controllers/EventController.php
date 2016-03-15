@@ -15,6 +15,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -65,6 +66,10 @@ class EventController extends Controller
 
     public function saveEvent(Requests\WebRequests\EventRequest $request)
     {
+
+
+        dd($request);
+
         if($request->authorize()){
 
             $user=Auth::User();
@@ -245,5 +250,31 @@ class EventController extends Controller
         $user=User::where('id','=',$id)->select('first_name','last_name')->get();
 
         return $user;
+    }
+
+    public function deleteEvent(Requests\WebRequests\DeleteEventRequest $request,$id)
+    {
+        if($request->authorize()===true)
+        {
+
+            $delete = Event::join('event_images','events.id','=','event_images.event_id')->where('events.id','=',$id)->first();
+
+            if($delete->image!="" || $delete->image!=null)
+            {
+
+                       unlink('uploads/events/'.$delete->image);
+
+            }
+
+
+            EventImages::where('event_id',$delete->id)->delete();
+            Event::where('id','=',$id)->delete();
+
+
+            Session::flash('message-success','Event deleted successfully !');
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }

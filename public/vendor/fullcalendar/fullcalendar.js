@@ -30,7 +30,6 @@ $.fn.fullCalendar = function(options) {
 		var element = $(_element);
 		var calendar = element.data('fullCalendar'); // get the existing calendar object (if any)
 		var singleRes; // the returned value of this single method call
-
 		// a method call
 		if (typeof options === 'string') {
 			if (calendar && $.isFunction(calendar[options])) {
@@ -52,8 +51,8 @@ $.fn.fullCalendar = function(options) {
 	});
 	
 	return res;
-};
 
+};
 
 var complexOptions = [ // names of options that are objects whose properties should be combined
 	'header',
@@ -150,7 +149,7 @@ function massageOverrides(input) {
 	return overrides;
 }
 
-;;
+
 
 // exports
 fc.intersectionToSeg = intersectionToSeg;
@@ -3251,7 +3250,6 @@ var Grid = fc.Grid = RowRenderer.extend({
 		if (!this.view.calendar.isSelectionRangeAllowed(range)) {
 			return null;
 		}
-
 		return range;
 	},
 
@@ -5138,7 +5136,6 @@ DayGrid.mixin({
 					seg = levelSegs[j];
 
 					emptyCellsUntil(seg.leftCol);
-
 					// create a container that occupies or more columns. append the event element.
 					td = $('<td class="fc-event-container"/>').append(seg.el);
 					if (seg.leftCol != seg.rightCol) {
@@ -5148,12 +5145,11 @@ DayGrid.mixin({
 						loneCellMatrix[i][col] = td;
 					}
 
-					while (col <= seg.rightCol) {
+					while (col <= seg.rightCol+1) {
 						cellMatrix[i][col] = td;
 						segMatrix[i][col] = seg;
 						col++;
 					}
-
 					tr.append(td);
 				}
 			}
