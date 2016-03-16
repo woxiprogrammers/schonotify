@@ -59,16 +59,13 @@ class EventController extends Controller
      +   * Function Name: saveEvent
      +   * Param: $request
      +   * Return: save event.
-     +   * Desc: it will save event data in database.
+     +   * Desc: it will save event data in database or save and publish event.
      +   * Developed By: Suraj Bande
      +   * Date: 5/3/2016
      +   */
 
     public function saveEvent(Requests\WebRequests\EventRequest $request)
     {
-
-
-        dd($request);
 
         if($request->authorize()){
 
@@ -95,7 +92,23 @@ class EventController extends Controller
             }
 
             $insertData['created_by'] = $user->id;
-            $insertData['published_by'] = 0;
+
+            if($request->hiddenField == "Publish") {
+                if($user->role_id != 1)
+                {
+                    $insertData['published_by'] = 0;
+                    $insertData['status'] = 1;
+
+                }else{
+                    $insertData['published_by'] = $user->id;
+                    $insertData['status'] = 2;
+                }
+
+            }else{
+                $insertData['published_by'] = 0;
+                $insertData['status'] = 0;
+            }
+
             $insertData['created_at'] = Carbon::now();
             $insertData['updated_at'] = Carbon::now();
 
@@ -109,8 +122,22 @@ class EventController extends Controller
             $result=EventImages::insert($insertImageData);
 
             if($result){
-                Session::flash('message-success','Event created successfully !');
-                return 1;
+                if($request->hiddenField == "Publish")
+                {
+                    if($user->role_id != 1)
+                    {
+                        Session::flash('message-success','Event created and sent for publish successfully !');
+                        return 1;
+                    } else {
+                        Session::flash('message-success','Event created and published successfully !');
+                        return 1;
+                    }
+
+                }else{
+                    Session::flash('message-success','Event created successfully !');
+                    return 1;
+                }
+
             }
 
         }
@@ -118,13 +145,60 @@ class EventController extends Controller
     }
 
     /*
-     +   * Function Name: saveEventCheckAcl
-     +   * Param: $request
-     +   * Return: access true or false.
-     +   * Desc: it will check acl to create event.
-     +   * Developed By: Suraj Bande
-     +   * Date: 8/3/2016
-     +   */
+         +   * Function Name: publishEditEvent
+         +   * Param: $request,$id
+         +   * Return: status of event publish.
+         +   * Desc: it will return published event if it is already created.
+         +   * Developed By: Suraj Bande
+         +   * Date: 13/3/2016
+         +   */
+
+    public function publishEditEvent(Requests\WebRequests\EventCreateRequest $request,$id)
+    {
+        $user=Auth::User();
+
+        if($request->authorize() === true) {
+
+            $publish=Event::find($id);
+
+            if($user->role_id != 1) {
+
+                $publish->published_by = 0;
+
+                $publish->status = 1;
+
+            } else {
+                $publish->published_by = $user->id;
+                $publish->status = 2;
+            }
+
+            $publish->updated_at = Carbon::now();
+
+            $publish->save();
+
+            if($user->role_id != 1)
+            {
+                Session::flash('message-success','Event sent for publish successfully !');
+                return 1;
+            } else {
+                Session::flash('message-success','Event published successfully !');
+                return 1;
+            }
+
+
+        }
+
+    }
+
+
+        /*
+         +   * Function Name: saveEventCheckAcl
+         +   * Param: $request
+         +   * Return: access true or false.
+         +   * Desc: it will check acl to create event.
+         +   * Developed By: Suraj Bande
+         +   * Date: 8/3/2016
+         +   */
 
     public function saveEventCheckAcl(Requests\WebRequests\EventCreateRequest $request)
     {
@@ -134,6 +208,15 @@ class EventController extends Controller
             return 0;
         }
     }
+
+    /*
+         +   * Function Name: editEventAcl
+         +   * Param: $request
+         +   * Return: access true or false.
+         +   * Desc: it will check acl to edit event.
+         +   * Developed By: Suraj Bande
+         +   * Date: 8/3/2016
+         +   */
 
     public function editEventAcl(Requests\WebRequests\EditEventRequest $request)
     {

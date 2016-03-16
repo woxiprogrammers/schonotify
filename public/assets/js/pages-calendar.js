@@ -290,7 +290,7 @@ var Calendar = function() {"use strict";
 						$(".form-full-event #event-name").val(demoCalendar[i].title);
 						$(".form-full-event #event-description").val(demoCalendar[i].content);
 						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start));
-						$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end));
+                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end));
 
 						if(demoCalendar[i].category == "" || typeof demoCalendar[i].category == "undefined") {
 							eventCategory = "Generic";
@@ -304,6 +304,7 @@ var Calendar = function() {"use strict";
                         if(date1._d == "Invalid Date")
                         {
                             date1=date;
+                            $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start).add(1, 'hours'));
                         }
 
                         var hoursStart = (date._i.split(' '))[1].split(':')[0];
@@ -406,13 +407,22 @@ var Calendar = function() {"use strict";
                             $('#delBtn').hide();
                         }else{
                             $('.edit-event').show();
-                            $('#publishBtn').show();
+                            var val = $('#hiddenUserRole').val();
+                            if(val == 2 && demoCalendar[i].status == 1) {
+                                $('#publishBtn').hide();
+                            }else{
+                                $('#publishBtn').show();
+                            }
                             $('#delBtn').show();
                         }
 
                         $('.save-edit-event').hide();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
+
+                        $('#error-div-edit').html("");
+
+                        $('#error-div-edit').hide();
 
 					}
 				}
@@ -502,22 +512,19 @@ var Calendar = function() {"use strict";
                 var isEdit=$('#hiddenEventId').val();
                 if(isEdit=="create")
                 {
-
                     var obj = $("input[type=hidden]");
 
-                    if(obj[1]=="Publish")
-                    {
+                    obj[1].name='hiddenField';
 
-                        savePublish(file)
-
-                    }else{
-                        uploadImage(file);
-                    }
+                    uploadImage(file);
 
                 }else{
 
-                    $('#error-div-edit').html("");
-                    $('#error-div-edit').hide();
+                    var obj = $("input[type=hidden]");
+
+                    obj[1].name='hiddenField';
+
+                    saveEditPublish(file);
 
                 }
 
@@ -569,22 +576,30 @@ var Calendar = function() {"use strict";
 
     }
 
-    function savePublish(file)
+    function saveEditPublish(file)
     {
-        var formData=new FormData(file[0]);
 
+        var id = $('#hiddenEventId').val();
         $.ajax({
-            url:'/save-event',
-            data: formData,
+            url:'/publish-edit-event/'+id,
             processData: false,
             contentType: false,
-            type: 'POST',
+            type: 'get',
             success: function(data){
 
                 if(data==1){
                     window.location.href="/event/1";
+                }else{
+                    var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                        '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                        '</button>'+
+                        "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                        "</div>";
+                    $('#error-div-edit').show();
+                    $('#error-div-edit').html(str);
                 }
-                $('.events-modal').modal('hide');
+
             },
             error: function(data){
                 // Error...
@@ -597,13 +612,12 @@ var Calendar = function() {"use strict";
                 });
                 errorsHtml += '</ul></di>';
 
-                $('#error-div').html(errorsHtml);
+                $('#error-edit-div').html(errorsHtml);
             }
 
         });
 
     }
-
 
     function uploadImageEdit(file)
     {

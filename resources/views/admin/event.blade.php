@@ -51,6 +51,7 @@
                         </div>
 
                         <div class="col-sm-12">
+                            <input type="hidden" id="hiddenUserRole" value="{!! Auth::User()->role_id !!}">
                             <div id='full-calendar'>
 
                             </div>
@@ -64,7 +65,7 @@
                     <div class="modal-dialog modal-dialog modal-md">
                         <div class="modal-content">
                             <form class="form-full-event" id="create_event_form">
-                                <input type="hidden" id="hiddenEventId">
+                                <input type="hidden" name="hiddenEventId" id="hiddenEventId">
                                 <div class="modal-body">
                                     <div id="editEvent">
                                         <div class="form-group ">
@@ -160,17 +161,18 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <input class="btn btn-info btn-o delete-event pull-left" type="submit" value="Publish" id="publishBtn">
+
+                                    <input class="btn btn-info btn-o pull-left" type="submit" value="Publish" id="publishBtn">
 
                                     <button class="btn btn-info btn-o pull-left" type="button" data-dismiss="modal">
                                         Cancel
                                     </button>
+
                                     <button class="btn btn-danger btn-o delete-event" id="delBtn">
                                         Delete
                                     </button>
 
                                     <input class="btn btn-primary btn-o save-event" type="submit" value="Save" id="upload">
-
 
                                     <button class="btn btn-primary btn-o save-edit-event" type="submit" id="saveEdit">
                                         Save
