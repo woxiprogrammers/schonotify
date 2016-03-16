@@ -101,15 +101,28 @@
 													<input type="text" id="end-date-time" style="background-color: #fff !important;"  class="form-control underline" name="eventEndDate" />
 													<i class="ti-calendar"></i> </span>
                                         </div>
+
                                         <div class="form-group">
 
                                             <label>
                                                 Select Image
                                             </label>
+                                            <div class="editImageDiv">
+                                                <div class=" col-sm-2 img-event-align-div" id="field-name-image"></div>
+                                                <div class="col-sm-5">
+                                                    <h5 id="img-title" class="text-bold padding-top-30"></h5>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <button type="button" class="btn btn-primary btn-red pull-left margin-top-20" id="removeBatch" onclick="deleteEventImage()"><i class="glyphicon glyphicon-trash"></i></button>
+                                                </div>
+                                            </div>
                                             <div id="imageUploader">
                                                 <input class="form-control" type="file" name="image" id="img-file">
                                             </div>
+                                            <input type="hidden" id="isNewImage" name="isNewImage">
+
                                         </div>
+
                                     </div>
                                     <div id="showEvent">
                                         <div id="error-div-edit"></div>
@@ -147,6 +160,7 @@
                                                 <div class="col-sm-12">
                                                     <img class="thumbnail" id="event-image"  width="200">
                                                 </div>
+
                                                 <div class="col-sm-12">
 
                                                     <span id="published-by-div">
@@ -174,9 +188,7 @@
 
                                     <input class="btn btn-primary btn-o save-event" type="submit" value="Save" id="upload">
 
-                                    <button class="btn btn-primary btn-o save-edit-event" type="submit" id="saveEdit">
-                                        Save
-                                    </button>
+                                    <input class="btn btn-primary btn-o save-edit-event" type="submit" value="Update" id="saveEdit">
 
                                     <a class="btn btn-primary btn-o edit-event" id="editEventBtn">
                                         Edit
@@ -252,9 +264,10 @@
 
                 if(res==1){
 
-                        window.location.href="/event/1";
+                    window.location.href="/event/1";
 
                     $('.events-modal').modal('hide');
+
                 }else{
                     var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
                         '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
@@ -271,8 +284,6 @@
         });
 
     });
-
-
 
     $('#editEventBtn').click(function(){
 
@@ -309,6 +320,14 @@
 
     });
 
+
+
+    function deleteEventImage()
+    {
+        $('.editImageDiv').hide();
+        $('#isNewImage').val(2); //status value of isNewImage is  0 : no new image 1: new image 2:deleted image
+        $('#img-file').attr('disabled',false);
+    }
 
 </script>
 
