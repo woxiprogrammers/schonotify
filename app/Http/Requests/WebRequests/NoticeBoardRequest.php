@@ -30,7 +30,6 @@ class NoticeBoardRequest extends Request
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
         }
-
         switch($ch)
         {
             case 'GET':

@@ -44,22 +44,141 @@
             }
             if(in_array('view_announcement',$resultArr) && in_array('view_achivement',$resultArr)) {
               if($user->role_id == 1) {
-                $data = Event::where('event_type_id',1)->orWhere('event_type_id',2)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
+                            $dataPublish = Event::where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $dataUnpublish = Event::where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $data = array_merge($dataPublish,$dataUnpublish);
               } elseif ($user->role_id == 2) {
-                  $divisionCheck = Division::where('class_teacher_id',$user->id)->get();
-                    if($divisionCheck !== null) {
-                        //class teacher
-                    } else{
-                        // subject teacher
+                  $divisionCheck = Division::where('class_teacher_id',$user->id)->first();
+                    if ($divisionCheck !== null) {
+                            $dataCreatedBy = Event::where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $dataForUser = EventUserRoles::where('event_user_roles.user_id',$user->id)
+                                                           ->join('events','event_user_roles.event_id','=','events.id')
+                                                           ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                           ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $dataForUserDivision = EventUserRoles::where('event_user_roles.division_id',$divisionCheck->id)
+                                                                ->join('events','event_user_roles.event_id','=','events.id')
+                                                                ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $dataForUserSubjectDivision = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                                                                ->join('event_user_roles','division_subjects.division_id','=','event_user_roles.division_id')
+                                                                                ->join('events','event_user_roles.event_id','=','events.id')
+                                                                                ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                                ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                             $data = array_merge($dataCreatedBy,$dataForUser,$dataForUserDivision,$dataForUserSubjectDivision);
+                             $data = array_unique($data,SORT_REGULAR);
+                    } else {
+                            $dataCreatedBy = Event::where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $dataForUser = EventUserRoles::where('event_user_roles.user_id',$user->id)
+                                                            ->join('events','event_user_roles.event_id','=','events.id')
+                                                            ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                            ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $dataForUserSubjectDivision = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                                                                ->join('event_user_roles','division_subjects.division_id','=','event_user_roles.division_id')
+                                                                                ->join('events','event_user_roles.event_id','=','events.id')
+                                                                                ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                                ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $data = array_merge($dataCreatedBy,$dataForUser,$dataForUserSubjectDivision);
+                            $data = array_unique($data,SORT_REGULAR);
                     }
               }
             } elseif(in_array('view_announcement',$resultArr)) {
-                $data = Event::where('event_type_id',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
+                    if($user->role_id == 1) {
+                        $dataPublish = Event::where('event_type_id',1)->where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                        $dataUnpublish = Event::where('event_type_id',1)->where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                        $data = array_merge($dataPublish,$dataUnpublish);
+                    } elseif ($user->role_id == 2) {
+                        $divisionCheck = Division::where('class_teacher_id',$user->id)->first();
+                        if ($divisionCheck !== null) {
+                            $dataCreatedBy = Event::where('event_type_id',1)->where('created_by',$user->id)->where('status',1)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $dataForUser = EventUserRoles::where('event_user_roles.user_id',$user->id)
+                                                            ->where('events.event_type_id',1)
+                                                            ->join('events','event_user_roles.event_id','=','events.id')
+                                                            ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                            ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $dataForUserDivision = EventUserRoles::where('event_user_roles.division_id',$divisionCheck->id)
+                                                                    ->where('events.event_type_id',1)
+                                                                    ->join('events','event_user_roles.event_id','=','events.id')
+                                                                    ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                    ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $dataForUserSubjectDivision = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                                                                ->where('events.event_type_id',1)
+                                                                                ->join('event_user_roles','division_subjects.division_id','=','event_user_roles.division_id')
+                                                                                ->join('events','event_user_roles.event_id','=','events.id')
+                                                                                ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                                ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $data = array_merge($dataCreatedBy,$dataForUser,$dataForUserDivision,$dataForUserSubjectDivision);
+                            $data = array_unique($data,SORT_REGULAR);
+                        } else {
+                            $dataCreatedBy = Event::where('event_type_id',1)->where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $dataForUser = EventUserRoles::where('event_user_roles.user_id',$user->id)
+                                                            ->where('events.event_type_id',1)
+                                                            ->join('events','event_user_roles.event_id','=','events.id')
+                                                            ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                            ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $dataForUserSubjectDivision = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                                                                ->where('events.event_type_id',1)
+                                                                                ->join('event_user_roles','division_subjects.division_id','=','event_user_roles.division_id')
+                                                                                ->join('events','event_user_roles.event_id','=','events.id')
+                                                                                ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                                ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                            $data = array_merge($dataCreatedBy,$dataForUser,$dataForUserSubjectDivision);
+                            $data = array_unique($data,SORT_REGULAR);
+                        }
+                    }
             } elseif(in_array('view_achivement',$resultArr)){
-                $data = Event::where('event_type_id',2)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get();
+                        if($user->role_id == 1) {
+                            $dataPublish = Event::where('event_type_id',2)->where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $dataUnpublish = Event::where('event_type_id',2)->where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                            $data = array_merge($dataPublish,$dataUnpublish);
+                        } elseif ($user->role_id == 2) {
+                            $divisionCheck = Division::where('class_teacher_id',$user->id)->first();
+                            if ($divisionCheck !== null) {
+                                $dataCreatedBy = Event::where('event_type_id',1)->where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                                $dataForUser = EventUserRoles::where('event_user_roles.user_id',$user->id)
+                                                                ->where('events.event_type_id',2)
+                                                                ->join('events','event_user_roles.event_id','=','events.id')
+                                                                ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                                $dataForUserDivision = EventUserRoles::where('event_user_roles.division_id',$divisionCheck->id)
+                                                                        ->where('events.event_type_id',2)
+                                                                        ->join('events','event_user_roles.event_id','=','events.id')
+                                                                        ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                        ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                                $dataForUserSubjectDivision = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                                                                    ->where('events.event_type_id',2)
+                                                                                    ->join('event_user_roles','division_subjects.division_id','=','event_user_roles.division_id')
+                                                                                    ->join('events','event_user_roles.event_id','=','events.id')
+                                                                                    ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                                    ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                                $data = array_merge($dataCreatedBy,$dataForUser,$dataForUserDivision,$dataForUserSubjectDivision);
+                                $data = array_unique($data,SORT_REGULAR);
+                            } else {
+                                $dataCreatedBy = Event::where('event_type_id',2)->where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                                $dataForUser = EventUserRoles::where('event_user_roles.user_id',$user->id)
+                                                                ->where('events.event_type_id',2)
+                                                                ->join('events','event_user_roles.event_id','=','events.id')
+                                                                ->select('events.id as event_id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                                $dataForUserSubjectDivision = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                                                                    ->where('events.event_type_id',2)
+                                                                                    ->join('event_user_roles','division_subjects.division_id','=','event_user_roles.division_id')
+                                                                                    ->join('events','event_user_roles.event_id','=','events.id')
+                                                                                    ->select('events.id','events.event_type_id','events.created_by','events.published_by','events.title','events.status','events.detail','events.priority','events.created_at','events.updated_at')
+                                                                                    ->skip($pageCount*4)->take(4)->orderBy('events.created_at', 'desc')->get()->toArray();
+                                $data = array_merge($dataCreatedBy,$dataForUser,$dataForUserSubjectDivision);
+                                $data = array_unique($data,SORT_REGULAR);
+                            }
+                        }
             }
 
-            return view('noticeBoard');
+            $count = 0;
+            foreach($data as $row) {
+                $dataDate[]=date('F',strtotime($row['created_at']));
+                $count++;
+            }
+
+            $dataDate = array_unique($dataDate,SORT_REGULAR);
+            return view('noticeBoard')->with(compact('data','dataDate'));
         }
 
         public function loadMore()
@@ -415,7 +534,7 @@
                     }
                 } elseif($request->buttons == 'save'){
                     $annoucement['created_by'] = $user->id;
-                    $annoucement['status'] = 1;
+                    $annoucement['status'] = 0;
                 }
                 $eventId = Event::insertGetId($annoucement);
                 if($eventId != null) {
