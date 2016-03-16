@@ -85,7 +85,7 @@
                                             <b>{!! $row['detail'] !!}</b>
                                         </div>
                                         <div class="readmore">
-                                            <a href="detailAnnouncement/{!! $row['event_id']!!}" class="btn btn-primary btn-o btn-wide">
+                                            <a href="detailAnnouncement/{!! $row['id']!!}" class="btn btn-primary btn-o btn-wide">
                                                 Read More <i class="fa fa-arrow-circle-right"></i>
                                             </a>
                                         </div>
