@@ -435,7 +435,7 @@ class AttendanceController extends Controller
                 foreach ($markedAttendance as $absents) {
                     $finalList[$i]['student_id'] = $absents['id'];
                     $leaveApplied = LeaveRequest::select('*')->whereRaw("('$date' between from_date and end_date)")
-                        ->where('student_id', $absents['id'])
+                        ->where('student_id', '=', $absents['id'])
                         ->select('student_id as id','status','created_at','updated_at','approved_by')->first();
                     if(!Empty($leaveApplied)) {
                         $finalList[$i]['leave_status'] = $leaveApplied['status'];
@@ -449,9 +449,13 @@ class AttendanceController extends Controller
                         $finalList[$i]['applied_on'] = " ";
                         $finalList[$i]['approved_at'] = " ";
                         $finalList[$i]['approved_by'] = " ";
+                    } else if ($finalList[$i]['leave_status'] == 1){
+                        $finalList[$i]['applied_on'] = date("M j y",strtotime(date("Y-m-d ",strtotime($leaveApplied['created_at']))));
+                        $finalList[$i]['approved_at'] = " ";
+                        $finalList[$i]['approved_by'] = " ";
                     } else {
-                        $finalList[$i]['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leaveApplied['created_at']))));
-                        $finalList[$i]['approved_at'] = date("M j",strtotime(date("Y-m-d ",strtotime($leaveApplied['updated_at']))));
+                        $finalList[$i]['applied_on'] = date("M j y",strtotime(date("Y-m-d ",strtotime($leaveApplied['created_at']))));
+                        $finalList[$i]['approved_at'] = date("M j y",strtotime(date("Y-m-d ",strtotime($leaveApplied['updated_at']))));
                         $user =  User::where('id','=',$leaveApplied['approved_by'])->select('first_name','last_name')->first();;
                         $finalList[$i]['approved_by'] = $user['first_name']." ".$user['last_name'];
                     }

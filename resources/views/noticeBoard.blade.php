@@ -51,39 +51,47 @@
             <div class="row">
                 <div class="col-md-12">
                     <div id="timeline">
+
+
                         <div class="timeline" id="tmlin">
                             <div class="spine"></div>
-                            <div class="date_separator" id="november">
-                                <span>{!! strtoupper(Date('F Y')) !!}</span>
-                            </div>
                             <ul class="columns">
+                                @foreach($data as $row)
+                                @foreach($dataDate as $data)
+                                @if(date('F',strtotime($row['created_at'])) == $data)
+                                <div class="date_separator" id="november">
+                                    <span>{!! $data !!}</span>
+                                </div>
+
+                                @if($row['event_type_id'] == 1 )
                                 <li>
                                     <div class="timeline_element partition-white">
                                         <div class="timeline_date">
                                             <div>
                                                 <div class="inline-block">
-                                                    <span class="day text-bold">02</span>
+                                                    <span class="day text-bold">{!! date('d',strtotime($row['created_at'])) !!}</span>
                                                 </div>
                                                 <div class="inline-block">
-                                                    <span class="block week-day text-extra-large">Wensdey</span>
-                                                    <span class="block month text-large text-light">1:00 PM</span>
+                                                    <span class="block week-day text-extra-large">{!! date('l',strtotime($row['created_at'])) !!}</span>
+                                                    <span class="block month text-large text-light">{!! date('g:i a',strtotime($row['created_at'])) !!}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="timeline_title">
                                             <i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>
-                                            <h4 class="light-text no-margin padding-5">Parent Meet for this month</h4>
+                                            <h4 class="light-text no-margin padding-5" >{!! $row['title'] !!}</h4>
                                         </div>
-                                        <div class="timeline_content">
-                                            <b>Parent Meet</b> for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
+                                        <div class="timeline_content" >
+                                            <b>{!! $row['detail'] !!}</b>
                                         </div>
                                         <div class="readmore">
-                                            <a href="detailAnnouncement" class="btn btn-primary btn-o btn-wide">
+                                            <a href="detailAnnouncement/{!! $row['id']!!}" class="btn btn-primary btn-o btn-wide">
                                                 Read More <i class="fa fa-arrow-circle-right"></i>
                                             </a>
                                         </div>
                                     </div>
                                 </li>
+                                @else
                                 <li>
                                     <div class="timeline_element partition-gray">
                                         <div class="timeline_date">
@@ -117,13 +125,16 @@
                                         </div>
                                     </div>
                                 </li>
+                                @endif
+                                @endif
+                                @endforeach
 
+                                @endforeach
                             </ul>
 
-
-
-
                         </div>
+
+
                         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                     </div>
                 </div>
