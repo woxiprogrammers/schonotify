@@ -71,11 +71,14 @@ class EventController extends Controller
 
             $user=Auth::User();
 
+            $request->eventEndDate=date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+            $endDate=date('Y-m-d H:i:s',strtotime("+1 day",strtotime($request->eventEndDate)));
+
             $insertData['title'] = $request->eventName;
             $insertData['event_type_id'] = 3;
             $insertData['detail'] = $request->eventDescription;
             $insertData['start_date'] = date_format(date_create($request->eventStartDate),'Y-m-d H:i:s');
-            $insertData['end_date'] = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+            $insertData['end_date'] = $endDate;
 
             if(Input::hasFile('image')){
                 $image = $request->file('image');
@@ -379,6 +382,10 @@ class EventController extends Controller
     public function saveEditEvent(Request $request)
     {
 
+        $request->eventEndDate=date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+
+        $endDate=date('Y-m-d H:i:s',strtotime("+1 day",strtotime($request->eventEndDate)));
+
         $event = Event::join('event_images','event_images.event_id','=','events.id')->where('events.id','=',$request->hiddenEventId)->first();
 
         $eventImage = EventImages::where('event_id','=',$request->hiddenEventId)->first();
@@ -431,7 +438,7 @@ class EventController extends Controller
         $eventToUpdate->title = $request->eventName;
         $eventToUpdate->detail = $request->eventDescription;
         $eventToUpdate->start_date = date_format(date_create($request->eventStartDate),'Y-m-d H:i:s');
-        $eventToUpdate->end_date = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+        $eventToUpdate->end_date = $endDate;
         $eventToUpdate->updated_at = Carbon::now();
         $eventToUpdate->save();
 
