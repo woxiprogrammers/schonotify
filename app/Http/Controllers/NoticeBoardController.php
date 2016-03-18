@@ -28,26 +28,19 @@
         }
         public function show(NoticeBoardRequest $request)
         {
+
             $data = array();
             $pageCount = 0;
             $user = Auth::user();
-            $val1 = User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
-                ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
-                ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
-                ->where('users.id','=',Auth::User()->id)
-                ->select('users.id','acl_master.slug as acl','modules.slug as module_slug')
-                ->get();
-            $resultArr=array();
-            foreach($val1 as $val)
-            {
-                array_push($resultArr,$val->acl.'_'.$val->module_slug);
-            }
-            if(in_array('view_announcement',$resultArr) && in_array('view_achivement',$resultArr)) {
+
+            if($request->authorize() === 1) {
               if($user->role_id == 1) {
-                            $dataPublish = Event::where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
-                            $dataUnpublish = Event::where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
-                            $data = array_merge($dataPublish,$dataUnpublish);
+                  //admin will get self created , all pending and publish announcement / achievement [1,2]
+                    $dataPublish = Event::where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                    $dataUnpublish = Event::where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
+                    $data = array_merge($dataPublish,$dataUnpublish);
               } elseif ($user->role_id == 2) {
+                  //teacher will get self created , self pending and all publish announcement / achievement [1,2]
                   $divisionCheck = Division::where('class_teacher_id',$user->id)->first();
                     if ($divisionCheck !== null) {
                             $dataCreatedBy = Event::where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
@@ -81,7 +74,7 @@
                             $data = array_unique($data,SORT_REGULAR);
                     }
               }
-            } elseif(in_array('view_announcement',$resultArr)) {
+            } elseif($request->authorize() === 2) {
                     if($user->role_id == 1) {
                         $dataPublish = Event::where('event_type_id',1)->where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
                         $dataUnpublish = Event::where('event_type_id',1)->where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
@@ -125,7 +118,7 @@
                             $data = array_unique($data,SORT_REGULAR);
                         }
                     }
-            } elseif(in_array('view_achivement',$resultArr)){
+            } elseif($request->authorize() === 3){
                         if($user->role_id == 1) {
                             $dataPublish = Event::where('event_type_id',2)->where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
                             $dataUnpublish = Event::where('event_type_id',2)->where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
@@ -169,8 +162,11 @@
                                 $data = array_unique($data,SORT_REGULAR);
                             }
                         }
+            }else{
+                return Redirect::to('/');
             }
 
+            $dataDate = array();
             $count = 0;
             foreach($data as $row) {
                 $dataDate[]=date('F',strtotime($row['created_at']));
