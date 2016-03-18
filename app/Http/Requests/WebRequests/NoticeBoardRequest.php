@@ -33,18 +33,18 @@ class NoticeBoardRequest extends Request
         switch($ch)
         {
             case 'GET':
-                if(in_array('view_announcement',$resultArr) && in_array('view_achivement',$resultArr)) {
-                    return true;
+                if(in_array('view_announcement',$resultArr) && in_array('view_achievement',$resultArr)) {
+                    return 1;
                 } elseif(in_array('view_announcement',$resultArr)) {
                     Session::flash('message-error','Currently you do not have permission to access view achivement functionality. Please contact administrator to grant you access !');
-                    return true;
-                } elseif(in_array('view_achivement',$resultArr)) {
+                    return 2;
+                } elseif(in_array('view_achievement',$resultArr)) {
                     Session::flash('message-error','Currently you do not have permission to access view announcement functionality. Please contact administrator to grant you access !');
-                    return true;
+                    return 3;
                 }
                 else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
-                    return true;
+                    return 4;
                 }
                 break;
 

@@ -79,6 +79,16 @@ class ModuleSeeder extends Seeder
                 'slug' => 'message',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
+            ],[
+                'title' => 'Achievement',
+                'slug' => 'achievement',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],[
+                'title' => 'Announcement',
+                'slug' => 'announcement',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]
         ]);
     }
