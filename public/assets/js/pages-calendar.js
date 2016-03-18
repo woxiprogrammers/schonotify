@@ -313,7 +313,7 @@ var Calendar = function() {"use strict";
                         }
 
 						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start));
-                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end));
+                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end).add(-1,'days'));
 
 						if(demoCalendar[i].category == "" || typeof demoCalendar[i].category == "undefined") {
 							eventCategory = "Generic";
@@ -321,14 +321,8 @@ var Calendar = function() {"use strict";
 							eventCategory = demoCalendar[i].category;
 						}
 
-                        var date=new moment(demoCalendar[i].start);
-                        var date1=new moment(demoCalendar[i].end);
-
-                        if(date1._d == "Invalid Date")
-                        {
-                            date1=date;
-                            $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start).add(1, 'hours'));
-                        }
+                        var date = new moment(demoCalendar[i].start);
+                        var date1 = new moment(demoCalendar[i].end).add(-1,'days');
 
                         var hoursStart = (date._i.split(' '))[1].split(':')[0];
 
