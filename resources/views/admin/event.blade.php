@@ -224,7 +224,7 @@
 <script src="/vendor/jquery-ui/jquery-ui-1.10.2.custom.min.js"></script>
 <script src="/vendor/moment/moment.min.js"></script>
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="/vendor/fullcalendar/fullcalendar.js"></script>
+<script src="/vendor/fullcalendar/fullcalendar.min.js"></script>
 <script src="/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
@@ -262,7 +262,7 @@
             type: 'GET',
             success: function(res){
 
-                if(res==1){
+                if(res == 1){
 
                     window.location.href="/event/1";
 

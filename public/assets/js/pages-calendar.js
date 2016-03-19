@@ -30,10 +30,11 @@ var Calendar = function() {"use strict";
 
                 var startDate=new moment(res[i]['start']);
 
-                var  endDate=new moment(res[i]['end']);
+                var  endDate=new moment(res[i]['end']).add(1,'days').format('YYYY-MM-DD HH:mm:ss');
 
                 res[i]['start']=startDate._i;
-                res[i]['end']=endDate._i;
+                res[i]['end']=endDate;
+
                 if(res[i]['status']==0)
                 {
                     res[i]['className']='event-to-do';
@@ -312,8 +313,8 @@ var Calendar = function() {"use strict";
                             $('#isNewImage').val(0);
                         }
 
-						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start));
-                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end).subtract(1,'days'));
+						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(moment(moment(demoCalendar[i].start)._i).format('MM/DD/YYYY hh:mm A')));
+                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(moment(moment(demoCalendar[i].end)._i).subtract(1,'days').format('MM/DD/YYYY hh:mm A')));
 
 						if(demoCalendar[i].category == "" || typeof demoCalendar[i].category == "undefined") {
 							eventCategory = "Generic";
@@ -427,8 +428,12 @@ var Calendar = function() {"use strict";
                             var val = $('#hiddenUserRole').val();
                             if(val == 2 && demoCalendar[i].status == 1) {
                                 $('#publishBtn').hide();
+                                $('.edit-event').hide();
+                                $('#delBtn').hide();
                             }else{
                                 $('#publishBtn').show();
+                                $('.edit-event').show();
+                                $('#delBtn').show();
                             }
 
                         }
@@ -696,7 +701,10 @@ var Calendar = function() {"use strict";
 		var startInput = $('#start-date-time');
 		var endInput = $('#end-date-time');
 		startInput.datetimepicker();
-		endInput.datetimepicker();
+		endInput.datetimepicker({
+            format: 'MM/DD/YYYY hh:mm A'
+
+        });
         var dateToday=new Date();
 		startInput.on("dp.change", function(e) {
             startInput.data("DateTimePicker").minDate(dateToday);
