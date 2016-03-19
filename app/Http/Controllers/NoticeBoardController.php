@@ -35,7 +35,7 @@
 
             if($request->authorize() === 1) {
               if($user->role_id == 1) {
-                  //admin will get self created , all pending and publish announcement / achievement [1,2]
+                  //admin will get self created , assigned for publish, assigned published and self pending announcement / achievement [1,2]
                     $dataPublish = Event::where('status',2)->orWhere('status',1)->skip($pageCount*4)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
                     $dataUnpublish = Event::where('created_by',$user->id)->where('status',0)->take(4)->orderBy('created_at', 'desc')->get()->toArray();
                     $data = array_merge($dataPublish,$dataUnpublish);
