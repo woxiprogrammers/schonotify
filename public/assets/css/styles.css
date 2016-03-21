@@ -11802,7 +11802,7 @@ a.control_next {
 
 .loader-position-event{
     width: 100%;
-    height: 100%;
+    height: 160%;
     position: absolute;
     background: rgba(0, 0, 0, 0.26);
     z-index: 99999;
@@ -11811,7 +11811,7 @@ a.control_next {
 
 
 .loader-position-event img{
-    margin-top: 170px;
+    margin-top: 270px;
     background: #FFF;
 }
 
