@@ -30,10 +30,11 @@ var Calendar = function() {"use strict";
 
                 var startDate=new moment(res[i]['start']);
 
-                var  endDate=new moment(res[i]['end']);
+                var  endDate=new moment(res[i]['end']).add(1,'days').format('YYYY-MM-DD HH:mm:ss');
 
                 res[i]['start']=startDate._i;
-                res[i]['end']=endDate._i;
+                res[i]['end']=endDate;
+
                 if(res[i]['status']==0)
                 {
                     res[i]['className']='event-to-do';
@@ -86,7 +87,9 @@ var Calendar = function() {"use strict";
                         $('.edit-event').hide();
                         $('.save-edit-event').hide();
                         $('#delBtn').hide();
+                        $('#publishBtn').show();
                         $('#error-div').html('');
+                        $('.editImageDiv').hide();
                     }
                 }
             });
@@ -102,6 +105,7 @@ var Calendar = function() {"use strict";
 			$(".form-full-event #start-date-time").val("").data("DateTimePicker").destroy();
 			$(".form-full-event #end-date-time").val("").data("DateTimePicker").destroy();
 			$(".event-categories[value='job']").prop('checked', true);
+            $('.editImageDiv').hide();
 		});
 
 		$('#event-categories div.event-category').each(function() {
@@ -216,7 +220,10 @@ var Calendar = function() {"use strict";
                                     $('.edit-event').hide();
                                     $('#error-div').html('');
                                     $('.events-modal').modal();
+                                    $('#publishBtn').show();
                                     $('.save-edit-event').hide();
+                                    $('.editImageDiv').hide();
+
                                 }
 
                             }
@@ -231,6 +238,8 @@ var Calendar = function() {"use strict";
                         $(".form-full-event #start-date-time").data("DateTimePicker").destroy();
                         $(".form-full-event #end-date-time").data("DateTimePicker").destroy();
                         alert('You cant create event for previous date.');
+                        $('#publishBtn').show();
+                        $('.editImageDiv').hide();
                     }
 
                 } else {
@@ -266,6 +275,7 @@ var Calendar = function() {"use strict";
                                 $('#error-div').html('');
                                 $('.events-modal').modal();
                                 $('.save-edit-event').hide();
+                                $('.editImageDiv').hide();
                             }
 
                         }
@@ -289,8 +299,22 @@ var Calendar = function() {"use strict";
 						$(".form-full-event #event-id").val(eventId);
 						$(".form-full-event #event-name").val(demoCalendar[i].title);
 						$(".form-full-event #event-description").val(demoCalendar[i].content);
-						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(demoCalendar[i].start));
-						$(".form-full-event #end-date-time").data("DateTimePicker").date(moment(demoCalendar[i].end));
+
+                        if(demoCalendar[i].image != null)
+                        {
+                            $(".form-full-event #img-title").html(demoCalendar[i].image);
+                            $('.editImageDiv').show();
+                            $(".form-full-event #img-file").attr('disabled',true);
+                            $(".form-full-event #field-name-image").html('<img class="image-align-event" src="/uploads/events/'+ demoCalendar[i].image +'">');
+                            $('#isNewImage').val(0);
+                        }else{
+                            $('.editImageDiv').hide();
+                            $('#img-file').attr('disabled',false);
+                            $('#isNewImage').val(0);
+                        }
+
+						$(".form-full-event #start-date-time").data("DateTimePicker").date(moment(moment(moment(demoCalendar[i].start)._i).format('MM/DD/YYYY hh:mm A')));
+                        $(".form-full-event #end-date-time").data("DateTimePicker").date(moment(moment(moment(demoCalendar[i].end)._i).subtract(1,'days').format('MM/DD/YYYY hh:mm A')));
 
 						if(demoCalendar[i].category == "" || typeof demoCalendar[i].category == "undefined") {
 							eventCategory = "Generic";
@@ -298,13 +322,8 @@ var Calendar = function() {"use strict";
 							eventCategory = demoCalendar[i].category;
 						}
 
-                        var date=new moment(demoCalendar[i].start);
-                        var date1=new moment(demoCalendar[i].end);
-
-                        if(date1._d == "Invalid Date")
-                        {
-                            date1=date;
-                        }
+                        var date = new moment(demoCalendar[i].start);
+                        var date1 = new moment(demoCalendar[i].end).subtract(1,'days');
 
                         var hoursStart = (date._i.split(' '))[1].split(':')[0];
 
@@ -338,7 +357,7 @@ var Calendar = function() {"use strict";
                             $("#status-show").html('<span class="label label-default">Published</span>');
                         }
 
-                        if(demoCalendar[i].image == null || demoCalendar[i].image == "") {
+                        if(demoCalendar[i].image == null) {
                             $("#event-image").prop('src','/uploads/events/picture.svg');
                         } else {
                             $("#event-image").prop('src','/uploads/events/'+demoCalendar[i].image);
@@ -406,17 +425,34 @@ var Calendar = function() {"use strict";
                             $('#delBtn').hide();
                         }else{
                             $('.edit-event').show();
+                            var val = $('#hiddenUserRole').val();
+                            if(val == 2 && demoCalendar[i].status == 1) {
+                                $('#publishBtn').hide();
+                                $('.edit-event').hide();
+                                $('#delBtn').hide();
+                            }else{
+                                $('#publishBtn').show();
+                                $('.edit-event').show();
+                                $('#delBtn').show();
+                            }
+
+                        }
+
+                        if(val == 1 && demoCalendar[i].status == 1) {
                             $('#delBtn').show();
                         }
 
-                        if(demoCalendar[i].status == 1)
-                        {
+                        if(demoCalendar[i].status == 0){
                             $('#publishBtn').show();
                         }
 
                         $('.save-edit-event').hide();
 
 						$(".event-categories[value='" + eventCategory + "']").prop('checked', true);
+
+                        $('#error-div-edit').html("");
+
+                        $('#error-div-edit').hide();
 
 					}
 				}
@@ -474,7 +510,6 @@ var Calendar = function() {"use strict";
                     greaterThan:'#start-date-time'
 				}
 
-
 			},
 			messages: {
 				eventName: "* Please specify the event title",
@@ -508,7 +543,7 @@ var Calendar = function() {"use strict";
                 {
                     var obj = $("input[type=hidden]");
 
-                    obj[1].name='hiddenField';
+                    obj[3].name='hiddenField';
 
                     uploadImage(file);
 
@@ -516,14 +551,24 @@ var Calendar = function() {"use strict";
 
                     var obj = $("input[type=hidden]");
 
-                    obj[1].name='hiddenField';
-                    if(obj[1].value=="Publish")
+                    obj[3].name='hiddenField';
+
+                    if(obj[3].value == "Update")
                     {
+
+                        var img = $('#img-file').val();
+
+                        if(img != "")
+                        {
+                            $('#isNewImage').val(1);
+                        }
+
+                        updateEvent(file);
+
+                    }else{
                         saveEditPublish(file);
                     }
 
-                    $('#error-div-edit').html("");
-                    $('#error-div-edit').hide();
                 }
 
 			}
@@ -574,6 +619,15 @@ var Calendar = function() {"use strict";
 
     }
 
+    /*
+     +   * Function Name: saveEditPublish
+     +   * Param: file
+     +   * Return: 1 or error.
+     +   * Desc: it will publish status published from edit form.
+     +   * Developed By: Suraj Bande
+     +   * Date: 15/3/2016
+     +   */
+
     function saveEditPublish(file)
     {
 
@@ -584,11 +638,19 @@ var Calendar = function() {"use strict";
             contentType: false,
             type: 'get',
             success: function(data){
-
                 if(data==1){
                     window.location.href="/event/1";
+                }else{
+                    var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                        '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                        '<span area-hidden="true">&times;</span>'+
+                        '</button>'+
+                        "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                        "</div>";
+                    $('#error-div-edit').show();
+                    $('#error-div-edit').html(str);
                 }
-                $('.events-modal').modal('hide');
+
             },
             error: function(data){
                 // Error...
@@ -601,14 +663,23 @@ var Calendar = function() {"use strict";
                 });
                 errorsHtml += '</ul></di>';
 
-                $('#error-div').html(errorsHtml);
+                $('#error-edit-div').html(errorsHtml);
             }
 
         });
 
     }
 
-    function uploadImageEdit(file)
+    /*
+     +   * Function Name: updateEvent
+     +   * Param: file
+     +   * Return: 1 or error.
+     +   * Desc: it will update event.
+     +   * Developed By: Suraj Bande
+     +   * Date: 15/3/2016
+     +   */
+
+    function updateEvent(file)
     {
         var formData=new FormData(file[0]);
 
@@ -619,35 +690,21 @@ var Calendar = function() {"use strict";
             contentType: false,
             type: 'POST',
             success: function(data){
-
                 if(data==1){
                     window.location.href="/event/1";
                 }
-                $('.events-modal').modal('hide');
-            },
-            error: function(data){
-                // Error...
-                var errors = $.parseJSON(data.responseText);
-
-                var errorsHtml = '<div class="alert alert-danger"><ul>';
-
-                $.each( errors, function( key, value ) {
-                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
-                });
-                errorsHtml += '</ul></di>';
-
-                $('#error-div').html(errorsHtml);
             }
-
         });
-
     }
 
 	var eventInputDateHandler = function() {
 		var startInput = $('#start-date-time');
 		var endInput = $('#end-date-time');
 		startInput.datetimepicker();
-		endInput.datetimepicker();
+		endInput.datetimepicker({
+            format: 'MM/DD/YYYY hh:mm A'
+
+        });
         var dateToday=new Date();
 		startInput.on("dp.change", function(e) {
             startInput.data("DateTimePicker").minDate(dateToday);

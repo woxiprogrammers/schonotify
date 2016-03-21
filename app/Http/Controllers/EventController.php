@@ -71,11 +71,14 @@ class EventController extends Controller
 
             $user=Auth::User();
 
+            $request->eventEndDate=date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+            $endDate=date('Y-m-d H:i:s',strtotime("+1 day",strtotime($request->eventEndDate)));
+
             $insertData['title'] = $request->eventName;
             $insertData['event_type_id'] = 3;
             $insertData['detail'] = $request->eventDescription;
             $insertData['start_date'] = date_format(date_create($request->eventStartDate),'Y-m-d H:i:s');
-            $insertData['end_date'] = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+            $insertData['end_date'] = $endDate;
 
             if(Input::hasFile('image')){
                 $image = $request->file('image');
@@ -161,25 +164,21 @@ class EventController extends Controller
 
             $publish=Event::find($id);
 
-
             if($user->role_id != 1) {
+
                 $publish->published_by = 0;
 
-                if($publish->status == 0)
-                {
-                    $publish->status = 1;
-                }else{
-                    Session::flash('message-success','Event already sent for publish !');
-                    return 1;
-                }
+                $publish->status = 1;
 
             } else {
                 $publish->published_by = $user->id;
                 $publish->status = 2;
             }
+
             $publish->updated_at = Carbon::now();
 
             $publish->save();
+
             if($user->role_id != 1)
             {
                 Session::flash('message-success','Event sent for publish successfully !');
@@ -339,29 +338,112 @@ class EventController extends Controller
         return $user;
     }
 
+    /*
+     +   * Function Name: deleteEvent
+     +   * Param: $id
+     +   * Return: 1.
+     +   * Desc: it will delete event.
+     +   * Developed By: Suraj Bande
+     +   * Date: 15/3/2016
+     +   */
+
     public function deleteEvent(Requests\WebRequests\DeleteEventRequest $request,$id)
     {
-        if($request->authorize()===true)
+        if($request->authorize() === true)
         {
 
             $delete = Event::join('event_images','events.id','=','event_images.event_id')->where('events.id','=',$id)->first();
 
-            if($delete->image!="" || $delete->image!=null)
-            {
+            if($delete->image != "" || $delete->image != null) {
 
                        unlink('uploads/events/'.$delete->image);
 
             }
 
-
             EventImages::where('event_id',$delete->id)->delete();
             Event::where('id','=',$id)->delete();
-
 
             Session::flash('message-success','Event deleted successfully !');
             return 1;
         }else{
             return 0;
         }
+    }
+
+    /*
+     +   * Function Name: saveEditEvent
+     +   * Param: $request
+     +   * Return: 1.
+     +   * Desc: it will update event.
+     +   * Developed By: Suraj Bande
+     +   * Date: 15/3/2016
+     +   */
+
+    public function saveEditEvent(Request $request)
+    {
+
+        $request->eventEndDate=date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+
+        $endDate=date('Y-m-d H:i:s',strtotime("+1 day",strtotime($request->eventEndDate)));
+
+        $event = Event::join('event_images','event_images.event_id','=','events.id')->where('events.id','=',$request->hiddenEventId)->first();
+
+        $eventImage = EventImages::where('event_id','=',$request->hiddenEventId)->first();
+
+        $eventToUpdate = Event::where('id','=',$request->hiddenEventId)->first();
+
+        if($request->isNewImage == 1)
+        {
+            if($request->hasFile('image'))
+            {
+
+                if($event->image != null)
+                {
+                    unlink('uploads/events/'.$event->image);
+                }
+
+                $image = $request->file('image');
+                $name = $request->file('image')->getClientOriginalName();
+                $filename = time()."_".$name;
+                $path = public_path('uploads/events/');
+                if (! file_exists($path)) {
+                    File::makeDirectory('uploads/events/', $mode = 0777, true, true);
+                }
+
+                $image->move($path,$filename);
+
+                //update image
+            } else {
+
+                unlink('uploads/events/'.$event->image);
+                $filename = null;
+                //delete existing image
+            }
+
+        }else if($request->isNewImage == 2) {
+            //delete existing image
+            unlink('uploads/events/'.$event->image);
+            $filename = null;
+
+        } else {
+
+            $filename = $eventImage->image;
+            //no change in image
+        }
+
+        $eventImage->image = $filename;
+        $eventImage->updated_at = Carbon::now();
+        $eventImage->save();
+
+        $eventToUpdate->title = $request->eventName;
+        $eventToUpdate->detail = $request->eventDescription;
+        $eventToUpdate->start_date = date_format(date_create($request->eventStartDate),'Y-m-d H:i:s');
+        $eventToUpdate->end_date = $endDate;
+        $eventToUpdate->updated_at = Carbon::now();
+        $eventToUpdate->save();
+
+        Session::flash('message-success','Event updated successfully !');
+        return 1;
+
     }
 }

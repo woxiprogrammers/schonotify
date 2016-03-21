@@ -295,6 +295,8 @@
 
     Route::get('/delete-event/{id}','EventController@deleteEvent');
 
+    Route::post('/save-edit-event','EventController@saveEditEvent');
+
     Route::get('/get-user-event/{id}','EventController@getUserEvent');
 
     Route::get('/publish-edit-event/{id}','EventController@publishEditEvent');

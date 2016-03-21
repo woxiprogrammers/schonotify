@@ -1293,7 +1293,43 @@ class ModulesAclsTableSeeder extends Seeder
                 'acl_id' => '5',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
-            ],
+            ],[
+                'user_id' => '1',
+                'module_id' => '12',
+                'acl_id' => '1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],[
+                'user_id' => '1',
+                'module_id' => '13',
+                'acl_id' => '1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],[
+                'user_id' => '2',
+                'module_id' => '12',
+                'acl_id' => '1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],[
+                'user_id' => '3',
+                'module_id' => '13',
+                'acl_id' => '1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],[
+                'user_id' => '4',
+                'module_id' => '12',
+                'acl_id' => '1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],[
+                'user_id' => '4',
+                'module_id' => '13',
+                'acl_id' => '1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
             
         ]);
     }
