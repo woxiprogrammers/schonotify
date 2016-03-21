@@ -182,9 +182,9 @@
                                         Cancel
                                     </button>
 
-                                    <button class="btn btn-danger btn-o delete-event" id="delBtn">
+                                    <a href="javascript:void(0);" class="btn btn-danger btn-o delete-event" id="delBtn">
                                         Delete
-                                    </button>
+                                    </a>
 
                                     <input class="btn btn-primary btn-o save-event" type="submit" value="Save" id="upload">
 
@@ -254,7 +254,8 @@
     $('#delBtn').click(function(){
 
         var val=$('#hiddenEventId').val();
-
+        $('#delBtn').prop('disabled',true);
+        $('#loadmoreajaxloader').show();
         $.ajax({
             url:'/delete-event/'+val,
             processData: false,
@@ -269,6 +270,8 @@
                     $('.events-modal').modal('hide');
 
                 }else{
+                    $('#loadmoreajaxloader').hide();
+                    $('#delBtn').prop('disabled',false);
                     var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
                         '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
                         '<span area-hidden="true">&times;</span>'+
@@ -286,7 +289,8 @@
     });
 
     $('#editEventBtn').click(function(){
-
+        $('#editEventBtn').prop('disabled',true);
+        $('#loadmoreajaxloader').show();
         $.ajax({
             url:'/check-acl-edit-event',
             processData: false,
@@ -303,7 +307,12 @@
                     $('#editEvent').show();
                     $('#error-div-edit').html("");
                     $('#error-div-edit').hide();
+
+                    $('#editEventBtn').prop('disabled',false);
+                    $('#loadmoreajaxloader').hide();
                 }else{
+                    $('#editEventBtn').prop('disabled',false);
+                    $('#loadmoreajaxloader').hide();
                     var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
                     '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
                         '<span area-hidden="true">&times;</span>'+
