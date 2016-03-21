@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Batch;
 use App\Classes;
 use App\Division;
+use App\LeaveRequest;
 use App\LeaveType;
 use App\SubjectClassDivision;
 use Carbon\Carbon;
@@ -42,7 +43,7 @@ class LeaveController extends Controller
                 {
                     $message = 'Successfully Listed';
                     $status = 200;
-                    $leaves = Leave::where('student_id', $student_id)
+                    $leaves = LeaveRequest::where('student_id', $student_id)
                         ->where('status', '1') //1 is for pending leaves and 2 for approved leaves.
                         ->orderBy('created_at', 'ASC')
                         ->get()->toArray();
@@ -115,14 +116,14 @@ class LeaveController extends Controller
                 {
                     $message = 'Successfully Listed';
                     $status = 200;
-                    $leaves = Leave::where('division_id', $division['id'])
+                    $leaves = LeaveRequest::where('division_id', $division['id'])
                         ->where('status', 1) //1 is for pending leaves and 2 for approved leaves.
                         ->orderBy('created_at', 'ASC')
                         ->get()->toArray();
                 } else if( $flag == 2 ) {
                     $message = 'Successfully Listed';
                     $status = 200;
-                    $leaves = Leave::where('division_id', $division['id'])
+                    $leaves = LeaveRequest::where('division_id', $division['id'])
                         ->where('status', '2') //1 is for pending leaves and 2 for approved leaves.
                         ->orderBy('created_at', 'ASC')
                         ->get()->toArray();
@@ -184,10 +185,10 @@ class LeaveController extends Controller
         try{
             $data = $request->all();
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
-            if(Leave::where('id', $data['leave_id'])->first()!=null) {
-                $status=Leave::where('id', $data['leave_id'])->pluck('status');
+            if(LeaveRequest::where('id', $data['leave_id'])->first()!=null) {
+                $status = LeaveRequest::where('id', $data['leave_id'])->pluck('status');
                 if ( $status == 1 ) {
-                    Leave::where('id', $data['leave_id'])->update(['status' => 2,'approved_by' => $data['teacher']['id']]);
+                    LeaveRequest::where('id', $data['leave_id'])->update(['status' => 2,'approved_by' => $data['teacher']['id']]);
                     $message = 'Leave Approved Successfully';
                     $status = 200;
                 } else {
@@ -241,7 +242,7 @@ class LeaveController extends Controller
                 $createData['end_date'] = $data['end_date'];
                 $createData['created_at'] = Carbon::now();
                 $createData['updated_at'] = Carbon::now();
-                Leave::insert($createData);
+                LeaveRequest::insert($createData);
             }
         } catch (\Exception $e) {
             $status = 500;

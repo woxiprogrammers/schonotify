@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 
 class AttendanceController extends Controller
@@ -232,42 +233,45 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
+            $status = 200;
+            $message = "Attendance Successfully Marked";
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $attendanceData = array();
             $role = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
             if (!Empty($role)) {
-                $studentData=$data['student_id'];
+                $studentData = $data['student_id'];
                 if (!Empty($studentData)) {
                     $markedAttendance = Attendance::where('teacher_id','=',$data['teacher']['id'])
                         ->where('date','=',$data['date'])->get()->toArray();
                     if (!Empty($markedAttendance)) {
                         Attendance::where('date',$data['date'])->delete();
                         foreach($studentData as $value) {
-                            $attendanceData['teacher_id']=$data['teacher']['id'];
-                            $attendanceData['date']=$data['date'];
-                            $attendanceData['student_id']=$value;
-                            $attendanceData['created_at']= Carbon::now();
-                            $attendanceData['updated_at']= Carbon::now();
+                            $attendanceData['teacher_id'] = $data['teacher']['id'];
+                            $attendanceData['date'] = $data['date'];
+                            $attendanceData['division_id'] = $role['id'];
+                            $attendanceData['student_id'] = $value;
+                            $attendanceData['created_at'] = Carbon::now();
+                            $attendanceData['updated_at'] = Carbon::now();
                             Attendance::insert($attendanceData);
                             $status = 200;
                             $message = "Attendance Successfully updated";
                         }
                     } else {
-                        $status = 200;
-                        $message = "Attendance Successfully Marked";
+
                         foreach($studentData as $value) {
-                            $attendanceData['teacher_id']=$data['teacher']['id'];
-                            $attendanceData['date']=$data['date'];
-                            $attendanceData['student_id']=$value;
-                            $attendanceData['created_at']= Carbon::now();
-                            $attendanceData['updated_at']= Carbon::now();
+                            $attendanceData['teacher_id'] = $data['teacher']['id'];
+                            $attendanceData['date'] = $data['date'];
+                            $attendanceData['division_id'] = $role['id'];
+                            $attendanceData['student_id'] = $value;
+                            $attendanceData['created_at'] = Carbon::now();
+                            $attendanceData['updated_at'] = Carbon::now();
                             Attendance::insert($attendanceData);
                         }
-                        $attendanceStatus['division_id']=$role['id'];
-                        $attendanceStatus['date']=$data['date'];
-                        $attendanceStatus['status']=1;
-                        $attendanceStatus['created_at']= Carbon::now();
-                        $attendanceStatus['updated_at']= Carbon::now();
+                        $attendanceStatus['division_id'] = $role['id'];
+                        $attendanceStatus['date'] = $data['date'];
+                        $attendanceStatus['status'] = 1;
+                        $attendanceStatus['created_at'] = Carbon::now();
+                        $attendanceStatus['updated_at'] = Carbon::now();
                         AttendanceStatus::insert($attendanceStatus);
                     }
                 }
@@ -489,7 +493,7 @@ class AttendanceController extends Controller
     public function viewAttendanceParent(Requests\viewAttendanceParent $request)
     {
        try{
-           $data=$request->all();
+           $data = $request->all();
            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
            $attendanceData = array();
             $studentDivisionId=User::where('id','=',$data['student_id'])->select('division_id')->first();
@@ -509,12 +513,12 @@ class AttendanceController extends Controller
                     if(!Empty($leaveApplied)) {
                         $status = 200;
                         $message = "Your child was absent for this day";
-                        $attendanceData['leaveStatus'] = $leaveApplied['status'];
-                        $attendanceData['applied_on'] = $leaveApplied['status'];
-                        $attendanceData['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leaveApplied['created_at']))));
+                        $attendanceData['attendance-data']['leaveStatus'] = $leaveApplied['status'];
+                        $attendanceData['attendance-data']['applied_on'] = $leaveApplied['status'];
+                        $attendanceData['attendance-data']['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leaveApplied['created_at']))));
                         $approvedBy = User::where('id','=',$leaveApplied['approved_by'])->select('first_name','last_name')->first();
-                        $attendanceData['approved_by'] = $approvedBy['first_name']." ".$approvedBy['last_name'];
-                        $attendanceData['approved_at'] =date("M j ",strtotime(date("Y-m-d ",strtotime($leaveApplied['updated_at']))));
+                        $attendanceData['attendance-data']['approved_by'] = $approvedBy['first_name']." ".$approvedBy['last_name'];
+                        $attendanceData['attendance-data']['approved_at'] =date("M j ",strtotime(date("Y-m-d ",strtotime($leaveApplied['updated_at']))));
                     } else {
                         $status = 200;
                         $message = "Your child was absent for this day";
@@ -524,12 +528,12 @@ class AttendanceController extends Controller
                     if(!Empty($leaveApplied)) {
                         $status = 200;
                         $message = "Your child was present for this day";
-                        $attendanceData['leaveStatus'] = $leaveApplied['status'];
-                        $attendanceData['applied_on'] = $leaveApplied['status'];
-                        $attendanceData['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leaveApplied['created_at']))));
+                        $attendanceData['attendance-data']['leaveStatus'] = $leaveApplied['status'];
+                        $attendanceData['attendance-data']['applied_on'] = $leaveApplied['status'];
+                        $attendanceData['attendance-data']['applied_on'] = date("M j",strtotime(date("Y-m-d ",strtotime($leaveApplied['created_at']))));
                         $approvedBy = User::where('id','=',$leaveApplied['approved_by'])->select('first_name','last_name')->first();
-                        $attendanceData['approved_by'] = $approvedBy['first_name']." ".$approvedBy['last_name'];
-                        $attendanceData['approved_at'] =date("M j ",strtotime(date("Y-m-d ",strtotime($leaveApplied['updated_at']))));
+                        $attendanceData['attendance-data']['approved_by'] = $approvedBy['first_name']." ".$approvedBy['last_name'];
+                        $attendanceData['attendance-data']['approved_at'] =date("M j ",strtotime(date("Y-m-d ",strtotime($leaveApplied['updated_at']))));
                     } else {
                         $status = 200;
                         $message = "Your child was present for this day";
@@ -589,7 +593,7 @@ class AttendanceController extends Controller
     * Date : 04/03/2016
     */
 
-    public function viewDefaultAttendanceTeacher(Requests\ViewRequest $request )
+    public function viewDefaultAttendanceTeacher(Requests\ViewRequest $request , $div_id  )
     {
         try{
             $data = $request->all();
@@ -599,12 +603,8 @@ class AttendanceController extends Controller
             $status = 200;
             $message = "Successfully Listed";
             $studentAttendance = array();
-            $division = Division::where('class_teacher_id' , '=' , $data['teacher']['id'])->pluck('id');
-            if (Empty($division)) {
-                $division = SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])->pluck('division_id');
-            }
             $roleId = UserRoles::where('slug','=',['student'])->pluck('id');
-            $students = User::where('division_id',$division)
+            $students = User::where('division_id',$div_id)
                 ->where('role_id','=',$roleId)
                 ->lists('id');
             $studentAttendance = Attendance::wherein('student_id',$students)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
@@ -614,6 +614,7 @@ class AttendanceController extends Controller
         }
         $response = [
             "status" => $status,
+
             "message" => $message,
             "data" => $studentAttendance
         ];
