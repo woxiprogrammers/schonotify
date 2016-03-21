@@ -364,7 +364,7 @@
     Route::post('view-attendance-parent','api\AttendanceController@viewAttendanceParent');
     Route::post('students-list','api\AttendanceController@getStudentsList');
     Route::get('default-attendance-parent/{student_id}','api\AttendanceController@viewDefaultAttendanceParent');
-    Route::get('default-attendance-teacher','api\AttendanceController@viewDefaultAttendanceTeacher');
+    Route::get('default-attendance-teacher/{div_id}','api\AttendanceController@viewDefaultAttendanceTeacher');
 
     //Message Related
     Route::post('get-detail-message',array('uses' => 'api\MessageController@getDetailMessages'));//teacher & parent(of students) gets details messages (conversation)
