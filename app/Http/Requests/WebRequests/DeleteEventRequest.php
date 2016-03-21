@@ -41,7 +41,6 @@ class DeleteEventRequest extends Request
                 if(in_array('delete_event',$resultArr)) {
                     return true;
                 } else {
-
                     return 1;
                 }
 

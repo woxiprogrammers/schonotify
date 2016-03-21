@@ -63,6 +63,8 @@ var Calendar = function() {"use strict";
 
 		$(".add-event").off().on("click", function() {
 
+            $('#loadmoreajaxloader').show();
+
             $.ajax({
                 url:"/save-event-check-acl",
                 type:'GET',
@@ -76,6 +78,9 @@ var Calendar = function() {"use strict";
                             '</div>';
 
                         $('#message-error-div').html(str);
+
+                        $('#loadmoreajaxloader').hide();
+
                     }else{
                         eventInputDateHandler();
                         $("#hiddenEventId").val("create");
@@ -90,6 +95,8 @@ var Calendar = function() {"use strict";
                         $('#publishBtn').show();
                         $('#error-div').html('');
                         $('.editImageDiv').hide();
+
+                        $('#loadmoreajaxloader').hide();
                     }
                 }
             });
@@ -106,6 +113,7 @@ var Calendar = function() {"use strict";
 			$(".form-full-event #end-date-time").val("").data("DateTimePicker").destroy();
 			$(".event-categories[value='job']").prop('checked', true);
             $('.editImageDiv').hide();
+            $(".form-full-event #img-file").attr('disabled',false);
 		});
 
 		$('#event-categories div.event-category').each(function() {
@@ -180,6 +188,7 @@ var Calendar = function() {"use strict";
 			selectHelper: true,
 			select: function(start, end, allDay) {
 
+                $('#loadmoreajaxloader').show();
                 var check = moment(start).format('YYYY-MM-DD hh:mm:ss');
                 var check1=new moment(check)._d;
                 var today = new Date();
@@ -204,6 +213,8 @@ var Calendar = function() {"use strict";
 
                                     $('#message-error-div').html(str);
 
+                                    $('#loadmoreajaxloader').hide();
+
                                 }else{
                                     eventInputDateHandler();
                                     $("#hiddenEventId").val("create");
@@ -224,6 +235,7 @@ var Calendar = function() {"use strict";
                                     $('.save-edit-event').hide();
                                     $('.editImageDiv').hide();
 
+                                    $('#loadmoreajaxloader').hide();
                                 }
 
                             }
@@ -240,6 +252,8 @@ var Calendar = function() {"use strict";
                         alert('You cant create event for previous date.');
                         $('#publishBtn').show();
                         $('.editImageDiv').hide();
+
+                        $('#loadmoreajaxloader').hide();
                     }
 
                 } else {
@@ -257,6 +271,8 @@ var Calendar = function() {"use strict";
                                     '</div>';
 
                                 $('#message-error-div').html(str);
+
+                                $('#loadmoreajaxloader').hide();
 
                             }else{
                                 eventInputDateHandler();
@@ -276,6 +292,8 @@ var Calendar = function() {"use strict";
                                 $('.events-modal').modal();
                                 $('.save-edit-event').hide();
                                 $('.editImageDiv').hide();
+
+                                $('#loadmoreajaxloader').hide();
                             }
 
                         }
@@ -291,7 +309,9 @@ var Calendar = function() {"use strict";
 
 				var eventId = calEvent._id;
 
-				for(var i = 0; i < demoCalendar.length; i++) {
+                $('#loadmoreajaxloader').show();
+
+                for(var i = 0; i < demoCalendar.length; i++) {
 
 					if(demoCalendar[i]._id == eventId) {
 
@@ -454,10 +474,15 @@ var Calendar = function() {"use strict";
 
                         $('#error-div-edit').hide();
 
+                        break;
+
 					}
+
 				}
 
 				$('.events-modal').modal();
+
+                $('#loadmoreajaxloader').hide();
 
 			}
 
@@ -586,6 +611,9 @@ var Calendar = function() {"use strict";
 
     function uploadImage(file)
     {
+        $('#upload').prop('disabled',true);
+        $('#loadmoreajaxloader').show();
+
         var formData=new FormData(file[0]);
 
         $.ajax({
@@ -603,6 +631,7 @@ var Calendar = function() {"use strict";
             },
             error: function(data){
                 // Error...
+
                 var errors = $.parseJSON(data.responseText);
 
                 var errorsHtml = '<div class="alert alert-danger"><ul>';
@@ -613,6 +642,11 @@ var Calendar = function() {"use strict";
                 errorsHtml += '</ul></di>';
 
                 $('#error-div').html(errorsHtml);
+
+                $('#upload').prop('disabled',false);
+
+                $('#loadmoreajaxloader').hide();
+
             }
 
         });
@@ -630,6 +664,9 @@ var Calendar = function() {"use strict";
 
     function saveEditPublish(file)
     {
+
+        $('#publishBtn').prop('disabled',true);
+        $('#loadmoreajaxloader').show();
 
         var id = $('#hiddenEventId').val();
         $.ajax({
@@ -649,6 +686,9 @@ var Calendar = function() {"use strict";
                         "</div>";
                     $('#error-div-edit').show();
                     $('#error-div-edit').html(str);
+
+                    $('#publishBtn').prop('disabled',false);
+                    $('#loadmoreajaxloader').hide();
                 }
 
             },
@@ -664,6 +704,9 @@ var Calendar = function() {"use strict";
                 errorsHtml += '</ul></di>';
 
                 $('#error-edit-div').html(errorsHtml);
+
+                $('#publishBtn').prop('disabled',false);
+                $('#loadmoreajaxloader').hide();
             }
 
         });
@@ -681,6 +724,9 @@ var Calendar = function() {"use strict";
 
     function updateEvent(file)
     {
+        $('#saveEdit').prop('disabled',true);
+        $('#loadmoreajaxloader').show();
+
         var formData=new FormData(file[0]);
 
         $.ajax({
@@ -701,10 +747,7 @@ var Calendar = function() {"use strict";
 		var startInput = $('#start-date-time');
 		var endInput = $('#end-date-time');
 		startInput.datetimepicker();
-		endInput.datetimepicker({
-            format: 'MM/DD/YYYY hh:mm A'
-
-        });
+		endInput.datetimepicker();
         var dateToday=new Date();
 		startInput.on("dp.change", function(e) {
             startInput.data("DateTimePicker").minDate(dateToday);
