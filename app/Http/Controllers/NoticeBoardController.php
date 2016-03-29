@@ -98,11 +98,21 @@
                             $adminAchievementArray = $value;
                         }
 
-                        if(strtotime($lastDateAnnouncement) > strtotime($lastDateAchievement))
+
+                        if($lastDateAnnouncement != "" && $lastDateAchievement != "")
                         {
+                            if(strtotime($lastDateAnnouncement) > strtotime($lastDateAchievement))
+                            {
+                                $lastDate = $lastDateAchievement;
+                            } else {
+                                $lastDate = $lastDateAnnouncement;
+                            }
+                        } else if($lastDateAnnouncement != ""){
+                            $lastDate = $lastDateAnnouncement;
+                        } else if($lastDateAchievement != "") {
                             $lastDate = $lastDateAchievement;
                         } else {
-                            $lastDate = $lastDateAnnouncement;
+                            $lastDate = "";
                         }
 
                         $result = array_merge($adminAnnouncementArray,$adminAchievementArray);
@@ -166,11 +176,20 @@
                             $teacherAchievementArray = $value;
                         }
 
-                        if(strtotime($lastDateAnnouncement) > strtotime($lastDateAchievement))
+                        if($lastDateAnnouncement != "" && $lastDateAchievement != "")
                         {
+                            if(strtotime($lastDateAnnouncement) > strtotime($lastDateAchievement))
+                            {
+                                $lastDate = $lastDateAchievement;
+                            } else {
+                                $lastDate = $lastDateAnnouncement;
+                            }
+                        } else if($lastDateAnnouncement != ""){
+                            $lastDate = $lastDateAnnouncement;
+                        } else if($lastDateAchievement != "") {
                             $lastDate = $lastDateAchievement;
                         } else {
-                            $lastDate = $lastDateAnnouncement;
+                            $lastDate = "";
                         }
 
                         $result = array_merge($teacherAnnouncementArray,$teacherAchievementArray);
@@ -494,6 +513,7 @@
                 $mergedArrayWithLastDate = array_merge($mergedArray,$adminAnnouncementOthersPending);
 
                 $adminAnnouncement[$lastDate] = $mergedArrayWithLastDate;
+
 
             } else {
 
