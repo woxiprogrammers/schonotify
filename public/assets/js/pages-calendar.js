@@ -288,6 +288,7 @@ var Calendar = function() {"use strict";
                                 $('#delBtn').hide();
                                 $('.save-event').show();
                                 $('.edit-event').hide();
+                                $('#publishBtn').show();
                                 $('#error-div').html('');
                                 $('.events-modal').modal();
                                 $('.save-edit-event').hide();

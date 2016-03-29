@@ -119,9 +119,9 @@
 
     Route::post('create-timetable','TimetableController@createTimetable');
 
-    Route::get('noticeBoard','NoticeBoardController@show');
+    Route::get('/noticeBoard','NoticeBoardController@show');
 
-    Route::get('loadMore','NoticeBoardController@loadMore');
+    Route::get('/show-noticeboard-listing/{id}','NoticeBoardController@getListing');
 
     Route::get('show-create-announcement','NoticeBoardController@showCreateAnnouncement');
 
@@ -133,7 +133,7 @@
 
     Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
 
-    Route::get('detailAchievement','NoticeBoardController@detailAchievement');
+    Route::get('detailAchievement/{$id}','NoticeBoardController@detailAchievement');
 
     Route::get('leaveListing','LeaveController@leaveListing');
 

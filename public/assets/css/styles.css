@@ -11825,3 +11825,27 @@ a.control_next {
 .img-event-align-div{
     padding:10px 10px 10px 0px;
 }
+
+.loadMoreBtn{
+    background: #ccc;
+    border: none;
+    border-radius: 0px;
+}
+
+.draft-block {
+    padding: 10px;
+    background: rgba(255, 0, 18, 0.9);
+    color: #fff;
+}
+
+.pending-block {
+    padding: 10px;
+    background: #1fbba6;
+    color: #fff;
+}
+
+.published-block {
+    padding: 10px;
+    background: #1F61BB;
+    color: #fff;
+}
