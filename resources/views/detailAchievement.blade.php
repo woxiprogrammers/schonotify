@@ -58,7 +58,7 @@
                                         <div class="col-sm-5">
                                             <div id="imgDiv">
                                                 <div class="col-sm-12">
-                                                    <img class="thumbnail" src="/assets/images/{{ $imageArray[0] }}" width="300" height="200" id="default-image" onError="this.onerror=null;this.width='300';this.src='/assets/images/your-logo-here.png'; ">
+                                                    <img class="thumbnail" src="/uploads/achievements/{{ $imageArray[0] }}" width="300" height="200" id="default-image" onError="this.onerror=null;this.width='300';this.src='/assets/images/your-logo-here.png'; ">
                                                 </div>
                                                 <div class="col-sm-12" id="clients">
 
@@ -73,7 +73,7 @@
 
                                                             @foreach($imageArray as $image)
                                                             <div style="display: none;">
-                                                                <img data-u="image" class="thumbnail pull-left thumb-image" style="margin-right:2px;" src="/assets/images/{{ $image }}" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
+                                                                <img data-u="image" class="thumbnail pull-left thumb-image" style="margin-right:2px;" src="/uploads/achievements/{{ $image }}" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
                                                             </div>
                                                             @endforeach
 
