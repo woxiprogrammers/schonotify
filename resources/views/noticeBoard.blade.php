@@ -295,12 +295,24 @@
                                                         str += '<h4 class="text-light no-margin padding-5" title="'+arr[i]['title']+'">'+ arr[i]['title'] +'</h4>';
 
                                                     }
+                            
                                             str +='</div>'+
                                             '</div>' +
                                             '<div class="timeline_content ">'+
                                             '<div class="row">'+
-                                            '<div class="col-md-3 col-xs-4"><img src="assets/images/photodune-4043508-3d-modern-office-room-l.jpg" alt="offce" class="img-responsive">'+
-                                            '</div>'+
+                                            '<div class="col-md-3 col-xs-4">' ;
+
+
+                                            if(arr[i]['image'] == null)
+                                            {
+                                                str += '<img src="/assets/images/your-logo-here.png" alt="offce" class="img-responsive">';
+
+                                            } else {
+                                                str += '<img src="/uploads/achievements/"'+arr[i]['image'] +' alt="offce" class="img-responsive">';
+
+                                            }
+
+                                            str +='</div>'+
                                             '<div class="col-md-9 col-xs-8" style="word-wrap: break-word;">'+
                                                 detail +
                                             '</div>'+
@@ -320,6 +332,7 @@
                             }
 
                         }
+
                         str+='</ul>';
 
                     $("#tmlin").append(str);
