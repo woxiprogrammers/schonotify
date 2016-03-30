@@ -235,10 +235,9 @@
                                     '<div class="timeline_title">'+
                                     '<i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>';
 
-                                    if(arr[i]['title'].length > 120)
+                                    if(arr[i]['title'].length > 25)
                                     {
-
-                                        str += '<h4 class="light-text no-margin padding-5" title="'+arr[i]["title"]+'">'+ arr[i]['title'].substring(0,120) + "....." +'</h4>';
+                                        str += '<h4 class="light-text no-margin padding-5" title="'+arr[i]["title"]+'">'+ arr[i]['title'].substring(0,20) + "....." +'</h4>';
 
                                     }else{
 

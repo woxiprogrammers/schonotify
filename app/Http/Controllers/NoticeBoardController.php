@@ -6,6 +6,7 @@
     use App\Classes;
     use App\Division;
     use App\Event;
+    use App\EventImages;
     use App\EventUserRoles;
     use App\Http\Requests\WebRequests\CreateAnnouncementRequest;
     use App\Http\Requests\WebRequests\NoticeBoardRequest;
@@ -1344,9 +1345,35 @@
         {
             return view('detailAnnouncement');
         }
+
+        /*
+        * Function Name : detailAchievement
+        * Param : $id
+        * Return : details of achievement
+        * Desc : it will return details achievement .
+        * Developed By : Suraj Bande
+        * Date : 28/3/2016
+        */
+
         public function detailAchievement($id)
         {
 
-            return view('detailAchievement');
+            $imageArray = array();
+
+            $images = EventImages::where('event_id','=',$id)
+                ->select('image')
+                ->get()->toArray();
+
+            foreach($images as $key=>$value)
+            {
+                array_push($imageArray,$value['image']);
+            }
+
+            $achievements = Event::join('users','users.id','=','events.created_by')
+                ->where('events.id','=',$id)
+                ->select('events.id','title','events.status','events.detail','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                ->get()->toArray();
+
+            return view('detailAchievement')->with(compact('achievements','imageArray'));
         }
     }

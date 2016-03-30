@@ -149,7 +149,6 @@
             </div>
             <div class="item-inner">
                 <span class="title"> Events </span>
-                <span class="badge pull-right">12</span>
             </div>
         </div>
     </a>
