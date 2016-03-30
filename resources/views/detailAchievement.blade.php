@@ -46,7 +46,9 @@
 
                                         <div class="timeline_title">
                                             <i class="fa fa-trophy fa-2x pull-left fa-border"></i>
-                                            <h4 class="panel-title no-margin text-primary" style="padding: 14px;">PLATINUM JUBILEE OF TRUST</h4>
+                                            @foreach($achievements as $achievement)
+                                                <h4 class="panel-title no-margin text-primary" style="padding: 14px;">{{ $achievement['title'] }}</h4>
+                                            @endforeach
                                         </div>
                                         <div class="panel-tools">
                                             <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="ti-reload"></i></a>
@@ -56,49 +58,116 @@
                                         <div class="col-sm-5">
                                             <div id="imgDiv">
                                                 <div class="col-sm-12">
-                                                    <img class="thumbnail" src="/assets/images/your-logo-here.png" onError="this.onerror=null;this.width='200';this.src='assets/images/picture.svg'; ">
+                                                    <img class="thumbnail" src="/assets/images/{{ $imageArray[0] }}" width="300" height="200" id="default-image" onError="this.onerror=null;this.width='300';this.src='/assets/images/your-logo-here.png'; ">
                                                 </div>
-                                                <div class="col-sm-12">
-                                                    <img class="thumbnail pull-left" width="80" style="margin-right:2px;" src="/assets/images/picture.svg" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
-                                                    <img class="thumbnail pull-left" width="80" style="margin-right:2px;" src="/assets/images/picture.svg" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
-                                                    <img class="thumbnail pull-left" width="80" style="margin-right:2px;" src="/assets/images/picture.svg" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
-                                                </div>
+                                                <div class="col-sm-12" id="clients">
 
+                                                    <div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 809px; height: 150px; overflow: hidden; visibility: hidden;">
+                                                        <!-- Loading Screen -->
+                                                        <div data-u="loading" style="position: absolute; top: 0px; left: 0px;">
+                                                            <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%;"></div>
+                                                            <div style="position:absolute;display:block;background:url('/assets/images/loading.gif') no-repeat center center;top:0px;left:0px;width:100%;height:100%;"></div>
+                                                        </div>
+
+                                                        <div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 809px; height: 150px; overflow: hidden;">
+
+                                                            @foreach($imageArray as $image)
+                                                            <div style="display: none;">
+                                                                <img data-u="image" class="thumbnail pull-left thumb-image" style="margin-right:2px;" src="/assets/images/{{ $image }}" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
+                                                            </div>
+                                                            @endforeach
+
+                                                        </div>
+
+                                                        <!-- Arrow Navigator -->
+                                                        <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px; border:1px solid #666; background-color:#fff;" data-autocenter="2"></span>
+                                                        <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px; border:1px solid #666; background-color:#fff; " data-autocenter="2"></span>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-7">
-                                        <div class="panel-scroll height-280 ps-container ps-active-y">
-                                            Platinum Jubilee : We are feeling proud to announce that we are completing 75 years of trust. so, this is notify you that you will get schedule and agenda of ceremony.
-                                            <br>
-                                            Venue:
-                                            <address>
-                                                <strong>MIT School</strong>
-                                                <br>
-                                                795 Folsom Ave, Suite 600
-                                                <br>
-                                                San Francisco, CA 94107
-                                                <br>
-                                                <abbr title="Phone">P:</abbr> (123) 456-7890
-                                            </address>
+                                        <div class="panel-scroll height-180 margin-bottom-10 ps-container ps-active-y">
+                                            <p>
+                                                @foreach($achievements as $achievement)
+                                                {{ $achievement['detail'] }}
+                                                @endforeach
+                                            </p>
+                                            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div>
+                                        </div>
+                                            @if($achievement['status'] == 2)
+                                            <div class="col-md-12" >
+                                                <h5> Status :<i class="fa fa-flag"></i> <i>Published</i></h5>
+                                            </div>
+                                            @elseif($achievement['status'] == 1)
+                                            <div class="col-md-12" >
+                                                <h5> Status :<i class="fa fa-flag"></i> <i>Pending</i></h5>
+                                            </div>
+                                            @else
+                                            <div class="col-md-12" >
+                                                <h5> Status :<i class="fa fa-flag"></i> <i>Draft</i></h5>
+                                            </div>
+                                            @endif
+                                        </div>
 
-                                            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
-                                         </div>
                                     </div>
                                     <div class="panel-footer col-sm-12">
 
-                                        <h4>Mr.R Ashwin <small><i>Teacher</i></small><small class="pull-right"><i class="fa fa-clock-o"></i> Wednesday 5 Oct, 2015 5:00 PM</small></h4>
+                                        @foreach($achievements as $achievement)
+                                        <h4>
+                                            @if($achievement['gender'] == 'M')
+                                                Mr.
+                                            @else
+                                                Mrs.
+                                            @endif
+
+                                            {{ $achievement['first_name'] }} {{ $achievement['last_name'] }} ({{ $achievement['username'] }})
+
+                                            <small>
+                                                  <i>
+                                                     @if($achievement['role_id'] == 2)
+                                                        Teacher
+                                                     @else
+                                                        Admin
+                                                      @endif
+                                                  </i>
+                                            </small>
+
+                                            <small class="pull-right">
+                                                @if($achievement['status'] == 2) Published At : @else Created At @endif
+                                                <i class="fa fa-clock-o"></i> {{ $achievement['updated_at'] }}
+                                            </small>
+                                        </h4>
+                                        @endforeach
+
+                                        @foreach($achievements as $achievement)
 
                                         <div class="col-md-12" id="btnDiv">
-                                            <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
-                                                <i class="fa fa-wrench"></i> Update
-                                            </button>
-                                            <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
-                                                <i class="fa fa-cloud-upload"></i> Publish
-                                            </button>
+
+                                            @if($achievement['status'] == 1)
+                                                @if(Auth::User()->role_id == 1)
+                                                    <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
+                                                        <i class="fa fa-wrench"></i> Update
+                                                    </button>
+                                                    <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                                        <i class="fa fa-cloud-upload"></i> Publish
+                                                    </button>
+                                                @endif
+                                            @elseif($achievement['status'] == 0)
+                                                <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
+                                                    <i class="fa fa-wrench"></i> Update
+                                                </button>
+                                                <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                                    <i class="fa fa-cloud-upload"></i> Publish
+                                                </button>
+                                            @endif
+
                                         </div>
-                                        <div class="col-md-12" id="btnStatus">
-                                            <h5> Status :<i class="fa fa-flag"></i> <i>Published</i></h5>
-                                        </div>
+
+
+                                        @endforeach
+
                                     </div>
                                 </div>
                             </div>
@@ -228,6 +297,8 @@
 <script src="/vendor/ckeditor/ckeditor.js"></script>
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/assets/js/form-validation.js"></script>
+<script src="/assets/js/carousels.js"></script>
+
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script>
     jQuery(document).ready(function() {
@@ -275,8 +346,60 @@
         }
     });
 
+    $('.thumb-image').click(function(){
+        var imgSrc = this.src
+
+        $('#default-image').attr('src',imgSrc);
+    });
+
 
 </script>
+
+<script type="text/javascript" src="/assets/js/jssor.slider.mini.js"></script>
+<!-- use jssor.slider.debug.js instead for debug -->
+<script>
+    jQuery(document).ready(function ($) {
+
+        var jssor_1_options = {
+            $AutoPlay: false,
+            $AutoPlaySteps: 4,
+            $SlideDuration: 160,
+            $SlideWidth: 200,
+            $SlideSpacing: 3,
+            $Cols: 4,
+            $ArrowNavigatorOptions: {
+                $Class: $JssorArrowNavigator$,
+                $Steps: 4
+            },
+            $BulletNavigatorOptions: {
+                $Class: $JssorBulletNavigator$,
+                $SpacingX: 1,
+                $SpacingY: 1
+            }
+        };
+
+        var jssor_1_slider = new $JssorSlider$("jssor_1", jssor_1_options);
+
+        //responsive code begin
+        //you can remove responsive code if you don't want the slider scales while window resizing
+        function ScaleSlider() {
+            var refSize = jssor_1_slider.$Elmt.parentNode.clientWidth;
+            if (refSize) {
+                refSize = Math.min(refSize, 809);
+                jssor_1_slider.$ScaleWidth(refSize);
+            }
+            else {
+                window.setTimeout(ScaleSlider, 30);
+            }
+        }
+        ScaleSlider();
+        $(window).bind("load", ScaleSlider);
+        $(window).bind("resize", ScaleSlider);
+        $(window).bind("orientationchange", ScaleSlider);
+        //responsive code end
+    });
+</script>
+
 
 <script id="template-upload" type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
