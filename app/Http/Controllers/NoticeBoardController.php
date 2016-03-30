@@ -65,7 +65,7 @@
 
             $user = Auth::User();
 
-            $latestEventDate = date('Y-m-d');
+            $latestEventDate = date('Y-m');
             $month = date('m', strtotime(date($latestEventDate)." -".$id." month"));
             $year = date('Y', strtotime(date($latestEventDate)." -".$id." month"));
 
@@ -127,8 +127,14 @@
 
                         }
 
-                        $uniqueResult[$lastDate] = array_values($temp_array);
+                        $price = array();
+                        foreach ($temp_array as $key => $row)
+                        {
+                            $price[$key] = $row['created_at'];
+                        }
+                        array_multisort($price, SORT_DESC, $temp_array);
 
+                        $uniqueResult[$lastDate] = array_values($temp_array);
 
                     } else {
 
@@ -144,7 +150,15 @@
 
                         }
 
+                        $price = array();
+                        foreach ($temp_array as $key => $row)
+                        {
+                            $price[$key] = $row['created_at'];
+                        }
+                        array_multisort($price, SORT_DESC, $temp_array);
+
                         $uniqueResult = array_values($temp_array);
+
                     }
 
                     return $uniqueResult;
@@ -204,6 +218,13 @@
 
                         }
 
+                        $price = array();
+                        foreach ($temp_array as $key => $row)
+                        {
+                            $price[$key] = $row['created_at'];
+                        }
+                        array_multisort($price, SORT_DESC, $temp_array);
+
                         $uniqueResult[$lastDate] = array_values($temp_array);
 
 
@@ -219,6 +240,13 @@
                                 $temp_array[$value['id']] = $value;
 
                         }
+
+                        $price = array();
+                        foreach ($temp_array as $key => $row)
+                        {
+                            $price[$key] = $row['created_at'];
+                        }
+                        array_multisort($price, SORT_DESC, $temp_array);
 
                         $uniqueResult = array_values($temp_array);
 
@@ -366,7 +394,6 @@
                         $uniqueResult = array_values($temp_array);
 
                     }
-
 
                     return $uniqueResult;
 
@@ -1319,7 +1346,6 @@
         }
         public function detailAchievement($id)
         {
-
 
             return view('detailAchievement');
         }

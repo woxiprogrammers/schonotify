@@ -319,12 +319,12 @@
                                             '</div>'+
                                             '</div>'+
                                             '<div class="readmore">'+
-                                            '<a href="/detailAchievement/'+arr[i]['id']+'" class="btn btn-transparent-white">'+
+                                            '<a href="/detail-achievement/'+arr[i]['id']+'" class="btn btn-transparent-white">'+
                                             "Read More"+
                                             '<i class="fa fa-arrow-circle-right"></i>'+
                                             '</a>'+
                                             '</div>'+
-                                            '</div>' +
+                                            '</div>'+
 
                                         '</div>'+
 

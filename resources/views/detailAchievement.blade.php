@@ -56,10 +56,12 @@
                                         <div class="col-sm-5">
                                             <div id="imgDiv">
                                                 <div class="col-sm-12">
-                                                    <img class="thumbnail" src="http://school_mit.schnotify.com/vendor/jquery-file-upload/server/php/files/download%20%281%29.jpg" onError="this.onerror=null;this.width='200';this.src='assets/images/picture.svg'; ">
-                                                    <img class="thumbnail pull-left" style="margin-right:2px;" src="http://school_mit.schnotify.com/vendor/jquery-file-upload/server/php/files/thumbnail/download%20%281%29.jpg" onError="this.onerror=null;this.width='80';this.src='assets/images/picture.svg'; ">
-                                                    <img class="thumbnail pull-left" style="margin-right:2px;" src="http://school_mit.schnotify.com/vendor/jquery-file-upload/server/php/files/thumbnail/download.jpg" onError="this.onerror=null;this.width='80';this.src='assets/images/picture.svg'; ">
-                                                    <img class="thumbnail pull-left" style="margin-right:2px;" src="http://school_mit.schnotify.com/vendor/jquery-file-upload/server/php/files/thumbnail/images.jpg" onError="this.onerror=null;this.width='80';this.src='assets/images/picture.svg'; ">
+                                                    <img class="thumbnail" src="/assets/images/your-logo-here.png" onError="this.onerror=null;this.width='200';this.src='assets/images/picture.svg'; ">
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <img class="thumbnail pull-left" width="80" style="margin-right:2px;" src="/assets/images/picture.svg" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
+                                                    <img class="thumbnail pull-left" width="80" style="margin-right:2px;" src="/assets/images/picture.svg" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
+                                                    <img class="thumbnail pull-left" width="80" style="margin-right:2px;" src="/assets/images/picture.svg" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
                                                 </div>
 
                                             </div>
@@ -212,20 +214,21 @@
 
 </div>
 <!-- start: MAIN JAVASCRIPTS -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
-<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="vendor/switchery/switchery.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/modernizr/modernizr.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
-<script src="assets/js/custom-project.js"></script>
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/adapters/jquery.js"></script>
-<script src="assets/js/form-validation.js"></script>
+<script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/assets/js/form-validation.js"></script>
+<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
@@ -354,36 +357,36 @@
 			</tr>
 			{% } %}
 		</script>
-<script src="vendor/jquery-file-upload/vendor/jquery.ui.widget.js"></script>
+<script src="/vendor/jquery-file-upload/vendor/jquery.ui.widget.js"></script>
 <!-- The Templates plugin is included to render the upload/download listings -->
 <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="vendor/javascript-Load-Image/load-image.all.min.js"></script>
+<script src="/vendor/javascript-Load-Image/load-image.all.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 <!-- blueimp Gallery script -->
 <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="vendor/jquery-file-upload/jquery.iframe-transport.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.fileupload.js"></script>
 <!-- The File Upload processing plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-process.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.fileupload-process.js"></script>
 <!-- The File Upload image preview & resize plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-image.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.fileupload-image.js"></script>
 <!-- The File Upload audio preview plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-audio.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.fileupload-audio.js"></script>
 <!-- The File Upload video preview plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-video.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.fileupload-video.js"></script>
 <!-- The File Upload validation plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-validate.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.fileupload-validate.js"></script>
 <!-- The File Upload user interface plugin -->
-<script src="vendor/jquery-file-upload/jquery.fileupload-ui.js"></script>
+<script src="/vendor/jquery-file-upload/jquery.fileupload-ui.js"></script>
 <!-- The main application script -->
-<script src="vendor/jquery-file-upload/main.js"></script>
+<script src="/vendor/jquery-file-upload/main.js"></script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
-<script src="js/cors/jquery.xdr-transport.js"></script>
+<script src="/js/cors/jquery.xdr-transport.js"></script>
 <![endif]-->
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 
