@@ -133,7 +133,7 @@
 
     Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
 
-    Route::get('detailAchievement/{$id}','NoticeBoardController@detailAchievement');
+    Route::get('detail-achievement/{id}','NoticeBoardController@detailAchievement');
 
     Route::get('leaveListing','LeaveController@leaveListing');
 
