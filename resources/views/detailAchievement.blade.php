@@ -51,7 +51,28 @@
                                             @endforeach
                                         </div>
                                         <div class="panel-tools">
-                                            <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="ti-reload"></i></a>
+
+                                            Created by
+                                            @if($achievement['gender'] == 'M')
+                                            Mr.
+                                            @else
+                                            Mrs.
+                                            @endif
+
+                                            {{ $achievement['first_name'] }} {{ $achievement['last_name'] }} ({{ $achievement['username'] }})
+
+                                            <small>
+                                                <i>
+                                                    @if($achievement['role_id'] == 2)
+                                                    Teacher
+                                                    @else
+                                                    Admin
+                                                    @endif
+                                                </i>
+                                            </small>
+
+                                            created At {{ $achievement['created_at'] }}
+
                                         </div>
                                     </div>
                                     <div class="panel-body">
@@ -96,6 +117,14 @@
                                             </p>
                                             <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div>
                                         </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="panel-footer col-sm-12">
+
+                                        @foreach($achievements as $achievement)
+                                        <h4>
                                             @if($achievement['status'] == 2)
                                             <div class="col-md-12" >
                                                 <h5> Status :<i class="fa fa-flag"></i> <i>Published</i></h5>
@@ -109,34 +138,29 @@
                                                 <h5> Status :<i class="fa fa-flag"></i> <i>Draft</i></h5>
                                             </div>
                                             @endif
-                                        </div>
-
-                                    </div>
-                                    <div class="panel-footer col-sm-12">
-
-                                        @foreach($achievements as $achievement)
-                                        <h4>
-                                            @if($achievement['gender'] == 'M')
-                                                Mr.
-                                            @else
-                                                Mrs.
-                                            @endif
-
-                                            {{ $achievement['first_name'] }} {{ $achievement['last_name'] }} ({{ $achievement['username'] }})
-
-                                            <small>
-                                                  <i>
-                                                     @if($achievement['role_id'] == 2)
-                                                        Teacher
-                                                     @else
-                                                        Admin
-                                                      @endif
-                                                  </i>
-                                            </small>
 
                                             <small class="pull-right">
-                                                @if($achievement['status'] == 2) Published At : @else Created At @endif
-                                                <i class="fa fa-clock-o"></i> {{ $achievement['updated_at'] }}
+                                                @if($achievement['status'] == 2)
+
+                                                Published By
+
+                                                @foreach($publishedBy as $row)
+                                                @if($row['gender'] == 'M')
+                                                    Mr.
+                                                @else
+                                                    Mrs.
+                                                @endif
+
+                                                {{ $row['first_name'] }} {{ $row['last_name'] }} ({{ $row['username'] }})
+
+                                                @if($row['role_id'] == 1)
+                                                    <small><i>Admin</i></small>
+                                                @else
+                                                    <small><i>Teacher</i></small>
+                                                @endif
+                                                @endforeach
+
+                                                    Published At : <i class="fa fa-clock-o"></i> {{ $achievement['updated_at'] }} @endif
                                             </small>
                                         </h4>
                                         @endforeach
@@ -164,7 +188,6 @@
                                             @endif
 
                                         </div>
-
 
                                         @endforeach
 

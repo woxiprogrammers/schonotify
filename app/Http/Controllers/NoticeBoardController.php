@@ -569,10 +569,10 @@
 
             $user = Auth::user();
 
-            $adminAchievementSelfCreatedAndPending = Event::join('event_images','event_images.event_id','=','events.id')
+            $adminAchievementSelfCreated = Event::join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('events.created_by','=',$user->id)
-                ->wherein('status',[0,1,2])
+                ->wherein('status',[0,2])
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
@@ -581,7 +581,7 @@
 
             $adminAchievementOthersPending = Event::join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
-                ->where('published_by','=',$user->id)
+                ->where('created_by','!=',$user->id)
                 ->where('status','=',1)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
@@ -600,10 +600,10 @@
 
             if($id == 0 ) {
 
-                $adminAchievementSelfCreatedAndPendingLastDate = Event::join('event_images','event_images.event_id','=','events.id')
+                $adminAchievementSelfCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('events.created_by','=',$user->id)
-                    ->wherein('status',[0,1,2])
+                    ->wherein('status',[0,2])
                     ->min('events.created_at');
 
                 $adminAchievementOthersPendingLastDate = Event::join('event_images','event_images.event_id','=','events.id')
@@ -617,7 +617,7 @@
                     ->where('status','=',2)
                     ->min('events.created_at');
 
-                $arrayMergedForLastDate = array_merge(array($adminAchievementSelfCreatedAndPendingLastDate),array($adminAchievementOthersPendingLastDate));
+                $arrayMergedForLastDate = array_merge(array($adminAchievementSelfCreatedLastDate),array($adminAchievementOthersPendingLastDate));
 
                 $finalMergedLastEvent = array_merge(array($adminAllPublishedLastDate),$arrayMergedForLastDate);
 
@@ -637,7 +637,7 @@
 
                     }
 
-                    $mergedArray = array_merge($adminAchievementSelfCreatedAndPending,$adminAchievementOthersPending);
+                    $mergedArray = array_merge($adminAchievementSelfCreated,$adminAchievementOthersPending);
 
                     $mergedArrayWithLastDate = array_merge($mergedArray,$adminAllPublished);
 
@@ -646,7 +646,7 @@
 
             } else {
 
-                $mergedArray = array_merge($adminAchievementSelfCreatedAndPending,$adminAchievementOthersPending);
+                $mergedArray = array_merge($adminAchievementSelfCreated,$adminAchievementOthersPending);
 
                 $adminAchievement = array_merge($mergedArray,$adminAllPublished);
 
@@ -1374,6 +1374,11 @@
                 ->select('events.id','title','events.status','events.detail','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
 
-            return view('detailAchievement')->with(compact('achievements','imageArray'));
+            $publishedBy = Event::join('users','users.id','=','events.published_by')
+                ->where('events.id','=',$id)
+                ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                ->get()->toArray();
+
+            return view('detailAchievement')->with(compact('achievements','imageArray','publishedBy'));
         }
     }
