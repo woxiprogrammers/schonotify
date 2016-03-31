@@ -25,7 +25,7 @@
 
                         <li>
                             <div class="values">
-                                <a href="/createNoticeBoard" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
+                                <a href="/create-notice-board" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
                             </div>
                         </li>
 
@@ -447,14 +447,7 @@
 			</span>
 			</td>
 			<td>
-			<p class="name">
-			{% if (file.url) { %}
 
-			<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-			{% } else { %}
-			<span>{%=file.name%}</span>
-			{% } %}
-			</p>
 			{% if (file.error) { %}
 			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
 			{% } %}
