@@ -209,11 +209,11 @@
 
                                                if(arr[i]['priority'] == 1)
                                                {
-                                                   str += '&nbsp;<i class="fa fa-angle-double-up text-danger" title="High"></i>';
+                                                   str += '&nbsp;<span class="label label-sm label-danger">High</span>';
                                                } else if(arr[i]['priority'] == 2) {
-                                                   str += '&nbsp;<i class="fa fa-angle-double-down text-orange" title="Low"></i>';
+                                                   str += '&nbsp;<span class="label label-sm label-orange">Low</span>';
                                                } else {
-                                                    str += '&nbsp;<i class="fa fa-angle-double-up text-success" title="Medium"></i>';
+                                                    str += '&nbsp;<span class="label label-sm label-success">Medium</span>';
                                                 }
 
                                          str +=   '</span>'+
