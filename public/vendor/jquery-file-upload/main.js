@@ -14,12 +14,18 @@
 $(function () {
     'use strict';
 
+    var counter=0;
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: 'vendor/jquery-file-upload/server/php/index.php'
+        url: 'vendor/jquery-file-upload/server/php/index.php',
+        singleFileUploads: false,
+//      limitMultiFileUploadSize :2,
+        getNumberOfFiles : 10
+
     });
+
 
     // Enable iframe cross-domain access via redirect option:
     $('#fileupload').fileupload(

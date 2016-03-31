@@ -202,7 +202,7 @@
                         <div class="tab-pane fade" id="myTab2_example2">
 
 
-                            <form action="#" role="form" id="form">
+                            <form action="#" role="form" id="createAchievementForm">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -275,8 +275,10 @@
 
                                     </div>
 
-
                                     <div class="col-md-12">
+                                        <button class="btn btn-primary btn-wide" type="submit">
+                                            Publish
+                                        </button>
                                         <button class="btn btn-primary btn-wide pull-right" type="submit">
                                             Create <i class="fa fa-arrow-circle-right"></i>
                                         </button>
@@ -285,7 +287,6 @@
                                 </div>
 
                             </form>
-
 
 
                         </div>
@@ -341,6 +342,7 @@
 			</td>
 			<td>
 			<p class="name">{%=file.name%}</p>
+			<input type="hidden" name="uploadedFiles[]" value="{%=file.name%}"/>
 			{% if (file.error) { %}
 			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
 			{% } %}
@@ -380,16 +382,20 @@
 			</span>
 			</td>
 			<td>
+
 			<p class="name">
 			{% if (file.url) { %}
 
 			<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
 			{% } else { %}
+
 			<span>{%=file.name%}</span>
 			{% } %}
 			</p>
 			{% if (file.error) { %}
 			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
+			{% } else { %}
+			<input type="hidden" name="uploadedFiles[]" value="{%=file.name%}"/>
 			{% } %}
 			</td>
 			<td>
