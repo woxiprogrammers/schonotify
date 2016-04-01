@@ -202,7 +202,7 @@
                         <div class="tab-pane fade" id="myTab2_example2">
 
 
-                            <form action="#" role="form" id="createAchievementForm">
+                            <form action="/create-achievement" role="form" method="post" id="createAchievementForm" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -275,11 +275,13 @@
 
                                     </div>
 
+                                    <input type="hidden" name="hiddenBtnCheck" id="hiddenBtnCheck">
+
                                     <div class="col-md-12">
-                                        <button class="btn btn-primary btn-wide" type="submit">
+                                        <button class="btn btn-primary btn-wide" type="submit" id="publishAchievBtn">
                                             Publish
                                         </button>
-                                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="createAchievBtn">
                                             Create <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
@@ -679,6 +681,18 @@
         }
     });
 
+    $('#createAchievBtn').click(
+        function(){
+
+            $('#hiddenBtnCheck').val(1);
+        }
+    );
+
+    $('#publishAchievBtn').click(
+        function(){
+            $('#hiddenBtnCheck').val(0);
+        }
+    );
 
 </script>
 

@@ -8,6 +8,7 @@
     use App\Event;
     use App\EventImages;
     use App\EventUserRoles;
+    use App\Http\Requests\WebRequests\CreateAchievementRequest;
     use App\Http\Requests\WebRequests\CreateAnnouncementRequest;
     use App\Http\Requests\WebRequests\NoticeBoardRequest;
     use App\SubjectClassDivision;
@@ -288,6 +289,8 @@
                         $uniqueResult[$lastDateAnnouncement] = array_values($temp_array);
 
                     } else {
+
+                        $temp_array = array();
 
                         foreach ($adminAnnouncement as $key=>$value) {
 
@@ -1381,4 +1384,10 @@
 
             return view('detailAchievement')->with(compact('achievements','imageArray','publishedBy'));
         }
+
+        public function createAchievement(CreateAchievementRequest $request)
+        {
+            dd($request->all());
+        }
+
     }
