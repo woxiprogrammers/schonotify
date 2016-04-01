@@ -347,11 +347,6 @@
         window.location.href="detailedAnnouncement";
     });
 
-    $('#btnPublish').click(function(){
-        $('#btnDiv').hide();
-        $('#btnStatus').show();
-    });
-
     var dir = "/vendor/jquery-file-upload/server/php/files/thumbnail/";
 
     var fileextension = ".png";
@@ -370,7 +365,6 @@
 
     $('.thumb-image').click(function(){
         var imgSrc = this.src
-
         $('#default-image').attr('src',imgSrc);
     });
 

@@ -17,6 +17,7 @@
     use Illuminate\Http\Request;
     use App\Http\Controllers\Controller;
     use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\File;
     use Illuminate\Support\Facades\Input;
     use Illuminate\Support\Facades\Redirect;
@@ -469,34 +470,31 @@
 
             $user = Auth::user();
 
-            $adminAnnouncementSelfCreatedAndPending = Event::where('event_type_id','=',1)
+            $adminAnnouncementSelfCreatedAndPending = DB::table('events')->where('event_type_id','=',1)
                 ->where('created_by','=',$user->id)
                 ->wherein('status',[0,1,2])
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
-                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                ->orderby('events.created_at','desc')
-                ->get()->toArray();
+                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
 
-            $adminAnnouncementAssignedPublished = Event::join('event_user_roles','event_user_roles.event_id','=','events.id')
+            $adminAnnouncementAssignedPublished = DB::table('events')->join('event_user_roles','event_user_roles.event_id','=','events.id')
                 ->where('event_type_id','=',1)
                 ->where('events.status','=',2)
                 ->where('event_user_roles.user_id','=',$user->id)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
-                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                ->orderby('events.created_at','desc')
-                ->get()->toArray();
+                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
 
-            $adminAnnouncementOthersPending = Event::where('status','=',1)
+            $adminAnnouncementOthersPending = DB::table('events')->where('status','=',1)
                 ->where('published_by','=',$user->id)
                 ->where('event_type_id','=',1)
                 ->whereraw('YEAR(created_at) ='.date($year))
                 ->whereraw('MONTH(created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
+                ->union($adminAnnouncementSelfCreatedAndPending)
+                ->union($adminAnnouncementAssignedPublished)
                 ->orderby('created_at','desc')
-                ->get()->toArray();
-
+                ->get();
 
             if($id == 0)
             {
@@ -522,8 +520,6 @@
 
                 $finalMergedLastEvent = array_merge(array($adminAnnouncementOthersPendingLastDate),$arrayMergedForLastDate);
 
-                $dummyArray = array();
-
                 $lastDate = date('');
 
                 foreach(array_unique($finalMergedLastEvent) as $row)
@@ -540,18 +536,13 @@
 
                 }
 
-                $mergedArray = array_merge($adminAnnouncementSelfCreatedAndPending,$adminAnnouncementAssignedPublished);
-
-                $mergedArrayWithLastDate = array_merge($mergedArray,$adminAnnouncementOthersPending);
-
-                $adminAnnouncement[$lastDate] = $mergedArrayWithLastDate;
+                $mergedArray = json_decode(json_encode($adminAnnouncementOthersPending),true);
+                $adminAnnouncement[$lastDate] = $mergedArray;
 
 
             } else {
 
-                $mergedArray = array_merge($adminAnnouncementSelfCreatedAndPending,$adminAnnouncementAssignedPublished);
-
-                $adminAnnouncement = array_merge($mergedArray,$adminAnnouncementOthersPending);
+                $adminAnnouncement = json_decode(json_encode($adminAnnouncementOthersPending),true);
 
             }
 
@@ -573,34 +564,32 @@
 
             $user = Auth::user();
 
-            $adminAchievementSelfCreated = Event::join('event_images','event_images.event_id','=','events.id')
+            $adminAchievementSelfCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('events.created_by','=',$user->id)
                 ->wherein('status',[0,2])
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
-                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
-                ->orderby('events.created_at','desc')
-                ->get()->toArray();
+                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
 
-            $adminAchievementOthersPending = Event::join('event_images','event_images.event_id','=','events.id')
+            $adminAchievementOthersPending = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('created_by','!=',$user->id)
                 ->where('status','=',1)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
-                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
-                ->orderby('events.created_at','desc')
-                ->get()->toArray();
+                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
 
-            $adminAllPublished = Event::join('event_images','event_images.event_id','=','events.id')
+            $adminAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('status','=',2)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
-                ->orderby('events.created_at','desc')
-                ->get()->toArray();
+                ->unionAll($adminAchievementOthersPending)
+                ->unionAll($adminAchievementSelfCreated)
+                ->orderby('created_at','desc')
+                ->get();
 
             if($id == 0 ) {
 
@@ -641,18 +630,14 @@
 
                     }
 
-                    $mergedArray = array_merge($adminAchievementSelfCreated,$adminAchievementOthersPending);
+                    $mergedArray = json_decode(json_encode($adminAllPublished),true);
 
-                    $mergedArrayWithLastDate = array_merge($mergedArray,$adminAllPublished);
-
-                    $adminAchievement[$lastDate] = $mergedArrayWithLastDate;
+                    $adminAchievement[$lastDate] = $mergedArray;
 
 
             } else {
 
-                $mergedArray = array_merge($adminAchievementSelfCreated,$adminAchievementOthersPending);
-
-                $adminAchievement = array_merge($mergedArray,$adminAllPublished);
+                $adminAchievement = json_decode(json_encode($adminAllPublished),true);
 
             }
 
@@ -673,26 +658,23 @@
         {
             $user = Auth::User();
 
-            $teacherAnnouncementSelfCreatedAndPendingAndPublished = Event::where('event_type_id','=',1)
+            $teacherAnnouncementSelfCreatedAndPendingAndPublished = DB::table('events')->where('event_type_id','=',1)
                 ->wherein('status',[0,1,2])
                 ->where('created_by','=',$user->id)
                 ->whereraw('YEAR(created_at) ='.date($year))
                 ->whereraw('MONTH(created_at) ='.date($month))
-                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                ->orderby('created_at','desc')
-                ->get()
-                ->toArray();
+                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
 
-            $teacherAnnouncementAssignedPublished = Event::join('event_user_roles','event_user_roles.event_id','=','events.id')
+            $teacherAnnouncementAssignedPublished = DB::table('events')->join('event_user_roles','event_user_roles.event_id','=','events.id')
                 ->where('event_type_id','=',1)
                 ->where('status','=',2)
                 ->where('event_user_roles.user_id','=',$user->id)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                ->orderby('events.created_at','desc')
-                ->get()
-                ->toArray();
+                ->union($teacherAnnouncementSelfCreatedAndPendingAndPublished)
+                ->orderby('created_at','desc')
+                ->get();
 
             if($id == 0)
             {
@@ -708,8 +690,6 @@
                     ->max('events.created_at');
 
                 $arrayMergedForLastDate = array_merge(array($teacherAnnouncementSelfCreatedAndPendingAndPublishedLastDate),array($teacherAnnouncementAssignedPublishedLastDate));
-
-                $dummyArray = array();
 
                 $lastDate = date('');
 
@@ -727,10 +707,12 @@
 
                 }
 
-                $teacherAnnouncement[$lastDate] = array_merge($teacherAnnouncementSelfCreatedAndPendingAndPublished,$teacherAnnouncementAssignedPublished);
+                $mergedArray = json_decode(json_encode($teacherAnnouncementAssignedPublished),true);
+
+                $teacherAnnouncement[$lastDate] = $mergedArray;
 
             } else {
-                $teacherAnnouncement = array_merge($teacherAnnouncementSelfCreatedAndPendingAndPublished,$teacherAnnouncementAssignedPublished);
+                $teacherAnnouncement = json_decode(json_encode($teacherAnnouncementAssignedPublished),true);
 
             }
 
@@ -752,25 +734,23 @@
 
             $user = Auth::User();
 
-            $teacherAchievementSelfPendingAndCreated = Event::join('event_images','event_images.event_id','=','events.id')
+            $teacherAchievementSelfPendingAndCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                         ->where('event_type_id','=',2)
                         ->where('created_by','=',$user->id)
                         ->wherein('status',[0,1])
                         ->whereraw('YEAR(events.created_at) ='.date($year))
                         ->whereraw('MONTH(events.created_at) ='.date($month))
-                        ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
-                        ->orderby('events.created_at','desc')
-                        ->get()->toArray();
+                        ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
 
-            $teacherAchievementAllPublished = Event::join('event_images','event_images.event_id','=','events.id')
+            $teacherAchievementAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                         ->where('event_type_id','=',2)
                         ->where('status','=',2)
                         ->whereraw('YEAR(events.created_at) ='.date($year))
                         ->whereraw('MONTH(events.created_at) ='.date($month))
                         ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
-                        ->orderby('events.created_at','desc')
-                        ->get()->toArray();
-
+                        ->union($teacherAchievementSelfPendingAndCreated)
+                        ->orderby('created_at','desc')
+                        ->get();
             //oldest date of event
 
             if($id == 0)
@@ -788,8 +768,6 @@
 
                 $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
 
-                $dummyArray = array();
-
                 $lastDate = date('');
 
                 foreach(array_unique($arrayMergedForLastDate) as $row)
@@ -806,11 +784,11 @@
 
                 }
 
-                $teacherAchievement[$lastDate] = array_merge($teacherAchievementSelfPendingAndCreated,$teacherAchievementAllPublished);
+                $teacherAchievement[$lastDate] = json_decode(json_encode($teacherAchievementAllPublished),true);
 
             } else {
 
-                $teacherAchievement = array_merge($teacherAchievementSelfPendingAndCreated,$teacherAchievementAllPublished);
+                $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
 
             }
 
@@ -1420,11 +1398,15 @@
 
                         $file = $path.$timeImage;
 
-                        rename(public_path($filename),$file);
+                        if(file_exists(public_path($filename)))
+                        {
+                            rename(public_path($filename),$file);
 
-                        chmod($file,0777);
+                            chmod($file,0777);
 
-                        array_push($images,$timeImage);
+                            array_push($images,$timeImage);
+
+                        }
 
                     }
 

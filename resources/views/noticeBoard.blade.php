@@ -204,7 +204,7 @@
                                             '<span class="day text-bold">'+ moment(arr[i]['created_at']).date() +'</span>'+
                                         '</div>'+
                                         '<div class="inline-block">'+
-                                            '<span class="block week-day text-extra-large"> &nbsp;'+ days[moment(arr[i]['created_at']).day()] +'</span>'+
+                                            '<span class="block week-day text-extra-large"> &nbsp;'+ days[moment(arr[i]['created_at']).day() - 1] +'</span>'+
                                             '<span class="block month text-large text-light"> &nbsp;'+ moment(arr[i]['created_at']).format('hh:mm A') ;
 
                                                if(arr[i]['priority'] == 1)
@@ -265,7 +265,7 @@
                                                     '<span class="day text-bold"> '+ moment(arr[i]['created_at']).date() +' </span>'+
                                                 '</div>'+
                                                 '<div class="inline-block">'+
-                                                    '<span class="block week-day text-extra-large"> &nbsp;'+ days[moment(arr[i]['created_at']).day()] +'</span>'+
+                                                    '<span class="block week-day text-extra-large"> &nbsp;'+ days[moment(arr[i]['created_at']).day() - 1] +'</span>'+
                                                     '<span class="block month text-large text-light"> &nbsp;'+ moment(arr[i]['created_at']).format('hh:mm A') +'</span>'+
                                                 '</div>'+
                                                 '<div class="inline-block pull-right">' ;
@@ -307,7 +307,8 @@
                                                 str += '<img src="/assets/images/your-logo-here.png" alt="offce" class="img-responsive">';
 
                                             } else {
-                                                str += '<img src="/uploads/achievements/"'+arr[i]['image'] +' alt="offce" class="img-responsive">';
+
+                                                str += '<img src="/uploads/achievements/'+arr[i]['image'] +'" class="img-responsive">';
 
                                             }
 
