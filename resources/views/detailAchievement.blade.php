@@ -52,7 +52,7 @@
                                         </div>
                                         <div class="panel-tools">
 
-                                            Created by
+                                            Created By
                                             @if($achievement['gender'] == 'M')
                                             Mr.
                                             @else
@@ -71,7 +71,7 @@
                                                 </i>
                                             </small>
 
-                                            created At {{ $achievement['created_at'] }}
+                                            Created On <i class="fa fa-clock-o"></i> {{ $achievement['created_at'] }}
 
                                         </div>
                                     </div>
@@ -160,7 +160,7 @@
                                                 @endif
                                                 @endforeach
 
-                                                    Published At : <i class="fa fa-clock-o"></i> {{ $achievement['updated_at'] }} @endif
+                                                    Published On <i class="fa fa-clock-o"></i> {{ $achievement['updated_at'] }} @endif
                                             </small>
                                         </h4>
                                         @endforeach

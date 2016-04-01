@@ -17,6 +17,7 @@
     use Illuminate\Http\Request;
     use App\Http\Controllers\Controller;
     use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\File;
     use Illuminate\Support\Facades\Input;
     use Illuminate\Support\Facades\Redirect;
     use Illuminate\Support\Facades\Session;
@@ -842,8 +843,20 @@
          * Date: 03/03/2016
          * author manoj chaudahri
          */
-        public function showCreateAnnouncement(Request $request)
+        public function showCreateNoticeBoard(Request $request)
         {
+
+            /***to unlink uploaded file from temp folder on page load ****/
+
+            $filename = "/vendor/jquery-file-upload/server/php/files/";
+
+            $path = public_path($filename);
+
+            foreach(glob($path.'*.*') as $file) {
+                if(is_file($file))
+                    unlink($file);
+            }
+
             $user = Auth::user();
             $classDivision = array();
             $batchList = array();
@@ -1387,7 +1400,99 @@
 
         public function createAchievement(CreateAchievementRequest $request)
         {
-            dd($request->all());
+            if($request->authorize() === true ) {
+
+                $images = array();
+
+                if(isset($request->uploadedFiles[0]))
+                {
+                    foreach($request->uploadedFiles as $row)
+                    {
+
+                        $filename = "/vendor/jquery-file-upload/server/php/files/".$row;
+
+                        $path = public_path('uploads/achievements/');
+                        if (! file_exists($path)) {
+                            File::makeDirectory('uploads/achievements/', $mode = 0777, true, true);
+                        }
+
+                        $timeImage = time().'_'.$row;
+
+                        $file = $path.$timeImage;
+
+                        rename(public_path($filename),$file);
+
+                        chmod($file,0777);
+
+                        array_push($images,$timeImage);
+
+                    }
+
+                }
+
+                $storeAchievement['title'] = $request->title;
+                $storeAchievement['detail'] = $request->achievement;
+
+                if($request->hiddenBtnCheck == 0)
+                {
+                    if(Auth::User()->role_id == 1)
+                    {
+                        $storeAchievement['status'] = 2;
+                        $storeAchievement['published_by'] = Auth::User()->id;
+                    } else {
+                        $storeAchievement['status'] = 1;
+                        $storeAchievement['published_by'] = 0;
+                    }
+
+                } else {
+                    $storeAchievement['status'] = 0;
+                    $storeAchievement['published_by'] = 0;
+                }
+                $storeAchievement['event_type_id'] = 2 ;
+                $storeAchievement['created_by'] = Auth::User()->id;
+                $storeAchievement['created_at'] = Carbon::now();
+                $storeAchievement['updated_at'] = Carbon::now();
+
+                $lastInsertId = Event::insertGetId($storeAchievement);
+
+                if(sizeof($images) == 0) {
+                    $storeAchievementImages['event_id'] = $lastInsertId;
+                    $storeAchievementImages['image'] = null;
+                    $storeAchievementImages['created_at'] = Carbon::now();
+                    $storeAchievementImages['updated_at'] = Carbon::now();
+
+                    EventImages::insert($storeAchievementImages);
+                } else {
+                    foreach($images as $image)
+                    {
+                        $storeAchievementImages['event_id'] = $lastInsertId;
+                        $storeAchievementImages['image'] = $image;
+                        $storeAchievementImages['created_at'] = Carbon::now();
+                        $storeAchievementImages['updated_at'] = Carbon::now();
+
+                        EventImages::insert($storeAchievementImages);
+                    }
+                }
+
+                if($request->hiddenBtnCheck == 0)
+                {
+                    if(Auth::User()->role_id == 1)
+                    {
+                        Session::flash('message-success','Achievement created and published successfully !');
+                    } else {
+                        Session::flash('message-success','Achievement created and sent for publish successfully !');
+                    }
+                } else {
+
+                    Session::flash('message-success','Achievement created successfully !');
+
+                }
+
+                return Redirect::to('/detail-achievement/'.$lastInsertId);
+
+            } else {
+                return Redirect::back();
+            }
         }
 
     }
