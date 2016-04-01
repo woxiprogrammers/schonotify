@@ -123,9 +123,11 @@
 
     Route::get('/show-noticeboard-listing/{id}','NoticeBoardController@getListing');
 
-    Route::get('show-create-announcement','NoticeBoardController@showCreateAnnouncement');
+    Route::get('/create-notice-board','NoticeBoardController@showCreateAnnouncement');
 
-    Route::get('/create-notice-board','NoticeBoardController@createNoticeBoard');
+    Route::post('/createNoticeBoard','NoticeBoardController@createNoticeBoard');
+
+    Route::post('/create-achievement','NoticeBoardController@createAchievement');
 
     Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
 
