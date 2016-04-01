@@ -123,7 +123,7 @@
 
     Route::get('/show-noticeboard-listing/{id}','NoticeBoardController@getListing');
 
-    Route::get('/create-notice-board','NoticeBoardController@showCreateAnnouncement');
+    Route::get('/create-notice-board','NoticeBoardController@showCreateNoticeBoard');
 
     Route::post('/createNoticeBoard','NoticeBoardController@createNoticeBoard');
 
