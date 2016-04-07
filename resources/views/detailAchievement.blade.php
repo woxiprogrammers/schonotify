@@ -53,17 +53,17 @@
                                         <div class="panel-tools">
 
                                             Created By
-                                            @if($achievement['gender'] == 'M')
+                                            @if($achievements[0]['gender'] == 'M')
                                             Mr.
                                             @else
                                             Mrs.
                                             @endif
 
-                                            {{ $achievement['first_name'] }} {{ $achievement['last_name'] }} ({{ $achievement['username'] }})
+                                            {{ $achievements[0]['first_name'] }} {{ $achievements[0]['last_name'] }} ({{ $achievements[0]['username'] }})
 
                                             <small>
                                                 <i>
-                                                    @if($achievement['role_id'] == 2)
+                                                    @if($achievements[0]['role_id'] == 2)
                                                     Teacher
                                                     @else
                                                     Admin
@@ -71,15 +71,18 @@
                                                 </i>
                                             </small>
 
-                                            Created On <i class="fa fa-clock-o"></i> {{ $achievement['created_at'] }}
+                                            Created On <i class="fa fa-clock-o"></i> {{ $achievements[0]['created_at'] }}
 
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="col-sm-5">
                                             <div id="imgDiv">
+
                                                 <div class="col-sm-12">
-                                                    <img class="thumbnail" src="/uploads/achievements/{{ $imageArray[0] }}" width="300" height="200" id="default-image" onError="this.onerror=null;this.width='300';this.src='/assets/images/your-logo-here.png'; ">
+
+                                                    <img class="thumbnail" src="/uploads/achievement/events/{{ $achievements[0]['id'] }}/{{ $imageArray[0] }}" width="300" height="200" id="default-image" onError="this.onerror=null;this.width='300';this.src='/assets/images/your-logo-here.png'; ">
+
                                                 </div>
                                                 <div class="col-sm-12" id="clients">
 
@@ -94,7 +97,8 @@
 
                                                             @foreach($imageArray as $image)
                                                             <div style="display: none;">
-                                                                <img data-u="image" class="thumbnail pull-left thumb-image" style="margin-right:2px;" src="/uploads/achievements/{{ $image }}" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
+
+                                                                <img data-u="image" class="thumbnail pull-left thumb-image" style="margin-right:2px;" src="/uploads/achievement/events/{{ $achievements[0]['id'] }}/{{ $image }}" onError="this.onerror=null;this.width='80';this.src='/assets/images/your-logo-here.png'; ">
                                                             </div>
                                                             @endforeach
 
@@ -174,17 +178,17 @@
                                                     <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                         <i class="fa fa-wrench"></i> Update
                                                     </button>
-                                                    <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                                    <a href="/check-publish-achievement/{{ $achievement['id'] }}" class="btn btn-primary btn-wide pull-right " type="button" id="btnPublish">
                                                         <i class="fa fa-cloud-upload"></i> Publish
-                                                    </button>
+                                                    </a>
                                                 @endif
                                             @elseif($achievement['status'] == 0)
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
-                                                <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                                <a href="/check-publish-achievement/{{ $achievement['id'] }}" class="btn btn-primary btn-wide pull-right " type="button" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
-                                                </button>
+                                                </a>
                                             @endif
 
                                         </div>
@@ -197,7 +201,7 @@
 
                         </div>
                         <div id="update">
-                            <form action="#" role="form" id="form2">
+                            <form action="/update-achievement" method="post" role="form" id="editAchievementForm" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -207,23 +211,22 @@
                                             <i class="fa fa-ok"></i> Your form validation is successful!
                                         </div>
                                     </div>
+                                    <input type="hidden" id="hiddenEVentId" value="{{ $achievements[0]['id'] }}"/>
+                                    <input type="hidden" id="hiddenUserId" value="{{ Auth::User()->id}}"/>
+                                    <input type="hidden" id="hiddenEventId" name="hiddenEventId" value="{{ $achievements[0]['id']}}"/>
                                     <div class="col-md-10">
                                         <div class="form-group">
                                             <label class="control-label">
                                                 Title <span class="symbol required"></span>
                                             </label>
-                                            <input type="text" placeholder="Insert Title" class="form-control" id="title" name="title" value="PARENT MEET FOR THIS MONTH">
+                                            <input type="text" placeholder="Insert Title" class="form-control" id="title" name="title" value="{{ $achievements[0]['title'] }}">
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
                                                 Type Description <span class="symbol required"></span>
                                             </label>
-                                            <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px;">Parent Meet for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
-                                                Venue:
-                                                MIT School
-                                                795 Folsom Ave, Suite 600
-                                                San Francisco, CA 94107
-                                                P: (123) 456-7890
+                                            <textarea class="form-control col-sm-8" id="achievement" name="achievement" style="min-height: 180px;">
+                                                {{ $achievements[0]['detail'] }}
                                             </textarea>
                                         </div>
                                     </div>
@@ -298,13 +301,13 @@
     </div>
 
 </div>
-
+<div id="loadmoreajaxloader" style="display: block;" class="loader-position-event" ><center><img src="/assets/images/loader1.gif" /></center></div>
 @include('footer')
 
 @include('rightSidebar')
 
-
 </div>
+
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -333,8 +336,38 @@
     });
 
     $('#btnEdit').click(function(){
-        $('#detail').hide();
-        $('#update').show();
+
+        $('#loadmoreajaxloader').show();
+
+        var route = "/check-edit-achievement";
+
+        $.get(route,function(res){
+
+            if(res == 1)
+            {
+                $('#detail').hide();
+                $('#update').show();
+                $('#message-error-div').hide();
+                $('#message-error-div').html("");
+            } else {
+                var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                    '<span area-hidden="true">&times;</span>'+
+                    '</button>'+
+                    "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                    "</div>";
+                $('#message-error-div').show();
+                $('#message-error-div').html(str);
+            }
+
+            $('#loadmoreajaxloader').hide();
+
+        });
+
+    });
+
+    $(window).load(function() {
+        $('#loadmoreajaxloader').hide();
     });
 
     $('#btnCancel').click(function(){
@@ -343,25 +376,6 @@
 
     });
 
-    $('#btnUpdate').click(function(){
-        window.location.href="detailedAnnouncement";
-    });
-
-    var dir = "/vendor/jquery-file-upload/server/php/files/thumbnail/";
-
-    var fileextension = ".png";
-
-    $.ajax({
-        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-        url: dir,
-        success: function (data) {
-            //List all .png file names in the page
-            $(data).find("a:contains(" + fileextension + ")").each(function () {
-                var filename = this.href.replace(window.location.host, "").replace("http://", "");
-                $("#imgDiv").append("<img src='" + dir + filename + "'>");
-            });
-        }
-    });
 
     $('.thumb-image').click(function(){
         var imgSrc = this.src
@@ -425,6 +439,7 @@
 			</td>
 			<td>
 			<p class="name">{%=file.name%}</p>
+			<input type="hidden" name="uploadedFiles[]" value="{%=file.name%}"/>
 			{% if (file.error) { %}
 			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
 			{% } %}
@@ -454,7 +469,7 @@
 		</script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
-			{% for (var i=0, file; file=o.files[i]; i++) { %}
+			{%for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-download fade">
 			<td>
 			<span class="preview">
@@ -465,8 +480,19 @@
 			</td>
 			<td>
 
+			<p class="name">
+			{% if (file.url) { %}
+
+			<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+			{% } else { %}
+
+			<span>{%=file.name%} </span>
+			{% } %}
+			</p>
 			{% if (file.error) { %}
 			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
+			{% } else { %}
+			<input type="hidden" name="uploadedFiles[]" value="{%=file.name%}"/>
 			{% } %}
 			</td>
 			<td>
@@ -474,10 +500,12 @@
 			</td>
 			<td>
 			{% if (file.deleteUrl) { %}
-			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+
+			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}&&id=userId"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 			<i class="glyphicon glyphicon-trash"></i>
 			<span>Delete</span>
 			</button>
+
 			<input type="checkbox" name="delete" value="1" class="toggle">
 			{% } else { %}
 			<button class="btn btn-warning cancel">
@@ -515,7 +543,7 @@
 <!-- The File Upload user interface plugin -->
 <script src="/vendor/jquery-file-upload/jquery.fileupload-ui.js"></script>
 <!-- The main application script -->
-<script src="/vendor/jquery-file-upload/main.js"></script>
+<script src="/vendor/jquery-file-upload/main1.js"></script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
 <script src="/js/cors/jquery.xdr-transport.js"></script>

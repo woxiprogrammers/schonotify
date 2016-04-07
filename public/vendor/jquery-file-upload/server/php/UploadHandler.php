@@ -40,14 +40,15 @@ class UploadHandler
 
     protected $image_objects = array();
 
-    function __construct($options = null, $initialize = true, $error_messages = null) {
+     function __construct($options = null, $initialize = true, $error_messages = null) {
+
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/',
-            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/',
-            'upload_url' => $this->get_full_url().'/files/',
+            'upload_dir' => $_SERVER['DOCUMENT_ROOT'].'/uploads/achievement/'.$_GET['id'].'/',
+            'upload_url' => '/uploads/achievement/'.$_GET['id'].'/',
             'user_dirs' => false,
-            'mkdir_mode' => 0755,
+            'mkdir_mode' => 0777,
             'param_name' => 'files',
             // Set the following option to 'POST', if your server does not support
             // DELETE requests. This is a parameter sent to the client:
@@ -174,6 +175,7 @@ class UploadHandler
             case 'PATCH':
             case 'PUT':
             case 'POST':
+                $_SESSION['userId_'] = $_GET['id'];
                 $this->post($this->options['print_response']);
                 break;
             case 'DELETE':
@@ -215,11 +217,13 @@ class UploadHandler
             $version_path = '';
         } else {
             $version_dir = @$this->options['image_versions'][$version]['upload_dir'];
+
             if ($version_dir) {
                 return $version_dir.$this->get_user_path().$file_name;
             }
             $version_path = $version.'/';
         }
+
         return $this->options['upload_dir'].$this->get_user_path()
             .$version_path.$file_name;
     }
@@ -253,10 +257,12 @@ class UploadHandler
     }
 
     protected function set_additional_file_properties($file) {
+
         $file->deleteUrl = $this->options['script_url']
             .$this->get_query_separator($this->options['script_url'])
             .$this->get_singular_param_name()
-            .'='.rawurlencode($file->name);
+            .'='.rawurlencode($file->name)
+            .'&&id='.$_GET['id'];
         $file->deleteType = $this->options['delete_type'];
         if ($file->deleteType !== 'DELETE') {
             $file->deleteUrl .= '&_method=DELETE';
@@ -1092,6 +1098,7 @@ class UploadHandler
                 }
             }
             $this->set_additional_file_properties($file);
+
         }
         return $file;
     }
@@ -1350,12 +1357,14 @@ class UploadHandler
 
     public function delete($print_response = true) {
         $file_names = $this->get_file_names_params();
+
         if (empty($file_names)) {
             $file_names = array($this->get_file_name_param());
         }
         $response = array();
         foreach($file_names as $file_name) {
             $file_path = $this->get_upload_path($file_name);
+
             $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
             if ($success) {
                 foreach($this->options['image_versions'] as $version => $options) {

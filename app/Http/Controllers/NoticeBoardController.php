@@ -10,7 +10,9 @@
     use App\EventUserRoles;
     use App\Http\Requests\WebRequests\CreateAchievementRequest;
     use App\Http\Requests\WebRequests\CreateAnnouncementRequest;
+    use App\Http\Requests\WebRequests\EditAchievementRequest;
     use App\Http\Requests\WebRequests\NoticeBoardRequest;
+    use App\Http\Requests\WebRequests\PublishAchievementRequest;
     use App\SubjectClassDivision;
     use App\User;
     use Carbon\Carbon;
@@ -826,7 +828,7 @@
 
             /***to unlink uploaded file from temp folder on page load ****/
 
-            $filename = "/vendor/jquery-file-upload/server/php/files/";
+            $filename = "uploads/achievement/".Auth::User()->id."/";
 
             $path = public_path($filename);
 
@@ -1341,6 +1343,28 @@
         }
 
         /*
+        * Function Name : removeEmptySubFolders
+        * Param : $path
+        * Return : --
+        * Desc : it will delete empty temporary directories after use .
+        * Developed By : Suraj Bande
+        * Date : 3/4/2016
+        */
+
+        public function removeEmptySubFolders($path)
+        {
+
+                foreach(scandir($path) as $file) {
+
+                    if ('.' === $file || '..' === $file) continue;
+                    if (is_dir("$path/$file")) $this::removeEmptySubFolders("$path/$file");
+                    else unlink("$path/$file");
+                }
+                rmdir($path);
+
+        }
+
+        /*
         * Function Name : detailAchievement
         * Param : $id
         * Return : details of achievement
@@ -1352,11 +1376,43 @@
         public function detailAchievement($id)
         {
 
-            $imageArray = array();
+            if(file_exists(public_path("uploads/achievement/".Auth::User()->id)))
+            {
+                $xx = $this::removeEmptySubFolders(public_path("uploads/achievement/".Auth::User()->id));
+            }
+
+            $path = public_path("uploads/achievement/".Auth::User()->id.'/'.$id.'/');
+
+            if (! file_exists($path.'thumbnail/')) {
+                File::makeDirectory('uploads/achievement/'.Auth::User()->id.'/'.$id.'/thumbnail/', $mode = 0777, true, true);
+            }
+
+            $file = public_path("uploads/achievement/events/".$id.'/');
+
+            if(! count(glob($file)) == 0)
+            {
+                foreach(glob($file.'*.*') as $files)
+                {
+                    $file_to_go = str_replace($file,$path,$files);
+
+                    copy($files,$file_to_go);
+                    chmod($file_to_go,0777);
+                }
+
+                foreach(glob($file.'thumbnail/*.*') as $thumbs)
+                {
+                    $file_to_go = str_replace($file.'thumbnail/',$path.'thumbnail/',$thumbs);
+
+                    copy($thumbs,$file_to_go);
+                    chmod($file_to_go,0777);
+                }
+            }
 
             $images = EventImages::where('event_id','=',$id)
                 ->select('image')
                 ->get()->toArray();
+
+            $imageArray = array();
 
             foreach($images as $key=>$value)
             {
@@ -1376,41 +1432,20 @@
             return view('detailAchievement')->with(compact('achievements','imageArray','publishedBy'));
         }
 
+        /*
+        * Function Name : createAchievement
+        * Param : $request
+        * Return : create achievement
+        * Desc : it will create achievement.
+        * Developed By : Suraj Bande
+        * Date : 28/3/2016
+        */
+
         public function createAchievement(CreateAchievementRequest $request)
         {
             if($request->authorize() === true ) {
 
                 $images = array();
-
-                if(isset($request->uploadedFiles[0]))
-                {
-                    foreach($request->uploadedFiles as $row)
-                    {
-
-                        $filename = "/vendor/jquery-file-upload/server/php/files/".$row;
-
-                        $path = public_path('uploads/achievements/');
-                        if (! file_exists($path)) {
-                            File::makeDirectory('uploads/achievements/', $mode = 0777, true, true);
-                        }
-
-                        $timeImage = time().'_'.$row;
-
-                        $file = $path.$timeImage;
-
-                        if(file_exists(public_path($filename)))
-                        {
-                            rename(public_path($filename),$file);
-
-                            chmod($file,0777);
-
-                            array_push($images,$timeImage);
-
-                        }
-
-                    }
-
-                }
 
                 $storeAchievement['title'] = $request->title;
                 $storeAchievement['detail'] = $request->achievement;
@@ -1436,6 +1471,45 @@
                 $storeAchievement['updated_at'] = Carbon::now();
 
                 $lastInsertId = Event::insertGetId($storeAchievement);
+
+                if(isset($request->uploadedFiles[0]))
+                {
+                    foreach($request->uploadedFiles as $row)
+                    {
+
+                        $filename = "/uploads/achievement/".Auth::User()->id.'/'.$row;
+                        $filenameThumb = "uploads/achievement/".Auth::User()->id.'/thumbnail/'.$row;
+
+                        $path = public_path('uploads/achievement/events/'.$lastInsertId.'/');
+
+                        if (! file_exists($path.'thumbnail/')) {
+                            File::makeDirectory('uploads/achievement/events/'.$lastInsertId.'/thumbnail/', $mode = 0777, true, true);
+                        }
+
+                        $timeImage = time().'_'.$row;
+
+                        $file = $path.$timeImage;
+
+                        if(file_exists(public_path($filename)))
+                        {
+                            rename(public_path($filename),$file);
+
+                            chmod($file,0777);
+
+                            array_push($images,$timeImage);
+
+                        }
+
+                        if(file_exists(public_path($filenameThumb)))
+                        {
+                            rename(public_path($filenameThumb),$path.'thumbnail/'.$timeImage);
+
+                            chmod($path.'/thumbnail/'.$timeImage,0777);
+                        }
+
+                    }
+
+                }
 
                 if(sizeof($images) == 0) {
                     $storeAchievementImages['event_id'] = $lastInsertId;
@@ -1470,7 +1544,182 @@
 
                 }
 
+                if(file_exists(public_path("uploads/achievement/".Auth::User()->id)))
+                {
+                    $xx = $this::removeEmptySubFolders(public_path("uploads/achievement/".Auth::User()->id));
+                }
+
                 return Redirect::to('/detail-achievement/'.$lastInsertId);
+
+            } else {
+                return Redirect::back();
+            }
+        }
+
+        /*
+        * Function Name : checkUpdateAchievementAcl
+        * Param : $request
+        * Return : check ACL for update achievement
+        * Desc : check ACL for update achievement.
+        * Developed By : Suraj Bande
+        * Date : 5/3/2016
+        */
+
+        public function checkUpdateAchievementAcl(EditAchievementRequest $request)
+        {
+            if($request->authorize() === true)
+            {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+
+        /*
+        * Function Name : checkPublishAchievementAcl
+        * Param : $request,$id
+        * Return : check ACL for publish achievement
+        * Desc : check ACL for publish achievement.
+        * Developed By : Suraj Bande
+        * Date : 5/3/2016
+        */
+
+        public function checkPublishAchievementAcl(PublishAchievementRequest $request,$id)
+        {
+            if($request->authorize() === true)
+            {
+
+                if(Auth::User()->role_id == 1)
+                {
+                    $achievement = Event::find($id);
+                    $achievement->published_by = Auth::User()->id;
+                    $achievement->status = 2;
+
+                    $achievement->save();
+
+                    Session::flash('message-success','Achievement published successfully !');
+
+                } else {
+
+                    $achievement = Event::find($id);
+                    $achievement->status = 1;
+
+                    $achievement->save();
+
+                    Session::flash('message-success','Achievement sent for publish successfully !');
+
+                }
+
+                return Redirect::back();
+
+            } else {
+                return Redirect::back();
+            }
+        }
+
+        /*
+        * Function Name : updateAchievement
+        * Param : $request
+        * Return : it will update achievement.
+        * Desc : it will update achievement.
+        * Developed By : Suraj Bande
+        * Date : 5/3/2016
+        */
+
+        public function updateAchievement(EditAchievementRequest $request)
+        {
+            if($request->authorize() === true)
+            {
+
+                $images = array();
+                $achievement = Event::find($request->hiddenEventId);
+
+                $achievement->title = $request->title;
+                $achievement->detail = $request->achievement;
+                $achievement->updated_at = Carbon::now();
+
+                $achievement->save();
+
+                EventImages::where('event_id','=',$request->hiddenEventId)
+                            ->delete();
+
+                $filename = "uploads/achievement/events/".$request->hiddenEventId."/";
+
+                $path = public_path($filename);
+
+                foreach(glob($path.'*.*') as $file) {
+                    if(is_file($file))
+                        unlink($file);
+                }
+
+                if(isset($request->uploadedFiles[0]))
+                {
+                    foreach($request->uploadedFiles as $row)
+                    {
+
+                        $filename = "uploads/achievement/".Auth::User()->id.'/'.$request->hiddenEventId.'/'.$row;
+                        $filenameThumb = "uploads/achievement/".Auth::User()->id.'/'.$request->hiddenEventId.'/thumbnail/'.$row;
+
+                        $tempPath = "uploads/achievement/events/".$request->hiddenEventId."/";
+
+                        $path = public_path($tempPath);
+
+                        if (! file_exists($path.'thumbnail/')) {
+                            File::makeDirectory('uploads/achievement/events/'.$request->hiddenEventId.'/thumbnail/', $mode = 0777, true, true);
+                        }
+
+                        $timeImage = time().'_'.$row;
+
+                        $file = $path.$timeImage;
+
+                        if(file_exists(public_path($filename)))
+                        {
+                            rename(public_path($filename),$file);
+
+                            chmod($file,0777);
+
+                            array_push($images,$timeImage);
+
+                        }
+
+                        if(file_exists(public_path($filenameThumb)))
+                        {
+                            rename(public_path($filenameThumb),$path.'thumbnail/'.$timeImage);
+
+                            chmod($path.'/thumbnail/'.$timeImage,0777);
+                        }
+
+                    }
+
+                }
+
+                if(sizeof($images) == 0) {
+                    $storeAchievementImages['event_id'] = $request->hiddenEventId;
+                    $storeAchievementImages['image'] = null;
+                    $storeAchievementImages['created_at'] = Carbon::now();
+                    $storeAchievementImages['updated_at'] = Carbon::now();
+
+                    EventImages::insert($storeAchievementImages);
+                } else {
+                    foreach($images as $image)
+                    {
+                        $storeAchievementImages['event_id'] = $request->hiddenEventId;
+                        $storeAchievementImages['image'] = $image;
+                        $storeAchievementImages['created_at'] = Carbon::now();
+                        $storeAchievementImages['updated_at'] = Carbon::now();
+
+                        EventImages::insert($storeAchievementImages);
+                    }
+                }
+
+                if(file_exists(public_path("uploads/achievement/".Auth::User()->id)))
+                {
+                    $xx = $this::removeEmptySubFolders(public_path("uploads/achievement/".Auth::User()->id));
+                }
+
+                Session::flash('message-success','Achievement updated successfully !');
+
+                return Redirect::back();
 
             } else {
                 return Redirect::back();
