@@ -116,10 +116,12 @@
                                         <div class="panel-scroll height-180 margin-bottom-10 ps-container ps-active-y">
                                             <p>
                                                 @foreach($achievements as $achievement)
-                                                {{ $achievement['detail'] }}
+                                                <textarea class="col-sm-12" style="height:200px;" disabled>
+                                                    {{ $achievement['detail'] }}
+                                                </textarea>
                                                 @endforeach
                                             </p>
-                                            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div>
+
                                         </div>
 
                                         </div>
