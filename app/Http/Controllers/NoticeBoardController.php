@@ -1351,9 +1351,20 @@
 
         }
 
-        public function detailAnnouncement()
+        public function detailAnnouncement($id)
         {
-            return view('detailAnnouncement');
+
+            $announcements = Event::join('users','users.id','=','events.created_by')
+                ->where('events.id','=',$id)
+                ->select('events.id','title','events.status','events.detail','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                ->get()->toArray();
+
+            $publishedBy = Event::join('users','users.id','=','events.published_by')
+                ->where('events.id','=',$id)
+                ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                ->get()->toArray();
+
+            return view('detailAnnouncement')->with(compact('announcements','publishedBy'));
         }
 
         /*

@@ -139,7 +139,7 @@
 
     Route::get('get-all-teachers','NoticeBoardController@getAllTeachers');
 
-    Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
+    Route::get('/detail-announcement/{id}','NoticeBoardController@detailAnnouncement');
 
     Route::get('detail-achievement/{id}','NoticeBoardController@detailAchievement');
 
