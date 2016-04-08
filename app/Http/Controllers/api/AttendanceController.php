@@ -630,7 +630,7 @@ class AttendanceController extends Controller
     * Return : $status $message $studentAttendance
     * Desc : A teacher can view default months attendance of division.
     * Developed By : Amol Rokade
-    * Date : 04/03/2016
+    * Date : 08/04/2016
     */
     public function viewDefaultAttendanceTeacher(Requests\ViewRequest $request)
     {
