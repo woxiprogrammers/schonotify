@@ -41,7 +41,7 @@ class Message extends Request
                 }
                 break;
             case 'PUT':
-                if(in_array('Publish_message',$resultArr) ){
+                if(in_array('Delete_message',$resultArr) ){
                     return true;
                 }
                 else{
