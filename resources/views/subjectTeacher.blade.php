@@ -179,6 +179,9 @@
 
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/custom-project.js"></script>
+<script src="vendor/sweetalert/sweet-alert.min.js"></script>
+<script src="vendor/toastr/toastr.min.js"></script>
+<script src="assets/js/ui-notifications.js"></script>
 
 <script>
     jQuery(document).ready(function() {
@@ -313,11 +316,26 @@
                     str+="\n"+res[i]['firstname']+" "+res[i]['lastname']+" ("+res[i]['username']+")";
                 }
                     str+='\n is already assigned to this subject do you want to change it ?';
-                var confirmVal=confirm(str);
-                if(confirmVal==false)
-                {
-                    $('#teacherDropdown option:eq(0)').attr('selected','selected');
-                }
+
+                swal({
+                    title: "Change subject teacher relation!",
+                    text: str,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel plx!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function(isConfirm) {
+                    if(isConfirm) {
+                        swal("Relation switched!", "Teacher is allowed to switch.", "success");
+                    } else {
+                        $('#teacherDropdown option:eq(0)').attr('selected','selected');
+                        swal("Cancelled", "Your operation is as it is. :)", "error");
+                    }
+                });
+
             }
         });
     });

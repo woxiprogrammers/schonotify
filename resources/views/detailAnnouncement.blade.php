@@ -54,7 +54,8 @@
                             </div>
                             <div class="panel-body">
                                 <div class="panel-scroll height-280 ps-container ps-active-y">
-                                    Parent Meet for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
+                                    <textarea class="col-sm-12" style="height:200px;" disabled>
+                                        Parent Meet for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
                                     <br>
                                     Venue:
                                     <address>
@@ -66,8 +67,9 @@
                                         <br>
                                         <abbr title="Phone">P:</abbr> (123) 456-7890
                                     </address>
+                                    </textarea>
 
-                                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
+                                </div>
                             </div>
                             <div class="panel-footer col-sm-12">
 
@@ -276,7 +278,7 @@
 </div>
 
 </div>
-
+<div id="loadmoreajaxloader" style="display: block;" class="loader-position-event" ><center><img src="/assets/images/loader1.gif" /></center></div>
 @include('footer')
 
 @include('rightSidebar')
@@ -284,20 +286,22 @@
 
 </div>
 <!-- start: MAIN JAVASCRIPTS -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
-<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="vendor/switchery/switchery.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/modernizr/modernizr.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
-<script src="assets/js/custom-project.js"></script>
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/adapters/jquery.js"></script>
-<script src="assets/js/form-validation.js"></script>
+<script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="/assets/js/form-validation.js"></script>
+<script src="/vendor/moment/moment.min.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
@@ -330,6 +334,10 @@
         $('#update').hide();
         $('#detail').show();
 
+    });
+
+    $(window).load(function() {
+        $('#loadmoreajaxloader').hide();
     });
 
     $('#btnUpdate').click(function(){
