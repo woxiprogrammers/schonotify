@@ -303,6 +303,7 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $finalList = array();
             $markedAttendance = array();
             $leaveApplied = array();
