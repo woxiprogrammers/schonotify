@@ -119,13 +119,21 @@
 
     Route::post('create-timetable','TimetableController@createTimetable');
 
-    Route::get('noticeBoard','NoticeBoardController@show');
+    Route::get('/noticeBoard','NoticeBoardController@show');
 
-    Route::get('loadMore','NoticeBoardController@loadMore');
+    Route::get('/show-noticeboard-listing/{id}','NoticeBoardController@getListing');
 
-    Route::get('show-create-announcement','NoticeBoardController@showCreateAnnouncement');
+    Route::get('/create-notice-board','NoticeBoardController@showCreateNoticeBoard');
 
-    Route::post('createNoticeBoard','NoticeBoardController@createNoticeBoard');
+    Route::post('/createNoticeBoard','NoticeBoardController@createNoticeBoard');
+
+    Route::post('/create-achievement','NoticeBoardController@createAchievement');
+
+    Route::post('/update-achievement','NoticeBoardController@updateAchievement');
+
+    Route::get('/check-edit-achievement','NoticeBoardController@checkUpdateAchievementAcl');
+
+    Route::get('/check-publish-achievement/{id}','NoticeBoardController@checkPublishAchievementAcl');
 
     Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
 
@@ -133,7 +141,7 @@
 
     Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
 
-    Route::get('detailAchievement','NoticeBoardController@detailAchievement');
+    Route::get('detail-achievement/{id}','NoticeBoardController@detailAchievement');
 
     Route::get('leaveListing','LeaveController@leaveListing');
 

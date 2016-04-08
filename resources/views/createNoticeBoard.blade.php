@@ -202,7 +202,7 @@
                         <div class="tab-pane fade" id="myTab2_example2">
 
 
-                            <form action="#" role="form" id="form">
+                            <form action="/create-achievement" role="form" method="post" id="createAchievementForm" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -225,7 +225,7 @@
                                             </label>
                                             <textarea class="form-control" id="achievement" name="achievement"></textarea>
                                         </div>
-
+<input type="hidden" id="hiddenUserId" name="hiddenUserId" value="{{ Auth::User()->id }}">
                                     </div>
 
                                     <div id="fileupload" class="col-sm-10">
@@ -275,9 +275,13 @@
 
                                     </div>
 
+                                    <input type="hidden" name="hiddenBtnCheck" id="hiddenBtnCheck">
 
                                     <div class="col-md-12">
-                                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                                        <button class="btn btn-primary btn-wide" type="submit" id="publishAchievBtn">
+                                            Publish
+                                        </button>
+                                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="createAchievBtn">
                                             Create <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
@@ -285,7 +289,6 @@
                                 </div>
 
                             </form>
-
 
 
                         </div>
@@ -304,7 +307,7 @@
 </div>
 
 </div>
-
+<div id="loadmoreajaxloader" style="display: block;" class="loader-position-event" ><center><img src="/assets/images/loader1.gif" /></center></div>
 @include('footer')
 
 @include('rightSidebar')
@@ -332,7 +335,6 @@
 
 
 
-
 <script id="template-upload" type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-upload fade">
@@ -341,6 +343,7 @@
 			</td>
 			<td>
 			<p class="name">{%=file.name%}</p>
+			<input type="hidden" name="uploadedFiles[]" value="{%=file.name%}"/>
 			{% if (file.error) { %}
 			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
 			{% } %}
@@ -369,8 +372,10 @@
 			{% } %}
 		</script>
 <!-- The template to display files available for download -->
+
 <script id="template-download" type="text/x-tmpl">
-			{% for (var i=0, file; file=o.files[i]; i++) { %}
+
+			{%for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-download fade">
 			<td>
 			<span class="preview">
@@ -380,16 +385,20 @@
 			</span>
 			</td>
 			<td>
+
 			<p class="name">
 			{% if (file.url) { %}
 
 			<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
 			{% } else { %}
-			<span>{%=file.name%}</span>
+
+			<span>{%=file.name%} </span>
 			{% } %}
 			</p>
 			{% if (file.error) { %}
 			<div><span class="label label-danger">Error</span> {%=file.error%}</div>
+			{% } else { %}
+			<input type="hidden" name="uploadedFiles[]" value="{%=file.name%}"/>
 			{% } %}
 			</td>
 			<td>
@@ -397,10 +406,12 @@
 			</td>
 			<td>
 			{% if (file.deleteUrl) { %}
-			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+
+			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}&&id=userId"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 			<i class="glyphicon glyphicon-trash"></i>
 			<span>Delete</span>
 			</button>
+
 			<input type="checkbox" name="delete" value="1" class="toggle">
 			{% } else { %}
 			<button class="btn btn-warning cancel">
@@ -479,6 +490,10 @@
         }
     });
 
+
+    $(window).load(function() {
+        $('#loadmoreajaxloader').hide();
+    });
 
     $('.parentChk').change(function(){
         if($(this).prop('checked') == true)
@@ -673,6 +688,18 @@
         }
     });
 
+    $('#createAchievBtn').click(
+        function(){
+
+            $('#hiddenBtnCheck').val(1);
+        }
+    );
+
+    $('#publishAchievBtn').click(
+        function(){
+            $('#hiddenBtnCheck').val(0);
+        }
+    );
 
 </script>
 

@@ -25,7 +25,7 @@
 
                     <li>
                         <div class="values">
-                            <a href="/show-create-announcement" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
+                            <a href="/create-notice-board" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
                         </div>
                     </li>
 
@@ -50,98 +50,25 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
+
+                    <input type="hidden" id="hiddenLoadingFlag">
+
                     <div id="timeline">
 
 
                         <div class="timeline" id="tmlin">
                             <div class="spine"></div>
-                            <ul class="columns">
-                                @foreach($data as $row)
-                                @foreach($dataDate as $data)
-                                @if(date('F',strtotime($row['created_at'])) == $data)
-                                <div class="date_separator" id="november">
-                                    <span>{!! $data !!}</span>
-                                </div>
-
-                                @if($row['event_type_id'] == 1 )
-                                <li>
-                                    <div class="timeline_element partition-white">
-                                        <div class="timeline_date">
-                                            <div>
-                                                <div class="inline-block">
-                                                    <span class="day text-bold">{!! date('d',strtotime($row['created_at'])) !!}</span>
-                                                </div>
-                                                <div class="inline-block">
-                                                    <span class="block week-day text-extra-large">{!! date('l',strtotime($row['created_at'])) !!}</span>
-                                                    <span class="block month text-large text-light">{!! date('g:i a',strtotime($row['created_at'])) !!}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline_title">
-                                            <i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>
-                                            <h4 class="light-text no-margin padding-5" >{!! $row['title'] !!}</h4>
-                                        </div>
-                                        <div class="timeline_content" >
-                                            <b>{!! $row['detail'] !!}</b>
-                                        </div>
-                                        <div class="readmore">
-                                            <a href="detailAnnouncement/{!! $row['id']!!}" class="btn btn-primary btn-o btn-wide">
-                                                Read More <i class="fa fa-arrow-circle-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                @else
-                                <li>
-                                    <div class="timeline_element partition-gray">
-                                        <div class="timeline_date">
-                                            <div>
-                                                <div class="inline-block">
-                                                    <span class="day text-bold">05</span>
-                                                </div>
-                                                <div class="inline-block">
-                                                    <span class="block week-day text-extra-large">Wensdey</span>
-                                                    <span class="block month text-large text-light">5:00 AM</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline_title">
-                                            <i class="fa fa-trophy fa-2x pull-left fa-border"></i>
-                                            <h4 class="text-white no-margin padding-5">Platinum Jubilee of trust</h4>
-                                        </div>
-                                        <div class="timeline_content ">
-                                            <div class="row">
-                                                <div class="col-md-3 col-xs-4"><img src="assets/images/photodune-4043508-3d-modern-office-room-l.jpg" alt="offce" class="img-responsive"/>
-                                                </div>
-                                                <div class="col-md-9 col-xs-8">
-                                                    <b>Platinum Jubilee</b> : We are feeling proud to announce that we are completing 75 years of trust. so, this is notify you that you will get schedule and agenda of ceremony.
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="readmore">
-                                            <a href="detailAchievement" class="btn btn-transparent-white">
-                                                Read More <i class="fa fa-arrow-circle-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                @endif
-                                @endif
-                                @endforeach
-
-                                @endforeach
-                            </ul>
-
                         </div>
 
-
                         <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+
+                        <center>
+                            <a class="btn btn-primary loadMoreBtn" id="loadMoreBtn" style="display:none;"> Load More Records... </a>
+                        </center>
                     </div>
                 </div>
             </div>
         </div>
-
-
 
     </div>
 </div>
@@ -170,165 +97,287 @@
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="assets/js/form-validation.js"></script>
+<script src="/vendor/moment/moment.min.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
         Main.init();
         FormValidator.init();
+        loadMore(0)
     });
 
+    var loaded = true;
 
-    var loaded = false;
-        $(window).scroll(function()
-        {
-            if($(window).scrollTop() == $(document).height() - $(window).height())
+    var dateCount = 1;
+
+    $('#loadMoreBtn').click(function()
+    {
+
+            $('div#loadmoreajaxloader').show();
+
+            $('#loadMoreBtn').hide();
+
+            loadMore(dateCount);
+
+            dateCount++;
+
+            if(loaded){
+                $('div#loadmoreajaxloader').html('<center>No more notices to show.</center>');
+                return;
+            }
+
+
+    });
+
+    /*
+     * Function Name : loadMore
+     * Param : dateCount
+     * Return : append data to view listing
+     * Desc : it will recive data from controller and append to view listing.
+     * Developed By : Suraj Bande
+     * Date : 28/3/2016
+     */
+
+    function loadMore(dateCount)
+    {
+
+        $.ajax({
+            url: "show-noticeboard-listing/"+dateCount,
+            success: function(data)
             {
-                $('div#loadmoreajaxloader').show();
 
+                var str = "";
 
-                if(loaded){
-                    $('div#loadmoreajaxloader').html('<center>No more notices to show.</center>');
-                    return;
+                var dateNow = new Date();
+
+                var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+                var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+                var dateToShow = moment(dateNow).subtract(dateCount,'month');
+
+                var monthTitle = months[moment(dateToShow).month()]+' '+moment(dateToShow).year();
+
+                str+='<div class="date_separator" id="october">';
+
+                str+='<span>'+monthTitle+'</span>';
+
+                str+= '</div>';
+
+                if(dateCount == 0 && data.length != 0)
+                {
+
+                   var dump = $.map(data,function(index,value){return [index];});
+
+                   var html = $.map(dump[0],function(index,value){return [index];});
+
+                   var date =  $.map(data,function(index,value){return [value];});
+
+                   $('#hiddenLoadingFlag').val(date);
+
+                } else {
+                    var html = data;
                 }
 
-                $.ajax({
-                    url: "loadMore",
-                    success: function(html)
+                var flagForLastRecord = 1;
+
+                if(html.length != 0)
+                {
+
+                    var arr = $.map(html, function(value, index) {
+                        return [value];
+                    });
+
+                    str+='<ul class="columns">';
+
+                    for(var i=0; i<arr.length; i++)
                     {
-                        if(html)
-                        {
-                            var obj = $.parseJSON(html);
 
-                            var arr = $.map(obj, function(value, index) {
-                                return [value];
-                            });
+                        var detail = arr[i]['detail'].substring(0,200) + ".....";
 
-                            var str="";
-                            var dt=new Date();
+                        if(arr[i]['event_type_id'] == 1) {
 
-                            for(var i=0; i<arr.length; i++)
-                            {
+                                str+='<li>' +
+                                    '<div class="timeline_element partition-white">' +
+                                        '<div class="timeline_date"><div>'+
+                                        '<div class="inline-block">'+
+                                            '<span class="day text-bold">'+ moment(arr[i]['created_at']).date() +'</span>'+
+                                        '</div>'+
+                                        '<div class="inline-block">'+
+                                            '<span class="block week-day text-extra-large"> &nbsp;'+ days[moment(arr[i]['created_at']).day() - 1] +'</span>'+
+                                            '<span class="block month text-large text-light"> &nbsp;'+ moment(arr[i]['created_at']).format('hh:mm A') ;
 
-                                str+='<div class="date_separator" id="october">';
-                                                if(i==0)
-                                                {
-                                                    str+='<span>AUGUST 2015</span>';
-                                                }else{
-                                                    str+='<span>JULY 2015</span>';
+                                               if(arr[i]['priority'] == 1)
+                                               {
+                                                   str += '&nbsp;<span class="label label-sm label-danger">High</span>';
+                                               } else if(arr[i]['priority'] == 2) {
+                                                   str += '&nbsp;<span class="label label-sm label-orange">Low</span>';
+                                               } else {
+                                                    str += '&nbsp;<span class="label label-sm label-success">Medium</span>';
                                                 }
 
-                                       str+= '</div>';
+                                         str +=   '</span>'+
+                                        '</div>'+
+                                        '<div class="inline-block pull-right">' ;
 
-                                str+='<ul class="columns">';
+                                            if(arr[i]['status'] == 0)
+                                            {
+                                                str +='<span class="draft-block text-bold">Draft</span>';
+                                            } else if(arr[i]['status'] == 1)
+                                            {
+                                                str +='<span class="pending-block text-bold">Pending</span>';
+                                            } else {
+                                                str +='<span class="published-block text-bold">Published</span>';
+                                            }
 
+                                        str += '</div>'+
+                                    '</div>'+
+                                    '<div class="timeline_title">'+
+                                    '<i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>';
 
-                                for(var j=0; j<arr[i].length; j++)
-                                {
-
-
-                                    if(arr[i][j]['type']=='announcement')
+                                    if(arr[i]['title'].length > 25)
                                     {
+                                        str += '<h4 class="light-text no-margin padding-5" title="'+arr[i]["title"]+'">'+ arr[i]['title'].substring(0,20) + "....." +'</h4>';
 
-
-                                        str+='<li>' +
-                                            '<div class="timeline_element partition-white">' +
-                                            '<div class="timeline_date">' +
-                                            '<div>'+
-                                            '<div class="inline-block">'+
-                                            '<span class="day text-bold">'+ arr[i][j]['date'] +'</span>'+
-                                            '</div>'+
-                                            '<div class="inline-block">'+
-                                            '<span class="block week-day text-extra-large">'+ arr[i][j]['day'] +'</span>'+
-                                            '<span class="block month text-large text-light">'+ arr[i][j]['time'] +'</span>'+
-                                            '</div>'+
-                                            '</div>'+
-                                            '</div>'+
-                                            '<div class="timeline_title">'+
-                                            '<i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>'+
-                                            '<h4 class="light-text no-margin padding-5">'+ arr[i][j]['title'] +'</h4>'+
-                                            '</div>'+
-                                            '<div class="timeline_content">'+
-                                                "For this concern please have contact to your head of department and clear your all doubts. Be sure to aware about all necessary documents"+
-                                            '</div>'+
-                                            '<div class="readmore">'+
-                                            '<a href="#" class="btn btn-primary btn-o btn-wide">'+
-                                            "Read More" +
-                                            '<i class="fa fa-arrow-circle-right"></i>'+
-                                            '</a>'+
-                                            '</div>'+
-                                            '</li>';
                                     }else{
-                                        str+='<li>' +
+
+                                        str += '<h4 class="light-text no-margin padding-5" title="'+arr[i]['title']+'">'+ arr[i]['title'] +'</h4>';
+
+                                    }
+
+                                    str += '</div>'+
+
+                                        '<div class="timeline_content" style="word-wrap: break-word;">'+
+                                         detail +
+                                    '</div>'+
+                                    '<div class="readmore">'+
+                                    '<a href="/detailAnnouncement/'+arr[i]['id']+'" class="btn btn-primary btn-o btn-wide">'+
+                                    "Read More" +
+                                    '<i class="fa fa-arrow-circle-right"></i>'+
+                                    '</a>'+
+                                    '</div>'+
+                                    '</li>';
+                            }else{
+                                str+='<li>' +
                                             '<div class="timeline_element partition-gray">' +
-                                            '<div class="timeline_date">' +
-                                            '<div>'+
-                                            '<div class="inline-block">'+
-                                            '<span class="day text-bold">'+ arr[i][j]['date'] +'</span>'+
-                                            '</div>'+
-                                            '<div class="inline-block">'+
-                                            '<span class="block week-day text-extra-large">'+ arr[i][j]['day'] +'</span>'+
-                                            '<span class="block month text-large text-light">'+ arr[i][j]['time'] +'</span>'+
-                                            '</div>'+
-                                            '</div>'+
+                                                '<div class="timeline_date"><div>'+
+                                                '<div class="inline-block">'+
+                                                    '<span class="day text-bold"> '+ moment(arr[i]['created_at']).date() +' </span>'+
+                                                '</div>'+
+                                                '<div class="inline-block">'+
+                                                    '<span class="block week-day text-extra-large"> &nbsp;'+ days[moment(arr[i]['created_at']).day() - 1] +'</span>'+
+                                                    '<span class="block month text-large text-light"> &nbsp;'+ moment(arr[i]['created_at']).format('hh:mm A') +'</span>'+
+                                                '</div>'+
+                                                '<div class="inline-block pull-right">' ;
+
+                                                    if(arr[i]['status'] == 0)
+                                                    {
+                                                        str +='<span class="draft-block text-bold">Draft</span>';
+                                                    } else if(arr[i]['status'] == 1)
+                                                    {
+                                                        str +='<span class="pending-block text-bold">Pending</span>';
+                                                    } else {
+                                                        str +='<span class="published-block text-bold">Published</span>';
+                                                    }
+
+                                                 str += '</div>'+
+                                                '</div>'+
                                             '<div class="timeline_title">'+
-                                            '<i class="fa fa-trophy fa-2x pull-left fa-border"></i>'+
-                                            '<h4 class="text-white no-margin padding-5">'+ arr[i][j]['title'] +'</h4>'+
-                                            '</div>'+
+                                                '<i class="fa fa-trophy fa-2x pull-left fa-border"></i>';
+                                                    if(arr[i]['title'].length > 120)
+                                                    {
+
+                                                        str += '<h4 class="text-light no-margin padding-5" title="'+arr[i]["title"]+'">'+ arr[i]['title'].substring(0,120) + "....." +'</h4>';
+
+                                                    }else{
+
+                                                        str += '<h4 class="text-light no-margin padding-5" title="'+arr[i]['title']+'">'+ arr[i]['title'] +'</h4>';
+
+                                                    }
+                            
+                                            str +='</div>'+
                                             '</div>' +
                                             '<div class="timeline_content ">'+
                                             '<div class="row">'+
-                                            '<div class="col-md-3 col-xs-4"><img src="assets/images/photodune-4043508-3d-modern-office-room-l.jpg" alt="offce" class="img-responsive">'+
+                                            '<div class="col-md-3 col-xs-4">' ;
+
+
+                                            if(arr[i]['image'] == null)
+                                            {
+                                                str += '<img src="/assets/images/your-logo-here.png" alt="offce" class="img-responsive">';
+
+                                            } else {
+
+                                                str += '<img src="/uploads/achievement/events/'+arr[i]['id']+'/'+arr[i]['image'] +'" class="img-responsive">';
+
+                                            }
+
+                                            str +='</div>'+
+                                            '<div class="col-md-9 col-xs-8" style="word-wrap: break-word;">'+
+                                                detail +
                                             '</div>'+
-                                            '<div class="col-md-9 col-xs-8">'+
-                                            '<b>Lorem Ipsum</b>'+
-                                            "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged." +
                                             '</div>'+
                                             '</div>'+
-                                            '</div>'+
-                                            '</div>' +
                                             '<div class="readmore">'+
-                                            '<a href="#" class="btn btn-transparent-white">'+
+                                            '<a href="/detail-achievement/'+arr[i]['id']+'" class="btn btn-transparent-white">'+
                                             "Read More"+
                                             '<i class="fa fa-arrow-circle-right"></i>'+
                                             '</a>'+
                                             '</div>'+
-
                                             '</div>'+
 
-                                            '</li>';
-                                    }
+                                        '</div>'+
 
-
-                                }
-                                str+='</ul>';
-
+                                    '</li>';
                             }
 
-
-                            $("#tmlin").append(str);
-                            $('div#loadmoreajaxloader').hide();
-                        }else
-                        {
-                            $('div#loadmoreajaxloader').html('<center>No more notices to show.</center>');
                         }
+
+                        str+='</ul>';
+
+                    $("#tmlin").append(str);
+                    $('div#loadmoreajaxloader').hide();
+                    $('#loadMoreBtn').show();
+                } else {
+
+                    if($('#hiddenLoadingFlag').val() != "")
+                    {
+                        var val = moment($('#hiddenLoadingFlag').val()).unix();
+
+                        var dateToShowLast = moment(dateToShow).unix();
+
+                        if(val > dateToShowLast)
+                        {
+                            loaded = false;
+                        } else {
+                            loaded = true;
+                        }
+                        if(loaded)
+                        {
+                            $("#tmlin").append(str);
+                            $('div#loadmoreajaxloader').html('<center>No notices to show for this month.</center>');
+                            $('div#loadmoreajaxloader').show();
+                            $('#loadMoreBtn').show();
+                        } else {
+                            $('div#loadmoreajaxloader').html('<center>No more records found.</center>');
+                            $('div#loadmoreajaxloader').show();
+                            $('#loadMoreBtn').hide();
+                        }
+                    } else {
+                        $("#tmlin").append(str);
+                        $('div#loadmoreajaxloader').html('<center>No more records found.</center>');
+                        $('div#loadmoreajaxloader').show();
+                        $('#loadMoreBtn').hide();
                     }
-                });
 
 
-                loaded=true;
-
-
-
-
+                }
             }
-
-
         });
 
+    }
+
 </script>
-
-
-
 
 <!-- start: MAIN JAVASCRIPTS -->
 

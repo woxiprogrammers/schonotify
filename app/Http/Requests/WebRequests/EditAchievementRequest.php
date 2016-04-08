@@ -5,10 +5,10 @@ namespace App\Http\Requests\WebRequests;
 use App\Http\Requests\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
-use Session;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
-class DeleteEventRequest extends Request
+class EditAchievementRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,6 @@ class DeleteEventRequest extends Request
      */
     public function authorize()
     {
-
         $ch=Request::method();
 
         $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
@@ -27,8 +26,6 @@ class DeleteEventRequest extends Request
             ->select('users.id','acl_master.slug as acl','modules.slug as module_slug')
             ->get();
         $resultArr=array();
-
-
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
@@ -36,19 +33,26 @@ class DeleteEventRequest extends Request
 
         switch($ch)
         {
-            case 'GET':
 
-                if(in_array('delete_event',$resultArr)) {
+            case 'GET' :
+                if(in_array('update_achievement',$resultArr)) {
                     return true;
                 } else {
-                    return 1;
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::back();
                 }
-
+                break;
+            case 'POST':
+                if(in_array('update_achievement',$resultArr)) {
+                    return true;
+                } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::back();
+                }
                 break;
 
             default:break;
         }
-
     }
 
     /**
@@ -58,8 +62,18 @@ class DeleteEventRequest extends Request
      */
     public function rules()
     {
-
-        return [];
+        $ch=Request::method();
+        switch($ch)
+        {
+            case 'GET': return [];
+                break;
+            case 'POST':return [
+                'title'=>'required',
+                'achievement'=>'required|min:6'
+            ];
+                break;
+            default:break;
+        }
 
     }
 }

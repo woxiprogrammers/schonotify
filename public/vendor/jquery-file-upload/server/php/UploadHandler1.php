@@ -45,8 +45,8 @@ class UploadHandler
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/',
-            'upload_dir' => $_SERVER['DOCUMENT_ROOT'].'/uploads/achievement/'.$_GET['id'].'/',
-            'upload_url' => '/uploads/achievement/'.$_GET['id'].'/',
+            'upload_dir' => $_SERVER['DOCUMENT_ROOT'].'/uploads/achievement/'.$_GET['userId'].'/'.$_GET['eventId'].'/',
+            'upload_url' => '/uploads/achievement/'.$_GET['userId'].'/'.$_GET['eventId'].'/',
             'user_dirs' => false,
             'mkdir_mode' => 0777,
             'param_name' => 'files',
@@ -175,7 +175,7 @@ class UploadHandler
             case 'PATCH':
             case 'PUT':
             case 'POST':
-                $_SESSION['userId_'] = $_GET['id'];
+
                 $this->post($this->options['print_response']);
                 break;
             case 'DELETE':
@@ -217,7 +217,6 @@ class UploadHandler
             $version_path = '';
         } else {
             $version_dir = @$this->options['image_versions'][$version]['upload_dir'];
-
             if ($version_dir) {
                 return $version_dir.$this->get_user_path().$file_name;
             }
@@ -262,7 +261,7 @@ class UploadHandler
             .$this->get_query_separator($this->options['script_url'])
             .$this->get_singular_param_name()
             .'='.rawurlencode($file->name)
-            .'&&id='.$_GET['id'];
+            .'&&eventId='.$_GET['eventId'].'&&userId='.$_GET['userId'];
         $file->deleteType = $this->options['delete_type'];
         if ($file->deleteType !== 'DELETE') {
             $file->deleteUrl .= '&_method=DELETE';
@@ -1363,15 +1362,45 @@ class UploadHandler
         }
         $response = array();
         foreach($file_names as $file_name) {
+
             $file_path = $this->get_upload_path($file_name);
 
+//            $path = $_SERVER['DOCUMENT_ROOT'].'/uploads/achievement/'.$_GET['userId'].'/';
+//
+//
+//            if (! file_exists($path.'thumbnail/')) {
+//                File::makeDirectory($_SERVER['DOCUMENT_ROOT'].'/uploads/achievement/'.$_GET['userId'].'/'.$_GET['eventId'].'/thumbnail/', $mode = 0777, true, true);
+//            }
+//
+//            $file = $_SERVER['DOCUMENT_ROOT'].'/uploads/achievement/'.$_GET['userId'].'/'.$_GET['eventId'].'/'.$file_name;
+//
+//            $fileThumb = $_SERVER['DOCUMENT_ROOT'].'/uploads/achievement/'.$_GET['userId'].'/'.$_GET['eventId'].'/thumbnail/'.$file_name;
+//
+//            if(file_exists($file_path))
+//            {
+//                rename($file_path,$file);
+//
+//                chmod($file,0777);
+//            }
+//
+//            if(file_exists($this->get_upload_path().'thumbnail/'))
+//            {
+//                rename($this->get_upload_path().'thumbnail/',$fileThumb);
+//
+//                chmod($fileThumb,0777);
+//
+//                $response[$file_name] = true;
+//            }
+
             $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
+
             if ($success) {
                 foreach($this->options['image_versions'] as $version => $options) {
                     if (!empty($version)) {
                         $file = $this->get_upload_path($file_name, $version);
                         if (is_file($file)) {
                             unlink($file);
+
                         }
                     }
                 }

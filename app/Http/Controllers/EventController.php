@@ -71,8 +71,7 @@ class EventController extends Controller
 
             $user=Auth::User();
 
-            $request->eventEndDate=date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
-            $endDate=date('Y-m-d H:i:s',strtotime("+1 day",strtotime($request->eventEndDate)));
+            $endDate = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
 
             $insertData['title'] = $request->eventName;
             $insertData['event_type_id'] = 3;
@@ -349,6 +348,7 @@ class EventController extends Controller
 
     public function deleteEvent(Requests\WebRequests\DeleteEventRequest $request,$id)
     {
+
         if($request->authorize() === true)
         {
 
@@ -382,9 +382,7 @@ class EventController extends Controller
     public function saveEditEvent(Request $request)
     {
 
-        $request->eventEndDate=date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
-
-        $endDate=date('Y-m-d H:i:s',strtotime("+1 day",strtotime($request->eventEndDate)));
+        $endDate = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
 
         $event = Event::join('event_images','event_images.event_id','=','events.id')->where('events.id','=',$request->hiddenEventId)->first();
 
