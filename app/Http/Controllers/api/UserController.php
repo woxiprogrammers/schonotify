@@ -225,9 +225,10 @@ class UserController extends Controller
      }
     public function getClassesTeacher(Request $request, $batch_id){
         try{
-            $data=$request->all();
-            $division=array();
-            $finalClasses=array();
+            $data = $request->all();
+            $division = array();
+            $finalClasses = array();
+            $finalClassInfo = array();
             $divisionData=SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])
                 ->select('division_id')
                 ->get()->toArray();
@@ -260,13 +261,18 @@ class UserController extends Controller
                     ->where('batch_id','=',$batch_id)
                     ->select('id','class_name as class_name')->first();
                 if(!Empty($class_id)&&!Empty($className)){
-                    $finalClasses[$i]['id']=$class_id['class_id'];
-                    $finalClasses[$i]['class_name']=$className['class_name'];
+                    $finalClasses[$class_id['class_id']]['id']=$class_id['class_id'];
+                    $finalClasses[$class_id['class_id']]['class_name']=$className['class_name'];
                     $i++;
                 }
             }
+            $i=0;
+            foreach($finalClasses as $value) {
+                $finalClassInfo[$i]=$value;
+                $i++;
+            }
             $status = 200;
-            $responseData['classList']= $finalClasses;
+            $responseData['classList']= $finalClassInfo;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
             echo $e->getMessage();
@@ -283,9 +289,10 @@ class UserController extends Controller
 
     public function getDivisions(Request $request, $class_id){
         try{
-            $data=$request->all();
-            $division=array();
-            $finalDivisions=array();
+            $data = $request->all();
+            $division = array();
+            $finalDivisionsInfo = array();
+            $finalDivisions = array();
             $divisionData=SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])
                 ->select('division_id')
                 ->get()->toArray();
@@ -319,12 +326,17 @@ class UserController extends Controller
                     ->select('divisions.id as id','divisions.division_name as division_name')
                     ->first();
                 if(!Empty($finalData)){
-                    $finalDivisions[$i]=$finalData;
+                    $finalDivisions[$finalData['id']]=$finalData;
                     $i++;
                 }
             }
+            $i=0;
+            foreach($finalDivisions as $value) {
+                $finalDivisionsInfo[$i]=$value;
+                $i++;
+            }
             $status = 200;
-            $responseData['divisionList']= $finalDivisions;
+            $responseData['divisionList']= $finalDivisionsInfo;
             $message = 'Successfully Listed';
         }catch (\Exception $e){
             echo $e->getMessage();
