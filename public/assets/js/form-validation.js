@@ -1686,6 +1686,9 @@ var FormValidator = function () {
                 userrole:{
                     required: true,
                     minlength: 1
+                },
+                adminToPublish:{
+                    required : true
                 }
 
             },
