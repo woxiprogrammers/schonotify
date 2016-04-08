@@ -1099,7 +1099,15 @@
             if($request->ajax()) {
                 return $classDivision;
             } else {
-                return view('createNoticeBoard')->with(compact('batchList','classDivision'));
+
+                $adminWithAcl = User::join('module_acls','module_acls.user_id','=','users.id')
+                            ->where('module_id','=',13)
+                            ->where('acl_id','=',5)
+                            ->where('role_id','=',1)
+                            ->select('users.id','users.first_name','users.last_name','users.username')
+                            ->get()->toArray();
+
+                return view('createNoticeBoard')->with(compact('batchList','classDivision','adminWithAcl'));
             }
 
         }
@@ -1141,8 +1149,12 @@
 
         public function createNoticeBoard(CreateAnnouncementRequest $request)
         {
+
+
             if ($request->authorize() === true)
-            {    $annoucement =array();
+            {
+
+                $annoucement =array();
                 $userEntry = array();
                 $user = Auth::user();
                 $annoucement['event_type_id'] = 1;
@@ -1159,12 +1171,14 @@
                         $annoucement['status'] = 2;
                     } elseif($user->role_id == 2){
                         $annoucement['created_by'] = $user->id;
+                        $annoucement['published_by'] = $request->adminToPublish;
                         $annoucement['status'] = 1;
                     }
                 } elseif($request->buttons == 'save'){
                     $annoucement['created_by'] = $user->id;
                     $annoucement['status'] = 0;
                 }
+
                 $eventId = Event::insertGetId($annoucement);
                 if($eventId != null) {
                     if($request->adminList) {

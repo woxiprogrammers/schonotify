@@ -182,8 +182,31 @@
                                                     @endif
 
                                                 </div>
+
                                             </div>
+
                                         </div>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        @if(Auth::User()->role_id !== 1)
+
+                                        <div class="form-group col-sm-6">
+                                            <label class="control-label">
+                                                Select Admin  <span class="symbol required" aria-required="true"></span>
+                                            </label>
+                                            <select class="form-control" name="adminToPublish" style="-webkit-appearance: menulist;">
+                                                <option value="">
+                                                    Please select admin...
+                                                </option>
+                                                @foreach($adminWithAcl as $admin)
+                                                <option value="{{ $admin['id'] }}">{{ $admin['first_name'] }} {{ $admin['last_name'] }} ({{ $admin['username'] }})</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+
+                                        @endif
                                     </div>
 
                                     <div class="col-md-12">
@@ -200,7 +223,6 @@
 
                         </div>
                         <div class="tab-pane fade" id="myTab2_example2">
-
 
                             <form action="/create-achievement" role="form" method="post" id="createAchievementForm" enctype="multipart/form-data">
                                 <div class="row">
@@ -225,7 +247,7 @@
                                             </label>
                                             <textarea class="form-control" id="achievement" name="achievement"></textarea>
                                         </div>
-<input type="hidden" id="hiddenUserId" name="hiddenUserId" value="{{ Auth::User()->id }}">
+                                    <input type="hidden" id="hiddenUserId" name="hiddenUserId" value="{{ Auth::User()->id }}">
                                     </div>
 
                                     <div id="fileupload" class="col-sm-10">
