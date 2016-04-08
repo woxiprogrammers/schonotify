@@ -1668,7 +1668,7 @@
                             File::makeDirectory('uploads/achievement/events/'.$request->hiddenEventId.'/thumbnail/', $mode = 0777, true, true);
                         }
 
-                        $timeImage = time().'_'.$row;
+                        $timeImage = $row;
 
                         $file = $path.$timeImage;
 
