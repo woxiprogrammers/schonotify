@@ -638,7 +638,7 @@ class HomeworkController extends Controller
                 $finalHomeworkListingSubjectTeacher[$i]['homework_id'] = $value->homework_id;
                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value->homeworkTitle;
                 $finalHomeworkListingSubjectTeacher[$i]['description'] = $value->description;
-                $finalHomeworkListingSubjectTeacher[$i]['due_date'] = date("M j, g:i a",strtotime( $value->due_date));
+                $finalHomeworkListingSubjectTeacher[$i]['due_date'] = date("j M Y ",strtotime($value->due_date));
                 $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = $value->attachment_file;
                 $teacherName=User::where('id',$value->teacher_id)->select('first_name','last_name')->first();
                 $finalHomeworkListingSubjectTeacher[$i]['teacher_id'] = $value->teacher_id;
@@ -654,7 +654,7 @@ class HomeworkController extends Controller
                 $finalHomeworkListingSubjectTeacher[$i]['division_name'] = $value->division_name;
                 $finalHomeworkListingSubjectTeacher[$i]['batch_name'] = $value->batch_name;
                 $finalHomeworkListingSubjectTeacher[$i]['batch_id'] = $value->batch_id;
-                $finalHomeworkListingSubjectTeacher[$i]['created_at'] = date("M j, g:i a",strtotime( $value->created_at));
+                $finalHomeworkListingSubjectTeacher[$i]['created_at'] = date("j M Y",strtotime( $value->created_at));
                 $studentList = HomeworkTeacher::where('homework_id','=',$value->homework_id)->select('student_id')->get();
                 $j=0;
                 foreach($studentList as $value)
@@ -766,7 +766,7 @@ class HomeworkController extends Controller
                      $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value['homeworkTitle'];
                      $finalHomeworkListingSubjectTeacher[$i]['description'] = $value['description'];
                      $finalHomeworkListingSubjectTeacher[$i]['date'] = $value['due_date'];
-                     $finalHomeworkListingSubjectTeacher[$i]['due_date'] = $date;
+                     $finalHomeworkListingSubjectTeacher[$i]['due_date'] = date("j M Y ",strtotime($value['due_date']));
                      $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = $value['attachment_file'];
                      $teacherName = User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
                      $finalHomeworkListingSubjectTeacher[$i]['teacher_id'] = $value['teacher_id'];
@@ -875,23 +875,23 @@ class HomeworkController extends Controller
                 ->where('homeworks.is_active','=',1)//0 is for deleted homework
                 ->select('homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','batches.name','homeworks.created_at')
                 ->get()->toarray();
-            $i=0;
+            $i = 0;
             if(!Empty($studentHomework)){
                 foreach($studentHomework as $value)
                     {
-                        $data[$i]['title']=$value['homeworkTitle'];
-                        $data[$i]['description']=$value['description'];
-                        $data[$i]['due_date']=date("M j",strtotime($value['due_date']));
-                        $data[$i]['created_At']=date("M j",strtotime($value['created_at']));
-                        $data[$i]['attachment_file']=$value['attachment_file'];
-                        $data[$i]['homeworkType']=$value['homeworkType'];
-                        $teacherName=User::where('id','=',$value['teacher_id'])->first();
-                        $data[$i]['teacher_name']=$teacherName['first_name']."  ".$teacherName['last_name'];
-                        $data[$i]['subject_name']=ucfirst($value['subjectName']);
-                        $data[$i]['division_name']=ucfirst($value['division_name']);
-                        $data[$i]['batch_name']=ucfirst($value['name']);
-                        $data[$i]['class_name']=ucfirst($value['class_name']);
-                        $data[$i]['created_at']=$value['created_at'];
+                        $data[$i]['title'] = $value['homeworkTitle'];
+                        $data[$i]['description'] = $value['description'];
+                        $data[$i]['due_date'] = date("j M Y ",strtotime($value['due_date']));
+                        $data[$i]['created_At'] = date("j M Y",strtotime($value['created_at']));
+                        $data[$i]['attachment_file'] = $value['attachment_file'];
+                        $data[$i]['homeworkType'] = $value['homeworkType'];
+                        $teacherName = User::where('id','=',$value['teacher_id'])->first();
+                        $data[$i]['teacher_name'] = $teacherName['first_name']."  ".$teacherName['last_name'];
+                        $data[$i]['subject_name'] = ucfirst($value['subjectName']);
+                        $data[$i]['division_name'] = ucfirst($value['division_name']);
+                        $data[$i]['batch_name'] = ucfirst($value['name']);
+                        $data[$i]['class_name'] = ucfirst($value['class_name']);
+                        $data[$i]['created_at'] = $value['created_at'];
                         $i++;
                     }
                 if($data !=null){
