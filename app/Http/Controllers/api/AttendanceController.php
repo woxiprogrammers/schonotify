@@ -381,6 +381,9 @@ class AttendanceController extends Controller
                 $status = 404;
                 $message = "Sorry!! Only class teacher can edit attendance";
             }
+            $finalList['batchName'] = 1;
+            $finalList['className'] = 1;
+            $finalList['divisionName'] = 1;
         } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
@@ -593,7 +596,7 @@ class AttendanceController extends Controller
     * Date : 04/03/2016
     */
 
-    public function viewDefaultAttendanceTeacher(Requests\ViewRequest $request , $div_id  )
+    public function viewDateAttendanceTeacher(Requests\ViewRequest $request , $div_id  )
     {
         try{
             $data = $request->all();
@@ -617,6 +620,45 @@ class AttendanceController extends Controller
 
             "message" => $message,
             "data" => $studentAttendance
+        ];
+        return response($response, $status);
+    }
+
+    public function viewDefaultAttendanceTeacher(Requests\ViewRequest $request)
+    {
+        try{
+            $data = $request->all();
+            $attendance  = array();
+            $studentAttendance = array();
+            $div_id = Attendance::select('division_id')->first();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
+            $division = array();
+            $status = 200;
+            $message = "Successfully Listed";
+            $studentAttendance = array();
+            $roleId = UserRoles::where('slug','=',['student'])->pluck('id');
+            $students = User::where('division_id','=',$div_id['division_id'])
+                ->where('role_id','=',$roleId)
+                ->lists('id');
+            $studentAttendance = Attendance::wherein('student_id',$students)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
+            $divisionName = Division::where('id',$div_id['division_id'])->select('division_name','class_id')->first();
+            $class = Classes::where('id','=',$divisionName['class_id'])->select('id','class_name','batch_id')->first();
+            $batch = Batch::where('id','=',$class['batch_id'])->select('id','name')->first();
+            $attendance['absentDates'] = $studentAttendance;
+            $attendance['batchId'] = $batch['id'];
+            $attendance['batchName'] = $batch['name'];
+            $attendance['classId'] = $class['id'];
+            $attendance['className'] = $class['class_name'];
+            $attendance['divId'] = $div_id['division_id'];
+            $attendance['divName'] = $divisionName['division_name'];
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "status" => $status,
+            "message" => $message,
+            "data" => $attendance
         ];
         return response($response, $status);
     }

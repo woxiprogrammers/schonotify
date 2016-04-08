@@ -312,9 +312,11 @@ class TimetableController extends Controller
             $day = DayMaster::where('id','=',$day_id)->pluck('name');
             $finalTimetable['div_id'] = $div_id;
             $divisionName = Division::where('id',$div_id)->select('division_name','class_id')->first();
-            $class = Classes::where('id','=',$divisionName['class_id'])->select('class_name','batch_id')->first();
-            $batch = Batch::where('id','=',$class['batch_id'])->pluck('name');
-            $finalTimetable['batchName'] = $batch;
+            $class = Classes::where('id','=',$divisionName['class_id'])->select('id','class_name','batch_id')->first();
+            $batch = Batch::where('id','=',$class['batch_id'])->select('id','name')->first();
+            $finalTimetable['classId'] = $class['id'];
+            $finalTimetable['batchId'] = $batch['id'];
+            $finalTimetable['batchName'] = $batch['name'];
             $finalTimetable['className'] = $class['class_name'];
             $finalTimetable['divisionName'] =  $divisionName['division_name'];
             $finalTimetable['day'] = $day;
