@@ -129,6 +129,12 @@
 
     Route::post('/create-achievement','NoticeBoardController@createAchievement');
 
+    Route::post('/update-achievement','NoticeBoardController@updateAchievement');
+
+    Route::get('/check-edit-achievement','NoticeBoardController@checkUpdateAchievementAcl');
+
+    Route::get('/check-publish-achievement/{id}','NoticeBoardController@checkPublishAchievementAcl');
+
     Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
 
     Route::get('get-all-teachers','NoticeBoardController@getAllTeachers');

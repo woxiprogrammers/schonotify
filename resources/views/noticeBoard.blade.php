@@ -308,7 +308,7 @@
 
                                             } else {
 
-                                                str += '<img src="/uploads/achievements/'+arr[i]['image'] +'" class="img-responsive">';
+                                                str += '<img src="/uploads/achievement/events/'+arr[i]['id']+'/'+arr[i]['image'] +'" class="img-responsive">';
 
                                             }
 

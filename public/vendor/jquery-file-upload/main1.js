@@ -15,13 +15,14 @@ $(function () {
     'use strict';
 
     var counter=0;
+    var eventId = $('#hiddenEVentId').val();
     var userId = $('#hiddenUserId').val();
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: 'vendor/jquery-file-upload/server/php/index.php?id='+userId,
+        url: '/vendor/jquery-file-upload/server/php/index.php?eventId='+eventId+'&&userId='+userId,
         singleFileUploads: false,
 //      limitMultiFileUploadSize :2,
         getNumberOfFiles : 10

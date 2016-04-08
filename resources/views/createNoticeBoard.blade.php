@@ -225,7 +225,7 @@
                                             </label>
                                             <textarea class="form-control" id="achievement" name="achievement"></textarea>
                                         </div>
-
+<input type="hidden" id="hiddenUserId" name="hiddenUserId" value="{{ Auth::User()->id }}">
                                     </div>
 
                                     <div id="fileupload" class="col-sm-10">
@@ -307,7 +307,7 @@
 </div>
 
 </div>
-
+<div id="loadmoreajaxloader" style="display: block;" class="loader-position-event" ><center><img src="/assets/images/loader1.gif" /></center></div>
 @include('footer')
 
 @include('rightSidebar')
@@ -331,7 +331,6 @@
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/custom-project.js"></script>
-
 
 
 
@@ -373,8 +372,10 @@
 			{% } %}
 		</script>
 <!-- The template to display files available for download -->
+
 <script id="template-download" type="text/x-tmpl">
-			{% for (var i=0, file; file=o.files[i]; i++) { %}
+
+			{%for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-download fade">
 			<td>
 			<span class="preview">
@@ -391,7 +392,7 @@
 			<a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
 			{% } else { %}
 
-			<span>{%=file.name%}</span>
+			<span>{%=file.name%} </span>
 			{% } %}
 			</p>
 			{% if (file.error) { %}
@@ -405,10 +406,12 @@
 			</td>
 			<td>
 			{% if (file.deleteUrl) { %}
-			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+
+			<button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}&&id=userId"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
 			<i class="glyphicon glyphicon-trash"></i>
 			<span>Delete</span>
 			</button>
+
 			<input type="checkbox" name="delete" value="1" class="toggle">
 			{% } else { %}
 			<button class="btn btn-warning cancel">
@@ -487,6 +490,10 @@
         }
     });
 
+
+    $(window).load(function() {
+        $('#loadmoreajaxloader').hide();
+    });
 
     $('.parentChk').change(function(){
         if($(this).prop('checked') == true)
