@@ -984,7 +984,7 @@ class UsersController extends Controller
     public function getTeachers(){
         $user=Auth::user();
         $teacher_role_id = UserRoles::whereIn('slug', ['teacher'])->pluck('id');
-        $teacher = User::where('role_id',$teacher_role_id)->where('body_id',$user->body_id)->whereNotIn('id', [$user->id])->get();
+        $teacher = User::where('role_id',$teacher_role_id)->where('is_active','=',1)->where('body_id',$user->body_id)->whereNotIn('id', [$user->id])->get();
         $teachers = $teacher->toArray();
         $userInformation =array();
         foreach($teachers as $teacher){

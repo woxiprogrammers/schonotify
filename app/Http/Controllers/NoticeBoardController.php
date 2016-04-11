@@ -847,110 +847,12 @@
                 $user=Auth::user();
                 $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
                 $batchList = $batchData->toArray();
-                if ($request->ajax()) {
-                    $classData = Classes::where('batch_id',$request->batch_id)->select('id','class_name')->get();
-                    $classList = $classData->toArray();
-                } else {
-                    $batch = Batch::where('body_id',$user->body_id)->select('id','name')->first();
-                    $classData = Classes::where('batch_id',$batch->id)->select('id','class_name')->get();
-                    $classList = $classData->toArray();
-                }
-                if($request->ajax()) {
-                    $count = 0;
-                    foreach($classList as $row) {
-                        $classDivision[$count]['class_id'] = $row['id'];
-                        $classDivision[$count]['class_name'] = $row['class_name'];
-                        $divisionData = Division::where('class_id',$row['id'])->select('id','division_name')->get();
-                        $countDivision = 0;
-                        foreach($divisionData as $division) {
-                            $classDivision[$count]['division'][$countDivision]['division_id'] = $division['id'];
-                            $classDivision[$count]['division'][$countDivision]['division_name'] = $division['division_name'];
-                            $countDivision++;
-                        }
-                        $count++;
-                    }
-                } else {
-                    $count = 0;
 
-                    foreach($classList as $row) {
-                        $classDivision[$count]['class_id'] = $row['id'];
-                        $classDivision[$count]['class_name'] = $row['class_name'];
-                        $divisionData = Division::where('class_id',$row['id'])->select('id','division_name')->get();
-                        $countDivision = 0;
-                        foreach($divisionData as $division) {
-                            $classDivision[$count]['division'][$countDivision]['division_id'] = $division['id'];
-                            $classDivision[$count]['division'][$countDivision]['division_name'] = $division['division_name'];
-                            $countDivision++;
-                        }
-                        $count++;
-                    }
-                }
             } elseif ($user->role_id == 2 ) {
                 $userCheck = Division::where('class_teacher_id',$user->id)->first();
                 if ($userCheck != null) {
                     $count=0;
-                    if ($request->ajax()) {
-                        $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
-                            ->join('classes','divisions.class_id','=','classes.id')
-                            ->join('batches','classes.batch_id','=','batches.id')
-                            ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
-                            ->get()->toArray();
-                        $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                            ->join('divisions','division_subjects.division_id','=','divisions.id')
-                            ->join('classes','divisions.class_id','=','classes.id')
-                            ->join('batches','classes.batch_id','=','batches.id')
-                            ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
-                            ->get()->toArray();
 
-                        $mergedArray = array_merge($batchClassData,$divisionSubjects);
-                        $mergedArray = array_unique($mergedArray, SORT_REGULAR);
-
-                        foreach($mergedArray as $row) {
-                            $batchList[$count]['id'] = $row['batch_id'];
-                            $batchList[$count]['name'] = $row['batch_name'];
-                            $count++;
-                        }
-
-                        $batchList = array_unique($batchList, SORT_REGULAR);
-                        $countClass = 0;
-
-                        foreach($mergedArray as $row) {
-                            $classDivision[$countClass]['class_id'] = $row['class_id'];
-                            $classDivision[$countClass]['class_name'] = $row['class_name'];
-
-                            if ($userCheck != null) {
-                                $divisionData1 = Division::where('class_id',$row['class_id'])->where('class_teacher_id',$user->id)->select('id','division_name')->get()->toArray();
-
-                            }
-                            $divisionSubject = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
-                            $divArr=array();
-                            foreach($divisionSubject as $divs)
-                            {
-                                array_push($divArr,$divs->division_id);
-                            }
-                            $divArr=array_unique($divArr);
-                            $divisionData2 = Division::where('class_id',$row['class_id'])->whereIn('id',$divArr)
-                                ->select('id','division_name')->get()->toArray();
-
-                            $divisionData2 = array_filter($divisionData2);
-                            $divisionData1 = array_filter($divisionData1);
-                            if($divisionData1 != null) {
-                                $divisionData = array_merge ($divisionData1, $divisionData2);
-                            } else {
-                                $divisionData = $divisionData2;
-                            }
-                            $divisionData = array_unique($divisionData, SORT_REGULAR);
-
-                            $countDivision = 0;
-                            foreach($divisionData as $division) {
-                                $classDivision[$countClass]['division'][$countDivision]['division_id'] = $division['id'];
-                                $classDivision[$countClass]['division'][$countDivision]['division_name'] = $division['division_name'];
-                                $countDivision++;
-                            }
-                            $countClass++;
-                        }
-                        $classDivision = array_unique($classDivision, SORT_REGULAR);
-                    } else {
                         $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
                             ->join('classes','divisions.class_id','=','classes.id')
                             ->join('batches','classes.batch_id','=','batches.id')
@@ -972,42 +874,9 @@
                             $count++;
                         }
                         $batchList = array_unique($batchList, SORT_REGULAR);
-                        $countClass = 0;
-                        foreach($mergedArray as $row) {
-                            $classDivision[$countClass]['class_id'] = $row['class_id'];
-                            $classDivision[$countClass]['class_name'] = $row['class_name'];
-                            if ($userCheck != null) {
-                                $divisionData1 = Division::where('class_id',$row['class_id'])->where('class_teacher_id',$user->id)->select('id','division_name')->get()->toArray();
-                            }
-                            $divisionSubject = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
-                            $divArr=array();
-                            foreach($divisionSubject as $divs)
-                            {
-                                array_push($divArr,$divs->division_id);
-                            }
-                            $divArr=array_unique($divArr);
-                            $divisionData2 = Division::where('class_id',$row['class_id'])->whereIn('id',$divArr)
-                                    ->select('id','division_name')->get()->toArray();
-                            $divisionData2 = array_filter($divisionData2);
-                            $divisionData1 = array_filter($divisionData1);
-                            if($divisionData1 != null) {
-                            $divisionData = array_merge ($divisionData1, $divisionData2);
-                            } else {
-                                $divisionData = $divisionData2;
-                            }
-                            $divisionData = array_unique($divisionData, SORT_REGULAR);
-                            $countDivision = 0;
-                            foreach($divisionData as $division) {
-                                    $classDivision[$countClass]['division'][$countDivision]['division_id'] = $division['id'];
-                                    $classDivision[$countClass]['division'][$countDivision]['division_name'] = $division['division_name'];
-                                    $countDivision++;
-                            }
-                            $countClass++;
-                        }
-                        $classDivision = array_unique($classDivision, SORT_REGULAR);
-                    }
+
                 } else {
-                    if ($request->ajax()) {
+
                         $count=0;
                         $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                             ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -1023,82 +892,9 @@
                             $count++;
                         }
                         $batchList = array_unique($batchList, SORT_REGULAR);
-                        $countClass = 0;
-                        foreach($divisionSubjects as $row) {
-                            $classDivision[$countClass]['class_id'] = $row['class_id'];
-                            $classDivision[$countClass]['class_name'] = $row['class_name'];
-                            $divisionSubject = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get()->toArray();
-                            $divisionSubject = array_unique($divisionSubject, SORT_REGULAR);
-                            $count = 0;
-                            foreach($divisionSubject as $divs ) {
-                                $divisionData2[$count] =Division::where('class_id',$row['class_id'])->where('id',$divs['division_id'])
-                                    ->select('id','division_name')->get()->toArray();
-                                $count++;
-                            }
-                            $divisionData2 = array_filter($divisionData2);
-                            $divisionData = array_unique($divisionData2, SORT_REGULAR);
-                            $countDivision = 0;
-                            $i = 0;
-                            foreach($divisionData as $division) {
-                                foreach($division as $row) {
-                                    $classDivision[$countClass]['division'][$countDivision]['division_id'] = $row['id'];
-                                    $classDivision[$countClass]['division'][$countDivision]['division_name'] = $row['division_name'];
-                                    $countDivision++;
-                                }
-                                $i++;
-                            }
-                            $countClass++;
-                        }
-                        $classDivision = array_unique($classDivision, SORT_REGULAR);
-                    } else {
-                        $count=0;
-                        $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                            ->join('divisions','division_subjects.division_id','=','divisions.id')
-                            ->join('classes','divisions.class_id','=','classes.id')
-                            ->join('batches','classes.batch_id','=','batches.id')
-                            ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
-                            ->get()->toArray();
 
-                        $divisionSubjects = array_unique($divisionSubjects, SORT_REGULAR);
-                        foreach($divisionSubjects as $row) {
-                            $batchList[$count]['id'] = $row['batch_id'];
-                            $batchList[$count]['name'] = $row['batch_name'];
-                            $count++;
-                        }
-                        $batchList = array_unique($batchList, SORT_REGULAR);
-                        $countClass = 0;
-                        foreach($divisionSubjects as $row) {
-                            $classDivision[$countClass]['class_id'] = $row['class_id'];
-                            $classDivision[$countClass]['class_name'] = $row['class_name'];
-                            $divisionSubject = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get()->toArray();
-                            $divisionSubject = array_unique($divisionSubject, SORT_REGULAR);
-                            $count = 0;
-                            foreach($divisionSubject as $divs ) {
-                                $divisionData2[$count] =Division::where('class_id',$row['class_id'])->where('id',$divs['division_id'])
-                                    ->select('id','division_name')->get()->toArray();
-                                $count++;
-                            }
-                            $divisionData2 = array_filter($divisionData2);
-                            $divisionData = array_unique($divisionData2, SORT_REGULAR);
-                            $countDivision = 0;
-                            $i = 0;
-                            foreach($divisionData as $division) {
-                                foreach($division as $row) {
-                                    $classDivision[$countClass]['division'][$countDivision]['division_id'] = $row['id'];
-                                    $classDivision[$countClass]['division'][$countDivision]['division_name'] = $row['division_name'];
-                                    $countDivision++;
-                                }
-                                $i++;
-                            }
-                            $countClass++;
-                        }
-                        $classDivision = array_unique($classDivision, SORT_REGULAR);
-                    }
                 }
             }
-            if($request->ajax()) {
-                return $classDivision;
-            } else {
 
                 $adminWithAcl = User::join('module_acls','module_acls.user_id','=','users.id')
                             ->where('module_id','=',13)
@@ -1107,8 +903,7 @@
                             ->select('users.id','users.first_name','users.last_name','users.username')
                             ->get()->toArray();
 
-                return view('createNoticeBoard')->with(compact('batchList','classDivision','adminWithAcl'));
-            }
+                return view('createNoticeBoard')->with(compact('batchList','adminWithAcl'));
 
         }
 
@@ -1124,7 +919,7 @@
         public function getAllAdmins()
         {
             $user = Auth::user();
-            $adminList = User::where('role_id',1)->where('is_active',1)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name')->get();
+            $adminList = User::where('role_id',1)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name')->get();
             return $adminList;
 
         }
@@ -1141,7 +936,7 @@
         public function getAllTeachers()
         {
             $user = Auth::user();
-            $teacherList = User::where('role_id',2)->where('is_active',1)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name')->get();
+            $teacherList = User::where('role_id',2)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name')->get();
             return $teacherList;
 
         }
@@ -1350,6 +1145,147 @@
 
 
         }
+
+
+        public function getBatchClass(Request $request,$batchId)
+        {
+            $user = Auth::User();
+            if($user->role_id == 1)
+            {
+                $batch = Batch::where('body_id',$user->body_id)->select('id','name')->first();
+                $classData = Classes::where('batch_id',$batchId)->select('id','class_name')->get();
+                $classList = $classData->toArray();
+
+                $count = 0;
+                    foreach($classList as $row) {
+                        $classDivision[$count]['class_id'] = $row['id'];
+                        $classDivision[$count]['class_name'] = $row['class_name'];
+                        $divisionData = Division::where('class_id',$row['id'])->select('id','division_name')->get();
+                        $countDivision = 0;
+                        foreach($divisionData as $division) {
+                            $classDivision[$count]['division'][$countDivision]['division_id'] = $division['id'];
+                            $classDivision[$count]['division'][$countDivision]['division_name'] = $division['division_name'];
+                            $countDivision++;
+                        }
+                        $count++;
+                    }
+
+            } else {
+
+                $userCheck = Division::where('class_teacher_id',$user->id)->first();
+
+                if ($userCheck != null) {
+
+                    $count=0;
+
+                    $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
+                        ->join('classes','divisions.class_id','=','classes.id')
+                        ->join('batches','classes.batch_id','=','batches.id')
+                        ->where('batches.id','=',$batchId)
+                        ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
+                        ->get()->toArray();
+                    $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                        ->join('divisions','division_subjects.division_id','=','divisions.id')
+                        ->join('classes','divisions.class_id','=','classes.id')
+                        ->join('batches','classes.batch_id','=','batches.id')
+                        ->where('batches.id','=',$batchId)
+                        ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
+                        ->get()->toArray();
+
+                    $mergedArray = array_merge($batchClassData,$divisionSubjects);
+                    $mergedArray = array_unique($mergedArray, SORT_REGULAR);
+
+                    foreach($mergedArray as $row) {
+                        $batchList[$count]['id'] = $row['batch_id'];
+                        $batchList[$count]['name'] = $row['batch_name'];
+                        $count++;
+                    }
+                    $batchList = array_unique($batchList, SORT_REGULAR);
+                    $countClass = 0;
+                    foreach($mergedArray as $row) {
+                        $classDivision[$countClass]['class_id'] = $row['class_id'];
+                        $classDivision[$countClass]['class_name'] = $row['class_name'];
+                        if ($userCheck != null) {
+                            $divisionData1 = Division::where('class_id',$row['class_id'])->where('class_teacher_id',$user->id)->select('id','division_name')->get()->toArray();
+                        }
+                        $divisionSubject = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get();
+                        $divArr=array();
+                        foreach($divisionSubject as $divs)
+                        {
+                            array_push($divArr,$divs->division_id);
+                        }
+                        $divArr=array_unique($divArr);
+                        $divisionData2 = Division::where('class_id',$row['class_id'])->whereIn('id',$divArr)
+                            ->select('id','division_name')->get()->toArray();
+                        $divisionData2 = array_filter($divisionData2);
+                        $divisionData1 = array_filter($divisionData1);
+                        if($divisionData1 != null) {
+                            $divisionData = array_merge ($divisionData1, $divisionData2);
+                        } else {
+                            $divisionData = $divisionData2;
+                        }
+                        $divisionData = array_unique($divisionData, SORT_REGULAR);
+                        $countDivision = 0;
+                        foreach($divisionData as $division) {
+                            $classDivision[$countClass]['division'][$countDivision]['division_id'] = $division['id'];
+                            $classDivision[$countClass]['division'][$countDivision]['division_name'] = $division['division_name'];
+                            $countDivision++;
+                        }
+                        $countClass++;
+                    }
+                    $classDivision = array_unique($classDivision, SORT_REGULAR);
+
+                } else {
+
+                    $count=0;
+                    $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                        ->join('divisions','division_subjects.division_id','=','divisions.id')
+                        ->join('classes','divisions.class_id','=','classes.id')
+                        ->join('batches','classes.batch_id','=','batches.id')
+                        ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
+                        ->get()->toArray();
+
+                    $divisionSubjects = array_unique($divisionSubjects, SORT_REGULAR);
+                    foreach($divisionSubjects as $row) {
+                        $batchList[$count]['id'] = $row['batch_id'];
+                        $batchList[$count]['name'] = $row['batch_name'];
+                        $count++;
+                    }
+                    $batchList = array_unique($batchList, SORT_REGULAR);
+                    $countClass = 0;
+                    foreach($divisionSubjects as $row) {
+                        $classDivision[$countClass]['class_id'] = $row['class_id'];
+                        $classDivision[$countClass]['class_name'] = $row['class_name'];
+                        $divisionSubject = SubjectClassDivision::where('teacher_id',$user->id)->select('division_id')->get()->toArray();
+                        $divisionSubject = array_unique($divisionSubject, SORT_REGULAR);
+                        $count = 0;
+                        foreach($divisionSubject as $divs ) {
+                            $divisionData2[$count] =Division::where('class_id',$row['class_id'])->where('id',$divs['division_id'])
+                                ->select('id','division_name')->get()->toArray();
+                            $count++;
+                        }
+                        $divisionData2 = array_filter($divisionData2);
+                        $divisionData = array_unique($divisionData2, SORT_REGULAR);
+                        $countDivision = 0;
+                        $i = 0;
+                        foreach($divisionData as $division) {
+                            foreach($division as $row) {
+                                $classDivision[$countClass]['division'][$countDivision]['division_id'] = $row['id'];
+                                $classDivision[$countClass]['division'][$countDivision]['division_name'] = $row['division_name'];
+                                $countDivision++;
+                            }
+                            $i++;
+                        }
+                        $countClass++;
+                    }
+                    $classDivision = array_unique($classDivision, SORT_REGULAR);
+
+                }
+            }
+
+            return $classDivision;
+        }
+
 
         public function detailAnnouncement($id)
         {

@@ -325,8 +325,8 @@
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "Yes, change it!",
                     cancelButtonText: "No, cancel plx!",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
+                    closeOnConfirm: true,
+                    closeOnCancel: true
                 }, function(isConfirm) {
                     if(isConfirm) {
                         swal("Relation switched!", "Teacher is allowed to switch.", "success");

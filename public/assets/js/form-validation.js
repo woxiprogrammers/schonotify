@@ -1738,8 +1738,10 @@ var FormValidator = function () {
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
             },
             submitHandler: function (form) {
+
                 successHandler2.show();
                 errorHandler2.hide();
+
                 if($('#service4').prop('checked'))
                 {
                     var counts = $("#adminList :selected").length;
@@ -1747,9 +1749,7 @@ var FormValidator = function () {
                     {
                         return false;
                     }
-                    else {
-                        return true;
-                    }
+
                 }
                 if($('#service1').prop('checked'))
                 {
@@ -1757,11 +1757,12 @@ var FormValidator = function () {
                     if(count == 0)
                     {
                         return false;
+                        $('#teacherSelect').addCss('color','red');
                     }
-                    else {
-                        return true;
-                    }
+
                 }
+
+                form.submit();
 
             }
         });
