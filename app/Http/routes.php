@@ -125,6 +125,8 @@
 
     Route::get('/create-notice-board','NoticeBoardController@showCreateNoticeBoard');
 
+    Route::get('/get-announcement-batch-class/{batchId}','NoticeBoardController@getBatchClass');
+
     Route::post('/createNoticeBoard','NoticeBoardController@createNoticeBoard');
 
     Route::post('/create-achievement','NoticeBoardController@createAchievement');

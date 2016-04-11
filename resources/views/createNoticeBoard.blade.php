@@ -51,7 +51,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="myTab2_example1">
 
-                            <form action="/createNoticeBoard" role="form" method="post" id="createAnnouncemnt">
+                            <form role="form" method="post" action="createNoticeBoard" id="createAnnouncemnt">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="errorHandler alert alert-danger no-display">
@@ -155,31 +155,8 @@
                                                     <label class="control-label">
                                                         Class <em>(select at least one)</em> <span class="symbol required"></span>
                                                     </label>
-                                                    @if($classDivision)
-                                                    <input type="hidden" name="hidenValue" id="hidenValue" value="1">
-                                                     @foreach($classDivision as $row)
-                                                    <div class="checkbox clip-check check-primary">
 
-                                                        <input type="checkbox" value="{!! $row['class_id']!!}" name="classFirst[]" class="classFirst" id="class_{!! $row['class_id']!!}">
-                                                        <label for="class_{!! $row['class_id']!!}">
-                                                            {!! $row['class_name']!!}
-                                                        </label>
-                                                    </div>
-                                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                                        @if(isset($row['division']))
-                                                        @foreach($row['division'] as $division)
-                                                        <input type="checkbox" value="{!! $division['division_id']!!}"  name = "FirstDiv[]" class="FirstDiv" id="class_{!! $row['class_id']!!}_{!! $division['division_id']!!}" >
-                                                        <label for="class_{!! $row['class_id']!!}_{!! $division['division_id']!!}">
-                                                            {!! $division['division_name']!!}
-                                                        </label>
-                                                        @endforeach
-                                                        @endif
-                                                    </div> <p></p>
-                                                    @endforeach
-                                                    @else
                                                     <input type="hidden" name="hidenValue" id="hidenValue" value="0">
-
-                                                    @endif
 
                                                 </div>
 
@@ -189,7 +166,8 @@
 
                                     </div>
                                     <div class="col-md-12">
-                                        @if(Auth::User()->role_id !== 1)
+
+                                        @if(Auth::User()->role_id != 1)
 
                                         <div class="form-group col-sm-6">
                                             <label class="control-label">
@@ -211,10 +189,10 @@
 
                                     <div class="col-md-12">
 
-                                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save" id="save">
+                                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save" >
                                             <span class="">Save</span>
                                         </button>
-                                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="buttons" value="publish">
+                                        <button class="btn btn-primary btn-wide pull-right" type="submit" name="buttons" value="publish">
                                             Publish
                                         </button>
                                     </div>
@@ -490,6 +468,10 @@
         Main.init();
         FormValidator.init();
 
+        var id = $('#batch-select').val();
+
+        batchChange(id);
+
         $('#parentClass').hide();
 
         $('.teacherList').hide();
@@ -574,7 +556,7 @@
 
 
    $('#service4').click(function(){
-        var route='get-all-admins/';
+        var route='/get-all-admins/';
         $.get(route,function(data){
             var res= $.map(data,function(value){
                 return value;
@@ -596,7 +578,7 @@
 
     });
     $('#service1').click(function(){
-        var route='get-all-teachers/';
+        var route='/get-all-teachers/';
         $.get(route,function(data){
             var res= $.map(data,function(value){
                 return value;
@@ -626,19 +608,18 @@
     });
     function batchChange(batch_id) {
 
-        $.ajax({
-            url: 'show-create-announcement',
-            type: "get",
-            data: {batch_id},
-            success: function(data){
+        var route = '/get-announcement-batch-class/'+batch_id;
+
+        $.get(route,function(data){
+
                 var res= $.map(data,function(value){
                     return value;
                 });
 
                     if (res.length == 0) {
                         $('#save').prop('disabled',true);
-                        $('#btnSubmit').prop('disabled',true);}
-                    else{
+                        $('#btnSubmit').prop('disabled',true);
+                    } else {
                     var str = "";
                     str += '<label class="control-label">'+
                         'Class <em>(select at least one)</em> <span class="symbol required"></span></label>';
@@ -695,7 +676,7 @@
                     }
                 });
                 }
-        });
+        );
     }
 
     $('#service2').click(function(){
