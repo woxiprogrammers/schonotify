@@ -116,8 +116,6 @@ class SearchController extends Controller
 
 
             }
-        } else {
-            $str .= "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
         }
 
 
