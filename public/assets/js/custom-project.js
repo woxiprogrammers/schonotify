@@ -101,19 +101,41 @@ $('#msgCountArea').click(function() {
     $.get('/get-unread-list',function(res){
         var str="";
         for(var i=0; i<res.length; i++) {
-            str+='<li><a href="javascript:void(0);" onclick="doListing('+res[i]['user_id']+');" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar" >'+
-                '<div class="clearfix">'+
-                '<div class="thread-image">'+
-                '<img class ="message_image" src= "'+res[i]["avatar"]+'" alt="">'+
-                '</div>'+
-                '<div class="thread-content">'+
-                '<span class="author">'+res[i]['first_name']+' '+res[i]['last_name']+'</span>'+
-                '<span class="preview">'+res[i]['description']+'</span>'+
-                '<span class="time">'+res[i]['timestamp']+ ' hrs ago</span>'+
-                '</div>'+
-                '</div>'+
-                '</a>'+
-                '</li>';
+
+            if(res[i]['is_active'] == 1)
+            {
+                str+='<li><a href="javascript:void(0);" onclick="doListing('+res[i]['user_id']+');" class="unread" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar" >'+
+                    '<div class="clearfix">'+
+                    '<div class="thread-image">'+
+                    '<img class ="message_image" src= "'+res[i]["avatar"]+'" alt="">'+
+                    '</div>'+
+                    '<div class="thread-content">'+
+                    '<span class="author">'+res[i]['first_name']+' '+res[i]['last_name']+'</span>'+
+                    '<span class="preview">'+res[i]['description']+'</span>'+
+                    '<span class="time">'+res[i]['timestamp']+ ' hrs ago</span>'+
+                    '</div>'+
+                    '</div>'+
+                    '</a>'+
+                    '</li>';
+            } else {
+                str+='<li style="opacity: 0.7;"><a href="javascript:void(0);">'+
+                    '<div class="clearfix">'+
+                    '<div class="thread-image">'+
+                    '<img class ="message_image" src= "'+res[i]["avatar"]+'" alt="">'+
+                    '</div>'+
+                    '<div class="thread-content">'+
+                    '<span class="author">'+res[i]['first_name']+' '+res[i]['last_name']+ '  ' +
+                    '<i class="fa fa-exclamation-circle pull-right" style="color:#C82E29;" title="this user is deactivated !"></i>'+
+                    '</span>'+
+                    '<span class="preview">'+res[i]['description']+'</span>'+
+                    '<span class="time">'+res[i]['timestamp']+ ' hrs ago</span>'+
+                    '</div>'+
+                    '</div>'+
+                    '</a>'+
+                    '</li>';
+            }
+
+
         }
 
         var seeAll='<a href="javascript:;" class="unread" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">See All</a>';
@@ -141,16 +163,34 @@ function userList(){
     $.get('/get-msg-list',function(res){
         var str="";
         for(var i=0; i<res.length; i++) {
-            str+='<li class="media">'+
-                '<a data-toggle-class="chat-open" data-toggle-target="#users" href="javascript:void(0);" onclick="doListing('+res[i]["user_id"]+')">'+
-                '<input type="hidden" name="to_id" id="to_id" value="'+res[i]["user_id"]+'" />'+
-                '<img alt="..." src="'+res[i]["avatar"]+'" class="media-object">'+
-                '<div class="media-body">'+
-                '<h4 class="media-heading">'+res[i]['first_name']+' '+res[i]['last_name']+'</h4>'+
-                '<span> '+res[i]['role']+ ' </span>'+
-                '</div>'+
-                '</a>'+
-                '</li>';
+            if(res[i]['is_active'] == 1)
+            {
+                str+='<li class="media">'+
+                    '<a data-toggle-class="chat-open" data-toggle-target="#users" href="javascript:void(0);" onclick="doListing('+res[i]["user_id"]+')">'+
+                    '<input type="hidden" name="to_id" id="to_id" value="'+res[i]["user_id"]+'" />'+
+                    '<img alt="..." src="'+res[i]["avatar"]+'" class="media-object">'+
+                    '<div class="media-body">'+
+                    '<h4 class="media-heading">'+res[i]['first_name']+' '+res[i]['last_name']+'</h4>'+
+                    '<span> '+res[i]['role']+ ' </span>'+
+                    '</div>'+
+                    '</a>'+
+                    '</li>';
+            } else {
+                str+='<li class="media" style="opacity: 0.7;">'+
+                    '<a href="javascript:void(0);">'+
+                    '<input type="hidden" name="to_id" id="to_id" value="'+res[i]["user_id"]+'" />'+
+                    '<img alt="..." src="'+res[i]["avatar"]+'" class="media-object">'+
+                    '<div class="media-body" style="display: block;">'+
+                    '<h4 class="media-heading">'+res[i]['first_name']+' '+res[i]['last_name']+'    ' +
+                    '<i class="fa fa-exclamation-circle pull-right" style="color:#C82E29;" title="this user is deactivated !"></i>'+
+                    '</h4>'+
+                    '<span> '+res[i]['role']+ ' </span>'+
+
+                    '</div>'+
+                    '</a>'+
+                    '</li>';
+            }
+
         }
         $('#userList').html(str);
         toggle();

@@ -39,7 +39,7 @@ class MessageController extends Controller
         $tomessageList = Message::where('to_id',$userId)->where('read_status',0)->lists('from_id');
         $toMessageData = array_unique(array_diff($tomessageList->toArray(),$senderArray));
         $messageContactLists = User::whereIn('id',$toMessageData)->select('id','first_name','last_name','role_id',
-            'division_id','avatar')->get();
+            'division_id','avatar','is_active')->get();
         $message = array();
         $messagesLists = array();
         $profileImagePath = URL::asset(env('PROFILE_IMAGE_UPLOAD'));
@@ -56,6 +56,7 @@ class MessageController extends Controller
             $dateDiff = $currentDate->diff($messageDate);
             $message['timestamp'] = $dateDiff->h;
             $message['user_id'] = $messageList['id'];
+            $message['user_id'] = $messageList['is_active'];
             $message['first_name'] = $messageList['first_name'];
             $message['last_name'] = $messageList['last_name'];
             array_push($messagesLists,$message);
@@ -74,7 +75,7 @@ class MessageController extends Controller
         $fromMessageData = array_unique(array_diff($frommessageList->toArray(),$senderArray));
         $messagecontact = array_unique(array_merge($toMessageData,$fromMessageData));
         $messageContactLists = User::whereIn('id',$messagecontact)->select('id','first_name','last_name','role_id',
-            'division_id','avatar')->get();
+            'division_id','avatar','is_active')->get();
         $message = array();
         $messagesLists = array();
         $profileImagePath = URL::asset(env('PROFILE_IMAGE_UPLOAD'));
@@ -88,6 +89,7 @@ class MessageController extends Controller
             $message['first_name'] = $messageList['first_name'];
             $message['last_name'] = $messageList['last_name'];
             $message['role'] = $userRole->name;
+            $message['is_active'] = $messageList['is_active'];
             $message['avatar'] = $ProfileDirectory.$messageList['avatar'];
             array_push($messagesLists,$message);
         }

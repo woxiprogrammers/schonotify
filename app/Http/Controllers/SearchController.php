@@ -111,11 +111,11 @@ class SearchController extends Controller
                 }
                 $str.="</td>";
 
-
                 $str.="<td><a href='/edit-user/".$row->id."'>Edit</a></td>";
 
-
             }
+        } else {
+            $str1 = "<h5 class='center'>No records found !</h5>";
         }
 
 
@@ -123,7 +123,14 @@ class SearchController extends Controller
 
         $str.="</table>";
 
-        return $str;
+        if(sizeof($result->toArray()) != 0 )
+        {
+            return $str;
+        } else {
+            return $str1;
+        }
+
+
 
     }
 

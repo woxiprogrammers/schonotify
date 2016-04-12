@@ -1300,7 +1300,12 @@
                 ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
 
-            return view('detailAnnouncement')->with(compact('announcements','publishedBy'));
+            $users = EventUserRoles::where('event_id','=',$id)
+                        ->get();
+
+            return $users;
+
+            //return view('detailAnnouncement')->with(compact('announcements','publishedBy'));
         }
 
         /*
