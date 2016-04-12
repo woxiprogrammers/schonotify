@@ -1300,10 +1300,22 @@
                 ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
 
-            $users = EventUserRoles::where('event_id','=',$id)
+            $users = EventUserRoles::join('users','event_user_roles.user_id','=','users.id')
+                        ->where('event_id','=',$id)
+                        ->select('event_user_roles.event_id','user_id','users.role_id','event_user_roles.division_id')
                         ->get();
 
+
             return $users;
+//            foreach($users as $user)
+//            {
+//                if($user->user_id != null)
+//                {
+//
+//                } else {
+//                    dd('null');
+//                }
+//            }
 
             //return view('detailAnnouncement')->with(compact('announcements','publishedBy'));
         }
