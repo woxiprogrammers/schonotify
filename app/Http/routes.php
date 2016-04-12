@@ -135,7 +135,11 @@
 
     Route::get('/check-edit-achievement','NoticeBoardController@checkUpdateAchievementAcl');
 
+    Route::get('/check-edit-announcement','NoticeBoardController@checkUpdateAnnouncementAcl');
+
     Route::get('/check-publish-achievement/{id}','NoticeBoardController@checkPublishAchievementAcl');
+
+    Route::get('/check-publish-announcement/{id}','NoticeBoardController@checkPublishAnnouncementAcl');
 
     Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
 
