@@ -960,21 +960,28 @@
                 $annoucement['detail'] = $request->announcement;
                 $annoucement['created_at'] = Carbon::now();
                 $annoucement['updated_at'] = Carbon::now();
+                $annoucement['created_by'] = $user->id;
 
-                if($request->buttons == 'publish') {
-                    if($user->role_id == 1) {
-                        $annoucement['created_by'] = $user->id;
+                if($user->role_id == 1) {
+                    if($request->buttons == 'publish') {
                         $annoucement['published_by'] = $user->id;
                         $annoucement['status'] = 2;
-                    } elseif($user->role_id == 2){
-                        $annoucement['created_by'] = $user->id;
-                        $annoucement['published_by'] = $request->adminToPublish;
-                        $annoucement['status'] = 1;
+                    } else {
+                        $annoucement['published_by'] = $user->id;
+                        $annoucement['status'] = 0;
                     }
-                } elseif($request->buttons == 'save'){
-                    $annoucement['created_by'] = $user->id;
-                    $annoucement['status'] = 0;
+                } else {
+
+                    $annoucement['published_by'] = $request->adminToPublish;
+
+                    if($request->buttons == 'publish') {
+                        $annoucement['status'] = 1;
+                    } else {
+                        $annoucement['status'] = 0;
+                    }
+
                 }
+
 
                 $eventId = Event::insertGetId($annoucement);
                 if($eventId != null) {
@@ -1139,7 +1146,7 @@
                     }
 
                 }
-                Session::flash('message-success','announcement created successfully');
+                Session::flash('message-success','Announcement created successfully');
                 return view('noticeBoard');
             } else {
                 return Redirect::back();
