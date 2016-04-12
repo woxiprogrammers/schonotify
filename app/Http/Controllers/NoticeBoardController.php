@@ -11,8 +11,10 @@
     use App\Http\Requests\WebRequests\CreateAchievementRequest;
     use App\Http\Requests\WebRequests\CreateAnnouncementRequest;
     use App\Http\Requests\WebRequests\EditAchievementRequest;
+    use App\Http\Requests\WebRequests\EditAnnouncementRequest;
     use App\Http\Requests\WebRequests\NoticeBoardRequest;
     use App\Http\Requests\WebRequests\PublishAchievementRequest;
+    use App\Http\Requests\WebRequests\PublishAnnouncementRequest;
     use App\SubjectClassDivision;
     use App\User;
     use Carbon\Carbon;
@@ -1570,6 +1572,25 @@
         }
 
         /*
+        * Function Name : checkUpdateAchievementAcl
+        * Param : $request
+        * Return : check ACL for update achievement
+        * Desc : check ACL for update achievement.
+        * Developed By : Suraj Bande
+        * Date : 5/3/2016
+        */
+
+        public function checkUpdateAnnouncementAcl(EditAnnouncementRequest $request)
+        {
+            if($request->authorize() === true)
+            {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+
+        /*
         * Function Name : checkPublishAchievementAcl
         * Param : $request,$id
         * Return : check ACL for publish achievement
@@ -1601,6 +1622,48 @@
                     $achievement->save();
 
                     Session::flash('message-success','Achievement sent for publish successfully !');
+
+                }
+
+                return Redirect::back();
+
+            } else {
+                return Redirect::back();
+            }
+        }
+
+
+        /*
+        * Function Name : checkPublishAnnouncementAcl
+        * Param : $request,$id
+        * Return : check ACL for publish announcement
+        * Desc : check ACL for publish announcement.
+        * Developed By : Suraj Bande
+        * Date : 5/3/2016
+        */
+
+        public function checkPublishAnnouncementAcl(PublishAnnouncementRequest $request,$id)
+        {
+            if($request->authorize() === true)
+            {
+
+                if(Auth::User()->role_id == 1)
+                {
+                    $announcement = Event::find($id);
+                    $announcement->status = 2;
+
+                    $announcement->save();
+
+                    Session::flash('message-success','Announcement published successfully !');
+
+                } else {
+
+                    $announcement = Event::find($id);
+                    $announcement->status = 1;
+
+                    $announcement->save();
+
+                    Session::flash('message-success','Announcement sent for publish successfully !');
 
                 }
 

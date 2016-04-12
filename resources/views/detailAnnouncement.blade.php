@@ -183,8 +183,57 @@
                                         @endif
 
                                     </div>
+
+                                </div>
+                                <div class="margin-top-10">
+                                    @if(Auth::User()->role_id == 2)
+                                    @foreach($announcements as $announcement)
+                                    @if($announcement['status'] == 0)
+                                    <h5>
+                                        Selected Admin to send request :
+
+                                        @foreach($publishedBy as $row)
+                                        @if($row['gender'] == 'M')
+                                        Mr.
+                                        @else
+                                        Mrs.
+                                        @endif
+
+                                        {{ $row['first_name'] }} {{ $row['last_name'] }} ({{ $row['username'] }})
+
+                                        @if($row['role_id'] == 1)
+                                        <small><i>Admin</i></small>
+                                        @else
+                                        <small><i>Teacher</i></small>
+                                        @endif
+                                        @endforeach
+                                    </h5>
+                                    @elseif($announcement['status'] == 1)
+                                    <h5>
+                                        Request sent to :
+
+                                        @foreach($publishedBy as $row)
+                                        @if($row['gender'] == 'M')
+                                        Mr.
+                                        @else
+                                        Mrs.
+                                        @endif
+
+                                        {{ $row['first_name'] }} {{ $row['last_name'] }} ({{ $row['username'] }})
+
+                                        @if($row['role_id'] == 1)
+                                        <small><i>Admin</i></small>
+                                        @else
+                                        <small><i>Teacher</i></small>
+                                        @endif
+                                        @endforeach
+                                    </h5>
+                                    @endif
+                                    @endforeach
+                                    @endif
                                 </div>
                             </div>
+
 
                             <div class="panel-footer col-sm-12">
 
@@ -232,27 +281,27 @@
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
-                                                <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                                <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
-                                                </button>
+                                                </a>
                                             @elseif($announcement['status'] == 1 && $announcement['published_by'] == Auth::User()->id)
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
-                                                <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                                <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
-                                                </button>
+                                                </a>
                                             @endif
                                         @endforeach
                                     @else
                                         @foreach($announcements as $announcement)
-                                            @if($announcement['status'] == 1)
+                                            @if($announcement['status'] == 0)
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
-                                                <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
+                                                <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
-                                                </button>
+                                                </a>
                                             @endif
                                         @endforeach
                                     @endif
@@ -448,7 +497,6 @@
 </div>
 
 
-
 </div>
 </div>
 
@@ -500,14 +548,40 @@
 
     });
 
-    $('#btnEdit').click(function(){
-        $('#detail').hide();
-        $('#update').show();
-    });
-
     $('#btnCancel').click(function(){
         $('#update').hide();
         $('#detail').show();
+
+    });
+
+    $('#btnEdit').click(function(){
+
+        $('#loadmoreajaxloader').show();
+
+        var route = "/check-edit-announcement";
+
+        $.get(route,function(res){
+
+            if(res == 1)
+            {
+                $('#detail').hide();
+                $('#update').show();
+                $('#message-error-div').hide();
+                $('#message-error-div').html("");
+            } else {
+                var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                    '<span area-hidden="true">&times;</span>'+
+                    '</button>'+
+                    "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                    "</div>";
+                $('#message-error-div').show();
+                $('#message-error-div').html(str);
+            }
+
+            $('#loadmoreajaxloader').hide();
+
+        });
 
     });
 
@@ -517,11 +591,6 @@
 
     $('#btnUpdate').click(function(){
         window.location.href="detailedAnnouncement";
-    });
-
-    $('#btnPublish').click(function(){
-        $('#btnDiv').hide();
-        $('#btnStatus').show();
     });
 
     $('.parentChk').change(function(){
