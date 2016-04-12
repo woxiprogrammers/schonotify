@@ -1292,7 +1292,7 @@
 
             $announcements = Event::join('users','users.id','=','events.created_by')
                 ->where('events.id','=',$id)
-                ->select('events.id','title','events.status','events.detail','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                ->select('events.id','title','events.status','events.detail','events.created_by','events.published_by','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
 
             $publishedBy = Event::join('users','users.id','=','events.published_by')
@@ -1300,24 +1300,40 @@
                 ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
 
-            $users = EventUserRoles::join('users','event_user_roles.user_id','=','users.id')
-                        ->where('event_id','=',$id)
-                        ->select('event_user_roles.event_id','user_id','users.role_id','event_user_roles.division_id')
+            $users = EventUserRoles::where('event_id','=',$id)
                         ->get();
 
+            $admins = array();
+            $teachers = array();
+            $divisions = array();
 
-            return $users;
-//            foreach($users as $user)
-//            {
-//                if($user->user_id != null)
-//                {
-//
-//                } else {
-//                    dd('null');
-//                }
-//            }
+            foreach($users as $user)
+            {
+                if($user->user_id != null)
+                {
+                    $userRole = User::select('role_id','first_name','last_name','username','id')->where('users.id','=',$user->user_id)->first();
+                    if($userRole->role_id == 1)
+                    {
+                        array_push($admins,$userRole);
+                    } else {
+                        array_push($teachers,$userRole);
+                    }
+                }
 
-            //return view('detailAnnouncement')->with(compact('announcements','publishedBy'));
+                if($user->division_id != null)
+                {
+                    $batches = Classes::join('divisions','classes.id','=','divisions.class_id')
+                                ->join('batches','classes.batch_id','=','batches.id')
+                                ->where('divisions.id','=',$user->division_id)
+                                ->select('divisions.id','divisions.class_id','classes.batch_id','divisions.division_name','classes.class_name','batches.name as batch_name')
+                                ->get();
+
+                    array_push($divisions,$batches);
+                }
+            }
+
+            return view('detailAnnouncement')->with(compact('announcements','admins','teachers','divisions','publishedBy'));
+
         }
 
         /*
