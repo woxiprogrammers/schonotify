@@ -133,7 +133,7 @@ class EventController extends Controller
             for($month = $startMonth ; $month<=12 ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
-                $previousYearData["month"][$j][$i] = $monthName;
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
                 $i++;
             }
             $i =1;
@@ -142,7 +142,7 @@ class EventController extends Controller
             for($month = 1 ; $month <= $endMonth ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
-                $nextYearData["month"][$j][$i] = $monthName;
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
                 $i++;
             }
         } else {
@@ -153,7 +153,7 @@ class EventController extends Controller
             for($month = 1 ; $month <= $endMonth ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
-                $nextYearData["month"][$j][$i] = $monthName;
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
                 $i++;
             }
             $j = 0;
@@ -161,7 +161,7 @@ class EventController extends Controller
             for($month = $startMonth ; $month<=12 ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
-                $previousYearData["month"][$j][$i] = $monthName;
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
                 $i++;
             }
         }
