@@ -77,7 +77,7 @@ class CreateAnnouncementRequest extends Request
             case 'GET': return [];
                 break;
             case 'POST':return [
-                'title'=>'required|min:3',
+                'title'=>'required|min:2',
                 'announcement'=>'required|min:6',
             ];
                 break;
