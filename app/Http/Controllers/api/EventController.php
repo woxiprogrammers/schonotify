@@ -129,7 +129,7 @@ class EventController extends Controller
             $currentYear = date('Y');
             $j = 0;
             $i = $startMonth;
-            $previousYearData["Year"] = $previousYear;
+            $previousYearData["year"] = $previousYear;
             for($month = $startMonth ; $month<=12 ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
@@ -138,7 +138,7 @@ class EventController extends Controller
             }
             $i =1;
             $j = 0;
-            $nextYearData["Year"] = $currentYear;
+            $nextYearData["year"] = $currentYear;
             for($month = 1 ; $month <= $endMonth ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
@@ -149,7 +149,7 @@ class EventController extends Controller
             $previousYear = date('Y')+1;
             $currentYear = date('Y') ;
             $j = 0;
-            $nextYearData["Year"] = $previousYear;
+            $nextYearData["year"] = $previousYear;
             for($month = 1 ; $month <= $endMonth ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
@@ -157,7 +157,7 @@ class EventController extends Controller
                 $i++;
             }
             $j = 0;
-            $previousYearData["Year"] = $currentYear;
+            $previousYearData["year"] = $currentYear;
             for($month = $startMonth ; $month<=12 ; $month++) {
                 $date = '2016-'.$month.'-05';
                 $monthName = date('F', strtotime($date));
