@@ -210,7 +210,7 @@
                                                if(arr[i]['priority'] == 1)
                                                {
                                                    str += '&nbsp;<span class="label label-sm label-danger">High</span>';
-                                               } else if(arr[i]['priority'] == 2) {
+                                               } else if(arr[i]['priority'] == 3) {
                                                    str += '&nbsp;<span class="label label-sm label-orange">Low</span>';
                                                } else {
                                                     str += '&nbsp;<span class="label label-sm label-success">Medium</span>';
