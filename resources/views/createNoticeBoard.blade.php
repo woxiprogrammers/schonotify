@@ -133,7 +133,7 @@
                                                 </div>
                                             </div>
                                             <div class="checkbox clip-check check-primary">
-                                                <input type="checkbox" value="" name="userrole" class="parentChk" id="service2">
+                                                <input type="checkbox" value="0" name="userrole" class="parentChk" id="service2">
                                                 <label for="service2">
                                                     Student
                                                 </label>
@@ -152,13 +152,11 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group" id="batch-class-div-data">
-                                                    <label class="control-label">
-                                                        Class <em>(select at least one)</em> <span class="symbol required"></span>
-                                                    </label>
 
-                                                    <input type="hidden" name="hidenValue" id="hidenValue" value="0">
 
                                                 </div>
+
+                                                <input type="hidden" name="hidenValue" id="hidenValue" value="0">
 
                                             </div>
 
@@ -621,8 +619,6 @@
                         $('#btnSubmit').prop('disabled',true);
                     } else {
                     var str = "";
-                    str += '<label class="control-label">'+
-                        'Class <em>(select at least one)</em> <span class="symbol required"></span></label>';
 
                              for(var i=0; i<res.length; i++)
                              {
@@ -680,14 +676,10 @@
     }
 
     $('#service2').click(function(){
-        if(this.checked == true) {
-            if($('#hidenValue').val() == 0) {
-                $('#save').prop('disabled',true);
-                $('#btnSubmit').prop('disabled',true);
-            } else {
-                $('#save').prop('disabled',false);
-                $('#btnSubmit').prop('disabled',false);
-            }
+        if(this.checked == true){
+            $('#hidenValue').val(1);
+        } else {
+            $('#hidenValue').val(0);
         }
     });
 
