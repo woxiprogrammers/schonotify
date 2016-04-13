@@ -19,7 +19,7 @@ class EventController extends Controller
 
     public function __construct(Request $request)
     {
-       // $this->middleware('db');
+        $this->middleware('db');
         $this->middleware('authenticate.user');
     }
 
