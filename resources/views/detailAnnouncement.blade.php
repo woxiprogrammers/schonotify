@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="panel-tools">
                                     @foreach($announcements as $announcement)
-                                        @if($announcement['priority'] == 0)
+                                        @if($announcement['priority'] == 1)
                                         <span class="label label-sm label-danger">High</span>
                                         @elseif($announcement['priority'] == 3)
                                         <span class="label label-sm label-orange">Low</span>
