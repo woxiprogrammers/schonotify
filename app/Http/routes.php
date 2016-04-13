@@ -125,6 +125,8 @@
 
     Route::get('/create-notice-board','NoticeBoardController@showCreateNoticeBoard');
 
+    Route::get('/get-announcement-batch-class/{batchId}','NoticeBoardController@getBatchClass');
+
     Route::post('/createNoticeBoard','NoticeBoardController@createNoticeBoard');
 
     Route::post('/create-achievement','NoticeBoardController@createAchievement');
@@ -133,13 +135,17 @@
 
     Route::get('/check-edit-achievement','NoticeBoardController@checkUpdateAchievementAcl');
 
+    Route::get('/check-edit-announcement','NoticeBoardController@checkUpdateAnnouncementAcl');
+
     Route::get('/check-publish-achievement/{id}','NoticeBoardController@checkPublishAchievementAcl');
+
+    Route::get('/check-publish-announcement/{id}','NoticeBoardController@checkPublishAnnouncementAcl');
 
     Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
 
     Route::get('get-all-teachers','NoticeBoardController@getAllTeachers');
 
-    Route::get('detailAnnouncement','NoticeBoardController@detailAnnouncement');
+    Route::get('/detail-announcement/{id}','NoticeBoardController@detailAnnouncement');
 
     Route::get('detail-achievement/{id}','NoticeBoardController@detailAchievement');
 

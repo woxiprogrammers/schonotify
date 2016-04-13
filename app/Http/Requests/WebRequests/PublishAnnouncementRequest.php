@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class CreateAnnouncementRequest extends Request
+class PublishAnnouncementRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,32 +33,18 @@ class CreateAnnouncementRequest extends Request
 
         switch($ch)
         {
-            case 'GET':
 
-                if(in_array('create_attendance',$resultArr)) {
-                    return true;
-                } else {
-                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
-                    return Redirect::to('/');
-                }
-
-                break;
-
-            case 'PUT':
-                if(in_array('create_attendance',$resultArr)) {
-                    return true;
-                } else {
-                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
-                    return Redirect::to('/');
-                }
-
-            case 'POST':
-                if(in_array('create_announcement',$resultArr)) {
+            case 'GET' :
+                if(in_array('publish_announcement',$resultArr)) {
                     return true;
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::back();
                 }
+                break;
+            case 'POST':
+
+                break;
 
             default:break;
         }
@@ -71,18 +57,6 @@ class CreateAnnouncementRequest extends Request
      */
     public function rules()
     {
-        $ch=Request::method();
-        switch($ch)
-        {
-            case 'GET': return [];
-                break;
-            case 'POST':return [
-                'title'=>'required|min:2',
-                'announcement'=>'required|min:6',
-            ];
-                break;
-            default:break;
-        }
-
+        return [];
     }
 }

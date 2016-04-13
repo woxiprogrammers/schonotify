@@ -38,7 +38,7 @@
                                     <label class="control-label">
                                         Message
                                     </label>
-                                    <input type="text" placeholder="Enter Text Message Here" class="form-control" name="description"/>
+                                    <textarea class="form-control" placeholder="Enter Text Message Here" name="description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                                     <label class="control-label">
                                         Message
                                     </label>
-                                    <input type="text" placeholder="Enter Text Message Here" class="form-control" name="description"/>
+                                    <textarea class="form-control" placeholder="Enter Text Message Here" name="description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                                     <label class="control-label">
                                         Message
                                     </label>
-                                    <input type="text" placeholder="Enter Text Message Here" class="form-control" name="description"/>
+                                    <textarea class="form-control" placeholder="Enter Text Message Here" name="description"></textarea>
                                 </div>
                             </div>
                         </div>

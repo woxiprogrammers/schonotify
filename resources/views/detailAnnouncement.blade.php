@@ -25,7 +25,7 @@
 
             <li>
                 <div class="values">
-                    <a href="/createNoticeBoard" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
+                    <a href="/create-notice-board" class="btn btn-primary"><i class="ti-plus"></i></a> Create New
                 </div>
             </li>
 
@@ -46,43 +46,277 @@
 
                                 <div class="timeline_title">
                                     <i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>
-                                    <h4 class="panel-title no-margin text-primary padding-15">PARENT MEET FOR THIS MONTH</h4>
+                                    <h4 class="panel-title no-margin text-primary padding-15" style="word-wrap: break-word;">@foreach($announcements as $announcement){{ strtoupper($announcement['title']) }}@endforeach</h4>
                                 </div>
                                 <div class="panel-tools">
-                                    <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="ti-reload"></i></a>
+                                    @foreach($announcements as $announcement)
+                                        @if($announcement['priority'] == 1)
+                                        <span class="label label-sm label-danger">High</span>
+                                        @elseif($announcement['priority'] == 3)
+                                        <span class="label label-sm label-orange">Low</span>
+                                        @else
+                                        <span class="label label-sm label-success">Medium</span>
+                                        @endif
+                                    @endforeach
+                                    Created by
+                                    @foreach($announcements as $announcement)
+                                    @if($announcement['gender'] == "M")
+
+                                    Mr.
+
+                                    @else
+
+                                    Mrs.
+
+                                    @endif
+
+                                    {{ $announcement['first_name'] }}
+
+                                    {{ $announcement['last_name'] }}
+
+                                    ( {{ $announcement['username'] }} )
+
+                                    @if($announcement['role_id'] == 1)
+                                    <small><i>Admin</i></small>
+                                    @else
+                                    <small><i>Teacher</i></small>
+                                    @endif
+
+                                    Created On <i class="fa fa-clock-o"></i> {{ $announcement['created_at'] }}
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="panel-body">
                                 <div class="panel-scroll height-280 ps-container ps-active-y">
-                                    Parent Meet for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
-                                    <br>
-                                    Venue:
-                                    <address>
-                                        <strong>MIT School</strong>
-                                        <br>
-                                        795 Folsom Ave, Suite 600
-                                        <br>
-                                        San Francisco, CA 94107
-                                        <br>
-                                        <abbr title="Phone">P:</abbr> (123) 456-7890
-                                    </address>
-
-                                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 180px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 82px;"></div></div></div>
+                                    <textarea class="col-sm-12" style="height:200px;" disabled>@foreach($announcements as $announcement){{ $announcement['detail'] }}@endforeach</textarea>
+                                </div>
                             </div>
+
+                            <div class="col-sm-12 margin-top-10 margin-bottom-10">
+                                <div class="panel panel-primary">
+
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">This announcement is viewable to following Users and Classes.</h4>
+                                        <div class="panel-tools">
+
+                                        </div>
+                                    </div>
+                                    <div class="panel-body no-padding partition-white">
+
+                                        @if(sizeOf($admins) != 0)
+
+                                        <div class="col-md-4 no-padding">
+                                            <div class="padding-15">
+                                                <ul>
+                                                    <h4>Admins</h4>
+                                                    @foreach($admins as $admin)
+                                                        <li>
+                                                            {{ $admin['first_name'] }} {{ $admin['last_name'] }} ({{ $admin['username'] }})
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        @else
+
+                                        <div class="col-md-4 no-padding">
+                                            <div class="padding-15">
+
+                                                <h4>Admins</h4>
+
+                                                <p>No records !</p>
+
+                                            </div>
+                                        </div>
+
+                                        @endif
+
+                                        @if(sizeOf($teachers) != 0)
+
+                                        <div class="col-md-4 no-padding">
+                                            <div class="padding-15">
+                                                <ul>
+                                                    <h4>Teachers</h4>
+                                                    @foreach($teachers as $teacher)
+                                                    <li>
+                                                        {{ $teacher['first_name'] }} {{ $teacher['last_name'] }} ({{ $teacher['username'] }})
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        @else
+
+                                        <div class="col-md-4 no-padding">
+                                            <div class="padding-15">
+
+                                                <h4>Teachers</h4>
+
+                                                <p>No records !</p>
+
+                                            </div>
+                                        </div>
+
+                                        @endif
+
+                                        @if(sizeOf($divisions) != 0)
+
+                                        <div class="col-md-4 no-padding">
+                                            <div class="padding-15">
+                                                <ul>
+                                                    <h4>Divisions</h4>
+                                                    @foreach($divisions as $division)
+                                                    <li>
+                                                        {{ $division[0]['division_name'] }} {{ $division[0]['class_name'] }} ({{ $division[0]['batch_name'] }} batch)
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        @else
+
+                                        <div class="col-md-4 no-padding">
+                                            <div class="padding-15">
+
+                                                <h4>Divisions</h4>
+
+                                                <p>No records !</p>
+
+                                            </div>
+                                        </div>
+
+                                        @endif
+
+                                    </div>
+
+                                </div>
+                                <div class="margin-top-10">
+                                    @if(Auth::User()->role_id == 2)
+                                    @foreach($announcements as $announcement)
+                                    @if($announcement['status'] == 0)
+                                    <h5>
+                                        Selected Admin to send request :
+
+                                        @foreach($publishedBy as $row)
+                                        @if($row['gender'] == 'M')
+                                        Mr.
+                                        @else
+                                        Mrs.
+                                        @endif
+
+                                        {{ $row['first_name'] }} {{ $row['last_name'] }} ({{ $row['username'] }})
+
+                                        @if($row['role_id'] == 1)
+                                        <small><i>Admin</i></small>
+                                        @else
+                                        <small><i>Teacher</i></small>
+                                        @endif
+                                        @endforeach
+                                    </h5>
+                                    @elseif($announcement['status'] == 1)
+                                    <h5>
+                                        Request sent to :
+
+                                        @foreach($publishedBy as $row)
+                                        @if($row['gender'] == 'M')
+                                        Mr.
+                                        @else
+                                        Mrs.
+                                        @endif
+
+                                        {{ $row['first_name'] }} {{ $row['last_name'] }} ({{ $row['username'] }})
+
+                                        @if($row['role_id'] == 1)
+                                        <small><i>Admin</i></small>
+                                        @else
+                                        <small><i>Teacher</i></small>
+                                        @endif
+                                        @endforeach
+                                    </h5>
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                </div>
+                            </div>
+
+
                             <div class="panel-footer col-sm-12">
 
-                                    <h4>Mrs. Archana Singh <small><i>Admin</i></small><small class="pull-right"><i class="fa fa-clock-o"></i> Wednesday 2 Oct, 2015 1:00 PM</small></h4>
+                                @foreach($announcements as $announcement)
+                                @if($announcement['status'] == 0)
+                                <h5> Status :<i class="fa fa-flag"></i> <i>Draft</i></h5>
+                                @elseif($announcement['status'] == 1)
+                                <h5> Status :<i class="fa fa-flag"></i> <i>Pending</i></h5>
+                                @else
+                                <h5> Status :<i class="fa fa-flag"></i> <i>Published</i></h5>
+                                @endif
 
+                                <h4>
+                                    <small class="pull-right">
+                                        @if($announcement['status'] == 2)
+
+                                        Published By
+
+                                        @foreach($publishedBy as $row)
+                                        @if($row['gender'] == 'M')
+                                        Mr.
+                                        @else
+                                        Mrs.
+                                        @endif
+
+                                        {{ $row['first_name'] }} {{ $row['last_name'] }} ({{ $row['username'] }})
+
+                                        @if($row['role_id'] == 1)
+                                        <small><i>Admin</i></small>
+                                        @else
+                                        <small><i>Teacher</i></small>
+                                        @endif
+                                        @endforeach
+
+                                        Published On <i class="fa fa-clock-o"></i> {{ $announcement['updated_at'] }} @endif
+                                    </small>
+                                </h4>
+
+                                @endforeach
                                 <div class="col-md-12" id="btnDiv">
-                                    <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
-                                        <i class="fa fa-wrench"></i> Update
-                                    </button>
-                                    <button class="btn btn-primary btn-wide pull-right panel-refresh" type="button" id="btnPublish">
-                                        <i class="fa fa-cloud-upload"></i> Publish
-                                    </button>
+
+                                    @if(Auth::User()->role_id == 1)
+                                        @foreach($announcements as $announcement)
+                                            @if($announcement['status'] == 0 && $announcement['created_by'] == Auth::User()->id)
+                                                <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
+                                                    <i class="fa fa-wrench"></i> Update
+                                                </button>
+                                                <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
+                                                    <i class="fa fa-cloud-upload"></i> Publish
+                                                </a>
+                                            @elseif($announcement['status'] == 1 && $announcement['published_by'] == Auth::User()->id)
+                                                <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
+                                                    <i class="fa fa-wrench"></i> Update
+                                                </button>
+                                                <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
+                                                    <i class="fa fa-cloud-upload"></i> Publish
+                                                </a>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        @foreach($announcements as $announcement)
+                                            @if($announcement['status'] == 0)
+                                                <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
+                                                    <i class="fa fa-wrench"></i> Update
+                                                </button>
+                                                <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
+                                                    <i class="fa fa-cloud-upload"></i> Publish
+                                                </a>
+                                            @endif
+                                        @endforeach
+                                    @endif
+
                                 </div>
-                                <div class="col-md-12" id="btnStatus">
-                                    <h5> Status :<i class="fa fa-flag"></i> <i>Published</i></h5>
+                                <div class="col-md-12">
+
                                 </div>
                             </div>
                         </div>
@@ -271,12 +505,11 @@
 </div>
 
 
-
 </div>
 </div>
 
 </div>
-
+<div id="loadmoreajaxloader" style="display: block;" class="loader-position-event" ><center><img src="/assets/images/loader1.gif" /></center></div>
 @include('footer')
 
 @include('rightSidebar')
@@ -284,20 +517,22 @@
 
 </div>
 <!-- start: MAIN JAVASCRIPTS -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
-<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="vendor/switchery/switchery.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/modernizr/modernizr.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
-<script src="assets/js/custom-project.js"></script>
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/adapters/jquery.js"></script>
-<script src="assets/js/form-validation.js"></script>
+<script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="/assets/js/form-validation.js"></script>
+<script src="/vendor/moment/moment.min.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
@@ -321,24 +556,49 @@
 
     });
 
-    $('#btnEdit').click(function(){
-        $('#detail').hide();
-        $('#update').show();
-    });
-
     $('#btnCancel').click(function(){
         $('#update').hide();
         $('#detail').show();
 
     });
 
-    $('#btnUpdate').click(function(){
-        window.location.href="detailedAnnouncement";
+    $('#btnEdit').click(function(){
+
+        $('#loadmoreajaxloader').show();
+
+        var route = "/check-edit-announcement";
+
+        $.get(route,function(res){
+
+            if(res == 1)
+            {
+                $('#detail').hide();
+                $('#update').show();
+                $('#message-error-div').hide();
+                $('#message-error-div').html("");
+            } else {
+                var str='<div class="alert alert-danger alert-dismissible" role="alert">'+
+                    '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
+                    '<span area-hidden="true">&times;</span>'+
+                    '</button>'+
+                    "Currently you do not have permission to access this functionality. Please contact administrator to grant you access !"+
+                    "</div>";
+                $('#message-error-div').show();
+                $('#message-error-div').html(str);
+            }
+
+            $('#loadmoreajaxloader').hide();
+
+        });
+
     });
 
-    $('#btnPublish').click(function(){
-        $('#btnDiv').hide();
-        $('#btnStatus').show();
+    $(window).load(function() {
+        $('#loadmoreajaxloader').hide();
+    });
+
+    $('#btnUpdate').click(function(){
+        window.location.href="detailedAnnouncement";
     });
 
     $('.parentChk').change(function(){

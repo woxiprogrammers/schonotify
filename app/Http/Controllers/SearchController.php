@@ -61,65 +61,76 @@ class SearchController extends Controller
 
         $str.="<thead><tr>";
 
-
-            if($result[0]['user_role']== 'student')
-            {
-                $str.="<th>Role No.</th>";
-            }
+        if($role_id == 3)
+        {
+            $str.="<th>Role No.</th>";
+        }
 
         $str.="<th>Name</th></th><th>Username</th><th>Email</th><th>Gender</th>";
 
-        if($result[0]['user_role']== 'student')
+        if($role_id == 3)
         {
-                $str.="<th>Parent Name</th>";
+            $str.="<th>Parent Name</th>";
         }
 
-        $str.="<th>Status</th>";
-
-        $str.="<th>Action</th>";
-
-        $str.="</tr></thead><tbody>";
-
-        foreach($result as $row)
+        if(sizeof($result->toArray()) != 0 )
         {
 
-            if($row->user_role=='student')
+            $str.="<th>Status</th>";
+
+            $str.="<th>Action</th>";
+
+            $str.="</tr></thead><tbody>";
+
+            foreach($result as $row)
             {
-                $str.="<tr><td>".$row->rollno."</td>";
-            }else{
-                $str.="<tr>";
+
+                if($row->user_role=='student')
+                {
+                    $str.="<tr><td>".$row->rollno."</td>";
+                }else{
+                    $str.="<tr>";
+                }
+
+                $str.="<td>".$row->firstname." ".$row->lastname."</td>";
+                $str.="<td>".$row->user_name."</td>";
+                $str.="<td>".$row->email."</td>";
+                $str.="<td>".$row->gender."</td>";
+                $parent=User::all()->where('id',$row->parent_id);
+                foreach($parent as $row1)
+                {
+                    $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
+                }
+
+                $str.="<td>";
+                if($row->is_active == 1)
+                {
+                    $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
+                }else{
+                    $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
+                }
+                $str.="</td>";
+
+                $str.="<td><a href='/edit-user/".$row->id."'>Edit</a></td>";
+
             }
-
-            $str.="<td>".$row->firstname." ".$row->lastname."</td>";
-            $str.="<td>".$row->user_name."</td>";
-            $str.="<td>".$row->email."</td>";
-            $str.="<td>".$row->gender."</td>";
-            $parent=User::all()->where('id',$row->parent_id);
-            foreach($parent as $row1)
-            {
-                $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
-            }
-
-            $str.="<td>";
-            if($row->is_active == 1)
-            {
-                $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
-            }else{
-                $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
-            }
-            $str.="</td>";
-
-
-            $str.="<td><a href='/edit-user/".$row->id."'>Edit</a></td>";
-
-
+        } else {
+            $str1 = "<h5 class='center'>No records found !</h5>";
         }
 
-        $str.="</tr>";
+
+        $str.="</tr></tbody>";
 
         $str.="</table>";
 
-        return $str;
+        if(sizeof($result->toArray()) != 0 )
+        {
+            return $str;
+        } else {
+            return $str1;
+        }
+
+
 
     }
 

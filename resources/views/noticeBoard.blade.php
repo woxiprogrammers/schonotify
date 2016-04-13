@@ -210,7 +210,7 @@
                                                if(arr[i]['priority'] == 1)
                                                {
                                                    str += '&nbsp;<span class="label label-sm label-danger">High</span>';
-                                               } else if(arr[i]['priority'] == 2) {
+                                               } else if(arr[i]['priority'] == 3) {
                                                    str += '&nbsp;<span class="label label-sm label-orange">Low</span>';
                                                } else {
                                                     str += '&nbsp;<span class="label label-sm label-success">Medium</span>';
@@ -251,7 +251,7 @@
                                          detail +
                                     '</div>'+
                                     '<div class="readmore">'+
-                                    '<a href="/detailAnnouncement/'+arr[i]['id']+'" class="btn btn-primary btn-o btn-wide">'+
+                                    '<a href="/detail-announcement/'+arr[i]['id']+'" class="btn btn-primary btn-o btn-wide">'+
                                     "Read More " +
                                     '<i class="fa fa-arrow-circle-right"></i>'+
                                     '</a>'+
