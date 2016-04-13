@@ -46,10 +46,18 @@
 
                                 <div class="timeline_title">
                                     <i class="fa fa-bullhorn fa-2x pull-left fa-border"></i>
-                                    <h4 class="panel-title no-margin text-primary padding-15">@foreach($announcements as $announcement){{ $announcement['title'] }}@endforeach</h4>
+                                    <h4 class="panel-title no-margin text-primary padding-15" style="word-wrap: break-word;">@foreach($announcements as $announcement){{ strtoupper($announcement['title']) }}@endforeach</h4>
                                 </div>
                                 <div class="panel-tools">
-
+                                    @foreach($announcements as $announcement)
+                                        @if($announcement['priority'] == 0)
+                                        <span class="label label-sm label-danger">High</span>
+                                        @elseif($announcement['priority'] == 3)
+                                        <span class="label label-sm label-orange">Low</span>
+                                        @else
+                                        <span class="label label-sm label-success">Medium</span>
+                                        @endif
+                                    @endforeach
                                     Created by
                                     @foreach($announcements as $announcement)
                                     @if($announcement['gender'] == "M")

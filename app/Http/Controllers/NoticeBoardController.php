@@ -947,7 +947,6 @@
         public function createNoticeBoard(CreateAnnouncementRequest $request)
         {
 
-
             if ($request->authorize() === true)
             {
 
@@ -1007,6 +1006,7 @@
                             $count++;
                         }
                     }
+
                     if($request->FirstDiv){
                         $count = 0;
                         foreach($request->FirstDiv as $row) {
@@ -1301,7 +1301,7 @@
 
             $announcements = Event::join('users','users.id','=','events.created_by')
                 ->where('events.id','=',$id)
-                ->select('events.id','title','events.status','events.detail','events.created_by','events.published_by','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                ->select('events.id','title','events.status','events.detail','events.created_by','events.published_by','events.priority','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
 
             $publishedBy = Event::join('users','users.id','=','events.published_by')
@@ -1340,6 +1340,10 @@
                     array_push($divisions,$batches);
                 }
             }
+
+            $admins =  array_unique($admins);
+
+            $teachers =  array_unique($teachers);
 
             return view('detailAnnouncement')->with(compact('announcements','admins','teachers','divisions','publishedBy'));
 

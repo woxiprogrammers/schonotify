@@ -627,7 +627,7 @@
                              for(var i=0; i<res.length; i++)
                              {
                                str +='<div class="checkbox clip-check check-primary">' +
-                                   '<input type="checkbox" value="'+res[i]['class_id']+'" class="classFirst" id="class_'+res[i]['class_id']+'">'+
+                                   '<input type="checkbox" value="'+res[i]['class_id']+'" name="classFirst[]" class="classFirst" id="class_'+res[i]['class_id']+'">'+
                                          '<label for="class_'+res[i]['class_id']+'">'
                                             + res[i]['class_name'] +
                                          '</label>'+
@@ -639,7 +639,7 @@
                                for(var j=0; j<res1.length; j++) {
 
                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
-                                       '<input type="checkbox" value="'+res1[j]['division_id']+'" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
+                                       '<input type="checkbox" value="'+res1[j]['division_id']+'" name="FirstDiv[]" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
                                        '<label for="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'">'
                                         +res1[j]['division_name']+
                                        '</label>';
