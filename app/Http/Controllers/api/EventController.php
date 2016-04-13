@@ -38,12 +38,13 @@ class EventController extends Controller
             $finalFiveEvents = array();
             $recentFiveEvents = array();
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
-            $recentFiveEvents = Event::where('event_type_id' , '=' , $eventTypesId)
-                ->where('status','=',2)
+            $recentFiveEvents = Event::join('event_images','events.id','=','event_images.event_id')
+                ->where('events.status','=',2)
+                ->where('events.event_type_id' , '=' , $eventTypesId)
                 ->orderBy('start_date', 'desc')
                 ->get()
-                ->take(5);
-            $counter = 0;
+                ->take(5)->toArray();
+             $counter = 0;
             foreach ($recentFiveEvents as $event) {
                 $finalFiveEvents[$counter]['id'] =  $event['id'];
                 $creatorUser = User::where ('id','=', $event['created_by'])->select('first_name','last_name')->first();
@@ -52,6 +53,16 @@ class EventController extends Controller
                 $finalFiveEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
                 $finalFiveEvents[$counter]['status'] = $event['status'];
                 $finalFiveEvents[$counter]['title'] = $event['title'];
+                   if($event['image'] != null) {
+                       $file = $this->getEventImagePath($event['image']);
+                       if($file['status']){
+                           $finalFiveEvents[$counter]['image'] = $event['image'];
+                           $finalFiveEvents[$counter]['path'] = $file['path'];
+                       } else {
+                           $finalFiveEvents[$counter]['image'] = null;
+                           $finalFiveEvents[$counter]['path'] = null;
+                       }
+                   }
                 $finalFiveEvents[$counter]['detail'] = $event['detail'];
                 $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
                 $finalFiveEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event['end_date']));
@@ -70,6 +81,99 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
+    /*
+      * Function Name : getEventImagePath
+      * Param : Request $requests , $imageName
+      * Return : $file
+      * Desc : get image path if file exits
+      * Developed By : Amol Rokade
+      * Date : 12/4/2016
+      */
+    public function getEventImagePath($imageName){
+        try{
+            $ds = DIRECTORY_SEPARATOR;
+            $eventUploadConfig = env('EVENT_FILE_UPLOAD');
+            $eventUploadPath = public_path().$eventUploadConfig;
+            $eventImageUploadPath = $eventUploadPath.$ds.$imageName;
+                $file['status'] = false;
+                if (file_exists($eventImageUploadPath)) {
+                    $file['status'] = true;
+                }
+                $path = $eventUploadConfig.$ds.$imageName;
+                $file['path'] = $path;
+                return $file;
+        }catch(\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+    /*
+        * Function Name : getYearMonth
+        * Param : Request $requests
+        * Return : $message $status , array of years and  months
+        * Desc : when user want to see events the months from Jan to Dec of current month selected by user.
+        * Developed By : Amol Rokade
+        * Date : 12/4/2016
+        */
+
+    public function getYearMonth(Request $request)
+    {
+        $message = "Successfully Listed";
+        $status = 200;
+        $startMonth = 6;
+        $endMonth = 4;
+        $currentMonth = date('n');
+        $data = array();
+        $i = 1 ;
+        if($currentMonth < $startMonth) {
+            $previousYear = date('Y') - 1;
+            $currentYear = date('Y');
+            $j = 0;
+            $i = $startMonth;
+            $previousYearData["year"] = $previousYear;
+            for($month = $startMonth ; $month<=12 ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+            $i =1;
+            $j = 0;
+            $nextYearData["year"] = $currentYear;
+            for($month = 1 ; $month <= $endMonth ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+        } else {
+            $previousYear = date('Y')+1;
+            $currentYear = date('Y') ;
+            $j = 0;
+            $nextYearData["year"] = $previousYear;
+            for($month = 1 ; $month <= $endMonth ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+            $j = 0;
+            $previousYearData["year"] = $currentYear;
+            for($month = $startMonth ; $month<=12 ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+        }
+        $data[0] = $previousYearData;
+        $data[1] = $nextYearData;
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $data
+        ];
+        return response($response, $status);
+    }
 
     /*
     * Function Name : viewMonthsEvent
@@ -80,7 +184,7 @@ class EventController extends Controller
     * Date : 3/3/2016
     */
 
-    public function viewMonthsEvent(Requests\EventRequest $request, $month_id)
+    public function viewMonthsEvent(Requests\EventRequest $request, $year,$month_id)
     {
         try {
             $data = $request->all();
@@ -88,7 +192,6 @@ class EventController extends Controller
             $pendingEvents = array();
             $publishedEvents = array();
             $finalMonthsEvents = array();
-            $year = date('Y');
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $startDate = $year."-".$month_id ."-"."01"." 00".":"."00".":"."00";
             $endDate = $year."-".$month_id ."-"."31"." 23".":"."59".":"."59";
@@ -108,10 +211,11 @@ class EventController extends Controller
                 ->union($publishedEvents)
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate)
-                ->orderBy('id','desc')
+                ->orderBy('created_at','desc')
                 ->get();
             $counter = 0;
             foreach ($monthsEvents as $event) {
+                $image = EventImages::where('event_id','=',$event->id)->pluck('image');
                 $finalMonthsEvents[$counter]['id'] =  $event->id;
                 $creatorUser = User::where ('id','=', $event->created_by)->select('first_name','last_name')->first();
                 $finalMonthsEvents[$counter]['created_by'] = $creatorUser['first_name']." ".$creatorUser['last_name'];
@@ -120,6 +224,16 @@ class EventController extends Controller
                 $finalMonthsEvents[$counter]['status'] = $event->status;
                 $finalMonthsEvents[$counter]['title'] = $event->title;
                 $finalMonthsEvents[$counter]['detail'] = $event->detail;
+                if($image != null) {
+                    $file = $this->getEventImagePath($image);
+                    if($file['status']){
+                        $finalMonthsEvents[$counter]['image'] = $image;
+                        $finalMonthsEvents[$counter]['path'] = $file['path'];
+                    } else {
+                        $finalMonthsEvents[$counter]['image'] = null;
+                        $finalMonthsEvents[$counter]['path'] = null;
+                     }
+                }
                 $finalMonthsEvents[$counter]['start_date'] =  date("j M y, g:i a",strtotime( $event->start_date));
                 $finalMonthsEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event->end_date));
                 $finalMonthsEvents[$counter]['created_at'] =  date("j M y, g:i a",strtotime( $event->created_at));
@@ -128,7 +242,6 @@ class EventController extends Controller
                 } else {
                     $finalMonthsEvents[$counter]['published_at'] = ' ';
                 }
-
                 $counter++;
             }
             $status = 200;
