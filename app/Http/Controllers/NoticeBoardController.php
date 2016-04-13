@@ -1007,63 +1007,24 @@
                         }
                     }
 
-                    if($request->FirstDiv){
-                        $count = 0;
-                        foreach($request->FirstDiv as $row) {
-                            $userEntry['event_id'] = $eventId;
-                            $userEntry['division_id'] = $row;
-                            $userEntry['created_at'] = Carbon::now();
-                            $userEntry['updated_at'] = Carbon::now();
-                            EventUserRoles::insert($userEntry);
-                            $count++;
-                        }
-                    } elseif(!($request->FirstDiv) && !($request->classFirst) && $request['batch-select'] ) {
+                    if($request->hidenValue == 1)
+                    {
 
-                        if($user->role_id == 1) {
-                            $divisionData = Classes::join('divisions','classes.id','=','divisions.class_id')
-                                ->where('classes.body_id',$user->body_id)
-                                ->where('classes.batch_id',$request['batch-select'])
-                                ->select('divisions.id as division_id','divisions.division_name')
-                                ->get();
+                        if($request->FirstDiv){
                             $count = 0;
-                            foreach($divisionData as $row) {
+                            foreach($request->FirstDiv as $row) {
                                 $userEntry['event_id'] = $eventId;
-                                $userEntry['division_id'] = $row['division_id'];
+                                $userEntry['division_id'] = $row;
                                 $userEntry['created_at'] = Carbon::now();
                                 $userEntry['updated_at'] = Carbon::now();
                                 EventUserRoles::insert($userEntry);
                                 $count++;
                             }
-                        } elseif ($user->role_id == 2) {
-                            $teacherCheck = Division::where('class_teacher_id',$user->id)->first();
-                            if($teacherCheck != null) {
-                                $divisionData = Division::where('divisions.class_teacher_id',$user->id)
-                                    ->join('classes','divisions.class_id','=','classes.id')
-                                    ->where('classes.batch_id',$request['batch-select'])
-                                    ->select('divisions.id as division_id','divisions.division_name')
-                                    ->get()->toArray();
-                                $divSubjectData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                                    ->join('divisions','division_subjects.division_id','=','divisions.id')
-                                    ->join('classes','divisions.class_id','=','classes.id')
-                                    ->where('classes.batch_id',$request['batch-select'])
-                                    ->select('divisions.id as division_id','divisions.division_name')
-                                    ->get()->toArray();
-                                $division = array_merge ($divSubjectData, $divisionData);
-                                $division = array_unique($division, SORT_REGULAR);
-                                $count = 0;
-                                foreach($division as $row) {
-                                    $userEntry['event_id'] = $eventId;
-                                    $userEntry['division_id'] = $row['division_id'];
-                                    $userEntry['created_at'] = Carbon::now();
-                                    $userEntry['updated_at'] = Carbon::now();
-                                    EventUserRoles::insert($userEntry);
-                                    $count++;
-                                }
+                        } elseif(!($request->FirstDiv) && !($request->classFirst) && $request['batch-select'] ) {
 
-                            } else {
-                                $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                                    ->join('divisions','division_subjects.division_id','=','divisions.id')
-                                    ->join('classes','divisions.class_id','=','classes.id')
+                            if($user->role_id == 1) {
+                                $divisionData = Classes::join('divisions','classes.id','=','divisions.class_id')
+                                    ->where('classes.body_id',$user->body_id)
                                     ->where('classes.batch_id',$request['batch-select'])
                                     ->select('divisions.id as division_id','divisions.division_name')
                                     ->get();
@@ -1076,52 +1037,55 @@
                                     EventUserRoles::insert($userEntry);
                                     $count++;
                                 }
-                            }
-                        }
-                    } elseif(!($request->FirstDiv) && $request->classFirst && $request['batch-select'] ) {
-                        if($user->role_id == 1) {
-                            $divisionData = Division::whereIn('class_id',$request->classFirst)
-                                ->select('divisions.id as division_id','divisions.division_name')
-                                ->get();
-                            $count = 0;
-                            foreach($divisionData as $row) {
-                                $userEntry['event_id'] = $eventId;
-                                $userEntry['division_id'] = $row['division_id'];
-                                $userEntry['created_at'] = Carbon::now();
-                                $userEntry['updated_at'] = Carbon::now();
-                                EventUserRoles::insert($userEntry);
-                                $count++;
-                            }
-                        } elseif ($user->role_id == 2) {
-                            $teacherCheck = Division::where('class_teacher_id',$user->id)->first();
-                            if($teacherCheck != null) {
-                                $divisionData = Division::where('class_teacher_id',$user->id)
-                                    ->whereIn('class_id',$request->classFirst)
-                                    ->select('divisions.id as division_id','divisions.division_name')
-                                    ->get()->toArray();
-                                $divSubjectData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                                    ->join('divisions','division_subjects.division_id','=','divisions.id')
-                                    ->whereIn('divisions.class_id',$request->classFirst)
-                                    ->select('divisions.id as division_id','divisions.division_name')
-                                    ->get()->toArray();
-                                $division = array_merge ($divSubjectData, $divisionData);
-                                $division = array_unique($division, SORT_REGULAR);
-                                $count = 0;
-                                foreach($division as $row) {
-                                    $userEntry['event_id'] = $eventId;
-                                    $userEntry['division_id'] = $row['division_id'];
-                                    $userEntry['created_at'] = Carbon::now();
-                                    $userEntry['updated_at'] = Carbon::now();
-                                    EventUserRoles::insert($userEntry);
-                                    $count++;
-                                }
+                            } elseif ($user->role_id == 2) {
+                                $teacherCheck = Division::where('class_teacher_id',$user->id)->first();
+                                if($teacherCheck != null) {
+                                    $divisionData = Division::where('divisions.class_teacher_id',$user->id)
+                                        ->join('classes','divisions.class_id','=','classes.id')
+                                        ->where('classes.batch_id',$request['batch-select'])
+                                        ->select('divisions.id as division_id','divisions.division_name')
+                                        ->get()->toArray();
+                                    $divSubjectData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                        ->join('divisions','division_subjects.division_id','=','divisions.id')
+                                        ->join('classes','divisions.class_id','=','classes.id')
+                                        ->where('classes.batch_id',$request['batch-select'])
+                                        ->select('divisions.id as division_id','divisions.division_name')
+                                        ->get()->toArray();
+                                    $division = array_merge ($divSubjectData, $divisionData);
+                                    $division = array_unique($division, SORT_REGULAR);
+                                    $count = 0;
+                                    foreach($division as $row) {
+                                        $userEntry['event_id'] = $eventId;
+                                        $userEntry['division_id'] = $row['division_id'];
+                                        $userEntry['created_at'] = Carbon::now();
+                                        $userEntry['updated_at'] = Carbon::now();
+                                        EventUserRoles::insert($userEntry);
+                                        $count++;
+                                    }
 
-                            } else {
-                                $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                                    ->join('divisions','division_subjects.division_id','=','divisions.id')
-                                    ->whereIn('divisions.class_id',$request->classFirst)
+                                } else {
+                                    $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                        ->join('divisions','division_subjects.division_id','=','divisions.id')
+                                        ->join('classes','divisions.class_id','=','classes.id')
+                                        ->where('classes.batch_id',$request['batch-select'])
+                                        ->select('divisions.id as division_id','divisions.division_name')
+                                        ->get();
+                                    $count = 0;
+                                    foreach($divisionData as $row) {
+                                        $userEntry['event_id'] = $eventId;
+                                        $userEntry['division_id'] = $row['division_id'];
+                                        $userEntry['created_at'] = Carbon::now();
+                                        $userEntry['updated_at'] = Carbon::now();
+                                        EventUserRoles::insert($userEntry);
+                                        $count++;
+                                    }
+                                }
+                            }
+                        } elseif(!($request->FirstDiv) && $request->classFirst && $request['batch-select'] ) {
+                            if($user->role_id == 1) {
+                                $divisionData = Division::whereIn('class_id',$request->classFirst)
                                     ->select('divisions.id as division_id','divisions.division_name')
-                                    ->get()->toArray();
+                                    ->get();
                                 $count = 0;
                                 foreach($divisionData as $row) {
                                     $userEntry['event_id'] = $eventId;
@@ -1131,19 +1095,61 @@
                                     EventUserRoles::insert($userEntry);
                                     $count++;
                                 }
+                            } elseif ($user->role_id == 2) {
+                                $teacherCheck = Division::where('class_teacher_id',$user->id)->first();
+                                if($teacherCheck != null) {
+                                    $divisionData = Division::where('class_teacher_id',$user->id)
+                                        ->whereIn('class_id',$request->classFirst)
+                                        ->select('divisions.id as division_id','divisions.division_name')
+                                        ->get()->toArray();
+                                    $divSubjectData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                        ->join('divisions','division_subjects.division_id','=','divisions.id')
+                                        ->whereIn('divisions.class_id',$request->classFirst)
+                                        ->select('divisions.id as division_id','divisions.division_name')
+                                        ->get()->toArray();
+                                    $division = array_merge ($divSubjectData, $divisionData);
+                                    $division = array_unique($division, SORT_REGULAR);
+                                    $count = 0;
+                                    foreach($division as $row) {
+                                        $userEntry['event_id'] = $eventId;
+                                        $userEntry['division_id'] = $row['division_id'];
+                                        $userEntry['created_at'] = Carbon::now();
+                                        $userEntry['updated_at'] = Carbon::now();
+                                        EventUserRoles::insert($userEntry);
+                                        $count++;
+                                    }
+
+                                } else {
+                                    $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                                        ->join('divisions','division_subjects.division_id','=','divisions.id')
+                                        ->whereIn('divisions.class_id',$request->classFirst)
+                                        ->select('divisions.id as division_id','divisions.division_name')
+                                        ->get()->toArray();
+                                    $count = 0;
+                                    foreach($divisionData as $row) {
+                                        $userEntry['event_id'] = $eventId;
+                                        $userEntry['division_id'] = $row['division_id'];
+                                        $userEntry['created_at'] = Carbon::now();
+                                        $userEntry['updated_at'] = Carbon::now();
+                                        EventUserRoles::insert($userEntry);
+                                        $count++;
+                                    }
+                                }
+                            }
+                        } elseif(($request->FirstDiv) && ($request->classFirst) && ($request['batch-select'])) {
+                            $count = 0;
+                            foreach($request->FirstDiv as $row) {
+                                $userEntry['event_id'] = $eventId;
+                                $userEntry['division_id'] = $row;
+                                $userEntry['created_at'] = Carbon::now();
+                                $userEntry['updated_at'] = Carbon::now();
+                                EventUserRoles::insert($userEntry);
+                                $count++;
                             }
                         }
-                    } elseif(($request->FirstDiv) && ($request->classFirst) && ($request['batch-select'])) {
-                        $count = 0;
-                        foreach($request->FirstDiv as $row) {
-                            $userEntry['event_id'] = $eventId;
-                            $userEntry['division_id'] = $row;
-                            $userEntry['created_at'] = Carbon::now();
-                            $userEntry['updated_at'] = Carbon::now();
-                            EventUserRoles::insert($userEntry);
-                            $count++;
-                        }
+
                     }
+
 
                 }
                 Session::flash('message-success','Announcement created successfully');
@@ -1636,10 +1642,10 @@
 
                 }
 
-                return Redirect::back();
+                return Redirect::to('/detail-announcement/'.$id);
 
             } else {
-                return Redirect::back();
+                return Redirect::to('/detail-announcement/'.$id);
             }
         }
 
