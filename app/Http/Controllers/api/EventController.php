@@ -51,7 +51,7 @@ class EventController extends Controller
                 $finalFiveEvents[$counter]['created_by'] = $creatorUser['first_name']." ".$creatorUser['last_name'];
                 $publishedUser = User::where ('id','=', $event['published_by'])->select('first_name','last_name')->first();
                 $finalFiveEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
-                $finalFiveEvents[$counter]['status'] = $event['status'];
+                $finalFiveEvents[$counter]['status'] ="Published";
                 $finalFiveEvents[$counter]['title'] = $event['title'];
                    if($event['image'] != null) {
                        $file = $this->getEventImagePath($event['image']);
@@ -59,9 +59,12 @@ class EventController extends Controller
                            $finalFiveEvents[$counter]['image'] = $event['image'];
                            $finalFiveEvents[$counter]['path'] = $file['path'];
                        } else {
-                           $finalFiveEvents[$counter]['image'] = null;
-                           $finalFiveEvents[$counter]['path'] = null;
+                           $finalFiveEvents[$counter]['image'] = "picture.svg";
+                           $finalFiveEvents[$counter]['path'] = "/uploads/events/picture.svg";
                        }
+                   } else {
+                       $finalFiveEvents[$counter]['image'] = "picture.svg";
+                       $finalFiveEvents[$counter]['path'] = "/uploads/events/picture.svg";
                    }
                 $finalFiveEvents[$counter]['detail'] = $event['detail'];
                 $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
@@ -211,7 +214,7 @@ class EventController extends Controller
                 ->union($publishedEvents)
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate)
-                ->orderBy('created_at','desc')
+                ->orderBy('start_date','desc')
                 ->get();
             $counter = 0;
             foreach ($monthsEvents as $event) {
@@ -221,18 +224,27 @@ class EventController extends Controller
                 $finalMonthsEvents[$counter]['created_by'] = $creatorUser['first_name']." ".$creatorUser['last_name'];
                 $publishedUser = User::where ('id','=', $event->published_by)->select('first_name','last_name')->first();
                 $finalMonthsEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
-                $finalMonthsEvents[$counter]['status'] = $event->status;
+                if($event->status == "0"){ //0 for draft
+                    $finalMonthsEvents[$counter]['status'] = "Draft" ;
+                } else  if($event->status == "1"){ //0 for draft
+                    $finalMonthsEvents[$counter]['status'] ="Pending";
+                } else {
+                    $finalMonthsEvents[$counter]['status'] ="Published";
+                }
                 $finalMonthsEvents[$counter]['title'] = $event->title;
                 $finalMonthsEvents[$counter]['detail'] = $event->detail;
-                if($image != null) {
+                if($image!=null) {
                     $file = $this->getEventImagePath($image);
                     if($file['status']){
                         $finalMonthsEvents[$counter]['image'] = $image;
                         $finalMonthsEvents[$counter]['path'] = $file['path'];
                     } else {
-                        $finalMonthsEvents[$counter]['image'] = null;
-                        $finalMonthsEvents[$counter]['path'] = null;
-                     }
+                        $finalMonthsEvents[$counter]['image'] = "picture.svg";
+                        $finalMonthsEvents[$counter]['path'] = "/uploads/events/picture.svg";
+                    }
+                } else {
+                    $finalMonthsEvents[$counter]['image'] = "picture.svg";
+                    $finalMonthsEvents[$counter]['path'] = "/uploads/events/picture.svg";
                 }
                 $finalMonthsEvents[$counter]['start_date'] =  date("j M y, g:i a",strtotime( $event->start_date));
                 $finalMonthsEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event->end_date));
