@@ -123,8 +123,8 @@ class EventController extends Controller
         $message = "Successfully Listed";
         $status = 200;
         $startMonth = 6;
-        $endMonth = 4;
-        $currentMonth = date('n')+5;
+        $endMonth = 5;
+        $currentMonth = date('n');
         $data = array();
         $i = 1 ;
         if($currentMonth < $startMonth) {
