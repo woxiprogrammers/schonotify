@@ -123,13 +123,13 @@ class EventController extends Controller
         $message = "Successfully Listed";
         $status = 200;
         $startMonth = 6;
-        $endMonth = 4;
+        $endMonth = 5;
         $currentMonth = date('n');
         $data = array();
         $i = 1 ;
         if($currentMonth < $startMonth) {
-            $previousYear = date('Y') - 1;
-            $currentYear = date('Y');
+            $previousYear = strval(date('Y')-1);
+            $currentYear = strval(date('Y'));
             $j = 0;
             $i = $startMonth;
             $previousYearData["year"] = $previousYear;
@@ -149,8 +149,8 @@ class EventController extends Controller
                 $i++;
             }
         } else {
-            $previousYear = date('Y')+1;
-            $currentYear = date('Y') ;
+            $previousYear = strval(date('Y')+1);
+            $currentYear = strval(date('Y')) ;
             $j = 0;
             $nextYearData["year"] = $previousYear;
             for($month = 1 ; $month <= $endMonth ; $month++) {
