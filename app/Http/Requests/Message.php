@@ -73,6 +73,8 @@ class Message extends Request
                 ];
             case 'PUT':
                 return [
+                    'from_id' => 'required|integer',
+                    'to_id' => 'required|integer',
                 ];
                 break;
             case 'POST':

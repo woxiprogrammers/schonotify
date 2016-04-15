@@ -459,12 +459,13 @@
 
         //Event
         Route::get('view-top-five-event','api\EventController@viewFiveEvent');
-        Route::get('view-months-event/{month_id}','api\EventController@viewMonthsEvent');// BOTH FOR PARENT AND TEACHER
+        Route::get('view-months-event/{year}/{month_id}','api\EventController@viewMonthsEvent');// BOTH FOR PARENT AND TEACHER
         Route::post('create-event','api\EventController@createEvent');
         Route::put('send-for-publish-event','api\EventController@sendForPublishEventTeacher');
         Route::put('delete-event','api\EventController@deleteEventTeacher');
         Route::get('detail-view/{event_id}','api\EventController@detailView');
         Route::put('edit-event','api\EventController@editEvent');
+        Route::get('get-year-month','api\EventController@getYearMonth');
 
 
 
