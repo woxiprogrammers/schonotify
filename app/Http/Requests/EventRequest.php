@@ -78,6 +78,7 @@ class EventRequest extends Request
                     'detail' =>  'required|string',
                     'start_date' => 'required|date',
                     'end_date' => 'required|date',
+                    'flag' =>'required|integer',
                     'image' => 'mimes:jpeg,jpg,png|max:10000'
                 ];
                 break;
@@ -87,6 +88,7 @@ class EventRequest extends Request
                     'detail' =>  'required|string',
                     'start_date' => 'required|date',
                     'end_date' => 'required|date',
+                    'status' => 'required|integer',
                     'image' => 'mimes:jpeg,jpg,png|max:10000'
                 ];
                 break;
