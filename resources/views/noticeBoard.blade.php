@@ -60,7 +60,7 @@
                             <div class="spine"></div>
                         </div>
 
-                        <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+                        <div id="loadmoreajaxloader"><center><img src="assets/images/loader1.gif" /></center></div>
 
                         <center>
                             <a class="btn btn-primary loadMoreBtn" id="loadMoreBtn" style="display:none;"> Load More Records... </a>

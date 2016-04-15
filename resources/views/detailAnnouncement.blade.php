@@ -289,6 +289,9 @@
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
+                                                <a href="/delete-announcement/{{ $announcement['id'] }}" class="btn btn-danger btn-wide pull-right margin-left-10" type="button" id="btnEdit">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </a>
                                                 <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
                                                 </a>
@@ -296,6 +299,9 @@
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
+                                                <a href="/delete-announcement/{{ $announcement['id'] }}" class="btn btn-danger btn-wide pull-right margin-left-10" type="button" id="btnEdit">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </a>
                                                 <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
                                                 </a>
@@ -307,6 +313,9 @@
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
+                                                <a href="/delete-announcement/{{ $announcement['id'] }}" class="btn btn-danger btn-wide pull-right margin-left-10" type="button" id="btnEdit">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </a>
                                                 <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
                                                 </a>

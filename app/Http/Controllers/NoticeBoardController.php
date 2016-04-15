@@ -10,6 +10,8 @@
     use App\EventUserRoles;
     use App\Http\Requests\WebRequests\CreateAchievementRequest;
     use App\Http\Requests\WebRequests\CreateAnnouncementRequest;
+    use App\Http\Requests\WebRequests\DeleteAchievementRequest;
+    use App\Http\Requests\WebRequests\DeleteAnnouncementRequest;
     use App\Http\Requests\WebRequests\EditAchievementRequest;
     use App\Http\Requests\WebRequests\EditAnnouncementRequest;
     use App\Http\Requests\WebRequests\NoticeBoardRequest;
@@ -2213,6 +2215,67 @@
 
                 Session::flash('message-success','Announcement updated successfully !');
                 return Redirect::to('detail-announcement/'.$request->hiddenAnnouncementId);
+
+            } else {
+                return Redirect::back();
+            }
+        }
+
+        /*
+        * Function Name : deleteAnnouncement
+        * Param : $id
+        * Return : it will return delete message.
+        * Desc : it will delete announcement.
+        * Developed By : Suraj Bande
+        * Date : 15/4/2016
+        */
+
+        public function deleteAnnouncement(DeleteAnnouncementRequest $request,$id)
+        {
+            if($request->authorize() === true) {
+
+                EventUserRoles::where('event_id','=',$id)->delete();
+
+                Event::where('id','=',$id)->delete();
+
+                Session::flash('message-success','Announcement deleted successfully !');
+
+                return Redirect::to('noticeBoard');
+
+            } else {
+                return Redirect::back();
+            }
+        }
+
+        /*
+        * Function Name : deleteAchievement
+        * Param : $id
+        * Return : it will return delete message.
+        * Desc : it will delete achievement.
+        * Developed By : Suraj Bande
+        * Date : 15/4/2016
+        */
+
+        public function deleteAchievement(DeleteAchievementRequest $request,$id)
+        {
+            if($request->authorize() === true) {
+
+                //EventImages::where('event_id','=',$id)->delete();
+
+                $filename = "uploads/achievement/events/".$id."/";
+
+                $path = public_path($filename);
+
+                if(file_exists($path))
+                {
+                     $this::removeEmptySubFolders($path);
+                }
+
+                Event::where('id','=',$id)->delete();
+
+                Session::flash('message-success','Achievement deleted successfully !');
+
+                return Redirect::to('noticeBoard');
 
             } else {
                 return Redirect::back();
