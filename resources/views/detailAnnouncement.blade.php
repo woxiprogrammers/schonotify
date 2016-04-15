@@ -324,7 +324,7 @@
 
             </div>
             <div id="update">
-                <form action="#" role="form" id="form2">
+                <form method="post" action="/update-announcement" role="form" id="update-announcement-form">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="errorHandler alert alert-danger no-display">
@@ -334,28 +334,46 @@
                                 <i class="fa fa-ok"></i> Your form validation is successful!
                             </div>
                         </div>
+                        @foreach($announcements as $announcement)
+                        <input type="hidden" name="hiddenAnnouncementId" id="hiddenAnnouncementId" value="{{ $announcement['id'] }}">
+
                         <div class="col-md-10">
                             <div class="form-group">
                                 <label class="control-label">
                                     Title <span class="symbol required"></span>
                                 </label>
-                                <input type="text" placeholder="Insert Title" class="form-control" id="title" name="title" value="PARENT MEET FOR THIS MONTH">
+                                <input type="text" placeholder="Insert Title" class="form-control" id="title" name="title" value="{{ strtoupper($announcement['title']) }}">
                             </div>
                             <div class="form-group">
                                 <label class="control-label">
                                     Description <span class="symbol required"></span>
                                 </label>
-                                <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px;">Parent Meet for this month is scheduled. And everyone should be requested to have their presence. this parent meet will have focused on renovation of school and faculty.
-                                    Venue:
-                                    MIT School
-                                    795 Folsom Ave, Suite 600
-                                    San Francisco, CA 94107
-                                    P: (123) 456-7890
-                                </textarea>
+                                <textarea class="form-control col-sm-8" id="announcement" name="announcement" style="min-height: 180px;">{{ $announcement['detail'] }}</textarea>
+                            </div>
+                            <div class="">
+                                <label>
+                                    Priority <span class="symbol required"></span>
+                                </label>
+                                <div class="form-group">
+                                    <div class="radio clip-radio radio-primary">
+                                        <input type="radio" @if($announcement['priority'] == 1) checked @endif id="priority1" name="priority" value="1" class="event-categories">
+                                        <label for="priority1">
+                                            <span class="fa fa-circle text-red"></span> High
+                                        </label>
+                                        <input type="radio" @if($announcement['priority'] == 2) checked @endif id="priority2" name="priority" value="2" class="event-categories">
+                                        <label for="priority2">
+                                            <span class="fa fa-circle text-green"></span> Medium
+                                        </label>
+                                        <input type="radio" @if($announcement['priority'] == 3) checked @endif id="priority3" name="priority" value="3" class="event-categories">
+                                        <label for="priority3">
+                                            <span class="fa fa-circle text-yellow"></span> Low
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-
+                        @endforeach
                         <div class="col-md-12 margin-top-10">
 
                             <div class="form-group col-sm-6">
@@ -363,7 +381,12 @@
                                     User Roles <em>(select at least one)</em> <span class="symbol required"></span>
                                 </label>
                                 <div class="checkbox clip-check check-primary">
+
+                                    @if(sizeOf($admins) != 0)
+                                    <input type="checkbox" value="" name="userrole" id="service4" class="adminChk" checked>
+                                    @else
                                     <input type="checkbox" value="" name="userrole" id="service4" class="adminChk">
+                                    @endif
                                     <label for="service4">
                                         Admin
                                     </label>
@@ -371,39 +394,69 @@
                                     <div class="form-group">
                                         <br>
                                         <div class="adminList">
+                                            @if(sizeOf($allAdmins) != 0)
+                                            <select multiple="multiple" name="adminList[]" id="adminList" class="form-control">
 
-                                            <select multiple="multiple" id="form-field-select-2" class="form-control">
-                                                <option value="1">Mr. Sharma</option>
-                                                <option value="2">Mr. Sali</option>
-                                                <option value="3">Mr. Rao</option>
+                                                @if(sizeOf($admins) != 0)
+                                                @foreach($allAdmins as $admin)
+
+                                                        <option @foreach($admins as $row) @if($row['id'] == $admin['id']) selected @endif @endforeach value="{{ $admin['id'] }}">{{ $admin['first_name'] }} {{ $admin['last_name'] }}</option>
+
+                                                @endforeach
+                                                @else
+                                                @foreach($allAdmins as $admin)
+
+                                                    <option value="{{ $admin['id'] }}">{{ $admin['first_name'] }} {{ $admin['last_name'] }}</option>
+
+                                                @endforeach
+                                                @endif
                                             </select>
                                             <em>Please Use CTRL Button to select multiple options.</em>
+                                            @else
+                                            <div class="adminList"> No records found !</div>
+                                            @endif
                                         </div>
 
                                     </div>
                                 </div>
                                 <div class="checkbox clip-check check-primary">
+                                    @if(sizeOf($teachers) != 0)
                                     <input type="checkbox" value="" name="userrole" id="service1" class="teacherChk" checked>
+                                    @else
+                                    <input type="checkbox" value="" name="userrole" id="service1" class="teacherChk" >
+                                    @endif
                                     <label for="service1">
                                         Teacher
                                     </label>
 
                                     <div class="form-group">
                                         <br>
+
+                                        @if(sizeOf($allTeachers) != 0)
                                         <div class="teacherList">
-                                            <select multiple="multiple" id="form-field-select-2" class="form-control">
-                                                <option value="1">Mr. Sawant</option>
-                                                <option value="2">Mr. Kamble</option>
-                                                <option value="3">Mr. Patel</option>
-                                                <option value="4">Mr. Kamble</option>
-                                                <option value="5">Mr. Rane</option>
+
+                                            <select multiple="multiple" name="teacherList[]" id="teacherList" class="form-control teacherList">
+                                                @if(sizeOf($teachers) != 0)
+                                                @foreach($allTeachers as $teacher)
+                                                        <option @foreach($teachers as $row) @if($teacher['id'] == $row['id']) selected @endif @endforeach value="{{ $teacher['id'] }}"> {{ $teacher['first_name'] }} {{ $teacher['last_name'] }}</option>
+                                                @endforeach
+                                                @else
+                                                @foreach($allTeachers as $teacher)
+
+                                                    <option value="{{ $teacher['id'] }}"> {{ $teacher['first_name'] }} {{ $teacher['last_name'] }}</option>
+
+                                                @endforeach
+                                                @endif
                                             </select>
                                             <em>Please Use CTRL Button to select multiple options.</em>
                                         </div>
+                                        @else
+                                        <div class="teacherList"> No records found !</div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="checkbox clip-check check-primary">
-                                    <input type="checkbox" value="" name="userrole" class="parentChk" id="service2" checked>
+                                    <input type="checkbox" @if(sizeOf($selectedBatches) != 0) checked @endif value="" name="userrole" class="parentChk" id="service2">
                                     <label for="service2">
                                         Student
                                     </label>
@@ -413,82 +466,48 @@
                                         <label for="form-field-select-2">
                                             Select Batch
                                         </label>
-                                        <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
-                                            <option value="1">morning</option>
-                                            <option value="2">evening</option>
+
+                                        <select class="form-control" name="batch-select[]" id="batch-select" style="-webkit-appearance: menulist;">
+
+                                            @foreach($batchList as $row)
+
+                                                <option @foreach($selectedBatches as $batch) @if($batch == $row['id']) selected @endif @endforeach value="{{ $row['id'] }}">{{ $row['name'] }}</option>
+
+                                            @endforeach
+
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Class <em>(select at least one)</em> <span class="symbol required"></span>
-                                        </label>
+                                    <div class="form-group" id="batch-class-div-data">
 
-                                        <div class="checkbox clip-check check-primary">
-                                            <input type="checkbox" value="" class="classFirst" id="service5" checked>
-                                            <label for="service5">
-                                                First
-                                            </label>
-                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="checkbox clip-check check-primary checkbox-inline">
-                                            <input type="checkbox" value="" class="FirstDiv" id="service6" checked>
-                                            <label for="service6">
-                                                A
-                                            </label>
-                                        </div>
-                                        <div class="checkbox clip-check check-primary checkbox-inline">
-                                            <input type="checkbox" value="" class="FirstDiv" id="service7" checked>
-                                            <label for="service7">
-                                                B
-                                            </label>
-                                        </div>
-                                        <div class="checkbox clip-check check-primary checkbox-inline">
-                                            <input type="checkbox" value="" class="FirstDiv" id="service8">
-                                            <label for="service8">
-                                                C
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="checkbox clip-check check-primary">
-                                            <input type="checkbox" value="" class="classSecond" id="service9">
-                                            <label for="service9">
-                                                Second
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="checkbox clip-check check-primary checkbox-inline">
-                                            <input type="checkbox" value="" class="SecondDiv" id="service10" >
-                                            <label for="service10">
-                                                A
-                                            </label>
-                                        </div>
-                                        <div class="checkbox clip-check check-primary checkbox-inline">
-                                            <input type="checkbox" value="" class="SecondDiv"  id="service11" >
-                                            <label for="service11">
-                                                B
-                                            </label>
-                                        </div>
-                                        <div class="checkbox clip-check check-primary checkbox-inline">
-                                            <input type="checkbox" value="" class="SecondDiv"  id="service12">
-                                            <label for="service12">
-                                                C
-                                            </label>
-                                        </div>
-                                        <div class="checkbox clip-check check-primary checkbox-inline">
-                                            <input type="checkbox" value="" class="SecondDiv"  id="service13">
-                                            <label for="service13">
-                                                D
-                                            </label>
-                                        </div>
-                                    </div>
+
+                                    <input type="hidden" name="hidenValue" id="hidenValue" value="0">
+
                                 </div>
                             </div>
 
                         </div>
+                        <div class="col-md-12">
 
+                            @if(Auth::User()->role_id != 1)
+
+                            <div class="form-group col-sm-6">
+                                <label class="control-label">
+                                    Select Admin  <span class="symbol required" aria-required="true"></span>
+                                </label>
+                                <select class="form-control" name="adminToPublish" style="-webkit-appearance: menulist;">
+                                    <option value="">
+                                        Please select admin...
+                                    </option>
+                                    @foreach($adminWithAcl as $admin)
+                                    <option value="{{ $admin['id'] }}">{{ $admin['first_name'] }} {{ $admin['last_name'] }} ({{ $admin['username'] }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                            @endif
+                        </div>
                         <div class="col-md-12">
                             <button class="btn btn-primary btn-wide pull-left" type="button" id="btnCancel">
                                 Cancel <i class="fa fa-times-circle-o"></i>
@@ -554,6 +573,32 @@
             $('.teacherList').show();
         }
 
+        var id = $('#batch-select').val();
+
+        batchChange(id);
+
+            if($('.adminChk').prop('checked') == true)
+            {
+                $('.adminList').fadeIn(500);
+            }
+
+            if($('.parentChk').prop('checked') == true)
+            {
+                $('#parentClass').fadeIn(500);
+            }
+
+            if($('.teacherChk').prop('checked') == true)
+            {
+                $('.teacherList').fadeIn(500);
+            }
+
+        if($('#service2').is(":checked") == true){
+
+            $('#hidenValue').val(1);
+        } else {
+            $('#hidenValue').val(0);
+        }
+
     });
 
     $('#btnCancel').click(function(){
@@ -561,6 +606,141 @@
         $('#detail').show();
 
     });
+
+
+    $('#batch-select').change(function(){
+        $('#batch-class-div-data').html('');
+        var id=this.value;
+        batchChange(id);
+
+    });
+    function batchChange(batch_id) {
+
+        var hiddenId = $('#hiddenAnnouncementId').val();
+
+        var route = '/get-announcement-batch-class-with-updated/'+batch_id+'/'+hiddenId;
+
+        $.get(route,function(data){
+
+                var res= $.map(data[0],function(value){
+                    return value;
+                });
+
+                if (res.length == 0) {
+                    $('#save').prop('disabled',true);
+                    $('#btnSubmit').prop('disabled',true);
+                } else {
+                    var str = "";
+
+                    for(var i=0; i<res.length; i++)
+                    {
+                        if($.inArray(res[i]['class_id'],data[2]) != -1)
+                        {
+
+                            str +='<div class="checkbox clip-check check-primary">' +
+                                '<input type="checkbox" checked value="'+res[i]['class_id']+'" name="classFirst[]" class="classFirst" id="class_'+res[i]['class_id']+'">'+
+                                '<label for="class_'+res[i]['class_id']+'">'
+                                + res[i]['class_name'] +
+                                '</label>'+
+                                '</div>';
+
+                            var res1= $.map(res[i]['division'],function(value){
+                                return value;
+                            });
+
+                            for(var j=0; j<res1.length; j++) {
+
+                                if($.inArray(res[i]['division'][j]['division_id'],data[1]) != -1)
+                                {
+                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
+                                        '<input type="checkbox" checked value="'+res1[j]['division_id']+'" name="FirstDiv[]" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
+                                        '<label for="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'">'
+                                        +res1[j]['division_name']+
+                                        '</label>';
+                                    str +='</div> ';
+                                } else {
+                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
+                                        '<input type="checkbox" value="'+res1[j]['division_id']+'" name="FirstDiv[]" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
+                                        '<label for="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'">'
+                                        +res1[j]['division_name']+
+                                        '</label>';
+                                    str +='</div> ';
+                                }
+
+                            }
+                            str+="<p></p>"
+
+                        } else {
+                            str +='<div class="checkbox clip-check check-primary">' +
+                                '<input type="checkbox" value="'+res[i]['class_id']+'" name="classFirst[]" class="classFirst" id="class_'+res[i]['class_id']+'">'+
+                                '<label for="class_'+res[i]['class_id']+'">'
+                                + res[i]['class_name'] +
+                                '</label>'+
+                                '</div>';
+
+                            var res1= $.map(res[i]['division'],function(value){
+                                return value;
+                            });
+
+                            for(var j=0; j<res1.length; j++) {
+
+                                if($.inArray(res[i]['division'][j]['division_id'],data[1]) != -1)
+                                {
+                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
+                                        '<input type="checkbox" checked value="'+res1[j]['division_id']+'" name="FirstDiv[]" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
+                                        '<label for="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'">'
+                                        +res1[j]['division_name']+
+                                        '</label>';
+                                    str +='</div> ';
+                                } else {
+                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
+                                        '<input type="checkbox" value="'+res1[j]['division_id']+'" name="FirstDiv[]" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
+                                        '<label for="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'">'
+                                        +res1[j]['division_name']+
+                                        '</label>';
+                                    str +='</div> ';
+                                }
+
+                            }
+                            str+="<p></p>"
+
+                        }
+
+
+                    }
+                }
+                $('#batch-class-div-data').html(str);
+
+
+                $('.classFirst').change(function(){
+                    var classId = this.id;
+                    if($(this).prop('checked') == true)
+                    {
+                        $('.FirstDiv').each(function() { //loop through each checkbox
+                            var divId = this.id;
+                            var req = new RegExp(classId, 'g');
+                            var check =  divId.match(req);
+                            if(check != null)
+                            {
+                                this.checked = true;
+                            }
+                        });
+                    }else{
+                        $('.FirstDiv').each(function() { //loop through each checkbox
+                            var divId = this.id;
+                            var req = new RegExp(classId, 'g');
+                            var check =  divId.match(req);
+                            if(check != null)
+                            {
+                                this.checked = false;
+                            }
+                        });
+                    }
+                });
+            }
+        );
+    }
+
 
     $('#btnEdit').click(function(){
 
@@ -595,10 +775,6 @@
 
     $(window).load(function() {
         $('#loadmoreajaxloader').hide();
-    });
-
-    $('#btnUpdate').click(function(){
-        window.location.href="detailedAnnouncement";
     });
 
     $('.parentChk').change(function(){
@@ -641,19 +817,29 @@
         }
     });
 
-    $('.classSecond').change(function(){
-        if($(this).prop('checked') == true)
-        {
-            $('.SecondDiv').each(function() { //loop through each checkbox
-                this.checked = true;  //select all checkboxes with class "checkbox1"
-            });
-        }else{
-            $('.SecondDiv').each(function() { //loop through each checkbox
-                this.checked = false;  //select all checkboxes with class "checkbox1"
-            });
+    $('#service2').click(function(){
+        if(this.checked == true){
+            $('#hidenValue').val(1);
+        } else {
+            $('#hidenValue').val(0);
         }
     });
 
+    $('#service1').click(function(){
+        if(this.checked == false)
+        {
+            $('#teacherList option').each(function(){ $(this).attr('selected',false); });
+        }
+
+    });
+
+    $('#service4').click(function(){
+        if(this.checked == false)
+        {
+            $('#adminList option').each(function(){ $(this).attr('selected',false); });
+        }
+
+    });
 
 </script>
 
