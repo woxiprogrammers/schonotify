@@ -293,7 +293,7 @@ class EventController extends Controller
             $eventData['created_by'] = $data['teacher']['id'];
             $eventData['published_by'] = null;
             $eventData['title'] = $data['title'];
-            $eventData['status'] = 0;
+            $eventData['status'] = $data['status'];
             $eventData['detail'] = $data['detail'];
             $eventData['priority'] = 0;
             $eventData['start_date'] = $data['start_date'];
@@ -321,15 +321,20 @@ class EventController extends Controller
                 $eventImageData['updated_at'] = Carbon::now();
                 EventImages::insert($eventImageData);
             }
-            $status = 200;
-            $message = 'Event Successfully Created';
+            if($eventData['status'] == 0) {
+                $status = 200;
+                $message = 'Event successfully saved in draft';
+            } else {
+                $status = 200;
+                $message = 'Event successfully sent for publish';
+            }
         } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
         $response = [
-            "message" => $message,
-            "status" => $status
+            "status" => $status,
+            "message" => $message
         ];
         return response($response, $status);
     }
@@ -356,25 +361,30 @@ class EventController extends Controller
                 $eventData['end_date'] = $data['end_date'];
                 $eventData['updated_at'] = Carbon::now();
                 Event::where('id','=',$data['event_id'])->update($eventData);
-                $image = EventImages::where('event_id','=',$data['event_id'])->pluck('image');
-                if(!Empty($image)) {
-                    unlink('uploads/events/'."".$image);
-                }
-                if ($request->hasFile('image')) {
-                    $image = $request->file('image');
-                    $name = $request->file('image')->getClientOriginalName();
-                    $filename = time()."_".$name;
-                    $path = public_path('uploads/events/');
-                    if (!file_exists($path)) {
-                        File::makeDirectory('uploads/events/', $mode = 0777, true,true);
+                if($data['flag'] == 1){
+                    $image = EventImages::where('event_id','=',$data['event_id'])->pluck('image');
+                    if(!Empty($image)) {
+                        unlink('uploads/events/'."".$image);
                     }
-                    $image->move($path,$filename);
-                } else {
-                    $filename = null;
+                    if ($request->hasFile('image')) {
+                        $image = $request->file('image');
+                        $name = $request->file('image')->getClientOriginalName();
+                        $filename = time()."_".$name;
+                        $path = public_path('uploads/events/');
+                        if (!file_exists($path)) {
+                            File::makeDirectory('uploads/events/', $mode = 0777, true,true);
+                        }
+                        $image->move($path,$filename);
+                        $eventImageData['image'] = $filename;
+                        $eventImageData['updated_at'] = Carbon::now();
+                        EventImages::where('event_id','=',$data['event_id'])->update($eventImageData);
+                    }
+                } else if($data['flag'] == 2) {
+                        $filename = null;
+                    $eventImageData['image'] = $filename;
+                    $eventImageData['updated_at'] = Carbon::now();
+                    EventImages::where('event_id','=',$data['event_id'])->update($eventImageData);
                 }
-                $eventImageData['image'] = $filename;
-                $eventImageData['updated_at'] = Carbon::now();
-                EventImages::where('event_id','=',$data['event_id'])->update($eventImageData);
                 $status = 200;
                 $message = 'Event Successfully updated';
             } else {
