@@ -219,6 +219,21 @@
         getMsgCount();
         Main.init();
         FormValidator.init();
+
+        $('#allCheckedStud-label img').css('border','1px solid');
+        if ($('.allCheckedStud').prop('checked') == true)
+        {
+            $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
+            var i=0;
+            $('.checkedStud').each(function() { //loop through each checkbox
+                if (this.checked == true){
+                    $('#'+this.className+this.id).prop('src','assets/images/tick.png');
+                }else{
+                    $('#'+this.className+this.id).prop('src','assets/images/cross.png');
+                }
+                i++;
+            });
+        }
         TableData.init();
         FormElements.init();
         UIButtons.init();
@@ -237,20 +252,7 @@
         });
         var endDate = new Date();
         $('#datePiker').datepicker('setEndDate', endDate);
-        $('#allCheckedStud-label img').css('border','1px solid');
-        if ($('.allCheckedStud').prop('checked') == true)
-        {
-            $('#allCheckedStud-label img').prop('src','assets/images/tick.png');
-            var i=0;
-            $('.checkedStud').each(function() { //loop through each checkbox
-                if (this.checked == true){
-                    $('#'+this.className+this.id).prop('src','assets/images/tick.png');
-                }else{
-                    $('#'+this.className+this.id).prop('src','assets/images/cross.png');
-                }
-                i++;
-            });
-        }
+
     });
     $('#btnSubmit').click(function(){
         var date=$('#datePiker').val();
@@ -399,7 +401,6 @@
                 }
 
 
-                TableData.init();
                 $('#allCheckedStud-label img').css('border','1px solid');
                 if ($('.allCheckedStud').prop('checked') == true)
                 {
@@ -415,6 +416,7 @@
                         i++;
                     });
                 }
+                TableData.init();
                 $('.checkedStud').change(function(){
 
                     if(this.checked==true)
