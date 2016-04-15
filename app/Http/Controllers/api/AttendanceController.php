@@ -245,27 +245,30 @@ class AttendanceController extends Controller
                         ->where('date','=',$data['date'])->get()->toArray();
                     if (!Empty($markedAttendance)) {
                         Attendance::where('date',$data['date'])->delete();
-                        foreach($studentData as $value) {
-                            $attendanceData['teacher_id'] = $data['teacher']['id'];
-                            $attendanceData['date'] = $data['date'];
-                            $attendanceData['division_id'] = $role['id'];
-                            $attendanceData['student_id'] = $value;
-                            $attendanceData['created_at'] = Carbon::now();
-                            $attendanceData['updated_at'] = Carbon::now();
-                            Attendance::insert($attendanceData);
-                            $status = 200;
-                            $message = "Attendance Successfully updated";
+                        $status = 200;
+                        $message = "Attendance Successfully updated";
+                        if($studentData[0]!=null) {
+                            foreach($studentData as $value) {
+                                $attendanceData['teacher_id'] = $data['teacher']['id'];
+                                $attendanceData['date'] = $data['date'];
+                                $attendanceData['division_id'] = $role['id'];
+                                $attendanceData['student_id'] = $value;
+                                $attendanceData['created_at'] = Carbon::now();
+                                $attendanceData['updated_at'] = Carbon::now();
+                                Attendance::insert($attendanceData);
+                            }
                         }
                     } else {
-
-                        foreach($studentData as $value) {
-                            $attendanceData['teacher_id'] = $data['teacher']['id'];
-                            $attendanceData['date'] = $data['date'];
-                            $attendanceData['division_id'] = $role['id'];
-                            $attendanceData['student_id'] = $value;
-                            $attendanceData['created_at'] = Carbon::now();
-                            $attendanceData['updated_at'] = Carbon::now();
-                            Attendance::insert($attendanceData);
+                        if($studentData[0]!=null) {
+                            foreach($studentData as $value) {
+                                $attendanceData['teacher_id'] = $data['teacher']['id'];
+                                $attendanceData['date'] = $data['date'];
+                                $attendanceData['division_id'] = $role['id'];
+                                $attendanceData['student_id'] = $value;
+                                $attendanceData['created_at'] = Carbon::now();
+                                $attendanceData['updated_at'] = Carbon::now();
+                                Attendance::insert($attendanceData);
+                            }
                         }
                         $attendanceStatus['division_id'] = $role['id'];
                         $attendanceStatus['date'] = $data['date'];
@@ -322,6 +325,9 @@ class AttendanceController extends Controller
                         ->where('division_id','=', $divisionId['id'])
                         ->select('id','first_name','last_name','roll_number')
                         ->get();
+                    $studentListForLeave = User::where('role_id','=',$studentRole)
+                        ->where('division_id','=', $divisionId['id'])
+                        ->lists('id');
                     $i = 0;
                     if (!Empty($studentList)) {
                         $status = 200;
@@ -332,7 +338,7 @@ class AttendanceController extends Controller
                             ->get()->toArray();
                         $date = $data['date'];
                         $leaveApplied = LeaveRequest::select('*')->whereRaw("('$date' between from_date and end_date)")
-                            ->wherein('student_id',$studentList)
+                            ->wherein('student_id',$studentListForLeave)
                             ->get()->toArray();
                     }
                     $i = 0;
@@ -358,7 +364,7 @@ class AttendanceController extends Controller
                     }
                     if (Empty($markedAttendance)) {
                         $status = 200;
-                        $message = "All students were present on this day";
+                        $message = "All students present on this day";
                     }
                     $i=0;
                     foreach ($studentList as $students) {

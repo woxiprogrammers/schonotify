@@ -60,11 +60,11 @@ class EventController extends Controller
                            $finalFiveEvents[$counter]['path'] = $file['path'];
                        } else {
                            $finalFiveEvents[$counter]['image'] = "picture.svg";
-                           $finalFiveEvents[$counter]['path'] = "/uploads/events/picture.svg";
+                           $finalFiveEvents[$counter]['path'] =url()."/uploads/events/picture.svg";
                        }
                    } else {
                        $finalFiveEvents[$counter]['image'] = "picture.svg";
-                       $finalFiveEvents[$counter]['path'] = "/uploads/events/picture.svg";
+                       $finalFiveEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
                    }
                 $finalFiveEvents[$counter]['detail'] = $event['detail'];
                 $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
@@ -102,7 +102,7 @@ class EventController extends Controller
                 if (file_exists($eventImageUploadPath)) {
                     $file['status'] = true;
                 }
-                $path = $eventUploadConfig.$ds.$imageName;
+                $path = url().$eventUploadConfig.$ds.$imageName;
                 $file['path'] = $path;
                 return $file;
         }catch(\Exception $e){
@@ -195,6 +195,8 @@ class EventController extends Controller
             $pendingEvents = array();
             $publishedEvents = array();
             $finalMonthsEvents = array();
+            $status = 200;
+            $message = 'Successfully Listed';
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $startDate = $year."-".$month_id ."-"."01"." 00".":"."00".":"."00";
             $endDate = $year."-".$month_id ."-"."31"." 23".":"."59".":"."59";
@@ -217,47 +219,50 @@ class EventController extends Controller
                 ->orderBy('start_date','desc')
                 ->get();
             $counter = 0;
-            foreach ($monthsEvents as $event) {
-                $image = EventImages::where('event_id','=',$event->id)->pluck('image');
-                $finalMonthsEvents[$counter]['id'] =  $event->id;
-                $creatorUser = User::where ('id','=', $event->created_by)->select('first_name','last_name')->first();
-                $finalMonthsEvents[$counter]['created_by'] = $creatorUser['first_name']." ".$creatorUser['last_name'];
-                $publishedUser = User::where ('id','=', $event->published_by)->select('first_name','last_name')->first();
-                $finalMonthsEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
-                if($event->status == "0"){ //0 for draft
-                    $finalMonthsEvents[$counter]['status'] = "Draft" ;
-                } else  if($event->status == "1"){ //0 for draft
-                    $finalMonthsEvents[$counter]['status'] ="Pending";
-                } else {
-                    $finalMonthsEvents[$counter]['status'] ="Published";
-                }
-                $finalMonthsEvents[$counter]['title'] = $event->title;
-                $finalMonthsEvents[$counter]['detail'] = $event->detail;
-                if($image!=null) {
-                    $file = $this->getEventImagePath($image);
-                    if($file['status']){
-                        $finalMonthsEvents[$counter]['image'] = $image;
-                        $finalMonthsEvents[$counter]['path'] = $file['path'];
+            if(!Empty($monthsEvents)){
+                foreach ($monthsEvents as $event) {
+                    $image = EventImages::where('event_id','=',$event->id)->pluck('image');
+                    $finalMonthsEvents[$counter]['id'] =  $event->id;
+                    $creatorUser = User::where ('id','=', $event->created_by)->select('first_name','last_name')->first();
+                    $finalMonthsEvents[$counter]['created_by'] = $creatorUser['first_name']." ".$creatorUser['last_name'];
+                    $publishedUser = User::where ('id','=', $event->published_by)->select('first_name','last_name')->first();
+                    $finalMonthsEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
+                    if($event->status == "0"){ //0 for draft
+                        $finalMonthsEvents[$counter]['status'] = "Draft" ;
+                    } else  if($event->status == "1"){ //0 for draft
+                        $finalMonthsEvents[$counter]['status'] ="Pending";
+                    } else {
+                        $finalMonthsEvents[$counter]['status'] ="Published";
+                    }
+                    $finalMonthsEvents[$counter]['title'] = $event->title;
+                    $finalMonthsEvents[$counter]['detail'] = $event->detail;
+                    if($image!=null) {
+                        $file = $this->getEventImagePath($image);
+                        if($file['status']){
+                            $finalMonthsEvents[$counter]['image'] = $image;
+                            $finalMonthsEvents[$counter]['path'] = $file['path'];
+                        } else {
+                            $finalMonthsEvents[$counter]['image'] = "picture.svg";
+                            $finalMonthsEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
+                        }
                     } else {
                         $finalMonthsEvents[$counter]['image'] = "picture.svg";
-                        $finalMonthsEvents[$counter]['path'] = "/uploads/events/picture.svg";
+                        $finalMonthsEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
                     }
-                } else {
-                    $finalMonthsEvents[$counter]['image'] = "picture.svg";
-                    $finalMonthsEvents[$counter]['path'] = "/uploads/events/picture.svg";
+                    $finalMonthsEvents[$counter]['start_date'] =  date("j M y, g:i a",strtotime( $event->start_date));
+                    $finalMonthsEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event->end_date));
+                    $finalMonthsEvents[$counter]['created_at'] =  date("j M y, g:i a",strtotime( $event->created_at));
+                    if($event->status == 2) {
+                        $finalMonthsEvents[$counter]['published_at'] =  date("j M y, g:i a",strtotime( $event->updated_at));
+                    } else {
+                        $finalMonthsEvents[$counter]['published_at'] = ' ';
+                    }
+                    $counter++;
                 }
-                $finalMonthsEvents[$counter]['start_date'] =  date("j M y, g:i a",strtotime( $event->start_date));
-                $finalMonthsEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event->end_date));
-                $finalMonthsEvents[$counter]['created_at'] =  date("j M y, g:i a",strtotime( $event->created_at));
-                if($event->status == 2) {
-                    $finalMonthsEvents[$counter]['published_at'] =  date("j M y, g:i a",strtotime( $event->updated_at));
-                } else {
-                    $finalMonthsEvents[$counter]['published_at'] = ' ';
-                }
-                $counter++;
+            } else {
+                $status = 404;
+                $message = 'Sorry! No events found for this instance.';
             }
-            $status = 200;
-            $message = 'Successfully Listed';
         } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
