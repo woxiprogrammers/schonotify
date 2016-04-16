@@ -412,31 +412,18 @@
 
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
-
     Route::post('homework-create','api\HomeworkController@createHomework');
-
     Route::put('update-homework',array('uses' => 'api\HomeworkController@updateHomework'));
-
     Route::put('publish-homework/',array('uses' => 'api\HomeworkController@publishHomeWork'));
-
     Route::put('deleteHomework',array('uses' => 'api\HomeworkController@deleteHomework'));
-
     Route::get('get-teachers-subjects','api\HomeworkController@getTeacherSubject');
-
     Route::get('get-subjects-batches/{subject_id}','api\HomeworkController@getSubjectBatches');
-
     Route::get('get-batches-classes/{subject_id}/{batch_id}','api\HomeworkController@getBatchesClasses');
-
     Route::get('get-classes-division/{subject_id}/{batch_id}/{class_id}','api\HomeworkController@getClassesDivision');
-
     Route::post('get-divisions-students','api\HomeworkController@getDivisionsStudents');
-
     Route::get('view-homework-parent/{student_id}','api\HomeworkController@viewHomeworkParent');
-
     Route::get('view-homework','api\HomeworkController@viewHomeWork');
-
     Route::get('view-unpublished-homework',array('uses' => 'api\HomeworkController@viewUnpublishedHomeWork'));
-   
     Route::get('view-detail-homework/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
 
 

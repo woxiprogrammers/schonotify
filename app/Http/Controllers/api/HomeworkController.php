@@ -224,13 +224,13 @@ class HomeworkController extends Controller
             $DivisionArray=array_unique($division['id'],SORT_REGULAR);
             $i=0;
             foreach ($DivisionArray  as $value){
-                $class_id=Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
-                $className=Classes::where('id','=',$class_id['class_id'])
+                $class_id = Division::where('id','=',$value)->select('divisions.class_id as class_id')->first();
+                $className = Classes::where('id','=',$class_id['class_id'])
                                   ->where('batch_id','=',$batch_id)
                                   ->select('id','class_name as class_name')->first();
                 if(!Empty($class_id)&&!Empty($className)){
-                    $finalClasses[$i]['id']=$class_id['class_id'];
-                    $finalClasses[$i]['name']=$className['class_name'];
+                    $finalClasses[$class_id['class_id']]['id'] = $class_id['class_id'];
+                    $finalClasses[$class_id['class_id']]['name'] = $className['class_name'];
                     $i++;
                     }
                 }
