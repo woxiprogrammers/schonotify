@@ -180,6 +180,9 @@
                                                     <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                         <i class="fa fa-wrench"></i> Update
                                                     </button>
+                                                    <a href="/delete-achievement/{{ $achievement['id'] }}" class="btn btn-danger btn-wide pull-right margin-left-10" type="button" id="btnEdit">
+                                                        <i class="fa fa-trash"></i> Delete
+                                                    </a>
                                                     <a href="/check-publish-achievement/{{ $achievement['id'] }}" class="btn btn-primary btn-wide pull-right " type="button" id="btnPublish">
                                                         <i class="fa fa-cloud-upload"></i> Publish
                                                     </a>
@@ -188,6 +191,9 @@
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
+                                                <a href="/delete-achievement/{{ $achievement['id'] }}" class="btn btn-danger btn-wide pull-right margin-left-10" type="button" id="btnEdit">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </a>
                                                 <a href="/check-publish-achievement/{{ $achievement['id'] }}" class="btn btn-primary btn-wide pull-right " type="button" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
                                                 </a>
@@ -296,8 +302,6 @@
                     </div>
                 </div>
             </div>
-
-
 
         </div>
     </div>

@@ -145,6 +145,10 @@
 
     Route::post('/update-announcement','NoticeBoardController@updateAnnouncement');
 
+    Route::get('/delete-announcement/{id}','NoticeBoardController@deleteAnnouncement');
+
+    Route::get('/delete-achievement/{id}','NoticeBoardController@deleteAchievement');
+
     Route::get('get-all-admins','NoticeBoardController@getAllAdmins');
 
     Route::get('get-all-teachers','NoticeBoardController@getAllTeachers');
