@@ -1353,146 +1353,160 @@
         public function detailAnnouncement($id)
         {
 
-            $announcements = Event::join('users','users.id','=','events.created_by')
-                ->where('events.id','=',$id)
-                ->select('events.id','title','events.status','events.detail','events.created_by','events.published_by','events.priority','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
-                ->get()->toArray();
+            $events=Event::where('id','=',$id)->get();
 
-            $publishedBy = Event::join('users','users.id','=','events.published_by')
-                ->where('events.id','=',$id)
-                ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
-                ->get()->toArray();
-
-            $users = EventUserRoles::where('event_id','=',$id)
-                        ->get();
-
-            $admins = array();
-            $teachers = array();
-            $divisions = array();
-
-
-            $selectedBatches = array();
-            $selectedClasses = array();
-            $selectedDivisions = array();
-
-            foreach($users as $user)
+            if(sizeOf($events) != 0)
             {
-                if($user->user_id != null)
+
+                $announcements = Event::join('users','users.id','=','events.created_by')
+                    ->where('events.id','=',$id)
+                    ->select('events.id','title','events.status','events.detail','events.created_by','events.published_by','events.priority','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                    ->get()->toArray();
+
+                $publishedBy = Event::join('users','users.id','=','events.published_by')
+                    ->where('events.id','=',$id)
+                    ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
+                    ->get()->toArray();
+
+                $users = EventUserRoles::where('event_id','=',$id)
+                    ->get();
+
+                $admins = array();
+                $teachers = array();
+                $divisions = array();
+
+
+                $selectedBatches = array();
+                $selectedClasses = array();
+                $selectedDivisions = array();
+
+                foreach($users as $user)
                 {
-                    $userRole = User::select('role_id','first_name','last_name','username','id')->where('users.id','=',$user->user_id)->first();
-                    if($userRole->role_id == 1)
+                    if($user->user_id != null)
                     {
-                        array_push($admins,$userRole);
+                        $userRole = User::select('role_id','first_name','last_name','username','id')->where('users.id','=',$user->user_id)->first();
+                        if($userRole->role_id == 1)
+                        {
+                            array_push($admins,$userRole);
+                        } else {
+                            array_push($teachers,$userRole);
+                        }
+                    }
+
+                    if($user->division_id != null)
+                    {
+                        $batches = Classes::join('divisions','classes.id','=','divisions.class_id')
+                            ->join('batches','classes.batch_id','=','batches.id')
+                            ->where('divisions.id','=',$user->division_id)
+                            ->select('divisions.id','divisions.class_id','classes.batch_id','divisions.division_name','classes.class_name','batches.name as batch_name')
+                            ->get();
+
+                        array_push($divisions,$batches);
+
+                        $batchesArray = $batches->toArray();
+
+                        array_push($selectedBatches,$batchesArray[0]['batch_id']);
+                        array_push($selectedClasses,$batchesArray[0]['class_id']);
+                        array_push($selectedDivisions,$batchesArray[0]['id']);
+
+                    }
+                }
+
+                $selectedBatches = array_unique($selectedBatches);
+
+                $selectedClasses = array_unique($selectedClasses);
+
+                $selectedDivisions = array_unique($selectedDivisions);
+
+                $admins =  array_unique($admins);
+
+                $teachers =  array_unique($teachers);
+
+                //////////////data to show on update page/////////////
+
+                $user = Auth::user();
+
+                $batchList = array();
+
+                if ($user->role_id == 1) {
+                    $user=Auth::user();
+                    $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
+                    $batchList = $batchData->toArray();
+
+                } elseif ($user->role_id == 2 ) {
+                    $userCheck = Division::where('class_teacher_id',$user->id)->first();
+                    if ($userCheck != null) {
+                        $count=0;
+
+                        $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
+                            ->join('classes','divisions.class_id','=','classes.id')
+                            ->join('batches','classes.batch_id','=','batches.id')
+                            ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
+                            ->get()->toArray();
+                        $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                            ->join('divisions','division_subjects.division_id','=','divisions.id')
+                            ->join('classes','divisions.class_id','=','classes.id')
+                            ->join('batches','classes.batch_id','=','batches.id')
+                            ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
+                            ->get()->toArray();
+
+                        $mergedArray = array_merge($batchClassData,$divisionSubjects);
+                        $mergedArray = array_unique($mergedArray, SORT_REGULAR);
+
+                        foreach($mergedArray as $row) {
+                            $batchList[$count]['id'] = $row['batch_id'];
+                            $batchList[$count]['name'] = $row['batch_name'];
+                            $count++;
+                        }
+                        $batchList = array_unique($batchList, SORT_REGULAR);
+
                     } else {
-                        array_push($teachers,$userRole);
+
+                        $count=0;
+                        $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
+                            ->join('divisions','division_subjects.division_id','=','divisions.id')
+                            ->join('classes','divisions.class_id','=','classes.id')
+                            ->join('batches','classes.batch_id','=','batches.id')
+                            ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
+                            ->get()->toArray();
+
+                        $divisionSubjects = array_unique($divisionSubjects, SORT_REGULAR);
+                        foreach($divisionSubjects as $row) {
+                            $batchList[$count]['id'] = $row['batch_id'];
+                            $batchList[$count]['name'] = $row['batch_name'];
+                            $count++;
+                        }
+                        $batchList = array_unique($batchList, SORT_REGULAR);
+
                     }
                 }
 
-                if($user->division_id != null)
+                $adminWithAcl = User::join('module_acls','module_acls.user_id','=','users.id')
+                    ->where('module_id','=',13)
+                    ->where('acl_id','=',5)
+                    ->where('role_id','=',1)
+                    ->select('users.id','users.first_name','users.last_name','users.username')
+                    ->get()->toArray();
+
+                if($announcements[0]['role_id'] == 2)
                 {
-                    $batches = Classes::join('divisions','classes.id','=','divisions.class_id')
-                                ->join('batches','classes.batch_id','=','batches.id')
-                                ->where('divisions.id','=',$user->division_id)
-                                ->select('divisions.id','divisions.class_id','classes.batch_id','divisions.division_name','classes.class_name','batches.name as batch_name')
-                                ->get();
-
-                    array_push($divisions,$batches);
-
-                    $batchesArray = $batches->toArray();
-
-                    array_push($selectedBatches,$batchesArray[0]['batch_id']);
-                    array_push($selectedClasses,$batchesArray[0]['class_id']);
-                    array_push($selectedDivisions,$batchesArray[0]['id']);
-
-                }
-            }
-
-            $selectedBatches = array_unique($selectedBatches);
-
-            $selectedClasses = array_unique($selectedClasses);
-
-            $selectedDivisions = array_unique($selectedDivisions);
-
-            $admins =  array_unique($admins);
-
-            $teachers =  array_unique($teachers);
-
-            //////////////data to show on update page/////////////
-
-            $user = Auth::user();
-
-            $batchList = array();
-
-            if ($user->role_id == 1) {
-                $user=Auth::user();
-                $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
-                $batchList = $batchData->toArray();
-
-            } elseif ($user->role_id == 2 ) {
-                $userCheck = Division::where('class_teacher_id',$user->id)->first();
-                if ($userCheck != null) {
-                    $count=0;
-
-                    $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
-                        ->join('classes','divisions.class_id','=','classes.id')
-                        ->join('batches','classes.batch_id','=','batches.id')
-                        ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
-                        ->get()->toArray();
-                    $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                        ->join('divisions','division_subjects.division_id','=','divisions.id')
-                        ->join('classes','divisions.class_id','=','classes.id')
-                        ->join('batches','classes.batch_id','=','batches.id')
-                        ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
-                        ->get()->toArray();
-
-                    $mergedArray = array_merge($batchClassData,$divisionSubjects);
-                    $mergedArray = array_unique($mergedArray, SORT_REGULAR);
-
-                    foreach($mergedArray as $row) {
-                        $batchList[$count]['id'] = $row['batch_id'];
-                        $batchList[$count]['name'] = $row['batch_name'];
-                        $count++;
-                    }
-                    $batchList = array_unique($batchList, SORT_REGULAR);
-
+                    $allAdmins = $this::getAllAdminsForUpdate();
                 } else {
-
-                    $count=0;
-                    $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
-                        ->join('divisions','division_subjects.division_id','=','divisions.id')
-                        ->join('classes','divisions.class_id','=','classes.id')
-                        ->join('batches','classes.batch_id','=','batches.id')
-                        ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
-                        ->get()->toArray();
-
-                    $divisionSubjects = array_unique($divisionSubjects, SORT_REGULAR);
-                    foreach($divisionSubjects as $row) {
-                        $batchList[$count]['id'] = $row['batch_id'];
-                        $batchList[$count]['name'] = $row['batch_name'];
-                        $count++;
-                    }
-                    $batchList = array_unique($batchList, SORT_REGULAR);
-
+                    $allAdmins = $this::getAllAdmins();
                 }
-            }
 
-            $adminWithAcl = User::join('module_acls','module_acls.user_id','=','users.id')
-                ->where('module_id','=',13)
-                ->where('acl_id','=',5)
-                ->where('role_id','=',1)
-                ->select('users.id','users.first_name','users.last_name','users.username')
-                ->get()->toArray();
+                $allTeachers = $this::getAllTeachers();
 
-            if($announcements[0]['role_id'] == 2)
-            {
-                $allAdmins = $this::getAllAdminsForUpdate();
+                return view('detailAnnouncement')->with(compact('announcements','admins','teachers','divisions','publishedBy','batchList','adminWithAcl','selectedBatches','selectedClasses','selectedDivisions','allAdmins','allTeachers'));
+
+
             } else {
-                $allAdmins = $this::getAllAdmins();
+
+                Session::flash('message-error','This announcement is not available !');
+
+                return Redirect::to('noticeBoard');
+
             }
-
-            $allTeachers = $this::getAllTeachers();
-
-            return view('detailAnnouncement')->with(compact('announcements','admins','teachers','divisions','publishedBy','batchList','adminWithAcl','selectedBatches','selectedClasses','selectedDivisions','allAdmins','allTeachers'));
 
         }
 
