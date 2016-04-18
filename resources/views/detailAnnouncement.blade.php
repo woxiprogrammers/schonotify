@@ -613,7 +613,7 @@
     });
 
     $('#btnCancel').click(function(){
-        location.reload();
+        window.location = window.location.href;
     });
 
     $('#batch-select').change(function(){
@@ -622,6 +622,7 @@
         batchChange(id);
 
     });
+
     function batchChange(batch_id) {
 
         var hiddenId = $('#hiddenAnnouncementId').val();
