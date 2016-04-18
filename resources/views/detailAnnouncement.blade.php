@@ -608,14 +608,13 @@
             $('#hidenValue').val(0);
         }
 
+        sessionStorage.setItem('pageState',1);
+
     });
 
     $('#btnCancel').click(function(){
-        $('#update').hide();
-        $('#detail').show();
-
+        location.reload();
     });
-
 
     $('#batch-select').change(function(){
         $('#batch-class-div-data').html('');

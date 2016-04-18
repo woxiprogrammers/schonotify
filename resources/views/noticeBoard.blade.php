@@ -103,7 +103,15 @@
         getMsgCount();
         Main.init();
         FormValidator.init();
-        loadMore(0)
+        loadMore(0);
+        
+        var stateStatus = sessionStorage.getItem('pageState');
+
+        if(stateStatus == 1)
+        {
+            sessionStorage.setItem('pageState',0);
+            location.reload();
+        }
     });
 
     var loaded = true;
