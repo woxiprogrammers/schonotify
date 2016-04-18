@@ -509,7 +509,9 @@
                                         Please select admin...
                                     </option>
                                     @foreach($adminWithAcl as $admin)
-                                    <option value="{{ $admin['id'] }}">{{ $admin['first_name'] }} {{ $admin['last_name'] }} ({{ $admin['username'] }})</option>
+                                        @foreach($announcements as $announcement)
+                                            <option @if($admin['id'] == $announcement['published_by']) selected @endif value="{{ $admin['id'] }}">{{ $admin['first_name'] }} {{ $admin['last_name'] }} ({{ $admin['username'] }})</option>
+                                        @endforeach
                                     @endforeach
                                 </select>
                             </div>
