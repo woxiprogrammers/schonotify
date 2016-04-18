@@ -288,6 +288,7 @@ class EventController extends Controller
     {
         try {
             $data = $request->all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $eventData['event_type_id'] = $eventTypesId;
             $eventData['created_by'] = $data['teacher']['id'];
@@ -352,6 +353,7 @@ class EventController extends Controller
     {
         try {
             $data = $request -> all();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $event_id = Event::where('id','=',$data['event_id'])->get()->toArray();
             if(!Empty($event_id)) {
                 $eventData['title'] = $data['title'];
