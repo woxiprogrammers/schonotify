@@ -15,6 +15,7 @@ function doListing(id) {
         var str="";
         for(var i=0; i<res.length; i++)
         {
+
             if(res[i]['from_id'] == id){
                 str+='<li class="self">'+
                     '<input type="hidden" name="to_id" id="to_id" value="'+ id +'" />'+
@@ -26,6 +27,7 @@ function doListing(id) {
                     '</li>';
             }else{
                 str+='<li class="other">'+
+                    '<input type="hidden" name="to_id" id="to_id" value="'+ id +'" />'+
                     '<div class="message">'+
                     '<div class="message-wrap message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+
