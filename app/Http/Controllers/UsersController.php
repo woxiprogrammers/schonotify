@@ -151,7 +151,7 @@ class UsersController extends Controller
         return $mainArr;
 
     }
-    public function userModuleAclsEdit(Request $request, $id)
+    public function userModuleAclsEdit( $id)
     {
 
         $modules=Module::select('slug','id')->get();
@@ -428,6 +428,75 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function viewUser(Requests\WebRequests\ViewUserRequest $request,$id)
+    {
+
+        if($request->authorize() === true)
+        {
+            $user=User::where('id',$id)->first();
+
+            $userRole=UserRoles::where('id',$user->role_id)->select('slug')->first();
+
+            $userModuleAcls = $this::userModuleAclsEdit($id);
+
+            if($userRole->slug == 'admin')
+            {
+                return view('viewUser')->with(compact('user','userModuleAcls'));
+            }elseif($userRole->slug == 'teacher')
+            {
+                $classTeacher=Division::where('class_teacher_id',$id)->first();
+                if($classTeacher != null)
+                {
+                    $class=Classes::where('id',$classTeacher->class_id)->first();
+                    $batch=Batch::where('id',$class->batch_id)->first();
+                    $user['batch_id']=$batch->id;
+                    $user['batch_name']=$batch->slug;
+                    $user['class_id']=$class->id;
+                    $user['class_name']=$class->slug;
+                    $user['division_id']=$classTeacher->id;
+                    $user['division_name']=$classTeacher->slug;
+                }
+                $teacherView=TeacherView::where('user_id',$id)->first();
+                $user['web_view'] = $teacherView->web_view;
+                $user['mobile_view']= $teacherView->mobile_view;
+                return view('viewUser')->with(compact('user','userModuleAcls'));
+            }elseif($userRole->slug == 'student')
+            {
+                $userData=User::where('id',$user['parent_id'])->first();
+                $user['parentUserId']=$user['parent_id'];
+                $user['parentUserName']=$userData->username;
+                $user['parentFirstName']=$userData->first_name;
+                $user['parentLastName']=$userData->last_name;
+                $user['parentEmail']=$userData->email;
+                $user['parentGender']=$userData->gender;
+                $user['parentBirth_date']=$userData->birth_date;
+                $user['parentMobile']=$userData->mobile;
+                $user['parentAddress']=$userData->address;
+                $user['parentAlternateNumber']=$userData->alternate_number;
+                $user['parentAvatar']=$userData->avatar;
+
+                $division=Division::where('id',$user['division_id'])->first();
+                $class=Classes::where('id',$division->class_id)->first();
+                $batch=Batch::where('id',$class->batch_id)->first();
+                $user['batch_id']=$batch->id;
+                $user['batch_name']=$batch->slug;
+                $user['class_id']=$class->id;
+                $user['class_name']=$class->slug;
+                $user['division_id']=$division->id;
+                $user['division_name']=$division->slug;
+                return view('viewUser')->with(compact('user','userModuleAcls'));
+            }elseif($userRole->slug == 'parent')
+            {
+                $students=User::where('parent_id',$user->id)->get();
+                return view('viewUser')->with(compact('user','userModuleAcls','students'));
+            }
+
+        }else{
+            return Redirect::back();
+        }
+    }
+
 
     public function editUser(Requests\WebRequests\EditUserRequest $request,$id)
     {
