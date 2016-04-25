@@ -156,7 +156,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($dropDownData['student_list'])
+                                            @if(isset($dropDownData['student_list']))
                                             @foreach($dropDownData['student_list'] as $row)
                                             <tr>
                                                 <td>@if($row['student_attendance_status'] == 1  ) <input type="checkbox" class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}"  /> <label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @else <input type="checkbox"  class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}" checked /><label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @endif</td>
