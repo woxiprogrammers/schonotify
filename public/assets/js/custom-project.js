@@ -62,6 +62,7 @@ $('#description').on('keyup',function(){
 });
 
 $('#send-msg').click(function() {
+
     var val = $('#chat-history').find('input[type=hidden]:first').val();
     var description = $('#description').val();
 
@@ -72,6 +73,7 @@ $('#send-msg').click(function() {
         {
             if(res[i]['to_id'] == val){
                 str+='<li class="other">'+
+                    '<input type="hidden" name="to_id" id="to_id" value="'+ val +'" />'+
                     '<div class="message">'+
                     '<div class="message-wrap message-text">'+res[i]['description']+'<div class="messages-date new-date">'+res[i]['date'] +'</div>'+'</div>'+
                     '<div class="message-avatar"><img src="'+res[i]['from_avatar']+'" alt="">'+

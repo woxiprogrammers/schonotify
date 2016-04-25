@@ -10,22 +10,35 @@
     | and give it the controller to call when that URI is requested.
     |
     */
-    /*
-    Route::group(['domain' => '{account}.schnotify.com'], function () {
+
+    /*Route::group(['domain' => '{account}.schnotify.com'], function () {
         Route::get('/', function ($account) {
 
-            $domain=ucfirst($account);
-
-            Config::set('database.connections.mysql_db1.database',$domain);
-            \DB::setDefaultConnection('mysql_db1');
-
-            $check=\DB::connection()->getDatabaseName();
-
-            if(!$check)
+            if($account == "admin")
             {
-                return response('Unauthorized.', 401);
-            }else{
-                return view('login_signin');
+                return $account;
+            } else {
+
+                $domain=ucfirst($account);
+
+                Config::set('database.connections.mysql_db1.database',$domain);
+                \DB::setDefaultConnection('mysql_db1');
+
+                $check=\DB::connection()->getDatabaseName();
+
+                if(!$check)
+                {
+                    return response('Unauthorized.', 401);
+                }else{
+
+                    if(\Illuminate\Support\Facades\Auth::User() != null)
+                    {
+                        return view('admin.dashboard');
+                    } else {
+                        return view('login_signin');
+                    }
+
+                }
             }
 
         });
@@ -54,6 +67,8 @@
     Route::get('lockScreen','LogController@lockScreen');
 
     Route::get('createUsers/{id}','UsersController@create');
+
+    Route::get('view-user/{id}','UsersController@viewUser');
 
     Route::get('adminCreate','UsersController@adminCreateForm');
 

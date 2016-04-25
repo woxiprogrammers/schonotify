@@ -26,16 +26,12 @@ class SearchController extends Controller
     {
 
     }
-    public function searchUsers(Requests\WebRequests\ViewUserRequest $request)
-    {
-        if($request->authorize()===true)
-        {
-            $roles=UserRoles::all();
 
-            return view('admin.searchUsers')->with('userRoles',$roles);
-        }else{
-            return Redirect::to('/');
-        }
+    public function searchUsers()
+    {
+        $roles=UserRoles::all();
+
+        return view('admin.searchUsers')->with('userRoles',$roles);
 
     }
     public function selectRole($role_id)
@@ -76,7 +72,10 @@ class SearchController extends Controller
         if(sizeof($result->toArray()) != 0 )
         {
 
-            $str.="<th>Status</th>";
+            if($user->role_id == 1)
+            {
+                $str.="<th>Status</th>";
+            }
 
             $str.="<th>Action</th>";
 
@@ -102,22 +101,30 @@ class SearchController extends Controller
                     $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
                 }
 
-                $str.="<td>";
-                if($row->is_active == 1)
+                if($user->role_id == 1)
                 {
-                    $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
-                }else{
-                    $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
+                    $str.="<td>";
+                    if($row->is_active == 1)
+                    {
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
+                    }else{
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
+                    }
+                    $str.="</td>";
                 }
-                $str.="</td>";
 
-                $str.="<td><a href='/edit-user/".$row->id."'>Edit</a></td>";
+                $str.="<td>";
+
+                $str.="<a href='/edit-user/".$row->id."'>Edit </a>";
+
+                $str.=" / <a href='/view-user/".$row->id."'> View</a>";
+
+                $str.="</td>";
 
             }
         } else {
             $str1 = "<h5 class='center'>No records found !</h5>";
         }
-
 
         $str.="</tr></tbody>";
 
@@ -129,7 +136,6 @@ class SearchController extends Controller
         } else {
             return $str1;
         }
-
 
 
     }
