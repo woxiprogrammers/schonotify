@@ -11909,6 +11909,15 @@ a.control_next {
 .jssora03r.jssora03rdn { background-position: -303px -33px; }
 
 
+body::-webkit-scrollbar {
+    background:#ccc;
+    width:8px;
+    border-radius: 4px;
+}
 
+body::-webkit-scrollbar-thumb {
+    background:rgba(0, 122, 255, 0.34);
+    border-radius: 4px;
+}
 
 
