@@ -95,10 +95,17 @@ class SearchController extends Controller
                 $str.="<td>".$row->user_name."</td>";
                 $str.="<td>".$row->email."</td>";
                 $str.="<td>".$row->gender."</td>";
-                $parent=User::all()->where('id',$row->parent_id);
-                foreach($parent as $row1)
-                {
-                    $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
+
+                if($row->user_role=='student') {
+                    $parent=User::all()->where('id',$row->parent_id);
+                    if($parent->toArray() == null) {
+                        $str.="<td> -- </td>";
+                    } else {
+                        foreach($parent as $row1)
+                        {
+                            $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
+                        }
+                    }
                 }
 
                 if($user->role_id == 1)
