@@ -90,11 +90,13 @@ class TimetableController extends Controller
                 if( $row['division_subject_id'] != 0 ) {
                     $subject = SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
                         ->join('users','users.id','=','division_subjects.teacher_id')
-                        ->select('users.username as teacher','subjects.subject_name')
+                        ->select('users.username as teacher','subjects.subject_name','users.is_active')
                         ->where('division_subjects.id',$row['division_subject_id'])
                         ->get()->toArray();
 
                     $row['teacher'] = $subject[0]['teacher'];
+
+                    $row['teacher_is_active'] = $subject[0]['is_active'];
 
                     $row['subject'] = $subject[0]['subject_name'];
 
@@ -314,6 +316,27 @@ class TimetableController extends Controller
     {
         $subjects = SubjectClassDivision::where('division_id','=',$id)
             ->join('subjects','subjects.id','=','division_subjects.subject_id')
+            ->select('subjects.subject_name','division_subjects.id')
+            ->get();
+
+        return $subjects;
+    }
+
+    /*
+ +   * Function Name: getSubjects
+ +   * Param: $id
+ +   * Return: it returns subjects
+ +   * Desc: it will returns subjects array respect to division_id .
+ +   * Developed By: Suraj Bande
+ +   * Date: 16/2/2016
+ +   */
+
+    public function getTimetableCreateSubjects($id)
+    {
+        $subjects = SubjectClassDivision::where('division_subjects.division_id','=',$id)
+            ->join('subjects','subjects.id','=','division_subjects.subject_id')
+            ->join('users','users.id','=','division_subjects.teacher_id')
+            ->where('users.is_active','=',1)
             ->select('subjects.subject_name','division_subjects.id')
             ->get();
 
