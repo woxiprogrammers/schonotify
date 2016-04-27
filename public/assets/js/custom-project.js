@@ -38,6 +38,7 @@ function doListing(id) {
         }
 
         $('#chat-history').html(str);
+        $('#fixId').show();
         $(".perfect-scrollbar").scrollTop( $( '#chat-history').prop( "scrollHeight" ) );
         $(".perfect-scrollbar").perfectScrollbar('update');
         getMsgCount();
@@ -529,3 +530,7 @@ function leaveCount()
         }
     });
 }
+
+$('#backChat').click(function(){
+    $('#fixId').hide();
+});

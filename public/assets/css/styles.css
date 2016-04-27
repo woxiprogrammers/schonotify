@@ -11723,13 +11723,14 @@ a.control_next {
 }
 
 .fixBackButton{
-    position: absolute !important;
+    position: fixed !important;
     z-index: 99999;
     background: rgba(238, 238, 238, 0.41);
-    bottom: 5px;
+    bottom: 54px;
     right: 5px;
     box-shadow: 0px 1px 1px #ccc;
     border-radius: 22px;
+    display: none;
 }
 
 .new-date{
