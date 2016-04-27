@@ -31,7 +31,7 @@
 <div class="user-chat">
 <div class="chat-content">
 <div class="sidebar-content perfect-scrollbar">
-<a class="fixBackButton sidebar-back pull-left " href="#" data-toggle-class="chat-open" data-toggle-target="#users"><i id="backChat" class="ti-angle-left"></i></a>
+<a class="fixBackButton sidebar-back pull-left " id="fixId" href="#" data-toggle-class="chat-open" data-toggle-target="#users"><i id="backChat" class="ti-angle-left"></i></a>
 <ol class="discussion" id="chat-history">
 </ol>
 </div>
