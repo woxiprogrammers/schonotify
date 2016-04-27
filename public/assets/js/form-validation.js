@@ -1544,7 +1544,7 @@ var FormValidator = function () {
 
                     var division=$('#hiddenDivId').val();
 
-                    var route="get-timetable-subjects/"+division;
+                    var route="get-timetable-create-subjects/"+division;
 
                     $.get(route,function(res){
 
@@ -2104,7 +2104,7 @@ var FormValidator = function () {
                 successHandler1.show();
                 errorHandler1.hide();
                 // submit form
-                debugger;
+
                 form.submit();
             }
         });
