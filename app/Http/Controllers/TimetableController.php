@@ -106,6 +106,8 @@ class TimetableController extends Controller
 
                     $row['subject'] = "";
 
+                    $row['teacher_is_active'] = 1;
+
                 }
 
                 array_push($arrayTimetable,$row);
