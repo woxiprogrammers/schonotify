@@ -534,3 +534,17 @@ function leaveCount()
 $('#backChat').click(function(){
     $('#fixId').hide();
 });
+
+$('body').click(function(){
+    if($('#app').hasClass('app-offsidebar-open') == false) {
+
+        $('#fixId').fadeOut();
+
+    }
+});
+
+$('#see-all').click(function(){
+    if($('#users').hasClass('chat-open') == true) {
+        $('#fixId').fadeIn();
+    }
+});
