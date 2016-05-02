@@ -48,7 +48,8 @@ class CreateAnnouncement extends Request
         return [
             'title' => 'required|min:5|max:100',
             'detail' => 'required',
-            'date' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
             'batch'=>'required',
             'class'=>'required',
             'division'=>'required',
