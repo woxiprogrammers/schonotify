@@ -29,13 +29,6 @@ var FormWizard = function () {
         return true;
     }, "This field is required if Make as Class Teacher is checked...");
 
-    $.validator.addMethod("modules", function(value, elem, param) {
-        if($("input[name='modules']:checked").length > 1){
-            return true;
-        }else {
-            return false;
-        }
-    },"You must select at least two!");
     $.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
     });
@@ -60,7 +53,7 @@ var FormWizard = function () {
             errorElement: "span", // contain the error msg in a span tag
             errorClass: 'help-block',
             errorPlacement: function (error, element) { // render error placement for each input type
-                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                if (element.attr("type") == "radio") { // for chosen elements, need to insert the error after the chosen container
                     error.insertAfter($(element).closest('.form-group').children('div').children().last());
                 } else if (element.attr("name") == "dd" || element.attr("name") == "mm" || element.attr("name") == "yyyy") {
                     error.insertAfter($(element).closest('.form-group').children('div'));
@@ -161,9 +154,7 @@ var FormWizard = function () {
                      required:"Please provide address",
                      address:"Address must contain at-least 15 characters"
                 },
-                modules: {
-                    minlength: jQuery.validator.format("Please select  at least {0} types of Service")
-                },
+
                 password:{
                     required:"Password is required",
                     minlength: jQuery.validator.format("Password must contain at least {0} characters")
