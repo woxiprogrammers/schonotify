@@ -19,7 +19,15 @@
                 <div class="row">
                     <div class="col-sm-7">
                         <h1 class="mainTitle">View</h1>
+                        @if($user->role_id == 1)
                         <span class="mainDescription">Admin</span>
+                        @elseif($user->role_id == 2)
+                        <span class="mainDescription">Teacher</span>
+                        @elseif($user->role_id == 3)
+                        <span class="mainDescription">Student</span>
+                        @elseif($user->role_id == 4)
+                        <span class="mainDescription">Parent</span>
+                        @endif
                     </div>
 
                 </div>
@@ -55,6 +63,13 @@
                                     </a>
                                 </li>
 
+                                @endif
+                                @if($user->role_id == 4)
+                                <li>
+                                    <a data-toggle="tab" href="#panel_my_child">
+                                        Children's
+                                    </a>
+                                </li>
                                 @endif
                             </ul>
                             <div class="tab-content">
@@ -162,15 +177,55 @@
                                                                     Division
                                                                 </label>
                                                                 <select class="form-control" disabled name="division" style="-webkit-appearance: menulist;" id="division">
-                                                                    <option>{{ $user->division_name }}</option>
+                                                                    <option>{{ strtoupper($user->division_name) }}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
+
 
                                                         @endif
 
                                                     </div>
 
+                                                @elseif($user->role_id == 3)
+                                                    <div class="row">
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group" id="clstchr_batch" >
+                                                                <label class="control-label">
+                                                                    Batch
+                                                                </label>
+
+                                                                <select class="form-control" disabled name="batch" style="-webkit-appearance: menulist;" id="batch"  >
+                                                                    <option>{{ $user->batch_name }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group" id="clstchr_class" >
+                                                                <label class="control-label">
+                                                                    Class
+                                                                </label>
+                                                                <select class="form-control" disabled name="class" style="-webkit-appearance: menulist;" id="class">
+                                                                    <option>{{ $user->class_name }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group" id="clstchr_div">
+                                                                <label class="control-label">
+                                                                    Division
+                                                                </label>
+                                                                <select class="form-control" disabled name="division" style="-webkit-appearance: menulist;" id="division">
+                                                                    <option>{{ strtoupper($user->division_name) }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
                                                 @endif
 
                                                 </div>
@@ -197,6 +252,15 @@
 
                                                     @endif
 
+                                                    @if($user->role_id == 3)
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                            Roll No.
+                                                        </label>
+                                                        <input type="text" disabled placeholder="{!! $user->roll_number !!}" value="{!! $user->roll_number !!}" class="form-control" >
+                                                    </div>
+                                                    @endif
+
                                                     <div class="form-group">
                                                         <label class="control-label">
                                                             Phone
@@ -209,12 +273,12 @@
                                                             Gender
                                                         </label>
                                                         <div class="clip-radio radio-primary">
-                                                            <input type="radio" disabled value="F" name="gender" id="us-female" @if($user->gender=='F') checked @endif>
+                                                            <input type="radio" disabled value="F" name="gender" @if($user->gender == 'F') checked @endif>
                                                             <label for="us-female">
                                                                 Female
                                                             </label>
 
-                                                            <input type="radio" disabled value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
+                                                            <input type="radio" disabled value="M" name="gender" @if($user->gender == 'M') checked @endif>
 
                                                             <label for="us-male">
                                                                 Male
@@ -245,6 +309,7 @@
 
 
                                                 </div>
+                                                @if($user->role_id == 1 || $user->role_id == 2)
                                                 <div class="col-md-6">
                                                     <label class="control-label">
                                                         Employee Type</span>
@@ -257,6 +322,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                @endif
 
                                             </div>
                                         </fieldset>
@@ -313,12 +379,12 @@
                                                                 Gender
                                                             </label>
                                                             <div class="clip-radio radio-primary">
-                                                                <input type="radio" disabled value="F" name="gender" id="us-female" @if($user->parentGender=='F') checked @endif>
+                                                                <input type="radio" disabled value="F"  id="us-female" @if($user->parentGender=='F') checked @endif>
                                                                 <label for="us-female">
                                                                     Female
                                                                 </label>
 
-                                                                <input type="radio" disabled value="M" name="gender" id="us-male" @if($user->parentGender=='M') checked @endif>
+                                                                <input type="radio" disabled value="M"  id="us-male" @if($user->parentGender=='M') checked @endif>
 
                                                                 <label for="us-male">
                                                                     Male
@@ -374,6 +440,24 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                @if($user->role_id == 4)
+                                <div id="panel_my_child" class="tab-pane fade">
+                                    <div class="panel-body">
+                                        <div class="col-sm-10">
+                                            <table class="table">
+                                                @foreach($students as $student)
+                                                <tr>
+                                                    <td>{!! $student->first_name !!} {!! $student->last_name !!}</td>
+                                                    <td><a href="/view-user/{!!  $student->id !!}">Edit <i class="fa fa-pencil edit-user-info"></i></a></td>
+                                                </tr>
+                                                @endforeach
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                @endif
 
                                 <input type="hidden" id="valHiddenId" @if($user->role_id != 3) value="{!! $user->id !!} @else value="{!! $user->parentUserId !!} @endif">
                             </div>

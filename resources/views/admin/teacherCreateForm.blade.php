@@ -402,7 +402,7 @@
     function userAclModule()
     {
 
-        var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','delete_class','update_class','publish_event','delete_event'];
+        var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_event','delete_event'];
 
         $('div#loadmoreajaxloader').show();
         var route='user-module-acl';

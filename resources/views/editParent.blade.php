@@ -275,6 +275,7 @@
     function userAclModule()
     {
         var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message'];
+        var disableModules = ['create_timetable','update_timetable','delete_timetable','publish_timetable','create_user','view_user','update_user','delete_user','publish_user','delete_homework','publish_homework','update_homework','create_homework','delete_user','update_message','delete_message','publish_message','delete_leave','update_leave','publish_leave','publish_attendance','update_attendance','delete_attendance','create_attendance','update_announcement','delete_announcement','publish_announcement','create_announcement','delete_achievement','create_achievement','publish_achievement','update_achievement','create_subject','view_subject','update_subject','publish_subject','delete_subject','create_class','publish_class','view_class','delete_class','update_class','create_event','update_event','publish_event','delete_event'];
         var route='/user-module-acl-edit/{!! $user->id !!}';
         $.get(route,function(res){
 
@@ -315,20 +316,18 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],enabled_modules)==-1){
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" disabled value="" >'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
-
-                    }else{
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
                         if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
                         {
 
-                            str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
+                            str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                                 '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                         }else{
-                            str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
+                            str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
                                 '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                         }
+                    } else {
+                        str += "--";
                     }
                     str+='</div>'+
                         '</td>';
@@ -338,6 +337,69 @@
             }
 
             $('#aclMod').html(str);
+
+            /////////////////////Leave///////////
+
+            $('.leave').change(function(){
+
+                if($.inArray(this.id,["create_leave"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.leave').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.leave').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_leave") {
+                    $('.leave').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Message///////////
+
+            $('.message').change(function(){
+
+                if($.inArray(this.id,["create_message"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.message').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.message').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_message") {
+                    $('.message').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
         });
     }
 
