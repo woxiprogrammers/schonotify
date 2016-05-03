@@ -143,7 +143,7 @@
                                     </button> </span>
                         </div>
 
-                        <!--                            <input class="form-control format-datepicker" type="text">-->
+
                     </div>
                     <div class="form-group">
                             <label>
@@ -374,6 +374,8 @@
 
             var allModAclArr=res['allModAclArr'];
 
+            var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','delete_class','update_class','publish_event','delete_event'];
+
             var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
@@ -407,14 +409,20 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                    {
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
 
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
-                    }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
+                        {
+
+                            str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }else{
+                            str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }
+
+                    } else {
+                        str += "--";
                     }
                     str+='</div>'+
                         '</td>';
@@ -424,6 +432,372 @@
             }
 
             $('#aclMod').html(str);
+
+            ///////////user///////////
+
+
+            $('.user').change(function(){
+
+                if($.inArray(this.id,["create_user","update_user"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.user').each(function() {
+
+                            if(this.id == "view_user") {
+                                this.checked = true;
+                            }
+
+                        });
+                    } else {
+                        $('.user').each(function() {
+
+                            if(this.id == "view_user") {
+                                this.checked = false;
+                            }
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_user") {
+                    $('.user').each(function() {
+
+                        if($.inArray(this.id,["create_user","update_user"]) !== -1) {
+                            this.checked = false;
+                        }
+
+                    });
+                }
+
+            });
+
+            /////////////////////Homework///////////
+
+            $('.homework').change(function(){
+
+                if($.inArray(this.id,["create_homework","update_homework"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.homework').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.homework').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_homework") {
+                    $('.homework').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Leave///////////
+
+            $('.leave').change(function(){
+
+                if($.inArray(this.id,["publish_leave"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.leave').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.leave').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_leave") {
+                    $('.leave').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Class///////////
+
+            $('.class').change(function(){
+
+                if($.inArray(this.id,["create_class"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.class').each(function() {
+
+                            if(this.id == "view_class") {
+
+                                this.checked = true;
+
+                            }
+
+                        });
+                    } else {
+                        $('.class').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_class") {
+                    $('.class').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Subject///////////
+
+            $('.subject').change(function(){
+
+                if($.inArray(this.id,["create_subject"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.subject').each(function() {
+
+                            if(this.id == "view_subject") {
+
+                                this.checked = true;
+
+                            }
+
+                        });
+                    } else {
+                        $('.subject').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_subject") {
+                    $('.subject').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Message///////////
+
+            $('.message').change(function(){
+
+                if($.inArray(this.id,["create_message"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.message').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.message').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_message") {
+                    $('.message').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+
+            /////////////////////Announcement///////////
+
+            $('.announcement').change(function(){
+
+                if($.inArray(this.id,["create_announcement"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.announcement').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.announcement').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_announcement") {
+                    $('.announcement').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Achievement///////////
+
+            $('.achievement').change(function(){
+
+                if($.inArray(this.id,["create_achievement"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.achievement').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.achievement').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_achievement") {
+                    $('.achievement').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Timetable///////////
+
+            $('.timetable').change(function(){
+
+                if($.inArray(this.id,["create_timetable","update_timetable","delete_timetable"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.timetable').each(function() {
+
+                            if(this.id == "view_timetable") {
+                                this.checked = true;
+                            }
+
+                        });
+                    }else if($(this).prop('checked') == false) {
+                        $('.timetable').each(function() {
+
+                            if(this.id == "view_timetable") {
+                                this.checked = true;
+                            }
+
+                        });
+                    } else {
+                        $('.timetable').each(function() {
+
+                            if(this.id == "view_timetable") {
+
+                                this.checked = false;
+
+                            }
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_timetable") {
+                    $('.timetable').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+
+            /////////////////////Attendance///////////
+
+            $('.attendance').change(function(){
+
+                if($.inArray(this.id,["create_attendance","update_attendance"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.attendance').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.attendance').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_attendance") {
+                    $('.attendance').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Event///////////
+
+            $('.event').change(function(){
+
+                if($.inArray(this.id,["create_event","update_event"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.event').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.event').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_event") {
+                    $('.event').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
         });
     }
 

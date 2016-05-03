@@ -261,6 +261,8 @@
 
             var allModAclArr=res['allModAclArr'];
 
+            var disableModules = ['create_homework','view_homework','update_homework','delete_homework','publish_homework','publish_user','create_message','view_message','update_message','publish_message','delete_message','publish_attendance','delete_attendance','delete_subject','update_subject','delete_class','update_class'];
+
             var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
@@ -293,15 +295,18 @@
                 {
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
+                        {
 
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                    {
-
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
-                    }else{
-                        str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                            str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }else{
+                            str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }
+                    } else {
+                        str += "--";
                     }
                     str+='</div>'+
                         '</td>';
@@ -311,6 +316,307 @@
             }
 
             $('#aclMod').html(str);
+
+            ///////////user///////////
+
+
+            $('.user').change(function(){
+
+                if($.inArray(this.id,["create_user","update_user"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.user').each(function() {
+
+                            if(this.id == "view_user") {
+                                this.checked = true;
+                            }
+
+                        });
+                    } else {
+                        $('.user').each(function() {
+
+                            if(this.id == "view_user") {
+                                this.checked = false;
+                            }
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_user") {
+                    $('.user').each(function() {
+
+                        if($.inArray(this.id,["create_user","update_user"]) !== -1) {
+                            this.checked = false;
+                        }
+
+                    });
+                }
+
+            });
+
+            /////////////////////Announcement///////////
+
+            $('.announcement').change(function(){
+
+                if($.inArray(this.id,["create_announcement","update_announcement","delete_announcement","publish_announcement"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.announcement').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.announcement').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_announcement") {
+                    $('.announcement').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Achievement///////////
+
+            $('.achievement').change(function(){
+
+                if($.inArray(this.id,["create_achievement","update_achievement","delete_achievement","publish_achievement"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.achievement').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.achievement').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_achievement") {
+                    $('.achievement').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Attendance///////////
+
+            $('.attendance').change(function(){
+
+                if($.inArray(this.id,["create_attendance","update_attendance"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.attendance').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.attendance').each(function() {
+
+                            this.checked = false;
+
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_attendance") {
+                    $('.attendance').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Timetable///////////
+
+            $('.timetable').change(function(){
+
+                if($.inArray(this.id,["create_timetable","update_timetable","delete_timetable"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.timetable').each(function() {
+
+                            if(this.id == "view_timetable") {
+                                this.checked = true;
+                            }
+
+                        });
+                    }else if($(this).prop('checked') == false) {
+                        $('.timetable').each(function() {
+
+                            if(this.id == "view_timetable") {
+                                this.checked = true;
+                            }
+
+                        });
+                    } else {
+                        $('.timetable').each(function() {
+
+                            if(this.id == "view_timetable") {
+
+                                this.checked = false;
+
+                            }
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_timetable") {
+                    $('.timetable').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Class///////////
+
+            $('.class').change(function(){
+
+                if($.inArray(this.id,["create_class"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.class').each(function() {
+
+                            if(this.id == "view_class") {
+
+                                this.checked = true;
+
+                            }
+
+                        });
+                    } else {
+                        $('.class').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_class") {
+                    $('.class').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Subject///////////
+
+            $('.subject').change(function(){
+
+                if($.inArray(this.id,["create_subject"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.subject').each(function() {
+
+                            if(this.id == "view_subject") {
+
+                                this.checked = true;
+
+                            }
+
+                        });
+                    } else {
+                        $('.subject').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_subject") {
+                    $('.subject').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Event///////////
+
+            $('.event').change(function(){
+
+                if($.inArray(this.id,["update_event","create_event"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        var checkId = this.id;
+
+                        $('.event').each(function() {
+
+                            if(this.id == "view_event") {
+                                this.checked = true;
+                            }
+
+                            if(this.id == "update_event" && checkId != "update_event") {
+                                this.checked = true;
+                            }
+
+                            if(this.id == "create_event" && checkId != "create_event") {
+                                this.checked = true;
+                            }
+
+                        });
+                    } else if($.inArray(this.id,["delete_event","publish_event"]) !== -1){
+                        $('.event').each(function() {
+                            if(this.id == "view_event") {
+                                this.checked = true;
+                            }
+                        });
+                    } else {
+                        $('.event').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else  if($.inArray(this.id,["delete_event","publish_event"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.event').each(function() {
+                            if(this.id == "view_event") {
+                                this.checked = true;
+                            }
+                        });
+                    }
+                } else if($(this).prop('checked') == false && this.id == "view_event") {
+                    $('.event').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+
         });
     }
 

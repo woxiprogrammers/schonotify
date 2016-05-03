@@ -933,6 +933,11 @@ class UsersController extends Controller
             $user->is_active=1;
             $user->save();
 
+            if($user->role_id == 4) {
+                User::where('parent_id','=',$user->id)
+                    ->update(['is_active' => 1]);
+            }
+
             return response()->json(['status'=>'record has been activated.']);
         }else{
             return response()->json(['status'=>403]);
@@ -946,6 +951,11 @@ class UsersController extends Controller
             $user=User::find($id);
             $user->is_active=0;
             $user->save();
+
+            if($user->role_id == 4) {
+                User::where('parent_id','=',$user->id)
+                    ->update(['is_active' => 0]);
+            }
 
             return response()->json(['status'=>'record has been deactivated.']);
         }else{
