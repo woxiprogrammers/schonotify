@@ -117,6 +117,12 @@
 
                     window.location.replace(route);
 
+                } else if(res['status'] == 401) {
+
+                    var route= "/searchUsers";
+
+                    window.location.replace(route);
+
                 }else{
                     swal("Activated!", "User has been activated.", "success");
                 }

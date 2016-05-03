@@ -67,7 +67,7 @@
                                 @if($user->role_id == 4)
                                 <li>
                                     <a data-toggle="tab" href="#panel_my_child">
-                                        Children's
+                                        Children
                                     </a>
                                 </li>
                                 @endif
@@ -449,7 +449,7 @@
                                                 @foreach($students as $student)
                                                 <tr>
                                                     <td>{!! $student->first_name !!} {!! $student->last_name !!}</td>
-                                                    <td><a href="/view-user/{!!  $student->id !!}">Edit <i class="fa fa-pencil edit-user-info"></i></a></td>
+                                                    <td><a href="/view-user/{!!  $student->id !!}">View <i class="fa fa-pencil edit-user-info"></i></a></td>
                                                 </tr>
                                                 @endforeach
                                             </table>

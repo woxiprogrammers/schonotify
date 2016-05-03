@@ -938,6 +938,23 @@ class UsersController extends Controller
                     ->update(['is_active' => 1]);
             }
 
+            if($user->role_id == 3) {
+                $parent = User::where('id','=',$user->id)
+                    ->select('parent_id')->get();
+
+                $userParentStatus = User::where('id','=',$parent[0]['parent_id'])
+                    ->select('is_active')->get();
+
+                if($userParentStatus[0]['is_active'] == 0) {
+                    $user->is_active=0;
+                    $user->save();
+                    Session::flash('message-error','student cant be activated as its parent is deactivate !');
+                    return response()->json(['status'=>401]);
+                } else {
+                    return response()->json(['status'=>'record has been activated.']);
+                }
+
+            }
             return response()->json(['status'=>'record has been activated.']);
         }else{
             return response()->json(['status'=>403]);
