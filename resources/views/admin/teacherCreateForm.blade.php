@@ -402,7 +402,7 @@
     function userAclModule()
     {
 
-        var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_event','delete_event'];
+        var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_event','delete_event','publish_message','publish_achievement','publish_announcement','publish_timetable'];
 
         $('div#loadmoreajaxloader').show();
         var route='user-module-acl';
@@ -593,7 +593,7 @@
 
             $('.announcement').change(function(){
 
-                if($.inArray(this.id,["create_announcement"]) !== -1)
+                if($.inArray(this.id,["create_announcement","update_announcement","delete_announcement"]]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.announcement').each(function() {
@@ -623,7 +623,7 @@
 
             $('.achievement').change(function(){
 
-                if($.inArray(this.id,["create_achievement"]) !== -1)
+                if($.inArray(this.id,["create_achievement","update_achievement","delete_achievement"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.achievement').each(function() {
