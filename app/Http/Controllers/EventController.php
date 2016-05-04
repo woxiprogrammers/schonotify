@@ -349,14 +349,12 @@ class EventController extends Controller
     public function deleteEvent(Requests\WebRequests\DeleteEventRequest $request,$id)
     {
 
-        if($request->authorize() === true)
-        {
+        $delete = Event::join('event_images','events.id','=','event_images.event_id')->where('events.id','=',$id)->first();
 
-            $delete = Event::join('event_images','events.id','=','event_images.event_id')->where('events.id','=',$id)->first();
-
+        if($delete->created_by == Auth::User()->id) {
             if($delete->image != "" || $delete->image != null) {
 
-                       unlink('uploads/events/'.$delete->image);
+                unlink('uploads/events/'.$delete->image);
 
             }
 
@@ -365,9 +363,26 @@ class EventController extends Controller
 
             Session::flash('message-success','Event deleted successfully !');
             return 1;
-        }else{
-            return 0;
+        } else {
+            if($request->authorize() === true)
+            {
+
+                if($delete->image != "" || $delete->image != null) {
+
+                    unlink('uploads/events/'.$delete->image);
+
+                }
+
+                EventImages::where('event_id',$delete->id)->delete();
+                Event::where('id','=',$id)->delete();
+
+                Session::flash('message-success','Event deleted successfully !');
+                return 1;
+            }else{
+                return 0;
+            }
         }
+
     }
 
     /*

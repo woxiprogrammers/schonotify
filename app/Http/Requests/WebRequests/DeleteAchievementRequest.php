@@ -38,7 +38,7 @@ class DeleteAchievementRequest extends Request
                 if(in_array('delete_achievement',$resultArr)) {
                     return true;
                 } else {
-                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+
                     return Redirect::back();
                 }
                 break;
