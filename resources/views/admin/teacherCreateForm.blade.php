@@ -593,7 +593,7 @@
 
             $('.announcement').change(function(){
 
-                if($.inArray(this.id,["create_announcement","update_announcement","delete_announcement"]]) !== -1)
+                if($.inArray(this.id,["create_announcement","update_announcement","delete_announcement"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.announcement').each(function() {
