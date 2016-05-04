@@ -1844,8 +1844,10 @@
 
         public function checkPublishAchievementAcl(PublishAchievementRequest $request,$id)
         {
-            if($request->authorize() === true)
-            {
+
+            $event = Event::find($id);
+
+            if($event->created_by == Auth::User()->id) {
 
                 if(Auth::User()->role_id == 1)
                 {
@@ -1871,7 +1873,37 @@
                 return Redirect::to('/detail-announcement/'.$id);
 
             } else {
-                return Redirect::to('/detail-announcement/'.$id);
+
+                if($request->authorize() === true)
+                {
+
+                    if(Auth::User()->role_id == 1)
+                    {
+                        $achievement = Event::find($id);
+                        $achievement->published_by = Auth::User()->id;
+                        $achievement->status = 2;
+
+                        $achievement->save();
+
+                        Session::flash('message-success','Achievement published successfully !');
+
+                    } else {
+
+                        $achievement = Event::find($id);
+                        $achievement->status = 1;
+
+                        $achievement->save();
+
+                        Session::flash('message-success','Achievement sent for publish successfully !');
+
+                    }
+
+                    return Redirect::to('/detail-announcement/'.$id);
+
+                } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::to('/detail-announcement/'.$id);
+                }
             }
         }
 
@@ -1887,8 +1919,10 @@
 
         public function checkPublishAnnouncementAcl(PublishAnnouncementRequest $request,$id)
         {
-            if($request->authorize() === true)
-            {
+
+            $event = Event::find($id);
+
+            if($event->created_by == Auth::User()->id) {
 
                 if(Auth::User()->role_id == 1)
                 {
@@ -1913,8 +1947,39 @@
                 return Redirect::back();
 
             } else {
-                return Redirect::back();
+
+                if($request->authorize() === true)
+                {
+
+                    if(Auth::User()->role_id == 1)
+                    {
+                        $announcement = Event::find($id);
+                        $announcement->status = 2;
+
+                        $announcement->save();
+
+                        Session::flash('message-success','Announcement published successfully !');
+
+                    } else {
+
+                        $announcement = Event::find($id);
+                        $announcement->status = 1;
+
+                        $announcement->save();
+
+                        Session::flash('message-success','Announcement sent for publish successfully !');
+
+                    }
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::back();
+
+                } else {
+                    return Redirect::back();
+                }
+
             }
+
+
         }
 
         /*
@@ -2246,8 +2311,10 @@
 
         public function deleteAnnouncement(DeleteAnnouncementRequest $request,$id)
         {
-            if($request->authorize() === true) {
 
+            $event = Event::find($id);
+
+            if($event->created_by == Auth::User()->id) {
                 EventUserRoles::where('event_id','=',$id)->delete();
 
                 Event::where('id','=',$id)->delete();
@@ -2255,10 +2322,24 @@
                 Session::flash('message-success','Announcement deleted successfully !');
 
                 return Redirect::to('noticeBoard');
-
             } else {
-                return Redirect::back();
+                if($request->authorize() === true) {
+
+                    EventUserRoles::where('event_id','=',$id)->delete();
+
+                    Event::where('id','=',$id)->delete();
+
+                    Session::flash('message-success','Announcement deleted successfully !');
+
+                    return Redirect::to('noticeBoard');
+
+                } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::back();
+                }
             }
+
+
         }
 
         /*
@@ -2272,17 +2353,16 @@
 
         public function deleteAchievement(DeleteAchievementRequest $request,$id)
         {
-            if($request->authorize() === true) {
+            $event = Event::find($id);
 
-                //EventImages::where('event_id','=',$id)->delete();
-
+            if($event->created_by == Auth::User()->id) {
                 $filename = "uploads/achievement/events/".$id."/";
 
                 $path = public_path($filename);
 
                 if(file_exists($path))
                 {
-                     $this::removeEmptySubFolders($path);
+                    $this::removeEmptySubFolders($path);
                 }
 
                 Event::where('id','=',$id)->delete();
@@ -2290,10 +2370,32 @@
                 Session::flash('message-success','Achievement deleted successfully !');
 
                 return Redirect::to('noticeBoard');
-
             } else {
-                return Redirect::back();
+                if($request->authorize() === true) {
+
+                    //EventImages::where('event_id','=',$id)->delete();
+
+                    $filename = "uploads/achievement/events/".$id."/";
+
+                    $path = public_path($filename);
+
+                    if(file_exists($path))
+                    {
+                        $this::removeEmptySubFolders($path);
+                    }
+
+                    Event::where('id','=',$id)->delete();
+
+                    Session::flash('message-success','Achievement deleted successfully !');
+
+                    return Redirect::to('noticeBoard');
+
+                } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::back();
+                }
             }
+
         }
 
 
