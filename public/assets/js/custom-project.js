@@ -38,7 +38,7 @@ function doListing(id) {
         }
 
         $('#chat-history').html(str);
-        $('#fixId').show();
+        $('#fixId').fadeIn();
         $(".perfect-scrollbar").scrollTop( $( '#chat-history').prop( "scrollHeight" ) );
         $(".perfect-scrollbar").perfectScrollbar('update');
         getMsgCount();
@@ -66,7 +66,6 @@ $('#send-msg').click(function() {
 
     var val = $('#chat-history').find('input[type=hidden]:first').val();
     var description = $('#description').val();
-
     var route='/send-message';
     $.post(route,{id:val,description:description},function(res){
         var str="";
@@ -94,9 +93,11 @@ $('#send-msg').click(function() {
             }
         }
         $('#chat-history').html(str);
+
         $(".perfect-scrollbar").scrollTop( $( '#chat-history').prop( "scrollHeight" ) );
         $(".perfect-scrollbar").perfectScrollbar('update');
         toggle();
+        $('#fixId').fadeIn();
         $('#description').val('');
         $('#send-msg').hide();
     });
@@ -531,8 +532,8 @@ function leaveCount()
     });
 }
 
-$('#backChat').click(function(){
-    $('#fixId').hide();
+$('#backChat').on('click',function(){
+    $('#fixId').fadeOut();
 });
 
 $('body').click(function(){

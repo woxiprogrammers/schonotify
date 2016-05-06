@@ -316,9 +316,10 @@ class TimetableController extends Controller
 
     public function getSubjects($id)
     {
-        $subjects = SubjectClassDivision::where('division_id','=',$id)
+        $subjects = SubjectClassDivision::where('division_subjects.division_id','=',$id)
             ->join('subjects','subjects.id','=','division_subjects.subject_id')
-            ->select('subjects.subject_name','division_subjects.id')
+            ->join('users','users.id','=','division_subjects.teacher_id')
+            ->select('subjects.subject_name','division_subjects.id','users.username')
             ->get();
 
         return $subjects;
@@ -339,7 +340,7 @@ class TimetableController extends Controller
             ->join('subjects','subjects.id','=','division_subjects.subject_id')
             ->join('users','users.id','=','division_subjects.teacher_id')
             ->where('users.is_active','=',1)
-            ->select('subjects.subject_name','division_subjects.id')
+            ->select('subjects.subject_name','division_subjects.id','users.username')
             ->get();
 
         return $subjects;
