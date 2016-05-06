@@ -248,7 +248,7 @@ class AttendanceController extends Controller
                         Attendance::where('date',$data['date'])->delete();
                         $status = 200;
                         $message = "Attendance Successfully updated";
-                        if($studentData[0]!=null) {
+                        if(sizeof($studentData) > 0) {
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];
@@ -260,7 +260,7 @@ class AttendanceController extends Controller
                             }
                         }
                     } else {
-                        if($studentData[0]!=null) {
+                        if(sizeof($studentData) > 0) {
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];
