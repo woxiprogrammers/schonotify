@@ -334,6 +334,7 @@
                         </div>
 
                     </div>
+                    <div id="temp"></div>
 
                 </div>
 
@@ -572,7 +573,7 @@ function showTimetable(val)
 
         var arr = $.map(obj, function(value, index) {
 
-            return [value]
+            return [value];
 
         });
 
@@ -592,7 +593,7 @@ function showTimetable(val)
                 var subjects = "";
                 for( var i = 0; i < res.length; i++ )
                 {
-                    subjects += "<option value='"+res[i]['id']+"'>"+res[i]['subject_name']+"</option>";
+                    subjects += "<option value='"+res[i]['id']+"'>"+res[i]['subject_name']+" ("+res[i]['username']+")</option>";
                 }
 
                 $('#subject-edit-copy-structure').html(subjects);
