@@ -587,7 +587,7 @@ class HomeworkController extends Controller
                     ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
                     ->Join('users as teacher' ,'homework_teacher.teacher_id', '=', 'teacher.id')
                     ->where('homework_teacher.division_id','=',$division['id'])
-                    ->where('homeworks.status','=',1)//1 is for published homework
+//                    ->where('homeworks.status','=',2)//2 is for published homework
                     ->where('homeworks.is_active','=',1)//0 is for deleted homework
                     ->groupBy('homework_teacher.homework_id')
                     ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','homework_types.id as id ','users.first_name as first_name','users.last_name as last_name','users.id as userId','subjects.slug as subjectName','subjects.id as subject_id','homeworks.status','divisions.division_name','divisions.id as division_id','classes.class_name','classes.id as class_id','homeworks.created_at','batches.name as batch_name','batches.id as batch_id','teacher.first_name','teacher.last_name');
@@ -600,7 +600,7 @@ class HomeworkController extends Controller
                     ->Join('users as teacher' ,'homework_teacher.teacher_id', '=', 'teacher.id')
                     ->Join('batches', 'classes.batch_id', '=', 'batches.id')
                     ->where('homework_teacher.teacher_id','=',$data['teacher']['id'])
-                    ->where('homeworks.status','=',1) //0 is for unpublished homework
+                    ->wherein('homeworks.status',[0,2]) //2 is for published homework
                     ->where('homeworks.is_active','=',1)//0 is for deleted homework
                     ->union($homeworkListingClassTeacher)
                     ->groupBy('homework_teacher.homework_id')
@@ -623,7 +623,7 @@ class HomeworkController extends Controller
                             ->Join('users as teacher' ,'homework_teacher.teacher_id', '=', 'teacher.id')
                             ->where('homeworks.subject_id','=',$value['subject_id'])
                             ->where('homework_teacher.division_id','=',$value['division_id'])
-                            ->where('homeworks.status','=',1)//1 is for published homework
+//                            ->where('homeworks.status',[1,2])//2 is for published homework
                             ->where('homeworks.is_active','=',1)//0 is for deleted homework
                             ->groupBy('homework_teacher.homework_id')
                             ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','homework_types.id as id ','users.first_name as first_name','users.last_name as last_name','users.id as userId','subjects.slug as subjectName','subjects.id as subject_id','homeworks.status','divisions.division_name','divisions.id as division_id','classes.class_name','classes.id as class_id','homeworks.created_at','batches.name as batch_name','batches.id as batch_id','teacher.first_name as teacher_name')
@@ -871,7 +871,7 @@ class HomeworkController extends Controller
                 ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
                 ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
                 ->where('homework_teacher.student_id','=',$student_id)
-                ->where('homeworks.status','=',1)//parent ca n see published homework ony
+                ->where('homeworks.status','=',2)//parent ca n see published homework ony
                 ->where('homeworks.is_active','=',1)//0 is for deleted homework
                 ->select('homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','batches.name','homeworks.created_at')
                 ->get()->toarray();

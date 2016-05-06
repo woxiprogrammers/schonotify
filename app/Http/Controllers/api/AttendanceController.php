@@ -233,6 +233,7 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
+
             $status = 200;
             $message = "Attendance Successfully Marked";
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
@@ -244,7 +245,7 @@ class AttendanceController extends Controller
                     $markedAttendance = Attendance::where('teacher_id','=',$data['teacher']['id'])
                         ->where('date','=',$data['date'])->get()->toArray();
                     if (!Empty($markedAttendance)) {
-                        Attendance::where('date',$data['date'])->delete();
+                        Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                         $status = 200;
                         $message = "Attendance Successfully updated";
 
@@ -284,7 +285,7 @@ class AttendanceController extends Controller
                     }
                 } else {
 
-                    Attendance::where('date',$data['date'])->delete();
+                    Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                     $status = 200;
                     $message = "Attendance Successfully updated";
 
