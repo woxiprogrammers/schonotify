@@ -1970,10 +1970,11 @@
                         Session::flash('message-success','Announcement sent for publish successfully !');
 
                     }
-                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+
                     return Redirect::back();
 
                 } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::back();
                 }
 
