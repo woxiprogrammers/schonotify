@@ -207,18 +207,26 @@
                            Attendance::insert($saveData);
                         $i++;
                     }
+
             $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
-            $attendanceStatus['division_id'] = $request['division-select'];
-            $attendanceStatus['status'] = 1;
-            $attendanceStatus['created_at'] = Carbon::now();
-            $attendanceStatus['updated_at'] = Carbon::now();
-            $result=AttendanceStatus::insert($attendanceStatus);
-            if($result==true)
-            {
-                return "1";
-            }else{
+
+            $attendance = AttendanceStatus::where('date','=',$attendanceStatus['date'])->where('division_id','=',$request['division-select'])->get();
+            if(sizeOf($attendance) == 0) {
+                $attendanceStatus['division_id'] = $request['division-select'];
+                $attendanceStatus['status'] = 1;
+                $attendanceStatus['created_at'] = Carbon::now();
+                $attendanceStatus['updated_at'] = Carbon::now();
+                $result=AttendanceStatus::insert($attendanceStatus);
+                if($result==true)
+                {
+                    return "1";
+                }else{
+                    return "0";
+                }
+            } else {
                 return "0";
             }
+
         }
         /**
          * Function Name: getAllClasses
