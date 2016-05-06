@@ -254,6 +254,7 @@ class AttendanceController extends Controller
                                 $attendanceData['date'] = $data['date'];
                                 $attendanceData['division_id'] = $role['id'];
                                 $attendanceData['student_id'] = $value;
+                                $attendanceData['status'] = 1;
                                 $attendanceData['created_at'] = Carbon::now();
                                 $attendanceData['updated_at'] = Carbon::now();
                                 Attendance::insert($attendanceData);
@@ -266,6 +267,7 @@ class AttendanceController extends Controller
                                 $attendanceData['date'] = $data['date'];
                                 $attendanceData['division_id'] = $role['id'];
                                 $attendanceData['student_id'] = $value;
+                                $attendanceData['status'] = 1;
                                 $attendanceData['created_at'] = Carbon::now();
                                 $attendanceData['updated_at'] = Carbon::now();
                                 Attendance::insert($attendanceData);
