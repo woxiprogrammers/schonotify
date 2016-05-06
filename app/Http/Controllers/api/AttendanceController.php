@@ -233,6 +233,7 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
+            Log::info($data);
             $status = 200;
             $message = "Attendance Successfully Marked";
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
@@ -367,12 +368,11 @@ class AttendanceController extends Controller
                         $status = 200;
                         $message = "All students present on this day";
                     }
-                    $markedAttendance = Attendance::where('teacher_id','=',$data['teacher']['id'])
-                        ->where('date','=',$data['date'])
+                    $markedAttendance = Attendance::where('date','=',$data['date'])
                         ->lists('student_id')->toArray();
                     $finalList['absentList'] = $markedAttendance;
                 }else {
-                    $status = 404;
+                    $status = 406;
                     $message = "Sorry!! Only class teacher can edit attendance";
                 }
                 $finalList['divisionName'] = $divisionId['division_name'];
