@@ -545,7 +545,7 @@ class HomeworkController extends Controller
     public function publishHomeWork(Requests\PublishRequest $request)
     {
         try{
-            $homework_id= Homework::where('id',$request->homework_id)->update(array('status'=>1));
+            $homework_id= Homework::where('id',$request->homework_id)->update(array('status'=>2));
             $status = 200;
             $message = "Homework Published";
         }
