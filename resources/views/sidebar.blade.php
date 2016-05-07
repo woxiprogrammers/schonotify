@@ -162,7 +162,6 @@
             </div>
             <div class="item-inner">
                 <span class="title"> Notice Board </span>
-                <span class="badge pull-right">9</span>
             </div>
         </div>
     </a>
