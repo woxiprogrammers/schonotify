@@ -261,7 +261,7 @@
 
             var allModAclArr=res['allModAclArr'];
 
-            var disableModules = ['create_homework','view_homework','update_homework','delete_homework','publish_homework','publish_user','create_message','view_message','update_message','publish_message','delete_message','publish_attendance','delete_attendance','delete_subject','update_subject','publish_subject','delete_class','update_class','publish_class','publish_timetable'];
+            var disableModules = ['create_homework','view_homework','update_homework','delete_homework','publish_homework','publish_user','create_message','view_message','update_message','publish_message','delete_message','publish_attendance','delete_attendance','delete_subject','update_subject','publish_subject','delete_class','update_class','publish_class','publish_timetable','create_leave','update_leave','delete_leave'];
 
             var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
@@ -608,6 +608,36 @@
                     }
                 } else if($(this).prop('checked') == false && this.id == "view_event") {
                     $('.event').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Leave///////////
+
+            $('.leave').change(function(){
+
+                if($.inArray(this.id,["publish_leave"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.leave').each(function() {
+
+                            this.checked = true;
+
+                        });
+                    } else {
+                        $('.leave').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_leave") {
+                    $('.leave').each(function() {
 
                         this.checked = false;
 

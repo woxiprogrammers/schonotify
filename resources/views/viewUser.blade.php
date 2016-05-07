@@ -459,7 +459,8 @@
                                 </div>
                                 @endif
 
-                                <input type="hidden" id="valHiddenId" @if($user->role_id != 3) value="{!! $user->id !!} @else value="{!! $user->parentUserId !!} @endif">
+                                <input type="hidden" id="valHiddenId" @if($user->role_id != 3) value="{!! $user->id !!}" @else value="{!! $user->parentUserId !!}" @endif>
+                                <input type="hidden" id="valHiddenRoleId" @if($user->role_id != 3) value="{!! $user->role_id !!}" @else value="4" @endif>
                             </div>
                         </div>
                     </div>
@@ -522,6 +523,18 @@
 
         var valHiddenId = $('#valHiddenId').val();
 
+        var roleId = $('#valHiddenRoleId').val();
+
+        if(roleId == 1) {
+            var disableModules = ['create_homework','view_homework','update_homework','delete_homework','publish_homework','publish_user','create_message','view_message','update_message','publish_message','delete_message','publish_attendance','delete_attendance','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_timetable','create_leave','update_leave','delete_leave'];
+        } else if(roleId == 2) {
+            var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_event','delete_event','publish_message','publish_achievement','publish_announcement','publish_timetable','publish_timetable'];
+        } else if(roleId == 3) {
+            var disableModules = ['create_timetable','update_timetable','delete_timetable','publish_timetable','create_user','view_user','update_user','delete_user','publish_user','delete_homework','publish_homework','update_homework','create_homework','delete_user','update_message','delete_message','publish_message','delete_leave','update_leave','publish_leave','publish_attendance','update_attendance','delete_attendance','create_attendance','update_announcement','delete_announcement','publish_announcement','create_announcement','delete_achievement','create_achievement','publish_achievement','update_achievement','create_subject','view_subject','update_subject','publish_subject','delete_subject','create_class','publish_class','view_class','delete_class','update_class','create_event','update_event','publish_event','delete_event'];
+        } else if(roleId == 4) {
+            var disableModules = ['create_timetable','update_timetable','delete_timetable','publish_timetable','create_user','view_user','update_user','delete_user','publish_user','delete_homework','publish_homework','update_homework','create_homework','delete_user','update_message','delete_message','publish_message','delete_leave','update_leave','publish_leave','publish_attendance','update_attendance','delete_attendance','create_attendance','update_announcement','delete_announcement','publish_announcement','create_announcement','delete_achievement','create_achievement','publish_achievement','update_achievement','create_subject','view_subject','update_subject','publish_subject','delete_subject','create_class','publish_class','view_class','delete_class','update_class','create_event','update_event','publish_event','delete_event'];
+        }
+
         var route='/user-module-acl-edit/'+valHiddenId;
         $.get(route,function(res){
 
@@ -561,16 +574,20 @@
                 {
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
+                        {
 
-                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                    {
-
-                        str+='<input type="checkbox" disabled id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
-                    }else{
-                        str+='<input type="checkbox" disabled id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
-                            '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                            str+='<input type="checkbox" disabled id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }else{
+                            str+='<input type="checkbox" disabled id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
+                                '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                        }
+                    } else {
+                        str += '--';
                     }
+
                     str+='</div>'+
                         '</td>';
                 }
