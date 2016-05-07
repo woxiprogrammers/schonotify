@@ -1104,7 +1104,7 @@ class ModulesAclsTableSeeder extends Seeder
                 'acl_id' => '4',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
-            ],
+            ]
             
         ]);
     }
