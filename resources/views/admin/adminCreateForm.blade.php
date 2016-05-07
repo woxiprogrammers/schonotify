@@ -334,7 +334,7 @@
 
         var clickBehaviorModules = ['create_homework'];
 
-        var disableModules = ['create_homework','view_homework','update_homework','delete_homework','publish_homework','publish_user','create_message','view_message','update_message','publish_message','delete_message','publish_attendance','delete_attendance','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class'];
+        var disableModules = ['create_homework','view_homework','update_homework','delete_homework','publish_homework','publish_user','create_message','view_message','update_message','publish_message','delete_message','publish_attendance','delete_attendance','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_timetable'];
 
         $('div#loadmoreajaxloader').show();
         var route='user-module-acl';
