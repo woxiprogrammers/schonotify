@@ -487,7 +487,7 @@ use Carbon\Carbon;
                 'parent_id' => '0',
                 'roll_number' => '0',
                 'emp_type' => 'full_type',
-                'division_id' => 0,
+                'division_id' => 1,
                 'is_active' => 1,
                 'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
