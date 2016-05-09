@@ -358,23 +358,49 @@
 
             $('.announcement').change(function(){
 
-                if($.inArray(this.id,["create_announcement","update_announcement","delete_announcement","publish_announcement"]) !== -1)
+                if($.inArray(this.id,["update_announcement","create_announcement"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
+                        var checkId = this.id;
+
                         $('.announcement').each(function() {
 
-                            this.checked = true;
+                            if(this.id == "view_announcement") {
+                                this.checked = true;
+                            }
 
+                            if(this.id == "update_announcement" && checkId != "update_announcement") {
+                                this.checked = true;
+                            }
+
+                            if(this.id == "create_announcement" && checkId != "create_announcement") {
+                                this.checked = true;
+                            }
+
+                        });
+                    } else if($.inArray(this.id,["delete_announcement","publish_announcement"]) !== -1){
+                        $('.announcement').each(function() {
+                            if(this.id == "view_announcement") {
+                                this.checked = true;
+                            }
                         });
                     } else {
                         $('.announcement').each(function() {
 
                             this.checked = false;
 
-
                         });
                     }
 
+                } else  if($.inArray(this.id,["delete_announcement","publish_announcement"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.announcement').each(function() {
+                            if(this.id == "view_announcement") {
+                                this.checked = true;
+                            }
+                        });
+                    }
                 } else if($(this).prop('checked') == false && this.id == "view_announcement") {
                     $('.announcement').each(function() {
 
@@ -385,27 +411,54 @@
 
             });
 
+
             /////////////////////Achievement///////////
 
             $('.achievement').change(function(){
 
-                if($.inArray(this.id,["create_achievement","update_achievement","delete_achievement","publish_achievement"]) !== -1)
+                if($.inArray(this.id,["update_achievement","create_achievement"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
+                        var checkId = this.id;
+
                         $('.achievement').each(function() {
 
-                            this.checked = true;
+                            if(this.id == "view_achievement") {
+                                this.checked = true;
+                            }
 
+                            if(this.id == "update_achievement" && checkId != "update_achievement") {
+                                this.checked = true;
+                            }
+
+                            if(this.id == "create_achievement" && checkId != "create_achievement") {
+                                this.checked = true;
+                            }
+
+                        });
+                    } else if($.inArray(this.id,["delete_achievement","publish_achievement"]) !== -1){
+                        $('.achievement').each(function() {
+                            if(this.id == "view_event") {
+                                this.checked = true;
+                            }
                         });
                     } else {
                         $('.achievement').each(function() {
 
                             this.checked = false;
 
-
                         });
                     }
 
+                } else  if($.inArray(this.id,["delete_achievement","publish_achievement"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.achievement').each(function() {
+                            if(this.id == "view_achievement") {
+                                this.checked = true;
+                            }
+                        });
+                    }
                 } else if($(this).prop('checked') == false && this.id == "view_achievement") {
                     $('.achievement').each(function() {
 
@@ -415,6 +468,7 @@
                 }
 
             });
+
 
             /////////////////////Attendance///////////
 

@@ -43,6 +43,7 @@ class AttendanceController extends Controller
             $data = $requests->all();
             $division = array();
             $batchInfo = array();
+            $finalBatchInfo = array();
             $classes = array();
             $divisionArray = array();
             $k = 0;
@@ -262,7 +263,7 @@ class AttendanceController extends Controller
                             }
                         }
                     } else {
-                        if(sizeof($studentData) > 0) {
+                        if(isset($studentData[0]) == true && $studentData[0] != "") {
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];

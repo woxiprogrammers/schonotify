@@ -68,6 +68,7 @@
                                 <input type="hidden" name="hiddenEventId" id="hiddenEventId">
                                 <div class="modal-body">
                                     <div id="editEvent">
+                                        <div id="error-edit-div1"></div>
                                         <div class="form-group ">
                                             <div id="error-div"></div>
                                             <h4>Event</h4>
