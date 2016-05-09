@@ -317,7 +317,11 @@ class UsersController extends Controller
             $userData->role_id = $data['role'];
             $userData->avatar = 'default-user.jpg';
             $userData->is_active = 0;
-            $userData->remember_token = csrf_token();
+            
+            if($data['role_name'] != 'student') {
+                $userData->remember_token = csrf_token();
+            }
+
             $userData->confirmation_code = str_random(30);
             $userData->body_id = $user->body_id;
             $userData->created_at = Carbon::now();
