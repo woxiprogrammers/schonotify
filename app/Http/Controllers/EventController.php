@@ -394,69 +394,71 @@ class EventController extends Controller
      +   * Date: 15/3/2016
      +   */
 
-    public function saveEditEvent(Request $request)
+    public function saveEditEvent(Requests\WebRequests\EditEventRequest $request)
     {
+        if($request->authorize()) {
+            $endDate = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
 
-        $endDate = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
+            $event = Event::join('event_images','event_images.event_id','=','events.id')->where('events.id','=',$request->hiddenEventId)->first();
 
-        $event = Event::join('event_images','event_images.event_id','=','events.id')->where('events.id','=',$request->hiddenEventId)->first();
+            $eventImage = EventImages::where('event_id','=',$request->hiddenEventId)->first();
 
-        $eventImage = EventImages::where('event_id','=',$request->hiddenEventId)->first();
+            $eventToUpdate = Event::where('id','=',$request->hiddenEventId)->first();
 
-        $eventToUpdate = Event::where('id','=',$request->hiddenEventId)->first();
-
-        if($request->isNewImage == 1)
-        {
-            if($request->hasFile('image'))
+            if($request->isNewImage == 1)
             {
-
-                if($event->image != null)
+                if($request->hasFile('image'))
                 {
+
+                    if($event->image != null)
+                    {
+                        unlink('uploads/events/'.$event->image);
+                    }
+
+                    $image = $request->file('image');
+                    $name = $request->file('image')->getClientOriginalName();
+                    $filename = time()."_".$name;
+                    $path = public_path('uploads/events/');
+                    if (! file_exists($path)) {
+                        File::makeDirectory('uploads/events/', $mode = 0777, true, true);
+                    }
+
+                    $image->move($path,$filename);
+
+                    //update image
+                } else {
+
                     unlink('uploads/events/'.$event->image);
+                    $filename = null;
+                    //delete existing image
                 }
 
-                $image = $request->file('image');
-                $name = $request->file('image')->getClientOriginalName();
-                $filename = time()."_".$name;
-                $path = public_path('uploads/events/');
-                if (! file_exists($path)) {
-                    File::makeDirectory('uploads/events/', $mode = 0777, true, true);
-                }
-
-                $image->move($path,$filename);
-
-                //update image
-            } else {
-
+            }else if($request->isNewImage == 2) {
+                //delete existing image
                 unlink('uploads/events/'.$event->image);
                 $filename = null;
-                //delete existing image
+
+            } else {
+
+                $filename = $eventImage->image;
+                //no change in image
             }
 
-        }else if($request->isNewImage == 2) {
-            //delete existing image
-            unlink('uploads/events/'.$event->image);
-            $filename = null;
+            $eventImage->image = $filename;
+            $eventImage->updated_at = Carbon::now();
+            $eventImage->save();
 
-        } else {
+            $eventToUpdate->title = $request->eventName;
+            $eventToUpdate->detail = $request->eventDescription;
+            $eventToUpdate->start_date = date_format(date_create($request->eventStartDate),'Y-m-d H:i:s');
+            $eventToUpdate->end_date = $endDate;
+            $eventToUpdate->updated_at = Carbon::now();
+            $eventToUpdate->save();
 
-            $filename = $eventImage->image;
-            //no change in image
+            Session::flash('message-success','Event updated successfully !');
+            return 1;
+
         }
-
-        $eventImage->image = $filename;
-        $eventImage->updated_at = Carbon::now();
-        $eventImage->save();
-
-        $eventToUpdate->title = $request->eventName;
-        $eventToUpdate->detail = $request->eventDescription;
-        $eventToUpdate->start_date = date_format(date_create($request->eventStartDate),'Y-m-d H:i:s');
-        $eventToUpdate->end_date = $endDate;
-        $eventToUpdate->updated_at = Carbon::now();
-        $eventToUpdate->save();
-
-        Session::flash('message-success','Event updated successfully !');
-        return 1;
 
     }
 }

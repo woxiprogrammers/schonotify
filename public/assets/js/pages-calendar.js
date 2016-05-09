@@ -740,6 +740,22 @@ var Calendar = function() {"use strict";
                 if(data==1){
                     window.location.href="/event/1";
                 }
+            },
+            error: function(data){
+                // Error...
+                var errors = $.parseJSON(data.responseText);
+
+                var errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                $.each( errors, function( key, value ) {
+                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                });
+                errorsHtml += '</ul></di>';
+
+                $('#error-edit-div1').html(errorsHtml);
+
+                $('#saveEdit').prop('disabled',false);
+                $('#loadmoreajaxloader').hide();
             }
         });
     }
