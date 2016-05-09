@@ -59,6 +59,7 @@ class MessageController extends Controller
             $message['user_id'] = $messageList['is_active'];
             $message['first_name'] = $messageList['first_name'];
             $message['last_name'] = $messageList['last_name'];
+            $message['is_active'] = $messageList['is_active'];
             array_push($messagesLists,$message);
         }
         return $messagesLists;
