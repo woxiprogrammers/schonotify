@@ -5,11 +5,10 @@ namespace App\Http\Requests\WebRequests;
 use App\Http\Requests\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 
-class EventRequest extends Request
+class EventPublishRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -39,44 +38,24 @@ class EventRequest extends Request
         {
             case 'GET':
 
-                if(in_array('view_event',$resultArr)) {
+                if(in_array('publish_event',$resultArr)) {
                     return true;
                 } else {
-
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
 
-            break;
-
-            case 'PUT':
-
+                break;
+            case 'POST':
+                if(in_array('publish_event',$resultArr)) {
+                    return true;
+                } else {
+                    Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
+                    return Redirect::to('/');
+                }
                 break;
 
-            case 'POST':
-                $request = Input::all();
-
-                if($request['hiddenField'] == "Publish") {
-                    if(in_array('publish_event',$resultArr)) {
-                        return true;
-                    } else {
-
-                        Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
-                        return Redirect::to('/');
-                    }
-                } else {
-                    if(in_array('create_event',$resultArr)) {
-                        return true;
-                    } else {
-
-                        Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
-                        return Redirect::to('/');
-                    }
-                }
-
-
-                    break;
-             default:break;
+            default:break;
         }
 
     }
@@ -88,7 +67,6 @@ class EventRequest extends Request
      */
     public function rules()
     {
-
         if(Request::method()=="POST")
         {
             return [
