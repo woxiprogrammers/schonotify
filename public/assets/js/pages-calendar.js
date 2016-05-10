@@ -625,9 +625,8 @@ var Calendar = function() {"use strict";
             type: 'POST',
             success: function(data){
 
-                if(data==1){
-                    window.location.href="/event/1";
-                }
+                window.location.href="/event/1";
+
                 $('.events-modal').modal('hide');
             },
             error: function(data){

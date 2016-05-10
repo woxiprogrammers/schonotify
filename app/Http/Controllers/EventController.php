@@ -67,7 +67,7 @@ class EventController extends Controller
     public function saveEvent(Requests\WebRequests\EventRequest $request)
     {
 
-        if($request->authorize()){
+        if($request->authorize() === true){
 
             $user=Auth::User();
 
@@ -142,9 +142,12 @@ class EventController extends Controller
 
             }
 
+        } else {
+            return 0;
         }
 
     }
+
 
     /*
          +   * Function Name: publishEditEvent
@@ -155,40 +158,69 @@ class EventController extends Controller
          +   * Date: 13/3/2016
          +   */
 
-    public function publishEditEvent(Requests\WebRequests\EventCreateRequest $request,$id)
+    public function publishEditEvent(Requests\WebRequests\EventPublishRequest $request,$id)
     {
         $user=Auth::User();
 
-        if($request->authorize() === true) {
+        $publish=Event::find($id);
 
-            $publish=Event::find($id);
+         if($publish->created_by == $user->id) {
 
-            if($user->role_id != 1) {
+             if($user->role_id != 1) {
 
-                $publish->published_by = 0;
+                 $publish->published_by = 0;
 
-                $publish->status = 1;
+                 $publish->status = 1;
 
-            } else {
-                $publish->published_by = $user->id;
-                $publish->status = 2;
-            }
+             } else {
+                 $publish->published_by = $user->id;
+                 $publish->status = 2;
+             }
 
-            $publish->updated_at = Carbon::now();
+             $publish->updated_at = Carbon::now();
 
-            $publish->save();
+             $publish->save();
 
-            if($user->role_id != 1)
-            {
-                Session::flash('message-success','Event sent for publish successfully !');
-                return 1;
-            } else {
-                Session::flash('message-success','Event published successfully !');
-                return 1;
-            }
+             if($user->role_id != 1)
+             {
+                 Session::flash('message-success','Event sent for publish successfully !');
+                 return 1;
+             } else {
+                 Session::flash('message-success','Event published successfully !');
+                 return 1;
+             }
+
+         } else {
+
+             if($request->authorize() === true) {
+
+                 if($user->role_id != 1) {
+
+                     $publish->published_by = 0;
+
+                     $publish->status = 1;
+
+                 } else {
+                     $publish->published_by = $user->id;
+                     $publish->status = 2;
+                 }
+
+                 $publish->updated_at = Carbon::now();
+
+                 $publish->save();
+
+                 if($user->role_id != 1)
+                 {
+                     Session::flash('message-success','Event sent for publish successfully !');
+                     return 1;
+                 } else {
+                     Session::flash('message-success','Event published successfully !');
+                     return 1;
+                 }
 
 
-        }
+             }
+         }
 
     }
 
