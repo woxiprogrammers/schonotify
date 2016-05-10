@@ -128,7 +128,7 @@
             </div>
                 <div class="col-md-12 form-group">
 
-                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save">
+                        <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save" id="saveSubmit">
                             <span class="">Save</span>
                             </button>
                         <button class="btn btn-primary btn-wide pull-right" type="submit" id="btnSubmit" name="buttons" value="publish">
@@ -195,11 +195,6 @@
     });
 
 
-
-   /* $('#btnSubmit').click(function(){
-        window.location.href="homeworkListing";
-    });*/
-
     $('.classFirst').change(function(){
         if($(this).prop('checked') == true)
         {
@@ -241,6 +236,8 @@
 
 
     $('#subjectsDropdown').change(function(){
+        $('#btnSubmit').attr('disabled','true');
+        $('#saveSubmit').attr('disabled','true');
         var id=this.value;
         var route='get-subject-batches/'+id;
         $.get(route,function(res){
@@ -259,6 +256,7 @@
                 str+='<option value="'+batch[i]['batch_id']+'">'+batch[i]['batch']+'</option>';
             }
             $('#batch-select').html(str);
+
             }
         });
     });
@@ -313,7 +311,8 @@
                 }
                 $('#division').html(str);
 
-
+                $('#btnSubmit').removeAttr('disabled');
+                $('#saveSubmit').removeAttr('disabled');
             }
         });
 
