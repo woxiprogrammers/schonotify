@@ -312,7 +312,11 @@
         var id=this.value;
         var route = 'get-attendance-classes/'+id;
         $('div#loadmoreajaxloaderClass').show();
-        $.get(route,function(res){
+        $.ajax({
+            url:route,
+            type:'GET',
+            async:false,
+            success: function(res){
             if (res.length == 0)
             {
                 $('#class-select').html("no record found");
@@ -326,6 +330,7 @@
                 $('#class-select').html(str);
                 $('div#loadmoreajaxloaderClass').hide();
             }
+        }
         });
     });
 
