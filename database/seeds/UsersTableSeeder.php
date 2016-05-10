@@ -57,7 +57,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => NULL,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwrkoBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -81,7 +81,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => NULL,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87hbkZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -105,7 +105,7 @@ use Carbon\Carbon;
             'emp_type' => 'full_type',
             'division_id' => NULL,
             'is_active' => 1,
-            'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+            'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZujcwBSzoEehA87RTiZDKRLfX3F',
             'confirmation_code' => str_random(30),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
@@ -129,7 +129,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjycsmqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -153,7 +153,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXhhhLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -177,7 +177,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGy2zFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -201,7 +201,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14619uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -225,7 +225,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN144uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -249,7 +249,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN214uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -273,7 +273,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4Npyab1N14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -297,7 +297,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEexzxdsA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -321,7 +321,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBS34ssshA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -345,7 +345,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzxc2hA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -369,7 +369,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 2,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBfdfdfzoEehA87RTiZDKRLfX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -393,7 +393,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 2,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKfffX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -417,7 +417,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 2,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfsdsaX3F',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -441,7 +441,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 2,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3sdsF',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -465,7 +465,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 2,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3Fxzx',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -489,7 +489,7 @@ use Carbon\Carbon;
                 'emp_type' => 'full_type',
                 'division_id' => 1,
                 'is_active' => 1,
-                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3F',
+                'remember_token' => 'jznsnrBykw4NpyabN14uRVGFFXLsjqt3c87ZuwBSzoEehA87RTiZDKRLfX3Fcx',
                 'confirmation_code' => str_random(30),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
