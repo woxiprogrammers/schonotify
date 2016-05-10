@@ -63,6 +63,7 @@
             <div class="user-left">
                 <div class="center">
                     <h4>{!! $user->name !!}</h4>
+                    <input type="hidden" id="hiddenRoleId" value="{{ $user->role_id }}">
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                         <div class="user-image">
                             <div class="fileinput-new thumbnail"><img src="uploads/profile-picture/{!! $user->avatar !!}" alt="">
@@ -388,6 +389,15 @@
 
     function userAclModule()
     {
+
+        var role = $('#hiddenRoleId').val();
+
+        if(role == 1) {
+            var disableModules = ['create_homework','view_homework','update_homework','delete_homework','publish_homework','publish_user','create_message','view_message','update_message','publish_message','delete_message','publish_attendance','delete_attendance','delete_subject','update_subject','publish_subject','delete_class','update_class','publish_class','publish_timetable','create_leave','update_leave','delete_leave'];
+        } else {
+            var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_event','delete_event','publish_message','publish_achievement','publish_announcement','publish_timetable','publish_timetable','delete_announcement','delete_achievement'];
+        }
+
         var route='user-module-acl';
         $.get(route,function(res){
 
@@ -427,6 +437,7 @@
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
 
+                    if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
 
                     if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
                     {
@@ -437,6 +448,11 @@
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1" disabled>'+
                             '<label for="checkbox"></label>';
                     }
+
+                    } else {
+                        str += "--";
+                    }
+
                     str+='</div>'+
                         '</td>';
                 }

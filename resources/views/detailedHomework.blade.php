@@ -605,6 +605,8 @@
 
 
     $('#subjectsDropdown').change(function(){
+        $('#btnSubmit').attr('disabled','true');
+        $('#btnEdit').attr('disabled','true');
         var id=this.value;
         var route='/get-subject-batches/'+id;
         $.get(route,function(res){
@@ -677,6 +679,8 @@
                         '</div>';
                 }
                 $('#division').html(str);
+                $('#btnSubmit').removeAttr('disabled');
+                $('#btnEdit').removeAttr('disabled');
                 FormElements.init();
             }
         });
