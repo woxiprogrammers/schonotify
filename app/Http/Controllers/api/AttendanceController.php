@@ -386,7 +386,7 @@ class AttendanceController extends Controller
                     $message = "Sorry!! Only class teacher can edit attendance";
                 }
                 $finalList['divisionName'] = $divisionId['division_name'];
-                $className = Classes::where('id','=',$divisionId['class_id'])->select('id','class_name')->first();
+                $className = Classes::where('id','=',$divisionId['class_id'])->select('id','class_name','batch_id')->first();
                 $finalList['className'] = $className['class_name'];
                 $batchName = Batch::where('id','=',$className['batch_id'])->pluck('name');
                 $finalList['batchName'] = $batchName;
