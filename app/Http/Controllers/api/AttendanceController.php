@@ -388,7 +388,7 @@ class AttendanceController extends Controller
                 $finalList['divisionName'] = $divisionId['division_name'];
                 $className = Classes::where('id','=',$divisionId['class_id'])->select('id','class_name')->first();
                 $finalList['className'] = $className['class_name'];
-                $batchName = Batch::where('id','=',$className['id'])->pluck('name');
+                $batchName = Batch::where('id','=',$className['batch_id'])->pluck('name');
                 $finalList['batchName'] = $batchName;
             }
         } catch (\Exception $e) {
@@ -645,8 +645,8 @@ class AttendanceController extends Controller
             $data = $request->all();
             $attendance  = array();
             $studentAttendance = array();
-            $div_id = Attendance::select('division_id')->first();
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
+            $div_id = SubjectClassDivision::where('teacher_id','=',$data['teacher']['id'])->first();
             $division = array();
             $status = 200;
             $message = "Successfully Listed";
