@@ -568,7 +568,7 @@
                 var str = "";
                 for(var i=0; i<res.length; i++)
                 {
-                   str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
+                   str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'('+res[i]['username']+')'+'</option>';
                 }
                 $('#adminList').html(str);
             }
@@ -590,7 +590,7 @@
                 var str = "";
                 for(var i=0; i<res.length; i++)
                 {
-                    str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+'</option>';
+                    str += '<option value="'+res[i]['id']+'">'+res[i]['first_name'] +' '+ res[i]['last_name']+' ('+res[i]['username']+')'+'</option>';
                 }
                 $('#teacherList').html(str);
             }

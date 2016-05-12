@@ -70,25 +70,16 @@ class ClassController extends Controller
             return 0;
         }
     }
-    public function deleteBatch(Requests\WebRequests\DeleteClassRequest $request,$id)
+    public function deleteBatch(Request $request,$id)
     {
-        if($request->authorize()===true)
+
+        Batch::where('id',$id)->delete();
+        if($request->ajax())
         {
-            Batch::where('id',$id)->delete();
-            if($request->ajax())
-            {
-                return 1;
-            }else{
-                Session::flash('message-success','Batch has been deleted.');
-                return Redirect::back();
-            }
+            return 1;
         }else{
-            if($request->ajax())
-            {
-                return 403;
-            }else{
-                return Redirect::to('/');
-            }
+            Session::flash('message-success','Batch has been deleted.');
+            return Redirect::back();
         }
 
     }
