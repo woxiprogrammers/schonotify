@@ -923,7 +923,7 @@
         public function getAllAdmins()
         {
             $user = Auth::user();
-            $adminList = User::where('role_id',1)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name')->get();
+            $adminList = User::where('role_id',1)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name','username')->get();
             return $adminList;
 
         }
@@ -941,7 +941,7 @@
         public function getAllAdminsForUpdate()
         {
             $user = Auth::user();
-            $adminList = User::where('role_id',1)->where('body_id',$user->body_id)->select('id','first_name','last_name')->get();
+            $adminList = User::where('role_id',1)->where('body_id',$user->body_id)->select('id','first_name','last_name','username')->get();
             return $adminList;
 
         }
@@ -959,7 +959,7 @@
         public function getAllTeachers()
         {
             $user = Auth::user();
-            $teacherList = User::where('role_id',2)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name')->get();
+            $teacherList = User::where('role_id',2)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name','username')->get();
             return $teacherList;
 
         }

@@ -504,7 +504,7 @@ var Calendar = function() {"use strict";
             function(value, element, params) {
 
                 if (!/Invalid|NaN/.test(new moment(value)._i)) {
-                    return new moment(value)._i > new moment($(params).val())._i;
+                    return new moment(value).unix() > new moment($(params).val()).unix();
                 }
 
                 return isNaN(value) && isNaN($(params).val())
