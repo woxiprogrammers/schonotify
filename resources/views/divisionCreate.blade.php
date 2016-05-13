@@ -125,6 +125,7 @@
     $('#division').css('text-transform','uppercase');
 
     $('#dropdown').change(function(){
+        $('#division').val("");
         $('div#loadmoreajaxloader').show();
         var route="/get-classes/"+this.value;
         $.get(route,function(res){
@@ -136,6 +137,10 @@
             $('#classDropdown').html(str);
             $('div#loadmoreajaxloader').hide();
         });
+    });
+
+    $('#classDropdown').change(function(){
+        $('#division').val("");
     });
 
 </script>

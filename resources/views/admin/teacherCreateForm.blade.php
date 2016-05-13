@@ -557,6 +557,74 @@
 
             });
 
+            /////////////////////Class///////////
+
+            $('.class').change(function(){
+
+                if($.inArray(this.id,["create_class"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.class').each(function() {
+
+                            if(this.id == "view_class") {
+
+                                this.checked = true;
+
+                            }
+
+                        });
+                    } else {
+                        $('.class').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_class") {
+                    $('.class').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
+            /////////////////////Subject///////////
+
+            $('.subject').change(function(){
+
+                if($.inArray(this.id,["create_subject"]) !== -1)
+                {
+                    if($(this).prop('checked') == true) {
+                        $('.subject').each(function() {
+
+                            if(this.id == "view_subject") {
+
+                                this.checked = true;
+
+                            }
+
+                        });
+                    } else {
+                        $('.subject').each(function() {
+
+                            this.checked = false;
+
+                        });
+                    }
+
+                } else if($(this).prop('checked') == false && this.id == "view_subject") {
+                    $('.subject').each(function() {
+
+                        this.checked = false;
+
+                    });
+                }
+
+            });
+
 
             /////////////////////Message///////////
 
