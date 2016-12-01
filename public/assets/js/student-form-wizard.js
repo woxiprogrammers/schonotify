@@ -117,13 +117,13 @@ var FormWizard = function () {
                     mobileNumber : true
                 },
 
-                schoolName:{
+                school_name:{
                     alpha: true
                 },
                 city:{
                     alpha: true
                 },
-                mediumOfInstruction:{
+                medium_of_instruction:{
                     alpha: true
                 },
                 board_examination:{
@@ -343,13 +343,13 @@ var FormWizard = function () {
                     mobileNumber : "Mobile number must be 10 digit only "
                 },
 
-                schoolName:{
+                school_name:{
                     alpha: "School Name must contain only letters"
                 },
                 city:{
                     alpha: "city must contain only letters"
                 },
-                mediumOfInstruction:{
+                medium_of_instruction:{
                     alpha: "Medium Of Instruction must contain only letters"
                 },
                 board_examination:{

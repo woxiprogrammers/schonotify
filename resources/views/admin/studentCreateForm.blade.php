@@ -592,7 +592,7 @@
                     <label  class="control-label">
                         School Name
                     </label>
-                    <input type="text" placeholder="Enter School Name" class="form-control" name="schoolName"/>
+                    <input type="text" placeholder="Enter School Name" class="form-control" name="school_name"/>
                 </div>
             </div>
             <div class="col-md-6">
@@ -618,7 +618,7 @@
                     <label class="control-label">
                         Medium of instruction
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="mediumOfInstruction"/>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="medium_of_instruction"/>
                 </div>
             </div>
         </div>
@@ -648,14 +648,24 @@
             <legend>
                 SPECIAL APTITUDE
             </legend>
-
+            <INPUT type="button" value="Add Row" onclick="addRowSpecialAptitude('dataTable')" />
+            <TABLE id="dataTable" width="350px" border="1">
+                <TR>
+                    <TD> <INPUT type="text" name="special_aptitude[]"/> </TD>
+                </TR>
+            </TABLE>
 
         </fieldset>
         <fieldset>
             <legend>
                 INTEREST / HOBBIES
             </legend>
-
+            <INPUT type="button" value="Add Row" onclick="addRow('hobbies')" />
+            <TABLE id="hobbies" width="350px" border="1">
+                <TR>
+                    <TD> <INPUT type="text" name="hobbies[]"/> </TD>
+                </TR>
+            </TABLE>
 
         </fieldset>
 
@@ -663,7 +673,12 @@
             <legend>
                 DOCUMENTS SUBMITTED
             </legend>
-
+            <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
+            <TABLE id="upload_doc" width="350px" border="1">
+                <TR>
+                    <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
+                </TR>
+            </TABLE>
 
         </fieldset>
 <div class="form-group">
@@ -838,6 +853,44 @@
             $('#parent_id').val('');
         }
     });
+
+
+
+    function addRow(tableID) {
+        var table = document.getElementById(tableID);
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+        var cell3 = row.insertCell(0);
+        var element2 = document.createElement("input");
+        element2.type = "text";
+        element2.name = "hobbies[]";
+        cell3.appendChild(element2);
+    }
+
+    function addRowSpecialAptitude(tableID){
+        var table = document.getElementById(tableID);
+
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        var cell3 = row.insertCell(0);
+        var element2 = document.createElement("input");
+        element2.type = "text";
+        element2.name = "special_aptitude[]";
+        cell3.appendChild(element2);
+    }
+    function addRowUploadDoc(tableID){
+        var table = document.getElementById(tableID);
+
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        var cell3 = row.insertCell(0);
+        var element2 = document.createElement("input");
+        element2.type = "file";
+        element2.name = "upload_doc[]";
+        cell3.appendChild(element2);
+    }
 
 </script>
 
