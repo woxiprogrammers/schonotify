@@ -561,7 +561,111 @@
             </div>
         </div>
 
+        <div class="row">
+            <label  class="control-label col-md-3">
+                SIBLINGS <span class="symbol required"></span>
+            </label>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="text" placeholder="Name" class="form-control" >
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="text" placeholder="Age" class="form-control" >
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <button type="submit" class="btn btn-primary" id="addBatch"><i class="ti-plus"></i></button>
+            </div>
+        </div>
+
     </fieldset>
+
+    <fieldset>
+        <legend>
+            DETAILS OF PREVIOUS SCHOOL ATTENDED
+        </legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        School Name
+                    </label>
+                    <input type="text" placeholder="Enter School Name" class="form-control" name="schoolName"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">
+                        UDISE No.
+                    </label>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="udise_no"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        City
+                    </label>
+                    <input type="text" placeholder="Enter School Name" class="form-control" name="city"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">
+                        Medium of instruction
+                    </label>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="mediumOfInstruction"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Name of board/examination
+                    </label>
+                    <input type="text" placeholder="Enter School Name" class="form-control" name="board_examination"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">
+                        Grades / %
+                    </label>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="grades"/>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+
+        <fieldset>
+            <legend>
+                SPECIAL APTITUDE
+            </legend>
+
+
+        </fieldset>
+        <fieldset>
+            <legend>
+                INTEREST / HOBBIES
+            </legend>
+
+
+        </fieldset>
+
+        <fieldset>
+            <legend>
+                DOCUMENTS SUBMITTED
+            </legend>
+
+
+        </fieldset>
 <div class="form-group">
     <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" >
         Next <i class="fa fa-arrow-circle-right"></i>

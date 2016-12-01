@@ -116,6 +116,22 @@ var FormWizard = function () {
                     number:true,
                     mobileNumber : true
                 },
+
+                schoolName:{
+                    alpha: true
+                },
+                city:{
+                    alpha: true
+                },
+                mediumOfInstruction:{
+                    alpha: true
+                },
+                board_examination:{
+                    alpha: true
+                },
+                grades:{
+                    alphanumeric: true
+                },
                 grn:{
                     required: true,
                     alphanumeric: true
@@ -325,6 +341,22 @@ var FormWizard = function () {
                     required: "Mother Contact No is required" ,
                     number:"Mobile number must be numeric",
                     mobileNumber : "Mobile number must be 10 digit only "
+                },
+
+                schoolName:{
+                    alpha: "School Name must contain only letters"
+                },
+                city:{
+                    alpha: "city must contain only letters"
+                },
+                mediumOfInstruction:{
+                    alpha: "Medium Of Instruction must contain only letters"
+                },
+                board_examination:{
+                    alpha: "Board/examination must contain only letters"
+                },
+                grades:{
+                    alphanumeric: "Grades must contain only letters and number"
                 },
                 studid:"please provide correct student id",
                 email: {
