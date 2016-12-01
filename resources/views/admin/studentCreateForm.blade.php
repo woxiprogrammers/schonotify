@@ -565,19 +565,13 @@
             <label  class="control-label col-md-3">
                 SIBLINGS <span class="symbol required"></span>
             </label>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <input type="text" placeholder="Name" class="form-control" >
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <input type="text" placeholder="Age" class="form-control" >
-                </div>
-            </div>
-            <div class="col-md-3 ">
-                <button type="submit" class="btn btn-primary" id="addBatch"><i class="ti-plus"></i></button>
-            </div>
+            <INPUT type="button" value="Add Row" onclick="addSibling('sibling')" />
+            <TABLE id="sibling" width="350px" border="1">
+                <TR>
+                    <TD> <INPUT type="text" name="sibling['name'][]"/> </TD>
+                    <TD> <INPUT type="text" name="sibling['age'][]"/> </TD>
+                </TR>
+            </TABLE>
         </div>
 
     </fieldset>
@@ -890,6 +884,25 @@
         element2.type = "file";
         element2.name = "upload_doc[]";
         cell3.appendChild(element2);
+    }
+
+    function addSibling(tableID){
+        var table = document.getElementById(tableID);
+
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        var cell2 = row.insertCell(0);
+        var element2 = document.createElement("input");
+        element2.type = "text";
+        element2.name = "sibling['name'][]";
+        cell2.appendChild(element2);
+
+        var cell3 = row.insertCell(1);
+        var element3 = document.createElement("input");
+        element3.type = "text";
+        element3.name = "sibling['age'][]";
+        cell3.appendChild(element3);
     }
 
 </script>
