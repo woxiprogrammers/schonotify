@@ -118,8 +118,20 @@
             </div><!-- @end #w -->
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    GRN <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Enter a GRN" class="form-control" name="grn" id="grn"/>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
 
             <div class="form-group">
                 <label  class="control-label">
@@ -128,7 +140,15 @@
                 <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">
+                    Middle Name <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName"/>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">
                     Last Name <span class="symbol required"></span>
@@ -148,7 +168,60 @@
                 <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
             </div>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group"> <!-- Date input -->
+                <label class="control-label" for="dob">Date Of Birth</label>
+                <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('m/d/Y', time());!!}"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Place of Birth <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Enter a Place of Birth" class="form-control" name="bith_place" id="bith_place"/>
+            </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label  class="control-label">
+                    Nationality <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Enter Nationality" class="form-control" name="nationality"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Religion
+                </label>
+                <input type="text" placeholder="Enter Religion" class="form-control" name="religion"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label  class="control-label">
+                    Caste
+                </label>
+                <input type="text" placeholder="Enter Caste" class="form-control" name="caste"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Category
+                </label>
+                <input type="text" placeholder="Enter Category" class="form-control" name="category"/>
+            </div>
+        </div>
     </div>
 
     <div class="row">
@@ -222,7 +295,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label  class="control-label">
-                    Address <span class="symbol required"></span>
+                    Permanent Address <span class="symbol required"></span>
                 </label>
                 <div class="note-editor">
                     <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
@@ -230,11 +303,149 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label  class="control-label">
+                    Communication Address <span class="symbol required"></span>
+                </label>
+                <div class="note-editor">
+                    <textarea class="form-control autosize area-animated" name="communication_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                    </textarea>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Aadhar Card Number <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Aadhar Card Number " class="form-control" name="aadhar_number"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="form-field-select-2">
+                    Select Blood Group
+                </label>
+                <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+        </div>
 
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Mother Tongue <span class="symbol required"></span>
+                </label>
+                <input type="text" placeholder="Enter a Mother Tongue" class="form-control" name="mother_tongue"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Other Languages spoken/written
+                </label>
+                <input type="text" placeholder="Enter a Other Languages spoken/written" class="form-control" name="other_language"/>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="form-field-select-2">
+                    Highest Standard Passed
+                </label>
+                <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                   Roll Number
+                </label>
+                <input type="text" placeholder="Enter a Roll Number" class="form-control" name="roll_number"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Academic session applied to
+                </label>
+                <input type="text" class="form-control" name="academic_to"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Academic session applied from
+                </label>
+                <input type="text"  class="form-control" name="academic_from"/>
+            </div>
+        </div>
+    </div>
 </fieldset>
 
+
+    <fieldset>
+        <legend>
+            FAMILY INFORMATION (student)
+        </legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Father’s/Guardian’s First Name <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter your First Name" class="form-control" name="fatherfirstName"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Middle Name
+                    </label>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="fathermiddleName"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Last Name
+                    </label>
+                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="fatherlastName"/>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
 <div class="form-group">
     <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" >
         Next <i class="fa fa-arrow-circle-right"></i>
@@ -288,9 +499,13 @@
 <script src="vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
+
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
@@ -310,6 +525,14 @@
         FormWizard.init();
         getParents();
         getbatches();
+        var date_input=$('input[name="dob"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
     });
 </script>
 <script type="text/javascript">

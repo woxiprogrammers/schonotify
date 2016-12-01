@@ -24,7 +24,9 @@ var FormWizard = function () {
     $.validator.addMethod("mobileNumber", function(value, element) {
         return this.optional(element) || /^[0-9]{10}(\-[0-9]{4})?$/.test(value);
     });
-
+    $.validator.addMethod("year", function(value, element) {
+        return this.optional(element) || /^[0-9]{4}?$/.test(value);
+    });
     $.validator.addMethod("requiredIfChecked", function (val, ele, arg) {
         if ($("#checkbox8").is(":checked") && ($.trim(val) == '')) { return false; }
         return true;
@@ -59,6 +61,56 @@ var FormWizard = function () {
                     minlength: 2,
                     required: true,
                     alpha: true
+                },
+                middleName: {
+                    minlength: 2,
+                    required: true,
+                    alpha: true
+                },
+                grn:{
+                    required: true,
+                    alphanumeric: true
+                },
+                bith_place:{
+                    required: true,
+                    alpha: true
+                },
+                nationality:{
+                    required: true,
+                    alpha: true
+                },
+                religion:{
+                    alpha: true
+                },
+                caste:{
+                    alpha: true
+                },
+                category:{
+                    alpha: true
+                },
+                aadhar_number:{
+                    required: true,
+                    alphanumeric: true
+                },
+                mother_tongue:{
+                    required: true,
+                    alpha: true
+                },
+                other_language:{
+                    alpha: true
+                },
+                roll_number:{
+                    alphanumeric: true
+                },
+                academic_to:{
+                    minlength: 4,
+                    year:true,
+                    number:true,
+                },
+                academic_from:{
+                    minlength: 4,
+                    year:true,
+                    number:true,
                 },
                 email: {
                     chkMail: true
@@ -125,6 +177,34 @@ var FormWizard = function () {
 
             },
             messages: {
+                grn:{
+                    required: "GRN required",
+                    alphanumeric:"GRN must contain only alphabets and numbers"
+                },
+                aadhar_number:{
+                    required: "Aadhar Card Number required",
+                    alphanumeric:"Aadhar Card Number must contain only alphabets and numbers"
+                },
+                bith_place:{
+                    required: "Birth Place is required" ,
+                    alpha: "Birth Place must contain only letters"
+                },
+                mother_tongue:{
+                    required: "Mother Tongue is required" ,
+                    alpha: "Mother Tongue must contain only letters"
+                },
+                other_language:{
+                    alpha: "Other language must contain only letters"
+                },
+                roll_number:{
+                    alphanumeric: "Roll number must contain only letters and number"
+                },
+                academic_to:{
+                    year:"Year must be numeric and  4 digit"
+                },
+                academic_from:{
+                    year:"Year must be numeric and 4 digit"
+                },
                 firstName: {
                     required: "First Name is required" ,
                     alpha: "First name must contain only letters"
@@ -132,6 +212,10 @@ var FormWizard = function () {
                 lastName: {
                     required: "Last Name is required",
                     alpha: "Last name must contain only letters"
+                },
+                middleName: {
+                    required: "Middle Name is required",
+                    alpha: "Middle name must contain only letters"
                 },
                 studid:"please provide correct student id",
                 email: {
