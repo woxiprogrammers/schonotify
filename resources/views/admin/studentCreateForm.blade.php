@@ -424,7 +424,7 @@
                     <label  class="control-label">
                         Father’s/Guardian’s First Name <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter your First Name" class="form-control" name="fatherfirstName"/>
+                    <input type="text" placeholder="Enter your First Name" class="form-control" name="fatherFirstName"/>
                 </div>
             </div>
             <div class="col-md-3">
@@ -432,7 +432,7 @@
                     <label class="control-label">
                         Middle Name
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="fathermiddleName"/>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="fatherMiddleName"/>
                 </div>
             </div>
             <div class="col-md-3">
@@ -440,7 +440,123 @@
                     <label class="control-label">
                         Last Name
                     </label>
-                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="fatherlastName"/>
+                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="fatherLastName"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Father’s/Guardian’s Occupation <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter Occupation" class="form-control" name="fatherOccuption"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Father’s/Guardian’s Income <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter Income" class="form-control" name="fatherIncome"/>P.A.
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Father’s/Guardian’s Contact Number <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="fatherContactNo"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Mother’s/Guardian’s First Name <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter your First Name" class="form-control" name="motherFirstName"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Middle Name
+                    </label>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="motherMiddleName"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Last Name
+                    </label>
+                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="motherLastName"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Mother’s/Guardian’s Occupation <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter Occupation" class="form-control" name="motherOccuption"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Mother’s/Guardian’s Income <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter Income" class="form-control" name="motherIncome"/>P.A.
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">
+                        Mother’s/Guardian’s Contact Number <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="motherContactNo"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Email <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Enter email" class="form-control" name="parentemail"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Permanent Address <span class="symbol required"></span>
+                    </label>
+                    <div class="note-editor">
+                        <textarea class="form-control autosize area-animated" name="parent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        Communication Address <span class="symbol required"></span>
+                    </label>
+                    <div class="note-editor">
+                        <textarea class="form-control autosize area-animated" name="parent_communication_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                        </textarea>
+                    </div>
                 </div>
             </div>
         </div>

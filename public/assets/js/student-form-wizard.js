@@ -67,6 +67,55 @@ var FormWizard = function () {
                     required: true,
                     alpha: true
                 },
+                fatherFirstName: {
+                    required: true,
+                    alpha: true
+                },
+                fatherLastName: {
+                    alpha: true
+                },
+                fatherMiddleName: {
+                    alpha: true
+                },
+
+
+                fatherOccuption: {
+                    required: true,
+                    alpha: true
+                },
+                fatherIncome: {
+                    required: true,
+                    alphanumeric: true
+                },
+                fatherContactNo: {
+                    required: true,
+                    number:true,
+                    mobileNumber : true
+                },
+                motherFirstName: {
+                    required: true,
+                    alpha: true
+                },
+                motherLastName: {
+                    alpha: true
+                },
+                motherMiddleName: {
+                    alpha: true
+                },
+
+                motherOccuption: {
+                    required: true,
+                    alpha: true
+                },
+                motherIncome: {
+                    required: true,
+                    alphanumeric: true
+                },
+                motherContactNo: {
+                    required: true,
+                    number:true,
+                    mobileNumber : true
+                },
                 grn:{
                     required: true,
                     alphanumeric: true
@@ -115,6 +164,11 @@ var FormWizard = function () {
                 email: {
                     chkMail: true
                 },
+                parentemail: {
+                    required:true,
+                    email:true,
+                    chkMail: true
+                },
                 password: {
                     minlength: 6,
                     required: true
@@ -129,6 +183,11 @@ var FormWizard = function () {
                     required: true
                 },
                 address:{
+                    minlength:15,
+                    required:true,
+                    removespace:true
+                },
+                parent_address:{
                     minlength:15,
                     required:true,
                     removespace:true
@@ -217,11 +276,70 @@ var FormWizard = function () {
                     required: "Middle Name is required",
                     alpha: "Middle name must contain only letters"
                 },
+                fatherFirstName: {
+                    required: "Father First Name is required" ,
+                    alpha: "Father first name must contain only letters"
+                },
+                fatherLastName: {
+                    alpha: "Father Last name must contain only letters"
+                },
+                fatherMiddleName: {
+                    alpha: "Father Middle name must contain only letters"
+                },
+
+                fatherOccuption: {
+                    required: "Father Occuption is required" ,
+                    alpha: "Father Occuption must contain only letters"
+                },
+                fatherIncome: {
+                    required: "Father Income is required" ,
+                    alphanumeric: "Father Income must contain only letters and number"
+                },
+                fatherContactNo: {
+                    required: "Father Contact No is required" ,
+                    number:"Mobile number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only "
+                },
+
+
+                motherFirstName: {
+                    required: "Mother First Name is required" ,
+                    alpha: "Mother first name must contain only letters"
+                },
+                motherLastName: {
+                    alpha: "Mother Last name must contain only letters"
+                },
+                motherMiddleName: {
+                    alpha: "Mother Middle name must contain only letters"
+                },
+
+                motherOccuption: {
+                    required: "Mother Occuption is required" ,
+                    alpha: "Mother Occuption must contain only letters"
+                },
+                motherIncome: {
+                    required: "Mother Income is required" ,
+                    alphanumeric: "Mother Income must contain only letters and number"
+                },
+                motherContactNo: {
+                    required: "Mother Contact No is required" ,
+                    number:"Mobile number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only "
+                },
                 studid:"please provide correct student id",
                 email: {
                     chkMail: "Your email address must be in the format of name@domain.com"
                 },
+                parentemail: {
+                    required:"Email is required",
+                    email:"Enter proper Email Id",
+                    chkMail: "Your email address must be in the format of name@domain.com"
+                },
                 address:{
+                    required:"Address is required",
+                    address:"Address must contain at-least 15 characters"
+                },
+                parent_address:{
                     required:"Address is required",
                     address:"Address must contain at-least 15 characters"
                 },
