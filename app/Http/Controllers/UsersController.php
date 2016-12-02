@@ -302,6 +302,7 @@ class UsersController extends Controller
     public function store(Requests\WebRequests\UserRequest $request)
     {
         $data = $request->all();
+        dd($data);
         $user=Auth::user();
         if(!empty($data)){
             $userData= new User;
@@ -364,6 +365,11 @@ class UsersController extends Controller
                 }
                 $userData->save();
                 $LastInsertId = $userData->id;
+
+                if(isset($data['hobbies'])){
+                    $userData = array_add($userData, 'division_id', $data['division']);
+                }
+
             }
             if(!empty($data['modules'])){
                 $userAclsData = array();

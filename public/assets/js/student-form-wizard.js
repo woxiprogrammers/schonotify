@@ -10,7 +10,7 @@ var FormWizard = function () {
             selected: 0,
             keyNavigation: false,
             onLeaveStep: leaveAStepCallback,
-            onShowStep: onShowStep,
+            onShowStep: onShowStep
         });
         var numberOfSteps = 0;
         initValidator();
@@ -170,12 +170,12 @@ var FormWizard = function () {
                 academic_to:{
                     minlength: 4,
                     year:true,
-                    number:true,
+                    number:true
                 },
                 academic_from:{
                     minlength: 4,
                     year:true,
-                    number:true,
+                    number:true
                 },
                 email: {
                     chkMail: true
