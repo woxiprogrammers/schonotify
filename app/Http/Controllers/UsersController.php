@@ -12,6 +12,11 @@ use App\HomeworkTeacher;
 use App\Leave;
 use App\Module;
 use App\ModuleAcl;
+use App\StudentFamily;
+use App\StudentHobby;
+use App\StudentPreviousSchool;
+use App\StudentSibling;
+use App\StudentSpecialAptitude;
 use App\SubjectClassDivision;
 use App\TeacherView;
 use App\User;
@@ -367,9 +372,51 @@ class UsersController extends Controller
                 $LastInsertId = $userData->id;
 
                 if(isset($data['hobbies'])){
-                    $userData = array_add($userData, 'division_id', $data['division']);
+                    $hobbyInfo = array();
+                    $hobbies = $data['hobbies'];
+                    foreach($hobbies as $hobby){
+                        $hobbyInfo['student_id'] = $LastInsertId;
+                        $hobbyInfo['hobby'] = $hobby;
+                        $hobbyInfo['created_at'] = Carbon::now();
+                        $hobbyInfo['updated_at'] = Carbon::now();
+                        StudentHobby::insert($hobbyInfo);
+                    }
                 }
+                if(isset($data['special_aptitude'])){
+                    $aptitudeInfo = array();
+                    $aptitudes = $data['special_aptitude'];
+                    foreach($aptitudes as $aptitude){
+                        $aptitudeInfo['student_id'] = $LastInsertId;
+                        $aptitudeInfo['special_aptitude'] = $aptitude;
+                        $aptitudeInfo['created_at'] = Carbon::now();
+                        $aptitudeInfo['updated_at'] = Carbon::now();
+                        StudentSpecialAptitude::insert($aptitudeInfo);
+                    }
+                }
+                $previousSchool = $request->only('school_name','udise_no','city','medium_of_instruction','board_examination','grades');
+                $previousSchool['student_id'] = $LastInsertId;
+                $previousSchool['created_at'] = Carbon::now();
+                $previousSchool['updated_at'] = Carbon::now();
+                StudentPreviousSchool::insert($previousSchool);
 
+                $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','communication_address','permanent_address');
+                $familyInfo['student_id'] = $LastInsertId;
+                $familyInfo['created_at'] = Carbon::now();
+                $familyInfo['updated_at'] = Carbon::now();
+                StudentFamily::insert($familyInfo);
+
+                if(isset($data['sibling'])){
+                    $siblingInfo = array();
+                    $siblings = $data['sibling'];
+                    foreach($siblings as $sibling){
+                        $siblingInfo['student_id'] = $LastInsertId;
+                        $siblingInfo['name'] = $sibling['name'];
+                        $siblingInfo['age'] = $sibling['age'];
+                        $siblingInfo['created_at'] = Carbon::now();
+                        $siblingInfo['updated_at'] = Carbon::now();
+                        StudentSibling::insert($siblingInfo);
+                    }
+                }
             }
             if(!empty($data['modules'])){
                 $userAclsData = array();

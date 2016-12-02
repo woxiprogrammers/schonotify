@@ -28,7 +28,7 @@ class CreateStudentFamilyInfoTable extends Migration
             $table->string('mother_occupation', 255)->nullable();
             $table->string('mother_income', 255)->nullable();
             $table->string('mother_contact', 255)->nullable();
-            $table->string('email', 255)->nullable();
+            $table->string('parent_email', 255)->nullable();
             $table->string('permanent_address', 255)->nullable();
             $table->string('communication_address', 255)->nullable();
             $table->timestamps();

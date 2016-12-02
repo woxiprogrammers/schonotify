@@ -67,51 +67,51 @@ var FormWizard = function () {
                     required: true,
                     alpha: true
                 },
-                fatherFirstName: {
+                father_first_name: {
                     required: true,
                     alpha: true
                 },
-                fatherLastName: {
+                father_last_name: {
                     alpha: true
                 },
-                fatherMiddleName: {
+                father_middle_name: {
                     alpha: true
                 },
 
 
-                fatherOccuption: {
+                father_occupation: {
                     required: true,
                     alpha: true
                 },
-                fatherIncome: {
+                father_income: {
                     required: true,
                     alphanumeric: true
                 },
-                fatherContactNo: {
+                father_contact: {
                     required: true,
                     number:true,
                     mobileNumber : true
                 },
-                motherFirstName: {
+                mother_first_name: {
                     required: true,
                     alpha: true
                 },
-                motherLastName: {
+                mother_last_name: {
                     alpha: true
                 },
-                motherMiddleName: {
+                mother_middle_name: {
                     alpha: true
                 },
 
-                motherOccuption: {
+                mother_occupation: {
                     required: true,
                     alpha: true
                 },
-                motherIncome: {
+                mother_income: {
                     required: true,
                     alphanumeric: true
                 },
-                motherContactNo: {
+                mother_contact: {
                     required: true,
                     number:true,
                     mobileNumber : true
@@ -180,7 +180,7 @@ var FormWizard = function () {
                 email: {
                     chkMail: true
                 },
-                parentemail: {
+                parent_email: {
                     required:true,
                     email:true,
                     chkMail: true
@@ -203,7 +203,7 @@ var FormWizard = function () {
                     required:true,
                     removespace:true
                 },
-                parent_address:{
+                permanent_address:{
                     minlength:15,
                     required:true,
                     removespace:true
@@ -292,52 +292,52 @@ var FormWizard = function () {
                     required: "Middle Name is required",
                     alpha: "Middle name must contain only letters"
                 },
-                fatherFirstName: {
+                father_first_name: {
                     required: "Father First Name is required" ,
                     alpha: "Father first name must contain only letters"
                 },
-                fatherLastName: {
+                father_middle_name: {
                     alpha: "Father Last name must contain only letters"
                 },
-                fatherMiddleName: {
+                father_last_name: {
                     alpha: "Father Middle name must contain only letters"
                 },
 
-                fatherOccuption: {
+                father_occupation: {
                     required: "Father Occuption is required" ,
                     alpha: "Father Occuption must contain only letters"
                 },
-                fatherIncome: {
+                father_income: {
                     required: "Father Income is required" ,
                     alphanumeric: "Father Income must contain only letters and number"
                 },
-                fatherContactNo: {
+                father_contact: {
                     required: "Father Contact No is required" ,
                     number:"Mobile number must be numeric",
                     mobileNumber : "Mobile number must be 10 digit only "
                 },
 
 
-                motherFirstName: {
+                mother_first_name: {
                     required: "Mother First Name is required" ,
                     alpha: "Mother first name must contain only letters"
                 },
-                motherLastName: {
+                mother_middle_name: {
                     alpha: "Mother Last name must contain only letters"
                 },
-                motherMiddleName: {
+                mother_last_name: {
                     alpha: "Mother Middle name must contain only letters"
                 },
 
-                motherOccuption: {
+                mother_occupation: {
                     required: "Mother Occuption is required" ,
                     alpha: "Mother Occuption must contain only letters"
                 },
-                motherIncome: {
+                mother_income: {
                     required: "Mother Income is required" ,
                     alphanumeric: "Mother Income must contain only letters and number"
                 },
-                motherContactNo: {
+                mother_contact: {
                     required: "Mother Contact No is required" ,
                     number:"Mobile number must be numeric",
                     mobileNumber : "Mobile number must be 10 digit only "
@@ -362,7 +362,7 @@ var FormWizard = function () {
                 email: {
                     chkMail: "Your email address must be in the format of name@domain.com"
                 },
-                parentemail: {
+                parent_email: {
                     required:"Email is required",
                     email:"Enter proper Email Id",
                     chkMail: "Your email address must be in the format of name@domain.com"
@@ -371,7 +371,7 @@ var FormWizard = function () {
                     required:"Address is required",
                     address:"Address must contain at-least 15 characters"
                 },
-                parent_address:{
+                permanent_address:{
                     required:"Address is required",
                     address:"Address must contain at-least 15 characters"
                 },
