@@ -12,6 +12,7 @@ use App\HomeworkTeacher;
 use App\Leave;
 use App\Module;
 use App\ModuleAcl;
+use App\StudentExtraInfo;
 use App\StudentFamily;
 use App\StudentHobby;
 use App\StudentPreviousSchool;
@@ -307,7 +308,6 @@ class UsersController extends Controller
     public function store(Requests\WebRequests\UserRequest $request)
     {
         $data = $request->all();
-        dd($data);
         $user=Auth::user();
         if(!empty($data)){
             $userData= new User;
@@ -358,6 +358,7 @@ class UsersController extends Controller
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'student'){
+                $userData->middle_name = $data['middleName'];
                 if(isset($data['division'])){
                     $userData = array_add($userData, 'division_id', $data['division']);
                 }
@@ -417,6 +418,13 @@ class UsersController extends Controller
                         StudentSibling::insert($siblingInfo);
                     }
                 }
+
+                $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','communication_address','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
+                $extraInfo['student_id'] = $LastInsertId;
+                $extraInfo['created_at'] = Carbon::now();
+                $extraInfo['updated_at'] = Carbon::now();
+                StudentExtraInfo::insert($extraInfo);
+
             }
             if(!empty($data['modules'])){
                 $userAclsData = array();
