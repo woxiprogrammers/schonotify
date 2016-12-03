@@ -136,7 +136,7 @@ var FormWizard = function () {
                     required: true,
                     alphanumeric: true
                 },
-                bith_place:{
+                birth_place:{
                     required: true,
                     alpha: true
                 },
@@ -260,7 +260,7 @@ var FormWizard = function () {
                     required: "Aadhar Card Number required",
                     alphanumeric:"Aadhar Card Number must contain only alphabets and numbers"
                 },
-                bith_place:{
+                birth_place:{
                     required: "Birth Place is required" ,
                     alpha: "Birth Place must contain only letters"
                 },

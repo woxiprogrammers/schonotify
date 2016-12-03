@@ -181,7 +181,7 @@
                 <label class="control-label">
                     Place of Birth <span class="symbol required"></span>
                 </label>
-                <input type="text" placeholder="Enter a Place of Birth" class="form-control" name="bith_place" id="bith_place"/>
+                <input type="text" placeholder="Enter a Place of Birth" class="form-control" name="birth_place" id="birth_place"/>
             </div>
         </div>
     </div>
@@ -330,7 +330,7 @@
                 <label for="form-field-select-2">
                     Select Blood Group
                 </label>
-                <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                <select class="form-control" name="blood_group" id="batch-select" style="-webkit-appearance: menulist;">
                     <option value="A+">A+</option>
                     <option value="A-">A-</option>
                     <option value="B+">B+</option>
@@ -370,7 +370,7 @@
                 <label for="form-field-select-2">
                     Highest Standard Passed
                 </label>
-                <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                <select class="form-control" id="highest_standard" style="-webkit-appearance: menulist;" name="highest_standard">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
