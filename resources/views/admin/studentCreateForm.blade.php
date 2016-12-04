@@ -304,12 +304,14 @@
             </div>
         </div>
         <div class="col-md-6">
+
             <div class="form-group">
                 <label  class="control-label">
                     Communication Address <span class="symbol required"></span>
                 </label>
-                <div class="note-editor">
-                    <textarea class="form-control autosize area-animated" name="communication_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                <input type="checkbox" name="student_communication_address" id="student_communication_address" checked> Same as Permanent Address
+                <div class="note-editor" id="communication_address">
+                    <textarea  class="form-control autosize area-animated"  name="communication_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
                     </textarea>
                 </div>
             </div>
@@ -553,8 +555,10 @@
                     <label  class="control-label">
                         Communication Address <span class="symbol required"></span>
                     </label>
-                    <div class="note-editor">
-                        <textarea class="form-control autosize area-animated" name="communication_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+
+                    <input type="checkbox" name="parent_communication_address" id="parent_communication_address" checked> Same as Permanent Address
+                    <div class="note-editor" id="communication_address_parent">
+                        <textarea class="form-control autosize area-animated" name="communication_address_parent" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
                         </textarea>
                     </div>
                 </div>
@@ -766,6 +770,17 @@
     });
 </script>
 <script type="text/javascript">
+    $('#communication_address').hide();
+
+    $("#student_communication_address").click(function(){
+        $('#communication_address').toggle();
+    });
+
+    $('#communication_address_parent').hide();
+
+    $("#parent_communication_address").click(function(){
+        $('#communication_address_parent').toggle();
+    });
 
     $('#role-select').on('change',function(){
 

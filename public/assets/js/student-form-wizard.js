@@ -553,7 +553,7 @@ var FormWizard = function () {
     };
     var validateAllSteps = function () {
         if(wizardForm.valid()){
-            return true;
+            return true;cb
         }else{
             return false;
         }
