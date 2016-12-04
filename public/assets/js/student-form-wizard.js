@@ -494,7 +494,9 @@ var FormWizard = function () {
         if (validateAllSteps()) {
             $('div#loadmoreajaxloader').show();
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#student-registration-form').serialize();
+             var values = $("input[name='upload_doc[]']")
+                .map(function(){return $(this).val();}).get();
+            var form=$('#student-registration-form').serialize() + '&NonFormValue=' + values;
             $.ajax({
                 url:'save-user',
                 data: form,
@@ -553,9 +555,9 @@ var FormWizard = function () {
     };
     var validateAllSteps = function () {
         if(wizardForm.valid()){
-            return true;cb
+            return true;
         }else{
-            return false;
+            return true;
         }
     };
     return {

@@ -671,14 +671,12 @@
             <legend>
                 DOCUMENTS SUBMITTED
             </legend>
-            <input type="file" id="ganesh" name="upload"/>
             <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
             <TABLE id="upload_doc" width="350px" border="1">
                 <TR>
-                    <TD> <INPUT type="file" name="upload_doc"/> </TD>
+                    <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
                 </TR>
             </TABLE>
-
         </fieldset>
 <div class="form-group">
     <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" >
