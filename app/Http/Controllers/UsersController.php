@@ -403,12 +403,11 @@ class UsersController extends Controller
                 StudentPreviousSchool::insert($previousSchool);
 
 
-                if($data['parent_communication_address'] == 'on'){
-                    $communication_address_parent = $userData->permanent_address;
+                if(isset($data['parent_communication_address'])){
+                    $communication_address_parent = $data['permanent_address'];
                 }else{
-                    $communication_address_parent = $userData->communication_address_parent;
+                    $communication_address_parent = $data['communication_address_parent'];
                 }
-
                 $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
                 $familyInfo['communication_address'] = $communication_address_parent;
                 $familyInfo['student_id'] = $LastInsertId;
@@ -428,10 +427,10 @@ class UsersController extends Controller
                         StudentSibling::insert($siblingInfo);
                     }
                 }
-                if($data['student_communication_address'] == 'on'){
-                    $student_communication_address = $userData->address;
+                if(isset($data['student_communication_address'])){
+                    $student_communication_address = $data['address'];
                 }else{
-                    $student_communication_address = $userData->communication_address;
+                    $student_communication_address = $data['communication_address'];
                 }
                 $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
                 $extraInfo['communication_address']=$student_communication_address;
