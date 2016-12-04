@@ -305,7 +305,7 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\WebRequests\UserRequest $request)
+    public function store(/*Requests\WebRequests\User*/Request $request)
     {
         $data = $request->all();
         $user=Auth::user();
@@ -359,6 +359,8 @@ class UsersController extends Controller
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'student'){
                 $userData->middle_name = $data['middleName'];
+
+
                 if(isset($data['division'])){
                     $userData = array_add($userData, 'division_id', $data['division']);
                 }
@@ -400,7 +402,15 @@ class UsersController extends Controller
                 $previousSchool['updated_at'] = Carbon::now();
                 StudentPreviousSchool::insert($previousSchool);
 
-                $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','communication_address','permanent_address');
+
+                if($data['parent_communication_address'] == 'on'){
+                    $communication_address_parent = $userData->permanent_address;
+                }else{
+                    $communication_address_parent = $userData->communication_address_parent;
+                }
+
+                $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
+                $familyInfo['communication_address'] = $communication_address_parent;
                 $familyInfo['student_id'] = $LastInsertId;
                 $familyInfo['created_at'] = Carbon::now();
                 $familyInfo['updated_at'] = Carbon::now();
@@ -418,8 +428,13 @@ class UsersController extends Controller
                         StudentSibling::insert($siblingInfo);
                     }
                 }
-
-                $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','communication_address','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
+                if($data['student_communication_address'] == 'on'){
+                    $student_communication_address = $userData->address;
+                }else{
+                    $student_communication_address = $userData->communication_address;
+                }
+                $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
+                $extraInfo['communication_address']=$student_communication_address;
                 $extraInfo['student_id'] = $LastInsertId;
                 $extraInfo['created_at'] = Carbon::now();
                 $extraInfo['updated_at'] = Carbon::now();
