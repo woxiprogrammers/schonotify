@@ -14,7 +14,7 @@
     <meta content="" name="author" />
     <!-- end: META -->
     <!-- start: GOOGLE FONTS -->
-    <!--<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />-->
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
     <!-- end: GOOGLE FONTS -->
     <!-- start: MAIN CSS -->
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">

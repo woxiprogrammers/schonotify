@@ -557,7 +557,7 @@ var FormWizard = function () {
         if(wizardForm.valid()){
             return true;
         }else{
-            return true;
+            return false;
         }
     };
     return {

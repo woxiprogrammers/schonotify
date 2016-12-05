@@ -667,7 +667,7 @@
 
         </fieldset>
 
-        <fieldset>
+        <!--<fieldset>
             <legend>
                 DOCUMENTS SUBMITTED
             </legend>
@@ -677,7 +677,7 @@
                     <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
                 </TR>
             </TABLE>
-        </fieldset>
+        </fieldset>-->
 <div class="form-group">
     <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" >
         Next <i class="fa fa-arrow-circle-right"></i>

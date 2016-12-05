@@ -299,11 +299,6 @@ class UsersController extends Controller
 
     }
 
-    function get_basename($filename)
-    {
-        return preg_replace('/^.+[\\\\\\/]/', '', $filename);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -313,21 +308,6 @@ class UsersController extends Controller
     public function store(/*Requests\WebRequests\User*/Request $request)
     {
         $data = $request->all();
-        $documents = explode(",",$data['NonFormValue']);
-        foreach($documents as $document){
-            $imagePath = $document;
-            $filename = time()."_".$this->get_basename($document);
-            $path = public_path('uploads/student_document/');
-            if (! file_exists($path)) {
-                File::makeDirectory('uploads/student_document/', $mode = 0777, true, true);
-            }
-            //$imagePath->move($path,$filename);
-
-            $img= file_get_contents($url);
-            file_put_contents($name,$img);
-        }
-        dd($documents);
-        dd($data);
         $user=Auth::user();
         if(!empty($data)){
             $userData= new User;
