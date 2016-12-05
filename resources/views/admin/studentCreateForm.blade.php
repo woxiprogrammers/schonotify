@@ -173,7 +173,7 @@
         <div class="col-md-6">
             <div class="form-group"> <!-- Date input -->
                 <label class="control-label" for="dob">Date Of Birth</label>
-                <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('m/d/Y', time());!!}"/>
+                <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
             </div>
         </div>
         <div class="col-md-6">
@@ -574,13 +574,13 @@
 
         <div class="row">
             <label  class="control-label col-md-3">
-                SIBLINGS <span class="symbol required"></span>
+                SIBLINGS
             </label>
             <INPUT type="button" value="Add Row" onclick="addSibling('sibling')" />
             <TABLE id="sibling" width="350px" border="1">
                 <TR>
-                    <TD> <INPUT type="text" name="sibling[0][name]"/> </TD>
-                    <TD> <INPUT type="text" name="sibling[0][age]"/> </TD>
+                    <TD> <INPUT type="text" name="sibling[0][name]" placeholder="Name"/> </TD>
+                    <TD> <INPUT type="text" name="sibling[0][age]" placeholder="Age"/> </TD>
                 </TR>
             </TABLE>
         </div>
@@ -605,7 +605,7 @@
                     <label class="control-label">
                         UDISE No.
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="udise_no"/>
+                    <input type="text" placeholder="Enter UDISE No " class="form-control" name="udise_no"/>
                 </div>
             </div>
         </div>
@@ -623,7 +623,7 @@
                     <label class="control-label">
                         Medium of instruction
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="medium_of_instruction"/>
+                    <input type="text" placeholder="Enter Medium of instruction" class="form-control" name="medium_of_instruction"/>
                 </div>
             </div>
         </div>
@@ -634,7 +634,7 @@
                     <label  class="control-label">
                         Name of board/examination
                     </label>
-                    <input type="text" placeholder="Enter School Name" class="form-control" name="board_examination"/>
+                    <input type="text" placeholder="Enter Name of board/examination" class="form-control" name="board_examination"/>
                 </div>
             </div>
             <div class="col-md-6">
@@ -642,7 +642,7 @@
                     <label class="control-label">
                         Grades / %
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="grades"/>
+                    <input type="text" placeholder="Enter Grades" class="form-control" name="grades"/>
                 </div>
             </div>
         </div>
@@ -767,10 +767,11 @@
         var date_input=$('input[name="dob"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
-            format: 'mm/dd/yyyy',
+            format: 'dd/mm/yyyy',
             container: container,
             todayHighlight: true,
             autoclose: true,
+            endDate: '+0d',
         })
     });
 </script>
@@ -916,12 +917,14 @@
         var cell2 = row.insertCell(0);
         var element2 = document.createElement("input");
         element2.type = "text";
+        element2.placeholder = "Name";
         element2.name = "sibling["+rowCount+"][name]";
         cell2.appendChild(element2);
 
         var cell3 = row.insertCell(1);
         var element3 = document.createElement("input");
         element3.type = "text";
+        element3.placeholder = "Age";
         element3.name = "sibling["+rowCount+"][age]";
         cell3.appendChild(element3);
     }

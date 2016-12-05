@@ -37,6 +37,14 @@ var FormWizard = function () {
     $.validator.addMethod("chkMail", function(value, element) {
         return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
     });
+    $.validator.addMethod("alphaSpace", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z]+[ A-Za-z]*$/.test(value);
+    });
+    $.validator.addMethod("alphaSpaceSpecial", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z]+[ A-Za-z,]*$/.test(value);
+    });
+    //regex:  /^[a-zA-Z]+[ A-Za-z0-9.-]*$/,
+
     jQuery.validator.addMethod("removespace", function(value, element) {
         if (value.trim().length >=15)
         {
@@ -81,7 +89,7 @@ var FormWizard = function () {
 
                 father_occupation: {
                     required: true,
-                    alpha: true
+                    alphaSpace: true
                 },
                 father_income: {
                     required: true,
@@ -105,7 +113,7 @@ var FormWizard = function () {
 
                 mother_occupation: {
                     required: true,
-                    alpha: true
+                    alphaSpace: true
                 },
                 mother_income: {
                     required: true,
@@ -118,7 +126,7 @@ var FormWizard = function () {
                 },
 
                 school_name:{
-                    alpha: true
+                    alphaSpace: true
                 },
                 city:{
                     alpha: true
@@ -138,20 +146,20 @@ var FormWizard = function () {
                 },
                 birth_place:{
                     required: true,
-                    alpha: true
+                    alphaSpace: true
                 },
                 nationality:{
                     required: true,
                     alpha: true
                 },
                 religion:{
-                    alpha: true
+                    alphaSpace: true
                 },
                 caste:{
-                    alpha: true
+                    alphaSpace: true
                 },
                 category:{
-                    alpha: true
+                    alphaSpace: true
                 },
                 aadhar_number:{
                     required: true,
@@ -162,7 +170,7 @@ var FormWizard = function () {
                     alpha: true
                 },
                 other_language:{
-                    alpha: true
+                    alphaSpaceSpecial: true
                 },
                 roll_number:{
                     alphanumeric: true
@@ -248,6 +256,9 @@ var FormWizard = function () {
                     minlength: 2,
                     required: true,
                     alphanumeric: true
+                },
+                "hobbies[]":{
+                    required: true
                 }
 
             },
@@ -262,14 +273,27 @@ var FormWizard = function () {
                 },
                 birth_place:{
                     required: "Birth Place is required" ,
-                    alpha: "Birth Place must contain only letters"
+                    alphaSpace: "Birth Place must contain only letters"
+                },
+                nationality:{
+                    required: "Nationality is required",
+                    alpha: "Nationality must contain only letters"
+                },
+                religion:{
+                    alphaSpace: "Religion must contain only letters "
+                },
+                caste:{
+                    alphaSpace: "Caste must contain only letters "
+                },
+                category:{
+                    alphaSpace: "Category must contain only letters"
                 },
                 mother_tongue:{
                     required: "Mother Tongue is required" ,
                     alpha: "Mother Tongue must contain only letters"
                 },
                 other_language:{
-                    alpha: "Other language must contain only letters"
+                    alphaSpaceSpecial: "Other language must contain only letters and ,"
                 },
                 roll_number:{
                     alphanumeric: "Roll number must contain only letters and number"
@@ -304,8 +328,8 @@ var FormWizard = function () {
                 },
 
                 father_occupation: {
-                    required: "Father Occuption is required" ,
-                    alpha: "Father Occuption must contain only letters"
+                    required: "Father Occupation is required" ,
+                    alphaSpace: "Father Occupation must contain only letters"
                 },
                 father_income: {
                     required: "Father Income is required" ,
@@ -330,8 +354,8 @@ var FormWizard = function () {
                 },
 
                 mother_occupation: {
-                    required: "Mother Occuption is required" ,
-                    alpha: "Mother Occuption must contain only letters"
+                    required: "Mother Occupation is required" ,
+                    alphaSpace: "Mother Occupation must contain only letters"
                 },
                 mother_income: {
                     required: "Mother Income is required" ,
@@ -344,7 +368,7 @@ var FormWizard = function () {
                 },
 
                 school_name:{
-                    alpha: "School Name must contain only letters"
+                    alphaSpace: "School Name must contain only letters"
                 },
                 city:{
                     alpha: "city must contain only letters"
