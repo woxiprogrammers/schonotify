@@ -305,7 +305,7 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(/*Requests\WebRequests\User*/Request $request)
+    public function store(Requests\WebRequests\UserRequest $request)
     {
         $data = $request->all();
         $user=Auth::user();
