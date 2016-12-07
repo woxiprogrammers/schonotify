@@ -256,9 +256,6 @@ var FormWizard = function () {
                     minlength: 2,
                     required: true,
                     alphanumeric: true
-                },
-                "hobbies[]":{
-                    required: true
                 }
 
             },
