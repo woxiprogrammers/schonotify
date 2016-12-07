@@ -12,6 +12,7 @@ use App\HomeworkTeacher;
 use App\Leave;
 use App\Module;
 use App\ModuleAcl;
+use App\StudentDocument;
 use App\StudentExtraInfo;
 use App\StudentFamily;
 use App\StudentHobby;
@@ -439,6 +440,25 @@ class UsersController extends Controller
                 $extraInfo['updated_at'] = Carbon::now();
                 StudentExtraInfo::insert($extraInfo);
 
+                if(isset($data['upload_doc'])){
+                    foreach($data['upload_doc'] as $doc){
+                        if($doc != null){
+                            $image = $doc;
+                            $name = $doc->getClientOriginalName();
+                            $filename = time()."_".$name;
+                            $path1 = public_path('uploads/student_documents/'.$LastInsertId);
+                            if (! file_exists($path1)) {
+                                File::makeDirectory('uploads/student_documents/'.$LastInsertId, $mode = 0777, true, true);
+                            }
+                            $image->move($path1,$filename);
+                            $studentDocument['document'] = $filename;
+                            $studentDocument['student_id'] = $LastInsertId;
+                            $studentDocument['created_at'] = Carbon::now();
+                            $studentDocument['updated_at'] = Carbon::now();
+                            StudentDocument::insert($studentDocument);
+                        }
+                    }
+                }
             }
             if(!empty($data['modules'])){
                 $userAclsData = array();

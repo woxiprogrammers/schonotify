@@ -520,12 +520,12 @@ var FormWizard = function () {
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
              var values = $("input[name='upload_doc[]']")
                 .map(function(){return $(this).val();}).get();
-            var form=$('#student-registration-form').serialize();
+            var formData1 = new FormData($("form")[0]);
             $.ajax({
                 url:'save-user',
-                data: form,
+                data: formData1,
                 processData: false,
-
+                contentType: false,
                 type: 'POST',
 
                 success: function(data){
