@@ -615,7 +615,7 @@
                     <label  class="control-label">
                         City
                     </label>
-                    <input type="text" placeholder="Enter School Name" class="form-control" name="city"/>
+                    <input type="text" placeholder="Enter City" class="form-control" name="city"/>
                 </div>
             </div>
             <div class="col-md-6">
