@@ -72,7 +72,7 @@
                     Personal Information (teacher)
                 </legend>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
                                 First Name <span class="symbol required"></span>
@@ -80,7 +80,15 @@
                             <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Middle Name <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName"/>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
                                 Last Name <span class="symbol required"></span>
@@ -103,6 +111,30 @@
 
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"> <!-- Date input -->
+                            <label class="control-label" for="dob">Date Of Birth</label>
+                            <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="form-field-select-2">
+                                Marital Status <span class="symbol required"></span>
+                            </label>
+                            <select class="form-control" id="martial_status" style="-webkit-appearance: menulist;" name="highest_standard">
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="separated">Separated</option>
+                                <option value="widowed">Widowed</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -266,6 +298,141 @@
 
             </fieldset>
 
+            <fieldset>
+                <legend>
+                    Name of Spouse
+                </legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                First Name <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter your First Name" class="form-control" name="spouse_first_name"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Middle Name
+                            </label>
+                            <input type="text" placeholder="Enter your Middle Name" class="form-control" name="spouse_middle_name"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Last Name
+                            </label>
+                            <input type="text" placeholder="Enter your Last Name" class="form-control" name="spouse_last_name"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Issues
+                            </label>
+                            <input type="text" placeholder="Enter Issues" class="form-control" name="issues"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Permanent Address <span class="symbol required"></span>
+                            </label>
+                            <div class="note-editor">
+                                <textarea class="form-control autosize area-animated" name="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Communication Address <span class="symbol required"></span>
+                            </label>
+
+                            <input type="checkbox" name="parent_communication_address" id="parent_communication_address" checked> Same as Permanent Address
+                            <div class="note-editor" id="communication_address_parent">
+                                <textarea class="form-control autosize area-animated" name="communication_address_parent" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Pan Card No.
+                            </label>
+                            <input type="text" placeholder="Enter Pan Card No." class="form-control" name="pan_card"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Aadhar Card No.
+                            </label>
+                            <input type="text" placeholder="Aadhar Card Number " class="form-control" name="aadhar_number"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Designation
+                            </label>
+                            <input type="text" placeholder="Enter Designation" class="form-control" name="designation"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"> <!-- Date input -->
+                            <label class="control-label" for="doj">Date Of Joining</label>
+                            <input class="form-control" id="doj" name="doj" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </fieldset>
+
+
+            <fieldset>
+                <legend>
+                    EDUCATIONAL QUALIFICATIONS
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowEducationlQualification('dataTable')" />
+                <TABLE id="dataTable" width="350px" border="1">
+                    <TR>
+                        <TH>Certificate/Degree </TH>
+                        <TH> Passing Year </TH>
+                        <TH>  University/Board</TH>
+                        <TH> Subject(s) </TH>
+                    </TR>
+                    <TR>
+                        <TD> <INPUT type="text" name="qualification[0][certificate]" placeholder="Certificate/Degree"/> </TD>
+                        <TD> <INPUT type="text" name="qualification[0][passing_year]" placeholder="Passing Year"/> </TD>
+                        <TD> <INPUT type="text" name="qualification[0][university]" placeholder="University/Board"/> </TD>
+                        <TD> <INPUT type="text" name="qualification[0][subjects]" placeholder="Subject(s)"/> </TD>
+                    </TR>
+                </TABLE>
+
+            </fieldset>
+
             <div class="form-group">
                 <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" disabled>
                     Next <i class="fa fa-arrow-circle-right"></i>
@@ -360,6 +527,8 @@
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
 <script>
     jQuery(document).ready(function() {
@@ -369,10 +538,77 @@
         Main.init();
         FormValidator.init();
         FormWizard.init();
+
+        var date_input=$('input[name="dob"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+            endDate: '+0d',
+        })
+
+
+        var date_input=$('input[name="doj"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+            endDate: '+0d',
+        })
     });
 </script>
 <script type="text/javascript">
 
+
+function addRowEducationlQualification(tableID){
+    var table = document.getElementById(tableID);
+
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+
+    var cell2 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "text";
+    element2.placeholder = "Certificate/Degree";
+    element2.name = "qualification["+rowCount+"][certificate]";
+    cell2.appendChild(element2);
+
+    var cell3 = row.insertCell(1);
+    var element3 = document.createElement("input");
+    element3.type = "text";
+    element3.placeholder = "Passing Year";
+    element3.name = "qualification["+rowCount+"][passing_year]";
+    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(2);
+    var element4 = document.createElement("input");
+    element4.type = "text";
+    element4.placeholder = "University/Board";
+    element4.name = "qualification["+rowCount+"][university]";
+    cell4.appendChild(element4);
+
+    var cell5 = row.insertCell(3);
+    var element5 = document.createElement("input");
+    element5.type = "text";
+    element5.placeholder = "Subject(s)";
+    element5.name = "qualification["+rowCount+"][subjects]";
+    cell5.appendChild(element5);
+}
+
+
+
+
+
+
+$('#communication_address_parent').hide();
+
+$("#parent_communication_address").click(function(){
+    $('#communication_address_parent').toggle();
+});
     $('#role-select').on('change',function(){
 
         var par=this.value;
