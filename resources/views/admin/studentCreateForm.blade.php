@@ -143,7 +143,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">
-                    Middle Name <span class="symbol required"></span>
+                    Middle Name
                 </label>
                 <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName"/>
             </div>
@@ -151,7 +151,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">
-                    Last Name <span class="symbol required"></span>
+                    Last Name
                 </label>
                 <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
             </div>
@@ -172,7 +172,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group"> <!-- Date input -->
-                <label class="control-label" for="dob">Date Of Birth</label>
+                <label class="control-label" for="dob">Date Of Birth <span class="symbol required"></span> </label>
                 <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
             </div>
         </div>
@@ -322,7 +322,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">
-                    Aadhar Card Number <span class="symbol required"></span>
+                    Aadhar Card Number
                 </label>
                 <input type="text" placeholder="Aadhar Card Number " class="form-control" name="aadhar_number"/>
             </div>
@@ -425,10 +425,10 @@
 
     <fieldset>
         <legend>
-            FAMILY INFORMATION (student)
+            STUDENT'S FAMILY INFORMATION
         </legend>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
                         Father’s/Guardian’s First Name <span class="symbol required"></span>
@@ -436,7 +436,7 @@
                     <input type="text" placeholder="Enter your First Name" class="form-control" name="father_first_name"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Middle Name
@@ -444,7 +444,7 @@
                     <input type="text" placeholder="Enter your Middle Name" class="form-control" name="father_middle_name"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Last Name
@@ -455,7 +455,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
                         Father’s/Guardian’s Occupation <span class="symbol required"></span>
@@ -463,7 +463,7 @@
                     <input type="text" placeholder="Enter Occupation" class="form-control" name="father_occupation"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Father’s/Guardian’s Income <span class="symbol required"></span>
@@ -471,7 +471,7 @@
                     <input type="text" placeholder="Enter Income" class="form-control" name="father_income"/>P.A.
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Father’s/Guardian’s Contact Number <span class="symbol required"></span>
@@ -481,7 +481,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
                         Mother’s/Guardian’s First Name <span class="symbol required"></span>
@@ -489,7 +489,7 @@
                     <input type="text" placeholder="Enter your First Name" class="form-control" name="mother_first_name"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Middle Name
@@ -497,7 +497,7 @@
                     <input type="text" placeholder="Enter your Middle Name" class="form-control" name="mother_middle_name"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Last Name
@@ -508,7 +508,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
                         Mother’s/Guardian’s Occupation <span class="symbol required"></span>
@@ -516,7 +516,7 @@
                     <input type="text" placeholder="Enter Occupation" class="form-control" name="mother_occupation"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Mother’s/Guardian’s Income <span class="symbol required"></span>
@@ -524,7 +524,7 @@
                     <input type="text" placeholder="Enter Income" class="form-control" name="mother_income"/>P.A.
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
                         Mother’s/Guardian’s Contact Number <span class="symbol required"></span>
