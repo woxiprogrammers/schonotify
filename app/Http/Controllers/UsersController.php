@@ -316,7 +316,6 @@ class UsersController extends Controller
             $userData->last_name = $data['lastName'];
             $userData->username = $data['userName'];
             $userData->password = bcrypt($data['password']);
-            $userData->email = $data['email'];
             $userData->gender = $data['gender'];
             $userData->address = $data['address'];
             $userData->mobile = $data['mobile'];

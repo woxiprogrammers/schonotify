@@ -158,7 +158,7 @@
         </div>
 
     </div>
-    <!--<div class="row">
+    <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">
@@ -168,8 +168,6 @@
                 <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
             </div>
         </div>
-    </div>-->
-    <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label class="block">
@@ -415,7 +413,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
-                        Father’s/Guardian’s First Name <span class="symbol required"></span>
+                        Father’s/Guardian’s Name <span class="symbol required"></span>
                     </label>
                     <input type="text" placeholder="Enter your First Name" class="form-control" name="father_first_name"/>
                 </div>
@@ -442,7 +440,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
-                        Father’s/Guardian’s Occupation <span class="symbol required"></span>
+                        Father’s/Guardian’s   Occupation <span class="symbol required"></span>
                     </label>
                     <input type="text" placeholder="Enter Occupation" class="form-control" name="father_occupation"/>
                 </div>
@@ -450,9 +448,9 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
-                        Father’s/Guardian’s Income <span class="symbol required"></span>
+                        Father’s/Guardian’s     Income (P.A.) <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Income" class="form-control" name="father_income"/>P.A.
+                    <input type="text" placeholder="Enter Income" class="form-control" name="father_income"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -468,7 +466,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
-                        Mother’s/Guardian’s First Name <span class="symbol required"></span>
+                        Mother’s/Guardian’s Name <span class="symbol required"></span>
                     </label>
                     <input type="text" placeholder="Enter your First Name" class="form-control" name="mother_first_name"/>
                 </div>
@@ -503,9 +501,9 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label">
-                        Mother’s/Guardian’s Income <span class="symbol required"></span>
+                        Mother’s/Guardian’s Income (P.A.) <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Income" class="form-control" name="mother_income"/>P.A.
+                    <input type="text" placeholder="Enter Income" class="form-control" name="mother_income"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -557,16 +555,20 @@
         </div>
 
         <div class="row">
-            <label  class="control-label col-md-3">
-                SIBLINGS
-            </label><br>
-            <INPUT style="align:left" type="button" value="Add Row" onclick="addSibling('sibling')" />
-            <TABLE id="sibling"  border="1">
-                <TR>
-                    <TD> <INPUT type="text" name="sibling[0][name]" placeholder="Name"/> </TD>
-                    <TD> <INPUT type="text" name="sibling[0][age]" placeholder="Age"/> </TD>
-                </TR>
-            </TABLE>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label  class="control-label">
+                        SIBLINGS
+                    </label><br>
+                    <INPUT type="button" value="Add Row" onclick="addSibling('sibling')" />
+                    <TABLE id="sibling"  border="1">
+                        <TR>
+                            <TD> <INPUT type="text" name="sibling[0][name]" placeholder="Name"/> </TD>
+                            <TD> <INPUT type="number" name="sibling[0][age]" placeholder="Age"/> </TD>
+                        </TR>
+                    </TABLE>
+                </div>
+            </div>
         </div>
 
     </fieldset>
@@ -641,7 +643,7 @@
             <TABLE id="dataTable"  border="1">
                 <TR>
                     <TD><INPUT type="text" name="special_aptitude[0][test]" placeholder="Test"/></TD>
-                    <TD><INPUT type="text" name="special_aptitude[0][score]" placeholder="Score"/></TD>
+                    <TD><INPUT type="number" name="special_aptitude[0][score]" placeholder="Score"/></TD>
 
                 </TR>
             </TABLE>
@@ -903,7 +905,7 @@
 
         var cell3 = row.insertCell(1);
         var element3 = document.createElement("input");
-        element3.type = "text";
+        element3.type = "number";
         element3.placeholder = "Score";
         element3.name = "special_aptitude["+rowCount+"][score]";
         cell3.appendChild(element3);
@@ -936,7 +938,7 @@
 
         var cell3 = row.insertCell(1);
         var element3 = document.createElement("input");
-        element3.type = "text";
+        element3.type = "number";
         element3.placeholder = "Age";
         element3.name = "sibling["+rowCount+"][age]";
         cell3.appendChild(element3);
