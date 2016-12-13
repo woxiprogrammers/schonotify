@@ -79,10 +79,10 @@ var FormWizard = function () {
                     required: true,
                     alphanumeric: true
                 },
-                 email: {
+                 /*email: {
                     required: true,
                      chkMail: true
-                },
+                },*/
                 password: {
                     minlength: 6,
                     required: true
@@ -146,10 +146,10 @@ var FormWizard = function () {
                     alphanumeric: "User name must contain only letters"
                 },
                 studid:"please provide correct student id",
-                email: {
+               /* email: {
                     required: "Please provide valid email id",
                     chkMail: "Your email address must be in the format of name@domain.com"
-                },
+                },*/
                 address:{
                      required:"Please provide address",
                      address:"Address must contain at-least 15 characters"

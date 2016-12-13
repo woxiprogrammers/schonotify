@@ -67,12 +67,10 @@ var FormWizard = function () {
                 },
                 lastName: {
                     minlength: 2,
-                    required: true,
                     alpha: true
                 },
                 middleName: {
                     minlength: 2,
-                    required: true,
                     alpha: true
                 },
                 father_first_name: {
@@ -162,7 +160,6 @@ var FormWizard = function () {
                     alphaSpace: true
                 },
                 aadhar_number:{
-                    required: true,
                     alphanumeric: true
                 },
                 mother_tongue:{
@@ -265,7 +262,6 @@ var FormWizard = function () {
                     alphanumeric:"GRN must contain only alphabets and numbers"
                 },
                 aadhar_number:{
-                    required: "Aadhar Card Number required",
                     alphanumeric:"Aadhar Card Number must contain only alphabets and numbers"
                 },
                 birth_place:{
@@ -306,11 +302,9 @@ var FormWizard = function () {
                     alpha: "First name must contain only letters"
                 },
                 lastName: {
-                    required: "Last Name is required",
                     alpha: "Last name must contain only letters"
                 },
                 middleName: {
-                    required: "Middle Name is required",
                     alpha: "Middle name must contain only letters"
                 },
                 father_first_name: {

@@ -316,7 +316,6 @@ class UsersController extends Controller
             $userData->last_name = $data['lastName'];
             $userData->username = $data['userName'];
             $userData->password = bcrypt($data['password']);
-            $userData->email = $data['email'];
             $userData->gender = $data['gender'];
             $userData->address = $data['address'];
             $userData->mobile = $data['mobile'];
@@ -391,7 +390,8 @@ class UsersController extends Controller
                     $aptitudes = $data['special_aptitude'];
                     foreach($aptitudes as $aptitude){
                         $aptitudeInfo['student_id'] = $LastInsertId;
-                        $aptitudeInfo['special_aptitude'] = $aptitude;
+                        $aptitudeInfo['special_aptitude'] = $aptitude['test'];
+                        $aptitudeInfo['score'] = $aptitude['score'];
                         $aptitudeInfo['created_at'] = Carbon::now();
                         $aptitudeInfo['updated_at'] = Carbon::now();
                         StudentSpecialAptitude::insert($aptitudeInfo);
