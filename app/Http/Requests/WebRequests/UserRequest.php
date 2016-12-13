@@ -79,7 +79,7 @@ class UserRequest extends Request
                 if($userToken['role_name'] == 'student'){
                     return [
                         'firstName'=>'required|min:2',
-                        'lastName' => 'required|min:2',
+                        'lastName' => 'min:2',
                         'password' => 'required|min:6',
                         'password2' => 'required|min:6',
                         'mobile' => 'required|min:10',

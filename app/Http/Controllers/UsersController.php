@@ -391,7 +391,8 @@ class UsersController extends Controller
                     $aptitudes = $data['special_aptitude'];
                     foreach($aptitudes as $aptitude){
                         $aptitudeInfo['student_id'] = $LastInsertId;
-                        $aptitudeInfo['special_aptitude'] = $aptitude;
+                        $aptitudeInfo['special_aptitude'] = $aptitude['test'];
+                        $aptitudeInfo['score'] = $aptitude['score'];
                         $aptitudeInfo['created_at'] = Carbon::now();
                         $aptitudeInfo['updated_at'] = Carbon::now();
                         StudentSpecialAptitude::insert($aptitudeInfo);

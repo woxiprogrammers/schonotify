@@ -158,7 +158,7 @@
         </div>
 
     </div>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">
@@ -166,6 +166,25 @@
                 </label>
                 <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
                 <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
+            </div>
+        </div>
+    </div>-->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="block">
+                    Gender
+                </label>
+                <div class="clip-radio radio-primary">
+                    <input type="radio" id="wz-female" name="gender" value="F">
+                    <label for="wz-female">
+                        Female
+                    </label>
+                    <input type="radio" id="wz-male" name="gender" value="M" checked>
+                    <label for="wz-male">
+                        Male
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -224,25 +243,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label">
-                    Password <span class="symbol required"></span>
-                </label>
-                <input type="password" placeholder="Enter a Password" class="form-control" name="password" id="password"/>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label">
-                    Repeat Password <span class="symbol required"></span>
-                </label>
-                <input type="password" placeholder="Repeat Password" class="form-control" name="password2"/>
-            </div>
-        </div>
 
-    </div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -262,7 +263,7 @@
         </div>
 
     </div>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">
@@ -272,24 +273,7 @@
                 <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="block">
-                    Gender
-                </label>
-                <div class="clip-radio radio-primary">
-                    <input type="radio" id="wz-female" name="gender" value="F">
-                    <label for="wz-female">
-                        Female
-                    </label>
-                    <input type="radio" id="wz-male" name="gender" value="M" checked>
-                    <label for="wz-male">
-                        Male
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
+    </div>-->
     <div class="row">
 
         <div class="col-md-6">
@@ -308,7 +292,7 @@
             <div class="form-group">
                 <label  class="control-label">
                     Communication Address <span class="symbol required"></span>
-                </label>
+                </label><br>
                 <input type="checkbox" name="student_communication_address" id="student_communication_address" checked> Same as Permanent Address
                 <div class="note-editor" id="communication_address">
                     <textarea  class="form-control autosize area-animated"  name="communication_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
@@ -561,7 +545,7 @@
                 <div class="form-group">
                     <label  class="control-label">
                         Communication Address <span class="symbol required"></span>
-                    </label>
+                    </label><br>
 
                     <input type="checkbox" name="parent_communication_address" id="parent_communication_address" checked> Same as Permanent Address
                     <div class="note-editor" id="communication_address_parent">
@@ -575,9 +559,9 @@
         <div class="row">
             <label  class="control-label col-md-3">
                 SIBLINGS
-            </label>
-            <INPUT type="button" value="Add Row" onclick="addSibling('sibling')" />
-            <TABLE id="sibling" width="350px" border="1">
+            </label><br>
+            <INPUT style="align:left" type="button" value="Add Row" onclick="addSibling('sibling')" />
+            <TABLE id="sibling"  border="1">
                 <TR>
                     <TD> <INPUT type="text" name="sibling[0][name]" placeholder="Name"/> </TD>
                     <TD> <INPUT type="text" name="sibling[0][age]" placeholder="Age"/> </TD>
@@ -654,9 +638,11 @@
                 SPECIAL APTITUDE
             </legend>
             <INPUT type="button" value="Add Row" onclick="addRowSpecialAptitude('dataTable')" />
-            <TABLE id="dataTable" width="350px" border="1">
+            <TABLE id="dataTable"  border="1">
                 <TR>
-                    <TD> <INPUT type="text" name="special_aptitude[]"/> </TD>
+                    <TD><INPUT type="text" name="special_aptitude[0][test]" placeholder="Test"/></TD>
+                    <TD><INPUT type="text" name="special_aptitude[0][score]" placeholder="Score"/></TD>
+
                 </TR>
             </TABLE>
 
@@ -666,7 +652,7 @@
                 INTEREST / HOBBIES
             </legend>
             <INPUT type="button" value="Add Row" onclick="addRow('hobbies')" />
-            <TABLE id="hobbies" width="350px" border="1">
+            <TABLE id="hobbies"  border="1">
                 <TR>
                     <TD> <INPUT type="text" name="hobbies[]"/> </TD>
                 </TR>
@@ -678,11 +664,31 @@
                 DOCUMENTS SUBMITTED
             </legend>
             <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
-            <TABLE id="upload_doc" width="350px" border="1">
+            <TABLE id="upload_doc"  border="1">
                 <TR>
                     <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
                 </TR>
             </TABLE>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Password <span class="symbol required"></span>
+                        </label>
+                        <input type="password" placeholder="Enter a Password" class="form-control" name="password" id="password"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Repeat Password <span class="symbol required"></span>
+                        </label>
+                        <input type="password" placeholder="Repeat Password" class="form-control" name="password2"/>
+                    </div>
+                </div>
+            </div>
         </fieldset>
 <div class="form-group">
     <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" >
@@ -888,11 +894,19 @@
         var rowCount = table.rows.length;
         var row = table.insertRow(rowCount);
 
-        var cell3 = row.insertCell(0);
+        var cell2 = row.insertCell(0);
         var element2 = document.createElement("input");
         element2.type = "text";
-        element2.name = "special_aptitude[]";
-        cell3.appendChild(element2);
+        element2.placeholder = "Test";
+        element2.name = "special_aptitude["+rowCount+"][test]";
+        cell2.appendChild(element2);
+
+        var cell3 = row.insertCell(1);
+        var element3 = document.createElement("input");
+        element3.type = "text";
+        element3.placeholder = "Score";
+        element3.name = "special_aptitude["+rowCount+"][score]";
+        cell3.appendChild(element3);
     }
     function addRowUploadDoc(tableID){
         var table = document.getElementById(tableID);
