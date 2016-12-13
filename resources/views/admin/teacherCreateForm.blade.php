@@ -83,7 +83,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
-                                Middle Name <span class="symbol required"></span>
+                                Middle Name
                             </label>
                             <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName"/>
                         </div>
@@ -91,7 +91,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
-                                Last Name <span class="symbol required"></span>
+                                Last Name
                             </label>
                             <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
                         </div>
@@ -106,6 +106,23 @@
                             </label>
                             <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
                             <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="block">
+                                Gender
+                            </label>
+                            <div class="clip-radio radio-primary">
+                                <input type="radio" id="wz-female" name="gender" value="F">
+                                <label for="wz-female">
+                                    Female
+                                </label>
+                                <input type="radio" id="wz-male" name="gender" value="M" checked>
+                                <label for="wz-male">
+                                    Male
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -206,7 +223,7 @@
                         </div>
                        </div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="block">
@@ -235,7 +252,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="row">
                     <div class="col-md-6">
                         <label class="control-label">
@@ -432,7 +449,60 @@
                 </TABLE>
 
             </fieldset>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Methods in B.Ed.
+                            </label>
+                            <input type="text" placeholder="Enter Methods in B.Ed." class="form-control" name="b_ed_methods"/>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    WORK EXPERIENCE
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowWorkExperience('work_experience')" />
+                <TABLE id="work_experience" width="350px" border="1">
+                    <TR>
+                        <TH>Organisation</TH>
+                        <TH>Designation </TH>
+                        <TH>Duration</TH>
+                    </TR>
+                    <TR>
+                        <TD> <INPUT type="text" name="work_experience[0][organisation]" placeholder="Organisation"/> </TD>
+                        <TD> <INPUT type="text" name="work_experience[0][designation]" placeholder="Designation"/> </TD>
+                        <TD> <INPUT type="text" name="work_experience[0][duration]" placeholder="Duration"/> </TD>
+                    </TR>
+                </TABLE>
 
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Work Experience (in years)
+                            </label>
+                            <input type="text" placeholder="Enter Work Experience (in years)" class="form-control" name="work_experience"/>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    DOCUMENTS
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
+                <TABLE id="upload_doc"  border="1">
+                    <TR>
+                        <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
+                    </TR>
+                </TABLE>
+            </fieldset>
             <div class="form-group">
                 <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" disabled>
                     Next <i class="fa fa-arrow-circle-right"></i>
@@ -599,7 +669,45 @@ function addRowEducationlQualification(tableID){
     cell5.appendChild(element5);
 }
 
+function addRowWorkExperience(tableID){
+    var table = document.getElementById(tableID);
 
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+
+    var cell2 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "text";
+    element2.placeholder = "Organisation	  ";
+    element2.name = "work_experience["+rowCount+"][organisation]";
+    cell2.appendChild(element2);
+
+    var cell3 = row.insertCell(1);
+    var element3 = document.createElement("input");
+    element3.type = "text";
+    element3.placeholder = "Designation";
+    element3.name = "work_experience["+rowCount+"][designation ]";
+    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(2);
+    var element4 = document.createElement("input");
+    element4.type = "text";
+    element4.placeholder = "Duration";
+    element4.name = "work_experience["+rowCount+"][duration]";
+    cell4.appendChild(element4);
+}
+function addRowUploadDoc(tableID){
+    var table = document.getElementById(tableID);
+
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+
+    var cell3 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "file";
+    element2.name = "upload_doc[]";
+    cell3.appendChild(element2);
+}
 
 
 

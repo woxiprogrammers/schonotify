@@ -71,7 +71,11 @@ var FormWizard = function () {
                 },
                 lastName: {
                     minlength: 2,
-                    required: true,
+                    /*required: true,*/
+                    alpha: true
+                },
+                middleName: {
+                    minlength: 2,
                     alpha: true
                 },
                 userName:{
@@ -137,9 +141,12 @@ var FormWizard = function () {
                     minlength:"Please enter at least 2 character"
                 },
                 lastName: {
-                     required: "Last Name is required",
+                     /*required: "Last Name is required",*/
                      alpha: "Last name must contain only letters",
                      minlength:"Please enter at least 2 character"
+                },
+                middleName: {
+                    alpha: "Middle name must contain only letters"
                 },
                 userName: {
                     required: "User Name is required",
