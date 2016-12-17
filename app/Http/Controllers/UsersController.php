@@ -312,7 +312,12 @@ class UsersController extends Controller
         $data = $request->all();
         $user=Auth::user();
         if(!empty($data)){
-            $unique_user_string = strtolower($data['firstName'] . $data['lastName'] . $data['dob']);
+            if(isset($data['dob'])){
+                $dob = $data['dob'];
+            }else{
+                $dob = $data['mobile'];
+            }
+            $unique_user_string = strtolower($data['firstName'] . $data['lastName'] . $dob);
             $username = ucfirst(substr($data['firstName'], 0, 1)) . ucfirst($data['lastName']) . crc32($unique_user_string);
             $userData= new User;
             $userData->first_name = $data['firstName'];
@@ -1155,7 +1160,7 @@ class UsersController extends Controller
             $parentInfo = ParentExtraInfo::where('parent_id',$user['id'])->first();
             $parentInfo['userId'] = $user['id'];
             $userInfo['data'] = $parentInfo;
-            $userInfo['value'] = $user["first_name"].' '.$user["last_name"].' ,"<i>'.$user["email"].'</i>"';
+            $userInfo['value'] = $user["email"];
             array_push($userInformation,$userInfo);
         }
         return $userInformation;
