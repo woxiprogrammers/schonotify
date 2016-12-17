@@ -95,29 +95,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
 
-            <div id="w">
-                <div id="content">
-
-                    <div id="searchfield">
-                        <form>
-                            <div class="form-group ">
-                                <label class="control-label">
-                                    Parent Name: <span class="symbol required"></span>
-                                </label>
-                                <input type="text" placeholder="Enter Parent Name" class="form-control" name="parent_name" id="autocomplete">
-                                <input type='hidden' name='parent_id' id='parent_id'>
-                                <br>
-                                <div class="form-group" id="outputcontent"></div>
-                            </div>
-                        </form>
-                    </div><!-- @end #searchfield -->
-                </div><!-- @end #content -->
-            </div><!-- @end #w -->
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-6">
@@ -159,7 +137,7 @@
 
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <!--<div class="col-md-6">
             <div class="form-group">
                 <label class="control-label">
                     User Name <span class="symbol required"></span>
@@ -167,7 +145,7 @@
                 <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
                 <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
             </div>
-        </div>
+        </div>-->
         <div class="col-md-6">
             <div class="form-group">
                 <label class="block">
@@ -409,13 +387,37 @@
         <legend>
             STUDENT'S FAMILY INFORMATION
         </legend>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div id="w">
+                    <div id="content">
+
+                        <div id="searchfield">
+                            <form>
+                                <div class="form-group ">
+                                    <label class="control-label">
+                                        Parent Name: <span class="symbol required"></span>
+                                    </label>
+                                    <input type="text" placeholder="Enter Parent Name" class="form-control" name="parent_name" id="autocomplete">
+                                    <input type='hidden' name='parent_id' id='parent_id'>
+                                    <br>
+                                    <div class="form-group" id="outputcontent"></div>
+                                </div>
+                            </form>
+                        </div><!-- @end #searchfield -->
+                    </div><!-- @end #content -->
+                </div><!-- @end #w -->
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label  class="control-label">
                         Father’s/Guardian’s Name <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter your First Name" class="form-control" name="father_first_name"/>
+                    <input type="text" placeholder="Enter your First Name" class="form-control" name="father_first_name" id="father_first_name"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -423,7 +425,7 @@
                     <label class="control-label">
                         Middle Name
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="father_middle_name"/>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="father_middle_name" id="father_middle_name"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -431,7 +433,7 @@
                     <label class="control-label">
                         Last Name
                     </label>
-                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="father_last_name"/>
+                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="father_last_name" id="father_last_name"/>
                 </div>
             </div>
         </div>
@@ -442,7 +444,7 @@
                     <label  class="control-label">
                         Father’s/Guardian’s   Occupation <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Occupation" class="form-control" name="father_occupation"/>
+                    <input type="text" placeholder="Enter Occupation" class="form-control" name="father_occupation" id="father_occupation"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -450,7 +452,7 @@
                     <label class="control-label">
                         Father’s/Guardian’s     Income (P.A.) <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Income" class="form-control" name="father_income"/>
+                    <input type="text" placeholder="Enter Income" class="form-control" name="father_income" id="father_income"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -458,7 +460,7 @@
                     <label class="control-label">
                         Father’s/Guardian’s Contact Number <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="father_contact"/>
+                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="father_contact" id="father_contact"/>
                 </div>
             </div>
         </div>
@@ -468,7 +470,7 @@
                     <label  class="control-label">
                         Mother’s/Guardian’s Name <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter your First Name" class="form-control" name="mother_first_name"/>
+                    <input type="text" placeholder="Enter your First Name" class="form-control" name="mother_first_name" id="mother_first_name"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -476,7 +478,7 @@
                     <label class="control-label">
                         Middle Name
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="mother_middle_name"/>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="mother_middle_name" id="mother_middle_name"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -484,7 +486,7 @@
                     <label class="control-label">
                         Last Name
                     </label>
-                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="mother_last_name"/>
+                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="mother_last_name" id="mother_last_name"/>
                 </div>
             </div>
         </div>
@@ -495,7 +497,7 @@
                     <label  class="control-label">
                         Mother’s/Guardian’s Occupation <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Occupation" class="form-control" name="mother_occupation"/>
+                    <input type="text" placeholder="Enter Occupation" class="form-control" name="mother_occupation" id="mother_occupation"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -503,7 +505,7 @@
                     <label class="control-label">
                         Mother’s/Guardian’s Income (P.A.) <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Income" class="form-control" name="mother_income"/>
+                    <input type="text" placeholder="Enter Income" class="form-control" name="mother_income" id="mother_income"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -511,21 +513,21 @@
                     <label class="control-label">
                         Mother’s/Guardian’s Contact Number <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="mother_contact"/>
+                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="mother_contact" id="mother_contact"/>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <!--<div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label  class="control-label">
                         Email <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter email" class="form-control" name="parent_email"/>
+                    <input type="text" placeholder="Enter email" class="form-control" name="parent_email" id="parent_email"/>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div class="row">
 
             <div class="col-md-6">
@@ -534,7 +536,7 @@
                         Permanent Address <span class="symbol required"></span>
                     </label>
                     <div class="note-editor">
-                        <textarea class="form-control autosize area-animated" name="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                        <textarea class="form-control autosize area-animated" name="permanent_address" id="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
                         </textarea>
                     </div>
                 </div>
@@ -856,7 +858,37 @@
                         lookup: currencies,
                         onSelect: function (suggestion) {
                             var thehtml = '<strong>Showing result for:</strong> ' + suggestion.value;
-                            $('#parent_id').val(suggestion.data);
+                            $('#parent_id').val(suggestion.data['userId']);
+                            $('#father_first_name').attr("disabled", true);
+                            $('#father_middle_name').attr("disabled", true);
+                            $('#father_last_name').attr("disabled", true);
+                            $('#mother_first_name').attr("disabled", true);
+                            $('#mother_middle_name').attr("disabled", true);
+                            $('#mother_last_name').attr("disabled", true);
+                            $('#father_occupation').attr("disabled", true);
+                            $('#mother_occupation').attr("disabled", true);
+                            $('#father_income').attr("disabled", true);
+                            $('#mother_income').attr("disabled", true);
+                            $('#father_contact').attr("disabled", true);
+                            $('#mother_contact').attr("disabled", true);
+                            $('#permanent_address').attr("disabled", true);
+
+                            $('#father_first_name').val(suggestion.data['father_first_name']);
+                            $('#father_middle_name').val(suggestion.data['father_middle_name']);
+                            $('#father_last_name').val(suggestion.data['father_last_name']);
+                            $('#mother_first_name').val(suggestion.data['mother_first_name']);
+                            $('#mother_middle_name').val(suggestion.data['mother_middle_name']);
+                            $('#mother_last_name').val(suggestion.data['mother_last_name']);
+                            $('#father_occupation').val(suggestion.data['father_occupation']);
+                            $('#mother_occupation').val(suggestion.data['mother_occupation']);
+                            $('#father_income').val(suggestion.data['father_income']);
+                            $('#mother_income').val(suggestion.data['mother_income']);
+                            $('#father_contact').val(suggestion.data['father_contact']);
+                            $('#mother_contact').val(suggestion.data['mother_contact']);
+                            $('#permanent_address').val(suggestion.data['permanent_address']);
+
+
+
                             $('#outputcontent').html(thehtml);
                             $('#tabTable').show();
                             var val3=$('#autocomplete').html(suggestion.value).text();
@@ -874,6 +906,32 @@
         if(e.keyCode != 13)
         {
             $('#parent_id').val('');
+            $('#father_first_name').attr("disabled", false);
+            $('#father_middle_name').attr("disabled", false);
+            $('#father_last_name').attr("disabled", false);
+            $('#mother_first_name').attr("disabled", false);
+            $('#mother_middle_name').attr("disabled", false);
+            $('#mother_last_name').attr("disabled", false);
+            $('#father_occupation').attr("disabled", false);
+            $('#mother_occupation').attr("disabled", false);
+            $('#father_income').attr("disabled", false);
+            $('#mother_income').attr("disabled", false);
+            $('#father_contact').attr("disabled", false);
+            $('#mother_contact').attr("disabled", false);
+            $('#permanent_address').attr("disabled", false);
+            $('#father_first_name').val('');
+            $('#father_middle_name').val('');
+            $('#father_last_name').val('');
+            $('#mother_first_name').val('');
+            $('#mother_middle_name').val('');
+            $('#mother_last_name').val('');
+            $('#father_occupation').val('');
+            $('#mother_occupation').val('');
+            $('#father_income').val('');
+            $('#mother_income').val('');
+            $('#father_contact').val('');
+            $('#mother_contact').val('');
+            $('#permanent_address').val('');
         }
     });
 

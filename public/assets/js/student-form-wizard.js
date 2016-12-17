@@ -238,16 +238,7 @@ var FormWizard = function () {
                     required:true
                 },
                 parent_name:{
-                    required:true,
-                    remote:{
-                        url:"/check-parent",
-                        type:"POST",
-                        data:{
-                            parentID:function() {
-                                return $( "#parent_id" ).val();
-                            }
-                        }
-                    }
+                    required:true
                 },
                 userName:{
                     minlength: 2,
@@ -424,8 +415,7 @@ var FormWizard = function () {
                     alphanumeric: "User name must contain only letters"
                 },
                 parent_name:{
-                    required:"Parent name is required",
-                    remote:"Please Select proper parent"
+                    required:"Parent name is required"
                 }
             },
 

@@ -12,6 +12,7 @@ use App\HomeworkTeacher;
 use App\Leave;
 use App\Module;
 use App\ModuleAcl;
+use App\ParentExtraInfo;
 use App\StudentDocument;
 use App\StudentExtraInfo;
 use App\StudentFamily;
@@ -311,10 +312,12 @@ class UsersController extends Controller
         $data = $request->all();
         $user=Auth::user();
         if(!empty($data)){
+            $unique_user_string = strtolower($data['firstName'] . $data['lastName'] . $data['dob']);
+            $username = ucfirst(substr($data['firstName'], 0, 1)) . ucfirst($data['lastName']) . crc32($unique_user_string);
             $userData= new User;
             $userData->first_name = $data['firstName'];
             $userData->last_name = $data['lastName'];
-            $userData->username = $data['userName'];
+            $userData->username = $username;
             $userData->password = bcrypt($data['password']);
             $userData->gender = $data['gender'];
             $userData->address = $data['address'];
@@ -358,18 +361,52 @@ class UsersController extends Controller
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'student'){
+                $userData->birth_date = $data['dob'];
                 $userData->middle_name = $data['middleName'];
-
-
                 if(isset($data['division'])){
                     $userData = array_add($userData, 'division_id', $data['division']);
                 }
-                if(isset($data['parent_id'])){
+                if(!empty($data['parent_id'])){
                     $userData = array_add($userData, 'parent_id', $data['parent_id']);
                     $parent=User::where('id',$data['parent_id'])->select('is_active')->first();
                     if($parent->is_active == 1){
                         $userData->is_active = 1;
                     }
+                }else{
+                    if(isset($data['parent_communication_address'])){
+                        $communication_address_parent = $data['permanent_address'];
+                    }else{
+                        $communication_address_parent = $data['communication_address_parent'];
+                    }
+                    $unique_user_string = strtolower($data['father_first_name'] . $data['father_last_name'] . $data['dob']);
+                    $username = ucfirst(substr($data['father_first_name'], 0, 1)) . ucfirst($data['father_last_name']) . crc32($unique_user_string);
+                    $parentData= new User;
+                    $parentData->first_name = $data['father_first_name'];
+                    $parentData->last_name = $data['father_last_name'];
+                    $parentData->middle_name = $data['father_middle_name'];
+                    $parentData->username = $username;
+                    $parentData->password = bcrypt($data['password']);
+                    $parentData->gender = $data['gender'];
+                    $parentData->address = $communication_address_parent;
+                    $parentData->mobile = $data['father_contact'];
+                    $parentData->email = $data['parent_name'];
+                    $parentData->role_id = 4;
+                    $parentData->avatar = 'default-user.jpg';
+                    $parentData->is_active = 0;
+                    $parentData->remember_token = csrf_token().'_'.time();
+                    $parentData->confirmation_code = str_random(30);
+                    $parentData->body_id = $user->body_id;
+                    $parentData->created_at = Carbon::now();
+                    $parentData->updated_at = Carbon::now();
+                    $parentData->save();
+                    $parnetId = $parentData->id;
+                    $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
+                    $familyInfo['communication_address'] = $communication_address_parent;
+                    $familyInfo['parent_id'] = $parnetId;
+                    $familyInfo['created_at'] = Carbon::now();
+                    $familyInfo['updated_at'] = Carbon::now();
+                    ParentExtraInfo::insert($familyInfo);
+                    $userData = array_add($userData, 'parent_id', $parnetId);
                 }
                 $userData->save();
                 $LastInsertId = $userData->id;
@@ -402,19 +439,6 @@ class UsersController extends Controller
                 $previousSchool['created_at'] = Carbon::now();
                 $previousSchool['updated_at'] = Carbon::now();
                 StudentPreviousSchool::insert($previousSchool);
-
-
-                if(isset($data['parent_communication_address'])){
-                    $communication_address_parent = $data['permanent_address'];
-                }else{
-                    $communication_address_parent = $data['communication_address_parent'];
-                }
-                $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
-                $familyInfo['communication_address'] = $communication_address_parent;
-                $familyInfo['student_id'] = $LastInsertId;
-                $familyInfo['created_at'] = Carbon::now();
-                $familyInfo['updated_at'] = Carbon::now();
-                StudentFamily::insert($familyInfo);
 
                 if(isset($data['sibling'])){
                     $siblingInfo = array();
@@ -1125,16 +1149,17 @@ class UsersController extends Controller
     public function getParents(){
         $user=Auth::user();
         $userInformation =array();
-        $userData = User::where('body_id',$user->body_id)->where('role_id',4)->select('id','first_name','last_name','email')->get();
+        $userData = User::where('body_id',$user->body_id)->where('role_id',4)->get();
         $userList = $userData->toArray();
         foreach($userList as $user){
-            $userInfo['data'] = $user['id'];
+            $parentInfo = ParentExtraInfo::where('parent_id',$user['id'])->first();
+            $parentInfo['userId'] = $user['id'];
+            $userInfo['data'] = $parentInfo;
             $userInfo['value'] = $user["first_name"].' '.$user["last_name"].' ,"<i>'.$user["email"].'</i>"';
             array_push($userInformation,$userInfo);
         }
         return $userInformation;
     }
-
 
     public function checkUser(Request $request){
 
