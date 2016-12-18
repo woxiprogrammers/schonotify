@@ -32,7 +32,7 @@
     @include('admin.userRoleDropdownCreate')
 </div>
 
-<form action="#" role="form" class="smart-wizard" id="registrationForm">
+<form action="#" role="form" class="smart-wizard" id="registrationForm" enctype="multipart/form-data">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
@@ -99,7 +99,7 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <!--<div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
                                 User Name <span class="symbol required"></span>
@@ -107,7 +107,7 @@
                             <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
                             <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="block">
@@ -141,7 +141,7 @@
                             <label for="form-field-select-2">
                                 Marital Status <span class="symbol required"></span>
                             </label>
-                            <select class="form-control" id="martial_status" style="-webkit-appearance: menulist;" name="highest_standard">
+                            <select class="form-control" id="martial_status" style="-webkit-appearance: menulist;" name="martial_status">
                                 <option value="single">Single</option>
                                 <option value="married">Married</option>
                                 <option value="divorced">Divorced</option>
@@ -376,9 +376,9 @@
                                 Communication Address <span class="symbol required"></span>
                             </label>
 
-                            <input type="checkbox" name="parent_communication_address" id="parent_communication_address" checked> Same as Permanent Address
-                            <div class="note-editor" id="communication_address_parent">
-                                <textarea class="form-control autosize area-animated" name="communication_address_parent" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                            <input type="checkbox" name="teacher_communication_address" id="teacher_communication_address" checked> Same as Permanent Address
+                            <div class="note-editor" id="communication_address_teacher">
+                                <textarea class="form-control autosize area-animated" name="communication_address_teacher" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
                                 </textarea>
                             </div>
                         </div>
@@ -417,8 +417,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group"> <!-- Date input -->
-                            <label class="control-label" for="doj">Date Of Joining</label>
-                            <input class="form-control" id="doj" name="doj" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
+                            <label class="control-label" for="joining_date">Date Of Joining</label>
+                            <input class="form-control" id="joining_date" name="joining_date" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
                         </div>
                     </div>
                 </div>
@@ -487,7 +487,7 @@
                             <label  class="control-label">
                                 Work Experience (in years)
                             </label>
-                            <input type="text" placeholder="Enter Work Experience (in years)" class="form-control" name="work_experience"/>
+                            <input type="text" placeholder="Enter Work Experience (in years)" class="form-control" name="total_work_experience"/>
                         </div>
                     </div>
                 </div>
@@ -620,14 +620,13 @@
         })
 
 
-        var date_input=$('input[name="doj"]'); //our date input has the name "date"
+        var date_input=$('input[name="joining_date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
             format: 'dd/mm/yyyy',
             container: container,
             todayHighlight: true,
             autoclose: true,
-            endDate: '+0d',
         })
     });
 </script>
@@ -712,10 +711,10 @@ function addRowUploadDoc(tableID){
 
 
 
-$('#communication_address_parent').hide();
+$('#communication_address_teacher').hide();
 
-$("#parent_communication_address").click(function(){
-    $('#communication_address_parent').toggle();
+$("#teacher_communication_address").click(function(){
+    $('#communication_address_teacher').toggle();
 });
     $('#role-select').on('change',function(){
 

@@ -21,7 +21,10 @@ use App\StudentPreviousSchool;
 use App\StudentSibling;
 use App\StudentSpecialAptitude;
 use App\SubjectClassDivision;
+use App\TeacherExtraInfo;
+use App\TeacherQualification;
 use App\TeacherView;
+use App\TeacherWorkExperience;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
@@ -325,7 +328,6 @@ class UsersController extends Controller
             $userData->username = $username;
             $userData->password = bcrypt($data['password']);
             $userData->gender = $data['gender'];
-            $userData->address = $data['address'];
             $userData->mobile = $data['mobile'];
             $userData->alternate_number = $data['alt_number'];
             $userData->role_id = $data['role'];
@@ -337,10 +339,12 @@ class UsersController extends Controller
             $userData->created_at = Carbon::now();
             $userData->updated_at = Carbon::now();
             if($data['role_name']== 'admin'){
+                $userData->address = $data['address'];
                 $userData = array_add($userData, 'emp_type', $data['emp_type']);
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'teacher'){
+                $userData->middle_name = $data['middleName'];
                 $userData = array_add($userData, 'emp_type', $data['emp_type']);
                 $userData->save();
                 $LastInsertId = $userData->id;
@@ -362,10 +366,73 @@ class UsersController extends Controller
                 $teacherViews['created_at'] = Carbon::now();
                 $teacherViews['updated_at'] = Carbon::now();
                 TeacherView::insert($teacherViews);
+
+
+                if(isset($data['teacher_communication_address'])){
+                    $communication_address_teacher = $data['permanent_address'];
+                }else{
+                    $communication_address_teacher = $data['communication_address_teacher'];
+                }
+                $teacherExtraInfo = $request->only('martial_status','spouse_first_name','spouse_middle_name','spouse_last_name','issues','permanent_address','aadhar_number','pan_card','designation','joining_date','b_ed_methods','total_work_experience');
+                $teacherExtraInfo['teacher_id'] = $LastInsertId;
+                $teacherExtraInfo['communication_address']=$communication_address_teacher;
+                $teacherExtraInfo['created_at'] = Carbon::now();
+                $teacherExtraInfo['updated_at'] = Carbon::now();
+                TeacherExtraInfo::insert($teacherExtraInfo);
+
+                if(isset($data['qualification'])){
+                    $qualificationInfo = array();
+                    $qualifications = $data['qualification'];
+                    foreach($qualifications as $qualification){
+                        $qualificationInfo['teacher_id'] = $LastInsertId;
+                        $qualificationInfo['certificate'] = $qualification['certificate'];
+                        $qualificationInfo['passing_year'] = $qualification['passing_year'];
+                        $qualificationInfo['university'] = $qualification['university'];
+                        $qualificationInfo['subjects'] = $qualification['subjects'];
+                        $qualificationInfo['created_at'] = Carbon::now();
+                        $qualificationInfo['updated_at'] = Carbon::now();
+                        TeacherQualification::insert($qualificationInfo);
+                    }
+                }
+
+                if(isset($data['work_experience'])){
+                    $workExperienceInfo = array();
+                    $workExperiences = $data['work_experience'];
+                    foreach($workExperiences as $workExperience){
+                        $workExperienceInfo['teacher_id'] = $LastInsertId;
+                        $workExperienceInfo['organisation'] = $workExperience['organisation'];
+                        $workExperienceInfo['designation'] = $workExperience['designation'];
+                        $workExperienceInfo['duration'] = $workExperience['duration'];
+                        $workExperienceInfo['created_at'] = Carbon::now();
+                        $workExperienceInfo['updated_at'] = Carbon::now();
+                        TeacherWorkExperience::insert($workExperienceInfo);
+                    }
+                }
+                if(isset($data['upload_doc'])){
+                    foreach($data['upload_doc'] as $doc){
+                        if($doc != null){
+                            $image = $doc;
+                            $name = $doc->getClientOriginalName();
+                            $filename = time()."_".$name;
+                            $path1 = public_path('uploads/teacher_documents/'.$LastInsertId);
+                            if (! file_exists($path1)) {
+                                File::makeDirectory('uploads/teacher_documents/'.$LastInsertId, $mode = 0777, true, true);
+                            }
+                            $image->move($path1,$filename);
+                            $studentDocument['document'] = $filename;
+                            $studentDocument['student_id'] = $LastInsertId;
+                            $studentDocument['created_at'] = Carbon::now();
+                            $studentDocument['updated_at'] = Carbon::now();
+                            StudentDocument::insert($studentDocument);
+                        }
+                    }
+                }
+
             }elseif($data['role_name']== 'parent'){
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'student'){
+                $userData->address = $data['address'];
                 $userData->birth_date = $data['dob'];
                 $userData->middle_name = $data['middleName'];
                 if(isset($data['division'])){
@@ -511,7 +578,11 @@ class UsersController extends Controller
                             $userAclData['module_id'] = $moduleMaster['id'];
                         }
                     }
+                    if($data['role_name']== 'student'){
+                        $userAclData['user_id'] = $parnetId;
+                    }else{
                     $userAclData['user_id'] = $LastInsertId;
+                    }
                     $userAclData['created_at'] = Carbon::now();
                     $userAclData['updated_at'] = Carbon::now();
                     array_push($userAclsData,$userAclData);

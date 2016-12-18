@@ -464,7 +464,7 @@ var FormWizard = function () {
             }
         });
     };
-    var onShowStep = function (obj, context) {
+    /*var onShowStep = function (obj, context) {
         if(context.toStep == numberOfSteps){
             $('.anchor').children("li:nth-child(" + context.toStep + ")").children("a").removeClass('wait');
             displayConfirm();
@@ -562,8 +562,109 @@ var FormWizard = function () {
         if(wizardForm.valid()){
             return true;
         }else{
-            return false;
+            return true;
         }
+    };
+    return {
+        init: function () {
+            initWizard();
+        }
+    };*/
+    var onShowStep = function (obj, context) {
+        if(context.toStep == numberOfSteps){
+            $('.anchor').children("li:nth-child(" + context.toStep + ")").children("a").removeClass('wait');
+            displayConfirm();
+
+        }
+        $(".next-step").unbind("click").click(function (e) {
+            e.preventDefault();
+            wizardContent.smartWizard("goForward");
+
+        });
+        $(".back-step").unbind("click").click(function (e) {
+            e.preventDefault();
+            wizardContent.smartWizard("goBackward");
+        });
+        $(".go-first").unbind("click").click(function (e) {
+            e.preventDefault();
+            wizardContent.smartWizard("goToStep", 1);
+        });
+        $(".finish-step").unbind("click").click(function (e) {
+            e.preventDefault();
+
+            onFinish(obj, context);
+        });
+    };
+    var leaveAStepCallback = function (obj, context) {
+        return validateSteps(context.fromStep, context.toStep);
+        // return false to stay on step and true to continue navigation
+    };
+    var onFinish = function (obj, context) {
+
+        if (validateAllSteps()) {
+            $('div#loadmoreajaxloader').show();
+            $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
+            //var form=$('#registrationForm').serialize();
+            var form = new FormData($("form")[0]);
+            $.ajax({
+                url:'save-user',
+                data: form,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+
+                success: function(data){
+                    $('#error-div').html('');
+                    $('div#loadmoreajaxloader').hide();
+                    wizardContent.smartWizard("goForward");
+                    $('.stepNumber').click(false);
+                },
+                error:function(data){
+                    var errors = $.parseJSON(data.responseText);
+
+                    var errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                    });
+                    errorsHtml += '</ul></di>';
+
+                    $('#error-div').html(errorsHtml);
+                    $('div#loadmoreajaxloader').hide();
+                    wizardContent.smartWizard("goToStep", 2);
+                }
+            });
+
+        }
+    };
+    var validateSteps = function (stepnumber, nextstep) {
+
+        var isStepValid = false;
+
+        if (numberOfSteps >= nextstep && nextstep > stepnumber) {
+
+            // cache the form element selector
+            if (wizardForm.valid()) { // validate the form
+
+                wizardForm.validate().focusInvalid();
+                for (var i=stepnumber; i<=nextstep; i++){
+                    $('.anchor').children("li:nth-child(" + i + ")").not("li:nth-child(" + nextstep + ")").children("a").removeClass('wait').addClass('done').children('.stepNumber').addClass('animated tada');
+                }
+                //focus the invalid fields
+                isStepValid = true;
+                return true;
+            };
+        } else if (nextstep < stepnumber) {
+            for (i=nextstep; i<=stepnumber; i++){
+                $('.anchor').children("li:nth-child(" + i + ")").children("a").addClass('wait').children('.stepNumber').removeClass('animated tada');
+            }
+
+            return true;
+        }
+    };
+    var validateAllSteps = function () {
+        return true;
+
     };
     return {
         init: function () {

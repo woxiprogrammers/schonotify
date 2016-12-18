@@ -261,11 +261,13 @@ var FormWizard = function () {
         if (validateAllSteps()) {
             $('div#loadmoreajaxloader').show();
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#registrationForm').serialize();
+            //var form=$('#registrationForm').serialize();
+            var form = new FormData($("form")[0]);
             $.ajax({
                 url:'save-user',
                 data: form,
                 processData: false,
+                contentType: false,
                 type: 'POST',
 
                 success: function(data){

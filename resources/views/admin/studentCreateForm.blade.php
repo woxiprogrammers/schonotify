@@ -51,7 +51,15 @@
             <div class="stepNumber">
                 2
             </div>
-            <span class="stepDesc"><small> Complete </small></span>
+            <span class="stepDesc"><small> Parent Assigned Modules </small></span>
+        </a>
+    </li>
+    <li>
+        <a href="#step-3">
+            <div class="stepNumber">
+                3
+            </div>
+            <span class="stepDesc"> <small> Complete </small> </span>
         </a>
     </li>
 </ul>
@@ -705,6 +713,36 @@
 <div id="step-2">
     <div class="row">
         <div class="col-md-12">
+            <fieldset>
+                <div class="panel-body">
+                    <div id="panel_module_assigned" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="col-sm-10">
+
+                                <table class="table table-responsive" id="aclModCreate">
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-primary btn-o back-step btn-wide pull-left">
+                    <i class="fa fa-circle-arrow-left"></i> Back
+                </button>
+                <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+                <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep" onclick="this.disabled = true">
+                    Next <i class="fa fa-arrow-circle-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="step-3">
+    <div class="row">
+        <div class="col-md-12">
             <div class="text-center">
                 <h1 class=" ti-check block text-primary"></h1>
                 <h2 class="StepTitle">Congratulations!</h2>
@@ -767,6 +805,7 @@
 
 <script>
     jQuery(document).ready(function() {
+        userAclModule();
         getMsgCount();
         Main.init();
         FormValidator.init();
@@ -785,6 +824,142 @@
     });
 </script>
 <script type="text/javascript">
+function userAclModule()
+{
+    $('div#loadmoreajaxloader').show();
+
+    var disableModules = ['create_timetable','update_timetable','delete_timetable','publish_timetable','create_user','view_user','update_user','delete_user','publish_user','delete_homework','publish_homework','update_homework','create_homework','delete_user','update_message','delete_message','publish_message','delete_leave','update_leave','publish_leave','publish_attendance','update_attendance','delete_attendance','create_attendance','update_announcement','delete_announcement','publish_announcement','create_announcement','delete_achievement','create_achievement','publish_achievement','update_achievement','create_subject','view_subject','update_subject','publish_subject','delete_subject','create_class','publish_class','view_class','delete_class','update_class','create_event','update_event','publish_event','delete_event'];
+    var route='user-module-acl';
+    $.get(route,function(res){
+
+        var str;
+
+        var arr=res['allModAclArr'];
+
+        var arr1= $.map(arr,function(index,value){
+            return [value];
+        });
+
+        var arr3=res['allAcls'];
+        var arr2= $.map(arr3,function(index,value){
+            return [index];
+        });
+
+        str+='<tr>'+
+            '<th><b>Modules</b></th>';
+        for(var j=0; j<arr2.length; j++)
+        {
+            str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
+        }
+
+        str+='</tr>';
+
+
+        for(var i=0; i<arr1.length; i++)
+        {
+
+            str+="<tr>"+
+                "<td>"+(arr1[i]).toUpperCase()+"</td>";
+            for(var j=0; j<arr2.length; j++)
+            {
+                str+='<td>'+
+                    '<div class="checkbox form-group clip-check check-primary checkbox-inline">';
+
+                if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
+                    str+='<input type="checkbox" class="'+arr1[i]+'" value="'+arr2[j]['slug']+'_'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="modules[]">'+
+                        '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
+                } else {
+                    str+="--";
+                }
+
+                str+='</div>'+
+                    '</td>';
+            }
+
+            str+="</tr>";
+        }
+
+        $('#aclModCreate').html(str);
+        $('div#loadmoreajaxloader').hide();
+
+
+        /////////////////////Leave///////////
+
+        $('.leave').change(function(){
+
+            if($.inArray(this.id,["create_leave"]) !== -1)
+            {
+                if($(this).prop('checked') == true) {
+                    $('.leave').each(function() {
+
+                        this.checked = true;
+
+                    });
+                } else {
+                    $('.leave').each(function() {
+
+                        this.checked = false;
+
+
+                    });
+                }
+
+            } else if($(this).prop('checked') == false && this.id == "view_leave") {
+                $('.leave').each(function() {
+
+                    this.checked = false;
+
+                });
+            }
+
+        });
+
+        /////////////////////Message///////////
+
+        $('.message').change(function(){
+
+            if($.inArray(this.id,["create_message"]) !== -1)
+            {
+                if($(this).prop('checked') == true) {
+                    $('.message').each(function() {
+
+                        this.checked = true;
+
+                    });
+                } else {
+                    $('.message').each(function() {
+
+                        this.checked = false;
+
+
+                    });
+                }
+
+            } else if($(this).prop('checked') == false && this.id == "view_message") {
+                $('.message').each(function() {
+
+                    this.checked = false;
+
+                });
+            }
+
+        });
+
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
     $('#communication_address').hide();
 
     $("#student_communication_address").click(function(){
