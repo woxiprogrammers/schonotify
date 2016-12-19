@@ -340,11 +340,13 @@ class UsersController extends Controller
             $userData->created_at = Carbon::now();
             $userData->updated_at = Carbon::now();
             if($data['role_name']== 'admin'){
+                $userData->email = $data['email'];
                 $userData->address = $data['address'];
                 $userData = array_add($userData, 'emp_type', $data['emp_type']);
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'teacher'){
+                $userData->email = $data['email'];
                 $userData->middle_name = $data['middleName'];
                 $userData = array_add($userData, 'emp_type', $data['emp_type']);
                 $userData->save();

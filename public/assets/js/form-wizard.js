@@ -83,10 +83,10 @@ var FormWizard = function () {
                     required: true,
                     alphanumeric: true
                 },
-                 /*email: {
+                email: {
                     required: true,
                      chkMail: true
-                },*/
+                },
                 password: {
                     minlength: 6,
                     required: true
@@ -100,7 +100,7 @@ var FormWizard = function () {
                     minlength: 1,
                     required: true
                 },
-                address:{
+                permanent_address:{
                     minlength:15,
                     required: true,
                     removespace:true
@@ -132,6 +132,27 @@ var FormWizard = function () {
                 'access[]':{
                     required:true,
                     minlength:1
+                },
+                "work_experience[0][organisation]":{
+                    required: true
+                },
+                "work_experience[0][designation]":{
+                    required: true
+                },
+                "work_experience[0][duration]":{
+                    required: true
+                },
+                "qualification[0][certificate]":{
+                    required: true
+                },
+                "qualification[0][passing_year]":{
+                    required: true
+                },
+                "qualification[0][university]":{
+                    required: true
+                },
+                "qualification[0][subjects]":{
+                    required: true
                 }
             },
             messages: {
@@ -153,11 +174,11 @@ var FormWizard = function () {
                     alphanumeric: "User name must contain only letters"
                 },
                 studid:"please provide correct student id",
-               /* email: {
+                email: {
                     required: "Please provide valid email id",
                     chkMail: "Your email address must be in the format of name@domain.com"
-                },*/
-                address:{
+                },
+                permanent_address:{
                      required:"Please provide address",
                      address:"Address must contain at-least 15 characters"
                 },

@@ -323,7 +323,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label  class="control-label">
-                                First Name <span class="symbol required"></span>
+                                First Name
                             </label>
                             <input type="text" placeholder="Enter your First Name" class="form-control" name="spouse_first_name"/>
                         </div>
@@ -374,7 +374,7 @@
                         <div class="form-group">
                             <label  class="control-label">
                                 Communication Address <span class="symbol required"></span>
-                            </label>
+                            </label><br>
 
                             <input type="checkbox" name="teacher_communication_address" id="teacher_communication_address" checked> Same as Permanent Address
                             <div class="note-editor" id="communication_address_teacher">
