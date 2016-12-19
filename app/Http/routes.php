@@ -381,7 +381,8 @@
 //check class name
     Route::get('check-class',array('uses' => 'ClassController@checkClass'));
     Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
-
+//enquiry form
+Route::get('/student-enquiry','EnquiryController@viewEnquiryForm');
     /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
 
