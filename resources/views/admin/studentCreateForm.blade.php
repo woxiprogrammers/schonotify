@@ -406,9 +406,9 @@
                             <form>
                                 <div class="form-group ">
                                     <label class="control-label">
-                                        Parent Name: <span class="symbol required"></span>
+                                        Parent Email: <span class="symbol required"></span>
                                     </label>
-                                    <input type="text" placeholder="Enter Parent Name" class="form-control" name="parent_name" id="autocomplete">
+                                    <input type="text" placeholder="Enter Parent Email" class="form-control" name="parent_name" id="autocomplete">
                                     <input type='hidden' name='parent_id' id='parent_id'>
                                     <br>
                                     <div class="form-group" id="outputcontent"></div>
@@ -785,9 +785,8 @@
 <script src="vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
+<script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>

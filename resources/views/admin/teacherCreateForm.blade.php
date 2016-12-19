@@ -494,6 +494,25 @@
             </fieldset>
             <fieldset>
                 <legend>
+                    REFERENCE AND THEIR CONTACT DETAILS
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowReference('references')" />
+                <TABLE id="references"  border="1">
+                    <TR>
+                        <TH>Reference Name</TH>
+                        <TH>Contact Number </TH>
+                        <TH>Address</TH>
+                    </TR>
+                    <TR>
+                        <TD> <INPUT type="text" name="reference[0][reference_name]" placeholder="Reference Name"/> </TD>
+                        <TD> <INPUT type="text" name="reference[0][contact_no]" placeholder="Contact Number"/> </TD>
+                        <TD> <INPUT type="text" name="reference[0][address]" placeholder="Address"/> </TD>
+                    </TR>
+                </TABLE>
+            </fieldset>
+
+            <fieldset>
+                <legend>
                     DOCUMENTS
                 </legend>
                 <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
@@ -597,9 +616,8 @@
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
+<script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script>
     jQuery(document).ready(function() {
         userAclModule();
@@ -685,7 +703,7 @@ function addRowWorkExperience(tableID){
     var element3 = document.createElement("input");
     element3.type = "text";
     element3.placeholder = "Designation";
-    element3.name = "work_experience["+rowCount+"][designation ]";
+    element3.name = "work_experience["+rowCount+"][designation]";
     cell3.appendChild(element3);
 
     var cell4 = row.insertCell(2);
@@ -693,6 +711,33 @@ function addRowWorkExperience(tableID){
     element4.type = "text";
     element4.placeholder = "Duration";
     element4.name = "work_experience["+rowCount+"][duration]";
+    cell4.appendChild(element4);
+}
+
+function addRowReference(tableID){
+    var table = document.getElementById(tableID);
+
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+    var cell2 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "text";
+    element2.placeholder = "Reference Name	  ";
+    element2.name = "reference["+rowCount+"][reference_name]";
+    cell2.appendChild(element2);
+
+    var cell3 = row.insertCell(1);
+    var element3 = document.createElement("input");
+    element3.type = "text";
+    element3.placeholder = "Contact Number";
+    element3.name = "reference["+rowCount+"][contact_no]";
+    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(2);
+    var element4 = document.createElement("input");
+    element4.type = "text";
+    element4.placeholder = "Address";
+    element4.name = "reference["+rowCount+"][address]";
     cell4.appendChild(element4);
 }
 function addRowUploadDoc(tableID){

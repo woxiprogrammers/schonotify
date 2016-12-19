@@ -23,6 +23,7 @@ use App\StudentSpecialAptitude;
 use App\SubjectClassDivision;
 use App\TeacherExtraInfo;
 use App\TeacherQualification;
+use App\TeacherReferences;
 use App\TeacherView;
 use App\TeacherWorkExperience;
 use App\User;
@@ -408,6 +409,19 @@ class UsersController extends Controller
                         TeacherWorkExperience::insert($workExperienceInfo);
                     }
                 }
+                if(isset($data['reference'])){
+                    $referenceInfo = array();
+                    $references = $data['reference'];
+                    foreach($references as $reference){
+                        $referenceInfo['teacher_id'] = $LastInsertId;
+                        $referenceInfo['reference_name'] = $reference['reference_name'];
+                        $referenceInfo['contact_no'] = $reference['contact_no'];
+                        $referenceInfo['address'] = $reference['address'];
+                        $referenceInfo['created_at'] = Carbon::now();
+                        $referenceInfo['updated_at'] = Carbon::now();
+                        TeacherReferences::insert($referenceInfo);
+                    }
+                }
                 if(isset($data['upload_doc'])){
                     foreach($data['upload_doc'] as $doc){
                         if($doc != null){
@@ -479,6 +493,35 @@ class UsersController extends Controller
                     $familyInfo['updated_at'] = Carbon::now();
                     ParentExtraInfo::insert($familyInfo);
                     $userData = array_add($userData, 'parent_id', $parnetId);
+                        if(!empty($data['modules'])){
+                            $userAclsData = array();
+                            $modules = $data['modules'];
+                            foreach($modules as $module){
+                                $acl_module = $module;
+                                $aclData = explode("_", $acl_module);
+                                $userAcl = $aclData[0];
+                                $userModule = $aclData[1];
+                                $aclMasters = AclMaster::select('id','slug')->get();
+                                $aclMasters = $aclMasters->toArray();
+                                foreach ($aclMasters as $aclMaster){
+                                    if($aclMaster['slug'] == $userAcl){
+                                        $userAclData['acl_id'] = $aclMaster['id'];
+                                    }
+                                }
+                                $moduleMasters = Module::select('id','slug')->get();
+                                $moduleMasters = $moduleMasters->toArray();
+                                foreach ($moduleMasters as $moduleMaster){
+                                    if($moduleMaster['slug'] == $userModule){
+                                        $userAclData['module_id'] = $moduleMaster['id'];
+                                    }
+                                }
+                                $userAclData['user_id'] = $parnetId;
+                                $userAclData['created_at'] = Carbon::now();
+                                $userAclData['updated_at'] = Carbon::now();
+                                array_push($userAclsData,$userAclData);
+                            }
+                            ModuleAcl::insert($userAclsData);
+                        }
                 }
                 $userData->save();
                 $LastInsertId = $userData->id;
@@ -556,6 +599,7 @@ class UsersController extends Controller
                     }
                 }
             }
+            if($data['role_name'] != 'student'){
             if(!empty($data['modules'])){
                 $userAclsData = array();
                 $modules = $data['modules'];
@@ -588,6 +632,7 @@ class UsersController extends Controller
                     array_push($userAclsData,$userAclData);
                 }
                 ModuleAcl::insert($userAclsData);
+            }
             }
             if($data['role_name'] != 'student'){
             $mailData['email']  = $data['email'];
