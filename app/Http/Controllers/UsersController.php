@@ -449,7 +449,8 @@ class UsersController extends Controller
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'student'){
                 $userData->address = $data['address'];
-                $userData->birth_date = $data['dob'];
+                $date = str_replace('/', '-', $data['dob']);
+                $userData->birth_date = date('Y-m-d', strtotime($date));
                 $userData->middle_name = $data['middleName'];
                 if(isset($data['division'])){
                     $userData = array_add($userData, 'division_id', $data['division']);
