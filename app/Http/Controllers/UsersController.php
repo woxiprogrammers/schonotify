@@ -348,6 +348,8 @@ class UsersController extends Controller
             }elseif($data['role_name']== 'teacher'){
                 $userData->email = $data['email'];
                 $userData->middle_name = $data['middleName'];
+                $date = str_replace('/', '-', $data['dob']);
+                $userData->birth_date = date('Y-m-d', strtotime($date));
                 $userData = array_add($userData, 'emp_type', $data['emp_type']);
                 $userData->save();
                 $LastInsertId = $userData->id;
@@ -376,7 +378,9 @@ class UsersController extends Controller
                 }else{
                     $communication_address_teacher = $data['communication_address_teacher'];
                 }
-                $teacherExtraInfo = $request->only('martial_status','spouse_first_name','spouse_middle_name','spouse_last_name','issues','permanent_address','aadhar_number','pan_card','designation','joining_date','b_ed_methods','total_work_experience');
+                $teacherExtraInfo = $request->only('martial_status','spouse_first_name','spouse_middle_name','spouse_last_name','issues','permanent_address','aadhar_number','pan_card','designation','b_ed_methods','total_work_experience');
+                $joiningDate = str_replace('/', '-', $data['joining_date']);
+                $teacherExtraInfo['joining_date'] = date('Y-m-d', strtotime($joiningDate));
                 $teacherExtraInfo['teacher_id'] = $LastInsertId;
                 $teacherExtraInfo['communication_address']=$communication_address_teacher;
                 $teacherExtraInfo['created_at'] = Carbon::now();
