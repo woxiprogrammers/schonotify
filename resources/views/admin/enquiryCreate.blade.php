@@ -14,7 +14,7 @@
 <div class="main-content" >
 <div class="wrap-content container" id="container">
 <!-- start: DASHBOARD TITLE -->
-@include('alerts.errors')
+
 <div id="message-error-div"></div>
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
@@ -27,9 +27,9 @@
 </section>
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
-
+    @include('alerts.errors')
 <div class="col-md-12">
-    <form method="post" action="#" role="form" id="studentEnquiry">
+    <form method="post" action="/store-student-enquiry" role="form" id="studentEnquiry">
         <fieldset>
             <legend>
                 Name of Father/Mother/Guardian
@@ -40,7 +40,7 @@
                         <label class="control-label">
                             First Name <span class="symbol required"></span>
                         </label>
-                        <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
+                        <input type="text" placeholder="Enter your First Name" class="form-control" name="guardian_first_name"/>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -48,7 +48,7 @@
                         <label class="control-label">
                             Middle Name
                         </label>
-                        <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName"/>
+                        <input type="text" placeholder="Enter your Middle Name" class="form-control" name="guardian_middle_name"/>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -56,7 +56,7 @@
                         <label class="control-label">
                             Last Name
                         </label>
-                        <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
+                        <input type="text" placeholder="Enter your Last Name" class="form-control" name="guardian_last_name"/>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                         <label class="control-label">
                             First Name <span class="symbol required"></span>
                         </label>
-                        <input type="text" placeholder="Enter your First Name" class="form-control" name="studentFirstName"/>
+                        <input type="text" placeholder="Enter your First Name" class="form-control" name="student_first_name"/>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -80,7 +80,7 @@
                         <label class="control-label">
                             Middle Name
                         </label>
-                        <input type="text" placeholder="Enter your Middle Name" class="form-control" name="studentMiddleName"/>
+                        <input type="text" placeholder="Enter your Middle Name" class="form-control" name="student_middle_name"/>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -88,7 +88,7 @@
                         <label class="control-label">
                             Last Name
                         </label>
-                        <input type="text" placeholder="Enter your Last Name" class="form-control" name="studentLastName"/>
+                        <input type="text" placeholder="Enter your Last Name" class="form-control" name="student_last_name"/>
                     </div>
                 </div>
             </div>

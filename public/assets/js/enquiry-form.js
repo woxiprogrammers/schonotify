@@ -49,29 +49,29 @@ var FormValidator = function () {
             ignore: "",
 
             rules: {
-                firstName: {
+                guardian_first_name: {
                     minlength: 2,
                     required: true,
                     alpha: true
                 },
-                lastName: {
+                guardian_last_name: {
                     minlength: 2,
                     alpha: true
                 },
-                middleName: {
+                guardian_middle_name: {
                     minlength: 2,
                     alpha: true
                 },
-                studentFirstName:{
+                student_first_name:{
                     minlength: 2,
                     required: true,
                     alpha: true
                 },
-                studentLastName: {
+                student_last_name: {
                     minlength: 2,
                     alpha: true
                 },
-                studentMiddleName: {
+                student_middle_name: {
                     minlength: 2,
                     alpha: true
                 },
