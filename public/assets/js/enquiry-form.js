@@ -77,9 +77,12 @@ var FormValidator = function () {
                 },
                 current_class:{
                     alpha_num: true
+
                 },
                 school_name:{
-                    required: $("#current_class").val().length <= 0,
+                    required: function(element){
+                        return $("#current_class").val()!="";
+                    },
                     alpha_num: true
                 },
                 admission_to_class:{
