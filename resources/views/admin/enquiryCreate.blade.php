@@ -113,7 +113,7 @@
                 <div class="col-md-6">
                     <div class="form-group"> <!-- Date input -->
                         <label class="control-label">School Name</label>
-                        <input class="form-control" id="school_name" name="school_name" placeholder="Enter School Name" type="text" />
+                        <input class="form-control" id="school_name" name="school_name" placeholder="Enter School Name" type="text" disabled/>
                     </div>
                 </div>
             </div>
@@ -215,6 +215,14 @@
             autoclose: true,
             endDate: '+0d',
         })
+    });
+
+    $('#current_class').blur(function() {
+        if($(this).val()=="") {
+            $('#school_name').attr("disabled", "disabled");
+        }else{
+            $("#school_name").removeAttr("disabled");
+        }
     });
 </script>
 @stop

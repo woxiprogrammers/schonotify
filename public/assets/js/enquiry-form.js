@@ -25,6 +25,9 @@ var FormValidator = function () {
         $.validator.addMethod("alpha_num", function(value, element) {
             return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
         }, "only alpha num characters are allowed");
+        $.validator.addMethod("alpha_num_space", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9]+([ A-Za-z0-9])*$/.test(value);
+        }, "only alpha num space characters are allowed , starting with space not allowed");
 
         $.validator.addMethod("greaterThan", function (value, element, param) {
             var $otherElement = $(param);
@@ -33,6 +36,14 @@ var FormValidator = function () {
             };
             return true; // <- other field was empty, no error message
         });
+        jQuery.validator.addMethod("removespace", function(value, element) {
+            if (value.trim().length >=15)
+            {
+                return true;
+            }else{
+                return false;
+            }
+        }, "Address must contain at-least 15 characters");
         $('#studentEnquiry').validate({
             errorElement: "span", // contain the error msg in a span tag
             errorClass: 'help-block',
@@ -83,7 +94,7 @@ var FormValidator = function () {
                     required: function(element){
                         return $("#current_class").val()!="";
                     },
-                    alpha_num: true
+                    alpha_num_space: true
                 },
                 admission_to_class:{
                     required: true,
@@ -94,14 +105,46 @@ var FormValidator = function () {
                     mobileNumber: true
                 },
                 address:{
-                    alpha_num_space_sym:true
+                    minlength:15,
+                    required:true,
+                    removespace:true
                 }
             },
             messages: {
-                firstName: "Please specify Parent first name",
-                studentFirstName:"Please specify student first name",
+                guardian_first_name: {
+                    alpha: "only Alphabets are allowed"
+                },
+                guardian_last_name: {
+                    alpha: "only Alphabets are allowed"
+                },
+                guardian_middle_name: {
+                    alpha: "only Alphabets are allowed"
+                },
+                student_first_name:{
+                    alpha: "only Alphabets are allowed"
+                },
+                student_last_name: {
+                    alpha: "only Alphabets are allowed"
+                },
+                student_middle_name: {
+                    alpha: "only Alphabets are allowed"
+                },
+                current_class:{
+                    alpha_num: "only Alpha and numbers are allowed "
+
+                },
+                school_name:{
+                    alpha_num: "only Alpha and numbers are allowed "
+                },
+                admission_to_class:{
+                    alpha_num: "only Alpha and numbers are allowed "
+                },
                 mobile_number:{
-                    mobileNumber: "Please enter proper mobile number"
+                    mobileNumber: "Only numbers are allowed"
+                },
+                address:{
+                    required:"Address is required",
+                    address:"Address must contain at-least 15 characters"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
