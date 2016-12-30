@@ -154,13 +154,18 @@
         </fieldset>
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-4">
             </div>
+            @if(Session::has('enquiryId'))
+            <a href="/studentCreateEnquiry" target="_blank" class="btn base-color">
+                Register Currently Added Student</a>
+            @endif
             <div class="col-md-4">
                 <button class="btn btn-primary btn-wide pull-right" type="submit">
                     Submit
                 </button>
             </div>
+
         </div>
     </form>
 </div>

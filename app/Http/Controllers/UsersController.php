@@ -305,6 +305,18 @@ class UsersController extends Controller
 
     }
 
+    public function studentCreateFormEnquiry(Requests\WebRequests\UserRequest $request)
+    {
+        $roles=UserRoles::all();
+        if($request->authorize()===true)
+        {
+            return view('admin.studentCreateFormEnquiry')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *

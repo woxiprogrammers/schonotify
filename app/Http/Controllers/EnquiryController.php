@@ -42,7 +42,12 @@ class EnquiryController extends Controller
             $data['dob'] = date('Y-m-d', strtotime($dob));
             $data['created_at'] = $currentTime;
             $data['updated_at'] = $currentTime;
-            EnquiryForm::create($data);
+            $newEnquiry = EnquiryForm::create($data);
+            if(Session::has('enquiryId')){
+                Session::put('enquiryId', $newEnquiry);
+            }else{
+                Session::set('enquiryId', $newEnquiry);
+            }
             Session::flash('message-success','Student Enquiry Submitted Successfully');
             return redirect('/student-enquiry');
         }catch(\Exception $e){
