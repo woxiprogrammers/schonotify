@@ -158,7 +158,7 @@
             </div>
             @if(Session::has('enquiryId'))
             <a href="/studentCreateEnquiry" target="_blank" class="btn base-color">
-                Register Currently Added Student</a>
+                Register Recently Added Student</a>
             @endif
             <div class="col-md-4">
                 <button class="btn btn-primary btn-wide pull-right" type="submit">
