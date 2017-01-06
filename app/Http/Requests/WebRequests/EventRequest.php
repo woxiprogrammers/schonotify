@@ -57,7 +57,7 @@ class EventRequest extends Request
                 $request = Input::all();
 
                 if($request['hiddenField'] == "Publish") {
-                    if(in_array('publish_event',$resultArr)) {
+                    if(in_array('create_event',$resultArr)) {
                         return true;
                     } else {
 
