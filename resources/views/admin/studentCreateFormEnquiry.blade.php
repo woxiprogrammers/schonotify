@@ -30,10 +30,15 @@
 
 <div class="col-md-12">
 
-    @include('admin.userRoleDropdownCreate')
+    <!--@include('admin.userRoleDropdownCreate')-->
 </div>
 
 <form action="#" role="form" class="smart-wizard" id="student-registration-form" enctype="multipart/form-data">
+
+
+@if(Session::has('enquiryId'))
+  <?php $enquiryInfo = Session::get('enquiryId'); ?>
+@endif
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
@@ -123,7 +128,7 @@
                 <label  class="control-label">
                     First Name <span class="symbol required"></span>
                 </label>
-                <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
+                <input type="text" placeholder="Enter your First Name" value = "{{$enquiryInfo->student_first_name}}" class="form-control" name="firstName"/>
             </div>
         </div>
         <div class="col-md-4">
@@ -131,7 +136,7 @@
                 <label class="control-label">
                     Middle Name
                 </label>
-                <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName"/>
+                <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName" value = "{{$enquiryInfo->student_middle_name}}"/>
             </div>
         </div>
         <div class="col-md-4">
@@ -139,7 +144,7 @@
                 <label class="control-label">
                     Last Name
                 </label>
-                <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
+                <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName" value = "{{$enquiryInfo->student_last_name}}"/>
             </div>
         </div>
 
@@ -176,7 +181,7 @@
         <div class="col-md-6">
             <div class="form-group"> <!-- Date input -->
                 <label class="control-label" for="dob">Date Of Birth <span class="symbol required"></span> </label>
-                <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
+                <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{{ date('d/m/Y',strtotime($enquiryInfo->dob) )}}"/>
             </div>
         </div>
         <div class="col-md-6">
@@ -267,6 +272,7 @@
                 </label>
                 <div class="note-editor">
                     <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                    {{$enquiryInfo->address}}
                     </textarea>
                 </div>
             </div>
@@ -425,7 +431,7 @@
                     <label  class="control-label">
                         Father’s/Guardian’s Name <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter your First Name" class="form-control" name="father_first_name" id="father_first_name"/>
+                    <input type="text" placeholder="Enter your First Name" class="form-control" name="father_first_name" id="father_first_name" value="{{$enquiryInfo->guardian_first_name}}"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -433,7 +439,7 @@
                     <label class="control-label">
                         Middle Name
                     </label>
-                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="father_middle_name" id="father_middle_name"/>
+                    <input type="text" placeholder="Enter your Middle Name" class="form-control" name="father_middle_name" id="father_middle_name" value="{{$enquiryInfo->guardian_middle_name}}"/>
                 </div>
             </div>
             <div class="col-md-4">
@@ -441,7 +447,7 @@
                     <label class="control-label">
                         Last Name
                     </label>
-                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="father_last_name" id="father_last_name"/>
+                    <input type="text" placeholder="Enter your Last Name" class="form-control" name="father_last_name" id="father_last_name" value="{{$enquiryInfo->guardian_last_name}}"/>
                 </div>
             </div>
         </div>
@@ -468,7 +474,7 @@
                     <label class="control-label">
                         Father’s/Guardian’s Contact Number <span class="symbol required"></span>
                     </label>
-                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="father_contact" id="father_contact"/>
+                    <input type="text" placeholder="Enter Contact Number" class="form-control" name="father_contact" id="father_contact" value="{{$enquiryInfo->mobile_number}}"/>
                 </div>
             </div>
         </div>
@@ -545,6 +551,7 @@
                     </label>
                     <div class="note-editor">
                         <textarea class="form-control autosize area-animated" name="permanent_address" id="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                            {{$enquiryInfo->address}}
                         </textarea>
                     </div>
                 </div>

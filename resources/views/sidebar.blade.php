@@ -256,6 +256,19 @@
     </ul>
 </li>
 
+<li>
+    <a href="/student-enquiry">
+        <div class="item-content">
+            <div class="item-media">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="item-inner">
+                <span class="title"> Enquiry Form </span>
+            </div>
+        </div>
+    </a>
+</li>
+
 </ul>
 </nav>
 </div>
