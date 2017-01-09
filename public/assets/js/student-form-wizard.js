@@ -10,7 +10,7 @@ var FormWizard = function () {
             selected: 0,
             keyNavigation: false,
             onLeaveStep: leaveAStepCallback,
-            onShowStep: onShowStep,
+            onShowStep: onShowStep
         });
         var numberOfSteps = 0;
         initValidator();
@@ -24,7 +24,9 @@ var FormWizard = function () {
     $.validator.addMethod("mobileNumber", function(value, element) {
         return this.optional(element) || /^[0-9]{10}(\-[0-9]{4})?$/.test(value);
     });
-
+    $.validator.addMethod("year", function(value, element) {
+        return this.optional(element) || /^[0-9]{4}?$/.test(value);
+    });
     $.validator.addMethod("requiredIfChecked", function (val, ele, arg) {
         if ($("#checkbox8").is(":checked") && ($.trim(val) == '')) { return false; }
         return true;
@@ -35,6 +37,14 @@ var FormWizard = function () {
     $.validator.addMethod("chkMail", function(value, element) {
         return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
     });
+    $.validator.addMethod("alphaSpace", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z]+[ A-Za-z]*$/.test(value);
+    });
+    $.validator.addMethod("alphaSpaceSpecial", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z]+[ A-Za-z,]*$/.test(value);
+    });
+    //regex:  /^[a-zA-Z]+[ A-Za-z0-9.-]*$/,
+
     jQuery.validator.addMethod("removespace", function(value, element) {
         if (value.trim().length >=15)
         {
@@ -57,10 +67,127 @@ var FormWizard = function () {
                 },
                 lastName: {
                     minlength: 2,
+                    alpha: true
+                },
+                middleName: {
+                    minlength: 2,
+                    alpha: true
+                },
+                father_first_name: {
                     required: true,
                     alpha: true
                 },
+                father_last_name: {
+                    alpha: true
+                },
+                father_middle_name: {
+                    alpha: true
+                },
+
+
+                father_occupation: {
+                    required: true,
+                    alphaSpace: true
+                },
+                father_income: {
+                    required: true,
+                    alphanumeric: true
+                },
+                father_contact: {
+                    required: true,
+                    number:true,
+                    mobileNumber : true
+                },
+                mother_first_name: {
+                    required: true,
+                    alpha: true
+                },
+                mother_last_name: {
+                    alpha: true
+                },
+                mother_middle_name: {
+                    alpha: true
+                },
+
+                mother_occupation: {
+                    required: true,
+                    alphaSpace: true
+                },
+                mother_income: {
+                    required: true,
+                    alphanumeric: true
+                },
+                mother_contact: {
+                    required: true,
+                    number:true,
+                    mobileNumber : true
+                },
+
+                school_name:{
+                    alphaSpace: true
+                },
+                city:{
+                    alpha: true
+                },
+                medium_of_instruction:{
+                    alpha: true
+                },
+                board_examination:{
+                    alpha: true
+                },
+                grades:{
+                    alphanumeric: true
+                },
+                grn:{
+                    required: true,
+                    alphanumeric: true
+                },
+                birth_place:{
+                    required: true,
+                    alphaSpace: true
+                },
+                nationality:{
+                    required: true,
+                    alpha: true
+                },
+                religion:{
+                    alphaSpace: true
+                },
+                caste:{
+                    alphaSpace: true
+                },
+                category:{
+                    alphaSpace: true
+                },
+                aadhar_number:{
+                    alphanumeric: true
+                },
+                mother_tongue:{
+                    required: true,
+                    alpha: true
+                },
+                other_language:{
+                    alphaSpaceSpecial: true
+                },
+                roll_number:{
+                    alphanumeric: true
+                },
+                academic_to:{
+                    minlength: 4,
+                    year:true,
+                    number:true
+                },
+                academic_from:{
+                    minlength: 4,
+                    year:true,
+                    number:true
+                },
                 email: {
+                    chkMail: true
+                },
+                parent_email: {
+                    required:true,
+                    email:true,
                     chkMail: true
                 },
                 password: {
@@ -77,6 +204,11 @@ var FormWizard = function () {
                     required: true
                 },
                 address:{
+                    minlength:15,
+                    required:true,
+                    removespace:true
+                },
+                permanent_address:{
                     minlength:15,
                     required:true,
                     removespace:true
@@ -106,16 +238,7 @@ var FormWizard = function () {
                     required:true
                 },
                 parent_name:{
-                    required:true,
-                    remote:{
-                        url:"/check-parent",
-                        type:"POST",
-                        data:{
-                            parentID:function() {
-                                return $( "#parent_id" ).val();
-                            }
-                        }
-                    }
+                    required:true
                 },
                 userName:{
                     minlength: 2,
@@ -125,19 +248,136 @@ var FormWizard = function () {
 
             },
             messages: {
+                grn:{
+                    required: "GRN required",
+                    alphanumeric:"GRN must contain only alphabets and numbers"
+                },
+                aadhar_number:{
+                    alphanumeric:"Aadhar Card Number must contain only alphabets and numbers"
+                },
+                birth_place:{
+                    required: "Birth Place is required" ,
+                    alphaSpace: "Birth Place must contain only letters"
+                },
+                nationality:{
+                    required: "Nationality is required",
+                    alpha: "Nationality must contain only letters"
+                },
+                religion:{
+                    alphaSpace: "Religion must contain only letters "
+                },
+                caste:{
+                    alphaSpace: "Caste must contain only letters "
+                },
+                category:{
+                    alphaSpace: "Category must contain only letters"
+                },
+                mother_tongue:{
+                    required: "Mother Tongue is required" ,
+                    alpha: "Mother Tongue must contain only letters"
+                },
+                other_language:{
+                    alphaSpaceSpecial: "Other language must contain only letters and ,"
+                },
+                roll_number:{
+                    alphanumeric: "Roll number must contain only letters and number"
+                },
+                academic_to:{
+                    year:"Year must be numeric and  4 digit"
+                },
+                academic_from:{
+                    year:"Year must be numeric and 4 digit"
+                },
                 firstName: {
                     required: "First Name is required" ,
                     alpha: "First name must contain only letters"
                 },
                 lastName: {
-                    required: "Last Name is required",
                     alpha: "Last name must contain only letters"
+                },
+                middleName: {
+                    alpha: "Middle name must contain only letters"
+                },
+                father_first_name: {
+                    required: "Father First Name is required" ,
+                    alpha: "Father first name must contain only letters"
+                },
+                father_middle_name: {
+                    alpha: "Father Last name must contain only letters"
+                },
+                father_last_name: {
+                    alpha: "Father Middle name must contain only letters"
+                },
+
+                father_occupation: {
+                    required: "Father Occupation is required" ,
+                    alphaSpace: "Father Occupation must contain only letters"
+                },
+                father_income: {
+                    required: "Father Income is required" ,
+                    alphanumeric: "Father Income must contain only letters and number"
+                },
+                father_contact: {
+                    required: "Father Contact No is required" ,
+                    number:"Mobile number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only "
+                },
+
+
+                mother_first_name: {
+                    required: "Mother First Name is required" ,
+                    alpha: "Mother first name must contain only letters"
+                },
+                mother_middle_name: {
+                    alpha: "Mother Last name must contain only letters"
+                },
+                mother_last_name: {
+                    alpha: "Mother Middle name must contain only letters"
+                },
+
+                mother_occupation: {
+                    required: "Mother Occupation is required" ,
+                    alphaSpace: "Mother Occupation must contain only letters"
+                },
+                mother_income: {
+                    required: "Mother Income is required" ,
+                    alphanumeric: "Mother Income must contain only letters and number"
+                },
+                mother_contact: {
+                    required: "Mother Contact No is required" ,
+                    number:"Mobile number must be numeric",
+                    mobileNumber : "Mobile number must be 10 digit only "
+                },
+
+                school_name:{
+                    alphaSpace: "School Name must contain only letters"
+                },
+                city:{
+                    alpha: "city must contain only letters"
+                },
+                medium_of_instruction:{
+                    alpha: "Medium Of Instruction must contain only letters"
+                },
+                board_examination:{
+                    alpha: "Board/examination must contain only letters"
+                },
+                grades:{
+                    alphanumeric: "Grades must contain only letters and number"
                 },
                 studid:"please provide correct student id",
                 email: {
                     chkMail: "Your email address must be in the format of name@domain.com"
                 },
+                parent_email: {
+                    required:"Email is required",
+                    email:"Enter proper Email Id",
+                    chkMail: "Your email address must be in the format of name@domain.com"
+                },
                 address:{
+                    required:"Address is required",
+                    address:"Address must contain at-least 15 characters"
+                },
+                permanent_address:{
                     required:"Address is required",
                     address:"Address must contain at-least 15 characters"
                 },
@@ -175,8 +415,7 @@ var FormWizard = function () {
                     alphanumeric: "User name must contain only letters"
                 },
                 parent_name:{
-                    required:"Parent name is required",
-                    remote:"Please Select proper parent"
+                    required:"Parent name is required"
                 }
             },
 
@@ -225,7 +464,7 @@ var FormWizard = function () {
             }
         });
     };
-    var onShowStep = function (obj, context) {
+    /*var onShowStep = function (obj, context) {
         if(context.toStep == numberOfSteps){
             $('.anchor').children("li:nth-child(" + context.toStep + ")").children("a").removeClass('wait');
             displayConfirm();
@@ -260,12 +499,14 @@ var FormWizard = function () {
         if (validateAllSteps()) {
             $('div#loadmoreajaxloader').show();
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#student-registration-form').serialize();
+             var values = $("input[name='upload_doc[]']")
+                .map(function(){return $(this).val();}).get();
+            var formData1 = new FormData($("form")[0]);
             $.ajax({
                 url:'save-user',
-                data: form,
+                data: formData1,
                 processData: false,
-
+                contentType: false,
                 type: 'POST',
 
                 success: function(data){
@@ -321,8 +562,109 @@ var FormWizard = function () {
         if(wizardForm.valid()){
             return true;
         }else{
-            return false;
+            return true;
         }
+    };
+    return {
+        init: function () {
+            initWizard();
+        }
+    };*/
+    var onShowStep = function (obj, context) {
+        if(context.toStep == numberOfSteps){
+            $('.anchor').children("li:nth-child(" + context.toStep + ")").children("a").removeClass('wait');
+            displayConfirm();
+
+        }
+        $(".next-step").unbind("click").click(function (e) {
+            e.preventDefault();
+            wizardContent.smartWizard("goForward");
+
+        });
+        $(".back-step").unbind("click").click(function (e) {
+            e.preventDefault();
+            wizardContent.smartWizard("goBackward");
+        });
+        $(".go-first").unbind("click").click(function (e) {
+            e.preventDefault();
+            wizardContent.smartWizard("goToStep", 1);
+        });
+        $(".finish-step").unbind("click").click(function (e) {
+            e.preventDefault();
+
+            onFinish(obj, context);
+        });
+    };
+    var leaveAStepCallback = function (obj, context) {
+        return validateSteps(context.fromStep, context.toStep);
+        // return false to stay on step and true to continue navigation
+    };
+    var onFinish = function (obj, context) {
+
+        if (validateAllSteps()) {
+            $('div#loadmoreajaxloader').show();
+            $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
+            //var form=$('#registrationForm').serialize();
+            var form = new FormData($("form")[0]);
+            $.ajax({
+                url:'save-user',
+                data: form,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+
+                success: function(data){
+                    $('#error-div').html('');
+                    $('div#loadmoreajaxloader').hide();
+                    wizardContent.smartWizard("goForward");
+                    $('.stepNumber').click(false);
+                },
+                error:function(data){
+                    var errors = $.parseJSON(data.responseText);
+
+                    var errorsHtml = '<div class="alert alert-danger"><ul>';
+
+                    $.each( errors, function( key, value ) {
+                        errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                    });
+                    errorsHtml += '</ul></di>';
+
+                    $('#error-div').html(errorsHtml);
+                    $('div#loadmoreajaxloader').hide();
+                    wizardContent.smartWizard("goToStep", 2);
+                }
+            });
+
+        }
+    };
+    var validateSteps = function (stepnumber, nextstep) {
+
+        var isStepValid = false;
+
+        if (numberOfSteps >= nextstep && nextstep > stepnumber) {
+
+            // cache the form element selector
+            if (wizardForm.valid()) { // validate the form
+
+                wizardForm.validate().focusInvalid();
+                for (var i=stepnumber; i<=nextstep; i++){
+                    $('.anchor').children("li:nth-child(" + i + ")").not("li:nth-child(" + nextstep + ")").children("a").removeClass('wait').addClass('done').children('.stepNumber').addClass('animated tada');
+                }
+                //focus the invalid fields
+                isStepValid = true;
+                return true;
+            };
+        } else if (nextstep < stepnumber) {
+            for (i=nextstep; i<=stepnumber; i++){
+                $('.anchor').children("li:nth-child(" + i + ")").children("a").addClass('wait').children('.stepNumber').removeClass('animated tada');
+            }
+
+            return true;
+        }
+    };
+    var validateAllSteps = function () {
+        return true;
+
     };
     return {
         init: function () {

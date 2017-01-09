@@ -90,10 +90,6 @@ class UserController extends Controller
                     {
                         $i=0;
                         $userData=User::where('parent_id','=',$data['users']['user_id'])->first();
-                        $userStudentData=User::where('parent_id','=',$data['users']['user_id'])->select('id','first_name','last_name')->get()->toArray();
-                        //dd(array_values($userStudentData));
-                        $data['Students']= (object)array_values($userStudentData);
-                        //dd($data);
                             $messageCount=Message::where('to_id',$userData['id'])
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)

@@ -76,6 +76,8 @@
 
     Route::get('studentCreate','UsersController@studentCreateForm');
 
+    Route::get('studentCreateEnquiry','UsersController@studentCreateFormEnquiry');
+
     Route::get('parentCreate','UsersController@parentCreateForm');
 
     Route::get('usersCreate','UsersController@usersCreateForm');
@@ -382,7 +384,11 @@
     Route::get('check-class',array('uses' => 'ClassController@checkClass'));
     Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
 
-    /*  Routes */
+//enquiry form
+    Route::get('/student-enquiry','EnquiryController@viewEnquiryForm');
+    Route::post('/store-student-enquiry','EnquiryController@storeEnquiryForm');
+    /* API Routes */
+
     Route::group(['prefix' => 'api/v1/user/'], function () {
 
     Route::post('auth','api\UserController@login');

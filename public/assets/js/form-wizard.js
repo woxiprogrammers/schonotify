@@ -71,7 +71,11 @@ var FormWizard = function () {
                 },
                 lastName: {
                     minlength: 2,
-                    required: true,
+                    /*required: true,*/
+                    alpha: true
+                },
+                middleName: {
+                    minlength: 2,
                     alpha: true
                 },
                 userName:{
@@ -79,7 +83,7 @@ var FormWizard = function () {
                     required: true,
                     alphanumeric: true
                 },
-                 email: {
+                email: {
                     required: true,
                      chkMail: true
                 },
@@ -96,7 +100,7 @@ var FormWizard = function () {
                     minlength: 1,
                     required: true
                 },
-                address:{
+                permanent_address:{
                     minlength:15,
                     required: true,
                     removespace:true
@@ -128,6 +132,27 @@ var FormWizard = function () {
                 'access[]':{
                     required:true,
                     minlength:1
+                },
+                "work_experience[0][organisation]":{
+                    required: true
+                },
+                "work_experience[0][designation]":{
+                    required: true
+                },
+                "work_experience[0][duration]":{
+                    required: true
+                },
+                "qualification[0][certificate]":{
+                    required: true
+                },
+                "qualification[0][passing_year]":{
+                    required: true
+                },
+                "qualification[0][university]":{
+                    required: true
+                },
+                "qualification[0][subjects]":{
+                    required: true
                 }
             },
             messages: {
@@ -137,9 +162,12 @@ var FormWizard = function () {
                     minlength:"Please enter at least 2 character"
                 },
                 lastName: {
-                     required: "Last Name is required",
+                     /*required: "Last Name is required",*/
                      alpha: "Last name must contain only letters",
                      minlength:"Please enter at least 2 character"
+                },
+                middleName: {
+                    alpha: "Middle name must contain only letters"
                 },
                 userName: {
                     required: "User Name is required",
@@ -150,7 +178,7 @@ var FormWizard = function () {
                     required: "Please provide valid email id",
                     chkMail: "Your email address must be in the format of name@domain.com"
                 },
-                address:{
+                permanent_address:{
                      required:"Please provide address",
                      address:"Address must contain at-least 15 characters"
                 },
@@ -254,11 +282,13 @@ var FormWizard = function () {
         if (validateAllSteps()) {
             $('div#loadmoreajaxloader').show();
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
-            var form=$('#registrationForm').serialize();
+            //var form=$('#registrationForm').serialize();
+            var form = new FormData($("form")[0]);
             $.ajax({
                 url:'save-user',
                 data: form,
                 processData: false,
+                contentType: false,
                 type: 'POST',
 
                 success: function(data){

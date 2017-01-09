@@ -79,7 +79,7 @@ class UserRequest extends Request
                 if($userToken['role_name'] == 'student'){
                     return [
                         'firstName'=>'required|min:2',
-                        'lastName' => 'required|min:2',
+                        'lastName' => 'min:2',
                         'password' => 'required|min:6',
                         'password2' => 'required|min:6',
                         'mobile' => 'required|min:10',
@@ -91,26 +91,24 @@ class UserRequest extends Request
                 }else{
                     return [
                         'firstName'=>'required|min:2',
-                        'lastName' => 'required|min:2',
+                        'lastName' => 'min:2',
                         'password' => 'required|min:6',
                         'password2' => 'required|min:6',
                         'mobile' => 'required|min:10',
                         'alt_number' => 'min:10',
-                        'email' => 'required|email',
-                        'address' => 'required|min:15'
+                        'email' => 'required|email'
                     ];
                     break;
                 }
                 }else{
                     return [
                         'firstName'=>'required|min:2',
-                        'lastName' => 'required|min:2',
+                        'lastName' => 'min:2',
                         'password' => 'required|min:6',
                         'password2' => 'required|min:6',
                         'mobile' => 'required|min:10',
                         'alt_number' => 'min:10',
-                        'email' => 'required|email',
-                        'address' => 'required|min:15'
+                        'email' => 'required|email'
                     ];
                     break;
                 }

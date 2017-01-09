@@ -154,7 +154,7 @@
     </a>
 </li>
 
-<li>
+<!--<li>
     <a href="/noticeBoard">
         <div class="item-content">
             <div class="item-media">
@@ -165,7 +165,7 @@
             </div>
         </div>
     </a>
-</li>
+</li>-->
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -212,7 +212,7 @@
     </a>
 </li>
 @endif
-<li>
+<!--<li>
     <a href="/results">
         <div class="item-content">
             <div class="item-media">
@@ -223,8 +223,8 @@
             </div>
         </div>
     </a>
-</li>
-<li>
+</li>-->
+<!--<li>
     <a href="javascript:void(0)">
         <div class="item-content">
             <div class="item-media">
@@ -254,8 +254,21 @@
             </a>
         </li>
     </ul>
+</li>-->
+@if(Auth::User()->role_id == 1)
+<li>
+    <a href="/student-enquiry">
+        <div class="item-content">
+            <div class="item-media">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="item-inner">
+                <span class="title"> Enquiry Form </span>
+            </div>
+        </div>
+    </a>
 </li>
-
+@endif
 </ul>
 </nav>
 </div>

@@ -38,7 +38,7 @@ class EventPublishRequest extends Request
         {
             case 'GET':
 
-                if(in_array('publish_event',$resultArr)) {
+                if(in_array('create_event',$resultArr)) {
                     return true;
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
@@ -47,7 +47,7 @@ class EventPublishRequest extends Request
 
                 break;
             case 'POST':
-                if(in_array('publish_event',$resultArr)) {
+                if(in_array('create_event',$resultArr)) {
                     return true;
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');

@@ -32,7 +32,7 @@
     @include('admin.userRoleDropdownCreate')
 </div>
 
-<form action="#" role="form" class="smart-wizard" id="registrationForm">
+<form action="#" role="form" class="smart-wizard" id="registrationForm" enctype="multipart/form-data">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
@@ -72,7 +72,7 @@
                     Personal Information (teacher)
                 </legend>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
                                 First Name <span class="symbol required"></span>
@@ -80,10 +80,18 @@
                             <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
-                                Last Name <span class="symbol required"></span>
+                                Middle Name
+                            </label>
+                            <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName"/>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Last Name
                             </label>
                             <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
                         </div>
@@ -91,7 +99,7 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <!--<div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
                                 User Name <span class="symbol required"></span>
@@ -99,10 +107,51 @@
                             <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
                             <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
                         </div>
+                    </div>-->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="block">
+                                Gender
+                            </label>
+                            <div class="clip-radio radio-primary">
+                                <input type="radio" id="wz-female" name="gender" value="F">
+                                <label for="wz-female">
+                                    Female
+                                </label>
+                                <input type="radio" id="wz-male" name="gender" value="M" checked>
+                                <label for="wz-male">
+                                    Male
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group"> <!-- Date input -->
+                            <label class="control-label" for="dob">Date Of Birth</label>
+                            <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="form-field-select-2">
+                                Marital Status <span class="symbol required"></span>
+                            </label>
+                            <select class="form-control" id="martial_status" style="-webkit-appearance: menulist;" name="martial_status">
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="separated">Separated</option>
+                                <option value="widowed">Widowed</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -174,7 +223,7 @@
                         </div>
                        </div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="block">
@@ -203,7 +252,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="row">
                     <div class="col-md-6">
                         <label class="control-label">
@@ -266,6 +315,213 @@
 
             </fieldset>
 
+            <fieldset>
+                <legend>
+                    Name of Spouse
+                </legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                First Name
+                            </label>
+                            <input type="text" placeholder="Enter your First Name" class="form-control" name="spouse_first_name"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Middle Name
+                            </label>
+                            <input type="text" placeholder="Enter your Middle Name" class="form-control" name="spouse_middle_name"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Last Name
+                            </label>
+                            <input type="text" placeholder="Enter your Last Name" class="form-control" name="spouse_last_name"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Issues
+                            </label>
+                            <input type="text" placeholder="Enter Issues" class="form-control" name="issues"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Permanent Address <span class="symbol required"></span>
+                            </label>
+                            <div class="note-editor">
+                                <textarea class="form-control autosize area-animated" name="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Communication Address <span class="symbol required"></span>
+                            </label><br>
+
+                            <input type="checkbox" name="teacher_communication_address" id="teacher_communication_address" checked> Same as Permanent Address
+                            <div class="note-editor" id="communication_address_teacher">
+                                <textarea class="form-control autosize area-animated" name="communication_address_teacher" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Pan Card No.
+                            </label>
+                            <input type="text" placeholder="Enter Pan Card No." class="form-control" name="pan_card"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Aadhar Card No.
+                            </label>
+                            <input type="text" placeholder="Aadhar Card Number " class="form-control" name="aadhar_number"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Designation
+                            </label>
+                            <input type="text" placeholder="Enter Designation" class="form-control" name="designation"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group"> <!-- Date input -->
+                            <label class="control-label" for="joining_date">Date Of Joining</label>
+                            <input class="form-control" id="joining_date" name="joining_date" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </fieldset>
+
+
+            <fieldset>
+                <legend>
+                    EDUCATIONAL QUALIFICATIONS
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowEducationlQualification('dataTable')" />
+                <TABLE id="dataTable" width="350px" border="1">
+                    <TR>
+                        <TH>Certificate/Degree </TH>
+                        <TH> Passing Year </TH>
+                        <TH>  University/Board</TH>
+                        <TH> Subject(s) </TH>
+                    </TR>
+                    <TR>
+                        <TD> <INPUT type="text" name="qualification[0][certificate]" placeholder="Certificate/Degree"/> </TD>
+                        <TD> <INPUT type="text" name="qualification[0][passing_year]" placeholder="Passing Year"/> </TD>
+                        <TD> <INPUT type="text" name="qualification[0][university]" placeholder="University/Board"/> </TD>
+                        <TD> <INPUT type="text" name="qualification[0][subjects]" placeholder="Subject(s)"/> </TD>
+                    </TR>
+                </TABLE>
+
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Methods in B.Ed.
+                            </label>
+                            <input type="text" placeholder="Enter Methods in B.Ed." class="form-control" name="b_ed_methods"/>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    WORK EXPERIENCE
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowWorkExperience('work_experience')" />
+                <TABLE id="work_experience" width="350px" border="1">
+                    <TR>
+                        <TH>Organisation</TH>
+                        <TH>Designation </TH>
+                        <TH>Duration</TH>
+                    </TR>
+                    <TR>
+                        <TD> <INPUT type="text" name="work_experience[0][organisation]" placeholder="Organisation"/> </TD>
+                        <TD> <INPUT type="text" name="work_experience[0][designation]" placeholder="Designation"/> </TD>
+                        <TD> <INPUT type="text" name="work_experience[0][duration]" placeholder="Duration"/> </TD>
+                    </TR>
+                </TABLE>
+
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="control-label">
+                                Work Experience (in years)
+                            </label>
+                            <input type="text" placeholder="Enter Work Experience (in years)" class="form-control" name="total_work_experience"/>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    REFERENCE AND THEIR CONTACT DETAILS
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowReference('references')" />
+                <TABLE id="references"  border="1">
+                    <TR>
+                        <TH>Reference Name</TH>
+                        <TH>Contact Number </TH>
+                        <TH>Address</TH>
+                    </TR>
+                    <TR>
+                        <TD> <INPUT type="text" name="reference[0][reference_name]" placeholder="Reference Name"/> </TD>
+                        <TD> <INPUT type="text" name="reference[0][contact_no]" placeholder="Contact Number"/> </TD>
+                        <TD> <INPUT type="text" name="reference[0][address]" placeholder="Address"/> </TD>
+                    </TR>
+                </TABLE>
+            </fieldset>
+
+            <fieldset>
+                <legend>
+                    DOCUMENTS
+                </legend>
+                <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
+                <TABLE id="upload_doc"  border="1">
+                    <TR>
+                        <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
+                    </TR>
+                </TABLE>
+            </fieldset>
             <div class="form-group">
                 <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" disabled>
                     Next <i class="fa fa-arrow-circle-right"></i>
@@ -361,6 +617,7 @@
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
 
+<script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script>
     jQuery(document).ready(function() {
         userAclModule();
@@ -369,10 +626,141 @@
         Main.init();
         FormValidator.init();
         FormWizard.init();
+
+        var date_input=$('input[name="dob"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+            endDate: '+0d',
+        })
+
+
+        var date_input=$('input[name="joining_date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
     });
 </script>
 <script type="text/javascript">
 
+
+function addRowEducationlQualification(tableID){
+    var table = document.getElementById(tableID);
+
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+
+    var cell2 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "text";
+    element2.placeholder = "Certificate/Degree";
+    element2.name = "qualification["+rowCount+"][certificate]";
+    cell2.appendChild(element2);
+
+    var cell3 = row.insertCell(1);
+    var element3 = document.createElement("input");
+    element3.type = "text";
+    element3.placeholder = "Passing Year";
+    element3.name = "qualification["+rowCount+"][passing_year]";
+    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(2);
+    var element4 = document.createElement("input");
+    element4.type = "text";
+    element4.placeholder = "University/Board";
+    element4.name = "qualification["+rowCount+"][university]";
+    cell4.appendChild(element4);
+
+    var cell5 = row.insertCell(3);
+    var element5 = document.createElement("input");
+    element5.type = "text";
+    element5.placeholder = "Subject(s)";
+    element5.name = "qualification["+rowCount+"][subjects]";
+    cell5.appendChild(element5);
+}
+
+function addRowWorkExperience(tableID){
+    var table = document.getElementById(tableID);
+
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+
+    var cell2 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "text";
+    element2.placeholder = "Organisation	  ";
+    element2.name = "work_experience["+rowCount+"][organisation]";
+    cell2.appendChild(element2);
+
+    var cell3 = row.insertCell(1);
+    var element3 = document.createElement("input");
+    element3.type = "text";
+    element3.placeholder = "Designation";
+    element3.name = "work_experience["+rowCount+"][designation]";
+    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(2);
+    var element4 = document.createElement("input");
+    element4.type = "text";
+    element4.placeholder = "Duration";
+    element4.name = "work_experience["+rowCount+"][duration]";
+    cell4.appendChild(element4);
+}
+
+function addRowReference(tableID){
+    var table = document.getElementById(tableID);
+
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+    var cell2 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "text";
+    element2.placeholder = "Reference Name	  ";
+    element2.name = "reference["+rowCount+"][reference_name]";
+    cell2.appendChild(element2);
+
+    var cell3 = row.insertCell(1);
+    var element3 = document.createElement("input");
+    element3.type = "text";
+    element3.placeholder = "Contact Number";
+    element3.name = "reference["+rowCount+"][contact_no]";
+    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(2);
+    var element4 = document.createElement("input");
+    element4.type = "text";
+    element4.placeholder = "Address";
+    element4.name = "reference["+rowCount+"][address]";
+    cell4.appendChild(element4);
+}
+function addRowUploadDoc(tableID){
+    var table = document.getElementById(tableID);
+
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+
+    var cell3 = row.insertCell(0);
+    var element2 = document.createElement("input");
+    element2.type = "file";
+    element2.name = "upload_doc[]";
+    cell3.appendChild(element2);
+}
+
+
+
+
+$('#communication_address_teacher').hide();
+
+$("#teacher_communication_address").click(function(){
+    $('#communication_address_teacher').toggle();
+});
     $('#role-select').on('change',function(){
 
         var par=this.value;
@@ -402,7 +790,7 @@
     function userAclModule()
     {
 
-        var disableModules = ['delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_event','delete_event','publish_message','publish_achievement','delete_achievement','publish_announcement','delete_announcement','publish_timetable'];
+        var disableModules = ['create_class','delete_homework','publish_homework','delete_user','publish_user','update_message','delete_message','delete_leave','update_leave','create_leave','publish_attendance','delete_attendance','publish_announcement','publish_achievement','delete_subject','update_subject','publish_subject','delete_class','publish_class','update_class','publish_event','delete_event','publish_message','publish_achievement','delete_achievement','publish_announcement','delete_announcement','publish_timetable'];
 
         $('div#loadmoreajaxloader').show();
         var route='user-module-acl';

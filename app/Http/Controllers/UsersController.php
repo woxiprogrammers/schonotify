@@ -12,8 +12,20 @@ use App\HomeworkTeacher;
 use App\Leave;
 use App\Module;
 use App\ModuleAcl;
+use App\ParentExtraInfo;
+use App\StudentDocument;
+use App\StudentExtraInfo;
+use App\StudentFamily;
+use App\StudentHobby;
+use App\StudentPreviousSchool;
+use App\StudentSibling;
+use App\StudentSpecialAptitude;
 use App\SubjectClassDivision;
+use App\TeacherExtraInfo;
+use App\TeacherQualification;
+use App\TeacherReferences;
 use App\TeacherView;
+use App\TeacherWorkExperience;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
@@ -293,6 +305,18 @@ class UsersController extends Controller
 
     }
 
+    public function studentCreateFormEnquiry(Requests\WebRequests\UserRequest $request)
+    {
+        $roles=UserRoles::all();
+        if($request->authorize()===true)
+        {
+            return view('admin.studentCreateFormEnquiry')->with('userRoles',$roles);
+        }else{
+            return Redirect::to('/');
+        }
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -304,14 +328,19 @@ class UsersController extends Controller
         $data = $request->all();
         $user=Auth::user();
         if(!empty($data)){
+            if(isset($data['dob'])){
+                $dob = $data['dob'];
+            }else{
+                $dob = $data['mobile'];
+            }
+            $unique_user_string = strtolower($data['firstName'] . $data['lastName'] . $dob);
+            $username = ucfirst(substr($data['firstName'], 0, 1)) . ucfirst($data['lastName']) . crc32($unique_user_string);
             $userData= new User;
             $userData->first_name = $data['firstName'];
             $userData->last_name = $data['lastName'];
-            $userData->username = $data['userName'];
+            $userData->username = $username;
             $userData->password = bcrypt($data['password']);
-            $userData->email = $data['email'];
             $userData->gender = $data['gender'];
-            $userData->address = $data['address'];
             $userData->mobile = $data['mobile'];
             $userData->alternate_number = $data['alt_number'];
             $userData->role_id = $data['role'];
@@ -323,10 +352,16 @@ class UsersController extends Controller
             $userData->created_at = Carbon::now();
             $userData->updated_at = Carbon::now();
             if($data['role_name']== 'admin'){
+                $userData->email = $data['email'];
+                $userData->address = $data['address'];
                 $userData = array_add($userData, 'emp_type', $data['emp_type']);
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'teacher'){
+                $userData->email = $data['email'];
+                $userData->middle_name = $data['middleName'];
+                $date = str_replace('/', '-', $data['dob']);
+                $userData->birth_date = date('Y-m-d', strtotime($date));
                 $userData = array_add($userData, 'emp_type', $data['emp_type']);
                 $userData->save();
                 $LastInsertId = $userData->id;
@@ -348,23 +383,243 @@ class UsersController extends Controller
                 $teacherViews['created_at'] = Carbon::now();
                 $teacherViews['updated_at'] = Carbon::now();
                 TeacherView::insert($teacherViews);
+
+
+                if(isset($data['teacher_communication_address'])){
+                    $communication_address_teacher = $data['permanent_address'];
+                }else{
+                    $communication_address_teacher = $data['communication_address_teacher'];
+                }
+                $teacherExtraInfo = $request->only('martial_status','spouse_first_name','spouse_middle_name','spouse_last_name','issues','permanent_address','aadhar_number','pan_card','designation','b_ed_methods','total_work_experience');
+                $joiningDate = str_replace('/', '-', $data['joining_date']);
+                $teacherExtraInfo['joining_date'] = date('Y-m-d', strtotime($joiningDate));
+                $teacherExtraInfo['teacher_id'] = $LastInsertId;
+                $teacherExtraInfo['communication_address']=$communication_address_teacher;
+                $teacherExtraInfo['created_at'] = Carbon::now();
+                $teacherExtraInfo['updated_at'] = Carbon::now();
+                TeacherExtraInfo::insert($teacherExtraInfo);
+
+                if(isset($data['qualification'])){
+                    $qualificationInfo = array();
+                    $qualifications = $data['qualification'];
+                    foreach($qualifications as $qualification){
+                        $qualificationInfo['teacher_id'] = $LastInsertId;
+                        $qualificationInfo['certificate'] = $qualification['certificate'];
+                        $qualificationInfo['passing_year'] = $qualification['passing_year'];
+                        $qualificationInfo['university'] = $qualification['university'];
+                        $qualificationInfo['subjects'] = $qualification['subjects'];
+                        $qualificationInfo['created_at'] = Carbon::now();
+                        $qualificationInfo['updated_at'] = Carbon::now();
+                        TeacherQualification::insert($qualificationInfo);
+                    }
+                }
+
+                if(isset($data['work_experience'])){
+                    $workExperienceInfo = array();
+                    $workExperiences = $data['work_experience'];
+                    foreach($workExperiences as $workExperience){
+                        $workExperienceInfo['teacher_id'] = $LastInsertId;
+                        $workExperienceInfo['organisation'] = $workExperience['organisation'];
+                        $workExperienceInfo['designation'] = $workExperience['designation'];
+                        $workExperienceInfo['duration'] = $workExperience['duration'];
+                        $workExperienceInfo['created_at'] = Carbon::now();
+                        $workExperienceInfo['updated_at'] = Carbon::now();
+                        TeacherWorkExperience::insert($workExperienceInfo);
+                    }
+                }
+                if(isset($data['reference'])){
+                    $referenceInfo = array();
+                    $references = $data['reference'];
+                    foreach($references as $reference){
+                        $referenceInfo['teacher_id'] = $LastInsertId;
+                        $referenceInfo['reference_name'] = $reference['reference_name'];
+                        $referenceInfo['contact_no'] = $reference['contact_no'];
+                        $referenceInfo['address'] = $reference['address'];
+                        $referenceInfo['created_at'] = Carbon::now();
+                        $referenceInfo['updated_at'] = Carbon::now();
+                        TeacherReferences::insert($referenceInfo);
+                    }
+                }
+                if(isset($data['upload_doc'])){
+                    foreach($data['upload_doc'] as $doc){
+                        if($doc != null){
+                            $image = $doc;
+                            $name = $doc->getClientOriginalName();
+                            $filename = time()."_".$name;
+                            $path1 = public_path('uploads/teacher_documents/'.$LastInsertId);
+                            if (! file_exists($path1)) {
+                                File::makeDirectory('uploads/teacher_documents/'.$LastInsertId, $mode = 0777, true, true);
+                            }
+                            $image->move($path1,$filename);
+                            $studentDocument['document'] = $filename;
+                            $studentDocument['student_id'] = $LastInsertId;
+                            $studentDocument['created_at'] = Carbon::now();
+                            $studentDocument['updated_at'] = Carbon::now();
+                            StudentDocument::insert($studentDocument);
+                        }
+                    }
+                }
+
             }elseif($data['role_name']== 'parent'){
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'student'){
+                $userData->address = $data['address'];
+                $date = str_replace('/', '-', $data['dob']);
+                $userData->birth_date = date('Y-m-d', strtotime($date));
+                $userData->middle_name = $data['middleName'];
+                $userData->roll_number = $data['roll_number'];
                 if(isset($data['division'])){
                     $userData = array_add($userData, 'division_id', $data['division']);
                 }
-                if(isset($data['parent_id'])){
+                if(!empty($data['parent_id'])){
                     $userData = array_add($userData, 'parent_id', $data['parent_id']);
                     $parent=User::where('id',$data['parent_id'])->select('is_active')->first();
                     if($parent->is_active == 1){
                         $userData->is_active = 1;
                     }
+                }else{
+                    if(isset($data['parent_communication_address'])){
+                        $communication_address_parent = $data['permanent_address'];
+                    }else{
+                        $communication_address_parent = $data['communication_address_parent'];
+                    }
+                    $unique_user_string = strtolower($data['father_first_name'] . $data['father_last_name'] . $data['dob']);
+                    $username = ucfirst(substr($data['father_first_name'], 0, 1)) . ucfirst($data['father_last_name']) . crc32($unique_user_string);
+                    $parentData= new User;
+                    $parentData->first_name = $data['father_first_name'];
+                    $parentData->last_name = $data['father_last_name'];
+                    $parentData->middle_name = $data['father_middle_name'];
+                    $parentData->username = $username;
+                    $parentData->password = bcrypt($data['password']);
+                    $parentData->gender = $data['gender'];
+                    $parentData->address = $communication_address_parent;
+                    $parentData->mobile = $data['father_contact'];
+                    $parentData->email = $data['parent_name'];
+                    $parentData->role_id = 4;
+                    $parentData->avatar = 'default-user.jpg';
+                    $parentData->is_active = 0;
+                    $parentData->remember_token = csrf_token().'_'.time();
+                    $parentData->confirmation_code = str_random(30);
+                    $parentData->body_id = $user->body_id;
+                    $parentData->created_at = Carbon::now();
+                    $parentData->updated_at = Carbon::now();
+                    $parentData->save();
+                    $parnetId = $parentData->id;
+                    $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
+                    $familyInfo['communication_address'] = $communication_address_parent;
+                    $familyInfo['parent_id'] = $parnetId;
+                    $familyInfo['created_at'] = Carbon::now();
+                    $familyInfo['updated_at'] = Carbon::now();
+                    ParentExtraInfo::insert($familyInfo);
+                    $userData = array_add($userData, 'parent_id', $parnetId);
+                        if(!empty($data['modules'])){
+                            $userAclsData = array();
+                            $modules = $data['modules'];
+                            foreach($modules as $module){
+                                $acl_module = $module;
+                                $aclData = explode("_", $acl_module);
+                                $userAcl = $aclData[0];
+                                $userModule = $aclData[1];
+                                $aclMasters = AclMaster::select('id','slug')->get();
+                                $aclMasters = $aclMasters->toArray();
+                                foreach ($aclMasters as $aclMaster){
+                                    if($aclMaster['slug'] == $userAcl){
+                                        $userAclData['acl_id'] = $aclMaster['id'];
+                                    }
+                                }
+                                $moduleMasters = Module::select('id','slug')->get();
+                                $moduleMasters = $moduleMasters->toArray();
+                                foreach ($moduleMasters as $moduleMaster){
+                                    if($moduleMaster['slug'] == $userModule){
+                                        $userAclData['module_id'] = $moduleMaster['id'];
+                                    }
+                                }
+                                $userAclData['user_id'] = $parnetId;
+                                $userAclData['created_at'] = Carbon::now();
+                                $userAclData['updated_at'] = Carbon::now();
+                                array_push($userAclsData,$userAclData);
+                            }
+                            ModuleAcl::insert($userAclsData);
+                        }
                 }
                 $userData->save();
                 $LastInsertId = $userData->id;
+
+                if(isset($data['hobbies'])){
+                    $hobbyInfo = array();
+                    $hobbies = $data['hobbies'];
+                    foreach($hobbies as $hobby){
+                        $hobbyInfo['student_id'] = $LastInsertId;
+                        $hobbyInfo['hobby'] = $hobby;
+                        $hobbyInfo['created_at'] = Carbon::now();
+                        $hobbyInfo['updated_at'] = Carbon::now();
+                        StudentHobby::insert($hobbyInfo);
+                    }
+                }
+                if(isset($data['special_aptitude'])){
+                    $aptitudeInfo = array();
+                    $aptitudes = $data['special_aptitude'];
+                    foreach($aptitudes as $aptitude){
+                        $aptitudeInfo['student_id'] = $LastInsertId;
+                        $aptitudeInfo['special_aptitude'] = $aptitude['test'];
+                        $aptitudeInfo['score'] = $aptitude['score'];
+                        $aptitudeInfo['created_at'] = Carbon::now();
+                        $aptitudeInfo['updated_at'] = Carbon::now();
+                        StudentSpecialAptitude::insert($aptitudeInfo);
+                    }
+                }
+                $previousSchool = $request->only('school_name','udise_no','city','medium_of_instruction','board_examination','grades');
+                $previousSchool['student_id'] = $LastInsertId;
+                $previousSchool['created_at'] = Carbon::now();
+                $previousSchool['updated_at'] = Carbon::now();
+                StudentPreviousSchool::insert($previousSchool);
+
+                if(isset($data['sibling'])){
+                    $siblingInfo = array();
+                    $siblings = $data['sibling'];
+                    foreach($siblings as $sibling){
+                        $siblingInfo['student_id'] = $LastInsertId;
+                        $siblingInfo['name'] = $sibling['name'];
+                        $siblingInfo['age'] = $sibling['age'];
+                        $siblingInfo['created_at'] = Carbon::now();
+                        $siblingInfo['updated_at'] = Carbon::now();
+                        StudentSibling::insert($siblingInfo);
+                    }
+                }
+                if(isset($data['student_communication_address'])){
+                    $student_communication_address = $data['address'];
+                }else{
+                    $student_communication_address = $data['communication_address'];
+                }
+                $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
+                $extraInfo['communication_address']=$student_communication_address;
+                $extraInfo['student_id'] = $LastInsertId;
+                $extraInfo['created_at'] = Carbon::now();
+                $extraInfo['updated_at'] = Carbon::now();
+                StudentExtraInfo::insert($extraInfo);
+
+                if(isset($data['upload_doc'])){
+                    foreach($data['upload_doc'] as $doc){
+                        if($doc != null){
+                            $image = $doc;
+                            $name = $doc->getClientOriginalName();
+                            $filename = time()."_".$name;
+                            $path1 = public_path('uploads/student_documents/'.$LastInsertId);
+                            if (! file_exists($path1)) {
+                                File::makeDirectory('uploads/student_documents/'.$LastInsertId, $mode = 0777, true, true);
+                            }
+                            $image->move($path1,$filename);
+                            $studentDocument['document'] = $filename;
+                            $studentDocument['student_id'] = $LastInsertId;
+                            $studentDocument['created_at'] = Carbon::now();
+                            $studentDocument['updated_at'] = Carbon::now();
+                            StudentDocument::insert($studentDocument);
+                        }
+                    }
+                }
             }
+            if($data['role_name'] != 'student'){
             if(!empty($data['modules'])){
                 $userAclsData = array();
                 $modules = $data['modules'];
@@ -387,12 +642,17 @@ class UsersController extends Controller
                             $userAclData['module_id'] = $moduleMaster['id'];
                         }
                     }
+                    if($data['role_name']== 'student'){
+                        $userAclData['user_id'] = $parnetId;
+                    }else{
                     $userAclData['user_id'] = $LastInsertId;
+                    }
                     $userAclData['created_at'] = Carbon::now();
                     $userAclData['updated_at'] = Carbon::now();
                     array_push($userAclsData,$userAclData);
                 }
                 ModuleAcl::insert($userAclsData);
+            }
             }
             if($data['role_name'] != 'student'){
             $mailData['email']  = $data['email'];
@@ -1030,16 +1290,17 @@ class UsersController extends Controller
     public function getParents(){
         $user=Auth::user();
         $userInformation =array();
-        $userData = User::where('body_id',$user->body_id)->where('role_id',4)->select('id','first_name','last_name','email')->get();
+        $userData = User::where('body_id',$user->body_id)->where('role_id',4)->get();
         $userList = $userData->toArray();
         foreach($userList as $user){
-            $userInfo['data'] = $user['id'];
-            $userInfo['value'] = $user["first_name"].' '.$user["last_name"].' ,"<i>'.$user["email"].'</i>"';
+            $parentInfo = ParentExtraInfo::where('parent_id',$user['id'])->first();
+            $parentInfo['userId'] = $user['id'];
+            $userInfo['data'] = $parentInfo;
+            $userInfo['value'] = $user["email"];
             array_push($userInformation,$userInfo);
         }
         return $userInformation;
     }
-
 
     public function checkUser(Request $request){
 
