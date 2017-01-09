@@ -18,6 +18,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class UserController extends Controller
@@ -36,6 +37,7 @@ class UserController extends Controller
 
         $data=array();
         try{
+            Log::info('234');
             $user = User::where('email', $request->email)->first();
             if ($user == NULL) {
                 $status =404;
@@ -46,6 +48,8 @@ class UserController extends Controller
             } elseif (Auth::attempt(['email' => $request->email,'password' => $request->password])) {
                 $user=Auth::User();
                 $userView=TeacherView::where('user_id','=',$user['id'])->first();
+
+
                 if(Empty($userView) && $user['role_id']==4 || $userView['mobile_view']==1)
                 {
                     $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -86,6 +90,10 @@ class UserController extends Controller
                     {
                         $i=0;
                         $userData=User::where('parent_id','=',$data['users']['user_id'])->first();
+                        $userStudentData=User::where('parent_id','=',$data['users']['user_id'])->select('id','first_name','last_name')->get()->toArray();
+                        //dd(array_values($userStudentData));
+                        $data['Students']= (object)array_values($userStudentData);
+                        //dd($data);
                             $messageCount=Message::where('to_id',$userData['id'])
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)
@@ -111,14 +119,13 @@ class UserController extends Controller
                 }
             }else   {
                 $status =404;
-                $message = 'Sorry!! Incorrect email or password';
+                $message = 'Sorry!! Incorrect email or password 34555';
             }
         }catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
-        $response = ["message" => $message,"status" => $status,"data" =>$data];
-
+        $response = ["message" => $message,"status" => $status,"data" =>$data,];
         return response($response,$status);
 
     }
@@ -241,6 +248,7 @@ class UserController extends Controller
                 }
             }
             $divisions=Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+
             if(!Empty($divisions)){
                 $divisionData=SubjectClassDivision::where('division_id','=',$divisions['id'])
                     ->select('division_id')
@@ -260,6 +268,7 @@ class UserController extends Controller
                 $className=Classes::where('id','=',$class_id['class_id'])
                     ->where('batch_id','=',$batch_id)
                     ->select('id','class_name as class_name')->first();
+
                 if(!Empty($class_id)&&!Empty($className)){
                     $finalClasses[$class_id['class_id']]['id']=$class_id['class_id'];
                     $finalClasses[$class_id['class_id']]['class_name']=$className['class_name'];
@@ -374,9 +383,10 @@ class UserController extends Controller
         }
         $response = [
             "message" => $message,
-            "status" => $status,
+            //"status" => $status,
             "data" =>$finalData
         ];
         return response($response, $status);
     }
+
 }

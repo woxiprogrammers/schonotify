@@ -382,7 +382,7 @@
     Route::get('check-class',array('uses' => 'ClassController@checkClass'));
     Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
 
-    /* API Routes */
+    /*  Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
 
     Route::post('auth','api\UserController@login');
@@ -474,7 +474,7 @@
         Route::get('detail-view/{event_id}','api\EventController@detailView');
         Route::put('edit-event','api\EventController@editEvent');
         Route::get('get-year-month','api\EventController@getYearMonth');
-
+        Route::post('image-upload','api\EventController@uploadImage');
 
 
     });
