@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EnquiryForm;
 use Carbon\Carbon;
+use Elibyy\TCPDF\Facades\TCPdf;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -83,10 +84,10 @@ class EnquiryController extends Controller
             $data['updated_at'] = $currentTime;
             $newEnquiry = EnquiryForm::create($data);
             //return redirect('/new-student-enquiry')->with('message', 'Success!');
-            TCPDF::AddPage();
+            TCPdf::AddPage();
             //TCPDF::Write(0, 'Hello World');
-            TCPDF::writeHTML(view('backend.common.pdf.rma-invoice')->with(compact('rmaInfo','sellerAddress','orderInfo'))->render());
-            TCPDF::Output("Invoice".date('Y-m-d_H_i_s').".pdf", 'D');
+            TCPdf::writeHTML(view('enquiry-pdf')->render());
+            TCPdf::Output("Invoice".date('Y-m-d_H_i_s').".pdf", 'D');
             //return view('backend.common.pdf.invoice')->with(compact('order','orderNo','seller','sellerAddress','customerAddress','product','brand','unitPrice','taxPrice','orderDate','sellerBankDetails','invoiceId','invoice','invoiceCreatedDate','orderDateChangeFormat'));
 
         }catch(\Exception $e){
