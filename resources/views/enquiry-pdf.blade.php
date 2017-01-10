@@ -26,24 +26,15 @@
         <td><h3>ENQUIRY FORM</h3></td>
     </tr>
 </table>
-<!--<table style="padding-top:10px;padding-bottom:10px;">-->
-<!--    <tr>-->
-<!--        <td width="35%">2.Name of prospective student:</td>-->
-<!--        <td width="65%">fc gvghvghvv gyffytfytfytfrtdestfytfty</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td width="35%"></td>-->
-<!--        <td width="65%;padding-top:-15px;">____________________________________________________________________</td>-->
-<!--    </tr>-->
-<!--</table>-->
+
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="35%">Date:- {{date('Y-m-d')}}</td>
+        <td width="35%">&nbsp;&nbsp;&nbsp;Date:- {{date('Y-m-d')}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="35%">1.Name of Father/Mother/Guardian:</td>
+        <td width="35%"><p>1.Name of</p> <p>&nbsp;&nbsp;&nbsp;Father/Mother/Guardian:</p></td>
         <td width="65%">
             <table>
                 <tr>
@@ -99,7 +90,7 @@
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="10%">School:</td>
+        <td width="12%">&nbsp;&nbsp;&nbsp;School:</td>
         <td style="width:90%;">
             <table>
                 <tr>
@@ -134,7 +125,7 @@
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="15%">Mobile No.</td>
+        <td width="15%">&nbsp;&nbsp;&nbsp;Mobile No.</td>
         <td width="65%">
             <table>
                 <tr>
@@ -149,14 +140,14 @@
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="15%">Address:</td>
+        <td width="15%">&nbsp;&nbsp;&nbsp;Address:</td>
         <td width="85%">
             <table>
                 <tr>
                     <td>{{ucwords($newEnquiry->address)}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-top:-15px;">______________________________________________________________</td>
+                    <td style="padding-top:-15px;">_______________________________________________________________</td>
                 </tr>
             </table>
         </td>
@@ -165,12 +156,12 @@
 <table>
     <tr>
         <td width="15%"></td>
-        <td style="padding-top:-15px;width:85%;">&nbsp;_______________________________________________________________</td>
+        <td style="padding-top:-15px;width:85%;">&nbsp;&nbsp;&nbsp;_______________________________________________________________</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="15%">Signature :</td>
+        <td width="15%">&nbsp;&nbsp;&nbsp;Signature :</td>
         <td width="65%">
             <table>
                 <tr>
@@ -183,87 +174,6 @@
         </td>
     </tr>
 </table>
-<!--<table style="padding-top:10px;padding-bottom:10px;">-->
-<!--    <tr>-->
-<!--        <td>_____________________________________________________________________________</td>-->
-<!--    </tr>-->
-<!--</table>-->
-<!--<table>-->
-<!--    <tr>-->
-<!--        <td>First Name</td>-->
-<!--        <td>Last Name</td>-->
-<!--        <td>Middle Name</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td style="padding-top: 10px;">__________________________</td>-->
-<!--        <td style="padding-top: 10px;">__________________________</td>-->
-<!--        <td style="padding-top: 10px;">__________________________</td>-->
-<!--    </tr>-->
-<!--</table>-->
-<!---->
-<!--<table style="padding-top:10px;padding-bottom:10px;">-->
-<!---->
-<!--    <tr>-->
-<!--        <td><h5>Name of prospective student</h5></td>-->
-<!--    </tr>-->
-<!--</table>-->
-<!--<table>-->
-<!--    <tr>-->
-<!--        <td>First Name</td>-->
-<!--        <td>Last Name</td>-->
-<!--        <td>Middle Name</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td>__________________________</td>-->
-<!--        <td>__________________________</td>-->
-<!--        <td>__________________________</td>-->
-<!--    </tr>-->
-<!--</table>-->
-<!---->
-<!--<table style="padding-top:10px;padding-bottom:10px;">-->
-<!---->
-<!--    <tr>-->
-<!--        <td>-->
-<!--            <table>-->
-<!--                <tr>-->
-<!--                    <td>Date Of Birth</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td style="margin-top: 10px;">__________________________</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td style="padding-top: 10px;">Presently studying in class</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td style="margin-top: 10px;">__________________________</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td style="margin-top: 10px;">Seeking admission to class</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td style="margin-top: 10px;">__________________________</td>-->
-<!--                </tr>-->
-<!--            </table>-->
-<!--        </td>-->
-<!--        <td>-->
-<!--            <table>-->
-<!--                <tr>-->
-<!--                    <td style="margin-top: 70px;">School Name</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td style="margin-top: 10px;">__________________________</td>-->
-<!--                </tr>-->
-<!--            </table>-->
-<!--        </td>-->
-<!--    </tr>-->
-<!--</table>-->
-<!---->
-<!--<table>-->
-<!--    <tr>-->
-<!--        <td></td>-->
-<!--        <td></td>-->
-<!--    </tr>-->
-<!--</table>-->
 
 </body>
 </html>
