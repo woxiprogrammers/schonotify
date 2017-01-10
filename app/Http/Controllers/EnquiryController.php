@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class EnquiryController extends Controller
@@ -84,11 +85,16 @@ class EnquiryController extends Controller
             $data['updated_at'] = $currentTime;
             $newEnquiry = EnquiryForm::create($data);
             //return redirect('/new-student-enquiry')->with('message', 'Success!');
+            Session::flash('message-success','Student Enquiry Submitted Successfully');
+
             TCPdf::AddPage();
             //TCPDF::Write(0, 'Hello World');
-            TCPdf::writeHTML(view('enquiry-pdf')->render());
-            TCPdf::Output("Invoice".date('Y-m-d_H_i_s').".pdf", 'D');
+            TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
+            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
             //return view('backend.common.pdf.invoice')->with(compact('order','orderNo','seller','sellerAddress','customerAddress','product','brand','unitPrice','taxPrice','orderDate','sellerBankDetails','invoiceId','invoice','invoiceCreatedDate','orderDateChangeFormat'));
+
+            //return redirect('/new-student-enquiry')->with('message-success');
+            return Redirect::back();
 
         }catch(\Exception $e){
             $data = [

@@ -28,7 +28,16 @@
 </section>
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
-    @include('alerts.errors')
+
+    @if(Session::has('message-success'))
+    <meta http-equiv="refresh" content="5;url={{"/new-student-enquiry"  }}">
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" area-lebel="close">
+            <span area-hidden="true">&times;</span>
+        </button>
+        {{ Session::get('message-success') }}
+    </div>
+    @endif
 <div class="col-md-12">
     <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry">
         <fieldset>

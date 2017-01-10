@@ -38,11 +38,16 @@
 <!--</table>-->
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
+        <td width="35%">Date:- {{date('Y-m-d')}}</td>
+    </tr>
+</table>
+<table style="padding-top:10px;padding-bottom:10px;">
+    <tr>
         <td width="35%">1.Name of Father/Mother/Guardian:</td>
         <td width="65%">
             <table>
                 <tr>
-                    <td>Desai Swapnali Vijay fgdgfdgf fgdddtdtdt</td>
+                    <td>{{ucwords($newEnquiry->guardian_first_name)}}   {{ucwords($newEnquiry->guardian_middle_name)}}  {{ucwords($newEnquiry->guardian_last_name)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">_______________________________________________</td>
@@ -57,7 +62,7 @@
         <td width="65%">
             <table>
                 <tr>
-                    <td>Desai Vijay fgdgfdgf fgdddtdtdt</td>
+                    <td>{{ucwords($newEnquiry->student_first_name)}}   {{ucwords($newEnquiry->student_middle_name)}}  {{ucwords($newEnquiry->student_last_name)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">_______________________________________________</td>
@@ -72,7 +77,7 @@
         <td width="20%">
             <table>
                 <tr>
-                    <td>10th</td>
+                    <td>{{ucwords($newEnquiry->current_class)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">_____________</td>
@@ -83,7 +88,7 @@
         <td width="40%">
             <table>
                 <tr>
-                    <td>7/4/1989</td>
+                    <td>{{ucwords($newEnquiry->dob)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">___________________________</td>
@@ -98,7 +103,7 @@
         <td style="width:90%;">
             <table>
                 <tr>
-                    <td>Ganesh International school</td>
+                    <td>{{ucwords($newEnquiry->school_name)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">__________________________________________________________________</td>
@@ -113,7 +118,7 @@
         <td width="65%">
             <table>
                 <tr>
-                    <td>7th</td>
+                    <td>{{ucwords($newEnquiry->admission_to_class)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">_______________________________________________</td>
@@ -133,7 +138,7 @@
         <td width="65%">
             <table>
                 <tr>
-                    <td>1111111111</td>
+                    <td>{{ucwords($newEnquiry->mobile_number)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">_______________________________________________</td>
@@ -148,7 +153,7 @@
         <td width="85%">
             <table>
                 <tr>
-                    <td>Navi Peth Pune</td>
+                    <td>{{ucwords($newEnquiry->address)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-top:-15px;">______________________________________________________________</td>
@@ -169,7 +174,7 @@
         <td width="65%">
             <table>
                 <tr>
-                    <td>7th</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td style="padding-top:-45px;">_______________________________________</td>
