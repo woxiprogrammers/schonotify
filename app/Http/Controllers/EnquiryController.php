@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EnquiryForm;
 use Carbon\Carbon;
-use Elibyy\TCPDF\Facades\TCPdf;
+use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -87,10 +87,10 @@ class EnquiryController extends Controller
             //return redirect('/new-student-enquiry')->with('message', 'Success!');
             Session::flash('message-success','Student Enquiry Submitted Successfully');
 
-            TCPdf::AddPage();
+            TCPDF::AddPage();
             //TCPDF::Write(0, 'Hello World');
-            TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
-            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+            TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
+            TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
             //return view('backend.common.pdf.invoice')->with(compact('order','orderNo','seller','sellerAddress','customerAddress','product','brand','unitPrice','taxPrice','orderDate','sellerBankDetails','invoiceId','invoice','invoiceCreatedDate','orderDateChangeFormat'));
 
             //return redirect('/new-student-enquiry')->with('message-success');
