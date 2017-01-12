@@ -70,6 +70,16 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Email
+                        </label>
+                        <input type="text" placeholder="Enter Email" class="form-control" name="email"/>
+                    </div>
+                </div>
+            </div>
 
         </fieldset>
         <fieldset>

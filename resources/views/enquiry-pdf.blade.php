@@ -10,7 +10,7 @@
 <table>
     <tr>
         <td width="35%"></td>
-        <td>S.S.P. SHIKSHAN SANSTHAN'S</td>
+        <td>S.S.P. SHIKSHAN SANSTHA'S</td>
     </tr>
 </table>
 <table>
@@ -29,139 +29,69 @@
 
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="35%">&nbsp;&nbsp;&nbsp;Date:- {{date('Y-m-d')}}</td>
+        <td width="35%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold">Date</span>:- {{date('Y-m-d')}}</td>
+        <td width="35%"></td>
+        <td width="37%">&nbsp;&nbsp;&nbsp;<span style="font-weight: bold"> Enquiry No</span>:- {{$enquiryId}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="35%"><p>1.Name of</p> <p>&nbsp;&nbsp;&nbsp;Father/Mother/Guardian:</p></td>
-        <td width="65%">
-            <table>
-                <tr>
-                    <td>{{ucwords($newEnquiry->guardian_first_name)}}   {{ucwords($newEnquiry->guardian_middle_name)}}  {{ucwords($newEnquiry->guardian_last_name)}}</td>
-                </tr>
-                <tr>
-                    <td style="padding-top:-15px;">_______________________________________________</td>
-                </tr>
-            </table>
-        </td>
+        <td width="100%"><span style="font-weight: bold">1.&nbsp;&nbsp;Name of the Father/Mother/Guardian:&nbsp;&nbsp;</span>{{ucwords($newEnquiry->guardian_first_name)}}   {{ucwords($newEnquiry->guardian_middle_name)}}  {{ucwords($newEnquiry->guardian_last_name)}}</td>
+
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="35%">2.Name of prospective student:</td>
-        <td width="65%">
-            <table>
-                <tr>
-                    <td>{{ucwords($newEnquiry->student_first_name)}}   {{ucwords($newEnquiry->student_middle_name)}}  {{ucwords($newEnquiry->student_last_name)}}</td>
-                </tr>
-                <tr>
-                    <td style="padding-top:-15px;">_______________________________________________</td>
-                </tr>
-            </table>
-        </td>
+        <td width="100%"><span style="font-weight: bold"> &nbsp;&nbsp;&nbsp;&nbsp;Email:&nbsp;&nbsp;</span>{{ucwords($newEnquiry->email)}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="30%">3.Presently studying in class:</td>
-        <td width="20%">
-            <table>
-                <tr>
-                    <td>{{ucwords($newEnquiry->current_class)}}</td>
-                </tr>
-                <tr>
-                    <td style="padding-top:-15px;">_____________</td>
-                </tr>
-            </table>
-        </td>
-        <td width="10%">DOB:</td>
-        <td width="40%">
-            <table>
-                <tr>
-                    <td>{{ucwords($newEnquiry->dob)}}</td>
-                </tr>
-                <tr>
-                    <td style="padding-top:-15px;">___________________________</td>
-                </tr>
-            </table>
-        </td>
+        <td width="100%"><span style="font-weight: bold"> 2.&nbsp;&nbsp;Name of the prospective student:&nbsp;&nbsp;</span> {{ucwords($newEnquiry->student_first_name)}}   {{ucwords($newEnquiry->student_middle_name)}}  {{ucwords($newEnquiry->student_last_name)}}</td>
+
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="12%">&nbsp;&nbsp;&nbsp;School:</td>
-        <td style="width:90%;">
-            <table>
-                <tr>
-                    <td>{{ucwords($newEnquiry->school_name)}}</td>
-                </tr>
-                <tr>
-                    <td style="padding-top:-15px;">__________________________________________________________________</td>
-                </tr>
-            </table>
-        </td>
+        <td width="50%"><span style="font-weight: bold"> 3.&nbsp;&nbsp;Presently studying in class:&nbsp;&nbsp;</span> {{ucwords($newEnquiry->current_class)}}</td>
+        <td width="50%"><span style="font-weight: bold"> DOB:&nbsp;&nbsp;</span> {{ucwords($newEnquiry->dob)}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="35%">4.Seeking admission to class :</td>
-        <td width="65%">
-            <table>
-                <tr>
-                    <td>{{ucwords($newEnquiry->admission_to_class)}}</td>
-                </tr>
-                <tr>
-                    <td style="padding-top:-15px;">_______________________________________________</td>
-                </tr>
-            </table>
-        </td>
+        <td width="100%"><span style="font-weight: bold"> &nbsp;&nbsp;&nbsp;&nbsp;School:&nbsp;&nbsp;</span> {{ucwords($newEnquiry->school_name)}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td>5.Contact Details :-</td>
+        <td width="100%"><span style="font-weight: bold"> 4.&nbsp;&nbsp;Seeking Admission to class:&nbsp;&nbsp;</span> {{ucwords($newEnquiry->admission_to_class)}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="15%">&nbsp;&nbsp;&nbsp;Mobile No.</td>
-        <td width="65%">
-            <table>
-                <tr>
-                    <td>{{ucwords($newEnquiry->mobile_number)}}</td>
-                </tr>
-                <tr>
-                    <td style="padding-top:-15px;">_______________________________________________</td>
-                </tr>
-            </table>
-        </td>
+        <td style="font-weight: bold">5.&nbsp;&nbsp;Contact Details :-</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="15%">&nbsp;&nbsp;&nbsp;Address:</td>
+        <td width="100%"><span style="font-weight: bold"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mobile No.&nbsp;&nbsp;</span> {{ucwords($newEnquiry->mobile_number)}}</td>
+    </tr>
+</table>
+<table style="padding-top:10px;padding-bottom:10px;">
+    <tr>
+        <td width="15%" style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address:</td>
         <td width="85%">
             <table>
                 <tr>
                     <td>{{ucwords($newEnquiry->address)}}</td>
                 </tr>
-                <tr>
-                    <td style="padding-top:-15px;">_______________________________________________________________</td>
-                </tr>
             </table>
         </td>
     </tr>
 </table>
-<table>
-    <tr>
-        <td width="15%"></td>
-        <td style="padding-top:-15px;width:85%;">&nbsp;&nbsp;&nbsp;_______________________________________________________________</td>
-    </tr>
-</table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="15%">&nbsp;&nbsp;&nbsp;Signature :</td>
+        <td width="20%" style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature :</td>
         <td width="65%">
             <table>
                 <tr>
