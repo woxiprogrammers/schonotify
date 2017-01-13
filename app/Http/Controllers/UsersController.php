@@ -654,7 +654,7 @@ class UsersController extends Controller
                 ModuleAcl::insert($userAclsData);
             }
             }
-            if($data['role_name'] != 'student'){
+            /*if($data['role_name'] != 'student'){
             $mailData['email']  = $data['email'];
             $mailData['confirmation_code']  = $userData->confirmation_code;
             $mailData['password']  = $data['password'];
@@ -664,7 +664,7 @@ class UsersController extends Controller
                 $message->subject("Welcome to site name");
                 $message->to($mailData['email']);
             });
-            }
+            }*/
             return $request;
         }else{
             return "Please Insert Data";
