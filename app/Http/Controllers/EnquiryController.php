@@ -51,6 +51,12 @@ class EnquiryController extends Controller
                 Session::set('enquiryId', $newEnquiry);
             }
             Session::flash('message-success','Student Enquiry Submitted Successfully');
+            $now = Carbon::now();
+            $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
+            TCPdf::AddPage();
+            TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
+            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+
             return redirect('/student-enquiry');
         }catch(\Exception $e){
             $data = [
