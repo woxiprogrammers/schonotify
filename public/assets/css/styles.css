@@ -11928,5 +11928,8 @@ body::-webkit-scrollbar-thumb {
     background:rgba(0, 122, 255, 0.34);
     border-radius: 4px;
 }
+.removePadding{
+    padding-top: 0px!important;
+}
 
 

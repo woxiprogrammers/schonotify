@@ -46,6 +46,10 @@
 
     Route::get('/','FrontController@index');
 
+    //enquiry form
+    Route::get('/new-student-enquiry','EnquiryController@viewEnquiryFormWithoutLogin');
+    Route::post('/store-student-enquiry-without-login','EnquiryController@storeEnquiryFormWithoutLogin');
+
     Route::get('get-msg-count','MessageController@getMessageCount');
 
     Route::get('get-unread-list','MessageController@getUnreadMessageListing');
