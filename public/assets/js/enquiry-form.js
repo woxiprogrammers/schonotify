@@ -36,6 +36,9 @@ var FormValidator = function () {
             };
             return true; // <- other field was empty, no error message
         });
+        $.validator.addMethod("chkMail", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
+        });
         jQuery.validator.addMethod("removespace", function(value, element) {
             if (value.trim().length >=15)
             {
@@ -108,6 +111,9 @@ var FormValidator = function () {
                     minlength:15,
                     required:true,
                     removespace:true
+                },
+                email: {
+                    chkMail: true
                 }
             },
             messages: {
@@ -145,6 +151,8 @@ var FormValidator = function () {
                 address:{
                     required:"Address is required",
                     address:"Address must contain at-least 15 characters"
+                },email: {
+                    chkMail: "Your email address must be in the format of name@domain.com"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit

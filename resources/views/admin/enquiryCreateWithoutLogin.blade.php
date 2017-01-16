@@ -4,11 +4,12 @@
 
 <div id="app">
 
-@include('sidebar')
-
+<div class="sidebar app-aside" id="sidebar" style="top: 0px!important;">
+    <img class="img-responsive" src="/assets/images/bodyLogo/sspss.jpg">
+</div>
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
-@include('header')
+
 
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
@@ -19,7 +20,7 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
-            <h1 class="mainTitle">Student</h1>
+            <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
             <span class="mainDescription">Enquiry Form</span>
         </div>
 
@@ -27,9 +28,18 @@
 </section>
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
-    @include('alerts.errors')
+
+    @if(Session::has('message-success'))
+    <meta http-equiv="refresh" content="5;url={{"/new-student-enquiry"  }}">
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" area-lebel="close">
+            <span area-hidden="true">&times;</span>
+        </button>
+        {{ Session::get('message-success') }}
+    </div>
+    @endif
 <div class="col-md-12">
-    <form method="post" action="/store-student-enquiry" role="form" id="studentEnquiry">
+    <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry">
         <fieldset>
             <legend>
                 Name of Father/Mother/Guardian
@@ -183,7 +193,7 @@
 <!-- end: DYNAMIC TABLE -->
 
 <!-- start: FOURTH SECTION -->
-@include('rightSidebar')
+
 <!-- end: FOURTH SECTION -->
 </div>
 </div>
@@ -210,7 +220,6 @@
 <script src="assets/js/main.js"></script>
 
 
-<script src="assets/js/custom-project.js"></script>
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
@@ -218,9 +227,12 @@
 <script src="assets/js/enquiry-form.js"></script>
 <script>
     jQuery(document).ready(function() {
-        getMsgCount();
         Main.init();
         FormValidator.init();
+        $("#app").addClass("removePadding");
+        //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
+
+
         var date_input=$('input[name="dob"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
