@@ -53,19 +53,25 @@ class EventController extends Controller
                 $finalFiveEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
                 $finalFiveEvents[$counter]['status'] ="Published";
                 $finalFiveEvents[$counter]['title'] = $event['title'];
-                   if($event['image'] != null) {
-                       $file = $this->getEventImagePath($event['image']);
-                       if($file['status']){
-                           $finalFiveEvents[$counter]['image'] = $event['image'];
-                           $finalFiveEvents[$counter]['path'] = $file['path'];
-                       } else {
-                           $finalFiveEvents[$counter]['image'] = "picture.svg";
-                           $finalFiveEvents[$counter]['path'] =url()."/uploads/events/picture.svg";
-                       }
-                   } else {
+                $finalFiveEvents[$counter]['created_at'] = $event['created_at'];
+                if($event['status'] == 2) {
+                    $finalFiveEvents[$counter]['published_at'] = $event['updated_at'];
+                } else {
+                    $finalFiveEvents[$counter]['published_at'] = ' ';
+                }
+                if($event['image'] != null) {
+                $file = $this->getEventImagePath($event['image']);
+                    if($file['status']){
+                       $finalFiveEvents[$counter]['image'] = $event['image'];
+                       $finalFiveEvents[$counter]['path'] = $file['path'];
+                    } else {
                        $finalFiveEvents[$counter]['image'] = "picture.svg";
-                       $finalFiveEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
-                   }
+                       $finalFiveEvents[$counter]['path'] =url()."/uploads/events/picture.svg";
+                    }
+                } else {
+                $finalFiveEvents[$counter]['image'] = "picture.svg";
+                $finalFiveEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
+                }
                 $finalFiveEvents[$counter]['detail'] = $event['detail'];
                 $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
                 $finalFiveEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event['end_date']));
@@ -77,6 +83,8 @@ class EventController extends Controller
             $status = 500;
             $message = "Something went wrong";
         }
+   
+
         $response = [
             "message" => $message,
             "status" => $status,
@@ -288,6 +296,11 @@ class EventController extends Controller
     {
         try {
             $data = $request->all();
+            $mytime = Carbon::now();
+            $tempImageName = (strtotime($mytime)).".jpg";
+            $tempImagePath = "uploads/events";
+            file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image) );
+
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $eventData['event_type_id'] = $eventTypesId;
@@ -302,22 +315,9 @@ class EventController extends Controller
             $eventData['created_at'] = Carbon::now();
             $eventData['updated_at'] = Carbon::now();
             $event_id = Event::insertGetId($eventData);
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $name = $request->file('image')->getClientOriginalName();
-                $filename = time()."_".$name;
-                $path = public_path('uploads/events/');
-                if (!file_exists($path)) {
-                    File::makeDirectory('uploads/events/', $mode = 0777, true,true);
-                }
-                $image->move($path,$filename);
-            }
-            else{
-                $filename = null;
-            }
             if($event_id != null) {
-                $eventImageData['event_id'] = $event_id;
-                $eventImageData['image'] = $filename;
+                $eventImageData['event_id'] = $event_id ;
+                $eventImageData['image'] = $tempImageName;
                 $eventImageData['created_at'] = Carbon::now();
                 $eventImageData['updated_at'] = Carbon::now();
                 EventImages::insert($eventImageData);
@@ -331,7 +331,7 @@ class EventController extends Controller
             }
         } catch (\Exception $e) {
             $status = 500;
-            $message = "Something went wrong";
+            $message = $e->getMessage();
         }
         $response = [
             "status" => $status,
@@ -339,6 +339,8 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
+
+
 
     /*
     * Function Name : editEvent
@@ -415,6 +417,7 @@ class EventController extends Controller
     public function sendForPublishEventTeacher(Requests\SendForPublishEventRequest $request)
     {
         try {
+
             $data = $request->all();
             $eventStatus = Event::where('id','=',$data['event_id'])->pluck('status');
             if($eventStatus == "0" | (!Empty($eventStatus))) {
@@ -431,6 +434,7 @@ class EventController extends Controller
                 $status = 406;
             }
         } catch (\Exception $e) {
+
             $status = 500;
             $message = "Something went wrong";
         }
@@ -454,14 +458,16 @@ class EventController extends Controller
     {
         try {
             $data = $request->all();
+
             $eventStatus = Event::where('id','=',$data['event_id'])->pluck('status');
+
             $createdBy = Event::where('id','=',$data['event_id'])->pluck('created_by');
             if($eventStatus == "0" || (!Empty($eventStatus)) && $eventStatus != "2" && $eventStatus != "1") {
                 Event::where('id', '=' , $data['event_id'])->delete();
                 $message = "Event Successfully Deleted";
                 $status = 200;
             } else {
-                $message = "Sorry!! This event can not be delete";
+                $message = "Sorry!! This event can not be deleted";
                 $status = 406;
             }
         } catch (\Exception $e) {

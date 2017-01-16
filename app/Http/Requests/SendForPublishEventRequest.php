@@ -13,6 +13,7 @@ class SendForPublishEventRequest extends Request
      * @return bool
      */
     public function authorize()
+
     {
         $userToken = $this->request->all();
         $userId = '';
@@ -27,16 +28,20 @@ class SendForPublishEventRequest extends Request
             ->select('users.id','acl_master.title as acl','modules.slug as module_slug')
             ->get();
         $resultArr = array();
+
+
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
 
         }
-        if (in_array('Publish_event',$resultArr) ) {
+
+        if (in_array('Create_event',$resultArr) ) {
             return true;
         } else {
             return false;
         }
+
     }
 
     /**
