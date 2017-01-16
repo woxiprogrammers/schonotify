@@ -434,6 +434,7 @@ class EventController extends Controller
                 $status = 406;
             }
         } catch (\Exception $e) {
+
             $status = 500;
             $message = "Something went wrong";
         }
@@ -457,14 +458,16 @@ class EventController extends Controller
     {
         try {
             $data = $request->all();
+
             $eventStatus = Event::where('id','=',$data['event_id'])->pluck('status');
+
             $createdBy = Event::where('id','=',$data['event_id'])->pluck('created_by');
             if($eventStatus == "0" || (!Empty($eventStatus)) && $eventStatus != "2" && $eventStatus != "1") {
                 Event::where('id', '=' , $data['event_id'])->delete();
                 $message = "Event Successfully Deleted";
                 $status = 200;
             } else {
-                $message = "Sorry!! This event can not be delete";
+                $message = "Sorry!! This event can not be deleted";
                 $status = 406;
             }
         } catch (\Exception $e) {

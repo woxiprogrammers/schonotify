@@ -37,7 +37,7 @@ class UserController extends Controller
 
         $data=array();
         try{
-            Log::info('234');
+
             $user = User::where('email', $request->email)->first();
             if ($user == NULL) {
                 $status =404;
@@ -94,6 +94,7 @@ class UserController extends Controller
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)
                                 ->count();
+
                             $data['Badge_count']['user_id']=$userData['id'];
                             $data['Badge_count']['message_count'] = $messageCount;
                             $data['Badge_count']['auto_notification_count'] = $messageCount;
@@ -115,7 +116,7 @@ class UserController extends Controller
                 }
             }else   {
                 $status =404;
-                $message = 'Sorry!! Incorrect email or password 34555';
+                $message = 'Sorry!! Incorrect email or password';
             }
         }catch (\Exception $e) {
             $status = 500;
@@ -379,7 +380,7 @@ class UserController extends Controller
         }
         $response = [
             "message" => $message,
-            //"status" => $status,
+            "status" => $status,
             "data" =>$finalData
         ];
         return response($response, $status);
