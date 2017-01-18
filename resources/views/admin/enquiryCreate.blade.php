@@ -109,7 +109,7 @@
                 <div class="col-md-6">
                     <div class="form-group"> <!-- Date input -->
                         <label class="control-label" for="dob">Date Of Birth <span class="symbol required"></span></label>
-                        <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
+                        <input class="form-control" id="dob" name="dob" placeholder="DD/MM/YY" type="text" value="{!! date('d/m/Y', time());!!}" readonly/>
                     </div>
                 </div>
             </div>
