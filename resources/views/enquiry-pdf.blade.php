@@ -29,7 +29,7 @@
 
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="35%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold">Date</span>:- {{date('Y-m-d')}}</td>
+        <td width="35%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold">Date</span>:- {{date('d-m-Y')}}</td>
         <td width="35%"></td>
         <td width="37%">&nbsp;&nbsp;&nbsp;<span style="font-weight: bold"> Enquiry No</span>:- {{$enquiryId}}</td>
     </tr>
