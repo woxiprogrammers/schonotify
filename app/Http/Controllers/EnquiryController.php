@@ -112,4 +112,12 @@ class EnquiryController extends Controller
             abort(500,$e->getMessage());
         }
     }
+
+    public function viewEnquiryList(){
+        try{
+            return view('admin.enquiry.listing');
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
 }
