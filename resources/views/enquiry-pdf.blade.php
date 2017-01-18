@@ -54,7 +54,7 @@
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
         <td width="50%"><span style="font-weight: bold"> 3.&nbsp;&nbsp;Presently studying in class:&nbsp;&nbsp;</span> {{ucwords($newEnquiry->current_class)}}</td>
-        <td width="50%"><span style="font-weight: bold"> DOB:&nbsp;&nbsp;</span> {{ucwords($newEnquiry->dob)}}</td>
+        <td width="50%"><span style="font-weight: bold"> DOB:&nbsp;&nbsp;</span> {{Carbon\Carbon::parse($newEnquiry->dob)->format('d-m-Y') }}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
