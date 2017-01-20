@@ -83,13 +83,13 @@ var Datatable = function() {
                             $.each(ajaxParams, function(key, value) {
                                 data[key] = value;
                             });
-                            App.blockUI({
+                            /*App.blockUI({
                                 message: tableOptions.loadingMessage,
                                 target: tableContainer,
                                 overlayColor: 'none',
                                 cenrerY: true,
                                 boxed: true
-                            });
+                            });*/
                         },
                         "dataSrc": function(res) { // Manipulate the data returned from the server
                             if (res.customActionMessage) {
@@ -117,7 +117,7 @@ var Datatable = function() {
                                 tableOptions.onSuccess.call(undefined, the, res);
                             }
 
-                            App.unblockUI(tableContainer);
+                            /*App.unblockUI(tableContainer);*/
 
                             return res.data;
                         },
@@ -126,7 +126,7 @@ var Datatable = function() {
                                 tableOptions.onError.call(undefined, the);
                             }
 
-                            App.alert({
+                            /*App.alert({
                                 type: 'danger',
                                 icon: 'warning',
                                 message: tableOptions.dataTable.language.metronicAjaxRequestGeneralError,
@@ -134,7 +134,7 @@ var Datatable = function() {
                                 place: 'prepend'
                             });
 
-                            App.unblockUI(tableContainer);
+                            App.unblockUI(tableContainer);*/
                         }
                     },
 

@@ -35,12 +35,11 @@
                 <!-- start: DYNAMIC TABLE -->
                 <div class="container-fluid container-fullw bg-white">
                     <div class="row">
-                        Form No.,  Name, Class appeared for, Written Exam, Interview, Documents, Action
                         <table class="table table-striped table-bordered table-hover table-checkable" id="datatable_products">
                             <thead>
                             <tr role="row" class="heading">
                                 <th width="1%">
-                                    <input type="checkbox" class="group-checkable" > </th>
+                                     </th>
                                 <th width="10%"> Form No </th>
                                 <th width="20%"> Name </th>
                                 <th width="10%"> Class appeared for </th>
@@ -107,7 +106,17 @@
 </div>
 
 <!-- start: MAIN JAVASCRIPTS -->
+
+
+
 <script src="vendor/jquery/jquery.min.js"></script>
+<script src="assets/js/app.js" type="text/javascript"></script>
+<script src="assets/js/datatable.js" type="text/javascript"></script>
+<script src="vendor/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="vendor/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="assets/js/enquiry-listing.min.js" type="text/javascript"></script>
+
+<script src="assets/js/main.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="vendor/modernizr/modernizr.js"></script>
 <script src="vendor/jquery-cookie/jquery.cookie.js"></script>
@@ -118,10 +127,7 @@
 <script src="vendor/select2/select2.min.js"></script><!--
 <script src="vendor/DataTables/jquery.dataTables.min.js"></script>
 -->
-<script src="assets/js/datatable.js" type="text/javascript"></script>
-<script src="vendor/datatables/datatables.min.js" type="text/javascript"></script>
-<script src="vendor/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-<script src="/assets/pages/scripts/ecommerce-products-superadmin.min.js" type="text/javascript"></script>
+
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <script src="vendor/sweetalert/sweet-alert.min.js"></script>
 <script src="vendor/toastr/toastr.min.js"></script>

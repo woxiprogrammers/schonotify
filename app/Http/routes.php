@@ -50,7 +50,7 @@
     Route::get('/new-student-enquiry','EnquiryController@viewEnquiryFormWithoutLogin');
     Route::post('/store-student-enquiry-without-login','EnquiryController@storeEnquiryFormWithoutLogin');
     Route::get('manage',array('uses' => 'EnquiryController@viewEnquiryList'));
-    Route::post('list',array('uses' => 'FinanceAdmin\OrderController@orderListing'));
+    Route::post('enquiry-list',array('uses' => 'EnquiryController@enquiryListing'));
 
     Route::get('get-msg-count','MessageController@getMessageCount');
 
