@@ -16,13 +16,13 @@ class AddNewColumnsToTableEnquiryForm extends Migration
             $table->dateTime('written_test_scheduled_on')->nullable();
             $table->string('written_test_conducted_by',255)->nullable();
             $table->string('written_test_status',255)->nullable();
-            $table->string('written_test_remark',255)->nullable();
+            $table->text('written_test_remark')->nullable();
             $table->dateTime('interview_scheduled_on')->nullable();
             $table->string('interview_conducted_by',255)->nullable();
             $table->string('interview_status',255)->nullable();
-            $table->string('interview_remark',255)->nullable();
+            $table->text('interview_remark')->nullable();
             $table->string('document_status',255)->nullable();
-            $table->string('document_remark',255)->nullable();
+            $table->text('document_remark')->nullable();
         });
     }
 
