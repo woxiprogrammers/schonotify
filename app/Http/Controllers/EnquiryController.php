@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\EnquiryForm;
+use App\User;
 use Carbon\Carbon;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
@@ -155,6 +156,97 @@ class EnquiryController extends Controller
             ];
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());
+        }
+    }
+
+    public function viewEnquiryList(){
+        try{
+            $enquiryData = EnquiryForm::orderBy('id','ASC')->get()->toArray();
+            $masterEnquiry = array();
+            foreach($enquiryData as $enquiry){
+                $now = Carbon::now();
+                $enquiryId = $now->year."-".str_pad($enquiry['id'],4,"0",STR_PAD_LEFT);
+                $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
+                $enquiry['form_no'] = $enquiryId;
+                $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
+                $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];
+                array_push($masterEnquiry,$enquiry);
+            }
+            return view('admin.enquiry.listing')->with(compact('masterEnquiry'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+
+    public function enquiryListing(Request $request){
+        try{
+
+            $enquiryData = EnquiryForm::all();
+            return view('admin.enquiry.listing')->with('results',$enquiryData);
+            /*if($enquiryData !=null){
+                $iTotalRecords = EnquiryForm::count();
+
+                $iDisplayLength = intval($request->length);
+                $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+                $iDisplayStart = intval($request->start);
+                $sEcho = intval($request->draw);
+                $records = array();
+                $records["data"] = array();
+
+                $end = $iDisplayStart + $iDisplayLength;
+                $end = $end > $iTotalRecords ? $iTotalRecords : $end;
+
+                $status_list = array(
+                    array("success" => "Pending"),
+                    array("info" => "Closed"),
+                    array("danger" => "On Hold"),
+                    array("warning" => "Fraud")
+                );
+                $limitedProducts = EnquiryForm::take($iDisplayLength)->skip($iDisplayStart)->get()->toArray();
+                for($j=0,$i = $iDisplayStart; $i < $end; $i++,$j++) {
+                    $now = Carbon::now();
+                    $enquiryId = $now->year."-".str_pad($limitedProducts[$j]['id'],4,"0",STR_PAD_LEFT);
+                    $orderDetailView = "/shipment/order/view/123";
+                    $records["data"][] = array(
+                            '<input type="checkbox" name="id[]" value="'.$limitedProducts[$j]['id'].'">',
+                        $enquiryId,
+                        $limitedProducts[$j]['student_first_name'],
+                        $limitedProducts[$j]['admission_to_class'],
+                            "Written Exam",
+                        "Interview",
+                        "Documents",
+                            '<a href='.$orderDetailView.' class="btn btn-sm btn-default btn-circle btn-editable"><i class="fa fa-pencil"></i> View</a>',
+                        );
+
+
+                }
+                if (isset($request->customActionType) && $request->customActionType == "group_action") {
+                    $records["customActionStatus"] = "OK"; // pass custom message(useful for getting status of group actions)
+                    $records["customActionMessage"] = "Group action successfully has been completed. Well done!"; // pass custom message(useful for getting status of group actions)
+                }
+                $records["draw"] = $sEcho;
+                $records["recordsTotal"] = $iTotalRecords;
+                $records["recordsFiltered"] = $iTotalRecords;
+            }else{
+                $records = '';
+            }*/
+        }catch(\Exception $e){
+            $records = $e->getMessage();
+        }
+        return response()->json($records);
+    }
+
+
+    public function editEnquiryView(Request $request,$enquiryId){
+        try{
+            $enquiryInfo = EnquiryForm::where('id',$enquiryId)->first();
+            $interviewUser = User::whereIn('role_id',[1,2])->get();
+            return view('admin.enquiry.enquiry-edit')->with(compact('enquiryInfo','interviewUser'));
+        }catch (\Exception $e){
+            Log::critical('exception:'.$e->getMessage());
+            abort(500,$e->getMessage());
+
         }
     }
 }
