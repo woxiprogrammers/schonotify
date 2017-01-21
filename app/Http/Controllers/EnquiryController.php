@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\EnquiryForm;
+use App\User;
 use Carbon\Carbon;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
@@ -115,7 +116,18 @@ class EnquiryController extends Controller
 
     public function viewEnquiryList(){
         try{
-            return view('admin.enquiry.listing');
+            $enquiryData = EnquiryForm::orderBy('id','ASC')->get()->toArray();
+            $masterEnquiry = array();
+            foreach($enquiryData as $enquiry){
+                $now = Carbon::now();
+                $enquiryId = $now->year."-".str_pad($enquiry['id'],4,"0",STR_PAD_LEFT);
+                $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
+                $enquiry['form_no'] = $enquiryId;
+                $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
+                $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];
+                array_push($masterEnquiry,$enquiry);
+            }
+            return view('admin.enquiry.listing')->with(compact('masterEnquiry'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -126,8 +138,8 @@ class EnquiryController extends Controller
         try{
 
             $enquiryData = EnquiryForm::all();
-
-            if($enquiryData !=null){
+            return view('admin.enquiry.listing')->with('results',$enquiryData);
+            /*if($enquiryData !=null){
                 $iTotalRecords = EnquiryForm::count();
 
                 $iDisplayLength = intval($request->length);
@@ -173,10 +185,23 @@ class EnquiryController extends Controller
                 $records["recordsFiltered"] = $iTotalRecords;
             }else{
                 $records = '';
-            }
+            }*/
         }catch(\Exception $e){
             $records = $e->getMessage();
         }
         return response()->json($records);
+    }
+
+
+    public function editEnquiryView(Request $request,$enquiryId){
+        try{
+            $enquiryInfo = EnquiryForm::where('id',$enquiryId)->first();
+            $interviewUser = User::whereIn('role_id',[1,2])->get();
+            return view('admin.enquiry.enquiry-edit')->with(compact('enquiryInfo','interviewUser'));
+        }catch (\Exception $e){
+            Log::critical('exception:'.$e->getMessage());
+            abort(500,$e->getMessage());
+
+        }
     }
 }

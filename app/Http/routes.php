@@ -51,8 +51,11 @@
     Route::post('/store-student-enquiry-without-login','EnquiryController@storeEnquiryFormWithoutLogin');
     Route::get('manage',array('uses' => 'EnquiryController@viewEnquiryList'));
     Route::post('enquiry-list',array('uses' => 'EnquiryController@enquiryListing'));
+    Route::get('edit-enquiry/{id}',array('uses' => 'EnquiryController@editEnquiryView'));
+    Route::post('edit-enquiry/{id}',array('uses' => 'EnquiryController@editEnquiry'));
 
-    Route::get('get-msg-count','MessageController@getMessageCount');
+
+Route::get('get-msg-count','MessageController@getMessageCount');
 
     Route::get('get-unread-list','MessageController@getUnreadMessageListing');
 
