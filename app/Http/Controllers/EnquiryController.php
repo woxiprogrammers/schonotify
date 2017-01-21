@@ -36,9 +36,54 @@ class EnquiryController extends Controller
 
     }
 
-    public function storeEnquiryForm(Request $request){
+    public function viewEnquiryListing(){
         try{
-            $data = $request->all();
+            return view('admin.enquiry_listing');
+        }catch(\Exception $e){
+            $data = [
+
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+
+    }
+
+    public function viewEnquiryListingDetails(){
+        try{
+            return view('admin.enquiry_form_details');
+        }catch(\Exception $e){
+            $data = [
+
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+
+    }
+
+    public function viewEnquiryListingData(Request $request){
+        $dataEnq = EnquiryForm::all();
+           //dd($dataEnq);
+
+        //$data['recordsTotal'] = 1;
+        //$data['recordsFiltered'] = 1;
+        //$data['draw'] = 1;
+        $data['data'] = $dataEnq;
+        //$finalData = json_encode($data);
+       // dd($finalData);
+
+
+
+        //return view('admin.enquiry_listing')->with(compact('finalData'));
+           return response()->json($data,200);
+    }
+
+    public function storeEnquiryForm(Request $request){
+        try{$data = $request->all();
+
             $currentTime = Carbon::now();
             $dob = str_replace('/', '-', $data['dob']);
             $data['dob'] = date('Y-m-d', strtotime($dob));

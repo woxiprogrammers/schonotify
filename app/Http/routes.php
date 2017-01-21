@@ -390,6 +390,9 @@
 
 //enquiry form
     Route::get('/student-enquiry','EnquiryController@viewEnquiryForm');
+    Route::get('/enquiry-listing','EnquiryController@viewEnquiryListing');
+     Route::get('/enquiry-form-details','EnquiryController@viewEnquiryListingDetails');
+    Route::get('/enquiry-form-data','EnquiryController@viewEnquiryListingData');
     Route::post('/store-student-enquiry','EnquiryController@storeEnquiryForm');
     /* API Routes */
 
