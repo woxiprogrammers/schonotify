@@ -199,21 +199,15 @@
             "ajax": {
                 "url": "/enquiry-form-data",
                 "type": "GET"
-            },
-            "columns": [
-                { "data": "id" },
-                { "data": "guardian_first_name" },
-                { "data": "guardian_middle_name" },
-                { "data": "guardian_last_name" },
-                { "data": "student_first_name" },
-                { "data": "student_middle_name" }
-            ]
+            }
+
         } );
 
 
 
         } );
 </script>
+
 
 
 @stop

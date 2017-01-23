@@ -29,7 +29,7 @@
                 <!-- start: DYNAMIC TABLE -->
                 @include('alerts.errors')
                 <div class="col-md-12">
-                    <form method="post" action="/store-student-enquiry" role="form" id="studentEnquiry">
+                    <form method="post" action="/edit-enquiry/{{$enquiryInfo['id']}}" role="form" id="studentEnquiry">
                         <fieldset>
                             <legend>
                                 Name of Father/Mother/Guardian
@@ -147,7 +147,12 @@
                                         <label class="control-label">Mobile Number <span class="symbol required"></span></label>
                                         <input class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number" type="text" value="{{$enquiryInfo['mobile_number']}}" />
                                     </div>
+                                    <div class="form-group"> <!-- Date input -->
+                                        <label class="control-label">Alternate Mobile Number </span></label>
+                                        <input class="form-control" id="alt_contact_no" name="alt_contact_no" placeholder="Enter Mobile Number" type="text" value="{{$enquiryInfo['alt_contact_no']}}" />
+                                    </div>
                                 </div>
+
                                 <div class="col-md-6">
                                     <label class="control-label">
                                         Address
@@ -168,30 +173,42 @@
                             <legend>
                                 WRITTEN TEST DETAILS
                             </legend>
+                            <div class="form-group">
+
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Scheduled on
-                                        </label>
-                                        <span class="input-icon">
-													<input type="text" id="start-date-time" style="background-color: #fff !important;"  class="form-control underline" name="eventStartDate"/>
-													<i class="ti-calendar"></i> </span>
-                                    </div>
+                                  <div class="form-group">
+                                       <label class="control-label">
+                                           Scheduled on
+                                         </label>
+                                         <div class='input-group date' id='datetimepicker1'>
+                                          <input type='text' class="form-control" id="written_test_scheduled_on" name="written_test_scheduled_on" value="{{$enquiryInfo['written_test_scheduled_on']}}"/>
+                                                <span class="input-group-addon">
+                                                  <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                         </div>
+
                                 </div>
+                                    </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Conducted By
                                         </label>
-                                        <select class="form-control" name="written_test_conducted_by" id="written_test_conducted_by" >
-                                            @if($interviewUser != null)
-                                            <option value="">Select...</option>
-                                            @foreach($interviewUser as $data)
-                                            <option value="{!! $data['id'] !!}" >{!! $data['first_name'] !!}</option>
-                                            @endforeach
+                                        <select class="form-control" name="written_test_conducted_by" id="written_test_conducted_by" value="{{$enquiryInfo['written_test_conducted_by']}}" >
+
+
+
+                                            @if($enquiryInfo['written_test_conducted_by']==NULL)
+                                                <option value="">Select...</option>
+                                                @foreach($interviewUser as $data)
+                                                <option value="{!! $data['id'] !!}" >{!! $data['first_name'] !!}</option>
+                                                @endforeach
                                             @else
-                                            <option value="">no seller available</option>
+                                                @foreach($interviewUser as $data)
+                                                <option value="{{ $data['id'] }}" @if($enquiryInfo['written_test_conducted_by']==$data['id']) selected='selected' @endif>{{ $data['first_name'] }}</option>
+                                                @endforeach
                                             @endif
                                         </select>
                                     </div>
@@ -203,42 +220,180 @@
                                         <label class="control-label">
                                             Test Status:
                                         </label>
-                                        <select class="form-control" name="seller_name" id="seller_name" >
-                                            <option value="pass">Pass</option>
-                                            <option value="fail">Fail</option>
+                                        <select class="form-control" name="written_test_status" id="written_test_status" value="{{$enquiryInfo['written_test_status']}}">
+
+                                            @if($enquiryInfo['written_test_status'] != null)
+                                                <option value="pass" @if($enquiryInfo['written_test_status']=="pass") selected='selected' @endif>Pass</option>
+                                                <option value="fail" @if($enquiryInfo['written_test_status']=="fail") selected='selected' @endif>Fail</option>
+                                            @else
+                                                <option value="">Select ..</option>
+                                                <option value="pass">Pass</option>
+                                                <option value="fail">Fail</option>
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
+                                            Remarks
+                                        </label>
+                                        <div class="note-editor">
+                                            <textarea  name="written_test_remark" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px ;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                                            {{$enquiryInfo['written_test_remark']}}
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>
+                                INTERVIEW DETAILS
+                            </legend>
+                            <div class="container">
+
+                            </div>
+                            <div class="row">
+
+                                    <div class='col-md-6'>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Scheduled on
+                                            </label>
+                                            <div class='input-group date' id='datetimepicker2'>
+                                                <input type='text' class="form-control" value="{{$enquiryInfo['interview_scheduled_on']}}" id="interview_scheduled_on" name="interview_scheduled_on"/>
+                                                <span class="input-group-addon">
+                                                  <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">
                                             Conducted By
                                         </label>
-                                        <select class="form-control" name="seller_name" id="seller_name" >
-                                            @if($interviewUser != null)
+                                        <select class="form-control" name="interview_conducted_by" value="{{$enquiryInfo['interview_conducted_by']}}" id="interview_conducted_by" >
+                                            @if($enquiryInfo['interview_conducted_by']==NULL)
                                             <option value="">Select...</option>
                                             @foreach($interviewUser as $data)
                                             <option value="{!! $data['id'] !!}" >{!! $data['first_name'] !!}</option>
                                             @endforeach
                                             @else
-                                            <option value="">no seller available</option>
+                                            @foreach($interviewUser as $data)
+                                            <option value="{{ $data['id'] }}" @if($enquiryInfo['interview_conducted_by']==$data['id']) selected='selected' @endif>{{ $data['first_name'] }}</option>
+                                            @endforeach
                                             @endif
                                         </select>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Interview Status:
+                                        </label>
+                                        <select class="form-control" name="interview_status" value="{{$enquiryInfo['interview_status']}}" id="interview_status" >
+
+                                            @if($enquiryInfo['interview_status'] != null)
+                                            <option value="pass" @if($enquiryInfo['interview_status']=="pass") selected='selected' @endif>Pass</option>
+                                            <option value="fail" @if($enquiryInfo['interview_status']=="fail") selected='selected' @endif>Fail</option>
+                                            @else
+                                            <option value="">Select ..</option>
+                                            <option value="pass">Pass</option>
+                                            <option value="fail">Fail</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">
+                                        Remarks
+                                    </label>
+                                    <div class="form-group">
+                                        <div class="note-editor">
+                                            <textarea  name="interview_remark"  data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                                                {{$enquiryInfo['interview_remark']}}
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>
+                                DOCUMENT DETAILS
+                            </legend>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Interview Status:
+                                        </label>
+                                        <select class="form-control" name="document_status" value="{{$enquiryInfo['document_status']}}" id="document_status" >
+
+                                            @if($enquiryInfo['document_status'] != null)
+                                            <option value="clear" @if($enquiryInfo['document_status']=="clear") selected='selected' @endif>Clear</option>
+                                            <option value="unclear" @if($enquiryInfo['document_status']=="unclear") selected='selected' @endif>Unclear</option>
+                                            @else
+                                            <option value="">Select ..</option>
+                                            <option value="clear">clear</option>
+                                            <option value="unclear">unclear</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">
+                                        Remarks
+                                    </label>
+                                    <div class="form-group">
+                                        <div class="note-editor">
+                                            <textarea  name="document_remark" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                                                {{$enquiryInfo['document_remark']}}
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Final admission Status:
+                                    </label>
+                                    <select class="form-control" name="final_status" value="{{$enquiryInfo['final_status']}}" id="final_status" >
+
+                                        @if($enquiryInfo['final_status'] != null)
+                                        <option value="pass" @if($enquiryInfo['final_status']=="pass") selected='selected' @endif>Pass</option>
+                                        <option value="fail" @if($enquiryInfo['final_status']=="fail") selected='selected' @endif>Fail</option>
+                                        @else
+                                        <option value="">Select ..</option>
+                                        <option value="pass">Pass</option>
+                                        <option value="fail">Fail</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+
                         </fieldset>
 
                         <div class="row">
-                            <div class="col-md-4">
-                            </div>
-                            @if(Session::has('enquiryId'))
-                            <a href="/studentCreateEnquiry" target="_blank" class="btn base-color">
-                                Register Recently Added Student</a>
-                            @endif
+
                             <div class="col-md-4">
                                 <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                    Submit
+                                    Edit
                                 </button>
                             </div>
 
@@ -321,6 +476,16 @@
         }else{
             $("#school_name").removeAttr("disabled");
         }
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker2').datetimepicker();
     });
 </script>
 @stop

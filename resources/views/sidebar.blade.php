@@ -268,7 +268,6 @@
             </div>
         </div>
     </a>
-<<<<<<< HEAD
     <ul class="sub-menu">
 
         <li>
@@ -279,13 +278,12 @@
             </a>
         </li>
         <li>
-            <a href="/enquiry-listing">
+            <a href="/manage">
                 <div class="item-inner">
                     <span class="title"> Enquiry Listing </span>
                 </div>
             </a>
         </li>
-
     </ul>
 </li>
 

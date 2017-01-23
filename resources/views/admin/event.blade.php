@@ -8,6 +8,7 @@
 
     <div class="app-content">
         <!-- start: TOP NAVBAR -->
+
         @include('header')
 
         <!-- end: TOP NAVBAR -->

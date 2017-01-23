@@ -67,19 +67,8 @@ class EnquiryController extends Controller
 
     public function viewEnquiryListingData(Request $request){
         $dataEnq = EnquiryForm::all();
-           //dd($dataEnq);
-
-        //$data['recordsTotal'] = 1;
-        //$data['recordsFiltered'] = 1;
-        //$data['draw'] = 1;
         $data['data'] = $dataEnq;
-        //$finalData = json_encode($data);
-       // dd($finalData);
-
-
-
-        //return view('admin.enquiry_listing')->with(compact('finalData'));
-           return response()->json($data,200);
+        return response()->json($data,200);
     }
 
     public function storeEnquiryForm(Request $request){
@@ -169,6 +158,7 @@ class EnquiryController extends Controller
                 $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
                 $enquiry['form_no'] = $enquiryId;
                 $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
+                $enquiry['result']= $enquiry['final_status'];
                 $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];
                 array_push($masterEnquiry,$enquiry);
             }
@@ -243,6 +233,20 @@ class EnquiryController extends Controller
             $enquiryInfo = EnquiryForm::where('id',$enquiryId)->first();
             $interviewUser = User::whereIn('role_id',[1,2])->get();
             return view('admin.enquiry.enquiry-edit')->with(compact('enquiryInfo','interviewUser'));
+        }catch (\Exception $e){
+            Log::critical('exception:'.$e->getMessage());
+            abort(500,$e->getMessage());
+
+        }
+    }
+
+    public function editEnquiry(Request $request,$enquiryId){
+        try{
+
+            $enquiryData = $request->all();
+            $enquiry = EnquiryForm::findOrFail($enquiryId);
+            $enquiryInfo = $enquiry->update($enquiryData);
+            return redirect('edit-enquiry/'.$enquiryId);
         }catch (\Exception $e){
             Log::critical('exception:'.$e->getMessage());
             abort(500,$e->getMessage());

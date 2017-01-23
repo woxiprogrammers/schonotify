@@ -85,18 +85,22 @@
     <th width="10%"> Interview </th>
     <th width="10%"> Documents </th>
     <th width="10%"> Actions </th>
+    <th width="10%"> Result </th>
+
 </tr>
 </thead>
 <tbody>
     @foreach($masterEnquiry as $enquiry)
     <tr>
-        <td>{!! $enquiry['id'] !!}</td>
+        <td>{!! $enquiry['form_no'] !!}</td>
         <td>{!! $enquiry['name'] !!}</td>
         <td>{!! $enquiry['current_class'] !!}</td>
         <td>{!! $enquiry['written_test_status'] !!}</td>
         <td>{!! $enquiry['interview_status'] !!}</td>
         <td>{!! $enquiry['document_status'] !!}</td>
         <td>{!! $enquiry['action'] !!}</td>
+        <td>{!! $enquiry['final_status'] !!}</td>
+
     </tr>
     @endforeach
 </tbody>
@@ -136,6 +140,63 @@
         Main.init();
         TableData.init();
     });
+</script>
+<script>
+    function studentResultStatus(result,form_no)
+    {
+        alert("hgghg");
+        if(result==fail)
+        {
+
+            var route='deactive/'+form_no;
+
+            $.get(route,function(res){
+                if(res['final_status']==403)
+                {
+                    var route= "/enquiry_listing";
+
+                    window.location.replace(route);
+
+                }else{
+                    swal({
+                        title: "Failed!",
+                        text: "User has been failed!",
+                        type: "error",
+                        confirmButtonColor: "#DD6B55",
+                        closeOnCancel: false
+                    });
+                }
+
+            });
+
+        }else
+        {
+
+            var route='active/'+form_no;
+
+            $.get(route,function(res){
+
+                if(res['final_status']==403)
+                {
+                    var route= "/enquiry_listing";
+
+                    window.location.replace(route);
+
+                } else if(res['final_status'] == 401) {
+
+                    var route= "/enquiry_listing";
+
+                    window.location.replace(route);
+
+                }else{
+                    swal("Activated!", "User has been Passed.", "success");
+                }
+
+            });
+
+        }
+
+    }
 </script>
 <!-- end: JavaScript Event Handlers for this page -->
 <!-- end: CLIP-TWO JAVASCRIPTS -->
