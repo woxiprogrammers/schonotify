@@ -198,11 +198,13 @@ class EnquiryController extends Controller
         try{
 
             $enquiryData = $request->all();
-
+            $now = Carbon::now();
+            $enquiryNumber = $now->year."-".str_pad($enquiryId,4,"0",STR_PAD_LEFT);
             $enquiryData['address'] = ltrim($enquiryData['address']);
             $enquiryData['written_test_remark'] = trim($enquiryData['written_test_remark']);
             $enquiryData['interview_remark'] = trim($enquiryData['interview_remark']);
             $enquiryData['document_remark'] = trim($enquiryData['document_remark']);
+            $enquiryData['enquiry_number'] = $enquiryNumber;
             $enquiry = EnquiryForm::findOrFail($enquiryId);
             $enquiryInfo = $enquiry->update($enquiryData);
             return redirect('edit-enquiry/'.$enquiryId);
