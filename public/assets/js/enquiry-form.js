@@ -107,6 +107,9 @@ var FormValidator = function () {
                     required: true,
                     mobileNumber: true
                 },
+                alt_contact_no:{
+                    mobileNumber: true
+                },
                 address:{
                     minlength:15,
                     required:true,
@@ -146,6 +149,9 @@ var FormValidator = function () {
                     alpha_num: "only Alpha and numbers are allowed "
                 },
                 mobile_number:{
+                    mobileNumber: "Only numbers are allowed"
+                },
+                alt_contact_no:{
                     mobileNumber: "Only numbers are allowed"
                 },
                 address:{

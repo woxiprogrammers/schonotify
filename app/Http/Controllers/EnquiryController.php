@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\EnquiryForm;
+use App\User;
 use Carbon\Carbon;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
@@ -36,9 +37,43 @@ class EnquiryController extends Controller
 
     }
 
-    public function storeEnquiryForm(Request $request){
+    public function viewEnquiryListing(){
         try{
-            $data = $request->all();
+            return view('admin.enquiry_listing');
+        }catch(\Exception $e){
+            $data = [
+
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+
+    }
+
+    public function viewEnquiryListingDetails(){
+        try{
+            return view('admin.enquiry_form_details');
+        }catch(\Exception $e){
+            $data = [
+
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+
+    }
+
+    public function viewEnquiryListingData(Request $request){
+        $dataEnq = EnquiryForm::all();
+        $data['data'] = $dataEnq;
+        return response()->json($data,200);
+    }
+
+    public function storeEnquiryForm(Request $request){
+        try{$data = $request->all();
+
             $currentTime = Carbon::now();
             $dob = str_replace('/', '-', $data['dob']);
             $data['dob'] = date('Y-m-d', strtotime($dob));
@@ -110,6 +145,71 @@ class EnquiryController extends Controller
             ];
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());
+        }
+    }
+
+    public function viewEnquiryList(){
+        try{
+            $enquiryData = EnquiryForm::orderBy('id','ASC')->get()->toArray();
+            $masterEnquiry = array();
+            foreach($enquiryData as $enquiry){
+                $now = Carbon::now();
+                $enquiryId = $now->year."-".str_pad($enquiry['id'],4,"0",STR_PAD_LEFT);
+                $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
+                $enquiry['form_no'] = $enquiryId;
+                $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
+                $enquiry['result']= $enquiry['final_status'];
+                $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];
+                array_push($masterEnquiry,$enquiry);
+            }
+            return view('admin.enquiry.listing')->with(compact('masterEnquiry'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+
+    public function enquiryListing(Request $request){
+        try{
+
+            $enquiryData = EnquiryForm::all();
+            return view('admin.enquiry.listing')->with('results',$enquiryData);
+
+        }catch(\Exception $e){
+            $records = $e->getMessage();
+        }
+        return response()->json($records);
+    }
+
+
+    public function editEnquiryView(Request $request,$enquiryId){
+        try{
+            $enquiryInfo = EnquiryForm::where('id',$enquiryId)->first();
+            $interviewUser = User::whereIn('role_id',[1,2])->get();
+            return view('admin.enquiry.enquiry-edit')->with(compact('enquiryInfo','interviewUser'));
+        }catch (\Exception $e){
+            Log::critical('exception:'.$e->getMessage());
+            abort(500,$e->getMessage());
+
+        }
+    }
+
+    public function editEnquiry(Request $request,$enquiryId){
+        try{
+
+            $enquiryData = $request->all();
+
+            $enquiryData['address'] = ltrim($enquiryData['address']);
+            $enquiryData['written_test_remark'] = trim($enquiryData['written_test_remark']);
+            $enquiryData['interview_remark'] = trim($enquiryData['interview_remark']);
+            $enquiryData['document_remark'] = trim($enquiryData['document_remark']);
+            $enquiry = EnquiryForm::findOrFail($enquiryId);
+            $enquiryInfo = $enquiry->update($enquiryData);
+            return redirect('edit-enquiry/'.$enquiryId);
+        }catch (\Exception $e){
+            Log::critical('exception:'.$e->getMessage());
+            abort(500,$e->getMessage());
+
         }
     }
 }
