@@ -7,7 +7,7 @@
 <script src="vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-<script src="vendor/select2/selesct2.min.js"></script>
+<script src="vendor/select2/select2.min.js"></script>
 <script src="vendor/DataTables/jquery.dataTables.min.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->

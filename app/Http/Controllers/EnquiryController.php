@@ -198,6 +198,11 @@ class EnquiryController extends Controller
         try{
 
             $enquiryData = $request->all();
+
+            $enquiryData['address'] = ltrim($enquiryData['address']);
+            $enquiryData['written_test_remark'] = trim($enquiryData['written_test_remark']);
+            $enquiryData['interview_remark'] = trim($enquiryData['interview_remark']);
+            $enquiryData['document_remark'] = trim($enquiryData['document_remark']);
             $enquiry = EnquiryForm::findOrFail($enquiryId);
             $enquiryInfo = $enquiry->update($enquiryData);
             return redirect('edit-enquiry/'.$enquiryId);

@@ -109,7 +109,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group"> <!-- Date input -->
                                         <label class="control-label" for="dob">Date Of Birth <span class="symbol required"></span></label>
-                                        <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{{$enquiryInfo['dob']}}"/>
+                                        <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{{$enquiryInfo['dob']}}" readonly/>
                                     </div>
                                 </div>
                             </div>
@@ -160,9 +160,7 @@
 
                                     <div class="form-group">
                                         <div class="note-editor">
-                                            <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
-                                                {{$enquiryInfo['address']}}
-                                            </textarea>
+                                            <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['address']}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -239,9 +237,7 @@
                                             Remarks
                                         </label>
                                         <div class="note-editor">
-                                            <textarea  name="written_test_remark" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px ;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">
-                                            {{$enquiryInfo['written_test_remark']}}
-                                            </textarea>
+                                            <textarea  name="written_test_remark" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px ;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['written_test_remark']}}</textarea>
                                         </div>
                                     </div>
 
@@ -318,9 +314,7 @@
                                     </label>
                                     <div class="form-group">
                                         <div class="note-editor">
-                                            <textarea  name="interview_remark"  data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">
-                                                {{$enquiryInfo['interview_remark']}}
-                                            </textarea>
+                                            <textarea  name="interview_remark"  data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['interview_remark']}}</textarea>
                                         </div>
                                     </div>
 
@@ -358,9 +352,7 @@
                                     </label>
                                     <div class="form-group">
                                         <div class="note-editor">
-                                            <textarea  name="document_remark" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">
-                                                {{$enquiryInfo['document_remark']}}
-                                            </textarea>
+                                            <textarea  name="document_remark" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['document_remark']}}</textarea>
                                         </div>
                                     </div>
 
@@ -390,10 +382,14 @@
                         </fieldset>
 
                         <div class="row">
-
+                            <div class="col-md-8">
+                                <a href="/manage">
+                                    Back
+                                </a>
+                            </div>
                             <div class="col-md-4">
                                 <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                    Edit
+                                    Admit
                                 </button>
                             </div>
 
@@ -480,12 +476,12 @@
 </script>
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker1').datetimepicker({ format:'YYYY-MM-DD hh:mm:00 a' });
     });
 </script>
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker2').datetimepicker();
+        $('#datetimepicker2').datetimepicker({ format:'YYYY-MM-DD hh:mm:00 a' });
     });
 </script>
 @stop
