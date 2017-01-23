@@ -171,6 +171,15 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"> <!-- Date input -->
+                        <label class="control-label">Alternate Mobile Number </label>
+                        <input class="form-control" id="alt_contact_no" name="alt_contact_no" placeholder="Enter Mobile Number" type="text" />
+                    </div>
+                </div>
+
+            </div>
         </fieldset>
 
         <div class="row">

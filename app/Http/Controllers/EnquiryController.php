@@ -186,6 +186,9 @@ class EnquiryController extends Controller
         try{
             $enquiryInfo = EnquiryForm::where('id',$enquiryId)->first();
             $interviewUser = User::whereIn('role_id',[1,2])->get();
+            $enquiryInfo->written_test_scheduled_on = Carbon::parse($enquiryInfo->written_test_scheduled_on)->format('d-m-Y G:i:s');
+            $enquiryInfo->interview_scheduled_on = Carbon::parse($enquiryInfo->interview_scheduled_on)->format('d-m-Y h:i:s a/p');
+            $enquiryInfo->dob = Carbon::parse($enquiryInfo->dob)->format('d-m-Y');
             return view('admin.enquiry.enquiry-edit')->with(compact('enquiryInfo','interviewUser'));
         }catch (\Exception $e){
             Log::critical('exception:'.$e->getMessage());
@@ -198,12 +201,14 @@ class EnquiryController extends Controller
         try{
 
             $enquiryData = $request->all();
-
             $enquiryData['address'] = ltrim($enquiryData['address']);
             $enquiryData['written_test_remark'] = trim($enquiryData['written_test_remark']);
             $enquiryData['interview_remark'] = trim($enquiryData['interview_remark']);
             $enquiryData['document_remark'] = trim($enquiryData['document_remark']);
             $enquiry = EnquiryForm::findOrFail($enquiryId);
+            $enquiryData['written_test_scheduled_on'] = Carbon::parse($enquiryData['written_test_scheduled_on'])->format('Y-m-d G:i:s');
+            $enquiryData['interview_scheduled_on'] = Carbon::parse($enquiryData['interview_scheduled_on'])->format('Y-m-d G:i:s');
+            $enquiryData['dob'] = Carbon::parse($enquiryData['dob'])->format('Y-m-d');
             $enquiryInfo = $enquiry->update($enquiryData);
             return redirect('edit-enquiry/'.$enquiryId);
         }catch (\Exception $e){

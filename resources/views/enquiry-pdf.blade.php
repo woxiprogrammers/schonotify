@@ -72,9 +72,13 @@
         <td style="font-weight: bold">5.&nbsp;&nbsp;Contact Details :-</td>
     </tr>
 </table>
+<div style="margin-left: 100px">
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
         <td width="100%"><span style="font-weight: bold"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mobile No.&nbsp;&nbsp;</span> {{ucwords($newEnquiry->mobile_number)}}</td>
+    </tr>
+    <tr>
+        <td width="100%"><span style="font-weight: bold"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alternate Mobile No.&nbsp;&nbsp;</span> {{ucwords($newEnquiry->alt_contact_no)}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
@@ -104,6 +108,7 @@
         </td>
     </tr>
 </table>
+</div>
 
 </body>
 </html>

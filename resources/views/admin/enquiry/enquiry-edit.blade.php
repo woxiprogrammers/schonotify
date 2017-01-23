@@ -148,7 +148,7 @@
                                         <input class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number" type="text" value="{{$enquiryInfo['mobile_number']}}" />
                                     </div>
                                     <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label">Alternate Mobile Number </span></label>
+                                        <label class="control-label">Alternate Mobile Number </label>
                                         <input class="form-control" id="alt_contact_no" name="alt_contact_no" placeholder="Enter Mobile Number" type="text" value="{{$enquiryInfo['alt_contact_no']}}" />
                                     </div>
                                 </div>
@@ -458,7 +458,7 @@
         var date_input=$('input[name="dob"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
-            format: 'dd/mm/yyyy',
+            format: 'd-m-yyyy',
             container: container,
             todayHighlight: true,
             autoclose: true,
@@ -476,12 +476,12 @@
 </script>
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker1').datetimepicker({ format:'YYYY-MM-DD hh:mm:00 a' });
+        $('#datetimepicker1').datetimepicker({ format:'DD-MM-YYYY hh:mm:00 a' });
     });
 </script>
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker2').datetimepicker({ format:'YYYY-MM-DD hh:mm:00 a' });
+        $('#datetimepicker2').datetimepicker({ format:'DD-MM-YYYY hh:mm:00 a' });
     });
 </script>
 @stop
