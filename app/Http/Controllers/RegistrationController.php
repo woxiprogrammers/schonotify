@@ -66,8 +66,14 @@ class RegistrationController extends Controller
         try{
 
             $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->first();
+            $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
             $bodies = Body::all();
-            return view('registration.student-registration')->with(compact('enquiryInfo','bodies'));
+            if($userRegister!=null){
+                return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies'));
+            }else{
+                return view('registration.student-registration')->with(compact('enquiryInfo','bodies'));
+            }
+
         }catch(\Exception $e){
             $data = [
                 'input_params' => $request->all(),
