@@ -3,7 +3,9 @@
 @section('content')
 
 <div id="app">
-
+    <div class="sidebar app-aside" id="sidebar" style="top: 0px!important;">
+        <img class="img-responsive" src="/assets/images/bodyLogo/sspss.jpg">
+    </div>
     <div class="app-content">
         <!-- start: TOP NAVBAR -->
 
@@ -17,7 +19,7 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
-                            <h1 class="mainTitle">Student</h1>
+                            <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
                             <span class="mainDescription">Enquiry Form</span>
                         </div>
 

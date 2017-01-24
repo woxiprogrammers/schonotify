@@ -40,7 +40,7 @@ var FormValidator = function () {
             },
             messages: {
                 enquiry_number:{
-                    remote : "Number bnnot verified"
+                    remote : "form Number not verified"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit

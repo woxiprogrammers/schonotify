@@ -128,6 +128,8 @@ class EnquiryController extends Controller
             //return redirect('/new-student-enquiry')->with('message', 'Success!');
             $now = Carbon::now();
             $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
+            $enquiry = EnquiryForm::findOrFail($enquiryId->id);
+            $enquiryInfo = $enquiry->update(['enquiry_number' => $enquiryId]);
             Session::flash('message-success','Student Enquiry Submitted Successfully');
 
             TCPDF::AddPage();
@@ -196,15 +198,11 @@ class EnquiryController extends Controller
 
     public function editEnquiry(Request $request,$enquiryId){
         try{
-
             $enquiryData = $request->all();
-            $now = Carbon::now();
-            $enquiryNumber = $now->year."-".str_pad($enquiryId,4,"0",STR_PAD_LEFT);
             $enquiryData['address'] = ltrim($enquiryData['address']);
             $enquiryData['written_test_remark'] = trim($enquiryData['written_test_remark']);
             $enquiryData['interview_remark'] = trim($enquiryData['interview_remark']);
             $enquiryData['document_remark'] = trim($enquiryData['document_remark']);
-            $enquiryData['enquiry_number'] = $enquiryNumber;
             $enquiry = EnquiryForm::findOrFail($enquiryId);
             $enquiryInfo = $enquiry->update($enquiryData);
             return redirect('edit-enquiry/'.$enquiryId);
