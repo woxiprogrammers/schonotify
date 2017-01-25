@@ -85,7 +85,6 @@ class EnquiryController extends Controller
             }else{
                 Session::set('enquiryId', $newEnquiry);
             }
-            Session::flash('message-success','Student Enquiry Submitted Successfully');
             $now = Carbon::now();
             $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
             TCPdf::AddPage();
@@ -125,18 +124,12 @@ class EnquiryController extends Controller
             $data['created_at'] = $currentTime;
             $data['updated_at'] = $currentTime;
             $newEnquiry = EnquiryForm::create($data);
-            //return redirect('/new-student-enquiry')->with('message', 'Success!');
             $now = Carbon::now();
             $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
-            Session::flash('message-success','Student Enquiry Submitted Successfully');
-
             TCPDF::AddPage();
-            //TCPDF::Write(0, 'Hello World');
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
             TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
-            //return view('backend.common.pdf.invoice')->with(compact('order','orderNo','seller','sellerAddress','customerAddress','product','brand','unitPrice','taxPrice','orderDate','sellerBankDetails','invoiceId','invoice','invoiceCreatedDate','orderDateChangeFormat'));
 
-            //return redirect('/new-student-enquiry')->with('message-success');
             return Redirect::back();
 
         }catch(\Exception $e){
