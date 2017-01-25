@@ -54,8 +54,16 @@
     Route::get('edit-enquiry/{id}',array('uses' => 'EnquiryController@editEnquiryView'));
     Route::post('edit-enquiry/{id}',array('uses' => 'EnquiryController@editEnquiry'));
 
+    //public student registration
+    Route::get('registration/{id}',array('uses' => 'RegistrationController@getStudentRegistrationView'));
+    Route::get('check-enquiry',array('uses' => 'RegistrationController@getCheckEnquiryView'));
+    Route::post('check-enquiry',array('uses' => 'RegistrationController@checkEnquiry'));
+    Route::post('redirect',array('uses' => 'RegistrationController@redirectToRegistration'));
+    Route::get('get-enquiry-parents',array('uses' => 'RegistrationController@getStudentParents'));
+    Route::post('register-student', array('uses' => 'RegistrationController@registerStudent'));
 
-Route::get('get-msg-count','MessageController@getMessageCount');
+
+    Route::get('get-msg-count','MessageController@getMessageCount');
 
     Route::get('get-unread-list','MessageController@getUnreadMessageListing');
 

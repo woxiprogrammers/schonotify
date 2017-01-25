@@ -87,6 +87,8 @@ class EnquiryController extends Controller
             }
             $now = Carbon::now();
             $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
+	        $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
+            $enquiryInfo = $enquiry->update(['enquiry_number' => $enquiryId]);
             TCPdf::AddPage();
             TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
             TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
@@ -126,6 +128,8 @@ class EnquiryController extends Controller
             $newEnquiry = EnquiryForm::create($data);
             $now = Carbon::now();
             $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
+            $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
+            $enquiryInfo = $enquiry->update(['enquiry_number' => $enquiryId]);
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
             TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
@@ -192,7 +196,6 @@ class EnquiryController extends Controller
 
     public function editEnquiry(Request $request,$enquiryId){
         try{
-
             $enquiryData = $request->all();
             $enquiryData['address'] = ltrim($enquiryData['address']);
             $enquiryData['written_test_remark'] = trim($enquiryData['written_test_remark']);
