@@ -181,6 +181,7 @@ var FormValidator = function () {
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
             },
             submitHandler: function (form) {
+                $('#btn_submit').attr('disabled',true);
                 successHandler1.show();
                 errorHandler1.hide();
                 // submit form

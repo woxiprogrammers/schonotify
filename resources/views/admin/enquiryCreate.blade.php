@@ -1,4 +1,7 @@
 @extends('master')
+@if(Session::has('download.in.the.next.request'))
+<meta http-equiv="refresh" content="50;url={{ Session::get('download.in.the.next.request') }}">
+@endif
 
 @section('content')
 
@@ -176,7 +179,7 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary btn-wide pull-right" type="submit">
+                <button class="btn btn-primary btn-wide pull-right" id="btn_submit" type="submit">
                     Submit
                 </button>
             </div>
