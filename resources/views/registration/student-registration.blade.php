@@ -675,25 +675,14 @@
 </div>
 <div id="step-2">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="text-center">
                 <h1 class=" ti-check block text-primary"></h1>
                 <h2 class="StepTitle">Congratulations!</h2>
                 <p class="text-large">
-                    You have created new user.
+                    Congratulations..!! Registered successfully. Kindly contact school for further queries.
                 </p>
-                <p class="text-small">
-                    User will get the mail confirmation about his/her account. This mail includes link for login and his/her login credentials.
-                </p>
-                <a class="btn btn-primary btn-o" href="studentCreate">
-                    Back to first step
-                </a>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="text-center">
-
-                <a class="btn btn-primary btn-o" href="http://www.espncricinfo.com/" target="_blank">
+                <a class="btn btn-primary btn-o">
                     Make Payment
                 </a>
             </div>

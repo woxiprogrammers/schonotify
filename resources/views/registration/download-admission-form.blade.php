@@ -30,9 +30,13 @@
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
 
+    <div class="row">
+        <p></p>
 
+    </div>
 
-    <h1>We seen that you are already registered.</h1>
+    <h1>You have already registered with us.
+         Please contact school for further details.</h1>
     <div class="row">
         <p></p>
 
@@ -41,8 +45,13 @@
         <div class="col-md-4">
         </div>
         <div class="col-md-4">
-            <button class="btn btn-primary btn-wide pull-right">
+            <button class="btn btn-primary btn-wide ">
                 Download Admission form
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary btn-wide ">
+                Make Payment
             </button>
         </div>
 

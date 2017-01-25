@@ -40,7 +40,7 @@ var FormValidator = function () {
             },
             messages: {
                 enquiry_number:{
-                    remote : "form Number not verified"
+                    remote : "Your enquiry is not yet approved by school officials. Please contact administration for details."
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
