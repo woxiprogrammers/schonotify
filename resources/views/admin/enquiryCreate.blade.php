@@ -173,14 +173,16 @@
         </fieldset>
 
         <div class="row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-primary btn-wide pull-right" type="submit">
+
+            <div class="col-md-12">
+                <button class="btn btn-primary btn-wide pull-left" id="btn_submit" type="submit">
                     Submit
                 </button>
             </div>
 
+        </div>
+        <div class="row">
+            <p></p>
         </div>
     </form>
 </div>
