@@ -187,6 +187,7 @@ var FormValidator = function () {
                 // submit form
 
                 form.submit();
+                $("#step-2ss").show();
             }
         });
     };
