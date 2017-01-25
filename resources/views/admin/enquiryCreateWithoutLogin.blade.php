@@ -29,17 +29,14 @@
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
 
-    @if(Session::has('message-success'))
-    <meta http-equiv="refresh" content="5;url={{"/new-student-enquiry"  }}">
-    <div class="alert alert-success alert-dismissible" role="alert">
+    <div class="alert alert-success alert-dismissible" role="alert" id="step-2ss" style="display: none">
         <button type="button" class="close" data-dismiss="alert" area-lebel="close">
             <span area-hidden="true">&times;</span>
         </button>
-        {{ Session::get('message-success') }}
+        <p class="text-large"> Your enquiry is submitted. </p>
     </div>
-    @endif
 <div class="col-md-12">
-    <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry">
+    <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true">
         <fieldset>
             <legend>
                 Name of Father/Mother/Guardian
