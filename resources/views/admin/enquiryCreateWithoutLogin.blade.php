@@ -33,7 +33,7 @@
         <button type="button" class="close" data-dismiss="alert" area-lebel="close">
             <span area-hidden="true">&times;</span>
         </button>
-        <p class="text-large"> Your enquiry is submitted. </p>
+        <p class="text-large"> Congratulations..!! Your form has been submitted. Kindly contact school for further queries. </p>
     </div>
 <div class="col-md-12">
     <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true">
