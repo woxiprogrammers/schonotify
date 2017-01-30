@@ -62,36 +62,17 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Select Batch
-                                                </label>
-                                                <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Select class
-                                                </label>
-                                                <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Select division
-                                                </label>
-                                                <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
                                                     Roll Number
                                                 </label>
                                                 <input type="text" value="{!! $user->roll_number !!}"  class="form-control" id="roll_number" name="roll_number">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    GRN Number
+                                                </label>
+                                                <input type="text" value="{!! $user['studentExtraInfo']['grn'] !!}"  class="form-control" id="grn" name="grn">
                                             </div>
                                         </div>
                                     </div>
@@ -390,20 +371,11 @@
         FormValidator.init();
         FormElements.init();
         userAclModule();
-        getbatches();
 
         if($('#checkbox8').is(":checked")==true)
         {
             clsTeacher(true);
         }
-        if({!! $user->batch_id !!})
-    {
-        getCls({!! $user->batch_id !!});
-    }
-    if({!! $user->class_id !!})
-    {
-        getDivisions({!! $user->class_id !!});
-    }
 
     });
     $('#email').on('keyup',function(){
@@ -503,67 +475,7 @@
         });
     }
 
-    function getbatches()
-    {
-        var route='/get-batches';
-        $.get(route,function(res){
-            var str = "<option value=''>Please Select Batch</option>";
-            for(var i=0; i<res.length; i++){
-                if({!! $user->batch_id !!} == res[i]['id'])
-            {
-                str+='<option value='+res[i]['id']+' selected >'+res[i]['name']+'</option>';
-            }else{
-                str+='<option value='+res[i]['id']+' >'+res[i]['name']+'</option>';
-            }
 
-        }
-        $('#batch').html(str);
-    });
-    }
-
-    $("#batch").change(function() {
-        var id = this.value;
-        getCls(id);
-    });
-
-    function getCls(id)
-    {
-        var route='/get-classes/'+id;
-        $.get(route,function(res){
-            var str = "<option value=''>Please Select Class</option>";
-            for(var i=0; i<res.length; i++){
-                if({!! $user->class_id !!} == res[i]['id'])
-            {
-                str+='<option value='+res[i]['id']+' selected>'+res[i]['class_name']+'</option>';
-            }else{
-                str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
-            }
-        }
-        $('#class').html(str);
-    });
-    }
-
-    $("#class").change(function() {
-        var id = this.value;
-        getDivisions(id);
-
-    });
-    function getDivisions(id)
-    {
-        var route='/get-divisions/'+id;
-        $.get(route,function(res){
-            var str = "<option value=''>Please Select Division</option>";
-            for(var i=0; i<res.length; i++){
-                if({!! $user->division_id !!} == res[i]['id'])
-            {
-                str+='<option value='+res[i]['id']+' selected>'+res[i]['division_name']+'</option>';
-            }else{
-                str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
-            }
-        }
-        $('#division').html(str);
-    });
-    }
 
 
 

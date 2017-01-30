@@ -762,7 +762,7 @@ class UsersController extends Controller
     {
         if($request->authorize()===true)
         {
-            $user=User::where('id',$id)->first();
+            $user=User::where('id',$id)->with('studentExtraInfo')->first();
             $userRole=UserRoles::where('id',$user->role_id)->select('slug')->first();
             if($userRole->slug == 'admin')
             {
@@ -801,6 +801,7 @@ class UsersController extends Controller
                 $user['parentAvatar']=$userData->avatar;
 
                 $division=Division::where('id',$user['division_id'])->first();
+                if($division != null){
                 $class=Classes::where('id',$division->class_id)->first();
                 $batch=Batch::where('id',$class->batch_id)->first();
                 $user['batch_id']=$batch->id;
@@ -809,6 +810,7 @@ class UsersController extends Controller
                 $user['class_name']=$class->slug;
                 $user['division_id']=$division->id;
                 $user['division_name']=$division->slug;
+                }
                 return view('editStudent')->with('user',$user);
             }elseif($userRole->slug == 'parent')
             {
@@ -981,6 +983,9 @@ class UsersController extends Controller
         $leaves['division_id'] = $request->division;
         Leave::where('student_id',$request->id)->update($leaves);
         $userUpdate=User::where('id',$id)->update($userData);
+
+        $grnNumber = $request->grn;
+        $extraInfo = StudentExtraInfo::where('student_id',$id)->update(['grn' => $grnNumber]);
         if ($userUpdate == 1) {
             Session::flash('message-success','student updated successfully');
             return Redirect::back();
