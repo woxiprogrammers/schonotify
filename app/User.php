@@ -64,6 +64,11 @@ class User extends Model implements AuthenticatableContract,
         return null; // not supported
     }
 
+    public function studentExtraInfo()
+    {
+        return $this->hasOne('App\StudentExtraInfo','student_id');
+    }
+
     /**
      * Overrides the method to ignore the remember token.
      */
