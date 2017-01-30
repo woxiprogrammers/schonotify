@@ -123,8 +123,9 @@ class SearchController extends Controller
                 $str.="<td>";
 
                 $str.="<a href='/edit-user/".$row->id."'>Edit </a>";
-
+                if($row->user_role != 'student') {
                 $str.=" / <a href='/view-user/".$row->id."'> View</a>";
+                }
 
                 $str.="</td>";
 
