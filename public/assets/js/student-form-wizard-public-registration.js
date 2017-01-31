@@ -425,7 +425,7 @@ var FormWizard = function () {
                     alphanumeric: "User name must contain only letters"
                 },
                 parent_name:{
-                    required:"Parent name is required"
+                    required:"Parent email id is required"
                 },
                 enquiry_number:{
                     remote : "Number bnnot verified"

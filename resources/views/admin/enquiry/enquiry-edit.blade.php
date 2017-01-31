@@ -30,6 +30,23 @@
                 @include('alerts.errors')
                 <div class="col-md-12">
                     <form method="post" action="/edit-enquiry/{{$enquiryInfo['id']}}" role="form" id="studentEnquiry">
+
+                    <fieldset>
+                        <legend>
+                            Enquiry Number
+                        </legend>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Enquiry Number
+                                    </label>
+                                    <input type="text" placeholder="Enter Enquiry Number" class="form-control" name="enquiry_number" value="{{$enquiryInfo['enquiry_number']}}" readonly/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
                         <fieldset>
                             <legend>
                                 Name of Father/Mother/Guardian

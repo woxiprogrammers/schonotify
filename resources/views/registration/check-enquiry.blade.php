@@ -43,20 +43,17 @@
                                         Enter Enquiry Number
                                     </label>
                                     <input type="text" placeholder="Enter enquiry number" class="form-control" name="enquiry_number"/>
+
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-md-4">
-                            </div>
-                            <div class="col-md-4">
-                                <button class="btn btn-primary btn-wide pull-right" type="submit">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label  class="control-label"></label>
+                                </div>
+                                <button class="btn btn-primary btn-wide pull-left" type="submit">
                                     Submit
                                 </button>
                             </div>
-
                         </div>
                     </form>
                 </div>
