@@ -19,6 +19,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
+use Elibyy\TCPDF\Facades\TCPDF;
 
 class RegistrationController extends Controller
 {
@@ -259,4 +260,26 @@ class RegistrationController extends Controller
             return "Please Insert Data";
         }
     }
+
+
+    public function printAdmissionForm(Request $request,$enquiryNumber){
+        try{
+            $newEnquiry = EnquiryForm::findOrFail($enquiryNumber);
+            return view('registration.admission-pdf')->with(compact('newEnquiry'));
+            /*TCPdf::AddPage();
+            TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
+            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');*/
+
+
+        }catch(\Exception $e){
+            $data = [
+                'input_params' => $request->all(),
+                'action' => 'print Admission Form',
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+
 }
