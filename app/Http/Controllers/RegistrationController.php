@@ -19,7 +19,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
-use Elibyy\TCPDF\Facades\TCPDF;
+use Elibyy\TCPDF\Facades\TCPdf;
 
 class RegistrationController extends Controller
 {
@@ -264,11 +264,17 @@ class RegistrationController extends Controller
 
     public function printAdmissionForm(Request $request,$enquiryNumber){
         try{
-            $newEnquiry = EnquiryForm::findOrFail($enquiryNumber);
-            return view('registration.admission-pdf')->with(compact('newEnquiry'));
-            /*TCPdf::AddPage();
-            TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
-            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');*/
+            $newEnquiry = EnquiryForm::where('id',$enquiryNumber)->with('user')->first();
+            $studentExtraInfo = $newEnquiry->user->studentExtraInfo;
+            $studentFamilyInfo = $newEnquiry->user->studentFamilyInfo;
+            $studentSiblings = $newEnquiry->user->StudentSibling;
+            $previousSchool = $newEnquiry->user->StudentPreviousSchool;//StudentSpecialAptitude    StudentHobby
+            $studentSpecialAptitudes = $newEnquiry->user->StudentSpecialAptitude;
+            $studentHobbies = $newEnquiry->user->StudentHobby;
+            //return view('registration.admission-pdf')->with(compact('newEnquiry'));
+            TCPdf::AddPage();
+            TCPdf::writeHTML(view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies'))->render());
+            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
 
 
         }catch(\Exception $e){

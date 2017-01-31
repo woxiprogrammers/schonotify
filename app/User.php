@@ -69,6 +69,28 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasOne('App\StudentExtraInfo','student_id');
     }
 
+    public function studentFamilyInfo()
+    {
+        return $this->hasOne('App\StudentFamily','student_id');
+    }
+    public function StudentSibling()
+    {
+        return $this->hasMany('App\StudentSibling','student_id');
+    }
+    public function StudentPreviousSchool()
+    {
+        return $this->hasOne('App\StudentPreviousSchool','student_id');
+    }
+    public function StudentSpecialAptitude()
+    {
+        return $this->hasMany('App\StudentSpecialAptitude','student_id');
+    }
+    public function StudentHobby()
+    {
+        return $this->hasMany('App\StudentHobby','student_id');
+    }
+
+
     /**
      * Overrides the method to ignore the remember token.
      */
