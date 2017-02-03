@@ -45,7 +45,7 @@
     <div class="row">
         <div class="col-md-4">
         </div>
-        <form method="post" action="/print-admission-form/{{$enquiryInfo['id']}}">
+        <form method="get" action="/print-admission-form/{{$enquiryInfo['id']}}">
             <div class="col-md-4">
                 <button class="btn btn-primary btn-wide ">
                     Download Admission form

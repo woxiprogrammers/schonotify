@@ -199,7 +199,7 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'PDF' => Elibyy\TCPDF\Facades\TCPdf::class
+        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
 
     ],
 
