@@ -41,14 +41,17 @@
         <p></p>
 
     </div>
+
     <div class="row">
         <div class="col-md-4">
         </div>
-        <div class="col-md-4">
-            <button class="btn btn-primary btn-wide ">
-                Download Admission form
-            </button>
-        </div>
+        <form method="get" action="/print-admission-form/{{$enquiryInfo['id']}}">
+            <div class="col-md-4">
+                <button class="btn btn-primary btn-wide ">
+                    Download Admission form
+                </button>
+            </div>
+         </form>
         <div class="col-md-4">
             <button class="btn btn-primary btn-wide ">
                 Make Payment

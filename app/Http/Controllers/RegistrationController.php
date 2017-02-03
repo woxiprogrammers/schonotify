@@ -7,6 +7,7 @@ use App\EnquiryForm;
 use App\ParentExtraInfo;
 use App\StudentDocument;
 use App\StudentExtraInfo;
+use App\StudentFamily;
 use App\StudentHobby;
 use App\StudentPreviousSchool;
 use App\StudentSibling;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
+use Elibyy\TCPDF\Facades\TCPDF;
 
 class RegistrationController extends Controller
 {
@@ -185,23 +187,28 @@ class RegistrationController extends Controller
                     $hobbyInfo = array();
                     $hobbies = $data['hobbies'];
                     foreach($hobbies as $hobby){
-                        $hobbyInfo['student_id'] = $LastInsertId;
-                        $hobbyInfo['hobby'] = $hobby;
-                        $hobbyInfo['created_at'] = Carbon::now();
-                        $hobbyInfo['updated_at'] = Carbon::now();
-                        StudentHobby::insert($hobbyInfo);
+                        if($hobby != ''){
+                            $hobbyInfo['student_id'] = $LastInsertId;
+                            $hobbyInfo['hobby'] = $hobby;
+                            $hobbyInfo['created_at'] = Carbon::now();
+                            $hobbyInfo['updated_at'] = Carbon::now();
+                            StudentHobby::insert($hobbyInfo);
+                        }
+
                     }
                 }
                 if(isset($data['special_aptitude'])){
                     $aptitudeInfo = array();
                     $aptitudes = $data['special_aptitude'];
                     foreach($aptitudes as $aptitude){
-                        $aptitudeInfo['student_id'] = $LastInsertId;
-                        $aptitudeInfo['special_aptitude'] = $aptitude['test'];
-                        $aptitudeInfo['score'] = $aptitude['score'];
-                        $aptitudeInfo['created_at'] = Carbon::now();
-                        $aptitudeInfo['updated_at'] = Carbon::now();
-                        StudentSpecialAptitude::insert($aptitudeInfo);
+                        if($aptitude['test'] != '' && $aptitude != ''){
+                            $aptitudeInfo['student_id'] = $LastInsertId;
+                            $aptitudeInfo['special_aptitude'] = $aptitude['test'];
+                            $aptitudeInfo['score'] = $aptitude['score'];
+                            $aptitudeInfo['created_at'] = Carbon::now();
+                            $aptitudeInfo['updated_at'] = Carbon::now();
+                            StudentSpecialAptitude::insert($aptitudeInfo);
+                        }
                     }
                 }
                 $previousSchool = $request->only('school_name','udise_no','city','medium_of_instruction','board_examination','grades');
@@ -214,12 +221,15 @@ class RegistrationController extends Controller
                     $siblingInfo = array();
                     $siblings = $data['sibling'];
                     foreach($siblings as $sibling){
-                        $siblingInfo['student_id'] = $LastInsertId;
-                        $siblingInfo['name'] = $sibling['name'];
-                        $siblingInfo['age'] = $sibling['age'];
-                        $siblingInfo['created_at'] = Carbon::now();
-                        $siblingInfo['updated_at'] = Carbon::now();
-                        StudentSibling::insert($siblingInfo);
+                        if($sibling['name'] != '' && $sibling['age'] != ''){
+                            $siblingInfo['student_id'] = $LastInsertId;
+                            $siblingInfo['name'] = $sibling['name'];
+                            $siblingInfo['age'] = $sibling['age'];
+                            $siblingInfo['created_at'] = Carbon::now();
+                            $siblingInfo['updated_at'] = Carbon::now();
+                            StudentSibling::insert($siblingInfo);
+                        }
+
                     }
                 }
                 if(isset($data['student_communication_address'])){
@@ -259,4 +269,31 @@ class RegistrationController extends Controller
             return "Please Insert Data";
         }
     }
+
+
+    public function printAdmissionForm($enquiryNumber){
+        try{
+            $newEnquiry = EnquiryForm::where('id',$enquiryNumber)->with('user')->first();
+            $studentExtraInfo = $newEnquiry->user->studentExtraInfo;
+            $studentFamilyInfo = ParentExtraInfo::where('parent_id',$newEnquiry->user->parent_id)->first();
+            $studentSiblings = $newEnquiry->user->StudentSibling;
+            $previousSchool = $newEnquiry->user->StudentPreviousSchool;
+            $studentSpecialAptitudes = $newEnquiry->user->StudentSpecialAptitude;
+            $studentHobbies = $newEnquiry->user->StudentHobby;
+            //return view('registration.admission-pdf')->with(compact('newEnquiry'));
+            TCPDF::AddPage();
+            TCPDF::writeHTML(view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies'))->render());
+            TCPDF::Output("Admission Form".date('Y-m-d_H_i_s').".pdf", 'D');
+
+
+        }catch(\Exception $e){
+            $data = [
+                'action' => 'print Admission Form',
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+
 }

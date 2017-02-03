@@ -61,6 +61,7 @@
     Route::post('redirect',array('uses' => 'RegistrationController@redirectToRegistration'));
     Route::get('get-enquiry-parents',array('uses' => 'RegistrationController@getStudentParents'));
     Route::post('register-student', array('uses' => 'RegistrationController@registerStudent'));
+    Route::get('print-admission-form/{enquiryId}', array('uses' => 'RegistrationController@printAdmissionForm'));
 
 
     Route::get('get-msg-count','MessageController@getMessageCount');
