@@ -213,4 +213,24 @@ class EnquiryController extends Controller
 
         }
     }
+
+
+    public function printEnquiryForm($enquiryNumber){
+        try{
+            $now = Carbon::now();
+            $newEnquiry = EnquiryForm::where('id',$enquiryNumber)->first();
+            $enquiryId = $now->year."-".str_pad($enquiryNumber,4,"0",STR_PAD_LEFT);
+            TCPdf::AddPage();
+            TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
+            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+
+            return redirect('/student-enquiry');
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
 }

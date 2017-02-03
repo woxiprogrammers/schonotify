@@ -399,9 +399,14 @@
                         </fieldset>
 
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                                 <a href="/manage">
                                     Back
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="btn btn-primary btn-o" href="/print-enquiry-form/{{$enquiryInfo['id']}}">
+                                    Download Admission form
                                 </a>
                             </div>
                             <div class="col-md-4">
