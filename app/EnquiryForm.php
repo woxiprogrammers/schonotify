@@ -13,4 +13,9 @@ class EnquiryForm extends Model
         'dob','current_class','school_name','admission_to_class','mobile_number','address','created_at','updated_at','email','written_test_scheduled_on',
         'written_test_conducted_by','written_test_status','written_test_remark','interview_scheduled_on','interview_conducted_by',
         'interview_status','interview_remark','document_status','document_remark','alt_contact_no','final_status','enquiry_number' ];
+
+    public function user()
+    {
+        return $this->hasOne('App\User','enquiry_id');
+    }
 }

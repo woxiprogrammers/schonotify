@@ -94,7 +94,7 @@
             <label class="control-label">
                 Middle Name
             </label>
-            <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName" value="{{$enquiryInfo['student_midlle_name']}}"/>
+            <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middleName" value="{{$enquiryInfo['student_middle_name']}}"/>
         </div>
     </div>
     <div class="col-md-4">
@@ -687,6 +687,10 @@
                 </p>
                 <a class="btn btn-primary btn-o">
                     Make Payment
+                </a>
+
+                <a class="btn btn-primary btn-o" href="/print-admission-form/{{$enquiryInfo['id']}}">
+                    Download Admission form
                 </a>
             </div>
         </div>

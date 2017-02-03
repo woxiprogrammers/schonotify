@@ -550,23 +550,28 @@ class UsersController extends Controller
                     $hobbyInfo = array();
                     $hobbies = $data['hobbies'];
                     foreach($hobbies as $hobby){
-                        $hobbyInfo['student_id'] = $LastInsertId;
-                        $hobbyInfo['hobby'] = $hobby;
-                        $hobbyInfo['created_at'] = Carbon::now();
-                        $hobbyInfo['updated_at'] = Carbon::now();
-                        StudentHobby::insert($hobbyInfo);
+                        if($hobby != ''){
+                            $hobbyInfo['student_id'] = $LastInsertId;
+                            $hobbyInfo['hobby'] = $hobby;
+                            $hobbyInfo['created_at'] = Carbon::now();
+                            $hobbyInfo['updated_at'] = Carbon::now();
+                            StudentHobby::insert($hobbyInfo);
+                        }
+
                     }
                 }
                 if(isset($data['special_aptitude'])){
                     $aptitudeInfo = array();
                     $aptitudes = $data['special_aptitude'];
                     foreach($aptitudes as $aptitude){
-                        $aptitudeInfo['student_id'] = $LastInsertId;
-                        $aptitudeInfo['special_aptitude'] = $aptitude['test'];
-                        $aptitudeInfo['score'] = $aptitude['score'];
-                        $aptitudeInfo['created_at'] = Carbon::now();
-                        $aptitudeInfo['updated_at'] = Carbon::now();
-                        StudentSpecialAptitude::insert($aptitudeInfo);
+                        if($aptitude['test'] != '' && $aptitude != ''){
+                            $aptitudeInfo['student_id'] = $LastInsertId;
+                            $aptitudeInfo['special_aptitude'] = $aptitude['test'];
+                            $aptitudeInfo['score'] = $aptitude['score'];
+                            $aptitudeInfo['created_at'] = Carbon::now();
+                            $aptitudeInfo['updated_at'] = Carbon::now();
+                            StudentSpecialAptitude::insert($aptitudeInfo);
+                        }
                     }
                 }
                 $previousSchool = $request->only('school_name','udise_no','city','medium_of_instruction','board_examination','grades');
@@ -579,12 +584,15 @@ class UsersController extends Controller
                     $siblingInfo = array();
                     $siblings = $data['sibling'];
                     foreach($siblings as $sibling){
-                        $siblingInfo['student_id'] = $LastInsertId;
-                        $siblingInfo['name'] = $sibling['name'];
-                        $siblingInfo['age'] = $sibling['age'];
-                        $siblingInfo['created_at'] = Carbon::now();
-                        $siblingInfo['updated_at'] = Carbon::now();
-                        StudentSibling::insert($siblingInfo);
+                        if($sibling['name'] != '' && $sibling['age'] != ''){
+                            $siblingInfo['student_id'] = $LastInsertId;
+                            $siblingInfo['name'] = $sibling['name'];
+                            $siblingInfo['age'] = $sibling['age'];
+                            $siblingInfo['created_at'] = Carbon::now();
+                            $siblingInfo['updated_at'] = Carbon::now();
+                            StudentSibling::insert($siblingInfo);
+                        }
+
                     }
                 }
                 if(isset($data['student_communication_address'])){
