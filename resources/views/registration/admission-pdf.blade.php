@@ -297,7 +297,7 @@
         <td width="100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;font-size: 14px;">DOCUMENTS SUBMITTED:</span></td>
     </tr>
 </table>
-<table style="padding-top:10px;padding-bottom:10px;">
+<table cellspacing="0" cellpadding="0" style="padding-top:10px;padding-bottom:10px;">
     <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Birth certificate:</span></td><td width="30%">YES/NO</td></tr>
     <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Leaving certificate:</span></td><td width="30%">YES/NO</td></tr>
     <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Report card of previous school:</span></td><td width="30%">YES/NO</td></tr>
@@ -358,25 +358,35 @@
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Whether the pupil has undergone any surgical procedure:</span></td><td width="30%">YES/NO</td>
+        <td width="80%"><span >&nbsp;&nbsp;I.&nbsp;&nbsp;&nbsp;Whether the pupil has undergone any surgical procedure:</span></td><td width="20%">YES/NO</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="100%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please mention the details whether the pupil has a history of&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+        <td width="100%"><span >&nbsp;&nbsp;II.&nbsp;&nbsp;&nbsp;Please mention the details whether the pupil has a history of&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
     </tr>
 </table>
 <table cellspacing="0" cellpadding="0" style="padding-top:10px;padding-bottom:10px;">
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A. Congenital abnormality</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. Rheumatic heart disease</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. Bronchial asthma</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. Epilepsy</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E. Diabetes</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F. Hyper tension</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;G. Tuberculosis</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H. Congenital heart disease</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I. Any other disease(Please give details if necessary):</span></td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A. Congenital abnormality</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. Rheumatic heart disease</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. Bronchial asthma</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. Epilepsy</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E. Diabetes</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F. Hyper tension</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;G. Tuberculosis</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H. Congenital heart disease</span></td><td width="20%">YES/NO</td></tr>
+    <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I. Any other disease(Please give details if necessary):</span></td></tr>
 
+</table>
+<table style="padding-top:10px;padding-bottom:10px;">
+    <tr>
+        <td width="80%"><span >&nbsp;&nbsp;III.&nbsp;&nbsp;&nbsp;Please mention whether the student has any eye sight related problems</span></td><td width="20%">YES/NO</td>
+    </tr>
+</table>
+<table style="padding-top:10px;padding-bottom:10px;">
+    <tr>
+        <td width="80%"><span >&nbsp;&nbsp;IV.&nbsp;&nbsp;&nbsp;Please mention whether the student has been vaccinated regularly</span></td><td width="20%">YES/NO</td>
+    </tr>
 </table>
 
 <table style="padding-top:10px;padding-bottom:10px;">
@@ -458,7 +468,7 @@
     </tr>
     <tr width="100%">
         <td width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a.</td>
-        <td width="80%">a. The school reserves the right to grant admissions to the students, being a minority institution first preference shall be given to the minority category (kannada speaking linguistic minority) &nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
+        <td width="80%">The school reserves the right to grant admissions to the students, being a minority institution first preference shall be given to the minority category (kannada speaking linguistic minority) &nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
     </tr>
 </table>
 <table>

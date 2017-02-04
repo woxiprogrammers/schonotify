@@ -14,10 +14,24 @@
     </tr>
 </table>
 <table>
+    <tr>
+        <td width="35%"></td>
+        <td>(Linguistic Minority Institution)</td>
+    </tr>
+</table>
+<table>
 
     <tr>
         <td width="20%"></td>
         <td width="70%"><h3>GANESH INTERNATIONAL SCHOOL,CHIKHALI</h3></td>
+    </tr>
+</table>
+
+<table>
+
+    <tr>
+        <td width="35%"></td>
+        <td width="60%">(CBSC Affiliation No:1130632)</td>
     </tr>
 </table>
 <table>
