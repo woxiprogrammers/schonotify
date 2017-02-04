@@ -614,7 +614,7 @@
     </tr>
     <tr width="100%">
         <td width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.</td>
-        <td width="80%">c. The fees shall be paid online or through bank transactions as instructed on the school website: www.ganeshinternationalschool.com&nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
+        <td width="80%">The fees shall be paid online or through bank transactions as instructed on the school website: www.ganeshinternationalschool.com&nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
     </tr>
 </table>
 <table>
