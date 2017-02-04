@@ -406,7 +406,7 @@
                             </div>
                             <div class="col-md-4">
                                 <a class="btn btn-primary btn-o" href="/print-enquiry-form/{{$enquiryInfo['id']}}">
-                                    Download Admission form
+                                    Download Enquiry form
                                 </a>
                             </div>
                             <div class="col-md-4">
