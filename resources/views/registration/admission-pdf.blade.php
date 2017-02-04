@@ -30,7 +30,7 @@
 
     <tr>
         <td width="35%"></td>
-        <td width="60%">(CBSC Affiliation No. -1130632 )</td>
+        <td width="60%">(CBSC Affiliation No: 1130632 )</td>
     </tr>
 </table>
 <table>
@@ -225,10 +225,6 @@
             <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name:&nbsp;&nbsp;</span></td>
             <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age:&nbsp;&nbsp;</span></td>
         </tr>
-        <tr>
-            <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name:&nbsp;&nbsp;</span></td>
-            <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age:&nbsp;&nbsp;</span></td>
-        </tr>
 
     @endif
 </table>
@@ -276,10 +272,6 @@
             <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test:&nbsp;&nbsp;</span></td>
             <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score:&nbsp;&nbsp;</span></td>
         </tr>
-        <tr>
-            <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test:&nbsp;&nbsp;</span></td>
-            <td width="50%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score:&nbsp;&nbsp;</span></td>
-        </tr>
     @endif
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
@@ -298,9 +290,6 @@
         <tr>
             <td width="100%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name:&nbsp;&nbsp;</span></td>
         </tr>
-        <tr>
-            <td width="100%"><span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name:&nbsp;&nbsp;</span></td>
-        </tr>
     @endif
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
@@ -310,10 +299,11 @@
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Birth certificate:</span></td><td width="30%">YES/NO</td></tr>
-    <tr>   <td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Leaving certificate:</span></td><td width="30%">YES/NO</td></tr>
-    <tr>    <td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Report card of previous school:</span></td><td width="30%">YES/NO</td></tr>
-    <tr>    <td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. Aadhar card of child:</span></td><td width="30%">YES/NO</td></tr>
-    <tr>    <td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. Caste certificate if applicable:</span></td><td width="30%">YES/NO</td></tr>
+    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Leaving certificate:</span></td><td width="30%">YES/NO</td></tr>
+    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Report card of previous school:</span></td><td width="30%">YES/NO</td></tr>
+    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. Aadhar card of child:</span></td><td width="30%">YES/NO</td></tr>
+    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. Caste certificate if applicable:</span></td><td width="30%">YES/NO</td></tr>
+    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6. ID card size photo:</span></td><td width="30%">YES/NO</td></tr>
 
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
@@ -354,7 +344,7 @@
 
     <tr>
         <td width="35%"></td>
-        <td width="60%">(CBSC Affiliation No. -1130632)</td>
+        <td width="60%">(CBSC Affiliation No:1130632)</td>
     </tr>
 </table>
 <table>
@@ -447,7 +437,7 @@
 
     <tr>
         <td width="35%"></td>
-        <td width="60%">(CBSC Affiliation No. -1130632)</td>
+        <td width="60%">(CBSC Affiliation No: 1130632)</td>
     </tr>
 </table>
 <div></div>
@@ -460,6 +450,15 @@
 <table>
     <tr width="100%">
         <td >Please read the following instructions carefully and put a <img src="<?php echo url()?>/assets/images/bodyLogo/tickmark.jpg" style="width:10px;height: 10px"> mark against the instructions in the box. Please sign at the end of the instruction page to indicate that you have read and understood them and agree to them.</td>
+    </tr>
+</table>
+<table>
+    <tr width="100%">
+        <td ><ul><li>&nbsp;&nbsp;<B>Admissions</B></li></ul></td>
+    </tr>
+    <tr width="100%">
+        <td width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a.</td>
+        <td width="80%">a. The school reserves the right to grant admissions to the students, being a minority institution first preference shall be given to the minority category (kannada speaking linguistic minority) &nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
     </tr>
 </table>
 <table>
@@ -598,6 +597,14 @@
     <tr width="100%">
         <td width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a.</td>
         <td width="80%">All fees: Annual, Computer, Term, Activity etc. Must be paid before the Term End Exam otherwise the student will not be allowed to appear for the exam.&nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
+    </tr>
+    <tr width="100%">
+        <td width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b.</td>
+        <td width="80%">The fee structure shall be revised by the management from time to time in consultation with the school managing committee and executive committee. The decisions taken by these committees shall be binding to all the parents.&nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
+    </tr>
+    <tr width="100%">
+        <td width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.</td>
+        <td width="80%">c. The fees shall be paid online or through bank transactions as instructed on the school website: www.ganeshinternationalschool.com&nbsp;&nbsp;<img src="<?php echo url()?>/assets/images/bodyLogo/checkbox.jpg" style="width:10px;height: 10px"></td>
     </tr>
 </table>
 <table>
