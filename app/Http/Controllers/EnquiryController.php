@@ -206,11 +206,34 @@ class EnquiryController extends Controller
             $enquiryData['interview_scheduled_on'] = Carbon::parse($enquiryData['interview_scheduled_on'])->format('Y-m-d G:i:s');
             $enquiryData['dob'] = Carbon::parse($enquiryData['dob'])->format('Y-m-d');
             $enquiryInfo = $enquiry->update($enquiryData);
-            return redirect('edit-enquiry/'.$enquiryId);
+
+            $message = 'Enquiry Updated successfully';
+            $request->session()->flash('message-success', $message);
+            return redirect('/manage');
         }catch (\Exception $e){
             Log::critical('exception:'.$e->getMessage());
             abort(500,$e->getMessage());
 
+        }
+    }
+
+
+    public function printEnquiryForm($enquiryNumber){
+        try{
+            $now = Carbon::now();
+            $newEnquiry = EnquiryForm::where('id',$enquiryNumber)->first();
+            $enquiryId = $now->year."-".str_pad($enquiryNumber,4,"0",STR_PAD_LEFT);
+            TCPdf::AddPage();
+            TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
+            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+
+            return redirect('/student-enquiry');
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
         }
     }
 }

@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-sm-7">
             <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
-            <span class="mainDescription">Enquiry Form</span>
+            <span class="mainDescription">Admission Form</span>
         </div>
 
     </div>
@@ -139,7 +139,7 @@
     <div class="col-md-6">
         <div class="form-group"> <!-- Date input -->
             <label class="control-label" for="dob">Date Of Birth <span class="symbol required"></span> </label>
-            <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{{$enquiryInfo['dob']}}" readonly/>
+            <input class="form-control" id="dob" name="dob" placeholder="DD/MM/YYY" type="text" value="{{ Carbon\Carbon::parse($enquiryInfo['dob'])->format('d/m/Y') }}" readonly/>
         </div>
     </div>
     <div class="col-md-6">
@@ -229,7 +229,7 @@
                 Permanent Address <span class="symbol required"></span>
             </label>
             <div class="note-editor">
-                <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                <textarea class="form-control" name="address">
                 </textarea>
             </div>
         </div>
@@ -242,7 +242,7 @@
             </label><br>
             <input type="checkbox" name="student_communication_address" id="student_communication_address" checked> Same as Permanent Address
             <div class="note-editor" id="communication_address">
-                <textarea  class="form-control autosize area-animated"  name="communication_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                <textarea  class="form-control"  name="communication_address">
                 </textarea>
             </div>
         </div>
@@ -264,6 +264,7 @@
                 Select Blood Group
             </label>
             <select class="form-control" name="blood_group" id="batch-select" style="-webkit-appearance: menulist;">
+                <option value="">Please Select </option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
@@ -304,6 +305,8 @@
                 Highest Standard Passed
             </label>
             <select class="form-control" id="highest_standard" style="-webkit-appearance: menulist;" name="highest_standard">
+                <option value="">Please Select </option>
+                <option value="nursery">Nursery </option>
                 <option value="LKG">L KG</option>
                 <option value="UKG">U KG</option>
                 <option value="1">1</option>
@@ -323,7 +326,7 @@
     </div>
 </div>
 
-<div class="row">
+<!--<div class="row">
     <div class="col-md-6">
         <div class="form-group">
             <label class="control-label">
@@ -332,7 +335,7 @@
             <input type="text" placeholder="Enter a Roll Number" class="form-control" name="roll_number"/>
         </div>
     </div>
-</div>
+</div>-->
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
@@ -507,7 +510,7 @@
                     Permanent Address <span class="symbol required"></span>
                 </label>
                 <div class="note-editor">
-                    <textarea class="form-control autosize area-animated" name="permanent_address" id="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                    <textarea class="form-control" name="permanent_address" id="permanent_address" >
                     </textarea>
                 </div>
             </div>
@@ -520,7 +523,7 @@
 
                 <input type="checkbox" name="parent_communication_address" id="parent_communication_address" checked> Same as Permanent Address
                 <div class="note-editor" id="communication_address_parent">
-                    <textarea class="form-control autosize area-animated" name="communication_address_parent" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
+                    <textarea class="form-control" name="communication_address_parent">
                     </textarea>
                 </div>
             </div>
@@ -646,6 +649,9 @@
     </TABLE>
 </fieldset>
 <fieldset>
+    <legend>
+        CREATE PASSWORD FOR LOGIN
+    </legend>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
