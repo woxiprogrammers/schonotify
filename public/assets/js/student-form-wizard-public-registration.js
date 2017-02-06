@@ -725,7 +725,7 @@ var leaveAStepCallback = function (obj, context) {
 var onFinish = function (obj, context) {
     if (validateAllSteps()) {
         $('div#loadmoreajaxloader').show();
-        $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
+        //$('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
         //var form=$('#registrationForm').serialize();
         var form = new FormData($("form")[0]);
         $.ajax({
@@ -788,7 +788,7 @@ var validateAllSteps = function () {
     if(wizardForm.valid()){
         return true;
     }else{
-        return true;
+        return false;
     }
 };
 return {

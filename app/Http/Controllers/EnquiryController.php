@@ -206,7 +206,10 @@ class EnquiryController extends Controller
             $enquiryData['interview_scheduled_on'] = Carbon::parse($enquiryData['interview_scheduled_on'])->format('Y-m-d G:i:s');
             $enquiryData['dob'] = Carbon::parse($enquiryData['dob'])->format('Y-m-d');
             $enquiryInfo = $enquiry->update($enquiryData);
-            return redirect('edit-enquiry/'.$enquiryId);
+
+            $message = 'Enquiry Updated successfully';
+            $request->session()->flash('message-success', $message);
+            return redirect('/manage');
         }catch (\Exception $e){
             Log::critical('exception:'.$e->getMessage());
             abort(500,$e->getMessage());

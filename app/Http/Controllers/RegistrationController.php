@@ -133,7 +133,6 @@ class RegistrationController extends Controller
                 $date = str_replace('/', '-', $data['dob']);
                 $userData->birth_date = date('Y-m-d', strtotime($date));
                 $userData->middle_name = $data['middleName'];
-                $userData->roll_number = $data['roll_number'];
                 $userData->enquiry_id = $data['enquiry_id'];
                 if(isset($data['division'])){
                     $userData = array_add($userData, 'division_id', $data['division']);
