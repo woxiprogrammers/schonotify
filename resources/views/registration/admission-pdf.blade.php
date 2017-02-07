@@ -298,13 +298,13 @@
     </tr>
 </table>
 <table cellspacing="0" cellpadding="0" style="padding-top:10px;padding-bottom:10px;">
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Birth certificate:</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Leaving certificate:</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Report card of previous school:</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. Aadhar card of child:</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. Caste certificate if applicable:</span></td><td width="30%">YES/NO</td></tr>
-    <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6. ID card size photo:</span></td><td width="30%">YES/NO</td></tr>
-
+    @foreach($documents as $document)
+        @if (in_array($document['id'],$studentDocuments))
+            <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$document['id']}}. {{$document['document_name']}}:</span></td><td width="30%">YES</td></tr>
+        @else
+            <tr><td width="70%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$document['id']}}. {{$document['document_name']}}:</span></td><td width="30%">NO</td></tr>
+        @endif
+    @endforeach
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>

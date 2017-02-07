@@ -53,6 +53,8 @@ var FormWizard = function () {
             return false;
         }
     }, "Address must contain at-least 15 characters");
+
+
     var initValidator = function () {
 
         $.validator.setDefaults({
@@ -254,6 +256,26 @@ var FormWizard = function () {
                 },
                 body:{
                     required:true
+                },
+                'sibling[0][name]':{
+                    required: function(element){
+                        return $("#age0").val()!="";
+                    }
+                },
+                'sibling[0][age]':{
+                    required: function(element){
+                        return $("#name0").val()!="";
+                    }
+                },
+                'sibling[1][name]':{
+                    required: function(element){
+                        return $("#age1").val()!="";
+                    }
+                },
+                'sibling[1][age]':{
+                    required: function(element){
+                        return $("#name1").val()!="";
+                    }
                 }
 
             },

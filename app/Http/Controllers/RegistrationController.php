@@ -6,6 +6,7 @@ use App\Body;
 use App\EnquiryForm;
 use App\ParentExtraInfo;
 use App\StudentDocument;
+use App\StudentDocumentMaster;
 use App\StudentExtraInfo;
 use App\StudentFamily;
 use App\StudentHobby;
@@ -70,10 +71,11 @@ class RegistrationController extends Controller
             $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->first();
             $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
             $bodies = Body::all();
+            $documents = StudentDocumentMaster::all();
             if($userRegister!=null){
-                return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies'));
+                return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies','documents'));
             }else{
-                return view('registration.student-registration')->with(compact('enquiryInfo','bodies'));
+                return view('registration.student-registration')->with(compact('enquiryInfo','bodies','documents'));
             }
 
         }catch(\Exception $e){
@@ -244,7 +246,9 @@ class RegistrationController extends Controller
                 StudentExtraInfo::insert($extraInfo);
 
                 if(isset($data['upload_doc'])){
+                    $i =1;
                     foreach($data['upload_doc'] as $doc){
+
                         if($doc != null){
                             $image = $doc;
                             $name = $doc->getClientOriginalName();
@@ -256,10 +260,12 @@ class RegistrationController extends Controller
                             $image->move($path1,$filename);
                             $studentDocument['document'] = $filename;
                             $studentDocument['student_id'] = $LastInsertId;
+                            $studentDocument['document_id'] = $i;
                             $studentDocument['created_at'] = Carbon::now();
                             $studentDocument['updated_at'] = Carbon::now();
                             StudentDocument::insert($studentDocument);
                         }
+                        $i++;
                     }
                 }
             }
@@ -273,15 +279,17 @@ class RegistrationController extends Controller
     public function printAdmissionForm($enquiryNumber){
         try{
             $newEnquiry = EnquiryForm::where('id',$enquiryNumber)->with('user')->first();
+            $documents = StudentDocumentMaster::all();
             $studentExtraInfo = $newEnquiry->user->studentExtraInfo;
             $studentFamilyInfo = ParentExtraInfo::where('parent_id',$newEnquiry->user->parent_id)->first();
             $studentSiblings = $newEnquiry->user->StudentSibling;
             $previousSchool = $newEnquiry->user->StudentPreviousSchool;
             $studentSpecialAptitudes = $newEnquiry->user->StudentSpecialAptitude;
             $studentHobbies = $newEnquiry->user->StudentHobby;
-            //return view('registration.admission-pdf')->with(compact('newEnquiry'));
+            $studentDocuments = StudentDocument::where('student_id',$newEnquiry->user->id)->lists('document_id')->toArray();
+            //return view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'));
             TCPDF::AddPage();
-            TCPDF::writeHTML(view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies'))->render());
+            TCPDF::writeHTML(view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'))->render());
             TCPDF::Output("Admission Form".date('Y-m-d_H_i_s').".pdf", 'D');
 
 
