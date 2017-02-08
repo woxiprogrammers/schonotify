@@ -282,6 +282,8 @@ class RegistrationController extends Controller
             $documents = StudentDocumentMaster::all();
             $studentExtraInfo = $newEnquiry->user->studentExtraInfo;
             $studentFamilyInfo = ParentExtraInfo::where('parent_id',$newEnquiry->user->parent_id)->first();
+            $parentEmail = User::where('id',$newEnquiry->user->parent_id)->first();
+            $studentFamilyInfo['parent_email'] = $parentEmail['email'];
             $studentSiblings = $newEnquiry->user->StudentSibling;
             $previousSchool = $newEnquiry->user->StudentPreviousSchool;
             $studentSpecialAptitudes = $newEnquiry->user->StudentSpecialAptitude;
