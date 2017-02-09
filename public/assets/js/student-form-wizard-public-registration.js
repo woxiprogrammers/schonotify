@@ -162,6 +162,11 @@ var FormWizard = function () {
                     alphaSpace: true
                 },
                 aadhar_number:{
+
+                    remote: {
+                        url: "/check-aadhar",
+                        type: "POST"
+                    },
                     alphanumeric: true
                 },
                 mother_tongue:{
@@ -285,7 +290,8 @@ var FormWizard = function () {
                     alphanumeric:"GRN must contain only alphabets and numbers"
                 },
                 aadhar_number:{
-                    alphanumeric:"Aadhar Card Number must contain only alphabets and numbers"
+                    alphanumeric:"Aadhar Card Number must contain only alphabets and numbers",
+                    remote:"Aadhar Card number must be unique"
                 },
                 birth_place:{
                     required: "Birth Place is required" ,

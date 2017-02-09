@@ -305,4 +305,21 @@ class RegistrationController extends Controller
         }
     }
 
+    public function checkAadharNumber(Request $request){
+        try{
+            $aadharCount= StudentExtraInfo::where('aadhar_number',$request->aadhar_number)->count();
+            if($aadharCount > 0){
+                return 'false';
+            }else{
+                return 'true';
+            }
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+
 }

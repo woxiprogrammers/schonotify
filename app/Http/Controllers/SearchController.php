@@ -37,23 +37,46 @@ class SearchController extends Controller
     public function selectRole($role_id)
     {
         $user=Auth::user();
-
         if($user->role_id == 1)
         {
+            if($role_id == 3){
+                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                    ->where('users.body_id','=',$user->body_id)
+                    ->where('users.role_id','!=',1)
+                    ->where('users.role_id','=',$role_id)
+                    ->where('users.id','!=',$user->id)
+                    ->get();
+            }else{
         $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
             ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
             ->where('users.body_id','=',$user->body_id)
             ->where('users.role_id','=',$role_id)
             ->where('users.id','!=',$user->id)
             ->get();
+            }
         }else{
-            $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
-                ->where('users.body_id','=',$user->body_id)
-                ->where('users.role_id','!=',1)
-                ->where('users.role_id','=',$role_id)
-                ->where('users.id','!=',$user->id)
-                ->get();
+            if($role_id == 3){
+                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                    ->where('users.body_id','=',$user->body_id)
+                    ->where('users.role_id','!=',1)
+                    ->where('users.role_id','=',$role_id)
+                    ->where('users.id','!=',$user->id)
+                    ->get();
+            }else{
+                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
+                    ->where('users.body_id','=',$user->body_id)
+                    ->where('users.role_id','!=',1)
+                    ->where('users.role_id','=',$role_id)
+                    ->where('users.id','!=',$user->id)
+                    ->get();
+            }
+            dd($result);
+
         }
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
 
@@ -61,7 +84,7 @@ class SearchController extends Controller
 
         if($role_id == 3)
         {
-            $str.="<th>Role No.</th>";
+            $str.="<th>GRN No.</th>";
         }
 
         $str.="<th>Name</th></th><th>Username</th><th>Email</th><th>Gender</th>";

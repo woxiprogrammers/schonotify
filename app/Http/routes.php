@@ -63,6 +63,11 @@
     Route::post('register-student', array('uses' => 'RegistrationController@registerStudent'));
     Route::get('print-admission-form/{enquiryId}', array('uses' => 'RegistrationController@printAdmissionForm'));
 
+    //check GRN number
+    Route::post('check-grn',array('uses' => 'UsersController@checkGrnNumber'));
+    //check aadhar number
+
+    Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
 
     Route::get('get-msg-count','MessageController@getMessageCount');
 

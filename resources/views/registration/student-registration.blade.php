@@ -255,7 +255,7 @@
             <label class="control-label">
                 Aadhar Card Number
             </label>
-            <input type="text" placeholder="Aadhar Card Number " class="form-control" name="aadhar_number"/>
+            <input type="text" placeholder="Aadhar Card Number " class="form-control" id="aadhar_number" name="aadhar_number"/>
         </div>
     </div>
     <div class="col-md-6">
@@ -809,9 +809,10 @@
 
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
+<script src="assets/js/student-form-wizard-public-registration.js"></script>
 <script src="assets/js/main.js"></script>
 
-<script src="assets/js/student-form-wizard-public-registration.js"></script>
+
 
 <script src="assets/js/custom-project.js"></script>
 <script src="vendor/ckeditor/ckeditor.js"></script>
