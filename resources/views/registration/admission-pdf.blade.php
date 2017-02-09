@@ -30,7 +30,7 @@
 
     <tr>
         <td width="35%"></td>
-        <td width="60%">(CBSC Affiliation No: 1130632 )</td>
+        <td width="60%">(CBSE Affiliation No: 1130632 )</td>
     </tr>
 </table>
 <table>
@@ -344,7 +344,7 @@
 
     <tr>
         <td width="35%"></td>
-        <td width="60%">(CBSC Affiliation No:1130632)</td>
+        <td width="60%">(CBSE Affiliation No:1130632)</td>
     </tr>
 </table>
 <table>
@@ -353,20 +353,17 @@
         <td><h3><u>MEDICAL CERTIFICATE</u></h3></td>
     </tr>
 </table>
-<table style="padding-top:10px;padding-bottom:10px;">
-
-</table>
-<table style="padding-top:10px;padding-bottom:10px;">
+<table style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr>
         <td width="80%"><span >&nbsp;&nbsp;I.&nbsp;&nbsp;&nbsp;Whether the pupil has undergone any surgical procedure:</span></td><td width="20%">YES/NO</td>
     </tr>
 </table>
-<table style="padding-top:10px;padding-bottom:10px;">
+<table style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr>
         <td width="100%"><span >&nbsp;&nbsp;II.&nbsp;&nbsp;&nbsp;Please mention the details whether the pupil has a history of&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
     </tr>
 </table>
-<table cellspacing="0" cellpadding="0" style="padding-top:10px;padding-bottom:10px;">
+<table cellspacing="0" cellpadding="0" style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A. Congenital abnormality</span></td><td width="20%">YES/NO</td></tr>
     <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. Rheumatic heart disease</span></td><td width="20%">YES/NO</td></tr>
     <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. Bronchial asthma</span></td><td width="20%">YES/NO</td></tr>
@@ -378,27 +375,22 @@
     <tr><td width="5%"></td><td width="75%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I. Any other disease(Please give details if necessary):</span></td></tr>
 
 </table>
-<table style="padding-top:10px;padding-bottom:10px;">
+<table style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr>
         <td width="80%"><span >&nbsp;&nbsp;III.&nbsp;&nbsp;&nbsp;Please mention whether the student has any eye sight related problems</span></td><td width="20%">YES/NO</td>
     </tr>
 </table>
-<table style="padding-top:10px;padding-bottom:10px;">
+<table style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr>
         <td width="80%"><span >&nbsp;&nbsp;IV.&nbsp;&nbsp;&nbsp;Please mention whether the student has been vaccinated regularly</span></td><td width="20%">YES/NO</td>
     </tr>
 </table>
-
-<table style="padding-top:10px;padding-bottom:10px;">
-    <tr>
-        <td width="50%"></td><td><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature of the Doctor:</span></td>
-    </tr>
-</table>
-
-<table style="padding-top:10px;padding-bottom:10px;">
+<table style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr><td width="100%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full name of the doctor:</span></td></tr>
     <tr><td width="100%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address & contact no.:</span></td></tr>
-    <tr><td width="100%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Registration number:</span></td></tr>
+    <tr><td width="50%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Registration number:</span></td>
+        <td width="50%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature of the Doctor:</span></td>
+    </tr>
 </table>
 <table>
     <tr>
@@ -406,16 +398,15 @@
         <td width="90%"><h3><u>DECLARATION BY THE PARENTS/GUARDIANS</u></h3></td>
     </tr>
 </table>
-<table style="padding-top:10px;padding-bottom:10px;">
+<table style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr><td width="100%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In case of any medical emergency which may require surgical procedure, anaesthesia, invasive investigations, administration of drugs where the written permission is obligatory I hereby authorize the principal to give it on behalf provided is not possible to obtain from me in time. Medical treatment may be availed from any competent medical authority or institute.</span></td></tr>
 </table>
-<table style="padding-top:10px;padding-bottom:10px;">
+<table style="padding-top:10px;padding-bottom:10px;font-size: 11px">
     <tr><td width="100%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name of pupil:</span></td></tr>
     <tr><td width="50%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name of parent: </span></td><td width="50%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Relation with pupil:</span></td></tr>
     <tr><td width="100%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Full address: </span></td></tr>
     <tr><td width="50%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Telephone number: </span></td><td width="50%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Place:&nbsp;&nbsp;</span></td></tr>
     <tr><td width="50%"><span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:&nbsp;&nbsp;</span></td><td width="50%"><span >Parent’s/Guardian’s Signature:</span></td></tr>
-
 </table>
 <br pagebreak="true">
 <table>
@@ -447,7 +438,7 @@
 
     <tr>
         <td width="35%"></td>
-        <td width="60%">(CBSC Affiliation No: 1130632)</td>
+        <td width="60%">(CBSE Affiliation No: 1130632)</td>
     </tr>
 </table>
 <div></div>
@@ -457,6 +448,7 @@
     </tr>
 </table>
 <div></div>
+<div style="font-size: 11px">
 <table>
     <tr width="100%">
         <td >Please read the following instructions carefully and put a <img src="<?php echo url()?>/assets/images/bodyLogo/tickmark.jpg" style="width:10px;height: 10px"> mark against the instructions in the box. Please sign at the end of the instruction page to indicate that you have read and understood them and agree to them.</td>
@@ -649,5 +641,6 @@
         <td width="50%"><span >Parent’s/Guardian’s Signature:</span></td>
     </tr>
 </table>
+</div>
 </body>
 </html>
