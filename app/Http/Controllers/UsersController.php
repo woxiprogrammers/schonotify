@@ -41,6 +41,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Collective\Html\HtmlFacade;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -1510,5 +1511,22 @@ class UsersController extends Controller
         }
     }
 
+    public function checkGrnNumber(Request $request){
+        try{
+
+            $grnCount= StudentExtraInfo::where('student_id','!=',$request->userId)->where('grn',$request->grn)->count();
+            if($grnCount > 0){
+                return 'false';
+            }else{
+                return 'true';
+            }
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
 
 }

@@ -147,7 +147,7 @@ class EnquiryController extends Controller
 
     public function viewEnquiryList(){
         try{
-            $enquiryData = EnquiryForm::orderBy('id','ASC')->get()->toArray();
+            $enquiryData = EnquiryForm::orderBy('id','DESC')->get()->toArray();
             $masterEnquiry = array();
             foreach($enquiryData as $enquiry){
                 $now = Carbon::now();

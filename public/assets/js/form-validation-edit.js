@@ -374,6 +374,20 @@ var FormValidator = function () {
                 roll_number:{
                     required:true,
                     number:true
+                },
+                grn:{
+                    remote: {
+                        url: "/check-grn",
+                        type: "POST",
+                        data: {
+                            grn: function() {
+                                return $( "#grn" ).val();
+                            },
+                            userId:function() {
+                                return $( "#userId" ).val();
+                            }
+                        }
+                    }
                 }
 
             },
@@ -408,6 +422,9 @@ var FormValidator = function () {
                 roll_number:{
                     required:"Roll number is required",
                     number:"Roll number must be numeric"
+                },
+                grn:{
+                    remote: "GRN number must be unique"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit

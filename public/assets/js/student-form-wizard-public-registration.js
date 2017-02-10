@@ -53,6 +53,8 @@ var FormWizard = function () {
             return false;
         }
     }, "Address must contain at-least 15 characters");
+
+
     var initValidator = function () {
 
         $.validator.setDefaults({
@@ -160,6 +162,11 @@ var FormWizard = function () {
                     alphaSpace: true
                 },
                 aadhar_number:{
+
+                    remote: {
+                        url: "/check-aadhar",
+                        type: "POST"
+                    },
                     alphanumeric: true
                 },
                 mother_tongue:{
@@ -254,6 +261,26 @@ var FormWizard = function () {
                 },
                 body:{
                     required:true
+                },
+                'sibling[0][name]':{
+                    required: function(element){
+                        return $("#age0").val()!="";
+                    }
+                },
+                'sibling[0][age]':{
+                    required: function(element){
+                        return $("#name0").val()!="";
+                    }
+                },
+                'sibling[1][name]':{
+                    required: function(element){
+                        return $("#age1").val()!="";
+                    }
+                },
+                'sibling[1][age]':{
+                    required: function(element){
+                        return $("#name1").val()!="";
+                    }
                 }
 
             },
@@ -263,7 +290,8 @@ var FormWizard = function () {
                     alphanumeric:"GRN must contain only alphabets and numbers"
                 },
                 aadhar_number:{
-                    alphanumeric:"Aadhar Card Number must contain only alphabets and numbers"
+                    alphanumeric:"Aadhar Card Number must contain only alphabets and numbers",
+                    remote:"Aadhar Card number must be unique"
                 },
                 birth_place:{
                     required: "Birth Place is required" ,
