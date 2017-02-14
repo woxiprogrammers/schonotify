@@ -20,7 +20,11 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
+            @if($schoolSlug=='gis')
             <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
+            @else
+            <h1 class="mainTitle">Ganesh English Medium School , Dapodi</h1>
+            @endif
             <span class="mainDescription">Enquiry Form</span>
         </div>
 
@@ -37,6 +41,12 @@
     </div>
 <div class="col-md-12">
     <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true">
+
+        @if($schoolSlug=='gis')
+        <input type="hidden" id="body_id" name="body_id" value="1"/>
+        @else
+        <input type="hidden" id="body_id" name="body_id" value="2"/>
+        @endif
         <fieldset>
             <legend>
                 Name of Father/Mother/Guardian
