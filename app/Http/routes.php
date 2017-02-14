@@ -70,7 +70,10 @@
     Route::group(['prefix' => 'fees'], function () {
         Route::get('create',array('uses' => 'FeeController@createFeeStructureView'));
     });
+
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
+
+    Route::get('fees/get-concession-types',array('uses' => 'FeeController@concessionTypes'));
 
     Route::get('get-msg-count','MessageController@getMessageCount');
 
