@@ -67,6 +67,9 @@
     Route::post('check-grn',array('uses' => 'UsersController@checkGrnNumber'));
     //check aadhar number
 
+    Route::group(['prefix' => 'fees'], function () {
+        Route::get('create',array('uses' => 'FeeController@createFeeStructureView'));
+    });
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
 
     Route::get('get-msg-count','MessageController@getMessageCount');
