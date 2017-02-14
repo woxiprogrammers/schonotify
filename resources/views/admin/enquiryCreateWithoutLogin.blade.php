@@ -22,7 +22,7 @@
         <div class="col-sm-7">
             @if($schoolSlug=='gis')
             <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
-            @else
+            @elseif($schoolSlug=='gems')
             <h1 class="mainTitle">Ganesh English Medium School , Dapodi</h1>
             @endif
             <span class="mainDescription">Enquiry Form</span>
@@ -44,7 +44,7 @@
 
         @if($schoolSlug=='gis')
         <input type="hidden" id="body_id" name="body_id" value="1"/>
-        @else
+        @elseif($schoolSlug=='gems')
         <input type="hidden" id="body_id" name="body_id" value="2"/>
         @endif
         <fieldset>
