@@ -23,7 +23,11 @@
 
     <tr>
         <td width="20%"></td>
+        @if($newEnquiry->body_id == '1')
         <td width="70%"><h3>GANESH INTERNATIONAL SCHOOL,CHIKHALI</h3></td>
+        @else
+        <td width="70%"><h3>GANESH ENGLISH MEDIUM SCHOOL,DAPODI</h3></td>
+        @endif
     </tr>
 </table>
 
