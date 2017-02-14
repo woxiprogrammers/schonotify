@@ -80,8 +80,12 @@ class RegistrationController extends Controller
 
     public function redirectToRegistration(Request $request){
         try{
-
-            $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->first();
+            if($request->bodySlug == 'gis'){
+                $body_id = 1 ;
+            }elseif($request->bodySlug == 'gems'){
+                $body_id = 2 ;
+            }
+            $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->where('body_id',$body_id)->first();
             $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
             $bodies = Body::all();
             $documents = StudentDocumentMaster::all();

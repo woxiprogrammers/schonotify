@@ -21,7 +21,11 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
+            @if($enquiryInfo['body_id'] == 1)
             <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
+            @else
+            <h1 class="mainTitle">Ganesh English Medium School , Dapodi</h1>
+            @endif
             <span class="mainDescription">Admission Form</span>
         </div>
 
