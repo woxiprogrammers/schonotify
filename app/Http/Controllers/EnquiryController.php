@@ -165,7 +165,7 @@ class EnquiryController extends Controller
                 $now = Carbon::now();
                 $enquiryId = $now->year."-".str_pad($enquiry['id'],4,"0",STR_PAD_LEFT);
                 $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
-                $enquiry['form_no'] = $enquiryId;
+                $enquiry['form_no'] = $enquiry['enquiry_number'];
                 $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
                 $enquiry['result']= $enquiry['final_status'];
                 $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];
