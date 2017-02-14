@@ -108,8 +108,12 @@ class EnquiryController extends Controller
 
     public function viewEnquiryFormWithoutLogin($schoolSlug=NULL){
         try{
+            if($schoolSlug == 'gis' || $schoolSlug == 'gems'){
+                return view('admin.enquiryCreateWithoutLogin')->with(compact('schoolSlug'));
+            }else{
+                return view('errors.404');
+            }
 
-            return view('admin.enquiryCreateWithoutLogin')->with(compact('schoolSlug'));
         }catch(\Exception $e){
             $data = [
 
