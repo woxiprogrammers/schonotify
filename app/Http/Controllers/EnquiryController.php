@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class EnquiryController extends Controller
 {
@@ -72,13 +73,15 @@ class EnquiryController extends Controller
     }
 
     public function storeEnquiryForm(Request $request){
-        try{$data = $request->all();
-
+        try{
+            $user = Auth::User();
+            $data = $request->all();
             $currentTime = Carbon::now();
             $dob = str_replace('/', '-', $data['dob']);
             $data['dob'] = date('Y-m-d', strtotime($dob));
             $data['created_at'] = $currentTime;
             $data['updated_at'] = $currentTime;
+            $data['body_id'] = $user->body_id;
             $newEnquiry = EnquiryForm::create($data);
             if(Session::has('enquiryId')){
                 Session::put('enquiryId', $newEnquiry);
@@ -103,9 +106,10 @@ class EnquiryController extends Controller
         }
     }
 
-    public function viewEnquiryFormWithoutLogin(){
+    public function viewEnquiryFormWithoutLogin($schoolSlug=NULL){
         try{
-            return view('admin.enquiryCreateWithoutLogin');
+
+            return view('admin.enquiryCreateWithoutLogin')->with(compact('schoolSlug'));
         }catch(\Exception $e){
             $data = [
 
@@ -147,7 +151,8 @@ class EnquiryController extends Controller
 
     public function viewEnquiryList(){
         try{
-            $enquiryData = EnquiryForm::orderBy('id','DESC')->get()->toArray();
+            $user = Auth::User();
+            $enquiryData = EnquiryForm::orderBy('id','DESC')->where('body_id',$user->body_id)->get()->toArray();
             $masterEnquiry = array();
             foreach($enquiryData as $enquiry){
                 $now = Carbon::now();
