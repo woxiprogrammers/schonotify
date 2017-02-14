@@ -19,7 +19,12 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
+                            @if($schoolSlug=='gis')
                             <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
+                            @elseif($schoolSlug=='gems')
+                            <h1 class="mainTitle">Ganesh English Medium School , Dapodi</h1>
+                            @endif
+
                             <span class="mainDescription">Enquiry Form</span>
                         </div>
 
@@ -36,13 +41,14 @@
                             </legend>
 
                         </fieldset>
+                        <input type="hidden" name="bodySlug" id="bodySlug" value="{{$schoolSlug}}"/>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label  class="control-label">
                                         Enter Enquiry Number
                                     </label>
-                                    <input type="text" placeholder="Enter enquiry number" class="form-control" name="enquiry_number"/>
+                                    <input type="text" placeholder="Enter enquiry number" class="form-control" name="enquiry_number" id="enquiry_number"/>
 
                                 </div>
                             </div>
@@ -68,29 +74,29 @@
 </div>
 
 <!-- start: MAIN JAVASCRIPTS -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
-<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="vendor/switchery/switchery.min.js"></script>
-<script src="vendor/selectFx/classie.js"></script>
-<script src="vendor/selectFx/selectFx.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/modernizr/modernizr.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/vendor/switchery/switchery.min.js"></script>
+<script src="/vendor/selectFx/classie.js"></script>
+<script src="/vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
+<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 
 
-<script src="assets/js/custom-project.js"></script>
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/adapters/jquery.js"></script>
-<script src="assets/js/form-validation.js"></script>
+<script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/assets/js/form-validation.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="assets/js/enquiry-number.js"></script>
+<script src="/assets/js/enquiry-number.js"></script>
 <script>
     jQuery(document).ready(function() {
         getMsgCount();

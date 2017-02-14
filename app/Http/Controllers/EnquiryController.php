@@ -89,8 +89,9 @@ class EnquiryController extends Controller
                 Session::set('enquiryId', $newEnquiry);
             }
             $now = Carbon::now();
-            $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
 	        $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
+            $bodyEnquiryCount = EnquiryForm::where('body_id',$enquiry->body_id)->count();
+            $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
             $enquiryInfo = $enquiry->update(['enquiry_number' => $enquiryId]);
             TCPdf::AddPage();
             TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
@@ -135,8 +136,10 @@ class EnquiryController extends Controller
             $data['updated_at'] = $currentTime;
             $newEnquiry = EnquiryForm::create($data);
             $now = Carbon::now();
-            $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
+
             $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
+            $bodyEnquiryCount = EnquiryForm::where('body_id',$enquiry->body_id)->count();
+            $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
             $enquiryInfo = $enquiry->update(['enquiry_number' => $enquiryId]);
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
