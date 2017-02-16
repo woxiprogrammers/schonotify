@@ -30,14 +30,15 @@
         @endif
     </tr>
 </table>
-
+@if($newEnquiry->body_id == '1')
 <table>
-
     <tr>
         <td width="35%"></td>
-        <td width="60%">(CBSC Affiliation No:1130632)</td>
+        <td width="60%">(CBSE Affiliation No:1130632)</td>
     </tr>
 </table>
+@endif
+
 <table>
     <tr>
         <td width="40%"></td>

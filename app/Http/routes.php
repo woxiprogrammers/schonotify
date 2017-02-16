@@ -56,7 +56,7 @@
     Route::get('print-enquiry-form/{id}',array('uses' => 'EnquiryController@printEnquiryForm'));
     //public student registration
     Route::get('registration/{id}',array('uses' => 'RegistrationController@getStudentRegistrationView'));
-    Route::get('check-enquiry',array('uses' => 'RegistrationController@getCheckEnquiryView'));
+    Route::get('check-enquiry/{slug?}',array('uses' => 'RegistrationController@getCheckEnquiryView'));
     Route::post('check-enquiry',array('uses' => 'RegistrationController@checkEnquiry'));
     Route::post('redirect',array('uses' => 'RegistrationController@redirectToRegistration'));
     Route::get('get-enquiry-parents',array('uses' => 'RegistrationController@getStudentParents'));

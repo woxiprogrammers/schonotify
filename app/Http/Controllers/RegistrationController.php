@@ -37,9 +37,13 @@ class RegistrationController extends Controller
         }
     }
 
-    public function getCheckEnquiryView(){
+    public function getCheckEnquiryView($schoolSlug =NULL){
         try{
-            return view('registration.check-enquiry');
+            if($schoolSlug == 'gis' || $schoolSlug == 'gems'){
+                return view('registration.check-enquiry')->with(compact('schoolSlug'));
+            }else{
+                return view('errors.404');
+            }
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -47,11 +51,20 @@ class RegistrationController extends Controller
 
     public function checkEnquiry(Request $request){
         try{
-
-            $enquiryCount = EnquiryForm::where('final_status','pass')->where('enquiry_number',$request->enquiry_number)->count();
-            if($enquiryCount == 1){
-                return 'true';
-            } else {
+            $body_id = NULL;
+            if($request->bodySlug == 'gis'){
+                $body_id = 1 ;
+            }elseif($request->bodySlug == 'gems'){
+                $body_id = 2 ;
+            }
+            if($body_id != NULL){
+                $enquiryCount = EnquiryForm::where('final_status','pass')->where('enquiry_number',$request->enquiry_number)->where('body_id',$body_id)->count();
+                if($enquiryCount == 1){
+                    return 'true';
+                } else {
+                    return 'false';
+                }
+            }else{
                 return 'false';
             }
         }catch(\Exception $e){
@@ -67,8 +80,12 @@ class RegistrationController extends Controller
 
     public function redirectToRegistration(Request $request){
         try{
-
-            $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->first();
+            if($request->bodySlug == 'gis'){
+                $body_id = 1 ;
+            }elseif($request->bodySlug == 'gems'){
+                $body_id = 2 ;
+            }
+            $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->where('body_id',$body_id)->first();
             $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
             $bodies = Body::all();
             $documents = StudentDocumentMaster::all();

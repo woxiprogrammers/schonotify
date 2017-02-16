@@ -32,9 +32,21 @@ var FormValidator = function () {
             rules: {
                 enquiry_number:{
                     required: true,
-                    remote: {
+                    /*remote: {
                         type: "POST",
                         url: "/check-enquiry"
+                    },*/
+                    remote: {
+                        url: "/check-enquiry",
+                        type: "POST",
+                        data: {
+                            enquiry_number: function() {
+                                return $( "#enquiry_number" ).val();
+                            },
+                            bodySlug:function() {
+                                return $( "#bodySlug" ).val();
+                            }
+                        }
                     }
                 }
             },
