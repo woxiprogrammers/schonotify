@@ -13,9 +13,43 @@
     <!-- end: TOP NAVBAR -->
     <div class="main-content" >
         <div class="wrap-content container" id="container">
+            <section id="page-title" class="padding-top-15 padding-bottom-15">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <h1 class="mainTitle">Create</h1>
+                        <span class="mainDescription"> Fee Structure</span>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <div class="container-fluid container-fullw bg-white">
+             <div class="form-group">
+                 <label class="control-label">
+                     Academic Year <span class="symbol required"></span>
+                 </label>
+                 <select>
+                     <option value="2016">2016-2017</option>
+                     <option value="2017">2017-2018</option>
+                     <option value="2018">2018-2019</option>
+                     <option value="2019">2019-2020</option>
+                 </select>
 
 
+             </div>
+                </div>
+            <div class="container-fluid container-fullw">
+            <div class="form-group">
+                <label class="control-label">
+                     Fee Type<span class="symbol required"></span>
+                </label>
+                <input type="text" name="fee_name" id="fee_name1" placeholder="Fee Type">
 
+
+            </div>
+                </div>
+            <div class="container-fluid container-fullw">
             <div class="form-group">
 
                 <label class="control-label">
@@ -64,15 +98,112 @@
                     @endforeach
                 </div>
             </div>
+                </div>
+            <div class="container-fluid container-fullw bg-white">
 
-            @foreach($concession_types as $concessions)
+            <div class="form-group">
+                <label class="control-label">
+                    Select Castes <span class="symbol required"></span>
+                </label>
+                <div>
+                    @foreach($concession_types as $concessions)
 
-                      <div class="checkbox clip-check check-primary checkbox-inline">
-                <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="{{ $concessions['concession.id'] }}" name="concessions[]">
-                <label for="{{ $concessions['concession.id'] }}_concession_chk">{{ $concessions['concession.name'] }}</label>
+                    <div class="checkbox clip-check check-primary checkbox-inline">
+                        <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="" name="concessions[]">
+                        <label for="{{ $concessions['concession.id'] }}_concession_chk">{{ $concessions['concession.name'] }}</label>
+                    </div>
+
+                    @endforeach
+
+
+                </div>
+                <div class="form-group">
+
+                 </div>
+
             </div>
 
-            @endforeach
+            <div class="castes">
+
+                <label class="control-label">
+                    Caste Categories <span class="symbol required"></span>
+                </label>
+                <div>
+
+
+
+                        <table style="width:100%">
+                            <tr>
+                                <th>Caste</th>
+                                <th>Amount</th>
+
+                            </tr>
+                            @foreach($caste_types as $castes)
+                            <tr>
+                                <td>
+                                    <label for="{{ $castes['caste_id'] }}">{{ $castes['caste_category'] }}</label>
+                                </td>
+                                <td>
+                                    <input type="text"  id="{{ $castes['caste_id'] }}" value="{{ $castes['caste_id'] }}" name="castes[]">
+                                </td>
+
+                            </tr>
+                            @endforeach
+
+                        </table>
+
+
+
+
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+            <div class="container-fluid container-fullw">
+                <div class="form-group">
+                    <label class="control-label">
+                        Installments : <span class="symbol required"></span>
+                    </label>
+                    <div>
+                        <select border="1">
+                            <option value="" border="1">Select Total Number of Installments</option>
+
+                            @foreach($installment_number as $installments)
+                            <option value="{{ $installments['installment_id'] }}" >{{ $installments['installment_number'] }}</option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                    <div class="container-fluid container-fullw">
+                        <div id="installments">
+
+
+                        </div>
+
+                    </div>
+                    <div class="container-fluid container-fullw bg-green" style="color:white">
+                     <h3> Total fee :</h3>
+                        <input type="text" id="total_fee" class="total_fee">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                            Create <i class="fa fa-arrow-circle-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+                </div>
+
+
+
+
+
+
 
 
 
@@ -116,26 +247,53 @@
 <!-- start: JavaScript Event Handlers for this page -->
 
 <script src="/assets/js/form-validation-edit.js"></script>
+<script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
 
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
+<script src="/assets/js/table-data.js"></script>
 <script>
 jQuery(document).ready(function() {
-
+    $('.castes').hide();
     Main.init();
+
     FormValidator.init();
     FormElements.init();
-    //userAclModule();
 
 
-});
+
+
+    })
+
 
 
 
 
 
 </script>
+<script>
+    $( "select" )
+        .change(function () {
+            var str = this.value;
+
+             alert(str);
+            $.ajax({
+                       url: "/fees/installments",
+                       data:{str1 : str},
+                       success: function(response)
+                        {
+                            $("#installments").html(response);
+                        }
+                   });
+
+
+
+        })
+
+</script>
+
+
 
 
 @stop

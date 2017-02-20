@@ -69,11 +69,17 @@
 
     Route::group(['prefix' => 'fees'], function () {
         Route::get('create',array('uses' => 'FeeController@createFeeStructureView'));
+        Route::get('installments',array('uses' => 'FeeController@particulars'));
+        Route::get('summation',array('uses' => 'FeeController@summation'));
     });
 
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
 
     Route::get('fees/get-concession-types',array('uses' => 'FeeController@concessionTypes'));
+
+    Route::get('get-intallment-number',array('uses' => 'FeeController@installmentCount'));
+
+
 
     Route::get('get-msg-count','MessageController@getMessageCount');
 

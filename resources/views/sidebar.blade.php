@@ -308,6 +308,13 @@
                 </div>
             </a>
         </li>
+        <li>
+            <a href="/fees/installments">
+                <div class="item-inner">
+                    <span class="title"> fee particulars </span>
+                </div>
+            </a>
+        </li>
     </ul>
 </li>
 </ul>
