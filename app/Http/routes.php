@@ -71,6 +71,7 @@
         Route::get('create',array('uses' => 'FeeController@createFeeStructureView'));
         Route::get('installments',array('uses' => 'FeeController@particulars'));
         Route::get('summation',array('uses' => 'FeeController@summation'));
+        Route::post('create-fee-structure',array('uses' => 'FeeController@create'));
     });
 
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));

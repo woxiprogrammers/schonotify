@@ -12,7 +12,9 @@
     @include('header')
     <!-- end: TOP NAVBAR -->
     <div class="main-content" >
+
         <div class="wrap-content container" id="container">
+            <form action="/fees/create-fee-structure" method="post" role="form" id="fee_create">
             <section id="page-title" class="padding-top-15 padding-bottom-15">
                 <div class="row">
                     <div class="col-sm-7">
@@ -29,11 +31,11 @@
                  <label class="control-label">
                      Academic Year <span class="symbol required"></span>
                  </label>
-                 <select>
-                     <option value="2016">2016-2017</option>
-                     <option value="2017">2017-2018</option>
-                     <option value="2018">2018-2019</option>
-                     <option value="2019">2019-2020</option>
+                 <select name="myselect" id="myselect">
+                     <option value="2016-2017">2016-2017</option>
+                     <option value="2017-2018">2017-2018</option>
+                     <option value="2018-2019">2018-2019</option>
+                     <option value="2019-2020">2019-2020</option>
                  </select>
 
 
@@ -42,9 +44,9 @@
             <div class="container-fluid container-fullw">
             <div class="form-group">
                 <label class="control-label">
-                     Fee Type<span class="symbol required"></span>
+                     Fee Name<span class="symbol required"></span>
                 </label>
-                <input type="text" name="fee_name" id="fee_name1" placeholder="Fee Type">
+                <input type="text" name="fee_name" id="fee_name1" placeholder="Enter Fee Name">
 
 
             </div>
@@ -103,13 +105,13 @@
 
             <div class="form-group">
                 <label class="control-label">
-                    Select Castes <span class="symbol required"></span>
+                    Select Concession Types<span class="symbol required"></span>
                 </label>
                 <div>
                     @foreach($concession_types as $concessions)
 
                     <div class="checkbox clip-check check-primary checkbox-inline">
-                        <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="" name="concessions[]">
+                        <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="{{ $concessions['concession.id'] }}" name="concessions[]">
                         <label for="{{ $concessions['concession.id'] }}_concession_chk">{{ $concessions['concession.name'] }}</label>
                     </div>
 
@@ -144,7 +146,7 @@
                                     <label for="{{ $castes['caste_id'] }}">{{ $castes['caste_category'] }}</label>
                                 </td>
                                 <td>
-                                    <input type="text"  id="{{ $castes['caste_id'] }}" value="{{ $castes['caste_id'] }}" name="castes[]">
+                                    <input type="text"  id=""  name="castes[{{ $castes['caste_id'] }}]">
                                 </td>
 
                             </tr>
@@ -169,11 +171,11 @@
                         Installments : <span class="symbol required"></span>
                     </label>
                     <div>
-                        <select border="1">
-                            <option value="" border="1">Select Total Number of Installments</option>
+                        <select border="1" class="inst_no" id="inst_no"  name="installment_count" >
+                            <option  border="1">Select Total Number of Installments</option>
 
                             @foreach($installment_number as $installments)
-                            <option value="{{ $installments['installment_id'] }}" >{{ $installments['installment_number'] }}</option>
+                            <option value="{{ $installments['installment_id'] }}"  >{{ $installments['installment_number'] }}</option>
                             @endforeach
 
                         </select>
@@ -188,17 +190,17 @@
                     </div>
                     <div class="container-fluid container-fullw bg-green" style="color:white">
                      <h3> Total fee :</h3>
-                        <input type="text" id="total_fee" class="total_fee">
+                        <input type="text" id="total_fee" class="total_fee" value="" name="total_fee">
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="fee_structure_create">
                             Create <i class="fa fa-arrow-circle-right"></i>
                         </button>
                     </div>
 
                 </div>
                 </div>
-
+              </form>
 
 
 
@@ -265,7 +267,10 @@ jQuery(document).ready(function() {
 
 
     })
+     $("#2_concession_chk").click(function(){
 
+         $('.castes').toggle(1500);
+     })
 
 
 

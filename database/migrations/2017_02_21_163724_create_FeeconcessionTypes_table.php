@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFeeInstallmentClassTable extends Migration
+class CreateFeeconcessionTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,11 @@ class CreateFeeInstallmentClassTable extends Migration
      */
     public function up()
     {
-        Schema::create('fee_classes', function (Blueprint $table) {
+
+        Schema::create('fee_concession_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('fee_id')->unsigned();
-            $table->integer('class_id')->unsigned();
-            $table->string('amount', 255)->nullable();
+            $table->integer('fee_id');
+            $table->integer('fee_concession_types');
             $table->timestamps();
         });
     }
@@ -28,6 +28,7 @@ class CreateFeeInstallmentClassTable extends Migration
      */
     public function down()
     {
-        Schema::drop('caste_concession');
+        Schema::drop('fee_concession_types');
+
     }
 }

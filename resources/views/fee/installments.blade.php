@@ -21,7 +21,7 @@
                     <tr>
                        <td>Total amount of installment</td>
                         @foreach($installment_details as $installment_inputs)
-                        <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_sum_id" name="input"> </td>
+                        <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_sum_id" name="inputv[]"> </td>
                         @endforeach
 
                     </tr>
@@ -95,25 +95,50 @@
                             calculateSum5();
 
                         });
-                   function addition(){
-                       var l=$("#1_sum_id").val();
+                   function addition()
+                   {
 
-                       var m=$("#2_sum_id").val();
-                       var n=$("#3_sum_id").val();
-                       var o=$("#4_sum_id").val();
-                       var p=$("#5_sum_id").val();
-                       var a=l;
-                       var a=parseInt(a+m);
-                       var a=parseInt(a+n);
-                       var a=a+o;
-                       var a=a+p;
-                       $("#total_fee").val(a);
+                       var l=parseInt($("#1_sum_id").val());
+                       var m=parseInt($("#2_sum_id").val());
+                       var n=parseInt($("#3_sum_id").val(),10);
+                       var o=parseInt($("#4_sum_id").val(),10);
+                       var p=parseInt($("#5_sum_id").val(),10);
 
+                       var inst_count=$("#inst_no").val();
 
+                           if(inst_count == 1)
+                               {
 
+                                  var a=l;
+                                  $("#total_fee").val(a);
+                               }
+                           else if(inst_count == 2)
+                               {
 
+                                  var a=l+m;
+                                  $("#total_fee").val(a);
 
+                               }
+                           else if(inst_count == 3)
+                               {
 
+                                  var a=l+m+n;
+                                  $("#total_fee").val(a);
+
+                               }
+                           else if(inst_count == 4)
+                               {
+
+                                  var a=l+m+n+o;
+                                  $("#total_fee").val(a);
+                               }
+                           else
+                               {
+
+                                  var a=l+m+n+o+p;
+                                  $("#total_fee").val(a);
+
+                                }
                    }
 
 
@@ -162,7 +187,7 @@
                         });
 
                         $("input#2_sum_id").val(sum.toFixed(2));
-                        //var intaa=sum;
+
 
                         addition();
                     }

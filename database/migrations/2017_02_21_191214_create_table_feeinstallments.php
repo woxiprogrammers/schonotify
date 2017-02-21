@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFeesInstallmentTable extends Migration
+class CreateTableFeeinstallments extends Migration
 {
     /**
      * Run the migrations.
@@ -16,8 +16,8 @@ class CreateFeesInstallmentTable extends Migration
             $table->increments('id');
             $table->integer('fee_id')->unsigned();
             $table->integer('installment_id')->unsigned();
-            $table->string('particulars_id', 255)->nullable();
-            $table->string('amount', 255)->nullable();
+            $table->integer('particulars_id')->unsigned();
+            $table->integer('amount')->unsigned();
             $table->timestamps();
         });
     }
