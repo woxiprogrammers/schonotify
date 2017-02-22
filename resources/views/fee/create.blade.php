@@ -14,6 +14,7 @@
     <div class="main-content" >
 
         <div class="wrap-content container" id="container">
+            @include('alerts.errors')
             <form action="/fees/create-fee-structure" method="post" role="form" id="fee_create">
             <section id="page-title" class="padding-top-15 padding-bottom-15">
                 <div class="row">

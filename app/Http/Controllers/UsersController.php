@@ -8,6 +8,7 @@ use App\Batch;
 use App\ClassData;
 use App\Classes;
 use App\Division;
+use App\Fees;
 use App\HomeworkTeacher;
 use App\Leave;
 use App\Module;
@@ -16,6 +17,7 @@ use App\ParentExtraInfo;
 use App\StudentDocument;
 use App\StudentExtraInfo;
 use App\StudentFamily;
+use App\StudentFee;
 use App\StudentHobby;
 use App\StudentPreviousSchool;
 use App\StudentSibling;
@@ -732,6 +734,9 @@ class UsersController extends Controller
                 return view('viewUser')->with(compact('user','userModuleAcls'));
             }elseif($userRole->slug == 'student')
             {
+
+
+
                 $userData=User::where('id',$user['parent_id'])->first();
                 $user['parentUserId']=$user['parent_id'];
                 $user['parentUserName']=$userData->username;
@@ -754,6 +759,7 @@ class UsersController extends Controller
                 $user['class_name']=$class->slug;
                 $user['division_id']=$division->id;
                 $user['division_name']=$division->slug;
+
                 return view('viewUser')->with(compact('user','userModuleAcls'));
             }elseif($userRole->slug == 'parent')
             {
@@ -796,6 +802,8 @@ class UsersController extends Controller
                 return view('editTeacher')->with('user',$user);
             }elseif($userRole->slug == 'student')
             {
+                $fees=Fees::select('id','fee_name','year')->get();
+
                 $userData=User::where('id',$user['parent_id'])->first();
                 $user['parentUserId']=$user['parent_id'];
                 $user['parentUserName']=$userData->username;
@@ -820,7 +828,7 @@ class UsersController extends Controller
                 $user['division_id']=$division->id;
                 $user['division_name']=$division->slug;
                 }
-                return view('editStudent')->with('user',$user);
+                return view('editStudent')->with(compact('user','fees'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -950,7 +958,36 @@ class UsersController extends Controller
 
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
-    {
+    { //dd//($request->student_fee);
+
+      $query=Fees::where('id',$request->student_fee)->pluck('year');
+      //dd($query);
+
+       $query1=StudentFee::where('student_id',$id)->pluck('fee_id');
+       $query2=StudentFee::where('student_id',$id)->pluck('year');
+        //dd($query2);
+
+
+        if( $query1 != null && $query == $query2 )
+           {
+               $student_fee['student_id']=$id;
+               $student_fee['fee_id']=$request->student_fee;
+               $student_fee['year']=$query;
+               $a=StudentFee::where('student_id',$id)->update($student_fee);
+
+           }
+         else
+         {
+               $student_fee['student_id']=$id;
+               $student_fee['fee_id']=$request->student_fee;
+               $student_fee['year']=$query;
+               $a=StudentFee::insert($student_fee);
+
+
+           }
+
+
+      //  dd($query);
         $userImage=User::where('id',$id)->first();
         $existingEmail= trim($userImage->email);
         unset($request->_method);

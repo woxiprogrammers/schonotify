@@ -20,6 +20,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Batch;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class FeeController extends Controller
 {
@@ -98,66 +100,75 @@ class FeeController extends Controller
 
     public function create(Request $request)
     {
-       // dd($request->all());
+       //dd($request->all());
        // dd($request->castes['caste_id']);
         $fee_details['fee_name']=$request->fee_name;
         $fee_details['total_amount']=$request->total_fee;
         $fee_details['year']=$request->myselect;
-        $fee_details['created_at']=Carbon::now();
+      //  $fee_details['created_at']=Carbon::now();
         $query=Fees::insertGetId($fee_details);
+        //dd($query);
 
         if($query)
         {
-           foreach($request->class as $class)
-           {
+          //  dd(1234);
+            foreach($request->class as $class)
+            {
                //dd($query);
                $class_details['fee_id']=$query;
                $class_details['class_id']=$class;
                $class_details['amount']=$request->total_fee;
-               $class_details['created_at']=Carbon::now();
-               $query2=FeeClass::insert($class_details);
+               //   $class_details['created_at']=Carbon::now();
+                $query2=FeeClass::create($class_details);
 
 
-                //$query2=FeeClass::insert();
+
            }
+
             foreach($request->concessions as $concession)
             {
                 $concession_types['fee_id']=$query;
                 $concession_types['fee_concession_types']=$concession;
-                $concession_types['created_at']=Carbon::now();
-                $query3=FeeConcessionTypes::insert($concession_types);
+                //  $concession_types['created_at']=Carbon::now();
+                $query3=FeeConcessionTypes::create($concession_types);
 
 
 
             }
-          /*  foreach($request->castes as $key=>$caste)
+
+            foreach($request->castes as $key=>$caste)
             {
                 $caste_types['fee_id']=$query;
                 $caste_types['caste_id']=$key;
                 $caste_types['concession_amount']=$caste;
-                $caste_types['created_at']=Carbon::now();
-                $query4=CASTECONCESSION::insert($caste_types);
+                //  $caste_types['created_at']=Carbon::now();
+                $query4=CASTECONCESSION::create($caste_types);
 
 
 
-            }*/
+            }
+         //   dd($request->installment);
             foreach($request->installment as $installment=>$part_id)
-            {   foreach($part_id as $value)
+            {
+                foreach($part_id as $key => $value)
             {
                 $installment_details['fee_id']=$query;
 
                 $installment_details['installment_id']=$installment;
-                $installment_details['particulars_id']=$part_id;
+                $installment_details['particulars_id']=$key;
                 $installment_details['amount']=$value;
-                $installment_details['created_at']=Carbon::now();
+//                $installment_details['created_at']=Carbon::now();
+              //  dd($installment_details);
+                $query5=FeeInstallments::create($installment_details);
 
-                $query4=FeeInstallments::insert($installment_details);
+            }
 
             }
 
-            }
-           // dd($installment_details);
 
+            Session::flash('message-success','Fee structure created successfully');
+             return Redirect::back();
         }
+
     }
 }

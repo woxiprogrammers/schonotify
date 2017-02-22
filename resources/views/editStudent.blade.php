@@ -148,6 +148,7 @@
                                                     Alternate number
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
+
                                             </div>
                                             <div class="form-group">
                                                 <label>
@@ -170,6 +171,22 @@
                                             </div>
 
                                         </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>
+                                                Assign Fee Structure
+                                            </label>
+
+                                            <select name="student_fee">
+                                                @foreach($fees as $fee_details)
+                                                <option id="{{$fee_details['id']}}" class="form-control" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+
+
                                     </div>
                                 </fieldset>
                                 <div class="row">
@@ -286,6 +303,8 @@
                                             </div>
 
                                         </div>
+
+
                                     </div>
                                 </fieldset>
                                 <div class="row">

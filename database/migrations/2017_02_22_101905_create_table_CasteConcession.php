@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCasteFeeConcessionTable extends Migration
+class CreateTableCasteConcession extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateCasteFeeConcessionTable extends Migration
             $table->increments('id');
             $table->integer('fee_id')->unsigned();
             $table->integer('caste_id')->unsigned();
-            $table->string('concession_amount', 255)->nullable();
+            $table->integer('concession_amount')->unsigned();
             $table->timestamps();
         });
     }
@@ -29,5 +29,6 @@ class CreateCasteFeeConcessionTable extends Migration
     public function down()
     {
         Schema::drop('caste_concession');
+
     }
 }
