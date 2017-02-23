@@ -25,6 +25,13 @@
                         @endforeach
 
                     </tr>
+                    <tr>
+                        <td>Due date</td>
+                        @foreach($installment_details as $installment_inputs)
+                        <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_due_date" name="fee_due_date[{{ $installment_inputs['id'] }}]" placeholder="DD-MM-YYYY"> </td>
+                        @endforeach
+
+                    </tr>
 
                 </table>
 

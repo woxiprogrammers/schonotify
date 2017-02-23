@@ -63,7 +63,7 @@
                     @foreach($batches as $batch)
                     <div>
 
-                        <table class="table table-responsive batchClassTab">
+                        <table class="table table-responsive batchClassTab" id="ClassBatchtable">
                             <tr>
                                 <th>{!! $batch !!}</th>
                                 <th>&nbsp;</th>
@@ -111,7 +111,7 @@
                 <div>
                     @foreach($concession_types as $concessions)
 
-                    <div class="checkbox clip-check check-primary checkbox-inline">
+                    <div class="checkbox clip-check check-primary checkbox-inline" id="check">
                         <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="{{ $concessions['concession.id'] }}" name="concessions[]">
                         <label for="{{ $concessions['concession.id'] }}_concession_chk">{{ $concessions['concession.name'] }}</label>
                     </div>
@@ -126,7 +126,7 @@
 
             </div>
 
-            <div class="castes">
+            <div class="castes" style="display: none">
 
                 <label class="control-label">
                     Caste Categories <span class="symbol required"></span>
@@ -256,9 +256,10 @@
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
 <script src="/assets/js/table-data.js"></script>
+<script src="/assets/js/form-validation.js"></script>
 <script>
 jQuery(document).ready(function() {
-    $('.castes').hide();
+   // $('.castes').hide(0);
     Main.init();
 
     FormValidator.init();
@@ -270,7 +271,15 @@ jQuery(document).ready(function() {
     })
      $("#2_concession_chk").click(function(){
 
-         $('.castes').toggle(1500);
+         alert(this.checked);
+         if(this.checked)
+         {
+             $('.castes').show(1500);
+         }
+         else
+         {
+             $('.castes').hide(1500);
+         }
      })
 
 
@@ -283,7 +292,7 @@ jQuery(document).ready(function() {
         .change(function () {
             var str = this.value;
 
-             alert(str);
+
             $.ajax({
                        url: "/fees/installments",
                        data:{str1 : str},

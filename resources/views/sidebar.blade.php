@@ -37,6 +37,7 @@
             </a>
         </li>
 
+
         <li>
             <a href="/searchClasses/2">
                 <span class="title"> Classes  </span>
@@ -315,6 +316,7 @@
                 </div>
             </a>
         </li>
+
     </ul>
 </li>
 </ul>

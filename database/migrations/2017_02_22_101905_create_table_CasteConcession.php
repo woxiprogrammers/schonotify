@@ -12,13 +12,7 @@ class CreateTableCasteConcession extends Migration
      */
     public function up()
     {
-        Schema::create('caste_concession', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('fee_id')->unsigned();
-            $table->integer('caste_id')->unsigned();
-            $table->integer('concession_amount')->unsigned();
-            $table->timestamps();
-        });
+
     }
 
     /**

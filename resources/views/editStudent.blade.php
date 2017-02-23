@@ -172,21 +172,62 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>
                                                 Assign Fee Structure
                                             </label>
+                                            <div>
+                                                <select name="student_fee">
+                                                    @foreach($fees as $fee_details)
+                                                    <option id="{{$fee_details['id']}}" class="form-control" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
+                                                    @endforeach
+                                                </select>
 
-                                            <select name="student_fee">
-                                                @foreach($fees as $fee_details)
-                                                <option id="{{$fee_details['id']}}" class="form-control" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
-                                                @endforeach
-                                            </select>
+                                            </div>
+
+
 
                                         </div>
 
+                                     </div>
+                                    <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Select Concession Types
+                                        </label>
 
+                                        <div>
+                                            @foreach($concession_types as $concessions)
+
+                                            <div class="checkbox clip-check check-primary checkbox-inline" id="check">
+                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" value="{{ $concessions['id'] }}" name="concessions">
+                                                <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                                            </div>
+
+                                            @endforeach
+
+
+                                        </div>
+                                        <div class="form-group">
+
+                                        </div>
+
+                                    </div>
+                                        </div>
+                                   <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>
+                                                Assign Fee Concession
+                                            </label>
+                                            <div id="concession-types">
+
+
+                                            </div>
+
+
+
+                                        </div>
                                     </div>
                                 </fieldset>
                                 <div class="row">
@@ -397,6 +438,22 @@
         }
 
     });
+    $( "#2_concession_chk" ).click(function ()
+          {
+
+              var dataa=this.value;
+            $.ajax({
+                url: "/get-concession",
+
+                success: function(result)
+                {
+                    $("#concession-types").html(result);
+
+                }});
+           })
+
+
+
     $('#email').on('keyup',function(){
         var email = $(this).val();
         var route='/check-email';

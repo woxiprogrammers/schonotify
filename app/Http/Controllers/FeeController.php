@@ -10,6 +10,7 @@ use App\fee_installments;
 use App\fee_particulars;
 use App\FeeClass;
 use App\FeeConcessionTypes;
+use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
 use Carbon\Carbon;
@@ -49,6 +50,7 @@ class FeeController extends Controller
             $batches = array_unique($classArray);
             $concession_types = ConcessionTypes::select('id as concession.id','name as concession.name')->get();
             $caste_types = category_types::select('id as caste_id','caste_category')->get();
+           //  dd($caste_types);
             $installment_number =Installments::select('id as installment_id','installment_number')->get();
              //dd($caste_types);
             return view('fee.create')->with(compact('classes','batches','concession_types','caste_types','installment_number'));
@@ -100,7 +102,7 @@ class FeeController extends Controller
 
     public function create(Request $request)
     {
-       //dd($request->all());
+     //  dd($request->all());
        // dd($request->castes['caste_id']);
         $fee_details['fee_name']=$request->fee_name;
         $fee_details['total_amount']=$request->total_fee;
@@ -164,6 +166,18 @@ class FeeController extends Controller
             }
 
             }
+            foreach($request->fee_due_date as $key=>$due_date)
+            {
+                $caste_types['fee_id']=$query;
+                $caste_types['installment_id']=$key;
+                $caste_types['due_date']=$due_date;
+                //  $caste_types['created_at']=Carbon::now();
+                $query6=FeeDueDate::create($caste_types);
+
+
+
+            }
+
 
 
             Session::flash('message-success','Fee structure created successfully');

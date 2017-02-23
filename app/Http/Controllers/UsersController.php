@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\AclMaster;
 use App\Attendance;
 use App\Batch;
+use App\CASTECONCESSION;
+use App\category_types;
 use App\ClassData;
 use App\Classes;
+use App\ConcessionTypes;
 use App\Division;
 use App\Fees;
 use App\HomeworkTeacher;
@@ -803,6 +806,9 @@ class UsersController extends Controller
             }elseif($userRole->slug == 'student')
             {
                 $fees=Fees::select('id','fee_name','year')->get();
+                //$concession=where('fee')->select('id','fee_id','caste_id')->get();
+                $concession_types=ConcessionTypes::select('id','name')->get()->toarray();
+                //dd($concession_types);
 
                 $userData=User::where('id',$user['parent_id'])->first();
                 $user['parentUserId']=$user['parent_id'];
@@ -828,7 +834,7 @@ class UsersController extends Controller
                 $user['division_id']=$division->id;
                 $user['division_name']=$division->slug;
                 }
-                return view('editStudent')->with(compact('user','fees'));
+                return view('editStudent')->with(compact('user','fees','concession_types'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -958,7 +964,7 @@ class UsersController extends Controller
 
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
-    { //dd//($request->student_fee);
+    {// dd($request->caste);
 
       $query=Fees::where('id',$request->student_fee)->pluck('year');
       //dd($query);
@@ -973,6 +979,8 @@ class UsersController extends Controller
                $student_fee['student_id']=$id;
                $student_fee['fee_id']=$request->student_fee;
                $student_fee['year']=$query;
+               $student_fee['fee_concession_type']=$request->concessions;
+               $student_fee['caste_concession']=$request->caste;
                $a=StudentFee::where('student_id',$id)->update($student_fee);
 
            }
@@ -981,6 +989,8 @@ class UsersController extends Controller
                $student_fee['student_id']=$id;
                $student_fee['fee_id']=$request->student_fee;
                $student_fee['year']=$query;
+               $student_fee['fee_concession_type']=$request->concessions;
+               $student_fee['caste_concession']=$request->caste;
                $a=StudentFee::insert($student_fee);
 
 
@@ -1565,5 +1575,19 @@ class UsersController extends Controller
             abort(500,$e->getMessage());
         }
     }
+     public function concessionList(Request $request)
+         {
+             /* $query=CASTECONCESSION::where('fee_id',$request->dataa)->select('id','caste_id','concession_amount')->get()->toarray();
+               $iterator = 0;
+               foreach($query as $q1)
+               {
+                    $query[$iterator]['caste_name'] = category_types::where('id',$q1['caste_id'])->pluck('caste_category');
+                    $iterator++;
+               }*/
+             $query=category_types::select('caste_category','id')->get();
+//
+
+              return view('casteconcession')->with(compact('query'));
+         }
 
 }

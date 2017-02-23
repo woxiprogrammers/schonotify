@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableStudentFeeRelationship extends Migration
+class CreateTableFeeDueDate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateTableStudentFeeRelationship extends Migration
      */
     public function up()
     {
-        Schema::create('student_fee', function (Blueprint $table) {
+
+        Schema::create('fee_due_date', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('student_id')->unsigned();
             $table->integer('fee_id')->unsigned();
-            $table->string('year',255)->nullable();
+            $table->integer('installment_id')->unsigned();
+            $table->text('due_date');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateTableStudentFeeRelationship extends Migration
      */
     public function down()
     {
-        Schema::drop('student_fee');
+        Schema::drop('fee_due_date');
     }
 }
