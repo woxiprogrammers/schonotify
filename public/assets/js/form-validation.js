@@ -1222,31 +1222,33 @@ var FormValidator = function () {
                     minlength: 2,
                     required:true
                 },
-                class:{
-                    required:true
+                'class[]':{
+                    required:true,
+                    minlength:1
                 },
-                castes:{
-                    required:true
+                'concessions[]':{
+                    required:true,
+                    minlength:1
                 },
-                teacherDropdown:{
+                installment_count:{
                     required:true
                 }
             },
             messages: {
                 myselect:{
-                    required:"Please select year !."
+                    required:"Please select year !"
                 },
                 fee_name:{
-                    required:"Please enter fee name !."
+                    required:"Please enter fee name !"
                 },
-                class:{
+                'class[]':{
                     required:"Please select class !"
                 },
-                castes:{
-                    required:"Please select division !"
+                'concessions[]':{
+                    required:"Please select concession types !"
                 },
-                teacherDropdown:{
-                    required:"Please select teacher !"
+                installment_count:{
+                    required:"Please select total no of installments !"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit

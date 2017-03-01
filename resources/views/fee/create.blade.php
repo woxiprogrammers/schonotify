@@ -79,7 +79,7 @@
                                 <td>
                                     @endif
                                     <div class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox"  id="{!! $class['id'] !!}_chk" value="{!! $class['id'] !!}" name="class[]">
+                                                <input type="checkbox"  id="{!! $class['id'] !!}_chk" value="{!! $class['id'] !!}" name="class[]">
                                         <label for="{!! $class['id'] !!}_chk">{!! $class['class'] !!}</label>
                                     </div>
 
@@ -147,7 +147,7 @@
                                     <label for="{{ $castes['caste_id'] }}">{{ $castes['caste_category'] }}</label>
                                 </td>
                                 <td>
-                                    <input type="text"  id=""  name="castes[{{ $castes['caste_id'] }}]">
+                                    <input type="text"  id="caste"  name="castes[{{ $castes['caste_id'] }}]">
                                 </td>
 
                             </tr>
@@ -172,7 +172,7 @@
                         Installments : <span class="symbol required"></span>
                     </label>
                     <div>
-                        <select border="1" class="inst_no" id="inst_no"  name="installment_count" >
+                        <select border="1" class="inst_no" id="inst_no"   name="installment_count">
                             <option  border="1">Select Total Number of Installments</option>
 
                             @foreach($installment_number as $installments)
