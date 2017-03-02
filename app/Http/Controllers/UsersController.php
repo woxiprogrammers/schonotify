@@ -873,8 +873,9 @@ class UsersController extends Controller
                    }
                    foreach($installment_percent_amount as $amount)
                    {
-
+                     //For history
                    }
+                $concession_amount_array=array();
                 $caste_concession_type=StudentFee::where('student_id',$id)->pluck('caste_concession');
                 $caste_concn_amnt= CASTECONCESSION::where('caste_id', $caste_concession_type)->where('fee_id',$feedata)->pluck('concession_amount');
                 $collection=collect($installment_percent_amount);
@@ -885,6 +886,7 @@ class UsersController extends Controller
                        $concession_amount_array[$key] = $discounted_amount_for_installment;
                    }
                 $final_discounted_amounts = array();
+
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
                     foreach($concession_amount_array as $key => $value)
