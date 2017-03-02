@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class ParticularsSeeder extends Seeder
 {
@@ -11,7 +12,7 @@ class ParticularsSeeder extends Seeder
      */
     public function run()
     {
-        //fee_particulars
+
         DB::table('fee_particulars')->insert([
             [
                 'slug' => 'sc',
