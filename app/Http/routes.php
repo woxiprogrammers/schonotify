@@ -67,7 +67,24 @@
     Route::post('check-grn',array('uses' => 'UsersController@checkGrnNumber'));
     //check aadhar number
 
+    Route::group(['prefix' => 'fees'], function () {
+        Route::get('create',array('uses' => 'FeeController@createFeeStructureView'));
+        Route::get('installments',array('uses' => 'FeeController@particulars'));
+        Route::get('summation',array('uses' => 'FeeController@summation'));
+        Route::post('create-fee-structure',array('uses' => 'FeeController@create'));
+        Route::get('feelisting',array('uses' => 'FeeController@feeListingView'));
+
+
+    });
+    Route::get('get-concession',array('uses' => 'UsersController@concessionList'));
+
+    Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
+
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
+
+    Route::get('fees/get-concession-types',array('uses' => 'FeeController@concessionTypes'));
+
+    Route::get('get-intallment-number',array('uses' => 'FeeController@installmentCount'));
 
     Route::get('get-msg-count','MessageController@getMessageCount');
 

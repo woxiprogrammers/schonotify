@@ -50,6 +50,11 @@
                                 parent Assigned Modules
                             </a>
                         </li>
+                        <li>
+                            <a data-toggle="tab" href="#panel_module_fee">
+                                Fee Assigned
+                            </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div id="panel_edit_account" class="tab-pane fade in active ">
@@ -148,6 +153,7 @@
                                                     Alternate number
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
+
                                             </div>
                                             <div class="form-group">
                                                 <label>
@@ -169,6 +175,44 @@
                                                 </div>
                                             </div>
 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>
+                                                Assign Fee Structure
+                                            </label>
+                                            <div>
+                                                <select name="student_fee">
+                                                    @foreach($fees as $fee_details)
+                                                    <option id="{{$fee_details['id']}}" class="form-control" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Select Concession Types
+                                        </label>
+                                        <div>
+                                            @foreach($concession_types as $concessions)
+                                            <div class="checkbox clip-check check-primary checkbox-inline" id="check">
+                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" value="{{ $concessions['id'] }}" name="concessions">
+                                                <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    </div>
+                                   <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>
+                                                Assign Fee Concession
+                                            </label>
+                                            <div id="concession-types">
+                                            </div>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -286,6 +330,8 @@
                                             </div>
 
                                         </div>
+
+
                                     </div>
                                 </fieldset>
                                 <div class="row">
@@ -318,6 +364,43 @@
                                 </div>
                             </div>
                         </div>
+
+                            <div id="panel_module_fee" class="tab-pane fade-out">
+                                <div class="panel-body">
+
+                                    <div class="container">
+                                        <fieldset>
+                                            <select name="installment_number">
+                                                <option>Please select installment</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+
+                                        </fieldset>
+                                                   <div id="installment_table">
+                                                   </div>
+                                          <p></p>
+                                        <fieldset>
+                                            <div>
+                                                @foreach($final_fee_details as $key => $final_fee_detail)
+                                                <dl class="accordion">
+                                                    <dt><a href="">Installment: {{$final_fee_detail['installment_id']}} </a></dt>
+                                                    <dd><h3>Due-date:{{$final_fee_detail['due_date']}}</h3><h3>Amount: {{round($key,2)}}</h3></dd>
+                                                </dl>
+                                                @endforeach
+                                                <input type="hidden" id="user-id" value={{$user->id}}>
+                                            </div>
+                                         </fieldset>
+
+                                    </div>
+                                  </div>
+                                </div>
+
+                            </div>
+
 
 
 
@@ -364,8 +447,11 @@
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
+
+
 <script>
     jQuery(document).ready(function() {
+
         getMsgCount();
         Main.init();
         FormValidator.init();
@@ -377,7 +463,38 @@
             clsTeacher(true);
         }
 
+
+        (function($) {
+
+            var allPanels = $('.accordion > dd').hide();
+
+            $('.accordion > dt > a').click(function() {
+                allPanels.slideUp();
+                $(this).parent().next().slideDown();
+                return false;
+            });
+
+        })(jQuery);
+
+
     });
+
+    $( "#2_concession_chk" ).click(function ()
+          {
+
+              var dataa=this.value;
+            $.ajax({
+                url: "/get-concession",
+
+                success: function(result)
+                {
+                    $("#concession-types").html(result);
+
+                }});
+           })
+
+
+
     $('#email').on('keyup',function(){
         var email = $(this).val();
         var route='/check-email';
@@ -495,6 +612,28 @@
         });
     });
 
+
+</script>
+<script>
+    $( "select" )
+        .change(function () {
+
+            $id=$("#user-id").val();
+            var str = this.value;
+
+
+            $.ajax({
+                url: "/student-fee-installment",
+                data:{str1 : str,str2 : $id},
+                success: function(response)
+                {
+                    $("#installment_table").html(response);
+                }
+            });
+
+
+
+        })
 
 </script>
 @stop

@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\AclMaster;
 use App\Attendance;
 use App\Batch;
+use App\CASTECONCESSION;
+use App\category_types;
 use App\ClassData;
 use App\Classes;
+use App\ConcessionTypes;
 use App\Division;
+use App\fee_installments;
+use App\fee_particulars;
+use App\FeeDueDate;
+use App\FeeInstallments;
+use App\Fees;
 use App\HomeworkTeacher;
 use App\Leave;
 use App\Module;
@@ -16,6 +24,7 @@ use App\ParentExtraInfo;
 use App\StudentDocument;
 use App\StudentExtraInfo;
 use App\StudentFamily;
+use App\StudentFee;
 use App\StudentHobby;
 use App\StudentPreviousSchool;
 use App\StudentSibling;
@@ -42,9 +51,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Collective\Html\HtmlFacade;
 use Illuminate\Support\Facades\Log;
-
-
-
+use Symfony\Component\CssSelector\Tests\Parser\Shortcut\EmptyStringParserTest;
 
 
 class UsersController extends Controller
@@ -74,6 +81,34 @@ class UsersController extends Controller
         $user=Auth::user();
         return view('userProfile')->with('user',$user);
 
+    }
+
+    public function studentInstallmentview(Request $request)
+    {
+        $installment_data = array();
+        $student_fee=StudentFee::where('student_id',$request->str2)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+        foreach($student_fee as $key => $a)
+         {
+            $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->where('installment_id',$request->str1)->select('particulars_id','amount')->get()->toarray();
+         }
+        $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
+         if(!empty($installment_info))
+           {
+              $iterator = 0;
+              foreach($installment_info as $i)
+            {
+                $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
+                $iterator++;
+            }
+            $installment_data[] = $installment_info;
+           }
+
+         if(empty($installment_data))
+           {
+            $str = "Installment Not Found ";
+           }
+
+         return view('fee.student_installment')->with(compact('str','installment_data'));
     }
 
 
@@ -732,6 +767,9 @@ class UsersController extends Controller
                 return view('viewUser')->with(compact('user','userModuleAcls'));
             }elseif($userRole->slug == 'student')
             {
+
+
+
                 $userData=User::where('id',$user['parent_id'])->first();
                 $user['parentUserId']=$user['parent_id'];
                 $user['parentUserName']=$userData->username;
@@ -754,6 +792,7 @@ class UsersController extends Controller
                 $user['class_name']=$class->slug;
                 $user['division_id']=$division->id;
                 $user['division_name']=$division->slug;
+
                 return view('viewUser')->with(compact('user','userModuleAcls'));
             }elseif($userRole->slug == 'parent')
             {
@@ -796,31 +835,106 @@ class UsersController extends Controller
                 return view('editTeacher')->with('user',$user);
             }elseif($userRole->slug == 'student')
             {
-                $userData=User::where('id',$user['parent_id'])->first();
-                $user['parentUserId']=$user['parent_id'];
-                $user['parentUserName']=$userData->username;
-                $user['parentFirstName']=$userData->first_name;
-                $user['parentLastName']=$userData->last_name;
-                $user['parentEmail']=$userData->email;
-                $user['parentGender']=$userData->gender;
-                $user['parentBirth_date']=$userData->birth_date;
-                $user['parentMobile']=$userData->mobile;
-                $user['parentAddress']=$userData->address;
-                $user['parentAlternateNumber']=$userData->alternate_number;
-                $user['parentAvatar']=$userData->avatar;
+                $feedata=StudentFee::where('student_id',$id)->pluck('fee_id');
+                $fees=Fees::select('id','fee_name','year')->get();
+                $student_fee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+                    foreach($student_fee as $key => $a)
+                    {
+                        $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
+                    }
+                $installment_data = array();
+                    foreach($student_fee as $key => $a)
+                    {
+                        $fee_deta=Fees::where('id',$a['fee_id'])->select('total_amount','year','fee_name')->get();
+                        $concessionType_data=ConcessionTypes::where('id',$a['fee_concession_type'])->get()->toArray();
+                    }
+                    $fee_id=StudentFee::where('student_id',$id)->pluck('fee_id');
+                    $fee_due_date=FeeDueDate::where('fee_id',$fee_id)->select('installment_id','due_date')->get()->toArray();
+                    $installment_amount=fee_installments::where('fee_id',$fee_id)->select('installment_id','amount')->get()->toArray();
+                    $total_installment_amount = array();
+                   foreach($installment_amount as  $amount )
+                   {
+                        if(array_key_exists($amount['installment_id'],$total_installment_amount))
+                        {
+                            $total_installment_amount[$amount['installment_id']] += $amount['amount'];
+                        }
+                        else
+                        {
+                            $total_installment_amount[$amount['installment_id']] = $amount['amount'];
+                        }
+                   }
 
-                $division=Division::where('id',$user['division_id'])->first();
-                if($division != null){
-                $class=Classes::where('id',$division->class_id)->first();
-                $batch=Batch::where('id',$class->batch_id)->first();
-                $user['batch_id']=$batch->id;
-                $user['batch_name']=$batch->slug;
-                $user['class_id']=$class->id;
-                $user['class_name']=$class->slug;
-                $user['division_id']=$division->id;
-                $user['division_name']=$division->slug;
+                $total_fee_amount=array_sum ($total_installment_amount );
+                $installment_percent_amount=array();
+                   foreach($total_installment_amount as $key => $installment_amounts)
+                   {
+                       $installment_amounts=($installment_amounts/$total_fee_amount)*100;
+                       $installment_percent_amount[$key]=$installment_amounts;
+                   }
+                   foreach($installment_percent_amount as $amount)
+                   {
+
+                   }
+                $caste_concession_type=StudentFee::where('student_id',$id)->pluck('caste_concession');
+                $caste_concn_amnt= CASTECONCESSION::where('caste_id', $caste_concession_type)->where('fee_id',$feedata)->pluck('concession_amount');
+                $collection=collect($installment_percent_amount);
+                   foreach($collection as $key => $percent_discout_collection)
+                   {
+                       $concession_amount_array[$key]=array();
+                       $discounted_amount_for_installment=($percent_discout_collection/100)*$caste_concn_amnt;
+                       $concession_amount_array[$key] = $discounted_amount_for_installment;
+                   }
+                $final_discounted_amounts = array();
+                if(count($concession_amount_array) == count($total_installment_amount))
+                {
+                    foreach($concession_amount_array as $key => $value)
+                    {
+                        $final_discounted_amounts[$key] = $total_installment_amount[$key] - $value;
+                    }
                 }
-                return view('editStudent')->with('user',$user);
+                $final_fee_details=array_combine($final_discounted_amounts,$fee_due_date);
+                $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
+                if(!empty($installment_info))
+                   {
+                       $iterator = 0;
+                       foreach($installment_info as $i)
+                       {
+
+                           $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
+                           $iterator++;
+
+                       }
+                       $installment_data[] = $installment_info;
+                   }
+
+                    $concession_types=ConcessionTypes::select('id','name')->get()->toarray();
+                    $userData=User::where('id',$user['parent_id'])->first();
+
+                    $user['parentUserId']=$user['parent_id'];
+                    $user['parentUserName']=$userData->username;
+                    $user['parentFirstName']=$userData->first_name;
+                    $user['parentLastName']=$userData->last_name;
+                    $user['parentEmail']=$userData->email;
+                    $user['parentGender']=$userData->gender;
+                    $user['parentBirth_date']=$userData->birth_date;
+                    $user['parentMobile']=$userData->mobile;
+                    $user['parentAddress']=$userData->address;
+                    $user['parentAlternateNumber']=$userData->alternate_number;
+                    $user['parentAvatar']=$userData->avatar;
+
+                    $division=Division::where('id',$user['division_id'])->first();
+                    if($division != null){
+                        $class=Classes::where('id',$division->class_id)->first();
+                        $batch=Batch::where('id',$class->batch_id)->first();
+                        $user['batch_id']=$batch->id;
+                        $user['batch_name']=$batch->slug;
+                        $user['class_id']=$class->id;
+                        $user['class_name']=$class->slug;
+                        $user['division_id']=$division->id;
+                        $user['division_name']=$division->slug;
+                    }
+
+                  return view('editStudent')->with(compact('user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','final_fee_details'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -951,6 +1065,27 @@ class UsersController extends Controller
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
+        $query=Fees::where('id',$request->student_fee)->pluck('year');
+        $query2=StudentFee::where('student_id',$id)->select('fee_id')->get();
+        if($query2->isEmpty())
+        {
+            $student_fee['student_id']=$id;
+            $student_fee['fee_id']=$request->student_fee;
+            $student_fee['year']=$query;
+            $student_fee['fee_concession_type']=$request->concessions;
+            $student_fee['caste_concession']=$request->caste;
+            $a=StudentFee::insert($student_fee);
+
+        }else
+        {
+            $student_fee['student_id']=$id;
+            $student_fee['fee_id']=$request->student_fee;
+            $student_fee['year']=$query;
+            $student_fee['fee_concession_type']=$request->concessions;
+            $student_fee['caste_concession']=$request->caste;
+            $a=StudentFee::where('student_id',$id)->update($student_fee);
+        }
+
         $userImage=User::where('id',$id)->first();
         $existingEmail= trim($userImage->email);
         unset($request->_method);
@@ -1528,5 +1663,10 @@ class UsersController extends Controller
             abort(500,$e->getMessage());
         }
     }
+     public function concessionList(Request $request)
+         {
+             $query=category_types::select('caste_category','id')->get();
+             return view('casteconcession')->with(compact('query'));
+         }
 
 }
