@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class EnquiryController extends Controller
 {
@@ -72,13 +73,15 @@ class EnquiryController extends Controller
     }
 
     public function storeEnquiryForm(Request $request){
-        try{$data = $request->all();
-
+        try{
+            $user = Auth::User();
+            $data = $request->all();
             $currentTime = Carbon::now();
             $dob = str_replace('/', '-', $data['dob']);
             $data['dob'] = date('Y-m-d', strtotime($dob));
             $data['created_at'] = $currentTime;
             $data['updated_at'] = $currentTime;
+            $data['body_id'] = $user->body_id;
             $newEnquiry = EnquiryForm::create($data);
             if(Session::has('enquiryId')){
                 Session::put('enquiryId', $newEnquiry);
@@ -86,8 +89,9 @@ class EnquiryController extends Controller
                 Session::set('enquiryId', $newEnquiry);
             }
             $now = Carbon::now();
-            $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
 	        $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
+            $bodyEnquiryCount = EnquiryForm::where('body_id',$enquiry->body_id)->count();
+            $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
             $enquiryInfo = $enquiry->update(['enquiry_number' => $enquiryId]);
             TCPdf::AddPage();
             TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
@@ -103,9 +107,14 @@ class EnquiryController extends Controller
         }
     }
 
-    public function viewEnquiryFormWithoutLogin(){
+    public function viewEnquiryFormWithoutLogin($schoolSlug=NULL){
         try{
-            return view('admin.enquiryCreateWithoutLogin');
+            if($schoolSlug == 'gis' || $schoolSlug == 'gems'){
+                return view('admin.enquiryCreateWithoutLogin')->with(compact('schoolSlug'));
+            }else{
+                return view('errors.404');
+            }
+
         }catch(\Exception $e){
             $data = [
 
@@ -127,8 +136,10 @@ class EnquiryController extends Controller
             $data['updated_at'] = $currentTime;
             $newEnquiry = EnquiryForm::create($data);
             $now = Carbon::now();
-            $enquiryId = $now->year."-".str_pad($newEnquiry->id,4,"0",STR_PAD_LEFT);
+
             $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
+            $bodyEnquiryCount = EnquiryForm::where('body_id',$enquiry->body_id)->count();
+            $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
             $enquiryInfo = $enquiry->update(['enquiry_number' => $enquiryId]);
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
@@ -147,13 +158,14 @@ class EnquiryController extends Controller
 
     public function viewEnquiryList(){
         try{
-            $enquiryData = EnquiryForm::orderBy('id','DESC')->get()->toArray();
+            $user = Auth::User();
+            $enquiryData = EnquiryForm::orderBy('id','DESC')->where('body_id',$user->body_id)->get()->toArray();
             $masterEnquiry = array();
             foreach($enquiryData as $enquiry){
                 $now = Carbon::now();
                 $enquiryId = $now->year."-".str_pad($enquiry['id'],4,"0",STR_PAD_LEFT);
                 $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
-                $enquiry['form_no'] = $enquiryId;
+                $enquiry['form_no'] = $enquiry['enquiry_number'];
                 $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
                 $enquiry['result']= $enquiry['final_status'];
                 $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];

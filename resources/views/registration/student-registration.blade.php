@@ -21,7 +21,11 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
+            @if($enquiryInfo['body_id'] == 1)
             <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
+            @else
+            <h1 class="mainTitle">Ganesh English Medium School , Dapodi</h1>
+            @endif
             <span class="mainDescription">Admission Form</span>
         </div>
 
@@ -59,12 +63,13 @@
 <input type="hidden" id="role" name="role" value="3">
 <input type="hidden" id="role_name" name="role_name" value="student">
 <input type="hidden" id="enquiry_id" name="enquiry_id" value="{{$enquiryInfo['id']}}">
+<input type="hidden" id="body" name="body" value="{{$enquiryInfo['body_id']}}">
 <div class="col-md-8 col-md-offset-2">
 <fieldset>
 <legend>
     Personal Information (student)
 </legend>
-<div class="row">
+<!--<div class="row">
     <div class="col-md-6">
         <div class="form-group">
             <label class="control-label">
@@ -78,7 +83,7 @@
             </select>
         </div>
     </div>
-</div>
+</div>-->
 <div class="row">
     <div class="col-md-4">
 
