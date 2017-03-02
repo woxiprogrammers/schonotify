@@ -885,13 +885,13 @@ class UsersController extends Controller
                        $concession_amount_array[$key] = $discounted_amount_for_installment;
                    }
                 $final_discounted_amounts = array();
-                if(count($concession_amount_array) == count($total_installment_amount))
+                /*if(count($concession_amount_array) == count($total_installment_amount))
                 {
                     foreach($concession_amount_array as $key => $value)
                     {
                         $final_discounted_amounts[$key] = $total_installment_amount[$key] - $value;
                     }
-                }
+                }*/
                 $final_fee_details=array_combine($final_discounted_amounts,$fee_due_date);
                 $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
                 if(!empty($installment_info))
