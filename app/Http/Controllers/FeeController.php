@@ -129,10 +129,7 @@ class FeeController extends Controller
                 $caste_types['installment_id']=$key;
                 $caste_types['due_date']=$due_date;
             }
-
-
-
-            Session::flash('message-success','Fee structure created successfully');
+             Session::flash('message-success','Fee structure created successfully');
              return Redirect::back();
         }
 
@@ -140,6 +137,7 @@ class FeeController extends Controller
 
     public function feeListingView()
     {
+
         return view('fee.feelisting');
     }
 }

@@ -309,20 +309,7 @@
                 </div>
             </a>
         </li>
-        <li>
-            <a href="/fees/installments">
-                <div class="item-inner">
-                    <span class="title"> fee particulars </span>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="/fees/feelisting">
-                <div class="item-inner">
-                    <span class="title"> fee structure listing </span>
-                </div>
-            </a>
-        </li>
+
 
     </ul>
 </li>

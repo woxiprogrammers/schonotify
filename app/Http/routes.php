@@ -86,8 +86,6 @@
 
     Route::get('get-intallment-number',array('uses' => 'FeeController@installmentCount'));
 
-
-
     Route::get('get-msg-count','MessageController@getMessageCount');
 
     Route::get('get-unread-list','MessageController@getUnreadMessageListing');

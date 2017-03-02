@@ -271,7 +271,7 @@ jQuery(document).ready(function() {
     })
      $("#2_concession_chk").click(function(){
 
-         alert(this.checked);
+
          if(this.checked)
          {
              $('.castes').show(1500);
