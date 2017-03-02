@@ -140,6 +140,31 @@ class FeeController extends Controller
 
     public function feeListingView()
     {
-        return view('fee.feelisting');
+        $batches=Batch::select('id','name')->get()->toArray();
+
+        return view('fee.feelisting')->with(compact('batches'));
+    }
+    public function classesView(Request $request)
+    {
+       $classes=Classes::where('batch_id',$request->str1)->select('id','class_name')->get()->toArray();
+        return view('fee.claasses')->with(compact('classes'));
+    }
+    public function feeListingTableView(Request $request)
+    {
+       if($request->str1 == 0)
+       {
+           $fees=Fees::select()->get();
+           return view('fee.feetable')->with(compact('fees'));
+       }
+        else
+        {
+            $query=FeeClass::where('class_id',$request->str1)->select('fee_id')->get()->toarray();
+            $fees=Fees::where('fee_id',$query->fee_id)->select()->get();
+            return view('fee.feetable')->with(compact('fees'));
+        }
+
+
+
+
     }
 }

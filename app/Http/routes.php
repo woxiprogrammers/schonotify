@@ -73,6 +73,8 @@
         Route::get('summation',array('uses' => 'FeeController@summation'));
         Route::post('create-fee-structure',array('uses' => 'FeeController@create'));
         Route::get('feelisting',array('uses' => 'FeeController@feeListingView'));
+        Route::get('classes',array('uses' => 'FeeController@classesView'));
+        Route::get('feeListingTable',array('uses' => 'FeeController@feeListingTableView'));
 
 
     });
