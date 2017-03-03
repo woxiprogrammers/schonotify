@@ -190,7 +190,22 @@
             <label class="control-label">
                 Category
             </label>
-            <input type="text" placeholder="Enter Category" class="form-control" name="category"/>
+<!--            <input type="text" placeholder="Enter Category" class="form-control" name="category"/>-->
+	    <select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
+                <option value="">Please Select </option>
+                <option value="SC">SC</option>
+                <option value="ST">ST</option>
+                <option value="VJ(A)">VJ(A)</option>
+                <option value="NT(B)">NT(B)</option>
+                <option value="NT(C)">NT(C)</option>
+                <option value="NT(D)">NT(D)</option>
+                <option value="OBC">OBC</option>
+                <option value="SBC">SBC</option>
+		<option value="OPEN">OPEN</option>
+                <option value="MARATHA(ESBC)">MARATHA(ESBC)</option>
+                <option value="MUSLIM(SBC-A)">MUSLIM(SBC-A)</option>
+            </select>
+
         </div>
     </div>
 </div>
