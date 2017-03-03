@@ -47,12 +47,17 @@
                         </li>
                         <li>
                             <a data-toggle="tab" href="#panel_module_assigned">
-                                parent Assigned Modules
+                                Parent Assigned Modules
                             </a>
                         </li>
                         <li>
                             <a data-toggle="tab" href="#panel_module_fee">
-                                Fee Assigned
+                                Assigned Fee
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#fee_transaction">
+                                Fee Transactions
                             </a>
                         </li>
                     </ul>
@@ -385,12 +390,14 @@
                                           <p></p>
                                         <fieldset>
                                             <div>
+                                                @if(!empty($final_fee_details))
                                                 @foreach($final_fee_details as $key => $final_fee_detail)
                                                 <dl class="accordion">
                                                     <dt><a href="">Installment: {{$final_fee_detail['installment_id']}} </a></dt>
                                                     <dd><h3>Due-date:{{$final_fee_detail['due_date']}}</h3><h3>Amount: {{round($key,2)}}</h3></dd>
                                                 </dl>
                                                 @endforeach
+                                                @endif
                                                 <input type="hidden" id="user-id" value={{$user->id}}>
                                             </div>
                                          </fieldset>
@@ -398,8 +405,142 @@
                                     </div>
                                   </div>
                                 </div>
+                        <div class="tab-pane fade" id="fee_transaction">
+                            <div class="panel-body">
+
+                                    <fieldset>
+                                           <div class="col-sm-5">
+                                               <ul class="mini-stats pull-right">
+
+                                                   <li>
+                                                       <div class="values">
+                                                           <a  type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                                               Total fee for current year  :  {{$total_fee_for_current_year}}
+                                                           </a>
+                                                       </div>
+                                                   </li>
+                                               </ul>
+                                           </div>
+                                           <div>
+                                               <ul class="mini-stats pull-right">
+
+                                                   <li>
+                                                       <div class="values">
+                                                           <a type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                                               Total due fee for current year : {{$total_due_fee_for_current_year}}
+                                                           </a>
+                                                       </div>
+                                                   </li>
+                                               </ul>
+
+                                    </fieldset>
+                                    <fieldset>
+                                        <span class="mainDescription"><h3>Add Fee Transaction :</h3></span>
+                                        <hr>
+                                        <form id="fee_transaction_form" method="post" action="/fees/transactions">
+                                            <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Select Transaction Type :<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <select name="transaction_type">
+                                                            @foreach($transaction_types as $transaction_type)
+                                                            <option value="{{$transaction_type['transaction_type']}}">{{$transaction_type['transaction_type']}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Voucher No / NEFT  no:<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <input type="text" name="transaction_detail">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Paid Amount:<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <input type="number" name="transaction_amount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Transaction Date:<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <input type="text" name="date" placeholder="DD-MM-YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary pull-right" type="submit" >
+                                                Update <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                    </form>
+                                   </fieldset>
+                                   <fieldset>
+                                       <span class="mainDescription"><h3>Transactions :</h3></span>
+                                       <hr>
+                                       <div class="container">
+                                           <div class="col-md-12">
+                                           </div>  <div class="col-md-12">
+                                           </div>  <div class="col-md-12">
+                                           </div>
+                                           <div class="col-md-12">
+
+                                               <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+                                                   <thead>
+                                                   <tr>
+                                                       <th width="10%"> Transaction No </th>
+                                                       <th width="20%"> Transaction Type </th>
+                                                       <th width="10%"> Transaction Detail </th>
+                                                       <th width="10%"> Transaction Amount </th>
+                                                       <th width="10%"> Date </th>
+                                                   </tr>
+                                                   </thead>
+                                                   <tbody>
+
+                                                   @foreach($transactions as $transaction)
+                                                   <tr>
+                                                       <td>{!! $transaction->id !!}</td>
+                                                       <td>{!! $transaction->transaction_type !!}</td>
+                                                       <td>{!! $transaction->transaction_detail !!}</td>
+                                                       <td>{!! $transaction->transaction_amount !!}</td>
+                                                       <td>{!! $transaction->date !!}</td>
+                                                   </tr>
+                                                   @endforeach
+                                                   </tbody>
+                                               </table>
+
+                                           </div>
+                                       </div>
+
+                                   </fieldset>
+
+
+
+
 
                             </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
 
 
 
@@ -443,10 +584,12 @@
 
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="/assets/js/form-validation-edit.js"></script>
-
+<script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+<script src="/assets/js/table-data.js"></script>
 
 
 <script>
@@ -456,6 +599,7 @@
         Main.init();
         FormValidator.init();
         FormElements.init();
+        TableData.init();
         userAclModule();
 
         if($('#checkbox8').is(":checked")==true)

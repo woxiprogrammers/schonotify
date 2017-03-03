@@ -35,6 +35,8 @@ use App\TeacherQualification;
 use App\TeacherReferences;
 use App\TeacherView;
 use App\TeacherWorkExperience;
+use App\TransactionDetails;
+use App\TransactionTypes;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
@@ -885,6 +887,7 @@ class UsersController extends Controller
                        $concession_amount_array[$key] = $discounted_amount_for_installment;
                    }
                 $final_discounted_amounts = array();
+                 $total_fee_for_current_year=array_sum($total_installment_amount);
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
                     foreach($concession_amount_array as $key => $value)
@@ -892,7 +895,11 @@ class UsersController extends Controller
                         $final_discounted_amounts[$key] = $total_installment_amount[$key] - $value;
                     }
                 }
-                $final_fee_details=array_combine($final_discounted_amounts,$fee_due_date);
+                if(!empty($fee_due_date) && !empty($final_discounted_amounts))
+                {
+                    $final_fee_details=array_combine($final_discounted_amounts,$fee_due_date);
+                }
+
                 $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
                 if(!empty($installment_info))
                    {
@@ -933,8 +940,22 @@ class UsersController extends Controller
                         $user['division_id']=$division->id;
                         $user['division_name']=$division->slug;
                     }
+                    $transaction_types=TransactionTypes::select('id','transaction_type')->get()->toArray();
+                    $transactions=TransactionDetails::where('student_id',$id)->get();
+                    $new_array=array();
+                    $total_paid_fees=TransactionDetails::where('student_id',$id)->select('transaction_amount')->get()->toarray();
+                    foreach($total_paid_fees as $key => $total_paid_fee )
+                    {
+                        foreach($total_paid_fee as $fee)
+                        {
+                            array_push($new_array,$fee);
+                        }
 
-                  return view('editStudent')->with(compact('user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','final_fee_details'));
+                    }
+                    $final_paid_fee_for_current_year=array_sum($new_array);
+                     $total_due_fee_for_current_year=$total_fee_for_current_year-$final_paid_fee_for_current_year;
+
+                  return view('editStudent')->with(compact('user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','final_fee_details','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -1099,7 +1120,8 @@ class UsersController extends Controller
             }
             $image->move($path,$filename);
         }
-        else{
+        else
+        {
             $filename=$userImage->avatar;
 
         }

@@ -13,6 +13,8 @@ use App\FeeConcessionTypes;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\StudentFee;
+use App\TransactionDetails;
 use Carbon\Carbon;
 use App\Installments;
 use Illuminate\Http\Request;
@@ -162,9 +164,23 @@ class FeeController extends Controller
             $fees=Fees::where('fee_id',$query->fee_id)->select()->get();
             return view('fee.feetable')->with(compact('fees'));
         }
+    }
+    public function createTransactions(Request $request)
+    {    $user=$request->student_id;
+         $fee_id=StudentFee::where('student_id',$user)->pluck('fee_id');
+         $transaction_details=array();
+         $transaction_details['fee_id']=$fee_id;
+         $transaction_details['student_id']=$request->student_id;
+         $transaction_details['transaction_type']=$request->transaction_type;
+         $transaction_details['transaction_detail']=$request->transaction_detail;
+         $transaction_details['transaction_amount']=$request->transaction_amount;
+         $transaction_details['date']=$request->date;
+         $query=TransactionDetails::create($transaction_details);
+         if($query)
+         {
+             Session::flash('message-success','Fee transaction created successfully');
+         }
 
-
-
-
+        return redirect('/edit-user/'.$user);
     }
 }
