@@ -46,7 +46,7 @@
 <script>
     jQuery(document).ready(function()
     {
-       
+
         TableData.init();
 
     })
