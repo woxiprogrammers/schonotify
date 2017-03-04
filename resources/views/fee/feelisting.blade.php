@@ -116,29 +116,24 @@
 <script src="/assets/js/table-data.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script>
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function()
+    {
 
         Main.init();
-
+        callAllFess();
         FormValidator.init();
         FormElements.init();
         TableData.init();
-        callAllFess();
-
-
-
-
-
 
     })
 </script>
 <script>
     function callAllFess()
     {
-        str=0;
+        var strrr=0;
         $.ajax({
             url: "/fees/feeListingTable",
-            data:{str1 : str},
+            data:{str1 : strrr},
             success: function(response)
             {
                 $("#feetable").html(response);
@@ -149,7 +144,6 @@
 <script>
     $( "#batchDropdown" )
         .change(function () {
-            $str=this.value
             var str = this.value;
             $.ajax({
                 url: "/fees/classes",

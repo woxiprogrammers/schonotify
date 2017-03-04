@@ -263,19 +263,14 @@
 <script src="/assets/js/form-validation.js"></script>
 <script>
 jQuery(document).ready(function() {
-   // $('.castes').hide(0);
-    Main.init();
 
+    Main.init();
     FormValidator.init();
     FormElements.init();
-
-
-
-
-    })
+})
      $("#2_concession_chk").click(function(){
 
-         alert(this.checked);
+
          if(this.checked)
          {
              $('.castes').show(1500);

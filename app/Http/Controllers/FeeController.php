@@ -195,4 +195,5 @@ class FeeController extends Controller
 
         return redirect('/edit-user/'.$user);
     }
+
 }
