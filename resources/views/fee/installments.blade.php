@@ -1,10 +1,9 @@
                 <table style="width:100%" border="1">
-
                     <tr>
 
-                        <th>Particulars</th>
+                        <th style="font-size: 20px">Particulars</th>
                         @foreach($installment_details as $installment_inputs)
-                        <th>Installmest{{$installment_inputs['id']}}</th>
+                        <th style="font-size: 20px">Installment{{$installment_inputs['id']}}</th>
                         @endforeach
 
 
@@ -28,11 +27,9 @@
                     <tr>
                         <td>Due date</td>
                         @foreach($installment_details as $installment_inputs)
-                        <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_due_date" name="fee_due_date[{{ $installment_inputs['id'] }}]" placeholder="DD-MM-YYYY"> </td>
+                        <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_due_date" name="fee_due_date[{{ $installment_inputs['id'] }}]" placeholder="DD-MM-YYYY" required> </td>
                         @endforeach
-
                     </tr>
-
                 </table>
 
 

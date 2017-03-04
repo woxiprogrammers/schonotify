@@ -1,4 +1,4 @@
-<select name="class" id="classesDropdowntable">
+<select class="form-control" name="class" id="classesDropdowntable">
     <option>Select Class...</option>
     @foreach($classes as $class)
     <option value={{$class['id']}}>{{$class['class_name']}}</option>

@@ -372,70 +372,85 @@
 
                             <div id="panel_module_fee" class="tab-pane fade-out">
                                 <div class="panel-body">
+                                     <div class="container">
+                                         <div class="row">
 
-                                    <div class="container">
-                                        <fieldset>
-                                            <select name="installment_number">
-                                                <option>Please select installment</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
+                                             <fieldset>
+                                                 <div class="form-group">
+                                                     <div class="col-md-12">
+                                                         <span class="mainDescription"><h3>Fee particulars :</h3></span>
+                                                         <hr>
+                                                         <label>
+                                                             Installment :&nbsp
+                                                         </label>
+                                                         <select class="form-control" name="installment_number" style="-webkit-appearance: menulist;">
+                                                             <option>Please select installment</option>
+                                                             <option value="1">1</option>
+                                                             <option value="2">2</option>
+                                                             <option value="3">3</option>
+                                                             <option value="4">4</option>
+                                                             <option value="5">5</option>
+                                                         </select>
+                                                     </div>
 
-                                        </fieldset>
-                                                   <div id="installment_table">
-                                                   </div>
-                                          <p></p>
+                                             </fieldset>
+
+                                             <fieldset>
+                                                 <div id="installment_table">
+                                                 </div>
+                                             </fieldset>
+                                         </div>
                                         <fieldset>
-                                            <div>
-                                                @if(!empty($final_fee_details))
-                                                @foreach($final_fee_details as $key => $final_fee_detail)
-                                                <dl class="accordion">
-                                                    <dt><a href="">Installment: {{$final_fee_detail['installment_id']}} </a></dt>
-                                                    <dd><h3>Due-date:{{$final_fee_detail['due_date']}}</h3><h3>Amount: {{round($key,2)}}</h3></dd>
-                                                </dl>
-                                                @endforeach
-                                                @endif
-                                                <input type="hidden" id="user-id" value={{$user->id}}>
+                                            <div class="col-md-4">
+                                                <span class="mainDescription"><h3>Installment details :</h3></span>
+                                                <hr>
+                                                <div>
+                                                    @if(!empty($final_fee_details))
+                                                    @foreach($final_fee_details as $key => $final_fee_detail)
+                                                    <dl class="accordion">
+                                                        <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {{$final_fee_detail['installment_id']}} </a></dt>
+                                                        <dd>Due-date:{{$final_fee_detail['due_date']}} <br> Amount: {{round($key,2)}}</dd>
+                                                    </dl>
+                                                    @endforeach
+                                                    @endif
+                                                    <input type="hidden" id="user-id" value={{$user->id}}>
+                                                </div>
                                             </div>
                                          </fieldset>
-
+                                    </div>
                                     </div>
                                   </div>
-                                </div>
+
                         <div class="tab-pane fade" id="fee_transaction">
                             <div class="panel-body">
 
                                     <fieldset>
-                                           <div class="col-sm-5">
-                                               <ul class="mini-stats pull-right">
+
+                                               <ul class="mini-stats pull-left">
 
                                                    <li>
                                                        <div class="values">
-                                                           <a  type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
                                                                Total fee for current year  :  {{$total_fee_for_current_year}}
-                                                           </a>
+                                                           </div>
                                                        </div>
                                                    </li>
                                                </ul>
-                                           </div>
-                                           <div>
+
                                                <ul class="mini-stats pull-right">
 
                                                    <li>
                                                        <div class="values">
-                                                           <a type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
                                                                Total due fee for current year : {{$total_due_fee_for_current_year}}
-                                                           </a>
+                                                           </div>
                                                        </div>
                                                    </li>
                                                </ul>
 
                                     </fieldset>
                                     <fieldset>
-                                        <span class="mainDescription"><h3>Add Fee Transaction :</h3></span>
+                                        <span class="mainDescription"><h3>Add Fee Transaction </h3></span>
                                         <hr>
                                         <form id="fee_transaction_form" method="post" action="/fees/transactions">
                                             <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
@@ -489,7 +504,7 @@
                                     </form>
                                    </fieldset>
                                    <fieldset>
-                                       <span class="mainDescription"><h3>Transactions :</h3></span>
+                                       <span class="mainDescription"><h3>Transaction Details</h3></span>
                                        <hr>
                                        <div class="container">
                                            <div class="col-md-12">
@@ -501,7 +516,7 @@
                                                <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
                                                    <thead>
                                                    <tr>
-                                                       <th width="10%"> Transaction No </th>
+                                                       <th width="10%"> No </th>
                                                        <th width="20%"> Transaction Type </th>
                                                        <th width="10%"> Transaction Detail </th>
                                                        <th width="10%"> Transaction Amount </th>

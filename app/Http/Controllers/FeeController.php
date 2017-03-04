@@ -95,10 +95,22 @@ class FeeController extends Controller
         {
            foreach($request->class as $class)
             {
-               $class_details['fee_id']=$query;
-               $class_details['class_id']=$class;
-               $class_details['amount']=$request->total_fee;
-               $query2=FeeClass::create($class_details);
+                $class_present=FeeClass::where('class_id',$class)->exists();
+                if($class_present)
+                {
+                    $class_details['fee_id']=$query;
+                    $class_details['class_id']=$class;
+                    $class_details['amount']=$request->total_fee;
+                    $query2=FeeClass::where('class_id',$class)->update($class_details);
+                }
+                else
+                {
+                    $class_details['fee_id']=$query;
+                    $class_details['class_id']=$class;
+                    $class_details['amount']=$request->total_fee;
+                    $query2=FeeClass::create($class_details);
+                }
+
             }
             foreach($request->concessions as $concession)
             {
@@ -160,8 +172,8 @@ class FeeController extends Controller
        }
         else
         {
-            $query=FeeClass::where('class_id',$request->str1)->select('fee_id')->get()->toarray();
-            $fees=Fees::where('fee_id',$query->fee_id)->select()->get();
+            $query=FeeClass::where('class_id',$request->str1)->pluck('fee_id');
+            $fees=Fees::where('id',$query)->select()->get();
             return view('fee.feetable')->with(compact('fees'));
         }
     }

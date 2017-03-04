@@ -873,21 +873,18 @@ class UsersController extends Controller
                        $installment_amounts=($installment_amounts/$total_fee_amount)*100;
                        $installment_percent_amount[$key]=$installment_amounts;
                    }
-                   foreach($installment_percent_amount as $amount)
-                   {
 
-                   }
                 $caste_concession_type=StudentFee::where('student_id',$id)->pluck('caste_concession');
                 $caste_concn_amnt= CASTECONCESSION::where('caste_id', $caste_concession_type)->where('fee_id',$feedata)->pluck('concession_amount');
                 $collection=collect($installment_percent_amount);
+                $concession_amount_array=array();
                    foreach($collection as $key => $percent_discout_collection)
                    {
-                       $concession_amount_array[$key]=array();
+
                        $discounted_amount_for_installment=($percent_discout_collection/100)*$caste_concn_amnt;
                        $concession_amount_array[$key] = $discounted_amount_for_installment;
                    }
                 $final_discounted_amounts = array();
-                 $total_fee_for_current_year=array_sum($total_installment_amount);
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
                     foreach($concession_amount_array as $key => $value)
@@ -895,11 +892,12 @@ class UsersController extends Controller
                         $final_discounted_amounts[$key] = $total_installment_amount[$key] - $value;
                     }
                 }
+                $total_fee_for_current_year=array_sum($final_discounted_amounts);
+                $final_fee_details=array();
                 if(!empty($fee_due_date) && !empty($final_discounted_amounts))
                 {
                     $final_fee_details=array_combine($final_discounted_amounts,$fee_due_date);
                 }
-
                 $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
                 if(!empty($installment_info))
                    {

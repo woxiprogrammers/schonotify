@@ -4,7 +4,7 @@
 <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
     <thead>
     <tr>
-        <th width="10%"> Fee No </th>
+        <th width="10%"> No </th>
         <th width="20%"> Fee Name </th>
         <th width="10%"> Total Amount </th>
         <th width="10%">  Year </th>
