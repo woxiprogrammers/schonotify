@@ -142,6 +142,8 @@ class FeeController extends Controller
                 $caste_types['fee_id']=$query;
                 $caste_types['installment_id']=$key;
                 $caste_types['due_date']=$due_date;
+                $query7=FeeDueDate::create($caste_types);
+
             }
 
 

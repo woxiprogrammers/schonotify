@@ -124,6 +124,7 @@
         FormValidator.init();
         FormElements.init();
         TableData.init();
+        event.stopPropagation();
 
     })
 </script>

@@ -383,8 +383,8 @@
                                                          <label>
                                                              Installment :&nbsp
                                                          </label>
-                                                         <select class="form-control" name="installment_number" style="-webkit-appearance: menulist;">
-                                                             <option>Please select installment</option>
+                                                         <select name="installment_number" style="-webkit-appearance: menulist;">
+                                                             <option selected>Please select installment</option>
                                                              <option value="1">1</option>
                                                              <option value="2">2</option>
                                                              <option value="3">3</option>
@@ -405,11 +405,11 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
-                                                    @if(!empty($final_fee_details))
-                                                    @foreach($final_fee_details as $key => $final_fee_detail)
+                                                    @if(!empty($fee_due_date))
+                                                    @foreach($fee_due_date as  $fee_due_dates)
                                                     <dl class="accordion">
-                                                        <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {{$final_fee_detail['installment_id']}} </a></dt>
-                                                        <dd>Due-date:{{$final_fee_detail['due_date']}} <br> Amount: {{round($key,2)}}</dd>
+                                                        <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {{$fee_due_dates['installment_id']}} </a></dt>
+                                                        <dd>Due-date:{{$fee_due_dates['due_date']}} <br><br> Amount: {{round($fee_due_dates['discount'],2)}}</dd>
                                                     </dl>
                                                     @endforeach
                                                     @endif
@@ -616,6 +616,7 @@
         FormElements.init();
         TableData.init();
         userAclModule();
+
 
         if($('#checkbox8').is(":checked")==true)
         {

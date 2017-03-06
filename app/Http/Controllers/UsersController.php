@@ -885,6 +885,7 @@ class UsersController extends Controller
                        $concession_amount_array[$key] = $discounted_amount_for_installment;
                    }
                 $final_discounted_amounts = array();
+
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
                     foreach($concession_amount_array as $key => $value)
@@ -893,10 +894,19 @@ class UsersController extends Controller
                     }
                 }
                 $total_fee_for_current_year=array_sum($final_discounted_amounts);
-                $final_fee_details=array();
                 if(!empty($fee_due_date) && !empty($final_discounted_amounts))
                 {
-                    $final_fee_details=array_combine($final_discounted_amounts,$fee_due_date);
+                    for($i=1;$i<=count($final_discounted_amounts);$i++)
+                    {
+                      for($j=0;$j<count($fee_due_date);$j++)
+                      {
+                             if($fee_due_date[$j]['installment_id'] == $i)
+                             {
+                                 $fee_due_date[$j]['discount']=$final_discounted_amounts[$i];
+                              }
+                      }
+                    }
+
                 }
                 $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
                 if(!empty($installment_info))
@@ -953,7 +963,7 @@ class UsersController extends Controller
                     $final_paid_fee_for_current_year=array_sum($new_array);
                      $total_due_fee_for_current_year=$total_fee_for_current_year-$final_paid_fee_for_current_year;
 
-                  return view('editStudent')->with(compact('user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','final_fee_details','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
+                  return view('editStudent')->with(compact('user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
