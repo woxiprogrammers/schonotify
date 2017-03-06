@@ -194,15 +194,15 @@
                 <option value="">Please Select </option>
                 <option value="SC">SC</option>
                 <option value="ST">ST</option>
-                <option value="VJ(A)">VJ(A)</option>
-                <option value="NT(B)">NT(B)</option>
-                <option value="NT(C)">NT(C)</option>
-                <option value="NT(D)">NT(D)</option>
+                <option value="VJA">VJ(A)</option>
+                <option value="NTB">NT(B)</option>
+                <option value="NTC">NT(C)</option>
+                <option value="NTD">NT(D)</option>
                 <option value="OBC">OBC</option>
                 <option value="SBC">SBC</option>
                 <option value="OPEN">OPEN</option>
-                <option value="MARATHA(ESBC)">MARATHA(ESBC)</option>
-                <option value="MUSLIM(SBC-A)">MUSLIM(SBC-A)</option>
+                <option value="MARATHAESBC">MARATHA(ESBC)</option>
+                <option value="MUSLIMSBCA">MUSLIM(SBC-A)</option>
             </select>
 
         </div>
