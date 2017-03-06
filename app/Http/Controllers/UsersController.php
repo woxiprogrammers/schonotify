@@ -13,6 +13,7 @@ use App\ConcessionTypes;
 use App\Division;
 use App\fee_installments;
 use App\fee_particulars;
+use App\FeeClass;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
@@ -552,7 +553,7 @@ class UsersController extends Controller
                     ParentExtraInfo::insert($familyInfo);
                     $userData = array_add($userData, 'parent_id', $parnetId);
                         if(!empty($data['modules'])){
-                            $userAclsData = array();
+                             $userAclsData = array();
                             $modules = $data['modules'];
                             foreach($modules as $module){
                                 $acl_module = $module;
@@ -837,9 +838,19 @@ class UsersController extends Controller
                 return view('editTeacher')->with('user',$user);
             }elseif($userRole->slug == 'student')
             {
+                $division=User::where('id',$id)->pluck('division_id');
+                $class=Division::where('id',$division)->pluck('class_id');
                 $feedata=StudentFee::where('student_id',$id)->pluck('fee_id');
-                $fees=Fees::select('id','fee_name','year')->get();
-                $student_fee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+                if(!empty($class))
+                {
+                    $assigned_fee_for_class=FeeClass::where('class_id',$class)->select('fee_id')->get()->toArray();
+                    $fees=Fees::where('id',$assigned_fee_for_class)->select('id','fee_name','year')->get();
+                }
+                else
+                {
+                    $fees=Fees::select('id','fee_name','year')->get();
+                }
+               $student_fee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
                     foreach($student_fee as $key => $a)
                     {
                         $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();

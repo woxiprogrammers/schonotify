@@ -190,7 +190,6 @@
             <label class="control-label">
                 Category
             </label>
-            <!--            <input type="text" placeholder="Enter Category" class="form-control" name="category"/>-->
             <select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
                 <option value="">Please Select </option>
                 <option value="SC">SC</option>
@@ -326,7 +325,7 @@
             </label>
             <select class="form-control" id="highest_standard" style="-webkit-appearance: menulist;" name="highest_standard">
                 <option value="">Please Select </option>
-                <option value="nursery">Nursery </option>
+                <option value="Nursery">Nursery </option>
                 <option value="LKG">L KG</option>
                 <option value="UKG">U KG</option>
                 <option value="1">1</option>
@@ -341,6 +340,7 @@
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
+                <option value="Not Attended">Not Attended</option>
             </select>
         </div>
     </div>
@@ -664,6 +664,7 @@
         <TR>
             <TD><INPUT type="text" name="special_aptitude[0][test]" placeholder="Test"/></TD>
             <TD><INPUT type="number" name="special_aptitude[0][score]" placeholder="Score"/></TD>
+
         </TR>
     </TABLE>-->
     <div class="row">
@@ -856,22 +857,33 @@
     });
 </script>
 <script type="text/javascript">
+
     $('#communication_address').hide();
+
     $("#student_communication_address").click(function(){
         $('#communication_address').toggle();
     });
+
     $('#communication_address_parent').hide();
+
     $("#parent_communication_address").click(function(){
         $('#communication_address_parent').toggle();
     });
+
     $('#role-select').on('change',function(){
+
         var par=this.value;
+
         if(isNaN(par)==false)
         {
             var route= "/createUsers/"+par;
+
             window.location.replace(route);
+
         }
+
     });
+
     function getParents()
     {
         $(function(){
@@ -898,6 +910,7 @@
                             $('#father_contact').attr("disabled", true);
                             $('#mother_contact').attr("disabled", true);
                             $('#permanent_address').attr("disabled", true);
+
                             $('#father_first_name').val(suggestion.data['father_first_name']);
                             $('#father_middle_name').val(suggestion.data['father_middle_name']);
                             $('#father_last_name').val(suggestion.data['father_last_name']);
@@ -911,6 +924,9 @@
                             $('#father_contact').val(suggestion.data['father_contact']);
                             $('#mother_contact').val(suggestion.data['mother_contact']);
                             $('#permanent_address').val(suggestion.data['permanent_address']);
+
+
+
                             $('#outputcontent').html(thehtml);
                             $('#tabTable').show();
                             var val3=$('#autocomplete').html(suggestion.value).text();
@@ -919,8 +935,11 @@
                     });
                 }
             });
+
         });
+
     }
+
     $('#autocomplete').keyup(function(e){
         if(e.keyCode != 13)
         {
@@ -953,6 +972,9 @@
             $('#permanent_address').val('');
         }
     });
+
+
+
     function addRow(tableID) {
         var table = document.getElementById(tableID);
         var rowCount = table.rows.length;
@@ -963,16 +985,20 @@
         element2.name = "hobbies[]";
         cell3.appendChild(element2);
     }
+
     function addRowSpecialAptitude(tableID){
         var table = document.getElementById(tableID);
+
         var rowCount = table.rows.length;
         var row = table.insertRow(rowCount);
+
         var cell2 = row.insertCell(0);
         var element2 = document.createElement("input");
         element2.type = "text";
         element2.placeholder = "Test";
         element2.name = "special_aptitude["+rowCount+"][test]";
         cell2.appendChild(element2);
+
         var cell3 = row.insertCell(1);
         var element3 = document.createElement("input");
         element3.type = "number";
@@ -982,24 +1008,30 @@
     }
     function addRowUploadDoc(tableID){
         var table = document.getElementById(tableID);
+
         var rowCount = table.rows.length;
         var row = table.insertRow(rowCount);
+
         var cell3 = row.insertCell(0);
         var element2 = document.createElement("input");
         element2.type = "file";
         element2.name = "upload_doc[]";
         cell3.appendChild(element2);
     }
+
     function addSibling(tableID){
         var table = document.getElementById(tableID);
+
         var rowCount = table.rows.length;
         var row = table.insertRow(rowCount);
+
         var cell2 = row.insertCell(0);
         var element2 = document.createElement("input");
         element2.type = "text";
         element2.placeholder = "Name";
         element2.name = "sibling["+rowCount+"][name]";
         cell2.appendChild(element2);
+
         var cell3 = row.insertCell(1);
         var element3 = document.createElement("input");
         element3.type = "number";
@@ -1007,6 +1039,7 @@
         element3.name = "sibling["+rowCount+"][age]";
         cell3.appendChild(element3);
     }
+
 </script>
 
 @stop
