@@ -25,13 +25,42 @@
 
         </div>
     </section>
-    <div class="container-fluid container-fullw bg-white">
-        <div class="row">
-             <select>
-                 <option></option>
-             </select>
+
+    <fieldset>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Batch <span class="symbol required"></span>
+                </label>
+                <select name="batch" class="form-control" id="batchDropdown">
+                    <option selected>Select Batch...</option>
+                    @foreach($batches as $batch)
+                    <option value='{{$batch['id']}}'>{{$batch['name']}}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-    </div>
+        <div class="col-md-6">
+            <div class="form-group" >
+                <label class="control-label">
+                    Class <span class="symbol required"></span>
+                </label>
+                <div id="classesDropdown">
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group" >
+                <fieldset>
+                    <div id="feetable">
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+    </fieldset>
+
 
 
 
@@ -89,17 +118,51 @@
 <script src="/assets/js/table-data.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script>
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function()
+    {
 
         Main.init();
-
+        callAllFess();
         FormValidator.init();
         FormElements.init();
-
-
-
+        TableData.init();
+        event.stopPropagation();
 
     })
+</script>
+<script>
+    function callAllFess()
+    {
+        var strrr=0;
+        $.ajax({
+            url: "/fees/feeListingTable",
+            data:{str1 : strrr},
+            success: function(response)
+            {
+                $("#feetable").html(response);
+            }
+        });
+    }
+</script>
+<script>
+    $( "#batchDropdown" )
+        .change(function () {
+            var str = this.value;
+            $.ajax({
+                url: "/fees/classes",
+                data:{str1 : str},
+                success: function(response)
+                {
+                    $("#classesDropdown").html(response);
+                }
+            });
+
+
+
+        })
+
+</script>
+
 
 
 

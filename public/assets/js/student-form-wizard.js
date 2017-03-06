@@ -156,9 +156,7 @@ var FormWizard = function () {
                 caste:{
                     alphaSpace: true
                 },
-                category:{
-                    alphaSpace: true
-                },
+
                 aadhar_number:{
                     alphanumeric: true
                 },
@@ -276,9 +274,7 @@ var FormWizard = function () {
                 caste:{
                     alphaSpace: "Caste must contain only letters "
                 },
-                category:{
-                    alphaSpace: "Category must contain only letters"
-                },
+
                 mother_tongue:{
                     required: "Mother Tongue is required" ,
                     alpha: "Mother Tongue must contain only letters"

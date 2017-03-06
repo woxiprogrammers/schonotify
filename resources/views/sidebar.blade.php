@@ -262,7 +262,7 @@
     <a href="javascript:void(0)">
         <div class="item-content">
             <div class="item-media">
-                <i class="fa fa-users"></i>
+                <i class="fa fa-handshake-o"></i>
             </div>
             <div class="item-inner">
                 <span class="title">Admission Enquiry Form </span><i class="icon-arrow"></i>
@@ -293,7 +293,7 @@
     <a href="javascript:void(0)">
         <div class="item-content">
             <div class="item-media">
-                <i class="fa fa-users"></i>
+                <i class="fa fa-money"></i>
             </div>
             <div class="item-inner">
                 <span class="title">Fees </span><i class="icon-arrow"></i>
@@ -309,6 +309,16 @@
                 </div>
             </a>
         </li>
+
+
+        <li>
+            <a href="/fees/feelisting">
+                <div class="item-inner">
+                    <span class="title"> fee structure listing </span>
+                </div>
+            </a>
+        </li>
+       
 
 
     </ul>

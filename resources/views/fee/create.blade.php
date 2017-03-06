@@ -47,7 +47,7 @@
                 <label class="control-label">
                      Fee Name<span class="symbol required"></span>
                 </label>
-                <input type="text" name="fee_name" id="fee_name1" placeholder="Enter Fee Name">
+                <input type="text" class="form-control" name="fee_name" id="fee_name1" placeholder="Enter Fee Name">
 
 
             </div>
@@ -147,7 +147,7 @@
                                     <label for="{{ $castes['caste_id'] }}">{{ $castes['caste_category'] }}</label>
                                 </td>
                                 <td>
-                                    <input type="text"  id="caste"  name="castes[{{ $castes['caste_id'] }}]">
+                                    <input type="text"  id="caste"  name="castes[{{ $castes['caste_id'] }}]" required="">
                                 </td>
 
                             </tr>
@@ -193,11 +193,15 @@
                      <h3> Total fee :</h3>
                         <input type="text" id="total_fee" class="total_fee" value="" name="total_fee">
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-wide pull-right" type="submit" id="fee_structure_create">
-                            Create <i class="fa fa-arrow-circle-right"></i>
-                        </button>
-                    </div>
+                    <fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-wide pull-right" type="submit" id="fee_structure_create">
+                                Create <i class="fa fa-arrow-circle-right"></i>
+                            </button>
+                        </div>
+
+                    </fieldset>
+
 
                 </div>
                 </div>
@@ -259,16 +263,11 @@
 <script src="/assets/js/form-validation.js"></script>
 <script>
 jQuery(document).ready(function() {
-   // $('.castes').hide(0);
-    Main.init();
 
+    Main.init();
     FormValidator.init();
     FormElements.init();
-
-
-
-
-    })
+})
      $("#2_concession_chk").click(function(){
 
 

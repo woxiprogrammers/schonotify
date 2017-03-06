@@ -13,6 +13,8 @@ use App\FeeConcessionTypes;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\StudentFee;
+use App\TransactionDetails;
 use Carbon\Carbon;
 use App\Installments;
 use Illuminate\Http\Request;
@@ -93,10 +95,22 @@ class FeeController extends Controller
         {
            foreach($request->class as $class)
             {
-               $class_details['fee_id']=$query;
-               $class_details['class_id']=$class;
-               $class_details['amount']=$request->total_fee;
-               $query2=FeeClass::create($class_details);
+                $class_present=FeeClass::where('class_id',$class)->exists();
+                if($class_present)
+                {
+                    $class_details['fee_id']=$query;
+                    $class_details['class_id']=$class;
+                    $class_details['amount']=$request->total_fee;
+                    $query2=FeeClass::where('class_id',$class)->update($class_details);
+                }
+                else
+                {
+                    $class_details['fee_id']=$query;
+                    $class_details['class_id']=$class;
+                    $class_details['amount']=$request->total_fee;
+                    $query2=FeeClass::create($class_details);
+                }
+
             }
             foreach($request->concessions as $concession)
             {
@@ -128,6 +142,8 @@ class FeeController extends Controller
                 $caste_types['fee_id']=$query;
                 $caste_types['installment_id']=$key;
                 $caste_types['due_date']=$due_date;
+                $query7=FeeDueDate::create($caste_types);
+
             }
              Session::flash('message-success','Fee structure created successfully');
              return Redirect::back();
@@ -138,6 +154,47 @@ class FeeController extends Controller
     public function feeListingView()
     {
 
-        return view('fee.feelisting');
+        $batches=Batch::select('id','name')->get()->toArray();
+
+        return view('fee.feelisting')->with(compact('batches'));
     }
+    public function classesView(Request $request)
+    {
+       $classes=Classes::where('batch_id',$request->str1)->select('id','class_name')->get()->toArray();
+        return view('fee.claasses')->with(compact('classes'));
+
+    }
+    public function feeListingTableView(Request $request)
+    {
+       if($request->str1 == 0)
+       {
+           $fees=Fees::select()->get();
+           return view('fee.feetable')->with(compact('fees'));
+       }
+        else
+        {
+            $query=FeeClass::where('class_id',$request->str1)->pluck('fee_id');
+            $fees=Fees::where('id',$query)->select()->get();
+            return view('fee.feetable')->with(compact('fees'));
+        }
+    }
+    public function createTransactions(Request $request)
+    {    $user=$request->student_id;
+         $fee_id=StudentFee::where('student_id',$user)->pluck('fee_id');
+         $transaction_details=array();
+         $transaction_details['fee_id']=$fee_id;
+         $transaction_details['student_id']=$request->student_id;
+         $transaction_details['transaction_type']=$request->transaction_type;
+         $transaction_details['transaction_detail']=$request->transaction_detail;
+         $transaction_details['transaction_amount']=$request->transaction_amount;
+         $transaction_details['date']=$request->date;
+         $query=TransactionDetails::create($transaction_details);
+         if($query)
+         {
+             Session::flash('message-success','Fee transaction created successfully');
+         }
+
+        return redirect('/edit-user/'.$user);
+    }
+
 }

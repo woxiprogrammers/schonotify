@@ -73,6 +73,10 @@
         Route::get('summation',array('uses' => 'FeeController@summation'));
         Route::post('create-fee-structure',array('uses' => 'FeeController@create'));
         Route::get('feelisting',array('uses' => 'FeeController@feeListingView'));
+        Route::get('classes',array('uses' => 'FeeController@classesView'));
+        Route::get('feeListingTable',array('uses' => 'FeeController@feeListingTableView'));
+        Route::post('transactions',array('uses' => 'FeeController@createTransactions'));
+
 
 
     });
@@ -133,6 +137,8 @@
     Route::put('edit-admin/{id}','UsersController@updateAdmin');
 
     Route::put('edit-student/{id}','UsersController@updateStudent');
+
+    Route::get('edit-student/{id}','UsersController@updateStudent')->name('student-edit');
 
     Route::put('edit-parent/{id}','UsersController@updateParent');
 
