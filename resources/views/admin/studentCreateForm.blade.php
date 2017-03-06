@@ -222,8 +222,22 @@
                 <label class="control-label">
                     Category
                 </label>
-                <input type="text" placeholder="Enter Category" class="form-control" name="category"/>
-            </div>
+             <!-- <input type="text" placeholder="Enter Category" class="form-control" name="category"/>-->
+                <select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
+                <option value="">Please Select </option>
+                <option value="SC">SC</option>
+                <option value="ST">ST</option>
+                <option value="VJ(A)">VJ(A)</option>
+                <option value="NT(B)">NT(B)</option>
+                <option value="NT(C)">NT(C)</option>
+                <option value="NT(D)">NT(D)</option>
+                <option value="OBC">OBC</option>
+                <option value="SBC">SBC</option>
+                <option value="OPEN">OPEN</option>
+                <option value="MARATHA(ESBC)">MARATHA(ESBC)</option>
+                <option value="MUSLIM(SBC-A)">MUSLIM(SBC-A)</option>
+            </select>
+	</div>
         </div>
     </div>
 
@@ -300,17 +314,19 @@
                 <label for="form-field-select-2">
                     Select Blood Group
                 </label>
-                <select class="form-control" name="blood_group" id="batch-select" style="-webkit-appearance: menulist;">
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                </select>
-            </div>
+         <select class="form-control" name="blood_group" id="batch-select" style="-webkit-appearance: menulist;">
+                <option value="">Please Select </option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+    
+	</div>
         </div>
 
     </div>
@@ -340,23 +356,27 @@
                 <label for="form-field-select-2">
                     Highest Standard Passed
                 </label>
-                <select class="form-control" id="highest_standard" style="-webkit-appearance: menulist;" name="highest_standard">
-                    <option value="LKG">L KG</option>
-                    <option value="UKG">U KG</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                </select>
-            </div>
+            <select class="form-control" id="highest_standard" style="-webkit-appearance: menulist;" name="highest_standard">
+                <option value="">Please Select </option>
+                <option value="nursery">Nursery </option>
+                <option value="LKG">L KG</option>
+                <option value="UKG">U KG</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="Not Attended">Not Attended</option>
+            </select>
+
+		</div>
         </div>
     </div>
 
