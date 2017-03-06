@@ -190,11 +190,7 @@
             <label class="control-label">
                 Category
             </label>
-<<<<<<< HEAD
-            <select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
-=======
 	<select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
->>>>>>> master
                 <option value="">Please Select </option>
                 <option value="SC">SC</option>
                 <option value="ST">ST</option>
