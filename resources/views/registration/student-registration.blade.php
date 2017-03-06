@@ -190,7 +190,11 @@
             <label class="control-label">
                 Category
             </label>
+<<<<<<< HEAD
             <select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
+=======
+	<select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
+>>>>>>> master
                 <option value="">Please Select </option>
                 <option value="SC">SC</option>
                 <option value="ST">ST</option>
@@ -282,7 +286,7 @@
             <label for="form-field-select-2">
                 Select Blood Group
             </label>
-            <select class="form-control" name="blood_group" id="batch-select" style="-webkit-appearance: menulist;">
+          <select class="form-control" name="blood_group" id="batch-select" style="-webkit-appearance: menulist;">
                 <option value="">Please Select </option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -293,7 +297,7 @@
                 <option value="O+">O+</option>
                 <option value="O-">O-</option>
             </select>
-        </div>
+	</div>
     </div>
 
 </div>
@@ -340,7 +344,11 @@
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
+<<<<<<< HEAD
                 <option value="Not Attended">Not Attended</option>
+=======
+		<option value="Not Attended">Not Attended</option>
+>>>>>>> master
             </select>
         </div>
     </div>

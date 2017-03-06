@@ -1,5 +1,3 @@
-
-
 @extends('master')
 
 @section('content')
@@ -848,163 +846,101 @@
 function userAclModule()
 {
     $('div#loadmoreajaxloader').show();
-
     var disableModules = ['create_timetable','update_timetable','delete_timetable','publish_timetable','create_user','view_user','update_user','delete_user','publish_user','delete_homework','publish_homework','update_homework','create_homework','delete_user','update_message','delete_message','publish_message','delete_leave','update_leave','publish_leave','publish_attendance','update_attendance','delete_attendance','create_attendance','update_announcement','delete_announcement','publish_announcement','create_announcement','delete_achievement','create_achievement','publish_achievement','update_achievement','create_subject','view_subject','update_subject','publish_subject','delete_subject','create_class','publish_class','view_class','delete_class','update_class','create_event','update_event','publish_event','delete_event'];
     var route='user-module-acl';
     $.get(route,function(res){
-
         var str;
-
         var arr=res['allModAclArr'];
-
         var arr1= $.map(arr,function(index,value){
             return [value];
         });
-
         var arr3=res['allAcls'];
         var arr2= $.map(arr3,function(index,value){
             return [index];
         });
-
         str+='<tr>'+
             '<th><b>Modules</b></th>';
         for(var j=0; j<arr2.length; j++)
         {
             str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
         }
-
         str+='</tr>';
-
-
         for(var i=0; i<arr1.length; i++)
         {
-
             str+="<tr>"+
                 "<td>"+(arr1[i]).toUpperCase()+"</td>";
             for(var j=0; j<arr2.length; j++)
             {
                 str+='<td>'+
                     '<div class="checkbox form-group clip-check check-primary checkbox-inline">';
-
                 if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
                     str+='<input type="checkbox" class="'+arr1[i]+'" value="'+arr2[j]['slug']+'_'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="modules[]">'+
                         '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                 } else {
                     str+="--";
                 }
-
                 str+='</div>'+
                     '</td>';
             }
-
             str+="</tr>";
         }
-
         $('#aclModCreate').html(str);
         $('div#loadmoreajaxloader').hide();
-
-
         /////////////////////Leave///////////
-
         $('.leave').change(function(){
-
             if($.inArray(this.id,["create_leave"]) !== -1)
             {
                 if($(this).prop('checked') == true) {
                     $('.leave').each(function() {
-
                         this.checked = true;
-
                     });
                 } else {
                     $('.leave').each(function() {
-
                         this.checked = false;
-
-
                     });
                 }
-
             } else if($(this).prop('checked') == false && this.id == "view_leave") {
                 $('.leave').each(function() {
-
                     this.checked = false;
-
                 });
             }
-
         });
-
         /////////////////////Message///////////
-
         $('.message').change(function(){
-
             if($.inArray(this.id,["create_message"]) !== -1)
             {
                 if($(this).prop('checked') == true) {
                     $('.message').each(function() {
-
                         this.checked = true;
-
                     });
                 } else {
                     $('.message').each(function() {
-
                         this.checked = false;
-
-
                     });
                 }
-
             } else if($(this).prop('checked') == false && this.id == "view_message") {
                 $('.message').each(function() {
-
                     this.checked = false;
-
                 });
             }
-
         });
-
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 $('#communication_address').hide();
-
 $("#student_communication_address").click(function(){
     $('#communication_address').toggle();
 });
-
 $('#communication_address_parent').hide();
-
 $("#parent_communication_address").click(function(){
     $('#communication_address_parent').toggle();
 });
-
 $('#role-select').on('change',function(){
-
     var par=this.value;
-
     if(isNaN(par)==false)
     {
         var route= "/createUsers/"+par;
-
         window.location.replace(route);
-
     }
-
 });
 function getbatches()
 {
@@ -1017,7 +953,6 @@ function getbatches()
         $('#batch').html(str);
     });
 }
-
 $("#batch").change(function() {
     var id = this.value;
     var route='get-classes/'+id;
@@ -1029,7 +964,6 @@ $("#batch").change(function() {
         $('#class').html(str);
     });
 });
-
 $("#class").change(function() {
     var id = this.value;
     var route='get-divisions/'+id;
@@ -1041,7 +975,6 @@ $("#class").change(function() {
         $('#division').html(str);
     });
 });
-
 function getParents()
 {
     $(function(){
@@ -1068,7 +1001,6 @@ function getParents()
                         $('#father_contact').attr("disabled", true);
                         $('#mother_contact').attr("disabled", true);
                         $('#permanent_address').attr("disabled", true);
-
                         $('#father_first_name').val(suggestion.data['father_first_name']);
                         $('#father_middle_name').val(suggestion.data['father_middle_name']);
                         $('#father_last_name').val(suggestion.data['father_last_name']);
@@ -1082,9 +1014,6 @@ function getParents()
                         $('#father_contact').val(suggestion.data['father_contact']);
                         $('#mother_contact').val(suggestion.data['mother_contact']);
                         $('#permanent_address').val(suggestion.data['permanent_address']);
-
-
-
                         $('#outputcontent').html(thehtml);
                         $('#tabTable').show();
                         var val3=$('#autocomplete').html(suggestion.value).text();
@@ -1093,11 +1022,8 @@ function getParents()
                 });
             }
         });
-
     });
-
 }
-
 $('#autocomplete').keyup(function(e){
     if(e.keyCode != 13)
     {
@@ -1130,9 +1056,6 @@ $('#autocomplete').keyup(function(e){
         $('#permanent_address').val('');
     }
 });
-
-
-
 function addRow(tableID) {
     var table = document.getElementById(tableID);
     var rowCount = table.rows.length;
@@ -1143,20 +1066,16 @@ function addRow(tableID) {
     element2.name = "hobbies[]";
     cell3.appendChild(element2);
 }
-
 function addRowSpecialAptitude(tableID){
     var table = document.getElementById(tableID);
-
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
-
     var cell2 = row.insertCell(0);
     var element2 = document.createElement("input");
     element2.type = "text";
     element2.placeholder = "Test";
     element2.name = "special_aptitude["+rowCount+"][test]";
     cell2.appendChild(element2);
-
     var cell3 = row.insertCell(1);
     var element3 = document.createElement("input");
     element3.type = "number";
@@ -1166,30 +1085,24 @@ function addRowSpecialAptitude(tableID){
 }
 function addRowUploadDoc(tableID){
     var table = document.getElementById(tableID);
-
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
-
     var cell3 = row.insertCell(0);
     var element2 = document.createElement("input");
     element2.type = "file";
     element2.name = "upload_doc[]";
     cell3.appendChild(element2);
 }
-
 function addSibling(tableID){
     var table = document.getElementById(tableID);
-
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
-
     var cell2 = row.insertCell(0);
     var element2 = document.createElement("input");
     element2.type = "text";
     element2.placeholder = "Name";
     element2.name = "sibling["+rowCount+"][name]";
     cell2.appendChild(element2);
-
     var cell3 = row.insertCell(1);
     var element3 = document.createElement("input");
     element3.type = "number";
@@ -1197,7 +1110,6 @@ function addSibling(tableID){
     element3.name = "sibling["+rowCount+"][age]";
     cell3.appendChild(element3);
 }
-
 </script>
 
 @stop
