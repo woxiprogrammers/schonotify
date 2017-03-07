@@ -965,10 +965,22 @@ class UsersController extends Controller
                         }
 
                     }
-                    $final_paid_fee_for_current_year=array_sum($new_array);
-                     $total_due_fee_for_current_year=$total_fee_for_current_year-$final_paid_fee_for_current_year;
 
-                  return view('editStudent')->with(compact('user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
+                    $final_paid_fee_for_current_year=array_sum($new_array);
+                    $total_due_fee_for_current_year=$total_fee_for_current_year-$final_paid_fee_for_current_year;
+                    $fee_test=$fees->toArray();
+                      if(empty($fee_test))
+                        {
+                          $msg="Division not assigned !";
+                          return view('editStudent')->with(compact('msg','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
+                         }
+                        else
+                         {
+                           return view('editStudent')->with(compact('msg','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
+                         }
+
+
+
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();

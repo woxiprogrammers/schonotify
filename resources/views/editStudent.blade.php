@@ -189,10 +189,15 @@
                                             </label>
                                             <div>
                                                 <select name="student_fee">
+                                                    @if(!empty($fees))
                                                     @foreach($fees as $fee_details)
                                                     <option id="{{$fee_details['id']}}" class="form-control" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
                                                     @endforeach
+                                                    @endif
                                                 </select>
+                                                @if(!empty($msg))
+                                                <h5 style="color: red">{{$msg}}</h5>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
