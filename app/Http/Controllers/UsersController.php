@@ -975,7 +975,7 @@ class UsersController extends Controller
                           return view('editStudent')->with(compact('msg','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
                          }
                         else
-                         {
+                         { $msg=" ";
                            return view('editStudent')->with(compact('msg','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
                          }
 
