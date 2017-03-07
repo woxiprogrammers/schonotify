@@ -314,7 +314,7 @@
         <li>
             <a href="/fees/feelisting">
                 <div class="item-inner">
-                    <span class="title"> fee structure listing </span>
+                    <span class="title"> Fee structure listing </span>
                 </div>
             </a>
         </li>
