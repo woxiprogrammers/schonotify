@@ -156,6 +156,8 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+
+                                            @if(!empty($dropDownData['student_list']))
                                             @if(isset($dropDownData['student_list']))
                                             @foreach($dropDownData['student_list'] as $row)
                                             <tr>
@@ -164,6 +166,7 @@
                                                 <td>{!! $row['student_name'] !!} &nbsp; &nbsp; @if($row['student_leave_status'] == 1  ) <span class="label label-default label-text-yellow">Leave Applied</span> @elseif($row['student_leave_status'] == 2 )<span class="label label-default label-text-orange">Leave Approved</span> @endif  </td>
                                             </tr>
                                             @endforeach
+                                            @endif
                                             @endif
                                             </tbody>
                                         </table>
