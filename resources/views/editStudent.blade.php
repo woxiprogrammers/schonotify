@@ -425,9 +425,7 @@
                             <div class="panel-body">
 
                                     <fieldset>
-
                                                <ul class="mini-stats pull-left">
-
                                                    <li>
                                                        <div class="values">
                                                            <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
