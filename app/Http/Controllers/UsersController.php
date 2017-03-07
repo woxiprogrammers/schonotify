@@ -509,6 +509,7 @@ class UsersController extends Controller
                 $userData->middle_name = $data['middleName'];
                 $userData->roll_number = $data['roll_number'];
                 if(isset($data['division'])){
+
                     $userData = array_add($userData, 'division_id', $data['division']);
                 }
                 if(!empty($data['parent_id'])){
@@ -841,16 +842,9 @@ class UsersController extends Controller
                 $division=User::where('id',$id)->pluck('division_id');
                 $class=Division::where('id',$division)->pluck('class_id');
                 $feedata=StudentFee::where('student_id',$id)->pluck('fee_id');
-                if(!empty($class))
-                {
-                    $assigned_fee_for_class=FeeClass::where('class_id',$class)->select('fee_id')->get()->toArray();
-                    $fees=Fees::where('id',$assigned_fee_for_class)->select('id','fee_name','year')->get();
-                }
-                else
-                {
-                    $fees=Fees::select('id','fee_name','year')->get();
-                }
-               $student_fee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+                $assigned_fee_for_class=FeeClass::where('class_id',$class)->pluck('fee_id');
+                $fees=Fees::where('id',$assigned_fee_for_class)->select('id','fee_name','year')->get();
+                $student_fee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
                     foreach($student_fee as $key => $a)
                     {
                         $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
