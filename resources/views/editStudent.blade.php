@@ -67,6 +67,7 @@
                             <form id="formEditStudentAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
+                                <input type="hidden" name="division_id"  value="{!! $division_for_updation !!}">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -195,6 +196,7 @@
                                                     @endforeach
                                                     @endif
                                                 </select>
+                                                <h4 style="color: red">{{$division_status}}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -206,7 +208,7 @@
                                         <div>
                                             @foreach($concession_types as $concessions)
                                             <div class="checkbox clip-check check-primary checkbox-inline" id="check">
-                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" value="{{ $concessions['id'] }}" name="concessions">
+                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions">
                                                 <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
                                             </div>
                                             @endforeach
@@ -219,6 +221,7 @@
                                                 Assign Fee Concession
                                             </label>
                                             <div id="concession-types">
+
                                             </div>
                                         </div>
                                     </div>
