@@ -192,7 +192,7 @@
                                                 <select name="student_fee">
                                                     @if(!empty($fees))
                                                     @foreach($fees as $fee_details)
-                                                     <option id="{{$fee_details['id']}}" class="form-control" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
+                                                     <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
                                                     @endforeach
                                                     @endif
                                                 </select>
@@ -207,8 +207,8 @@
                                         </label>
                                         <div>
                                             @foreach($concession_types as $concessions)
-                                            <div class="checkbox clip-check check-primary checkbox-inline" id="check">
-                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions">
+                                            <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
+                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions" value="{{ $concessions['id'] }}">
                                                 <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
                                             </div>
                                             @endforeach
@@ -579,7 +579,7 @@
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
-<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>4a
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
 <script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
@@ -612,8 +612,23 @@
 
 <script>
     jQuery(document).ready(function() {
-
+        $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
+        $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
+        if($('#2_concession_chk').is(":checked")==true)
+        {
+            var user={{$user['id']}};
+        var dataa=this.value;
+        $.ajax({
+            url: "/get-concession",
+            data:{user},
+
+            success: function(result)
+            {
+                $("#concession-types").html(result);
+
+            }});
+    }
         Main.init();
         FormValidator.init();
         FormElements.init();
@@ -644,10 +659,11 @@
 
     $( "#2_concession_chk" ).click(function ()
           {
-
+              var user={{$user['id']}};
               var dataa=this.value;
             $.ajax({
                 url: "/get-concession",
+                data:{user},
 
                 success: function(result)
                 {
