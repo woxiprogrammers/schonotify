@@ -75,7 +75,7 @@ class SearchController extends Controller
                     ->where('users.id','!=',$user->id)
                     ->get();
             }
-            dd($result);
+
 
         }
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
