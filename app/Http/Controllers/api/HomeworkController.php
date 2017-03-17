@@ -393,7 +393,7 @@ class HomeworkController extends Controller
     *Date: 1/2/2016
      */
     public function createHomework(Requests\HomeworkRequest $request)
-    {
+    {   dd($request->all());
         try{
             $data=array();
             $HomeworkTeacher=array();
