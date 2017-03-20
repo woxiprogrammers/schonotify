@@ -142,15 +142,15 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12 form-group" id="tableContent2">
-                                        <div class="row" style="margin-bottom: 4px;">
-                                            <label>Unmark Students Who Are absent:</label>
+                                        <div class="row" style="margin-bottom: 8px;margin-top: 8px;">
+                                            <label>Unmark Students who Are absent:</label>
                                         </div>
                                         <div id="loadmoreajaxloaderStudent" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
 
                                         <table  class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                                             <thead>
                                             <tr>
-                                                <th><input type="checkbox" class="allCheckedStud"  id="allCheckedStud" checked /> <label for="allCheckedStud" id="allCheckedStud-label"><img class="checkbox-img"/></label></th>
+                                                <th></th>
                                                 <th>Roll No.</th>
                                                 <th>Name</th>
                                             </tr>
@@ -161,7 +161,13 @@
                                             @if(isset($dropDownData['student_list']))
                                             @foreach($dropDownData['student_list'] as $row)
                                             <tr>
-                                                <td>@if($row['student_attendance_status'] == 1  ) <input type="checkbox" class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}"  /> <label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @else <input type="checkbox"  class="checkedStud"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}" checked /><label for="{!! $row['student_id'] !!}"><img id="checkedStud{!! $row['student_id'] !!}" class="checkbox-img" for="{!! $row['student_id'] !!}"  /></label> @endif</td>
+                                                <td>
+                                                    @if($row['student_attendance_status'] == 1  )
+                                                    <input type="checkbox"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}"  /> <label for="{!! $row['student_id'] !!}"></label>
+                                                    @else
+                                                    <input type="checkbox"   name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}" checked /><label for="{!! $row['student_id'] !!}"></label>
+                                                    @endif
+                                                </td>
                                                 <td>{!! $row['roll_number'] !!}</td>
                                                 <td>{!! $row['student_name'] !!} &nbsp; &nbsp; @if($row['student_leave_status'] == 1  ) <span class="label label-default label-text-yellow">Leave Applied</span> @elseif($row['student_leave_status'] == 2 )<span class="label label-default label-text-orange">Leave Approved</span> @endif  </td>
                                             </tr>
@@ -237,7 +243,12 @@
                 i++;
             });
         }
-        TableData.init();
+        $('#sample_2').DataTable(
+            { scrollY: 450,
+                paging: false,
+                ordering:true
+            });
+
         FormElements.init();
         UIButtons.init();
         $(document).ready(function () {
@@ -338,6 +349,7 @@
      * Date: 22/2/2016
      * author manoj chaudahri
      */
+
     function dateChange(value,division){
         $('div#loadmoreajaxloaderStudent').show();
         $.ajax({

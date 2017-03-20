@@ -65,12 +65,14 @@ class EventController extends Controller
                        $finalFiveEvents[$counter]['image'] = $event['image'];
                        $finalFiveEvents[$counter]['path'] = $file['path'];
                     } else {
-                       $finalFiveEvents[$counter]['image'] = "picture.svg";
-                       $finalFiveEvents[$counter]['path'] =url()."/uploads/events/picture.svg";
+                       $finalFiveEvents[$counter]['image'] =$event['image'];
+                        $imageName="events".$event['image'];
+                       $finalFiveEvents[$counter]['path'] =url()."/uploads/events/$imageName";
                     }
                 } else {
-                $finalFiveEvents[$counter]['image'] = "picture.svg";
-                $finalFiveEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
+                $finalFiveEvents[$counter]['image'] = $event['image'];
+                    $imageName="events".$event['image'];
+                $finalFiveEvents[$counter]['path'] = url()."/uploads/events/$imageName";
                 }
                 $finalFiveEvents[$counter]['detail'] = $event['detail'];
                 $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
@@ -247,11 +249,12 @@ class EventController extends Controller
                     if($image!=null) {
                         $file = $this->getEventImagePath($image);
                         if($file['status']){
-                            $finalMonthsEvents[$counter]['image'] = $image;
+                            $finalMonthsEvents[$counter]['image'] = "events".$image;
                             $finalMonthsEvents[$counter]['path'] = $file['path'];
                         } else {
-                            $finalMonthsEvents[$counter]['image'] = "picture.svg";
-                            $finalMonthsEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
+                            $finalMonthsEvents[$counter]['image'] = "events".$image;
+                            $imageName= "events".$image;
+                            $finalMonthsEvents[$counter]['path'] = url()."/uploads/$imageName";
                         }
                     } else {
                         $finalMonthsEvents[$counter]['image'] = "picture.svg";
@@ -299,7 +302,7 @@ class EventController extends Controller
             $mytime = Carbon::now();
             $tempImageName = (strtotime($mytime)).".jpg";
             $tempImagePath = "uploads/events";
-            file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image) );
+            file_put_contents($tempImagePath.$tempImageName,base64_decode($request->img) );
 
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');

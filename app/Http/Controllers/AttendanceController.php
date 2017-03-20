@@ -173,7 +173,9 @@
          * Date: 10/2/2016
          * author manoj chaudahri
          */
-        public function attendanceMark(CreateAttendanceRequest $request){
+        public function attendanceMark(CreateAttendanceRequest $request)
+        {
+
             $user = Auth::user();
             $saveData = array();
             $userIds=array();
@@ -322,6 +324,7 @@
                         $division = $data['division'];
                         $date = date('Y-m-d',strtotime($data['date']));
                         $attendanceCount = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->count();
+
                         $attendance = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->get();
                         $attendanceStatus = AttendanceStatus::where('date',$date)->where('division_id',$division)->count();
                            if($attendanceCount > 0) {
