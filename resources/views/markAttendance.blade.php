@@ -365,10 +365,7 @@
                          '<thead>'+
                                  '<tr>'+
                                     '<th>'+
-                                            '<input type="checkbox" class="allCheckedStud"  id="allCheckedStud"  checked/>'+
-                                              '<label for="allCheckedStud" id="allCheckedStud-label">'+
-                                                '<img class="checkbox-img"/>'+
-                                              '</label>'+
+
                                     '</th>'+
                                     '<th> Roll No'+
                                     '</th>'+
@@ -382,14 +379,14 @@
                             str +='<tr>'+
                                     '<td>';
                                          if(res[i]['student_attendance_status'] == 1  ){
-                                             str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
+                                             str += '<input type="checkbox"   name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  />'+
                                                        '<label for="'+res[i]['student_id']+'">'+
-                                                       '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+
                                                        '</label>';
                                           }else{
-                                             str += '<input type="checkbox" class="checkedStud"  name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
+                                             str += '<input type="checkbox"   name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
                                                     '<label for="'+res[i]['student_id']+'">'+
-                                                    '<img id="checkedStud'+res[i]['student_id']+'" class="checkbox-img" for="'+res[i]['student_id']+'"  />'+
+
                                                     '</label>';
                                           }
                              str += '</td>'+
@@ -432,6 +429,7 @@
                     });
                 }
                 TableData.init();
+
                 $('.checkedStud').change(function(){
 
                     if(this.checked==true)
