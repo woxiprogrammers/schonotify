@@ -500,6 +500,8 @@ class UsersController extends Controller
                 }
 
             }elseif($data['role_name']== 'parent'){
+                $userData->email = $data['email'];
+                $userData->address = $data['address'];
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'student'){

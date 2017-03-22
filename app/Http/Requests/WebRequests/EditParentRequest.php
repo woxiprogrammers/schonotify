@@ -13,7 +13,7 @@ class EditParentRequest extends Request
     public function rules()
     {
         return [
-            'username' => 'required|max:20',
+            'username' => 'required|max:40',
             'firstname' => 'required|min:2|max:20',
             'lastname' => 'required|min:2|max:20',
             'email' => 'required|email',

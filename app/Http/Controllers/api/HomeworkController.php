@@ -409,13 +409,13 @@ class HomeworkController extends Controller
             $data['homework_timestamp'] = Carbon::now();
             $mytime = Carbon::now();
             $tempImageName = (strtotime($mytime)).".jpg";
-            $tempImagePath = "uploads/homeworks";
+            $tempImagePath = "uploads/homeworks/";
             file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image) );
             $data['status'] = 0;//by default homework will be 0 for draft
             $data['is_active'] = 1;//0 is for delete  so by default Homework is not deleted
             $data['created_at'] = Carbon::now();
             $data['updated_at'] = Carbon::now();
-            $data['attachment_file']='homeworks'.$tempImageName;
+            $data['attachment_file']=$tempImageName;
             $homework_id=Homework::insertGetId($data);
             if($homework_id != null)
             {
@@ -477,9 +477,9 @@ class HomeworkController extends Controller
                     $attachment_file = $request->file('attachment_file');
                     $name = $request->file('attachment_file')->getClientOriginalName();
                     $filename = time()."_".$name;
-                    $path = public_path('uploads/homework/');
+                    $path = public_path('uploads/homeworks/');
                     if (!file_exists($path)) {
-                        \Illuminate\Support\Facades\File::makeDirectory('uploads/homework/', $mode = 0777, true,true);
+                        \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
                     }
                     $attachment_file->move($path,$filename);
                 }
@@ -629,7 +629,7 @@ class HomeworkController extends Controller
                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value->homeworkTitle;
                 $finalHomeworkListingSubjectTeacher[$i]['description'] = $value->description;
                 $finalHomeworkListingSubjectTeacher[$i]['due_date'] = date("j M Y ",strtotime($value->due_date));
-                $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = $value->attachment_file;
+                $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = url()."/uploads/homeworks/".$value->attachment_file;
                 $teacherName=User::where('id',$value->teacher_id)->select('first_name','last_name')->first();
                 $finalHomeworkListingSubjectTeacher[$i]['teacher_id'] = $value->teacher_id;
                 $finalHomeworkListingSubjectTeacher[$i]['teacher_name'] = $teacherName->first_name." ".$teacherName->last_name;
@@ -757,7 +757,7 @@ class HomeworkController extends Controller
                      $finalHomeworkListingSubjectTeacher[$i]['description'] = $value['description'];
                      $finalHomeworkListingSubjectTeacher[$i]['date'] = $value['due_date'];
                      $finalHomeworkListingSubjectTeacher[$i]['due_date'] = date("j M Y ",strtotime($value['due_date']));
-                     $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = $value['attachment_file'];
+                     $finalHomeworkListingSubjectTeacher[$i]['attachment_file'] = url()."/uploads/homeworks/".$value['attachment_file'];
                      $teacherName = User::where('id',$value['teacher_id'])->select('first_name','last_name')->first();
                      $finalHomeworkListingSubjectTeacher[$i]['teacher_id'] = $value['teacher_id'];
                      $finalHomeworkListingSubjectTeacher[$i]['teacher_name'] = $teacherName['first_name']." ".$teacherName['last_name'];
@@ -873,7 +873,7 @@ class HomeworkController extends Controller
                         $data[$i]['description'] = $value['description'];
                         $data[$i]['due_date'] = date("j M Y ",strtotime($value['due_date']));
                         $data[$i]['created_At'] = date("j M Y",strtotime($value['created_at']));
-                        $data[$i]['attachment_file'] = url()."/"."uploads"."/".$value['attachment_file'];
+                        $data[$i]['attachment_file'] = url()."/"."uploads"."/"."homeworks/".$value['attachment_file'];
                         $data[$i]['homeworkType'] = $value['homeworkType'];
                         $teacherName = User::where('id','=',$value['teacher_id'])->first();
                         $data[$i]['teacher_name'] = $teacherName['first_name']."  ".$teacherName['last_name'];
