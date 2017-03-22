@@ -66,13 +66,12 @@ class EventController extends Controller
                        $finalFiveEvents[$counter]['path'] = $file['path'];
                     } else {
                        $finalFiveEvents[$counter]['image'] =$event['image'];
-                        $imageName="events".$event['image'];
-                       $finalFiveEvents[$counter]['path'] =url()."/uploads/events/$imageName";
+                       $finalFiveEvents[$counter]['path'] =url()."/uploads/events/".$event['image'];
                     }
                 } else {
                 $finalFiveEvents[$counter]['image'] = $event['image'];
-                    $imageName="events".$event['image'];
-                $finalFiveEvents[$counter]['path'] = url()."/uploads/events/$imageName";
+                    $imageName=$event['image'];
+                $finalFiveEvents[$counter]['path'] = url()."/uploads/events/".$imageName;
                 }
                 $finalFiveEvents[$counter]['detail'] = $event['detail'];
                 $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
@@ -252,9 +251,9 @@ class EventController extends Controller
                             $finalMonthsEvents[$counter]['image'] = "events".$image;
                             $finalMonthsEvents[$counter]['path'] = $file['path'];
                         } else {
-                            $finalMonthsEvents[$counter]['image'] = "events".$image;
-                            $imageName= "events".$image;
-                            $finalMonthsEvents[$counter]['path'] = url()."/uploads/$imageName";
+                            $finalMonthsEvents[$counter]['image'] = $image;
+                            $imageName=$image;
+                            $finalMonthsEvents[$counter]['path'] = url()."/uploads/events/".$imageName;
                         }
                     } else {
                         $finalMonthsEvents[$counter]['image'] = "picture.svg";
@@ -301,7 +300,7 @@ class EventController extends Controller
             $data = $request->all();
             $mytime = Carbon::now();
             $tempImageName = (strtotime($mytime)).".jpg";
-            $tempImagePath = "uploads/events";
+            $tempImagePath = "uploads/events/";
             file_put_contents($tempImagePath.$tempImageName,base64_decode($request->img) );
 
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
@@ -371,7 +370,7 @@ class EventController extends Controller
                 if($data['flag'] == 1){
                     $image = EventImages::where('event_id','=',$data['event_id'])->pluck('image');
                     if(!Empty($image)) {
-                        unlink('uploads/events/'."".$image);
+                        unlink('uploads/events/'.$image);
                     }
                     if ($request->hasFile('image')) {
                         $image = $request->file('image');
