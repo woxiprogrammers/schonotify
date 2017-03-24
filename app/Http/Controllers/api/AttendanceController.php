@@ -335,6 +335,7 @@ class AttendanceController extends Controller
                     $studentRole = UserRoles::where('slug',['student'])->pluck('id');
                     $studentList = User::where('role_id','=',$studentRole)
                         ->where('division_id','=', $divisionId['id'])
+                        ->where('is_active','=',1)
                         ->select('id','first_name','last_name','roll_number')
                         ->get();
                     if (!Empty($studentList)) {

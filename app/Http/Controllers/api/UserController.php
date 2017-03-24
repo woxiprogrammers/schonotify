@@ -361,7 +361,7 @@ class UserController extends Controller
         try{
             $data=$request->all();
             $finalData=array();
-            $parent_student=User::where('parent_id',$data['teacher']['id'])->get();
+            $parent_student=User::where('parent_id',$data['teacher']['id'])->where('is_active',1)->get();
             $finalData['Parent_student_relation']['parent_id']=$data['teacher']['id'];
                                $i=0;
                               foreach($parent_student as $val)

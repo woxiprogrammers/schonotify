@@ -129,7 +129,7 @@
 <script>
     function studentResultStatus(result,form_no)
     {
-        alert("hgghg");
+
         if(result==fail)
         {
 

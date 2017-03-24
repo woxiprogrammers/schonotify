@@ -414,6 +414,7 @@ class MessageController extends Controller
         try{
             $student_id = UserRoles::whereIn('slug', ['student'])->pluck('id');
             $student = User::where('role_id',$student_id)->where('division_id',$request->division_id)
+                                ->where('is_active',1)
                                 ->select('id','first_name', 'last_name')
                                 ->get()->toArray();
             $i=0;

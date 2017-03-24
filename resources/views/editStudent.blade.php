@@ -47,7 +47,17 @@
                         </li>
                         <li>
                             <a data-toggle="tab" href="#panel_module_assigned">
-                                parent Assigned Modules
+                                Parent Assigned Modules
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#panel_module_fee">
+                                Assigned Fee
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#fee_transaction">
+                                Fee Transactions
                             </a>
                         </li>
                     </ul>
@@ -57,6 +67,7 @@
                             <form id="formEditStudentAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
+                                <input type="hidden" name="division_id"  value="{!! $division_for_updation !!}">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -148,6 +159,7 @@
                                                     Alternate number
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
+
                                             </div>
                                             <div class="form-group">
                                                 <label>
@@ -169,6 +181,48 @@
                                                 </div>
                                             </div>
 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>
+                                                Assign Fee Structure
+                                            </label>
+                                            <div>
+                                                <select name="student_fee">
+                                                    @if(!empty($fees))
+                                                    @foreach($fees as $fee_details)
+                                                     <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                                <h4 style="color: red">{{$division_status}}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Select Concession Types
+                                        </label>
+                                        <div>
+                                            @foreach($concession_types as $concessions)
+                                            <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
+                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions" value="{{ $concessions['id'] }}">
+                                                <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    </div>
+                                   <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>
+                                                Assign Fee Concession
+                                            </label>
+                                            <div id="concession-types">
+
+                                            </div>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -286,6 +340,8 @@
                                             </div>
 
                                         </div>
+
+
                                     </div>
                                 </fieldset>
                                 <div class="row">
@@ -319,6 +375,192 @@
                             </div>
                         </div>
 
+                            <div id="panel_module_fee" class="tab-pane fade-out">
+                                <div class="panel-body">
+                                     <div class="container">
+                                         <div class="row">
+
+                                             <fieldset>
+                                                 <div class="form-group">
+                                                     <div class="col-md-12">
+                                                         <span class="mainDescription"><h3>Fee particulars :</h3></span>
+                                                         <hr>
+                                                         <label>
+                                                             Installment :&nbsp
+                                                         </label>
+                                                         <select name="installment_number" style="-webkit-appearance: menulist;">
+                                                             <option selected>Please select installment</option>
+                                                             <option value="1">1</option>
+                                                             <option value="2">2</option>
+                                                             <option value="3">3</option>
+                                                             <option value="4">4</option>
+                                                             <option value="5">5</option>
+                                                         </select>
+                                                     </div>
+
+                                             </fieldset>
+
+                                             <fieldset>
+                                                 <div id="installment_table">
+                                                 </div>
+                                             </fieldset>
+                                         </div>
+                                        <fieldset>
+                                            <div class="col-md-4">
+                                                <span class="mainDescription"><h3>Installment details :</h3></span>
+                                                <hr>
+                                                <div>
+                                                    @if(!empty($fee_due_date))
+                                                    @foreach($fee_due_date as  $fee_due_dates)
+                                                    <dl class="accordion">
+                                                        <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {{$fee_due_dates['installment_id']}} </a></dt>
+                                                        <dd>Due-date:{{$fee_due_dates['due_date']}} <br><br> Amount: {{round($fee_due_dates['discount'],2)}}</dd>
+                                                    </dl>
+                                                    @endforeach
+                                                    @endif
+                                                    <input type="hidden" id="user-id" value={{$user->id}}>
+                                                </div>
+                                            </div>
+                                         </fieldset>
+                                    </div>
+                                    </div>
+                                  </div>
+
+                        <div class="tab-pane fade" id="fee_transaction">
+                            <div class="panel-body">
+
+                                    <fieldset>
+                                               <ul class="mini-stats pull-left">
+                                                   <li>
+                                                       <div class="values">
+                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                                               Total fee for current year  :  {{$total_fee_for_current_year}}
+                                                           </div>
+                                                       </div>
+                                                   </li>
+                                               </ul>
+
+                                               <ul class="mini-stats pull-right">
+
+                                                   <li>
+                                                       <div class="values">
+                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                                               Total due fee for current year : {{$total_due_fee_for_current_year}}
+                                                           </div>
+                                                       </div>
+                                                   </li>
+                                               </ul>
+
+                                    </fieldset>
+                                    <fieldset>
+                                        <span class="mainDescription"><h3>Add Fee Transaction </h3></span>
+                                        <hr>
+                                        <form id="fee_transaction_form" method="post" action="/fees/transactions">
+                                            <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Select Transaction Type :<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <select name="transaction_type">
+                                                            @foreach($transaction_types as $transaction_type)
+                                                            <option value="{{$transaction_type['transaction_type']}}">{{$transaction_type['transaction_type']}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Voucher No / NEFT  no:<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <input type="text" name="transaction_detail">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Paid Amount:<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <input type="number" name="transaction_amount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Transaction Date:<span class="symbol required"></span>
+                                                    </label>
+                                                    <div>
+                                                        <input type="text" name="date" placeholder="DD-MM-YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary pull-right" type="submit" >
+                                                Update <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                    </form>
+                                   </fieldset>
+                                   <fieldset>
+                                       <span class="mainDescription"><h3>Transaction Details</h3></span>
+                                       <hr>
+                                       <div class="container">
+                                           <div class="col-md-12">
+                                           </div>  <div class="col-md-12">
+                                           </div>  <div class="col-md-12">
+                                           </div>
+                                           <div class="col-md-12">
+
+                                               <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+                                                   <thead>
+                                                   <tr>
+                                                       <th width="10%"> No </th>
+                                                       <th width="20%"> Transaction Type </th>
+                                                       <th width="10%"> Transaction Detail </th>
+                                                       <th width="10%"> Transaction Amount </th>
+                                                       <th width="10%"> Date </th>
+                                                   </tr>
+                                                   </thead>
+                                                   <tbody>
+
+                                                   @foreach($transactions as $transaction)
+                                                   <tr>
+                                                       <td>{!! $transaction->id !!}</td>
+                                                       <td>{!! $transaction->transaction_type !!}</td>
+                                                       <td>{!! $transaction->transaction_detail !!}</td>
+                                                       <td>{!! $transaction->transaction_amount !!}</td>
+                                                       <td>{!! $transaction->date !!}</td>
+                                                   </tr>
+                                                   @endforeach
+                                                   </tbody>
+                                               </table>
+
+                                           </div>
+                                       </div>
+
+                                   </fieldset>
+
+
+
+
+
+                            </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
 
 
                     </div>
@@ -337,7 +579,7 @@
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
-<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>4a
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
 <script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
@@ -360,24 +602,78 @@
 
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="/assets/js/form-validation-edit.js"></script>
-
+<script src="/assets/js/form-validation.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+<script src="/assets/js/table-data.js"></script>
+
+
 <script>
     jQuery(document).ready(function() {
+        $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
+        $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
+        if($('#2_concession_chk').is(":checked")==true)
+        {
+            var user={{$user['id']}};
+        var dataa=this.value;
+        $.ajax({
+            url: "/get-concession",
+            data:{user},
+
+            success: function(result)
+            {
+                $("#concession-types").html(result);
+
+            }});
+    }
         Main.init();
         FormValidator.init();
         FormElements.init();
+        TableData.init();
         userAclModule();
+
 
         if($('#checkbox8').is(":checked")==true)
         {
             clsTeacher(true);
         }
 
+
+        (function($) {
+
+            var allPanels = $('.accordion > dd').hide();
+
+            $('.accordion > dt > a').click(function() {
+                allPanels.slideUp();
+                $(this).parent().next().slideDown();
+                return false;
+            });
+
+        })(jQuery);
+
+
     });
+
+    $( "#2_concession_chk" ).click(function ()
+          {
+              var user={{$user['id']}};
+              var dataa=this.value;
+            $.ajax({
+                url: "/get-concession",
+                data:{user},
+
+                success: function(result)
+                {
+                    $("#concession-types").html(result);
+
+                }});
+           })
+
+
+
     $('#email').on('keyup',function(){
         var email = $(this).val();
         var route='/check-email';
@@ -495,6 +791,28 @@
         });
     });
 
+
+</script>
+<script>
+    $( "select" )
+        .change(function () {
+
+            $id=$("#user-id").val();
+            var str = this.value;
+
+
+            $.ajax({
+                url: "/student-fee-installment",
+                data:{str1 : str,str2 : $id},
+                success: function(response)
+                {
+                    $("#installment_table").html(response);
+                }
+            });
+
+
+
+        })
 
 </script>
 @stop
