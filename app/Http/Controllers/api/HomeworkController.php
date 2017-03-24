@@ -408,6 +408,9 @@ class HomeworkController extends Controller
             $data['subject_id'] = $subject['id'];
             $data['homework_timestamp'] = Carbon::now();
             $mytime = Carbon::now();
+            if (!file_exists('uploads/homeworks/')) {
+                \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
+            }
             $tempImageName = (strtotime($mytime)).".jpg";
             $tempImagePath = "uploads/homeworks/";
             file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image) );
@@ -434,7 +437,7 @@ class HomeworkController extends Controller
             }
         }catch (\Exception $e) {
           $status = 500;
-          $message = $e;
+          $message = "Something went wrong";
         }
         $response = [
             "status" =>$status,
