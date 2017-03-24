@@ -476,20 +476,6 @@ class HomeworkController extends Controller
                 $data['due_date']=$request->due_date;
                 $data['subject_id']=$subject['id'];
                 $data['homework_timestamp']=Carbon::now();
-                if($request->hasFile('attachment_file')){
-                    $attachment_file = $request->file('attachment_file');
-                    $name = $request->file('attachment_file')->getClientOriginalName();
-                    $filename = time()."_".$name;
-                    $path = public_path('uploads/homeworks/');
-                    if (!file_exists($path)) {
-                        \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
-                    }
-                    $attachment_file->move($path,$filename);
-                }
-                else{
-                    $filename=null;
-                }
-                $data['attachment_file']=$filename;
                 $data['created_at']= Carbon::now();
                 $data['updated_at']= Carbon::now();
                 $homework_id= Homework::where('id',$request->homework_id)->update($data);
