@@ -1456,11 +1456,24 @@ class UsersController extends Controller
         $classList = $classData->toArray();
         return $classList;
     }
+    public function getClassesForSearch(Request $request){
+        $classData = Classes::where('batch_id',$request->batch)->select('id','class_name')->get();
+        $classList = $classData;
+        return view('class')->with(compact('classList'));
+    }
+
 
     public function getDivisions($id){
         $divisionData = Division::where('class_id', $id)->select('id','division_name')->get();
         $divisionList = $divisionData->toArray();
         return $divisionList;
+    }
+
+    public function getDivisionsForsearch(Request $request){
+        $id=$request->classs;
+        $divisionData = Division::where('class_id', $id)->select('id','division_name')->get();
+        $divisionList = $divisionData;
+        return view('divisions')->with(compact('divisionList'));
     }
 
     public function getBatch(){
