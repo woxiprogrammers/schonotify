@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" id="DivisionBlock">
     <label class="control-label">
         Division
     </label>
@@ -50,6 +50,18 @@
             })
                 .done(function(res){
                     $("#tableContent").html(res);
+                    var switcheryHandler = function() {
+
+                        var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                        elements.forEach(function(html) {
+                            var switchery = new Switchery(html);
+                        });
+                    };
+
+                    switcheryHandler();
+
+                    TableData.init();
                 })
         })
 
