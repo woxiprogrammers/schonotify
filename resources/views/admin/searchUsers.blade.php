@@ -45,7 +45,15 @@
                         @include('admin.userRoleDropdown')
 
 
+                        <div class="container-fluid container-fullw bg-white col-md-4" id="UserSearch">
 
+                        </div>
+                        <div class="container-fluid container-fullw bg-white col-md-4" id="ClassSearch">
+
+                        </div>
+                        <div class="container-fluid container-fullw bg-white col-md-4" id="DivSearch">
+
+                        </div>
                         <!-- start: DYNAMIC TABLE -->
                         <div class="container-fluid container-fullw bg-white">
                         <div class="row">

@@ -41,10 +41,25 @@
     $('#role-select').change(function(){
 
         var par=this.value;
-
+        if(par == 3)
+        {
+            $('#UserSearch').show(1000);
+            $('#ClassSearch').show(1000);
+            $('#DivisionBlock').show(1000);
+            var route1='/search-batch';
+            $.get(route1,function(res){
+                $('#UserSearch').html(res);
+            });
+        }
+        else
+        {
+            $('#UserSearch').hide(1000);
+            $('#ClassSearch').hide(1000);
+            $('#DivisionBlock').hide(1000);
+        }
         tabUserSelect(par);
-
     });
+
 
 
     function tabUserSelect(par)
@@ -70,6 +85,7 @@
             TableData.init();
 
         });
+
 
     }
 
