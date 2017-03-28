@@ -148,6 +148,8 @@
 
     Route::get('searchUsers','SearchController@searchUsers');
 
+    Route::get('studentSearch','SearchController@Studentfilter');
+
     Route::get('selectUser/{id}','SearchController@selectRole');
 
     Route::post('searchUsers','SearchController@searchUsers');
@@ -324,6 +326,8 @@
 
     Route::get('create-division','ClassController@createDivision');
 
+    Route::get('search-batch','ClassController@SearchBatch');
+
     Route::post('division-create','ClassController@saveDivision');
 
     Route::get('check-div/{clsDiv}','ClassController@checkDivision');
@@ -389,7 +393,9 @@
     Route::get('/publish-edit-event/{id}','EventController@publishEditEvent');
 
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
+    Route::get('get-classes-search',array('uses' => 'UsersController@getClassesForSearch'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
+    Route::get('get-divisions-search',array('uses' => 'UsersController@getDivisionsForsearch'));
     Route::get('get-parents',array('uses' => 'UsersController@getParents'));
     Route::post('check-user',array('uses' => 'UsersController@checkUser'));
     Route::post('check-email',array('uses' => 'UsersController@checkEmail'));

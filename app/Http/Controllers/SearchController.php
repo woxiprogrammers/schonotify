@@ -34,12 +34,157 @@ class SearchController extends Controller
         return view('admin.searchUsers')->with('userRoles',$roles);
 
     }
+    public function Studentfilter(Request $request)
+    {
+        $role_id=3;
+        $user=Auth::user();
+        if($user->role_id == 1)
+        {
+            if($role_id == 3){
+
+                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                    ->where('division_id',$request->Division)
+                    ->where('users.body_id','=',$user->body_id)
+                    ->where('users.role_id','!=',1)
+                    ->where('users.role_id','=',$role_id)
+                    ->where('users.id','!=',$user->id)
+                    ->get();
+
+
+            }else{
+                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
+                    ->where('users.body_id','=',$user->body_id)
+                    ->where('users.role_id','=',$role_id)
+                    ->where('users.id','!=',$user->id)
+                    ->get();
+            }
+        }else{
+            if($role_id == 3){
+                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                    ->where('division_id',$request->Division)
+                    ->where('users.body_id','=',$user->body_id)
+                    ->where('users.role_id','!=',1)
+                    ->where('users.role_id','=',$role_id)
+                    ->where('users.id','!=',$user->id)
+                    ->get();
+
+            }else{
+                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
+                    ->where('users.body_id','=',$user->body_id)
+                    ->where('users.role_id','!=',1)
+                    ->where('users.role_id','=',$role_id)
+                    ->where('users.id','!=',$user->id)
+                    ->get();
+            }
+
+
+        }
+
+        $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+
+        $str.="<thead><tr>";
+
+        if($role_id == 3)
+        {
+            $str.="<th>GRN No.</th>";
+        }
+
+        $str.="<th>Name</th></th><th>Username</th><th>Email</th><th>Gender</th>";
+
+        if($role_id == 3)
+        {
+            $str.="<th>Parent Name</th>";
+        }
+
+        if(sizeof($result->toArray()) != 0 )
+        {
+
+            if($user->role_id == 1)
+            {
+                $str.="<th>Status</th>";
+            }
+
+            $str.="<th>Action</th>";
+
+            $str.="</tr></thead><tbody>";
+
+            foreach($result as $row)
+            {
+
+                if($row->user_role=='student')
+                {
+                    $str.="<tr><td>".$row->rollno."</td>";
+                }else{
+                    $str.="<tr>";
+                }
+
+                $str.="<td>".$row->firstname." ".$row->lastname."</td>";
+                $str.="<td>".$row->user_name."</td>";
+                $str.="<td>".$row->email."</td>";
+                $str.="<td>".$row->gender."</td>";
+
+                if($row->user_role=='student') {
+                    $parent=User::all()->where('id',$row->parent_id);
+                    if($parent->toArray() == null) {
+                        $str.="<td> -- </td>";
+                    } else {
+                        foreach($parent as $row1)
+                        {
+                            $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
+                        }
+                    }
+                }
+
+                if($user->role_id == 1)
+                {
+                    $str.="<td>";
+                    if($row->is_active == 1)
+                    {
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
+                    }else{
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
+                    }
+                    $str.="</td>";
+                }
+
+                $str.="<td>";
+
+                $str.="<a href='/edit-user/".$row->id."'>Edit </a>";
+                if($row->user_role != 'student') {
+                    $str.=" / <a href='/view-user/".$row->id."'> View</a>";
+                }
+
+                $str.="</td>";
+
+            }
+        } else {
+            $str1 = "<h5 class='center'>No records found !</h5>";
+        }
+
+        $str.="</tr></tbody>";
+
+        $str.="</table>";
+
+        if(sizeof($result->toArray()) != 0 )
+        {
+            return $str;
+        } else {
+            return $str1;
+        }
+    }
     public function selectRole($role_id)
     {
         $user=Auth::user();
         if($user->role_id == 1)
         {
             if($role_id == 3){
+
                 $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                     ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
                     ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
@@ -78,6 +223,7 @@ class SearchController extends Controller
 
 
         }
+       
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
 
         $str.="<thead><tr>";

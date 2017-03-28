@@ -95,6 +95,12 @@ class ClassController extends Controller
         }
     }
 
+    public function SearchBatch(Requests\WebRequests\DivisionRequest $request)
+    {
+            $batches=Batch::select('id','name')->get();
+            return view('batch')->with(compact('batches'));
+    }
+
     public function saveDivision(Requests\WebRequests\DivisionRequest $request)
     {
 
