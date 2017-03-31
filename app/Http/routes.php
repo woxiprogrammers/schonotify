@@ -80,8 +80,6 @@
 
 
     });
-    Route::get('get-concession',array('uses' => 'UsersController@concessionList'));
-
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
 
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
