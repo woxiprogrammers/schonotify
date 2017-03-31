@@ -1,15 +1,10 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
     @include('sidebar')
-
     <div class="app-content">
         <!-- start: TOP NAVBAR -->
         @include('header')
-
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
             <div class="wrap-content container" id="container">
@@ -22,15 +17,12 @@
                             <h1 class="mainTitle">Create</h1>
                             <span class="mainDescription">Class</span>
                         </div>
-
                     </div>
                 </section>
-
                     <div class="container-fluid container-fullw">
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-
-                                <form method="post" action="class-create" role="form" id="classCreateForm">
+                                  <form method="post" action="class-create" role="form" id="classCreateForm">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="errorHandler alert alert-danger no-display">
@@ -112,18 +104,13 @@
                                                         Close
                                                     </button>
                                                 </div>
-
-
-                                        </div>
+                                          </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
-                        </div>
                     </div>
-
+                </div>
                 @include('rightSidebar')
                 </div>
         </div>
@@ -141,7 +128,6 @@
 <script src="vendor/switchery/switchery.min.js"></script>
 <script src="vendor/selectFx/classie.js"></script>
 <script src="vendor/selectFx/selectFx.js"></script>
-
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
@@ -151,12 +137,9 @@
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
-
 <script src="assets/js/form-wizard.js"></script>
-
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/custom-project.js"></script>
-
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
@@ -165,7 +148,6 @@
         FormValidator.init();
         getbatches();
     });
-
     $('#resetBatch').click(function() {
         $('#access-denied').html('');
         var i = $('input[name="batches"]').size();
@@ -176,7 +158,6 @@
         }
         $('#checkHeight').removeClass('flexcroll1');
     });
-
     $('#resetBatch1').click(function() {
         $('#access-denied').html('');
         var i = $('input[name="batches"]').size();
@@ -188,14 +169,11 @@
         }
         $('#checkHeight').removeClass('flexcroll1');
     });
-
     function deleteBatch(val){
         var i = $('input[name="batches"]').size();
         var delDiv='.div'+val;
         var delBtn='.del'+val;
-
         var route="/delete-batch/"+val;
-
         $.get(route,function(res){
 
             if(res==403)
@@ -214,11 +192,8 @@
                 }
                 getbatches();
             }
-
         });
-
     }
-
     function getbatches()
     {
         $('div#loadmoreajaxloader').show();
@@ -233,14 +208,10 @@
             $('div#loadmoreajaxloader').hide();
         });
     }
-
     $('#dropdown').change(function(){
         $('#class').val('');
     });
-
-
 </script>
-
 @stop
 
 

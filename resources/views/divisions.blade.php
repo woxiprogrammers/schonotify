@@ -11,7 +11,6 @@
         @endif
     </select>
 </div>
-
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="vendor/modernizr/modernizr.js"></script>
@@ -39,8 +38,8 @@
 
 <script>
     $(document).ready(function(){
-
-        $('#Divisiondropdown').change(function(){
+         $('#Divisiondropdown').change(function(){
+            $('div#loadmoreajaxloader').show();
             var Division= $('#Divisiondropdown').val();
             var route='studentSearch';
             $.ajax({
@@ -50,6 +49,7 @@
             })
                 .done(function(res){
                     $("#tableContent").html(res);
+                    $('div#loadmoreajaxloader').hide();
                     var switcheryHandler = function() {
 
                         var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -58,9 +58,7 @@
                             var switchery = new Switchery(html);
                         });
                     };
-
                     switcheryHandler();
-
                     TableData.init();
                 })
         })
