@@ -963,15 +963,20 @@ class UsersController extends Controller
 
                 $query1=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');
                 $g=StudentFeeConcessions::where('fee_id',$feedata)->where('student_id',$id)->select('fee_concession_type')->first();
-                $assigned_fee_concessions=json_decode($g->fee_concession_type);
-                $concn_amnts=FeeConcessionAmount::where('fee_id',$feedata)->whereIn('concession_type',$assigned_fee_concessions)->select('amount')->get()->toArray();
-                     for($i=0;$i<count($concn_amnts);$i++)
+                if(!empty($g)){
+                    $assigned_fee_concessions=json_decode($g->fee_concession_type);
+                }
+                if(!empty($assigned_fee_concessions))
+                {
+                    $concn_amnts=FeeConcessionAmount::where('fee_id',$feedata)->whereIn('concession_type',$assigned_fee_concessions)->select('amount')->get()->toArray();
+                    for($i=0;$i<count($concn_amnts);$i++)
+                    {
+                        for($j=0;$j<count($fee_due_date);$j++)
                         {
-                         for($j=0;$j<count($fee_due_date);$j++)
-                           {
-                             $fee_due_date[$j]['discount']=  $fee_due_date[$j]['discount']-(($concn_amnts[$i]['amount'])/count($fee_due_date));
-                           }
+                            $fee_due_date[$j]['discount']=  $fee_due_date[$j]['discount']-(($concn_amnts[$i]['amount'])/count($fee_due_date));
                         }
+                    }
+                }
                 $total_fee_for_current_year=0;
                      foreach($fee_due_date as $key => $val)
                        {
