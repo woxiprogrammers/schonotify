@@ -208,7 +208,7 @@
                                         <div>
                                             @foreach($concession_types as $concessions)
                                             <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
-                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions" value="{{ $concessions['id'] }}">
+                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions[]" value="{{ $concessions['id'] }}">
                                                 <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
                                             </div>
                                             @endforeach
@@ -340,8 +340,6 @@
                                             </div>
 
                                         </div>
-
-
                                     </div>
                                 </fieldset>
                                 <div class="row">
@@ -374,12 +372,10 @@
                                 </div>
                             </div>
                         </div>
-
                             <div id="panel_module_fee" class="tab-pane fade-out">
                                 <div class="panel-body">
                                      <div class="container">
                                          <div class="row">
-
                                              <fieldset>
                                                  <div class="form-group">
                                                      <div class="col-md-12">
@@ -397,9 +393,7 @@
                                                              <option value="5">5</option>
                                                          </select>
                                                      </div>
-
                                              </fieldset>
-
                                              <fieldset>
                                                  <div id="installment_table">
                                                  </div>
@@ -425,10 +419,8 @@
                                     </div>
                                     </div>
                                   </div>
-
                         <div class="tab-pane fade" id="fee_transaction">
                             <div class="panel-body">
-
                                     <fieldset>
                                                <ul class="mini-stats pull-left">
                                                    <li>
@@ -439,10 +431,8 @@
                                                        </div>
                                                    </li>
                                                </ul>
-
                                                <ul class="mini-stats pull-right">
-
-                                                   <li>
+                                               <li>
                                                        <div class="values">
                                                            <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
                                                                Total due fee for current year : {{$total_due_fee_for_current_year}}
@@ -450,7 +440,6 @@
                                                        </div>
                                                    </li>
                                                </ul>
-
                                     </fieldset>
                                     <fieldset>
                                         <span class="mainDescription"><h3>Add Fee Transaction </h3></span>
@@ -527,7 +516,6 @@
                                                    </tr>
                                                    </thead>
                                                    <tbody>
-
                                                    @foreach($transactions as $transaction)
                                                    <tr>
                                                        <td>{!! $transaction->id !!}</td>
@@ -539,31 +527,15 @@
                                                    @endforeach
                                                    </tbody>
                                                </table>
-
                                            </div>
                                        </div>
-
                                    </fieldset>
-
-
-
-
-
-                            </div>
-
-
-                                </div>
+                              </div>
+                              </div>
                             </div>
                         </div>
-
-
-
-                    </div>
-
-
-
-
-                    </div>
+                     </div>
+                   </div>
                 </div>
             </div>
         </div>

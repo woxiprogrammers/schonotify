@@ -12,8 +12,7 @@
     @include('header')
     <!-- end: TOP NAVBAR -->
     <div class="main-content" >
-
-        <div class="wrap-content container" id="container">
+          <div class="wrap-content container" id="container">
             @include('alerts.errors')
             <form action="/fees/create-fee-structure" method="post" role="form" id="fee_create">
             <section id="page-title" class="padding-top-15 padding-bottom-15">
@@ -21,12 +20,9 @@
                     <div class="col-sm-7">
                         <h1 class="mainTitle">Create</h1>
                         <span class="mainDescription"> Fee Structure</span>
-
                     </div>
-
                 </div>
             </section>
-
             <div class="container-fluid container-fullw bg-white">
              <div class="form-group">
                  <label class="control-label">
@@ -38,8 +34,6 @@
                      <option value="2018-2019">2018-2019</option>
                      <option value="2019-2020">2019-2020</option>
                  </select>
-
-
              </div>
                 </div>
             <div class="container-fluid container-fullw">
@@ -48,22 +42,17 @@
                      Fee Name<span class="symbol required"></span>
                 </label>
                 <input type="text" class="form-control" name="fee_name" id="fee_name1" placeholder="Enter Fee Name">
-
-
             </div>
                 </div>
             <div class="container-fluid container-fullw">
             <div class="form-group">
-
                 <label class="control-label">
                     Select Classes <span class="symbol required"></span>
                 </label>
                 <div>
-
                     @foreach($batches as $batch)
                     <div>
-
-                        <table class="table table-responsive batchClassTab" id="ClassBatchtable">
+                         <table class="table table-responsive batchClassTab" id="ClassBatchtable">
                             <tr>
                                 <th>{!! $batch !!}</th>
                                 <th>&nbsp;</th>
@@ -82,20 +71,15 @@
                                                 <input type="checkbox"  id="{!! $class['id'] !!}_chk" value="{!! $class['id'] !!}" name="class[]">
                                         <label for="{!! $class['id'] !!}_chk">{!! $class['class'] !!}</label>
                                     </div>
-
                                     @if($i%2==0)
                                 </td>
-
                                 @else
                                 </td>
                             </tr>
                             @endif
                             @endif
                             <?php $i++;?>
-
-                            @endforeach
-
-
+                           @endforeach
                         </table>
                     </div>
                     @endforeach
@@ -103,43 +87,43 @@
             </div>
                 </div>
             <div class="container-fluid container-fullw bg-white">
-
-            <div class="form-group">
+             <div class="form-group">
                 <label class="control-label">
                     Select Concession Types<span class="symbol required"></span>
                 </label>
                 <div>
                     @foreach($concession_types as $concessions)
-
                     <div class="checkbox clip-check check-primary checkbox-inline" id="check">
                         <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="{{ $concessions['concession.id'] }}" name="concessions[]">
                         <label for="{{ $concessions['concession.id'] }}_concession_chk">{{ $concessions['concession.name'] }}</label>
                     </div>
-
                     @endforeach
-
-
                 </div>
                 <div class="form-group">
 
                  </div>
-
             </div>
-
+            <div class="rte" style="display: none;border: 2px">
+                <input type="text" placeholder="Enter RTE concession amount" class="form-control" name="rte">
+            </div>
+                <br>
+            <div class="special" style="display: none;border: 2px">
+                <input type="text" placeholder="Enter special concession amount" class="form-control" name="special">
+            </div>
+                <br>
+            <div class="sport" style="display: none;border: 2px ">
+                <input type="text" placeholder="Enter SPORT concession amount" class="form-control" name="sport">
+            </div>
+                <br>
             <div class="castes" style="display: none">
-
                 <label class="control-label">
                     Caste Categories <span class="symbol required"></span>
                 </label>
                 <div>
-
-
-
-                        <table style="width:100%">
+                         <table style="width:100%">
                             <tr>
                                 <th>Caste</th>
                                 <th>Amount</th>
-
                             </tr>
                             @foreach($caste_types as $castes)
                             <tr>
@@ -149,21 +133,11 @@
                                 <td>
                                     <input type="text"  id="caste"  name="castes[{{ $castes['caste_id'] }}]" required="">
                                 </td>
-
                             </tr>
                             @endforeach
-
-                        </table>
-
-
-
-
-                    </div>
-
-
-
-
-                </div>
+                         </table>
+                 </div>
+               </div>
             </div>
 
             <div class="container-fluid container-fullw">
@@ -181,13 +155,9 @@
 
                         </select>
                     </div>
-
                     <div class="container-fluid container-fullw">
                         <div id="installments">
-
-
                         </div>
-
                     </div>
                     <div class="container-fluid container-fullw bg-green" style="color:white">
                      <h3> Total fee :</h3>
@@ -269,9 +239,7 @@ jQuery(document).ready(function() {
     FormElements.init();
 })
      $("#2_concession_chk").click(function(){
-
-
-         if(this.checked)
+        if(this.checked)
          {
              $('.castes').show(1500);
          }
@@ -280,11 +248,36 @@ jQuery(document).ready(function() {
              $('.castes').hide(1500);
          }
      })
-
-
-
-
-
+   $("#1_concession_chk").click(function(){
+      if(this.checked)
+       {
+          $('.rte').show(1500);
+       }
+      else
+       {
+        $('.rte').hide(1500);
+       }
+    })
+   $("#3_concession_chk").click(function(){
+     if(this.checked)
+      {
+         $('.special').show(1500);
+      }
+     else
+      {
+        $('.special').hide(1500);
+      }
+})
+$("#4_concession_chk").click(function(){
+    if(this.checked)
+    {
+        $('.sport').show(1500);
+    }
+    else
+    {
+        $('.sport').hide(1500);
+    }
+})
 </script>
 <script>
     $( "select" )
