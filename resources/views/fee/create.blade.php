@@ -8,7 +8,6 @@
 @include('sidebar')
 
 <div class="app-content">
-
     @include('header')
     <!-- end: TOP NAVBAR -->
     <div class="main-content" >
@@ -59,7 +58,6 @@
                             </tr>
                             <?php $i=0; ?>
                             @foreach($classes as $class)
-
                             @if($batch==$class['batch'])
                             @if($i%2==0)
                             <tr>
@@ -139,7 +137,6 @@
                  </div>
                </div>
             </div>
-
             <div class="container-fluid container-fullw">
                 <div class="form-group">
                     <label class="control-label">
@@ -148,13 +145,12 @@
                     <div>
                         <select border="1" class="inst_no" id="inst_no"   name="installment_count">
                             <option  border="1">Select Total Number of Installments</option>
-
                             @foreach($installment_number as $installments)
                             <option value="{{ $installments['installment_id'] }}"  >{{ $installments['installment_number'] }}</option>
                             @endforeach
-
                         </select>
                     </div>
+                    <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
                     <div class="container-fluid container-fullw">
                         <div id="installments">
                         </div>
@@ -171,32 +167,15 @@
                         </div>
 
                     </fieldset>
-
-
                 </div>
                 </div>
               </form>
-
-
-
-
-
-
-
-
-
-     </div>
-
+    </div>
         @include('rightSidebar')
         </div>
-
-    </div>
-
+     </div>
 @include('footer')
 </div>
-
-
-
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
@@ -220,12 +199,9 @@
 <script src="/vendor/select2/select2.min.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-
 <!-- start: JavaScript Event Handlers for this page -->
-
 <script src="/assets/js/form-validation-edit.js"></script>
 <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
-
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
@@ -241,68 +217,59 @@ jQuery(document).ready(function() {
      $("#2_concession_chk").click(function(){
         if(this.checked)
          {
-             $('.castes').show(1500);
+             $('.castes').show(1000);
          }
          else
          {
-             $('.castes').hide(1500);
+             $('.castes').hide(1000);
          }
      })
    $("#1_concession_chk").click(function(){
       if(this.checked)
        {
-          $('.rte').show(1500);
+          $('.rte').show(1000);
        }
       else
        {
-        $('.rte').hide(1500);
+        $('.rte').hide(1000);
        }
     })
    $("#3_concession_chk").click(function(){
      if(this.checked)
       {
-         $('.special').show(1500);
+         $('.special').show(1000);
       }
      else
       {
-        $('.special').hide(1500);
+        $('.special').hide(1000);
       }
 })
 $("#4_concession_chk").click(function(){
     if(this.checked)
     {
-        $('.sport').show(1500);
+        $('.sport').show(1000);
     }
     else
     {
-        $('.sport').hide(1500);
+        $('.sport').hide(1000);
     }
 })
 </script>
 <script>
-    $( "select" )
-        .change(function () {
+    $( "select" ).change(function () {
+            $('div#loadmoreajaxloader').show();
             var str = this.value;
-
-
             $.ajax({
                        url: "/fees/installments",
                        data:{str1 : str},
                        success: function(response)
                         {
                             $("#installments").html(response);
+                            $('div#loadmoreajaxloader').hide();
                         }
                    });
-
-
-
-        })
-
+      })
 </script>
-
-
-
-
 @stop
 
 

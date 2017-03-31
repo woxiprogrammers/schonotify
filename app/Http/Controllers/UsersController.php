@@ -903,14 +903,14 @@ class UsersController extends Controller
                 }
                 if(!empty($fee_due_date) && !empty($final_discounted_amounts))
                 {
-                    for($i=1;$i<=count($final_discounted_amounts);$i++)
+                   for($i=1;$i<=count($final_discounted_amounts);$i++)
                     {
-                      for($j=0;$j<count($fee_due_date);$j++)
+                     for($j=0;$j<count($fee_due_date);$j++)
                       {
-                             if($fee_due_date[$j]['installment_id'] == $i)
+                          if($fee_due_date[$j]['installment_id'] == $i)
                              {
                                  $fee_due_date[$j]['discount']=$final_discounted_amounts[$i];
-                              }
+                             }
                       }
                     }
 
@@ -921,10 +921,8 @@ class UsersController extends Controller
                        $iterator = 0;
                        foreach($installment_info as $i)
                        {
-
                            $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
                            $iterator++;
-
                        }
                        $installment_data[] = $installment_info;
                    }
@@ -963,13 +961,12 @@ class UsersController extends Controller
                              $division_status="Division Not Assigned !";
                          }
 
-                     $query1=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');
-                     $g=StudentFeeConcessions::where('fee_id',$feedata)->where('student_id',$id)->select('fee_concession_type')->first();
-                     $assigned_fee_concessions=json_decode($g->fee_concession_type);
-                     $concn_amnts=FeeConcessionAmount::where('fee_id',$feedata)->whereIn('concession_type',$assigned_fee_concessions)->select('amount')->get()->toArray();
+                $query1=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');
+                $g=StudentFeeConcessions::where('fee_id',$feedata)->where('student_id',$id)->select('fee_concession_type')->first();
+                $assigned_fee_concessions=json_decode($g->fee_concession_type);
+                $concn_amnts=FeeConcessionAmount::where('fee_id',$feedata)->whereIn('concession_type',$assigned_fee_concessions)->select('amount')->get()->toArray();
                      for($i=0;$i<count($concn_amnts);$i++)
                         {
-                           // dd($install_amount['discount']);
                          for($j=0;$j<count($fee_due_date);$j++)
                            {
                              $fee_due_date[$j]['discount']=  $fee_due_date[$j]['discount']-(($concn_amnts[$i]['amount'])/count($fee_due_date));
@@ -984,8 +981,7 @@ class UsersController extends Controller
                 $caste_concession_type_edit=StudentFee::where('student_id',$id)->pluck('fee_concession_type');
                 $final_paid_fee_for_current_year=array_sum($new_array);
                 $total_due_fee_for_current_year=$total_fee_for_current_year-$final_paid_fee_for_current_year;
-
-              return  view('editStudent')->with(compact('query1','assigned_fee','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
+                return  view('editStudent')->with(compact('query1','assigned_fee','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year'));
 
             }elseif($userRole->slug == 'parent')
             {
