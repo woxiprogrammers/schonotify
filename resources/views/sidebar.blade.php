@@ -155,7 +155,7 @@
     </a>
 </li>
 
-<!--<li>
+<li>
     <a href="/noticeBoard">
         <div class="item-content">
             <div class="item-media">
@@ -166,7 +166,7 @@
             </div>
         </div>
     </a>
-</li>-->
+</li>
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
