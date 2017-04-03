@@ -521,7 +521,7 @@
         Route::get('view-test-chart/{uid}/{tid}','api\ResultController@viewTestGraph');
         Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
         Route::post('create-achievement','api\NoticeBoardController@createAchievement');
-        Route::get('view-achievement','api\NoticeBoardController@viewAchievement');
+        Route::get('view-achievement/{id}','api\NoticeBoardController@viewAchievement');
 
 
         //Event
@@ -533,6 +533,9 @@
         Route::get('detail-view/{event_id}','api\EventController@detailView');
         Route::put('edit-event','api\EventController@editEvent');
         Route::get('get-year-month','api\EventController@getYearMonth');
+        Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
+        Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
+
 
 
 

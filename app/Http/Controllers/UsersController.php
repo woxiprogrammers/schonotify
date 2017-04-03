@@ -112,7 +112,6 @@ class UsersController extends Controller
            {
             $str = "Installment Not Found ";
            }
-
          return view('fee.student_installment')->with(compact('str','installment_data'));
     }
 
