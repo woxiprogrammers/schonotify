@@ -592,10 +592,10 @@ class LeaveController extends Controller
         $student_pending_fee['pending_fee']=$total_due_fee_for_current_year;
         $total_student_fee_for_current_year=array();
         $total_student_fee_for_current_year['fee']=$total_fee_for_current_year;
-        $transactions=$transactions->toArray();
-        $transactions=array_merge($transactions,$student_pending_fee);
-        $transactions=array_merge($transactions,$total_student_fee_for_current_year);
-return response ($transactions);
+        $responseData['transactions'] = $transactions->toArray();
+        $responseData['pending_fees']=$student_pending_fee;
+        $responseData['fees']=$total_student_fee_for_current_year;
+return response ($responseData);
 
     }
 
