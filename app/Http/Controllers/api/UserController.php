@@ -95,6 +95,7 @@ class UserController extends Controller
                                 ->count();
 
                             $data['Badge_count']['user_id']=$userData['id'];
+                            $data['Badge_count']['body_id']=$user['body_id'];
                             $data['Badge_count']['message_count'] = $messageCount;
                             $data['Badge_count']['auto_notification_count'] = $messageCount;
 
