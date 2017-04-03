@@ -514,7 +514,7 @@
         //Announcement
         Route::post('create-announcement','api\NoticeBoardController@createAnnouncement');
         Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
-        Route::get('view-announcement','api\NoticeBoardController@viewAnnouncement');
+        Route::get('view-announcement/{id}','api\NoticeBoardController@viewAnnouncement');
 
         //Result
         Route::get('view-result/{id}','api\ResultController@viewResult');

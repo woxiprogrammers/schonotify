@@ -988,7 +988,10 @@ class UsersController extends Controller
                 $queryn=category_types::select('caste_category','id')->get()->toArray();
                 $querym=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');
                 $chkstatus=StudentFeeConcessions::where('student_id',$id)->select('fee_concession_type')->first();
-                $chkstatus = $chkstatus->fee_concession_type;
+                if(!empty($chkstatus))
+                {
+                    $chkstatus = $chkstatus->fee_concession_type;
+                }
                 return  view('editStudent')->with(compact('query1','assigned_fee','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus'));
 
             }elseif($userRole->slug == 'parent')

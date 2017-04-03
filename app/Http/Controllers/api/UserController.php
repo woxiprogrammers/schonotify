@@ -34,7 +34,6 @@ class UserController extends Controller
 
     protected function login(Requests\LoginRequest $request)
     {
-
         $data=array();
         try{
 
@@ -90,7 +89,7 @@ class UserController extends Controller
                     {
                         $i=0;
                         $userData=User::where('parent_id','=',$data['users']['user_id'])->first();
-                            $messageCount=Message::where('to_id',$userData['id'])
+                        $messageCount=Message::where('to_id',$userData['id'])
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)
                                 ->count();
@@ -105,6 +104,7 @@ class UserController extends Controller
                             ->where('is_delete','=',0)
                             ->count();
                         $data['Badge_count']['user_id']=$user['id'];
+                        $data['Badge_count']['body_id']=$user['body_id'];
                         $data['Badge_count']['message_count'] = $messageCount;
                         $data['Badge_count']['auto_notification_count'] = $messageCount;
                     }

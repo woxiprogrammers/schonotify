@@ -101,14 +101,14 @@ class NoticeBoardController extends Controller
     }
     public function viewAnnouncement(Requests\ViewAnnouncement $request)
     {
-        $data=$request->all();
+       /*$data=$request->all();
         try{
             $user =User::where('remember_token',$data['token'])->first();
             $unreadAnnouncement =Announcement::where('user_id', '=',$user['id'])
                 ->get();
             $unreadAnnouncementArray=$unreadAnnouncement->toArray();
             $i=0;
-            foreach($unreadAnnouncementArray as $value){
+
                 $unreadAnnouncementData[$i]['event_id']=$value['event_id'];
                 $event =Event::where('id', '=',$value['event_id'])->first();
                 $user=User::where('id', '=',$event ['user_id'])->first();
@@ -121,7 +121,7 @@ class NoticeBoardController extends Controller
                 $unreadAnnouncementData[$i]['detail']=$event['detail'];
                 $unreadAnnouncementData[$i]['date']=$event['date'];
                 $i++;
-            }
+
             $status = 200;
             $message = "Success";
             $responseData=$unreadAnnouncementData;
@@ -133,8 +133,10 @@ class NoticeBoardController extends Controller
             "message" => $message,
             "status" =>$status,
             "data" => $responseData
-        ];
-        return response($response, $status);
+        ];*/
+        $event =Event::where('event_type_id',1)->where('status',2)->get()->toArray();
+        $response=$event;
+        return response($response);
     }
     public function createAchievement(Requests\CreateAchievement $request)
     {
