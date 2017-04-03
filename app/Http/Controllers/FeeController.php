@@ -9,6 +9,7 @@ use App\ConcessionTypes;
 use App\fee_installments;
 use App\fee_particulars;
 use App\FeeClass;
+use App\FeeConcessionAmount;
 use App\FeeConcessionTypes;
 use App\FeeDueDate;
 use App\FeeInstallments;
@@ -93,7 +94,28 @@ class FeeController extends Controller
         $query=Fees::insertGetId($fee_details);
         if($query)
         {
-           foreach($request->class as $class)
+           if($request->rte)
+           {
+               $rteDetails['fee_id']=$query;
+               $rteDetails['concession_type']=1;
+               $rteDetails['amount']=$request->rte;
+               $rte=FeeConcessionAmount::insert($rteDetails);
+           }
+           if($request->special)
+           {
+               $specialDetails['fee_id']=$query;
+               $specialDetails['concession_type']=3;
+               $specialDetails['amount']=$request->special;
+               $special=FeeConcessionAmount::insert($specialDetails);
+           }
+            if($request->sport)
+            {
+                $sportDetails['fee_id']=$query;
+                $sportDetails['concession_type']=4;
+                $sportDetails['amount']=$request->special;
+                $sport=FeeConcessionAmount::insert($sportDetails);
+            }
+          foreach($request->class as $class)
             {
                 $class_present=FeeClass::where('class_id',$class)->exists();
                 if($class_present)

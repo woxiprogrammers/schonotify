@@ -186,13 +186,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>
-                                                Assign Fee Structure
+                                                Assign Fee Structure :
                                             </label>
                                             <div>
-                                                <select name="student_fee">
+                                                <select name="student_fee" style="width:60%;-webkit-appearance: menulist;">
                                                     @if(!empty($fees))
                                                     @foreach($fees as $fee_details)
-                                                     <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}} &nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
+                                                     <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}}&nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
                                                     @endforeach
                                                     @endif
                                                 </select>
@@ -203,26 +203,32 @@
                                     <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Concession Types
+                                            Select Concession Types :
                                         </label>
                                         <div>
                                             @foreach($concession_types as $concessions)
                                             <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
-                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions" value="{{ $concessions['id'] }}">
+                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions[]" value="{{ $concessions['id'] }}">
                                                 <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
                                             </div>
                                             @endforeach
                                         </div>
                                     </div>
                                     </div>
-                                   <div class="col-md-12">
+                                   <div class="col-md-12" style="display: none" id="CasteSelect">
                                         <div class="form-group">
                                             <label>
-                                                Assign Fee Concession
+                                                Assign Fee Concession :
                                             </label>
-                                            <div id="concession-types">
-
+                                            <div>
+                                                <select name="caste"  style="-webkit-appearance: menulist;">
+                                                    <option>Select Caste</option>
+                                                    @foreach($queryn as $castes)
+                                                    <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
+
                                         </div>
                                     </div>
                                 </fieldset>
@@ -340,8 +346,6 @@
                                             </div>
 
                                         </div>
-
-
                                     </div>
                                 </fieldset>
                                 <div class="row">
@@ -374,12 +378,10 @@
                                 </div>
                             </div>
                         </div>
-
                             <div id="panel_module_fee" class="tab-pane fade-out">
                                 <div class="panel-body">
                                      <div class="container">
                                          <div class="row">
-
                                              <fieldset>
                                                  <div class="form-group">
                                                      <div class="col-md-12">
@@ -389,7 +391,7 @@
                                                              Installment :&nbsp
                                                          </label>
                                                          <select name="installment_number" style="-webkit-appearance: menulist;">
-                                                             <option selected>Please select installment</option>
+                                                             <option selected>Select installment</option>
                                                              <option value="1">1</option>
                                                              <option value="2">2</option>
                                                              <option value="3">3</option>
@@ -397,9 +399,7 @@
                                                              <option value="5">5</option>
                                                          </select>
                                                      </div>
-
                                              </fieldset>
-
                                              <fieldset>
                                                  <div id="installment_table">
                                                  </div>
@@ -425,10 +425,8 @@
                                     </div>
                                     </div>
                                   </div>
-
                         <div class="tab-pane fade" id="fee_transaction">
                             <div class="panel-body">
-
                                     <fieldset>
                                                <ul class="mini-stats pull-left">
                                                    <li>
@@ -439,10 +437,8 @@
                                                        </div>
                                                    </li>
                                                </ul>
-
                                                <ul class="mini-stats pull-right">
-
-                                                   <li>
+                                               <li>
                                                        <div class="values">
                                                            <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
                                                                Total due fee for current year : {{$total_due_fee_for_current_year}}
@@ -450,7 +446,6 @@
                                                        </div>
                                                    </li>
                                                </ul>
-
                                     </fieldset>
                                     <fieldset>
                                         <span class="mainDescription"><h3>Add Fee Transaction </h3></span>
@@ -527,7 +522,6 @@
                                                    </tr>
                                                    </thead>
                                                    <tbody>
-
                                                    @foreach($transactions as $transaction)
                                                    <tr>
                                                        <td>{!! $transaction->id !!}</td>
@@ -539,37 +533,20 @@
                                                    @endforeach
                                                    </tbody>
                                                </table>
-
                                            </div>
                                        </div>
-
                                    </fieldset>
-
-
-
-
-
-                            </div>
-
-
-                                </div>
+                              </div>
+                              </div>
                             </div>
                         </div>
-
-
-
-                    </div>
-
-
-
-
-                    </div>
+                     </div>
+                   </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 @include('rightSidebar')
 </div>
 </div>
@@ -608,27 +585,22 @@
 <script src="/assets/js/custom-project.js"></script>
 <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
 <script src="/assets/js/table-data.js"></script>
-
-
 <script>
     jQuery(document).ready(function() {
         $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
-        if($('#2_concession_chk').is(":checked")==true)
-        {
-            var user={{$user['id']}};
-        var dataa=this.value;
-        $.ajax({
-            url: "/get-concession",
-            data:{user},
-
-            success: function(result)
-            {
-                $("#concession-types").html(result);
-
-            }});
-    }
+        var chkstatus = {!!$chkstatus!!};
+        for(var i = 0; i< chkstatus.length; i++){
+            $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+        }
+        $('#2_concession_chk').change(function(){
+           if($('#2_concession_chk').is(":checked")){
+               $('#CasteSelect').show();
+           }else{
+               $('#CasteSelect').hide();
+           }
+        });
         Main.init();
         FormValidator.init();
         FormElements.init();
@@ -656,25 +628,7 @@
 
 
     });
-
-    $( "#2_concession_chk" ).click(function ()
-          {
-              var user={{$user['id']}};
-              var dataa=this.value;
-            $.ajax({
-                url: "/get-concession",
-                data:{user},
-
-                success: function(result)
-                {
-                    $("#concession-types").html(result);
-
-                }});
-           })
-
-
-
-    $('#email').on('keyup',function(){
+  $('#email').on('keyup',function(){
         var email = $(this).val();
         var route='/check-email';
         $.post(route,{email:email},function(res){

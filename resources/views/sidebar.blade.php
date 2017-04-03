@@ -155,7 +155,7 @@
     </a>
 </li>
 
-<!--<li>
+<li>
     <a href="/noticeBoard">
         <div class="item-content">
             <div class="item-media">
@@ -166,7 +166,7 @@
             </div>
         </div>
     </a>
-</li>-->
+</li>
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -262,7 +262,7 @@
     <a href="javascript:void(0)">
         <div class="item-content">
             <div class="item-media">
-                <i class="fa fa-handshake-o"></i>
+                <i class="fa fa-phone" aria-hidden="true"></i>
             </div>
             <div class="item-inner">
                 <span class="title">Admission Enquiry Form </span><i class="icon-arrow"></i>

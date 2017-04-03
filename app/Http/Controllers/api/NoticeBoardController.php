@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 
@@ -100,15 +101,14 @@ class NoticeBoardController extends Controller
     }
     public function viewAnnouncement(Requests\ViewAnnouncement $request)
     {
-        $data=$request->all();
+       /*$data=$request->all();
         try{
             $user =User::where('remember_token',$data['token'])->first();
             $unreadAnnouncement =Announcement::where('user_id', '=',$user['id'])
-                ->where('read_status','=',0)
                 ->get();
             $unreadAnnouncementArray=$unreadAnnouncement->toArray();
             $i=0;
-            foreach($unreadAnnouncementArray as $value){
+
                 $unreadAnnouncementData[$i]['event_id']=$value['event_id'];
                 $event =Event::where('id', '=',$value['event_id'])->first();
                 $user=User::where('id', '=',$event ['user_id'])->first();
@@ -121,7 +121,7 @@ class NoticeBoardController extends Controller
                 $unreadAnnouncementData[$i]['detail']=$event['detail'];
                 $unreadAnnouncementData[$i]['date']=$event['date'];
                 $i++;
-            }
+
             $status = 200;
             $message = "Success";
             $responseData=$unreadAnnouncementData;
@@ -133,8 +133,10 @@ class NoticeBoardController extends Controller
             "message" => $message,
             "status" =>$status,
             "data" => $responseData
-        ];
-        return response($response, $status);
+        ];*/
+        $event =Event::where('event_type_id',1)->where('status',2)->get()->toArray();
+        $response=$event;
+        return response($response);
     }
     public function createAchievement(Requests\CreateAchievement $request)
     {
@@ -194,7 +196,7 @@ class NoticeBoardController extends Controller
         ];
         return response($response, $status);
     }
-    public function viewAchievement(Requests\ViewAnnouncement $request)
+   /* public function viewAchievement(Requests\ViewAnnouncement $request)
     {
         try{
             $achievementsData =Event::join('event_user_roles','events.id', '=', 'event_user_roles.event_id')
@@ -252,5 +254,67 @@ class NoticeBoardController extends Controller
             "data"=>$data
         ];
         return response($response, $status);
+    }*/
+    public function viewAchievement($id){
+        $teacherAchievementSelfPendingAndCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
+            ->where('event_type_id','=',2)
+            ->wherein('status',[0,1])
+            ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
+
+        $teacherAchievementAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
+            ->where('event_type_id','=',2)
+            ->where('status','=',2)
+            ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
+            ->union($teacherAchievementSelfPendingAndCreated)
+            ->orderby('created_at','desc')
+            ->get();
+        //oldest date of event
+
+        if($id == 0)
+        {
+            $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
+                ->where('event_type_id','=',2)
+                ->wherein('status',[0,1])
+                ->min('events.created_at');
+
+            $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
+                ->where('event_type_id','=',2)
+                ->where('status','=',2)
+                ->min('events.created_at');
+
+            $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
+
+            $lastDate = date('');
+
+            foreach(array_unique($arrayMergedForLastDate) as $row)
+            {
+                if($row != null)
+                {
+
+                    if(strtotime($lastDate) < strtotime($row))
+                    {
+                        $lastDate = $row;
+                    }
+
+                }
+
+            }
+            $path=array();
+            $path['path']=(url()."/achievement");
+            $teacherAchievement[$lastDate] = json_decode(json_encode($teacherAchievementAllPublished),true);
+            array_push($teacherAchievement,$path);
+
+        } else {
+            $path=array();
+            $path['path']=(url()."/achievement");
+
+            $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
+            $teacherAchievement=array_merge($teacherAchievement,$path);
+
+        }
+       return response($teacherAchievement);
+
     }
+
+
 }
