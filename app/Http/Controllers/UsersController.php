@@ -24,6 +24,7 @@ use App\Module;
 use App\ModuleAcl;
 use App\ParentExtraInfo;
 use App\StudentDocument;
+use App\StudentDocumentMaster;
 use App\StudentExtraInfo;
 use App\StudentFamily;
 use App\StudentFee;
@@ -33,6 +34,7 @@ use App\StudentPreviousSchool;
 use App\StudentSibling;
 use App\StudentSpecialAptitude;
 use App\SubjectClassDivision;
+use App\SubmittedDocuments;
 use App\TeacherExtraInfo;
 use App\TeacherQualification;
 use App\TeacherReferences;
@@ -308,16 +310,16 @@ class UsersController extends Controller
 
     public function studentCreateForm(Requests\WebRequests\UserRequest $request)
     {
-        $roles=UserRoles::all();
+        $userRoles =UserRoles::all();
         $role_id='3';
         Session::put('role_id', $role_id);
+        $documents = StudentDocumentMaster::all();
         if($request->authorize()===true)
         {
-            return view('admin.studentCreateForm')->with('userRoles',$roles);
+            return view('admin.studentCreateForm')->with(compact('userRoles','documents'));
         }else{
             return Redirect::to('/');
         }
-
     }
 
     public function parentCreateForm(Requests\WebRequests\UserRequest $request)
@@ -649,6 +651,12 @@ class UsersController extends Controller
                 $extraInfo['created_at'] = Carbon::now();
                 $extraInfo['updated_at'] = Carbon::now();
                 StudentExtraInfo::insert($extraInfo);
+               //Student documents submitted status.
+                $document=$request->documents;
+                $document=implode(",",$document);
+                $documentData['enquiry_id']=$LastInsertId;
+                $documentData['submitted_documents']=$document;
+                $query=SubmittedDocuments::insert($documentData);
 
                 if(isset($data['upload_doc'])){
                     foreach($data['upload_doc'] as $doc){
@@ -991,6 +999,8 @@ class UsersController extends Controller
                 if(!empty($chkstatus))
                 {
                     $chkstatus = $chkstatus->fee_concession_type;
+                }else{
+                    $chkstatus='null';
                 }
                 return  view('editStudent')->with(compact('query1','assigned_fee','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus'));
 
@@ -1123,8 +1133,7 @@ class UsersController extends Controller
 
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
-    {
-        $query=Fees::where('id',$request->student_fee)->pluck('year');
+    {  $query=Fees::where('id',$request->student_fee)->pluck('year');
         $query2=StudentFee::where('student_id',$id)->select('fee_id')->get();
         if($query2->isEmpty())
         {

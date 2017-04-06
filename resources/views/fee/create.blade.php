@@ -87,7 +87,7 @@
             <div class="container-fluid container-fullw bg-white">
              <div class="form-group">
                 <label class="control-label">
-                    Select Concession Types<span class="symbol required"></span>
+                    Select Concession Types<span class="symbol required"></span>&nbsp &nbsp<h5 style="color:red">[Note : If concession amount not available then simply put 0 value in it]</h5>
                 </label>
                 <div>
                     @foreach($concession_types as $concessions)

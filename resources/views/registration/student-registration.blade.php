@@ -340,11 +340,9 @@
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
-<<<<<<< HEAD
-                <option value="Not Attended">Not Attended</option>
-=======
+
 		<option value="Not Attended">Not Attended</option>
->>>>>>> master
+
             </select>
         </div>
     </div>
@@ -733,9 +731,9 @@
         </TR>
     </TABLE>-->
     @foreach($documents as $document)
-
     <div class="row">
         <div class="col-md-6">
+            <input type="checkbox" value="{{$document['id']}}" name="documents[]">
             <div class="form-group">
                 <label class="control-label">
                     {{$document['document_name']}}

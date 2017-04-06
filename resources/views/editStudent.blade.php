@@ -590,10 +590,15 @@
         $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
+        if({!!$chkstatus!!} == "null")
+    {
         var chkstatus = {!!$chkstatus!!};
+
         for(var i = 0; i< chkstatus.length; i++){
-            $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
-        }
+        $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+    }
+    }
+
         $('#2_concession_chk').change(function(){
            if($('#2_concession_chk').is(":checked")){
                $('#CasteSelect').show();

@@ -41,6 +41,7 @@
     $(document).ready(function(){
 
         $('#Batchdropdown').change(function(){
+            $('div#loadmoreajaxloader').show();
             var batch=this.value;
             var route='/get-classes-search';
             $.ajax({
@@ -50,6 +51,7 @@
             })
                 .done(function(res){
                     $('#ClassSearch').html(res);
+                    $('div#loadmoreajaxloader').hide();
 
                 })
         })
