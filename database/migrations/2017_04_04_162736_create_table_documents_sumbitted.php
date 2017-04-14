@@ -14,7 +14,7 @@ class CreateTableDocumentsSumbitted extends Migration
     {
         Schema::create('documents_submitted', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('enquiry_id')->unsigned();
+            $table->integer('student_id')->unsigned();
             $table->text('submitted_documents');
             $table->timestamps();
         });

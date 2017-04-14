@@ -197,6 +197,15 @@ var FormWizard = function () {
                     email:true,
                     chkMail: true
                 },
+                parent_password:{
+                    minlength:6,
+                    required:true
+                },
+                parent_password2:{
+                    required: true,
+                    minlength: 6,
+                    equalTo: "#parent_password"
+                },
                 password: {
                     minlength: 6,
                     required: true

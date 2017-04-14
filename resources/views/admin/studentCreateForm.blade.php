@@ -410,8 +410,6 @@
     </div>
 </div>
 </fieldset>
-
-
 <fieldset>
     <legend>
         STUDENT'S FAMILY INFORMATION
@@ -558,7 +556,6 @@
         </div>
     </div>-->
     <div class="row">
-
         <div class="col-md-6">
             <div class="form-group">
                 <label  class="control-label">
@@ -584,6 +581,24 @@
             </div>
         </div>
     </div>
+    <div class="row" id="parentPassword">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label  class="control-label">
+                    Password <span class="symbol required"></span>
+                </label>
+                <input type="password" tabindex="-1" placeholder="Enter Password" class="form-control" name="parent_password" id="parent_password"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">
+                    Confirm Password <span class="symbol required"></span>
+                </label>
+                <input type="password" tabindex="-1" placeholder="Enter Password" class="form-control" name="parent_password2" id="parent_password2"/>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-6">
@@ -604,12 +619,12 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" placeholder="Enter Name" class="form-control" name="sibling[0][name]" id="name0"/>
+                <input tabindex="-1" type="text" placeholder="Enter Name" class="form-control" name="sibling[0][name]" id="name0"/>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <input type="number" placeholder="Enter Age" class="form-control" name="sibling[0][age]" id="age0"/>
+                <input tabindex="-1" type="number" placeholder="Enter Age" class="form-control" name="sibling[0][age]" id="age0"/>
             </div>
         </div>
     </div>
@@ -874,7 +889,6 @@
 
 @include('footer')
 </div>
-
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -886,23 +900,18 @@
 <script src="vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
-
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
-
 <script src="assets/js/student-form-wizard.js"></script>
-
 <script src="assets/js/custom-project.js"></script>
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
-
 <script>
     jQuery(document).ready(function() {
         userAclModule();
@@ -1082,6 +1091,9 @@ function getParents()
                         $('#father_contact').attr("disabled", true);
                         $('#mother_contact').attr("disabled", true);
                         $('#permanent_address').attr("disabled", true);
+                        $('#parentPassword').css("display","none");
+                        $('#parent_password').css("display","none");
+                        $('#parent_password2').css("display","none");
                         $('#father_first_name').val(suggestion.data['father_first_name']);
                         $('#father_middle_name').val(suggestion.data['father_middle_name']);
                         $('#father_last_name').val(suggestion.data['father_last_name']);
@@ -1095,6 +1107,8 @@ function getParents()
                         $('#father_contact').val(suggestion.data['father_contact']);
                         $('#mother_contact').val(suggestion.data['mother_contact']);
                         $('#permanent_address').val(suggestion.data['permanent_address']);
+                        $('#parent_password').val('null');
+                        $('#parent_password2').val('null');
                         $('#outputcontent').html(thehtml);
                         $('#tabTable').show();
                         var val3=$('#autocomplete').html(suggestion.value).text();

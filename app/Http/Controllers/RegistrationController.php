@@ -126,7 +126,10 @@ class RegistrationController extends Controller
     {
         $data = $request->all();
         $document=$request->documents;
-        $document=implode(",",$document);
+        if(!empty($document)){
+            $document=implode(",",$document);
+        }
+
 
         if(!empty($data)){
             if(isset($data['dob'])){
@@ -265,7 +268,7 @@ class RegistrationController extends Controller
                 $extraInfo['created_at'] = Carbon::now();
                 $extraInfo['updated_at'] = Carbon::now();
                 $enquiry_id=StudentExtraInfo::insertGetId($extraInfo);
-                $documentData['enquiry_id']=$LastInsertId;
+                $documentData['student_id']=$LastInsertId;
                 $documentData['submitted_documents']=$document;
                 $query=SubmittedDocuments::insert($documentData);
                 if(isset($data['upload_doc'])){

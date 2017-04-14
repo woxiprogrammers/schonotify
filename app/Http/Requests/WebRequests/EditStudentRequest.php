@@ -24,7 +24,7 @@ class EditStudentRequest extends Request
     public function rules()
     {
         return [
-            'username' => 'required',
+
             'firstname' => 'required|min:2|max:20',
             'lastname' => 'required|min:2|max:20',
             'email' => 'email',

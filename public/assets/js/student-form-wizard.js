@@ -188,6 +188,15 @@ var FormWizard = function () {
                     email:true,
                     chkMail: true
                 },
+                parent_password:{
+                    minlength:6,
+                    required:true
+                },
+                parent_password2:{
+                    required: true,
+                    minlength: 6,
+                    equalTo: "#parent_password"
+                },
                 password: {
                     minlength: 6,
                     required: true
@@ -375,6 +384,14 @@ var FormWizard = function () {
                     required:"Email is required",
                     email:"Enter proper Email Id",
                     chkMail: "Your email address must be in the format of name@domain.com"
+                },
+                parent_password:{
+                    required:"Password is required",
+                    minlength: jQuery.validator.format("Password must contain at least {0} characters")
+                },
+                parent_password2:{
+                    required:"Password is required",
+                    minlength: jQuery.validator.format("Password must contain at least {0} characters")
                 },
                 address:{
                     required:"Address is required",
