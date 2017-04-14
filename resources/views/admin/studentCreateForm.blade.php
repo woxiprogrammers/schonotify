@@ -581,24 +581,6 @@
             </div>
         </div>
     </div>
-    <div class="row" id="parentPassword">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label  class="control-label">
-                    Password <span class="symbol required"></span>
-                </label>
-                <input type="password" tabindex="-1" placeholder="Enter Password" class="form-control" name="parent_password" id="parent_password"/>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label">
-                    Confirm Password <span class="symbol required"></span>
-                </label>
-                <input type="password" tabindex="-1" placeholder="Enter Password" class="form-control" name="parent_password2" id="parent_password2"/>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-6">
@@ -1091,9 +1073,6 @@ function getParents()
                         $('#father_contact').attr("disabled", true);
                         $('#mother_contact').attr("disabled", true);
                         $('#permanent_address').attr("disabled", true);
-                        $('#parentPassword').css("display","none");
-                        $('#parent_password').css("display","none");
-                        $('#parent_password2').css("display","none");
                         $('#father_first_name').val(suggestion.data['father_first_name']);
                         $('#father_middle_name').val(suggestion.data['father_middle_name']);
                         $('#father_last_name').val(suggestion.data['father_last_name']);
@@ -1107,8 +1086,6 @@ function getParents()
                         $('#father_contact').val(suggestion.data['father_contact']);
                         $('#mother_contact').val(suggestion.data['mother_contact']);
                         $('#permanent_address').val(suggestion.data['permanent_address']);
-                        $('#parent_password').val('null');
-                        $('#parent_password2').val('null');
                         $('#outputcontent').html(thehtml);
                         $('#tabTable').show();
                         var val3=$('#autocomplete').html(suggestion.value).text();
