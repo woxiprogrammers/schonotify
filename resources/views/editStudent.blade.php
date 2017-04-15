@@ -74,7 +74,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    First name
+                                                    First name: <span class="symbol required">
                                                 </label>
                                                 <input type="text" value="{!! $user->first_name !!}" class="form-control" id="firstname" name="firstname">
                                             </div>
@@ -94,7 +94,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label">Date of Birth </label>
+                                                <label class="control-label">Date of Birth: <span class="symbol required"> </label>
                                                 <div class="input-group input-append datepicker date col-sm-6">
                                                     <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
                                                         <span class="input-group-btn">
@@ -106,19 +106,19 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Nationality
+                                                    Nationality: <span class="symbol required">
                                                 </label>
-                                                <input type="text" value="{!! $student_info->nationality !!}"  class="form-control" id="roll_number" name="roll_number">
+                                                <input type="text" value="{!! $student_info->nationality !!}"  class="form-control" id="nationality" name="nationality">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Caste
                                                 </label>
-                                                <input type="text" value="{!! $student_info->caste !!}"  class="form-control" id="roll_number" name="roll_number">
+                                                <input type="text" value="{!! $student_info->caste !!}"  class="form-control" id="caste" name="caste">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Phone
+                                                    Phone : <span class="symbol required">
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
                                             </div>
@@ -138,7 +138,7 @@
                                                 <label class="control-label">
                                                     Mother Tongue <span class="symbol required"></span>
                                                 </label>
-                                                <input type="text" placeholder="Enter a Mother Tongue" class="form-control" name="mother_tongue"/>
+                                                <input type="text" placeholder="Enter a Mother Tongue" class="form-control" value="{!! $student_info->mother_tongue!!}" name="mother_tongue"/>
                                             </div>
                                             <div class="form-group">
                                                 <label for="form-field-select-2">
@@ -177,7 +177,6 @@
                                                 </label>
                                                 <input type="text" class="form-control" value="{!! $student_info->academic_to !!}" name="academic_to"/>
                                             </div>
-
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -192,9 +191,9 @@
 
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Place Of Birth
+                                                    Place Of Birth: <span class="symbol required">
                                                 </label>
-                                                <input type="text" value="{!! $student_info['birth_place'] !!}"  class="form-control" id="grn" name="grn">
+                                                <input type="text" value="{!! $student_info['birth_place'] !!}"  class="form-control" id="birth_place" name="birth_place">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -516,7 +515,7 @@
                                                             <label class="control-label">
                                                                 Parent Email: <span class="symbol required"></span>
                                                             </label>
-                                                            <input type="text" placeholder="Enter Parent Email" class="form-control" name="email" id="autocomplete" tabindex="-1" value="{!! $parent_email !!}" readonly>
+                                                            <input type="text" placeholder="Enter Parent Email" class="form-control" name="email" id="autocomplete" tabindex="-1" value="{{trim($parent_email)}}" readonly>
                                                             <input type='hidden' name='parent_id' id='parent_id'>
                                                             <br>
                                                             <div class="form-group" id="outputcontent"></div>
@@ -648,13 +647,10 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label  class="control-label">
-                                                Permanent Address <span class="symbol required"></span>
+                                                Permanent Address: <span class="symbol required"></span>
                                             </label>
                                             <div class="note-editor">
-
-                                                <textarea tabindex="-1" class="form-control autosize area-animated" name="permanent_address" id="permanent_address" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
-                                                    {!!  $family_info['permanent_address'] !!}
-                                                </textarea>
+                                                <textarea tabindex="-1" class="form-control autosize area-animated" name="permanent_address" id="permanent_address" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!!$family_info['permanent_address']!!}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -666,9 +662,7 @@
 
                                             <input type="checkbox" name="parent_communication_address" id="parent_communication_address"  checked> Same as Permanent Address
                                             <div class="note-editor" id="communication_address_parent">
-                                                <textarea class="form-control autosize area-animated" tabindex="-1" name="communication_address_parent" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
-                                                    {!!$family_info['communication_address']!!}
-                                                </textarea>
+                                                <textarea class="form-control autosize area-animated" tabindex="-1" name="communication_address_parent" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!!$family_info['communication_address']!!}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1226,4 +1220,5 @@
         })
 
 </script>
+<script src="/assets/js/student-edit.js" ></script>
 @stop

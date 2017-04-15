@@ -31,7 +31,15 @@ class EditStudentRequest extends Request
             'mobile' =>'required|digits:10',
             'address' =>'required',
             'avatar' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'roll_number'=>'required|integer'
+            'roll_number'=>'required|integer',
+            'DOB'=>'required',
+            'birth_place'=>'alpha',
+            'nationality'=>'required',
+            'mother_tongue'=>'required'
+
+
+
+
         ];
     }
 }
