@@ -70,6 +70,14 @@
                                 <input type="hidden" name="division_id"  value="{!! $division_for_updation !!}">
                              @foreach($student_info as $student_info)
                                 <fieldset>
+                                <div class="col-md-12">
+                                    <div >
+                                        <label >
+                                            GRN <span class="symbol required"></span>
+                                        </label>
+                                        <input type="text" placeholder="Enter a GRN" class="form-control" name="grn" id="grn" value="{!! $grn !!}" readonly/>
+                                    </div>
+                                </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -114,7 +122,7 @@
                                                 <label class="control-label">
                                                     Caste
                                                 </label>
-                                                <input type="text" value="{!! $student_info->caste !!}"  class="form-control" id="caste" name="caste">
+                                                <input type="text" value="{!!$caste!!}"  class="form-control" id="caste" name="caste">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -144,8 +152,8 @@
                                                 <label for="form-field-select-2">
                                                     Highest Standard Passed
                                                 </label>
+                                                <input type="hidden" id="highest_standard_hidden" value="{!!$student_info->highest_standard !!}" >
                                                 <select class="form-control" id="highest_standard" style="-webkit-appearance: menulist;" name="highest_standard">
-                                                    <option value="">{!! $student_info->highest_standard !!} </option>
                                                     <option value="nursery">Nursery </option>
                                                     <option value="LKG">L KG</option>
                                                     <option value="UKG">U KG</option>
@@ -199,14 +207,14 @@
                                                 <label class="control-label">
                                                     Religion
                                                 </label>
-                                                <input type="text" value="{!! $user->roll_number !!}"  class="form-control" id="roll_number" name="roll_number">
+                                                <input type="text" value="{!! $religion !!}"  class="form-control" id="religion" name="religion">
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Category
                                                 </label>
+                                                <input type="hidden" name="selected_category" id="selected_category" value="{!! $student_info->category !!}">
                                                 <select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
-                                                    <option value="">{!! $student_info->category !!} </option>
                                                     <option value="SC">SC</option>
                                                     <option value="ST">ST</option>
                                                     <option value="VJA">VJ(A)</option>
@@ -230,8 +238,8 @@
                                                 <label for="form-field-select-2">
                                                     Select Blood Group
                                                 </label>
-                                                <select class="form-control" name="blood_group" id="batch-select" style="-webkit-appearance: menulist;">
-                                                    <option value="">{!! $student_info->blood_group !!} </option>
+                                                <input type="hidden" id="blood_group_hideen" value="{!!$student_info->blood_group!!}">
+                                                <select class="form-control" name="blood_group" id="blood_group" style="-webkit-appearance: menulist;">
                                                     <option value="A+">A+</option>
                                                     <option value="A-">A-</option>
                                                     <option value="B+">B+</option>
@@ -276,7 +284,7 @@
                                                             <label class="control-label">
                                                                 UDISE No.
                                                             </label>
-                                                            <input type="text" placeholder="Enter UDISE No " class="form-control" value="{!! $school['udise_no']!!}" name="udise_no"/>
+                                                            <input type="number" placeholder="Enter UDISE No " class="form-control" value="{!! $school['udise_no']!!}" name="udise_no"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -313,7 +321,7 @@
                                                             <label class="control-label">
                                                                 Grades / %
                                                             </label>
-                                                            <input type="text" placeholder="Enter Grades" value="{!! $school['grades'] !!}" class="form-control" name="grades"/>
+                                                            <input type="number" placeholder="Enter Grades" value="{!! $school['grades'] !!}" class="form-control" name="grades"/>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -447,8 +455,8 @@
                                                     Assign Fee Concession :
                                                 </label>
                                                 <div>
-                                                    <select name="caste"  style="-webkit-appearance: menulist;">
-                                                        <option>Select Caste</option>
+                                                    <select name="caste1"  style="-webkit-appearance: menulist;">
+
                                                         @foreach($queryn as $castes)
                                                         <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
                                                         @endforeach
@@ -1040,6 +1048,12 @@
 <script src="/assets/js/table-data.js"></script>
 <script>
     jQuery(document).ready(function() {
+        var category = $("#selected_category").val();
+        var blood= $("#blood_group_hideen").val();
+        var std=$("#highest_standard_hidden").val();
+        $("option[value='"+std+"']").prop('selected',true);
+        $("option[value='"+category+"']").prop('selected',true);
+        $("option[value='"+blood+"']").prop('selected',true);
         $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
@@ -1109,7 +1123,7 @@
     function clsTeacher(chk){
         if(chk==true)
         {
-            $('#clstchr_batch').show();
+            $('#clstchr_batch').s{!! $student_info->blood_group !!}how();
             $('#clstchr_class').show();
             $('#clstchr_div').show();
         }else{
