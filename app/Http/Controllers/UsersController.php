@@ -1027,12 +1027,13 @@ class UsersController extends Controller
                 $documents = StudentDocumentMaster::all();
                 $doc=SubmittedDocuments::where('student_id',$id)->pluck('submitted_documents');
                 $doc=explode(',',$doc);
-
                 $family_info=ParentExtraInfo::where('parent_id',$user['parent_id'])->first();
                 $parent_email=User::where('id',$user['parent_id'])->pluck('email');
                 $student_data=StudentSibling::where('student_id',$id)->get();
-
-                return  view('editStudent')->with(compact('query1','assigned_fee','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email'));
+                $caste=StudentExtraInfo::where('student_id',$id)->pluck('caste');
+                $grn=StudentExtraInfo::where('student_id',$id)->pluck('grn');
+                $religion=StudentExtraInfo::where('student_id',$id)->pluck('religion');
+                return  view('editStudent')->with(compact('religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email'));
 
             }elseif($userRole->slug == 'parent')
             {
@@ -1178,7 +1179,7 @@ class UsersController extends Controller
                 }
                 $student_fee['year']=$query;
                 $student_fee['fee_concession_type']=$request->concessions_2;
-                $student_fee['caste_concession']=$request->caste;
+                $student_fee['caste_concession']=$request->caste1;
                 $a=StudentFee::insert($student_fee);
             }
             else
@@ -1187,7 +1188,7 @@ class UsersController extends Controller
                 $student_fee['fee_id']=$request->student_fee;
                 $student_fee['year']=$query;
                 $student_fee['fee_concession_type']=$request->concessions_2;
-                $student_fee['caste_concession']=$request->caste;
+                $student_fee['caste_concession']=$request->caste1;
                 $a=StudentFee::where('student_id',$id)->update($student_fee);
             }
         }
@@ -1224,10 +1225,8 @@ class UsersController extends Controller
             }
             $image->move($path,$filename);
         }
-        else
-        {
+        else{
             $filename=$userImage->avatar;
-
         }
         $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
         $userData['username']= $request->username;

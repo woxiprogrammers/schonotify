@@ -40,7 +40,7 @@ var FormValidation = function(){
                 birth_place: {
                     minlength: 2,
                     required: true,
-                    alpha: true
+                    alphanumeric:true
                 },
                 lastname: {
                     minlength: 2,
@@ -68,19 +68,6 @@ var FormValidation = function(){
                 },
                 address:{
                     required:true
-                },
-                access:{
-                    required:true,
-                    minlength:1
-                },
-                batch:{
-                    requiredIfChecked:true
-                },
-                class:{
-                    requiredIfChecked:true
-                },
-                division:{
-                    requiredIfChecked:true
                 },
                 roll_number:{
                     required:true,
@@ -110,7 +97,7 @@ var FormValidation = function(){
                 },
                 birth_place: {
                     required: "Birth Place is required" ,
-                    alpha: "Birth Place must contain only letters",
+                    alphanumeric: "Birth Place must contain only letters",
                     minlength:"Please enter at least 2 character"
                 },
                 lastname: {
@@ -177,6 +164,7 @@ var FormValidation = function(){
             submitHandler: function (form) {
                 successHandler.show();
                 errorHandler.hide();
+                form.submit();
             }
         });
     };

@@ -309,7 +309,7 @@ class SearchController extends Controller
 
         $str.="</table>";
 
-        if(sizeof($result->toArray()) != 0 )
+        if(!isEmpty($result->toArray()))
         {
             return $str;
         } else {
