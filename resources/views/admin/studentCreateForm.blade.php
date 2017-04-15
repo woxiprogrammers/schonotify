@@ -410,8 +410,6 @@
     </div>
 </div>
 </fieldset>
-
-
 <fieldset>
     <legend>
         STUDENT'S FAMILY INFORMATION
@@ -558,7 +556,6 @@
         </div>
     </div>-->
     <div class="row">
-
         <div class="col-md-6">
             <div class="form-group">
                 <label  class="control-label">
@@ -591,13 +588,37 @@
                 <label  class="control-label">
                     SIBLINGS
                 </label><br>
-                <INPUT type="button" tabindex="-1" value="Add Row" onclick="addSibling('sibling')" />
+               <!-- <INPUT type="button" tabindex="-1" value="Add Row" onclick="addSibling('sibling')" />
                 <TABLE id="sibling"  border="1">
                     <TR>
                         <TD> <INPUT type="text" name="sibling[0][name]" placeholder="Name"/> </TD>
                         <TD> <INPUT type="number" name="sibling[0][age]" placeholder="Age"/> </TD>
                     </TR>
-                </TABLE>
+                </TABLE>-->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input tabindex="-1" type="text" placeholder="Enter Name" class="form-control" name="sibling[0][name]" id="name0"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <input tabindex="-1" type="number" placeholder="Enter Age" class="form-control" name="sibling[0][age]" id="age0"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" placeholder="Enter Name" class="form-control" name="sibling[1][name]" id="name1"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="number" placeholder="Enter Age" class="form-control" name="sibling[1][age]" id="age1"/>
             </div>
         </div>
     </div>
@@ -670,38 +691,94 @@
     <legend>
         SPECIAL APTITUDE
     </legend>
-    <INPUT type="button" value="Add Row" onclick="addRowSpecialAptitude('dataTable')" />
+    <!--<INPUT type="button" value="Add Row" onclick="addRowSpecialAptitude('dataTable')" />
     <TABLE id="dataTable"  border="1">
         <TR>
             <TD><INPUT type="text" name="special_aptitude[0][test]" placeholder="Test"/></TD>
             <TD><INPUT type="number" name="special_aptitude[0][score]" placeholder="Score"/></TD>
 
         </TR>
-    </TABLE>
+    </TABLE>-->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" placeholder="Enter Test" class="form-control" name="special_aptitude[0][test]" id="test0"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="number" placeholder="Enter Score" class="form-control" name="special_aptitude[0][score]" id="score0"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" placeholder="Enter Test" class="form-control" name="special_aptitude[1][test]" id="test1"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="number" placeholder="Enter Score" class="form-control" name="special_aptitude[1][score]" id="score1"/>
+            </div>
+        </div>
+    </div>
 
 </fieldset>
 <fieldset>
     <legend>
         INTEREST / HOBBIES
     </legend>
-    <INPUT type="button" value="Add Row" onclick="addRow('hobbies')" />
+    <!--<INPUT type="button" value="Add Row" onclick="addRow('hobbies')" />
     <TABLE id="hobbies"  border="1">
         <TR>
             <TD> <INPUT type="text" name="hobbies[]"/> </TD>
         </TR>
-    </TABLE>
+    </TABLE>-->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" placeholder="Enter Hobby" class="form-control" name="hobbies[]" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" placeholder="Enter Hobby" class="form-control" name="hobbies[]"/>
+            </div>
+        </div>
+    </div>
 
 </fieldset>
 <fieldset>
     <legend>
-        DOCUMENTS SUBMITTED
+        DOCUMENTS SUBMITTED &nbsp [Note: If submitted then please tick the box]
     </legend>
-    <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
+   <!-- <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
     <TABLE id="upload_doc"  border="1">
         <TR>
             <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
         </TR>
-    </TABLE>
+    </TABLE>-->
+    @foreach($documents as $document)
+
+    <div class="row">
+        <div class="col-md-6">
+            <input type="checkbox" value="{{$document['id']}}" name="documents[]">
+            <div class="form-group">
+                <label class="control-label">
+                    {{$document['document_name']}}
+                </label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="file" name="upload_doc[{{$document['id']}}]" accept='image/jpeg,image/gif,image/png,application/pdf'/>
+            </div>
+        </div>
+    </div>
+    @endforeach
 </fieldset>
 <fieldset>
     <div class="row">
@@ -794,7 +871,6 @@
 
 @include('footer')
 </div>
-
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -806,23 +882,18 @@
 <script src="vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
-
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
-
 <script src="assets/js/student-form-wizard.js"></script>
-
 <script src="assets/js/custom-project.js"></script>
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
-
 <script>
     jQuery(document).ready(function() {
         userAclModule();

@@ -41,6 +41,7 @@
     $(document).ready(function(){
 
         $('#Classdropdown').change(function(){
+            $('div#loadmoreajaxloader').show();
             var classs=this.value;
             var route='/get-divisions-search';
             $.ajax({
@@ -50,6 +51,7 @@
             })
                 .done(function(res){
                     $('#DivSearch').html(res);
+                    $('div#loadmoreajaxloader').hide();
                 })
         })
 

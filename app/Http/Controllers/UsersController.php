@@ -24,6 +24,7 @@ use App\Module;
 use App\ModuleAcl;
 use App\ParentExtraInfo;
 use App\StudentDocument;
+use App\StudentDocumentMaster;
 use App\StudentExtraInfo;
 use App\StudentFamily;
 use App\StudentFee;
@@ -33,6 +34,7 @@ use App\StudentPreviousSchool;
 use App\StudentSibling;
 use App\StudentSpecialAptitude;
 use App\SubjectClassDivision;
+use App\SubmittedDocuments;
 use App\TeacherExtraInfo;
 use App\TeacherQualification;
 use App\TeacherReferences;
@@ -308,16 +310,16 @@ class UsersController extends Controller
 
     public function studentCreateForm(Requests\WebRequests\UserRequest $request)
     {
-        $roles=UserRoles::all();
+        $userRoles =UserRoles::all();
         $role_id='3';
         Session::put('role_id', $role_id);
+        $documents = StudentDocumentMaster::all();
         if($request->authorize()===true)
         {
-            return view('admin.studentCreateForm')->with('userRoles',$roles);
+            return view('admin.studentCreateForm')->with(compact('userRoles','documents'));
         }else{
             return Redirect::to('/');
         }
-
     }
 
     public function parentCreateForm(Requests\WebRequests\UserRequest $request)
@@ -424,7 +426,6 @@ class UsersController extends Controller
                 $teacherViews['updated_at'] = Carbon::now();
                 TeacherView::insert($teacherViews);
 
-
                 if(isset($data['teacher_communication_address'])){
                     $communication_address_teacher = $data['permanent_address'];
                 }else{
@@ -467,6 +468,7 @@ class UsersController extends Controller
                         TeacherWorkExperience::insert($workExperienceInfo);
                     }
                 }
+
                 if(isset($data['reference'])){
                     $referenceInfo = array();
                     $references = $data['reference'];
@@ -649,6 +651,16 @@ class UsersController extends Controller
                 $extraInfo['created_at'] = Carbon::now();
                 $extraInfo['updated_at'] = Carbon::now();
                 StudentExtraInfo::insert($extraInfo);
+               //Student documents submitted status.
+                $document=$request->documents;
+                if(!empty($document)){
+                    $document=implode(",",$document);
+                }
+                if(!empty($document)){
+                    $documentData['student_id']=$LastInsertId;
+                    $documentData['submitted_documents']=$document;
+                    $query=SubmittedDocuments::insert($documentData);
+                }
 
                 if(isset($data['upload_doc'])){
                     foreach($data['upload_doc'] as $doc){
@@ -669,6 +681,7 @@ class UsersController extends Controller
                         }
                     }
                 }
+
             }
             if($data['role_name'] != 'student'){
             if(!empty($data['modules'])){
@@ -988,11 +1001,38 @@ class UsersController extends Controller
                 $queryn=category_types::select('caste_category','id')->get()->toArray();
                 $querym=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');
                 $chkstatus=StudentFeeConcessions::where('student_id',$id)->select('fee_concession_type')->first();
+                $student_info=StudentExtraInfo::where('student_id',$id)->get();
+                $student_school=StudentPreviousSchool::where('student_id',$id)->get();
+                $school=array();
+                $aptitude=StudentSpecialAptitude::where('student_id',$id)->select('special_aptitude','score')->get();
+                foreach($student_school as $school_info){
+                             $school['name']=$school_info['school_name'];
+                             $school['udise_no']=$school_info['udise_no'];
+                             $school['city']=$school_info['city'];
+                             $school['medium_of_instruction']=$school_info['medium_of_instruction'];
+                             $school['board_examination']=$school_info['board_examination'];
+                             $school['grades']=$school_info['grades'];
+                }
+                $hobbies=array();
+                $interests=StudentHobby::where('student_id',$id)->get()->toArray();
+                foreach($interests as $interest){
+                             $hobbies['hobby']=$interest['hobby'];
+                }
                 if(!empty($chkstatus))
                 {
                     $chkstatus = $chkstatus->fee_concession_type;
+                }else{
+                    $chkstatus='null';
                 }
-                return  view('editStudent')->with(compact('query1','assigned_fee','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus'));
+                $documents = StudentDocumentMaster::all();
+                $doc=SubmittedDocuments::where('student_id',$id)->pluck('submitted_documents');
+                $doc=explode(',',$doc);
+
+                $family_info=ParentExtraInfo::where('parent_id',$user['parent_id'])->first();
+                $parent_email=User::where('id',$user['parent_id'])->pluck('email');
+                $student_data=StudentSibling::where('student_id',$id)->get();
+
+                return  view('editStudent')->with(compact('query1','assigned_fee','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email'));
 
             }elseif($userRole->slug == 'parent')
             {
@@ -1057,8 +1097,7 @@ class UsersController extends Controller
             {
                 array_push($aclSeperate,explode('_',$row));
             }
-
-           ModuleAcl::where('user_id',$id)->delete();
+        ModuleAcl::where('user_id',$id)->delete();
             $module_acl=array();
             foreach($aclSeperate as $row)
             {
@@ -1126,48 +1165,52 @@ class UsersController extends Controller
     {
         $query=Fees::where('id',$request->student_fee)->pluck('year');
         $query2=StudentFee::where('student_id',$id)->select('fee_id')->get();
-        if($query2->isEmpty())
-        {
-            $student_fee['student_id']=$id;
-            if( $request->student_fee == null)
+        if($request->fee_id != null){
+            if($query2->isEmpty())
             {
-                $student_fee['fee_id']=0;
-            }else
-            {
-                $student_fee['fee_id']=$request->student_fee;
+                $student_fee['student_id']=$id;
+                if( $request->student_fee == null)
+                {
+                    $student_fee['fee_id']=0;
+                }else
+                {
+                    $student_fee['fee_id']=$request->student_fee;
+                }
+                $student_fee['year']=$query;
+                $student_fee['fee_concession_type']=$request->concessions_2;
+                $student_fee['caste_concession']=$request->caste;
+                $a=StudentFee::insert($student_fee);
             }
-            $student_fee['year']=$query;
-            $student_fee['fee_concession_type']=$request->concessions_2;
-            $student_fee['caste_concession']=$request->caste;
-            $a=StudentFee::insert($student_fee);
-       }
-       else
-        {
-            $student_fee['student_id']=$id;
-            $student_fee['fee_id']=$request->student_fee;
-            $student_fee['year']=$query;
-            $student_fee['fee_concession_type']=$request->concessions_2;
-            $student_fee['caste_concession']=$request->caste;
-            $a=StudentFee::where('student_id',$id)->update($student_fee);
-        }
-        $existCheck=StudentFeeConcessions::where('student_id',$id)->exists();
-        if($existCheck == true)
-        {
-            $concessions=array();
-            $concessions['fee_id']=$request->student_fee;
-            $concessions['student_id']=$id;
-            $concessions['fee_concession_type']=json_encode($request->concessions);
-            $b=StudentFeeConcessions::where('student_id',$id)->update($concessions);
-        }
-        else
-        {
-            $concessions=array();
-            $concessions['fee_id']=$request->student_fee;
-            $concessions['student_id']=$id;
-            $concessions['fee_concession_type']=json_encode($request->concessions);
-            $b=StudentFeeConcessions::create($concessions);
+            else
+            {
+                $student_fee['student_id']=$id;
+                $student_fee['fee_id']=$request->student_fee;
+                $student_fee['year']=$query;
+                $student_fee['fee_concession_type']=$request->concessions_2;
+                $student_fee['caste_concession']=$request->caste;
+                $a=StudentFee::where('student_id',$id)->update($student_fee);
+            }
         }
 
+        $existCheck=StudentFeeConcessions::where('student_id',$id)->exists();
+       if($request->fee_id != null){
+           if($existCheck == true)
+           {
+               $concessions=array();
+               $concessions['fee_id']=$request->student_fee;
+               $concessions['student_id']=$id;
+               $concessions['fee_concession_type']=json_encode($request->concessions);
+               $b=StudentFeeConcessions::where('student_id',$id)->update($concessions);
+           }
+           else
+           {
+               $concessions=array();
+               $concessions['fee_id']=$request->student_fee;
+               $concessions['student_id']=$id;
+               $concessions['fee_concession_type']=json_encode($request->concessions);
+               $b=StudentFeeConcessions::create($concessions);
+           }
+       }
         $userImage=User::where('id',$id)->first();
         $existingEmail= trim($userImage->email);
         unset($request->_method);
@@ -1207,11 +1250,90 @@ class UsersController extends Controller
         }
         HomeworkTeacher::where('student_id',$request->id)->update($homework);
         Attendance::where('student_id',$request->id)->update($homework);
-        $leaves['division_id'] = $request->division;
+        $leaves['division_id'] = $request->division_id;
         Leave::where('student_id',$request->id)->update($leaves);
         $userUpdate=User::where('id',$id)->update($userData);
         $grnNumber = $request->grn;
         $extraInfo = StudentExtraInfo::where('student_id',$id)->update(['grn' => $grnNumber]);
+        $student_previous_school=array();
+        $student_previous_school['school_name']=$request->school_name;
+        $student_previous_school['udise_no']=$request->udise_no;
+        $student_previous_school['city']=$request->city;
+        $student_previous_school['medium_of_instruction']=$request->medium_of_instruction;
+        $student_previous_school['board_examination']=$request->board_examination;
+        $student_previous_school['grades']=$request->grades;
+        $student_pre_school=StudentPreviousSchool::where('student_id',$id)->update($student_previous_school);
+        if(isset($request['hobbies'])){
+            $hobbyInfo = array();
+            $hobbies = $request['hobbies'];
+            foreach($hobbies as $hobby){
+                if($hobby != ''){
+                    $hobbyInfo['student_id'] = $id;
+                    $hobbyInfo['hobby'] = $hobby;
+                    $hobbyInfo['updated_at'] = Carbon::now();
+                    StudentHobby::where('student_id',$id)->update($hobbyInfo);
+                }
+
+            }
+        }
+        if(isset($request['special_aptitude'])){
+            $aptitudeInfo = array();
+            $aptitudes = $request['special_aptitude'];
+            foreach($aptitudes as $aptitude){
+                if($aptitude['test'] != '' && $aptitude != ''){
+                    $aptitudeInfo['student_id'] = $id;
+                    $aptitudeInfo['special_aptitude'] = $aptitude['test'];
+                    $aptitudeInfo['score'] = $aptitude['score'];
+                    $aptitudeInfo['updated_at'] = Carbon::now();
+                    $q=StudentSpecialAptitude::where('student_id',$id)->update($aptitudeInfo);
+                }
+            }
+        }
+        if(isset($request['student_communication_address'])){
+            $student_communication_address = $request['address'];
+        }else{
+            $student_communication_address = $request['communication_address'];
+        }
+        $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
+        $extraInfo['communication_address']=$student_communication_address;
+        $extraInfo['student_id'] = $id;
+        $extraInfo['created_at'] = Carbon::now();
+        $extraInfo['updated_at'] = Carbon::now();
+        StudentExtraInfo::where('student_id',$id)->update($extraInfo);
+
+        if(isset($data['parent_communication_address'])){
+            $communication_address_parent = $request['permanent_address'];
+        }else{
+            $communication_address_parent = $request['communication_address_parent'];
+        }
+        $parnetId =User::where('id',$id)->pluck('parent_id');
+        $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
+        $familyInfo['communication_address'] = $communication_address_parent;
+        $familyInfo['parent_id'] = $parnetId;
+        $familyInfo['created_at'] = Carbon::now();
+        $familyInfo['updated_at'] = Carbon::now();
+        $g=ParentExtraInfo::where('parent_id',$parnetId)->update($familyInfo);
+
+
+        $student=SubmittedDocuments::exists($id);
+        if($student == false){
+            $document=$request->documents;
+            if(!empty($document)){
+                $document=implode(",",$document);
+            }
+            $documentData['student_id']=$id;
+            $documentData['submitted_documents']=$document;
+            $query=SubmittedDocuments::insert($documentData);
+        }else{
+            $document=$request->documents;
+            if(!empty($document)){
+                $document=implode(",",$document);
+             }
+            $documentData['student_id']=$id;
+            $documentData['submitted_documents']=$document;
+            $query=SubmittedDocuments::where('student_id',$id)->update($documentData);
+        }
+
         if ($userUpdate == 1) {
             Session::flash('message-success','student updated successfully');
             return Redirect::back();
@@ -1223,6 +1345,18 @@ class UsersController extends Controller
     }
     public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
     {
+        $data=$request->all();
+        if(isset($data['parent_communication_address'])){
+            $communication_address_parent = $data['permanent_address'];
+        }else{
+            $communication_address_parent = $data['communication_address_parent'];
+        }
+
+        $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
+        $familyInfo['permanent_address'] = $communication_address_parent;
+        $familyInfo['updated_at'] = Carbon::now();
+        $userFamilyUpdate=ParentExtraInfo::where('parent_id',$request->userId)->update($familyInfo);
+        $chk=StudentSibling::exists($id);
         $userImage=User::where('id',$id)->first();
         $existingEmail= trim($userImage->email);
         unset($request->_method);
@@ -1259,9 +1393,8 @@ class UsersController extends Controller
         $leaves['division_id']=$request->division;
         Leave::where('student_id',$request->id)->update($leaves);
         $userUpdate=User::where('id',$id)->update($userData);
-        if($userUpdate == 1){
-            $this->sendUpdateMail($existingEmail,$userData,$id);
-            Session::flash('message-success','Parent updated successfully');
+        if($userUpdate == 1 ){
+           Session::flash('message-success','Parent updated successfully');
             return Redirect::back();
         }
         else{
