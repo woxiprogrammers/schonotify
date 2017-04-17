@@ -33,7 +33,7 @@
         {
             tabUserSelect(id);
         }
-
+        $('option#4').hide();
         Main.init();
         FormValidator.init();
     });
@@ -60,15 +60,13 @@
         }
         tabUserSelect(par);
     });
-
-
-
-    function tabUserSelect(par)
+   function tabUserSelect(par)
     {
-
+        $('div#loadmoreajaxloader').show();
         var route='/selectUser'+'/'+par;
          $.get(route,function(res){
             $("#tableContent").html(res);
+             $('div#loadmoreajaxloader').hide();
             var switcheryHandler = function() {
             var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
                 elements.forEach(function(html) {
