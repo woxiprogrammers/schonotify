@@ -75,7 +75,7 @@
                                         <label >
                                             GRN <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" placeholder="Enter a GRN" class="form-control" name="grn" id="grn" value="{!! $grn !!}" readonly/>
+                                        <input type="text" placeholder="Enter a GRN" class="form-control" name="grn" id="grn" value="{!! $grn !!}"/>
                                     </div>
                                 </div>
                                     <div class="row">
