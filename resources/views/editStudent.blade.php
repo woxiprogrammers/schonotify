@@ -372,7 +372,9 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
+                                                            @if(!empty($hobbies))
                                                             <input type="text" placeholder="Enter Hobby" value="{!! $hobbies['hobby'] !!}" class="form-control" name="hobbies[]" />
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
