@@ -1,5 +1,4 @@
 @extends('master')
-
 @section('content')
  		<div id="app">
            @include('sidebar')
@@ -35,14 +34,21 @@
 						</section>
 						<!-- end: DASHBOARD TITLE -->
                        @include('admin.userRoleDropdown')
-                        <div class="container-fluid container-fullw bg-white col-md-4" id="UserSearch">
+                        <div class="container-fluid container-fullw bg-white col-md-3" id="Student_without_division" style="display: none">
+                            <input type="checkbox" class="checkbox" id="checkbox">
+                             <label for="checkbox">Show students without divsion.</label>
+                            <br>
+                            <br><br>
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-4" id="ClassSearch">
+                        <div class="container-fluid container-fullw bg-white col-md-3" id="UserSearch">
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-4" id="DivSearch">
+                        <div class="container-fluid container-fullw bg-white col-md-3" id="ClassSearch">
+                        </div>
+                        <div class="container-fluid container-fullw bg-white col-md-3" id="DivSearch">
                         </div>
                         <!-- start: DYNAMIC TABLE -->
                         <div class="container-fluid container-fullw bg-white">
+
                         <div class="row">
                             <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
                         <div class="col-md-12" id="tableContent">
@@ -61,8 +67,6 @@
             @include('footer')
 		</div>
         @include('searchJS')
-
-
 <script>
 
     function statusUser(status,id)
@@ -105,7 +109,3 @@
     }
 </script>
 @stop
-
-
-
-

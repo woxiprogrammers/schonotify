@@ -38,12 +38,37 @@
         FormValidator.init();
     });
 
+    $('#checkbox').change(function(){
+        $('div#loadmoreajaxloader').show();
+        var Division= "-1";
+        var route='studentSearch';
+        $.ajax({
+            method: "get",
+            url: route,
+            data: { Division }
+        })
+            .done(function(res){
+                $("#tableContent").html(res);
+                $('div#loadmoreajaxloader').hide();
+                var switcheryHandler = function() {
+
+                    var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                    elements.forEach(function(html) {
+                        var switchery = new Switchery(html);
+                    });
+                };
+                switcheryHandler();
+                TableData.init();
+            })
+    })
     $('#role-select').change(function(){
         $('div#loadmoreajaxloader').show();
         var par=this.value;
         if(par == 3)
         {
             $('#UserSearch').show(1000);
+            $('#Student_without_division').show(1000);
             $('#ClassSearch').show(1000);
             $('#DivisionBlock').show(1000);
             var route1='/search-batch';
@@ -55,6 +80,7 @@
         else
         {   $('div#loadmoreajaxloader').hide();
             $('#UserSearch').hide(1000);
+            $('#Student_without_division').hide(1000);
             $('#ClassSearch').hide(1000);
             $('#DivisionBlock').hide(1000);
         }
