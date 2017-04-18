@@ -209,7 +209,6 @@ class UsersController extends Controller
     {
 
         $modules=Module::select('slug','id')->get();
-
         $acls=AclMaster::all();
         $allModuleAcl=array();
         $arrMod=ModuleAcl::where('user_id',$id)
@@ -217,18 +216,13 @@ class UsersController extends Controller
             ->join('acl_master','module_acls.acl_id','=','acl_master.id')
             ->select('modules.slug as modules','acl_master.slug as acls')
             ->get();
-
         $userModAclArr=array();
         foreach($arrMod as $row)
         {
             array_push($userModAclArr,$row->acls.'_'.$row->modules);
         }
-
         $mainArr=array();
-
-
-        foreach($modules as $row1)
-        {
+        foreach($modules as $row1){
             $i=0;
             foreach($acls as $row)
             {
@@ -237,17 +231,13 @@ class UsersController extends Controller
                 $i++;
 
             }
-
         }
-
         $mainArr['allModules']=$modules;
         $mainArr['allAcls']=$acls;
         $mainArr['userModAclArr']=$userModAclArr;
         $mainArr['allModAclArr']=$allModuleAcl;
-
         return $mainArr;
-
-    }
+}
 
     /**
      * Show the form for creating a new resource.
@@ -256,13 +246,9 @@ class UsersController extends Controller
      */
     public function create($id)
     {
-
         $role1=UserRoles::find($id);
-
         Session::put('user_create_role',$role1->slug);
-
-        if($role1->slug=='admin')
-        {
+        if($role1->slug=='admin'){
             return Redirect::to('adminCreate');
         }elseif($role1->slug=='teacher')
         {
@@ -285,13 +271,11 @@ class UsersController extends Controller
         $roles=UserRoles::all();
         $role_id='1';
         Session::put('role_id', $role_id);
-        if($request->authorize()===true)
-        {
+        if($request->authorize()===true){
             return view('admin.adminCreateForm')->with('userRoles',$roles);
         }else{
             return Redirect::to('/');
         }
-
     }
 
     public function teacherCreateForm(Requests\WebRequests\UserRequest $request)
@@ -299,13 +283,11 @@ class UsersController extends Controller
         $roles=UserRoles::all();
         $role_id='2';
         Session::put('role_id', $role_id);
-        if($request->authorize()===true)
-        {
+        if($request->authorize()===true){
             return view('admin.teacherCreateForm')->with('userRoles',$roles);
         }else{
             return Redirect::to('/');
         }
-
     }
 
     public function studentCreateForm(Requests\WebRequests\UserRequest $request)
@@ -314,8 +296,7 @@ class UsersController extends Controller
         $role_id='3';
         Session::put('role_id', $role_id);
         $documents = StudentDocumentMaster::all();
-        if($request->authorize()===true)
-        {
+        if($request->authorize()===true){
             return view('admin.studentCreateForm')->with(compact('userRoles','documents'));
         }else{
             return Redirect::to('/');
@@ -327,8 +308,7 @@ class UsersController extends Controller
         $roles=UserRoles::all();
         $role_id='4';
         Session::put('role_id', $role_id);
-        if($request->authorize()===true)
-        {
+        if($request->authorize()===true){
             return view('admin.parentCreateForm')->with('userRoles',$roles);
         }else{
             return Redirect::to('/');
@@ -338,8 +318,7 @@ class UsersController extends Controller
     public function usersCreateForm(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-        if($request->authorize()===true)
-        {
+        if($request->authorize()===true){
             return view('admin.usersCreateForm')->with('userRoles',$roles);
         }else{
             return Redirect::to('/');
@@ -350,8 +329,7 @@ class UsersController extends Controller
     public function studentCreateFormEnquiry(Requests\WebRequests\UserRequest $request)
     {
         $roles=UserRoles::all();
-        if($request->authorize()===true)
-        {
+        if($request->authorize()===true){
             return view('admin.studentCreateFormEnquiry')->with('userRoles',$roles);
         }else{
             return Redirect::to('/');
@@ -439,7 +417,6 @@ class UsersController extends Controller
                 $teacherExtraInfo['created_at'] = Carbon::now();
                 $teacherExtraInfo['updated_at'] = Carbon::now();
                 TeacherExtraInfo::insert($teacherExtraInfo);
-
                 if(isset($data['qualification'])){
                     $qualificationInfo = array();
                     $qualifications = $data['qualification'];
@@ -454,7 +431,6 @@ class UsersController extends Controller
                         TeacherQualification::insert($qualificationInfo);
                     }
                 }
-
                 if(isset($data['work_experience'])){
                     $workExperienceInfo = array();
                     $workExperiences = $data['work_experience'];
@@ -1288,7 +1264,7 @@ class UsersController extends Controller
                 }
             }
         }
-        if(isset($request['student_communication_address'])){
+        if(isset($reqsest['student_communication_address'])){
             $student_communication_address = $request['address'];
         }else{
             $student_communication_address = $request['communication_address'];
@@ -1695,7 +1671,7 @@ class UsersController extends Controller
 
 
     public function getUserRoles(){
-        $userRole = UserRoles::whereNotIn('slug', ['parent','admin'])->get();
+        $userRole = UserRoles::whereNotIn('slug', ['parent','admin'])->top(3)->get();
         $userRoles = $userRole->toArray();
         return $userRoles;
     }
@@ -1875,8 +1851,8 @@ class UsersController extends Controller
 
     public function checkGrnNumber(Request $request){
         try{
-
-            $grnCount= StudentExtraInfo::where('student_id','!=',$request->userId)->where('grn',$request->grn)->count();
+            $body_id=User::where('id',$request->userId)->pluck('body_id');
+            $grnCount= StudentExtraInfo::where('body_id',$body_id)->where('student_id','!=',$request->userId)->where('grn',$request->grn)->count();
             if($grnCount > 0){
                 return 'false';
             }else{

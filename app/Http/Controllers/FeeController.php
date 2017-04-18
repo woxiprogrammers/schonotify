@@ -86,6 +86,9 @@ class FeeController extends Controller
         {
           return view('fee.installments');
         }
+    public function billiingPageView(){
+        return view('fee.FeeBillingPage');
+    }
     public function create(Request $request)
     {
         $fee_details['fee_name']=$request->fee_name;

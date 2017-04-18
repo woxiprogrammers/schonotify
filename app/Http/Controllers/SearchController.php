@@ -31,9 +31,7 @@ class SearchController extends Controller
     public function searchUsers()
     {
         $roles=UserRoles::all();
-
         return view('admin.searchUsers')->with('userRoles',$roles);
-
     }
     public function Studentfilter(Request $request)
     {
@@ -309,7 +307,7 @@ class SearchController extends Controller
 
         $str.="</table>";
 
-        if(!isEmpty($result->toArray()))
+        if(!empty($result))
         {
             return $str;
         } else {
