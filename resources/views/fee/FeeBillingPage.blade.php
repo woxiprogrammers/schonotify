@@ -23,25 +23,36 @@
                     </div>
                 </section>
                 <fieldset>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">
-                                Batch <span class="symbol required"></span>
-                            </label>
+                <legend> Student Details</legend>
+                    <form id="getStudentDetialsForm" role="form">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    School: <span class="symbol required"></span>
+                                </label>
+                                <select name="school" class="form-control">
+                                    @foreach($bodies as $body)
+                                        <option value="{{$body['id']}}"> {{$body['name']}} </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" >
-                            <label class="control-label">
-                                Class <span class="symbol required"></span>
-                            </label>
+                        <div class="col-md-4">
+                            <div class="form-group" >
+                                <label class="control-label">
+                                    GRN <span class="symbol required"></span>
+                                </label>
+                                <input name="grn" id="grn" type="text" PLACEHOLDER="Enter you GRN" class="form-control">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group" >
-
+                        <div class="col-md-5 col-md-offset-2">
+                            <div class="form-group" >
+                                <button class="btn btn-primary btn-wide" type="submit">
+                                    Get Details
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </fieldset>
             </div>
             @include('rightSidebar')
@@ -87,12 +98,76 @@
 <script src="/assets/js/table-data.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script>
+    var FormValidator1 = function(){
+        var detailsFormValidate = function(){
+            var form = $("#getStudentDetialsForm");
+            var errorHandler = $('.errorHandler', form);
+            var successHandler = $('.successHandler', form);
+
+            form.validate({
+                rules: {
+                    school :{
+                        required: true
+                    },
+                    grn:{
+                        required: true
+                    }
+                },
+                messages: {
+                    school :{
+                        required: "School field is required."
+                    },
+                    grn:{
+                        required: "GRN is required."
+                    }
+                },
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    successHandler.hide();
+                    errorHandler.show();
+                },
+                highlight: function (element) {
+                    $(element).closest('.help-block').removeClass('valid');
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                },
+                unhighlight: function (element) { // revert the change done by hightlight
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                success: function (label, element) {
+                    label.addClass('help-block valid');
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+                },
+                submitHandler: function (form) {
+                    successHandler.show();
+                    errorHandler.hide();
+
+                    var formData = $("#getStudentDetialsForm").serialize();
+                    $.ajax({
+                        url: '/fees/get-student-details',
+                        data: formData,
+                        type: "POST",
+                        async: true,
+                        success:function(){
+                            console.log('in success');
+                        },
+                        error: function(){
+                            console.log('in error');
+                        }
+                    });
+                    console.log(formData);
+                }
+            });
+        }
+
+        return{
+            init: function(){
+                detailsFormValidate();
+            }
+        }
+    }();
     jQuery(document).ready(function()
     {
         Main.init();
-        FormValidator.init();
-        FormElements.init();
-        event.stopPropagation();
+        FormValidator1.init();
     })
 </script>
 @stop

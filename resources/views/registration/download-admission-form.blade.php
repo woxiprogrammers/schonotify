@@ -54,7 +54,7 @@
          </form>
         <div class="col-md-4">
            <form method="get" action="/fees/billiingPage">
-               <button class="btn btn-primary btn-wide">
+               <button class="btn btn-primary btn-wide" type="submit">
                    Make Payment
                </button>
            </form>

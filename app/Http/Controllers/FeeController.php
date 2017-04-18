@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Body;
 use App\CASTECONCESSION;
 use App\category_types;
 use App\Classes;
@@ -16,6 +17,7 @@ use App\FeeInstallments;
 use App\Fees;
 use App\StudentFee;
 use App\TransactionDetails;
+use App\User;
 use Carbon\Carbon;
 use App\Installments;
 use Illuminate\Http\Request;
@@ -87,8 +89,18 @@ class FeeController extends Controller
           return view('fee.installments');
         }
     public function billiingPageView(){
-        return view('fee.FeeBillingPage');
+        try{
+            $bodies = Body::get()->toArray();
+            return view('fee.FeeBillingPage')->with(compact('bodies'));
+        }catch (\Exception $e){
+            $data = [
+                'action' => 'Get billing page View',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
     }
+
     public function create(Request $request)
     {
         $fee_details['fee_name']=$request->fee_name;
@@ -220,6 +232,23 @@ class FeeController extends Controller
          }
 
         return redirect('/edit-user/'.$user);
+    }
+
+    public function getStudentDetails(Request $request){
+        try{
+            $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
+                        ->where('users.body_id',$request->school)
+                        ->where('students_extra_info.grn',$request->grn)
+                        ->select('users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
+                        ->first()->toArray();
+        }catch(\Exception $e){
+            $data = [
+                'action' => 'Get Student details for payment',
+                'data' => $request->all(),
+                'message' => $e->getMessage()
+            ];
+            Log::info(json_encode($data));
+        }
     }
 
 }
