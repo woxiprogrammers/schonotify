@@ -76,7 +76,7 @@ class SearchController extends Controller
                     $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                         ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
                         ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
-                        ->where('division_id','null')
+                        ->whereNull('division_id')
                         ->where('users.body_id','=',$user->body_id)
                         ->where('users.role_id','!=',1)
                         ->where('users.role_id','=',$role_id)
