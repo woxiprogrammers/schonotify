@@ -78,7 +78,9 @@ class PaymentController extends Controller
 
             $paramArr[] = "CKS=" . hash("sha256", $chksm .$checksumkey );
             $i = $aesJava->encrypt(implode("&", $paramArr),$encryption_key , 128);
-            $this->render("sampleForm", array('data' => $i, 'action' => 'payment'));
+//            $this->render("sampleForm", array('data' => $i, 'action' => 'payment'));
+            $paymentUrl = "https://uat-etendering.axisbank.co.in/index.php/api/payment";
+            return view('paymentTest')->with(compact('paymentUrl','i'));
         }catch(\Exception $e){
             $data = [
                 'action' => 'Make bill payment',

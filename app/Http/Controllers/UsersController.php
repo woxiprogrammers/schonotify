@@ -1142,9 +1142,8 @@ class UsersController extends Controller
     {
         $query=Fees::where('id',$request->student_fee)->pluck('year');
         $query2=StudentFee::where('student_id',$id)->select('fee_id')->get();
-        if($request->fee_id != null){
-            if($query2->isEmpty())
-            {
+        if($request->fee_id == null){
+            if($query2->isEmpty()){
                 $student_fee['student_id']=$id;
                 if( $request->student_fee == null)
                 {
@@ -1157,9 +1156,8 @@ class UsersController extends Controller
                 $student_fee['fee_concession_type']=$request->concessions_2;
                 $student_fee['caste_concession']=$request->caste1;
                 $a=StudentFee::insert($student_fee);
-            }
-            else
-            {
+            }else{
+                dd(456467);
                 $student_fee['student_id']=$id;
                 $student_fee['fee_id']=$request->student_fee;
                 $student_fee['year']=$query;

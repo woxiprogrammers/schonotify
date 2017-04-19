@@ -239,8 +239,33 @@ class FeeController extends Controller
             $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
                         ->where('users.body_id',$request->school)
                         ->where('students_extra_info.grn',$request->grn)
-                        ->select('users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
+                        ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
                         ->first()->toArray();
+            $parameters['students_details'] = $student;
+        $student_fee=StudentFee::where('student_id',$student['id'])->select('fee_id','year','fee_concession_type','caste_concession')->first()->toarray();
+            $installment_info=FeeInstallments::where('fee_id',$student_fee['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
+            $installments = array();
+            if(!empty($installment_info))
+            {
+                foreach($installment_info as $installment)
+                {
+                    if(!array_key_exists($installment['installment_id'],$installments)){
+                        $installments[$installment['installment_id']] = array();
+                        $installments[$installment['installment_id']][$installment['particulars_id']]['amount'] = $installment['amount'];
+                        $installments[$installment['installment_id']][$installment['particulars_id']]['particulars_name'] = fee_particulars::where('id',$installment['particulars_id'])->pluck('particular_name');
+                    }else{
+                        $installments[$installment['installment_id']][$installment['particulars_id']]['amount'] = $installment['amount'];
+                        $installments[$installment['installment_id']][$installment['particulars_id']]['particulars_name'] = fee_particulars::where('id',$installment['particulars_id'])->pluck('particular_name');
+                    }
+                }
+            }
+
+            /*if(empty($installments))
+            {
+                $str = "Installment Not Found ";
+            }*/
+
+
         }catch(\Exception $e){
             $data = [
                 'action' => 'Get Student details for payment',
