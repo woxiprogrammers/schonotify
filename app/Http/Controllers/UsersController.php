@@ -1009,7 +1009,14 @@ class UsersController extends Controller
                 $caste=StudentExtraInfo::where('student_id',$id)->pluck('caste');
                 $grn=StudentExtraInfo::where('student_id',$id)->pluck('grn');
                 $religion=StudentExtraInfo::where('student_id',$id)->pluck('religion');
-                return  view('editStudent')->with(compact('religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email'));
+                $batches=Batch::get();
+                $divisionStudent=User::where('id',$id)->pluck('division_id');
+                if($divisionStudent != null){
+                    $divisionStudent=$divisionStudent;
+                }else{
+                    $divisionStudent="null";
+                }
+                return  view('editStudent')->with(compact('divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email'));
 
             }elseif($userRole->slug == 'parent')
             {
@@ -1140,6 +1147,12 @@ class UsersController extends Controller
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
+        $divisionStudent=User::where('id',$id)->pluck('division_id');
+        if($divisionStudent == null){
+            $div=array();
+            $div['division_id']=$request->Divisiondropdown;
+            $divisionupdate=User::where('id',$id)->update($div);
+        }
         $query=Fees::where('id',$request->student_fee)->pluck('year');
         $query2=StudentFee::where('student_id',$id)->select('fee_id')->get();
         if($request->fee_id == null){

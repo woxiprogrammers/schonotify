@@ -68,6 +68,30 @@
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                                 <input type="hidden" name="division_id"  value="{!! $division_for_updation !!}">
+                                <fieldset id="hide">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                Batch
+                                            </label>
+                                            <select class="form-control" id="Batchdropdown" name="Batchdropdown" style="-webkit-appearance: menulist;">
+                                                <option value="">Select Batch</option>
+                                                @if(!empty($batches))
+                                                @foreach($batches as $batch)
+                                                <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4" id="ClassSearchStudent">
+
+                                        </div>
+                                        <div class="col-md-4" id="DivSearch">
+
+                                        </div>
+
+                                    </div>
+                                </fieldset>
                              @foreach($student_info as $student_info)
                                 <fieldset>
                                 <div class="col-md-12">
@@ -1050,6 +1074,11 @@
 <script src="/assets/js/table-data.js"></script>
 <script>
     jQuery(document).ready(function() {
+        if({!!$divisionStudent!!} != null){
+            $('#hide').hide();
+        }else{
+        $('#hide').show();
+        }
         var category = $("#selected_category").val();
         var blood= $("#blood_group_hideen").val();
         var std=$("#highest_standard_hidden").val();
@@ -1102,6 +1131,22 @@
             });
 
         })(jQuery);
+    $('#Batchdropdown').change(function(){
+        $('div#loadmoreajaxloader').show();
+        var batch=this.value;
+        var route='/get-classes-search';
+        $.ajax({
+            method: "get",
+            url: route,
+            data: { batch }
+        })
+        .done(function(res){
+                $('#ClassSearchStudent').html(res);
+                $('div#loadmoreajaxloader').hide();
+        })
+    })
+
+
 
 
     });
@@ -1218,7 +1263,7 @@
     });
 </script>
 <script>
-    $( "select" )
+    $( "select[name='installment_number']" )
         .change(function () {
             $id=$("#user-id").val();
             var str = this.value;
