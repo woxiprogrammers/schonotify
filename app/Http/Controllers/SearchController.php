@@ -40,16 +40,28 @@ class SearchController extends Controller
         if($user->role_id == 1)
         {
             if($role_id == 3){
+                if($request->Division == "-1"){
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->whereNull('division_id')
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }else{
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->where('division_id',$request->Division)
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }
 
-                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
-                    ->where('division_id',$request->Division)
-                    ->where('users.body_id','=',$user->body_id)
-                    ->where('users.role_id','!=',1)
-                    ->where('users.role_id','=',$role_id)
-                    ->where('users.id','!=',$user->id)
-                    ->get();
             }else{
                 $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                     ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
@@ -60,15 +72,28 @@ class SearchController extends Controller
             }
         }else{
             if($role_id == 3){
-                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
-                    ->where('division_id',$request->Division)
-                    ->where('users.body_id','=',$user->body_id)
-                    ->where('users.role_id','!=',1)
-                    ->where('users.role_id','=',$role_id)
-                    ->where('users.id','!=',$user->id)
-                    ->get();
+                if($request->Division == "-1"){
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->whereNull('division_id')
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }else{
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->where('division_id',$request->Division)
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }
+
 
             }else{
                 $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -84,7 +109,6 @@ class SearchController extends Controller
         }
 
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
-
         $str.="<thead><tr>";
 
         if($role_id == 3)

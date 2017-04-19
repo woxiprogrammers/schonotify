@@ -74,6 +74,7 @@ var FormValidation = function(){
                     number:true
                 },
                 grn:{
+                    required:true,
                     remote: {
                         url: "/check-grn",
                         type: "POST",
@@ -135,8 +136,9 @@ var FormValidation = function(){
                     number:"Roll number must be numeric"
                 },
                 grn:{
+                    required:"GRN is required.",
                     remote: "GRN number must be unique"
-                }
+                                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler.hide();
@@ -209,9 +211,11 @@ var FormValidation = function(){
                     alpha: true
                 },
                 father_income: {
+                    required:true,
                     number:true
                 },
                 mother_income: {
+                    required:true,
                     number:true
                 },
                 mobile:{
