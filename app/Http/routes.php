@@ -81,8 +81,8 @@
     });
 
     Route::group(['prefix' => 'payment'],function(){
-        Route::get('make-payment',array('uses'=>'PaymentController@billPayment'));
-        Route::get('payment-return',array('uses'=>'PaymentController@billReturnUrl'));
+        Route::post('make-payment',array('uses'=>'PaymentController@billPayment'));
+        Route::post('payment-return',array('uses'=>'PaymentController@billReturnUrl'));
     });
 
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));

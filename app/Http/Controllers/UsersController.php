@@ -870,7 +870,6 @@ class UsersController extends Controller
                        $installment_amounts=($installment_amounts/$total_fee_amount)*100;
                        $installment_percent_amount[$key]=$installment_amounts;
                    }
-
                 $caste_concession_type=StudentFee::where('student_id',$id)->pluck('caste_concession');
                 $caste_concn_amnt= CASTECONCESSION::where('caste_id', $caste_concession_type)->where('fee_id',$feedata)->pluck('concession_amount');
                 $collection=collect($installment_percent_amount);
@@ -1170,7 +1169,6 @@ class UsersController extends Controller
                 $student_fee['caste_concession']=$request->caste1;
                 $a=StudentFee::insert($student_fee);
             }else{
-                dd(456467);
                 $student_fee['student_id']=$id;
                 $student_fee['fee_id']=$request->student_fee;
                 $student_fee['year']=$query;
@@ -1181,7 +1179,8 @@ class UsersController extends Controller
         }
 
         $existCheck=StudentFeeConcessions::where('student_id',$id)->exists();
-       if($request->fee_id != null){
+        if($student_fee['fee_id'] != null){
+
            if($existCheck == true)
            {
                $concessions=array();

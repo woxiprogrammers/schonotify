@@ -23,7 +23,7 @@
                     </div>
                 </section>
                 <fieldset>
-                <legend> Student Details</legend>
+                    <legend> Enter Details</legend>
                     <form id="getStudentDetialsForm" role="form">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -45,15 +45,21 @@
                                 <input name="grn" id="grn" type="text" PLACEHOLDER="Enter you GRN" class="form-control">
                             </div>
                         </div>
-                        <div class="col-md-5 col-md-offset-2">
+                        <div class="col-md-1">
                             <div class="form-group" >
-                                <button class="btn btn-primary btn-wide" type="submit">
+                                <label class="control-label">
+                                </label>
+                                <button class="btn btn-primary btn-wide form-control" type="submit">
                                     Get Details
                                 </button>
                             </div>
                         </div>
                     </form>
                 </fieldset>
+                <div id="student_details">
+
+                </div>
+
             </div>
             @include('rightSidebar')
         </div>
@@ -139,15 +145,16 @@
                 submitHandler: function (form) {
                     successHandler.show();
                     errorHandler.hide();
-
+                    $("#student_details").html();
                     var formData = $("#getStudentDetialsForm").serialize();
                     $.ajax({
                         url: '/fees/get-student-details',
                         data: formData,
                         type: "POST",
                         async: true,
-                        success:function(){
+                        success:function(data,textStatus,xhr){
                             console.log('in success');
+                            $("#student_details").html(data);
                         },
                         error: function(){
                             console.log('in error');
