@@ -94,24 +94,20 @@ class UsersController extends Controller
     {
         $installment_data = array();
         $student_fee=StudentFee::where('student_id',$request->str2)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
-        foreach($student_fee as $key => $a)
-         {
+        foreach($student_fee as $key => $a){
             $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->where('installment_id',$request->str1)->select('particulars_id','amount')->get()->toarray();
          }
         $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
-         if(!empty($installment_info))
-           {
+         if(!empty($installment_info)){
               $iterator = 0;
-              foreach($installment_info as $i)
-            {
+              foreach($installment_info as $i){
                 $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
                 $iterator++;
             }
             $installment_data[] = $installment_info;
            }
 
-         if(empty($installment_data))
-           {
+         if(empty($installment_data)){
             $str = "Installment Not Found ";
            }
          return view('fee.student_installment')->with(compact('str','installment_data'));
@@ -136,7 +132,6 @@ class UsersController extends Controller
           }
           else{
                 $filename=$userImage->avatar;
-
           }
         $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
           $userData['username']= $request->username;
@@ -994,8 +989,7 @@ class UsersController extends Controller
                 foreach($interests as $interest){
                              $hobbies['hobby']=$interest['hobby'];
                 }
-                if(!empty($chkstatus))
-                {
+                if(!empty($chkstatus)){
                     $chkstatus = $chkstatus->fee_concession_type;
                 }else{
                     $chkstatus='null';
@@ -1155,23 +1149,20 @@ class UsersController extends Controller
         }
         $query=Fees::where('id',$request->student_fee)->pluck('year');
         $query2=StudentFee::where('student_id',$id)->select('fee_id')->get();
-        if($request->fee_id != null){
+        if($request->student_fee != null){
             if($query2->isEmpty())
             {
                 $student_fee['student_id']=$id;
-                if( $request->student_fee == null)
-                {
+                if( $request->student_fee == null){
                     $student_fee['fee_id']=0;
-                }else
-                {
+                }else{
                     $student_fee['fee_id']=$request->student_fee;
                 }
                 $student_fee['year']=$query;
                 $student_fee['fee_concession_type']=$request->concessions_2;
                 $student_fee['caste_concession']=$request->caste1;
                 $a=StudentFee::insert($student_fee);
-            }
-            else
+            }else
             {
                 $student_fee['student_id']=$id;
                 $student_fee['fee_id']=$request->student_fee;
@@ -1183,17 +1174,14 @@ class UsersController extends Controller
         }
 
         $existCheck=StudentFeeConcessions::where('student_id',$id)->exists();
-       if($request->fee_id != null){
-           if($existCheck == true)
-           {
+       if($request->student_fee != null){
+           if($existCheck == true){
                $concessions=array();
                $concessions['fee_id']=$request->student_fee;
                $concessions['student_id']=$id;
                $concessions['fee_concession_type']=json_encode($request->concessions);
                $b=StudentFeeConcessions::where('student_id',$id)->update($concessions);
-           }
-           else
-           {
+           }else{
                $concessions=array();
                $concessions['fee_id']=$request->student_fee;
                $concessions['student_id']=$id;
@@ -1294,16 +1282,7 @@ class UsersController extends Controller
         }else{
             $communication_address_parent = $request['communication_address_parent'];
         }
-        $parnetId =User::where('id',$id)->pluck('parent_id');
-        $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
-        $familyInfo['communication_address'] = $communication_address_parent;
-        $familyInfo['parent_id'] = $parnetId;
-        $familyInfo['created_at'] = Carbon::now();
-        $familyInfo['updated_at'] = Carbon::now();
-        $g=ParentExtraInfo::where('parent_id',$parnetId)->update($familyInfo);
-
-
-        $student=SubmittedDocuments::exists($id);
+       $student=SubmittedDocuments::exists($id);
         if($student == false){
             $document=$request->documents;
             if(!empty($document)){
@@ -1549,7 +1528,6 @@ class UsersController extends Controller
                 User::where('parent_id','=',$user->id)
                     ->update(['is_active' => 1]);
             }
-
             if($user->role_id == 3) {
                 $parent = User::where('id','=',$user->id)
                     ->select('parent_id')->get();
@@ -1558,10 +1536,13 @@ class UsersController extends Controller
                     ->select('is_active')->get();
 
                 if($userParentStatus[0]['is_active'] == 0) {
-                    $user->is_active=0;
+                    $user->is_active=1;
                     $user->save();
-                    Session::flash('message-error','student cant be activated as its parent is deactivate !');
-                    return response()->json(['status'=>401]);
+                    $parent_id=User::where('id',$id)->pluck('parent_id');
+                    User::where('id','=',$parent_id)
+                        ->update(['is_active' => 1]);
+                    Session::flash('message-success','student and parent activated !');
+                    return response()->json(['status'=>'record has been activated.']);
                 } else {
                     return response()->json(['status'=>'record has been activated.']);
                 }
