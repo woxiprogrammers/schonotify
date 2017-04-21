@@ -99,9 +99,10 @@
     </div>
 </fieldset>
 <!--Student GRN No.|Student Name|Section|Standard|Academic Year|Fee Type|Parents Name|Email|Contact Number|Amount-->
-<form action="/payment/make-payment" method="POST">
+<form id="billGeneratorForm">
     <div class="col-md-offset-4 col-md-2">
-        <input type="hidden" value="" name="student_grn">
+        <input type="hidden" value="{{$student['grn']}}" name="student_grn">
+        <input type="hidden" value="{{$student['body_id']}}" name="student_body_id">
         <input type="hidden" value="{{$student['first_name'].' '.$student['last_name']}}" name="student_name">
         <input type="hidden" value="" name="section">
         <input type="hidden" value="" name="standard">
@@ -111,8 +112,58 @@
         <input type="hidden" value="{{$parent['first_name']}}" name="email">
         <input type="hidden" value="{{$parent['mobile']}}" name="contact">
         <input type="hidden" value="{{$payableAmount}}" name="amount">
-        <button class="btn btn-primary btn-wide form-control" type="submit">
+        <button class="btn btn-primary btn-wide form-control" type="button">
             Make Payment
         </button>
     </div>
 </form>
+<div id ="confirm-payment" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="resetBatch">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" id="myModalLabel">Confirm Payment</h3>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-8">
+                    <span> <h4> Do you want to confirm payment ? </h4> </span>
+                    <form id="paymentForm" method="post" action="{{env('EASY_PAY_PAYMENT_URL')}}">
+                        <input name="i" type="hidden">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <button class="btn btn-primary form-control" id="confirm"> Confirm </button>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="javascript:void(0);" class="btn btn-warn form-control" data-dismiss="modal">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#billGeneratorForm button").on('click', function(){
+            var formData = $("#billGeneratorForm").serializeArray();
+            console.log(formData);
+            $.ajax({
+                url: '/payment/make-payment',
+                data: formData,
+                type: 'POST',
+                async: true,
+                success: function(data,testStatus,xhr){
+                    $("#paymentForm input").val(data.i);
+                    $("#confirm-payment").modal('show');
+                },
+                error: function(data, errStatus){
+
+                }
+            });
+        });
+    });
+</script>

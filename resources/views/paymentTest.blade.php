@@ -1,16 +1,14 @@
 <html>
     <body>
-    afbasdjv
         <form method="POST" action="{{$paymentUrl}}">
             <input type="hidden" name="i" value="{{$i}}">
+            <input type="submit" value="Submit">
         </form>
     </body>
     <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-
     <script>
         $(document).ready(function(){
-            $("form").submit();
+//            $("form").submit();
         })
     </script>
 </html>

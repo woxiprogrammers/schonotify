@@ -15,18 +15,21 @@ class PaymentController extends Controller
             $checksumkey = 'axis';
             $encryption_key = 'axisbank12345678';
             $aesJava = new AesForJava();
-            if (!empty($_POST['CID']) && !empty($_POST['RID']) && !empty($_POST['CRN']) && !empty($_POST['AMT']) && !empty($_POST['VER']) && !empty($_POST['TYP']) && !empty($_POST['CNY']) && !empty($_POST['RTU']) && !empty($_POST['PPI'])) {
+            /*if (!empty($_POST['CID']) && !empty($_POST['RID']) && !empty($_POST['CRN']) && !empty($_POST['AMT']) && !empty($_POST['VER']) && !empty($_POST['TYP']) && !empty($_POST['CNY']) && !empty($_POST['RTU']) && !empty($_POST['PPI'])) {
                 $paramArr = array();
                 foreach ($_POST as $key => $val) {
                     if ($key != "easyTkn") {
                         $paramArr[] = $key . "=" . $val;
                     }
                 }
-            } else {
+            } else {*/
+            $customerUniqueId = sha1($request->student_grn."".$request->student_body_id);  // For CRN
+            $date = date('YmdHis');
+            $referenceId = ($request->student_grn."".$request->student_body_id.''.$date);
                 $paramArr = array(
                     "CID=".env('EASY_PAY_CORPORATE_CODE'),
-                    "RID=120",
-                    "CRN=211000190",
+                    "RID=".$referenceId,
+                    "CRN=".$customerUniqueId,
                     "AMT=1.0",
                     "VER=".env('EASY_PAY_VERSION'),
                     "TYP=".env('EASY_PAY_TYPE'),
@@ -67,7 +70,7 @@ class PaymentController extends Controller
                        CRN + AMT + key) and need to
                        be hashed by SHA256 hashed.
                 */
-            }
+//            }
 
 
             $chksm = "";
@@ -78,8 +81,10 @@ class PaymentController extends Controller
 
             $paramArr[] = "CKS=" . hash("sha256", $chksm .$checksumkey );
             $i = $aesJava->encrypt(implode("&", $paramArr),$encryption_key , 128);
-            $paymentUrl = "https://uat-etendering.axisbank.co.in/index.php/api/payment";
-            return view('paymentTest')->with(compact('paymentUrl','i'));
+            $data = [
+                'i' => $i
+            ];
+            return response()->json($data);
         }catch(\Exception $e){
             $data = [
                 'action' => 'Make bill payment',
@@ -90,7 +95,6 @@ class PaymentController extends Controller
         }
 
     }
-
 
     public function billReturnUrl(Request $request){
         try{

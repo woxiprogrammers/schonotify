@@ -242,6 +242,7 @@ class FeeController extends Controller
                         ->where('students_extra_info.grn',$request->grn)
                         ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
                         ->first()->toArray();
+            $student['grn'] = $request->grn;
             $parent = User::where('id',$student['parent_id'])->select('first_name','last_name','email','mobile')->first()->toArray();
             $student_fee=StudentFee::where('student_id',$student['id'])->select('fee_id','year','fee_concession_type','caste_concession')->first()->toarray();
             $installment_info=FeeInstallments::where('fee_id',$student_fee['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();

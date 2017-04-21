@@ -71,6 +71,7 @@
 
 
 <script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/jquery-modal/jquery.modal.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
 <script src="/vendor/jquery-cookie/jquery.cookie.js"></script>4a
@@ -160,7 +161,6 @@
                             console.log('in error');
                         }
                     });
-                    console.log(formData);
                 }
             });
         }
@@ -171,6 +171,8 @@
             }
         }
     }();
+
+
     jQuery(document).ready(function()
     {
         Main.init();
