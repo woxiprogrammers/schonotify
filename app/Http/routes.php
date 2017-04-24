@@ -76,9 +76,6 @@
         Route::get('classes',array('uses' => 'FeeController@classesView'));
         Route::get('feeListingTable',array('uses' => 'FeeController@feeListingTableView'));
         Route::post('transactions',array('uses' => 'FeeController@createTransactions'));
-
-
-
     });
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
 

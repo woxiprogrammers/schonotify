@@ -626,6 +626,7 @@
         Main.init();
         FormValidator.init();
         FormWizard.init();
+        $('option#4').hide();
 
         var date_input=$('input[name="dob"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";

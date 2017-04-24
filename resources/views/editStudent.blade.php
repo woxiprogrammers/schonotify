@@ -68,60 +68,48 @@
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
                                 <input type="hidden" name="division_id"  value="{!! $division_for_updation !!}">
-                                <fieldset>
+                                <fieldset id="hide">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Roll Number
-                                                </label>
-                                                <input type="text" value="{!! $user->roll_number !!}"  class="form-control" id="roll_number" name="roll_number">
-                                            </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                Batch
+                                            </label>
+                                            <select class="form-control" id="Batchdropdown" name="Batchdropdown" style="-webkit-appearance: menulist;">
+                                                <option value="">Select Batch</option>
+                                                @if(!empty($batches))
+                                                @foreach($batches as $batch)
+                                                <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    GRN Number
-                                                </label>
-                                                <input type="text" value="{!! $user['studentExtraInfo']['grn'] !!}"  class="form-control" id="grn" name="grn">
-                                            </div>
+                                        <div class="col-md-4" id="ClassSearchStudent">
+
                                         </div>
+                                        <div class="col-md-4" id="DivSearch">
+
+                                        </div>
+
                                     </div>
+                                </fieldset>
+                             @foreach($student_info as $student_info)
+                                <fieldset>
+                                <div class="col-md-12">
+                                    <div >
+                                        <label >
+                                            GRN <span class="symbol required"></span>
+                                        </label>
+                                        <input type="text" placeholder="Enter a GRN" class="form-control" name="grn" id="grn" value="{!! $grn !!}"/>
+                                    </div>
+                                </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Username
-                                                </label>
-                                                <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    First name
+                                                    First name: <span class="symbol required">
                                                 </label>
                                                 <input type="text" value="{!! $user->first_name !!}" class="form-control" id="firstname" name="firstname">
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Last name
-                                                </label>
-                                                <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Email Address
-                                                </label>
-                                                <input type="email" placeholder="{!! $user->email !!}" value="{!! $user->email !!}" class="form-control" id="editEmail" name="email">
-                                                <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Phone
-                                                </label>
-                                                <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Gender
@@ -138,13 +126,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label">
-                                                    Address
-                                                </label>
-                                                <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">Date of Birth </label>
+                                                <label class="control-label">Date of Birth: <span class="symbol required"> </label>
                                                 <div class="input-group input-append datepicker date col-sm-6">
                                                     <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
                                                         <span class="input-group-btn">
@@ -156,11 +138,364 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
+                                                    Nationality: <span class="symbol required">
+                                                </label>
+                                                <input type="text" value="{!! $student_info->nationality !!}"  class="form-control" id="nationality" name="nationality">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Caste
+                                                </label>
+                                                <input type="text" value="{!!$caste!!}"  class="form-control" id="caste" name="caste">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Phone : <span class="symbol required">
+                                                </label>
+                                                <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Address
+                                                </label>
+                                                <input type="text" value="{!! $user->address !!}" class="form-control" id="address" name="address">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Aadhar Card Number
+                                                </label>
+                                                <input type="text" placeholder="Aadhar Card Number " class="form-control" value="{!! $student_info->aadhar_number!!}" name="aadhar_number"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Mother Tongue <span class="symbol required"></span>
+                                                </label>
+                                                <input type="text" placeholder="Enter a Mother Tongue" class="form-control" value="{!! $student_info->mother_tongue!!}" name="mother_tongue"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="form-field-select-2">
+                                                    Highest Standard Passed
+                                                </label>
+                                                <input type="hidden" id="highest_standard_hidden" value="{!!$student_info->highest_standard !!}" >
+                                                <select class="form-control" id="highest_standard" style="-webkit-appearance: menulist;" name="highest_standard">
+                                                    <option value="nursery">Nursery </option>
+                                                    <option value="LKG">L KG</option>
+                                                    <option value="UKG">U KG</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="Not Attended">Not Attended</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Roll Number
+                                                </label>
+                                                <input type="text" value="{!! $user->roll_number !!}"  class="form-control" id="roll_number" name="roll_number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Academic session applied to
+                                                </label>
+                                                <input type="text" class="form-control" value="{!! $student_info->academic_to !!}" name="academic_to"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Last Name
+                                                </label>
+                                                <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
+                                            </div>
+                                            <div class="form-group">
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Place Of Birth: <span class="symbol required">
+                                                </label>
+                                                <input type="text" value="{!! $student_info['birth_place'] !!}"  class="form-control" id="birth_place" name="birth_place">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Religion
+                                                </label>
+                                                <input type="text" value="{!! $religion !!}"  class="form-control" id="religion" name="religion">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Category
+                                                </label>
+                                                <input type="hidden" name="selected_category" id="selected_category" value="{!! $student_info->category !!}">
+                                                <select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
+                                                    <option value="SC">SC</option>
+                                                    <option value="ST">ST</option>
+                                                    <option value="VJA">VJ(A)</option>
+                                                    <option value="NTB">NT(B)</option>
+                                                    <option value="NTC">NT(C)</option>
+                                                    <option value="NTD">NT(D)</option>
+                                                    <option value="OBC">OBC</option>
+                                                    <option value="SBC">SBC</option>
+                                                    <option value="OPEN">OPEN</option>
+                                                    <option value="MARATHAESBC">MARATHA(ESBC)</option>
+                                                    <option value="MUSLIMSBCA">MUSLIM(SBC-A)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
                                                     Alternate number
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="alternate_number" name="alternate_number">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="form-field-select-2">
+                                                    Select Blood Group
+                                                </label>
+                                                <input type="hidden" id="blood_group_hideen" value="{!!$student_info->blood_group!!}">
+                                                <select class="form-control" name="blood_group" id="blood_group" style="-webkit-appearance: menulist;">
+                                                    <option value="A+">A+</option>
+                                                    <option value="A-">A-</option>
+                                                    <option value="B+">B+</option>
+                                                    <option value="B-">B-</option>
+                                                    <option value="AB+">AB+</option>
+                                                    <option value="AB-">AB-</option>
+                                                    <option value="O+">O+</option>
+                                                    <option value="O-">O-</option>
+                                                </select>
 
                                             </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Other Languages spoken/written
+                                                </label>
+                                                <input type="text" value="{!! $student_info->other_language !!}" placeholder="Enter a Other Languages spoken/written" class="form-control" name="other_language"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Academic session applied from
+                                                </label>
+                                                <input type="text"  value="{!! $student_info->academic_from !!}" class="form-control" name="academic_from"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <legend>
+                                                    DETAILS OF PREVIOUS SCHOOL ATTENDED
+                                                </legend>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label  class="control-label">
+                                                                School Name
+                                                            </label>
+                                                            @if(!empty($school))
+                                                            <input type="text" value="{!! $school['name'] !!}" placeholder="Enter School Name" class="form-control" name="school_name"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                UDISE No.
+                                                            </label>
+                                                            <input type="number" placeholder="Enter UDISE No " class="form-control" value="{!! $school['udise_no']!!}" name="udise_no"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label  class="control-label">
+                                                                City
+                                                            </label>
+                                                            <input type="text" value="{!! $school['city'] !!}" placeholder="Enter City" class="form-control" name="city"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Medium of instruction
+                                                            </label>
+                                                            <input type="text" value="{!! $school['medium_of_instruction'] !!}" placeholder="Enter Medium of instruction" class="form-control" name="medium_of_instruction"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label  class="control-label">
+                                                                Name of board/examination
+                                                            </label>
+                                                            <input type="text" value="{!! $school['board_examination'] !!}" placeholder="Enter Name of board/examination" class="form-control" name="board_examination"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Grades / %
+                                                            </label>
+                                                            <input type="number" placeholder="Enter Grades" value="{!! $school['grades'] !!}" class="form-control" name="grades"/>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </fieldset>
+
+                                            <fieldset>
+                                                <legend>
+                                                    SPECIAL APTITUDE
+                                                </legend>
+                                                <!--<INPUT type="button" value="Add Row" onclick="addRowSpecialAptitude('dataTable')" />
+                                                <TABLE id="dataTable"  border="1">
+                                                    <TR>
+                                                        <TD><INPUT type="text" name="special_aptitude[0][test]" placeholder="Test"/></TD>
+                                                        <TD><INPUT type="number" name="special_aptitude[0][score]" placeholder="Score"/></TD>
+
+                                                    </TR>
+                                                </TABLE>-->
+                                                <div class="row">
+                                                    @if(!empty($aptitude))
+                                                    @foreach($aptitude as $apti)
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                           <input type="text" value="{!! $apti->special_aptitude !!}" placeholder="Enter Test" class="form-control"  name="special_aptitude[0][test]" id="test0"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input type="number" value="{!! $apti->score !!}" placeholder="Enter Score" class="form-control" name="special_aptitude[0][score]" id="score0"/>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                    @endif
+                                                </div>
+
+                                            </fieldset>
+                                            <fieldset>
+                                                <legend>
+                                                    INTEREST / HOBBIES
+                                                </legend><h6>Seperate by comma (,) if there are more than one hobby.</h6>
+                                                <!--<INPUT type="button" value="Add Row" onclick="addRow('hobbies')" />
+                                                <TABLE id="hobbies"  border="1">
+                                                    <TR>
+                                                        <TD> <INPUT type="text" name="hobbies[]"/> </TD>
+                                                    </TR>
+                                                </TABLE>-->
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            @if(!empty($hobbies))
+                                                            <input type="text" placeholder="Enter Hobby" value="{!! $hobbies['hobby'] !!}" class="form-control" name="hobbies[]" />
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <legend>
+                                                    DOCUMENTS SUBMITTED &nbsp [Note: If submitted then please tick the box]
+                                                </legend>
+                                                <!-- <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
+                                                 <TABLE id="upload_doc"  border="1">
+                                                     <TR>
+                                                         <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
+                                                     </TR>
+                                                 </TABLE>-->
+                                                @foreach($documents as $document)
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        @if(in_array($document['id'],$doc))
+                                                            <input type="checkbox" value="{{$document['id']}}" name="documents[]" checked>
+                                                        @else
+                                                            <input type="checkbox" value="{{$document['id']}}" name="documents[]">
+                                                        @endif
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                {{$document['document_name']}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input type="file" name="upload_doc[{{$document['id']}}]" accept='image/jpeg,image/gif,image/png,application/pdf'/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <fieldset>
+                                        <legend>
+                                            FEE STRUCTURE
+                                        </legend>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>
+                                                    Assign Fee Structure :
+                                                </label>
+                                                <div>
+                                                    <select name="student_fee" style="width:60%;-webkit-appearance: menulist;">
+                                                        @if(!empty($fees))
+                                                        @foreach($fees as $fee_details)
+                                                        <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}}&nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
+                                                        @endforeach
+                                                        @endif
+                                                    </select>
+                                                    <h4 style="color: red">{{$division_status}}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Select Concession Types :
+                                                </label>
+                                                <div>
+                                                    @foreach($concession_types as $concessions)
+                                                    <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
+                                                        <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions[]" value="{{ $concessions['id'] }}">
+                                                        <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                                                    </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" style="display: none" id="CasteSelect">
+                                            <div class="form-group">
+                                                <label>
+                                                    Assign Fee Concession :
+                                                </label>
+                                                <div>
+                                                    <select name="caste1"  style="-webkit-appearance: menulist;">
+
+                                                        @foreach($queryn as $castes)
+                                                        <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>
                                                     Image Upload
@@ -183,55 +518,8 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>
-                                                Assign Fee Structure :
-                                            </label>
-                                            <div>
-                                                <select name="student_fee" style="width:60%;-webkit-appearance: menulist;">
-                                                    @if(!empty($fees))
-                                                    @foreach($fees as $fee_details)
-                                                     <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}}&nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
-                                                    @endforeach
-                                                    @endif
-                                                </select>
-                                                <h4 style="color: red">{{$division_status}}</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Select Concession Types :
-                                        </label>
-                                        <div>
-                                            @foreach($concession_types as $concessions)
-                                            <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
-                                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions[]" value="{{ $concessions['id'] }}">
-                                                <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    </div>
-                                   <div class="col-md-12" style="display: none" id="CasteSelect">
-                                        <div class="form-group">
-                                            <label>
-                                                Assign Fee Concession :
-                                            </label>
-                                            <div>
-                                                <select name="caste"  style="-webkit-appearance: menulist;">
-                                                    <option>Select Caste</option>
-                                                    @foreach($queryn as $castes)
-                                                    <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                    </div>
                                 </fieldset>
+                                @endforeach
                                 <div class="row">
                                     <div class="col-md-4">
                                         <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
@@ -243,11 +531,218 @@
 
                         </div>
 
-                        <div id="panel_edit_Parent" class="tab-pane fade in  ">
+                        <div id="panel_edit_Parent" class="tab-pane fade in">
                             <div class="panel-body">
                                  <form id="formEditAccount" method="post" action="/edit-parent/{!! $user->parent_id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userPerentId" value="{!! $user->parentUserId !!}">
+                                <fieldset>
+                                <legend>
+                                    STUDENT'S FAMILY INFORMATION
+                                </legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                            <div id="w">
+                                            <div id="content">
+                                                <div id="searchfield">
+                                                        <div class="form-group ">
+                                                            <label class="control-label">
+                                                                Parent Email: <span class="symbol required"></span>
+                                                            </label>
+                                                            <input type="text" placeholder="Enter Parent Email" class="form-control" name="email" id="autocomplete" tabindex="-1" value="{{trim($parent_email)}}" readonly>
+                                                            <input type='hidden' name='parent_id' id='parent_id'>
+                                                            <br>
+                                                            <div class="form-group" id="outputcontent"></div>
+                                                        </div>
+                                                </div><!-- @end #searchfield -->
+                                            </div><!-- @end #content -->
+                                        </div><!-- @end #w -->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                Father’s/Guardian’s Name <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" placeholder="Enter your First Name" class="form-control" tabindex="-1" name="father_first_name" id="father_first_name" value="{!!  $family_info['father_first_name'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Middle Name
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter your Middle Name" class="form-control" name="father_middle_name" id="father_middle_name" value="{!!  $family_info['father_middle_name'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Last Name
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter your Last Name" class="form-control" name="father_last_name" id="father_last_name" value="{!!  $family_info['father_last_name'] !!}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                Father’s/Guardian’s   Occupation <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter Occupation" class="form-control" name="father_occupation" id="father_occupation" value="{!!  $family_info['father_occupation'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Father’s/Guardian’s     Income (P.A.) <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter Income" class="form-control" name="father_income" id="father_income" value="{!!  $family_info['father_income'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Father’s/Guardian’s Contact Number <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter Contact Number" class="form-control" name="father_contact" id="father_contact" value="{!!  $family_info['father_contact'] !!}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                Mother’s/Guardian’s Name <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter your First Name" class="form-control" name="mother_first_name" id="mother_first_name" value="{!!  $family_info['mother_first_name'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Middle Name
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter your Middle Name" class="form-control" name="mother_middle_name" id="mother_middle_name" value="{!!  $family_info['mother_middle_name'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Last Name
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter your Last Name" class="form-control" name="mother_last_name" id="mother_last_name" value="{!!  $family_info['mother_last_name'] !!}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                Mother’s/Guardian’s Occupation <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter Occupation" class="form-control" name="mother_occupation" id="mother_occupation" value="{!!  $family_info['mother_occupation'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Mother’s/Guardian’s Income (P.A.) <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter Income" class="form-control" name="mother_income" id="mother_income" value="{!!  $family_info['mother_income'] !!}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Mother’s/Guardian’s Contact Number <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" tabindex="-1" placeholder="Enter Contact Number" class="form-control" name="mother_contact" id="mother_contact" value="{!!  $family_info['mother_contact'] !!}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--<div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                Email <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" placeholder="Enter email" class="form-control" name="parent_email" id="parent_email"/>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                Permanent Address: <span class="symbol required"></span>
+                                            </label>
+                                            <div class="note-editor">
+                                                <textarea tabindex="-1" class="form-control autosize area-animated" name="permanent_address" id="permanent_address" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!!$family_info['permanent_address']!!}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                Communication Address <span class="symbol required"></span>
+                                            </label><br>
+
+                                            <input type="checkbox" name="parent_communication_address" id="parent_communication_address"  checked> Same as Permanent Address
+                                            <div class="note-editor" id="communication_address_parent">
+                                                <textarea class="form-control autosize area-animated" tabindex="-1" name="communication_address_parent" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!!$family_info['communication_address']!!}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--<div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label  class="control-label">
+                                                SIBLINGS
+                                            </label><br>
+                                            <!-- <INPUT type="button" tabindex="-1" value="Add Row" onclick="addSibling('sibling')" />
+                                             <TABLE id="sibling"  border="1">
+                                                 <TR>
+                                                     <TD> <INPUT type="text" name="sibling[0][name]" placeholder="Name"/> </TD>
+                                                     <TD> <INPUT type="number" name="sibling[0][age]" placeholder="Age"/> </TD>
+                                                 </TR>
+                                             </TABLE>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Enter Name" class="form-control" name="sibling[0][name]" id="name0"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="number" placeholder="Enter Age" class="form-control" name="sibling[0][age]" id="age0" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Enter Name" class="form-control" name="sibling[1][name]" id="name1" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="number" placeholder="Enter Age" class="form-control" name="sibling[1][age]" id="age1"/>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                </fieldset>
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -268,14 +763,6 @@
                                                     Last name
                                                 </label>
                                                 <input type="text" value="{!! $user->parentLastName !!}" class="form-control" id="lastname" name="lastname">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Email Address
-                                                </label>
-                                                <input type="email" placeholder="{!! $user->parentEmail !!}" value="{!! $user->parentEmail !!}" class="form-control" id="editEmailParent" name="email">
-                                                <div id="emailIdfeedback"><div class="" id="emailparentfeedback" ></div></div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -321,7 +808,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Alternate number
+                                                    Alternate Contact Number
                                                 </label>
                                                 <input type="text" placeholder="{!! $user->parentAlternateNumber !!}" value="{!! $user->parentAlternateNumber !!}" class="form-control" id="alternate_number" name="alternate_number">
                                             </div>
@@ -587,12 +1074,25 @@
 <script src="/assets/js/table-data.js"></script>
 <script>
     jQuery(document).ready(function() {
+        if({!!$divisionStudent!!} != null){
+            $('#hide').hide();
+        }else{
+        $('#hide').show();
+        }
+        var category = $("#selected_category").val();
+        var blood= $("#blood_group_hideen").val();
+        var std=$("#highest_standard_hidden").val();
+        $("option[value='"+std+"']").prop('selected',true);
+        $("option[value='"+category+"']").prop('selected',true);
+        $("option[value='"+blood+"']").prop('selected',true);
         $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
+        if({!!$chkstatus!!} != "null"){
         var chkstatus = {!!$chkstatus!!};
         for(var i = 0; i< chkstatus.length; i++){
-            $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+           $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+        }
         }
         $('#2_concession_chk').change(function(){
            if($('#2_concession_chk').is(":checked")){
@@ -607,15 +1107,20 @@
         TableData.init();
         userAclModule();
 
+    $('#communication_address').hide();
+    $("#student_communication_address").click(function(){
+        $('#communication_address').toggle();
+    });
+    $('#communication_address_parent').hide();
+    $("#parent_communication_address").click(function(){
+        $('#communication_address_parent').toggle();
+    });
 
-        if($('#checkbox8').is(":checked")==true)
+    if($('#checkbox8').is(":checked")==true)
         {
             clsTeacher(true);
         }
-
-
         (function($) {
-
             var allPanels = $('.accordion > dd').hide();
 
             $('.accordion > dt > a').click(function() {
@@ -625,6 +1130,22 @@
             });
 
         })(jQuery);
+    $('#Batchdropdown').change(function(){
+        $('div#loadmoreajaxloader').show();
+        var batch=this.value;
+        var route='/get-classes-search';
+        $.ajax({
+            method: "get",
+            url: route,
+            data: { batch }
+        })
+        .done(function(res){
+                $('#ClassSearchStudent').html(res);
+                $('div#loadmoreajaxloader').hide();
+        })
+    })
+
+
 
 
     });
@@ -648,7 +1169,7 @@
     function clsTeacher(chk){
         if(chk==true)
         {
-            $('#clstchr_batch').show();
+            $('#clstchr_batch').s{!! $student_info->blood_group !!}how();
             $('#clstchr_class').show();
             $('#clstchr_div').show();
         }else{
@@ -724,11 +1245,6 @@
             $('#aclMod').html(str);
         });
     }
-
-
-
-
-
     $('#roll_number').on('keyup',function(){
         var roll_number = this.value;
         var division = $('#division').val();
@@ -744,17 +1260,12 @@
             }
         });
     });
-
-
 </script>
 <script>
-    $( "select" )
+    $( "select[name='installment_number']" )
         .change(function () {
-
             $id=$("#user-id").val();
             var str = this.value;
-
-
             $.ajax({
                 url: "/student-fee-installment",
                 data:{str1 : str,str2 : $id},
@@ -769,18 +1280,5 @@
         })
 
 </script>
+<script src="/assets/js/student-edit.js" ></script>
 @stop
-
-
-
-
-
-
-
-
-
-
-
-
-
-

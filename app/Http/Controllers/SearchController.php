@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
 class SearchController extends Controller
+
 {
     public function __construct()
     {
@@ -30,9 +31,7 @@ class SearchController extends Controller
     public function searchUsers()
     {
         $roles=UserRoles::all();
-
         return view('admin.searchUsers')->with('userRoles',$roles);
-
     }
     public function Studentfilter(Request $request)
     {
@@ -41,17 +40,27 @@ class SearchController extends Controller
         if($user->role_id == 1)
         {
             if($role_id == 3){
-
-                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
-                    ->where('division_id',$request->Division)
-                    ->where('users.body_id','=',$user->body_id)
-                    ->where('users.role_id','!=',1)
-                    ->where('users.role_id','=',$role_id)
-                    ->where('users.id','!=',$user->id)
-                    ->get();
-
+                if($request->Division == "-1"){
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->whereNull('division_id')
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }else{
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->where('division_id',$request->Division)
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }
 
             }else{
                 $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -63,15 +72,28 @@ class SearchController extends Controller
             }
         }else{
             if($role_id == 3){
-                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                    ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                    ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
-                    ->where('division_id',$request->Division)
-                    ->where('users.body_id','=',$user->body_id)
-                    ->where('users.role_id','!=',1)
-                    ->where('users.role_id','=',$role_id)
-                    ->where('users.id','!=',$user->id)
-                    ->get();
+                if($request->Division == "-1"){
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->whereNull('division_id')
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }else{
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                        ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active')
+                        ->where('division_id',$request->Division)
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->get();
+                }
+
 
             }else{
                 $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -87,7 +109,6 @@ class SearchController extends Controller
         }
 
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
-
         $str.="<thead><tr>";
 
         if($role_id == 3)
@@ -192,7 +213,8 @@ class SearchController extends Controller
                     ->where('users.role_id','!=',1)
                     ->where('users.role_id','=',$role_id)
                     ->where('users.id','!=',$user->id)
-                    ->get();
+                    ->get()->toArray();
+
         }else{
         $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
             ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
@@ -240,7 +262,7 @@ class SearchController extends Controller
             $str.="<th>Parent Name</th>";
         }
 
-        if(sizeof($result->toArray()) != 0 )
+        if(sizeof($result) != 0 )
         {
 
             if($user->role_id == 1)
@@ -254,21 +276,20 @@ class SearchController extends Controller
 
             foreach($result as $row)
             {
-
-                if($row->user_role=='student')
+                if($row['user_role'] == 'student')
                 {
-                    $str.="<tr><td>".$row->rollno."</td>";
+                    $str.="<tr><td>".$row['rollno']."</td>";
                 }else{
                     $str.="<tr>";
                 }
 
-                $str.="<td>".$row->firstname." ".$row->lastname."</td>";
-                $str.="<td>".$row->user_name."</td>";
-                $str.="<td>".$row->email."</td>";
-                $str.="<td>".$row->gender."</td>";
+                $str.="<td>".$row['firstname']." ".$row['lastname']."</td>";
+                $str.="<td>".$row['user_name']."</td>";
+                $str.="<td>".$row['email']."</td>";
+                $str.="<td>".$row['gender']."</td>";
 
-                if($row->user_role=='student') {
-                    $parent=User::all()->where('id',$row->parent_id);
+                if($row['user_role']=='student') {
+                    $parent=User::all()->where('id',$row['parent_id']);
                     if($parent->toArray() == null) {
                         $str.="<td> -- </td>";
                     } else {
@@ -282,20 +303,21 @@ class SearchController extends Controller
                 if($user->role_id == 1)
                 {
                     $str.="<td>";
-                    if($row->is_active == 1)
-                    {
-                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
+                    if($row['is_active'] == 1)
+                    {   $a_id=$row['id'];
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$a_id)' id='status$a_id' value='$a_id' checked/>";
                     }else{
-                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
+                        $a_id=$row['id'];
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$a_id)' id='status$a_id' value='$a_id'/>";
                     }
                     $str.="</td>";
                 }
 
                 $str.="<td>";
 
-                $str.="<a href='/edit-user/".$row->id."'>Edit </a>";
-                if($row->user_role != 'student') {
-                $str.=" / <a href='/view-user/".$row->id."'> View</a>";
+                $str.="<a href='/edit-user/".$row['id']."'>Edit </a>";
+                if($row['user_role'] != 'student') {
+                $str.=" / <a href='/view-user/".$row['id']."'> View</a>";
                 }
 
                 $str.="</td>";
@@ -309,10 +331,11 @@ class SearchController extends Controller
 
         $str.="</table>";
 
-        if(sizeof($result->toArray()) != 0 )
+        if(!empty($result))
         {
             return $str;
         } else {
+
             return $str1;
         }
 

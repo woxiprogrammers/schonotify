@@ -296,6 +296,7 @@
         Main.init();
         FormValidator.init();
         FormWizard.init();
+        $('option#4').hide();
     });
 </script>
 <script type="text/javascript">

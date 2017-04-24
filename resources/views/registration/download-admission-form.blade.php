@@ -53,7 +53,7 @@
             </div>
          </form>
         <div class="col-md-4">
-            <button class="btn btn-primary btn-wide ">
+            <button class="btn btn-primary btn-wide">
                 Make Payment
             </button>
         </div>

@@ -13,6 +13,7 @@ use App\StudentHobby;
 use App\StudentPreviousSchool;
 use App\StudentSibling;
 use App\StudentSpecialAptitude;
+use App\SubmittedDocuments;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -89,6 +90,7 @@ class RegistrationController extends Controller
             $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
             $bodies = Body::all();
             $documents = StudentDocumentMaster::all();
+
             if($userRegister!=null){
                 return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies','documents'));
             }else{
@@ -123,6 +125,10 @@ class RegistrationController extends Controller
     public function registerStudent(Request $request)
     {
         $data = $request->all();
+        $document=$request->documents;
+        if(!empty($document)){
+            $document=implode(",",$document);
+        }
         if(!empty($data)){
             if(isset($data['dob'])){
                 $dob = $data['dob'];
@@ -234,7 +240,6 @@ class RegistrationController extends Controller
                 $previousSchool['created_at'] = Carbon::now();
                 $previousSchool['updated_at'] = Carbon::now();
                 StudentPreviousSchool::insert($previousSchool);
-
                 if(isset($data['sibling'])){
                     $siblingInfo = array();
                     $siblings = $data['sibling'];
@@ -260,8 +265,12 @@ class RegistrationController extends Controller
                 $extraInfo['student_id'] = $LastInsertId;
                 $extraInfo['created_at'] = Carbon::now();
                 $extraInfo['updated_at'] = Carbon::now();
-                StudentExtraInfo::insert($extraInfo);
-
+                $enquiry_id=StudentExtraInfo::insertGetId($extraInfo);
+                if(isset($document)){
+                    $documentData['student_id']=$LastInsertId;
+                    $documentData['submitted_documents']=$document;
+                    $query=SubmittedDocuments::insert($documentData);
+                }
                 if(isset($data['upload_doc'])){
                     $i =1;
                     foreach($data['upload_doc'] as $doc){
