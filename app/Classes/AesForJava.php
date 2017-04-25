@@ -146,7 +146,7 @@ class AesForJava {
                 mcrypt_encrypt(
                     $this->cipher, $this->key, $this->pkcs5_pad($this->data), $this->mode, $this->getIV())));
         } else {
-            throw new Exception('Invlid params!');
+            throw new Exception('Invalid params!');
         }
     }
 

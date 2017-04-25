@@ -104,10 +104,10 @@
         <input type="hidden" value="{{$student['grn']}}" name="student_grn">
         <input type="hidden" value="{{$student['body_id']}}" name="student_body_id">
         <input type="hidden" value="{{$student['first_name'].' '.$student['last_name']}}" name="student_name">
-        <input type="hidden" value="" name="section">
-        <input type="hidden" value="" name="standard">
-        <input type="hidden" value="" name="academic_year">
-        <input type="hidden" value="" name="fee_type">
+        <input type="hidden" value="{{$student['division']}}" name="section">
+        <input type="hidden" value="{{$student['standard']}}" name="standard">
+        <input type="hidden" value="{{$student['academic_year']}}" name="academic_year">
+        <input type="hidden" value="{{$student['fee_type']}}" name="fee_type">
         <input type="hidden" value="{{$parent['first_name'].' '.$parent['last_name']}}" name="parent_name">
         <input type="hidden" value="{{$parent['first_name']}}" name="email">
         <input type="hidden" value="{{$parent['mobile']}}" name="contact">

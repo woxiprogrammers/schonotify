@@ -7,6 +7,7 @@ use App\CASTECONCESSION;
 use App\category_types;
 use App\Classes;
 use App\ConcessionTypes;
+use App\Division;
 use App\fee_installments;
 use App\fee_particulars;
 use App\FeeClass;
@@ -35,7 +36,7 @@ class FeeController extends Controller
     public function __construct()
     {
         $this->middleware('db');
-        $this->middleware('auth');
+        $this->middleware('auth',['except'=>['billiingPageView','getStudentDetails']]);
 
     }
     public function createFeeStructureView(){
@@ -89,6 +90,7 @@ class FeeController extends Controller
         {
           return view('fee.installments');
         }
+
     public function billiingPageView(){
         try{
             $bodies = Body::get()->toArray();
@@ -242,9 +244,14 @@ class FeeController extends Controller
                         ->where('students_extra_info.grn',$request->grn)
                         ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
                         ->first()->toArray();
+            $divisionData = Division::where('id',$student['division_id'])->select('division_name','class_id')->first()->toArray();
+            $student['division'] = $divisionData['division_name'];
+            $student['standard'] = Classes::where('id',$divisionData['class_id'])->pluck('class_name');
             $student['grn'] = $request->grn;
             $parent = User::where('id',$student['parent_id'])->select('first_name','last_name','email','mobile')->first()->toArray();
             $student_fee=StudentFee::where('student_id',$student['id'])->select('fee_id','year','fee_concession_type','caste_concession')->first()->toarray();
+            $student['fee_type'] = $student_fee['fee_id'];
+            $student['academic_year'] = $student_fee['year'];
             $installment_info=FeeInstallments::where('fee_id',$student_fee['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
             $installments = array();
             $total_fee_amount = 0;

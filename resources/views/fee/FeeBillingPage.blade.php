@@ -5,11 +5,8 @@
 
 <div id="app">
 
-    @include('sidebar')
-
     <div class="app-content">
 
-        @include('header')
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
             <div class="wrap-content container" id="container">
@@ -61,7 +58,6 @@
                 </div>
 
             </div>
-            @include('rightSidebar')
         </div>
     </div>
 
