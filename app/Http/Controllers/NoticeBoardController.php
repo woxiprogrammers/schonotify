@@ -72,9 +72,7 @@
 
         public function getListing(NoticeBoardRequest $request,$id)
         {
-
             $user = Auth::User();
-
             $latestEventDate = date('Y-m');
             $month = date('m', strtotime(date($latestEventDate)." -".$id." month"));
             $year = date('Y', strtotime(date($latestEventDate)." -".$id." month"));
@@ -126,17 +124,11 @@
                         }
 
                         $result = array_merge($adminAnnouncementArray,$adminAchievementArray);
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
-                            if (isset($temp_array))
-
+                             if (isset($temp_array))
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $price = array();
                         foreach ($temp_array as $key => $row)
                         {
@@ -157,22 +149,16 @@
                             if (isset($temp_array))
 
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $price = array();
                         foreach ($temp_array as $key => $row)
                         {
                             $price[$key] = $row['created_at'];
                         }
                         array_multisort($price, SORT_DESC, $temp_array);
-
                         $uniqueResult = array_values($temp_array);
-
                     }
-
                     return $uniqueResult;
-
                 } elseif ($user->role_id == 2) {
                     //teacher will get self created , self pending and all publish announcement / achievement [1,2]
 
@@ -453,15 +439,10 @@
                         $uniqueResult = array_values($temp_array);
 
                     }
-
-
-                    return $uniqueResult;
-
+                        return $uniqueResult;
                 }
             }
-
         }
-
         /*
         * Function Name : getAdminAnnouncement
         * Param : $month,$year,$id
@@ -1547,7 +1528,6 @@
                         array_push($teachers,$userRole);
                     }
                 }
-
                 if($user->division_id != null)
                 {
                     $batches = Classes::join('divisions','classes.id','=','divisions.class_id')
@@ -1555,32 +1535,19 @@
                         ->where('divisions.id','=',$user->division_id)
                         ->select('divisions.id','divisions.class_id','classes.batch_id','divisions.division_name','classes.class_name','batches.name as batch_name')
                         ->get();
-
                     array_push($divisions,$batches);
-
                     $batchesArray = $batches->toArray();
-
                     array_push($selectedBatches,$batchesArray[0]['batch_id']);
                     array_push($selectedClasses,$batchesArray[0]['class_id']);
                     array_push($selectedDivisions,$batchesArray[0]['id']);
-
                 }
             }
-
             $selectedBatches = array_unique($selectedBatches);
-
             $selectedClasses = array_unique($selectedClasses);
-
             $selectedDivisions = array_unique($selectedDivisions);
-
-
             $batchClass = $this::getBatchClass($batchId);
-
             return array($batchClass,$selectedDivisions,$selectedClasses);
-
         }
-
-
         /*
         * Function Name : removeEmptySubFolders
         * Param : $path
@@ -1589,7 +1556,6 @@
         * Developed By : Suraj Bande
         * Date : 3/4/2016
         */
-
         public function removeEmptySubFolders($path)
         {
 
@@ -1715,86 +1681,61 @@
                 {
                     foreach($request->uploadedFiles as $row)
                     {
-
                         $filename = "/uploads/achievement/".Auth::User()->id.'/'.$row;
                         $filenameThumb = "uploads/achievement/".Auth::User()->id.'/thumbnail/'.$row;
-
                         $path = public_path('uploads/achievement/events/'.$lastInsertId.'/');
-
                         if (! file_exists($path.'thumbnail/')) {
                             File::makeDirectory('uploads/achievement/events/'.$lastInsertId.'/thumbnail/', $mode = 0777, true, true);
                         }
-
                         $timeImage = time().'_'.$row;
-
                         $file = $path.$timeImage;
-
                         if(file_exists(public_path($filename)))
                         {
                             rename(public_path($filename),$file);
-
                             chmod($file,0777);
-
                             array_push($images,$timeImage);
-
                         }
-
                         if(file_exists(public_path($filenameThumb)))
                         {
                             rename(public_path($filenameThumb),$path.'thumbnail/'.$timeImage);
-
                             chmod($path.'/thumbnail/'.$timeImage,0777);
                         }
-
                     }
-
                 }
-
                 if(sizeof($images) == 0) {
                     $storeAchievementImages['event_id'] = $lastInsertId;
                     $storeAchievementImages['image'] = null;
                     $storeAchievementImages['created_at'] = Carbon::now();
                     $storeAchievementImages['updated_at'] = Carbon::now();
-
                     EventImages::insert($storeAchievementImages);
                 } else {
-                    foreach($images as $image)
-                    {
+                    foreach($images as $image){
                         $storeAchievementImages['event_id'] = $lastInsertId;
                         $storeAchievementImages['image'] = $image;
                         $storeAchievementImages['created_at'] = Carbon::now();
                         $storeAchievementImages['updated_at'] = Carbon::now();
-
                         EventImages::insert($storeAchievementImages);
                     }
                 }
-
                 if($request->hiddenBtnCheck == 0)
                 {
-                    if(Auth::User()->role_id == 1)
-                    {
+                    if(Auth::User()->role_id == 1){
                         Session::flash('message-success','Achievement created and published successfully !');
                     } else {
                         Session::flash('message-success','Achievement created and sent for publish successfully !');
                     }
                 } else {
-
                     Session::flash('message-success','Achievement created successfully !');
-
                 }
-
                 if(file_exists(public_path("uploads/achievement/".Auth::User()->id)))
                 {
                     $xx = $this::removeEmptySubFolders(public_path("uploads/achievement/".Auth::User()->id));
                 }
-
                 return Redirect::to('/detail-achievement/'.$lastInsertId);
-
             } else {
                 return Redirect::back();
             }
         }
-
         /*
         * Function Name : checkUpdateAchievementAcl
         * Param : $request
@@ -1803,7 +1744,6 @@
         * Developed By : Suraj Bande
         * Date : 23/3/2016
         */
-
         public function checkUpdateAchievementAcl(EditAchievementRequest $request)
         {
             if($request->authorize() === true)
@@ -1813,7 +1753,6 @@
                 return 2;
             }
         }
-
         /*
         * Function Name : checkUpdateAchievementAcl
         * Param : $request
@@ -1822,7 +1761,6 @@
         * Developed By : Suraj Bande
         * Date : 22/3/2016
         */
-
         public function checkUpdateAnnouncementAcl(EditAnnouncementRequest $request)
         {
             if($request->authorize() === true)
@@ -1832,7 +1770,6 @@
                 return 2;
             }
         }
-
         /*
         * Function Name : checkPublishAchievementAcl
         * Param : $request,$id
@@ -1841,73 +1778,47 @@
         * Developed By : Suraj Bande
         * Date : 22/3/2016
         */
-
         public function checkPublishAchievementAcl(PublishAchievementRequest $request,$id)
         {
-
             $event = Event::find($id);
-
             if($event->created_by == Auth::User()->id) {
-
                 if(Auth::User()->role_id == 1)
                 {
                     $achievement = Event::find($id);
                     $achievement->published_by = Auth::User()->id;
                     $achievement->status = 2;
-
                     $achievement->save();
-
                     Session::flash('message-success','Achievement published successfully !');
-
                 } else {
-
                     $achievement = Event::find($id);
                     $achievement->status = 1;
-
                     $achievement->save();
-
                     Session::flash('message-success','Achievement sent for publish successfully !');
-
                 }
-
                 return Redirect::to('/detail-announcement/'.$id);
-
             } else {
-
                 if($request->authorize() === true)
                 {
-
                     if(Auth::User()->role_id == 1)
                     {
                         $achievement = Event::find($id);
                         $achievement->published_by = Auth::User()->id;
                         $achievement->status = 2;
-
                         $achievement->save();
-
                         Session::flash('message-success','Achievement published successfully !');
-
                     } else {
-
                         $achievement = Event::find($id);
                         $achievement->status = 1;
-
                         $achievement->save();
-
                         Session::flash('message-success','Achievement sent for publish successfully !');
-
                     }
-
                     return Redirect::to('/detail-announcement/'.$id);
-
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/detail-announcement/'.$id);
                 }
             }
         }
-
-
         /*
         * Function Name : checkPublishAnnouncementAcl
         * Param : $request,$id
@@ -1916,73 +1827,45 @@
         * Developed By : Suraj Bande
         * Date : 5/4/2016
         */
-
         public function checkPublishAnnouncementAcl(PublishAnnouncementRequest $request,$id)
         {
-
             $event = Event::find($id);
-
             if($event->created_by == Auth::User()->id) {
-
                 if(Auth::User()->role_id == 1)
                 {
                     $announcement = Event::find($id);
                     $announcement->status = 2;
-
                     $announcement->save();
-
                     Session::flash('message-success','Announcement published successfully !');
-
                 } else {
-
                     $announcement = Event::find($id);
                     $announcement->status = 1;
-
                     $announcement->save();
-
                     Session::flash('message-success','Announcement sent for publish successfully !');
-
                 }
-
                 return Redirect::back();
-
             } else {
-
                 if($request->authorize() === true)
                 {
-
                     if(Auth::User()->role_id == 1)
                     {
                         $announcement = Event::find($id);
                         $announcement->status = 2;
-
                         $announcement->save();
-
                         Session::flash('message-success','Announcement published successfully !');
-
                     } else {
-
                         $announcement = Event::find($id);
                         $announcement->status = 1;
-
                         $announcement->save();
-
                         Session::flash('message-success','Announcement sent for publish successfully !');
-
                     }
-
                     return Redirect::back();
-
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::back();
                 }
-
             }
-
-
         }
-
         /*
         * Function Name : updateAchievement
         * Param : $request
@@ -1994,77 +1877,48 @@
 
         public function updateAchievement(EditAchievementRequest $request)
         {
-            if($request->authorize() === true)
-            {
-
+            if($request->authorize() === true){
                 $images = array();
                 $achievement = Event::find($request->hiddenEventId);
-
                 $achievement->title = $request->title;
                 $achievement->detail = $request->achievement;
                 $achievement->updated_at = Carbon::now();
-
                 $achievement->save();
-
                 EventImages::where('event_id','=',$request->hiddenEventId)
                             ->delete();
-
                 $filename = "uploads/achievement/events/".$request->hiddenEventId."/";
-
                 $path = public_path($filename);
-
                 foreach(glob($path.'*.*') as $file) {
                     if(is_file($file))
                         unlink($file);
                 }
-
-                if(isset($request->uploadedFiles[0]))
-                {
-                    foreach($request->uploadedFiles as $row)
-                    {
-
+                if(isset($request->uploadedFiles[0])){
+                    foreach($request->uploadedFiles as $row){
                         $filename = "uploads/achievement/".Auth::User()->id.'/'.$request->hiddenEventId.'/'.$row;
                         $filenameThumb = "uploads/achievement/".Auth::User()->id.'/'.$request->hiddenEventId.'/thumbnail/'.$row;
-
                         $tempPath = "uploads/achievement/events/".$request->hiddenEventId."/";
-
                         $path = public_path($tempPath);
-
                         if (! file_exists($path.'thumbnail/')) {
                             File::makeDirectory('uploads/achievement/events/'.$request->hiddenEventId.'/thumbnail/', $mode = 0777, true, true);
                         }
-
                         $timeImage = $row;
-
                         $file = $path.$timeImage;
-
-                        if(file_exists(public_path($filename)))
-                        {
+                        if(file_exists(public_path($filename))){
                             rename(public_path($filename),$file);
-
                             chmod($file,0777);
-
                             array_push($images,$timeImage);
-
                         }
-
-                        if(file_exists(public_path($filenameThumb)))
-                        {
+                        if(file_exists(public_path($filenameThumb))){
                             rename(public_path($filenameThumb),$path.'thumbnail/'.$timeImage);
-
                             chmod($path.'/thumbnail/'.$timeImage,0777);
                         }
-
                     }
-
                 }
-
                 if(sizeof($images) == 0) {
                     $storeAchievementImages['event_id'] = $request->hiddenEventId;
                     $storeAchievementImages['image'] = null;
                     $storeAchievementImages['created_at'] = Carbon::now();
                     $storeAchievementImages['updated_at'] = Carbon::now();
-
                     EventImages::insert($storeAchievementImages);
                 } else {
                     foreach($images as $image)
@@ -2073,11 +1927,9 @@
                         $storeAchievementImages['image'] = $image;
                         $storeAchievementImages['created_at'] = Carbon::now();
                         $storeAchievementImages['updated_at'] = Carbon::now();
-
                         EventImages::insert($storeAchievementImages);
                     }
                 }
-
                 if(file_exists(public_path("uploads/achievement/".Auth::User()->id)))
                 {
                     $xx = $this::removeEmptySubFolders(public_path("uploads/achievement/".Auth::User()->id));

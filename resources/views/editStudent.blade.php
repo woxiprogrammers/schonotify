@@ -1225,8 +1225,7 @@
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
 
                     }else{
-                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                        {
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1){
 
                             str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                                 '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
