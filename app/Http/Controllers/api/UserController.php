@@ -30,13 +30,10 @@ class UserController extends Controller
         $this->middleware('remember.user.token');
         $this->middleware('authenticate.user',['except' => ['login']]);
     }
-
-
     protected function login(Requests\LoginRequest $request)
     {
         $data=array();
         try{
-
             $user = User::where('email', $request->email)->first();
             if ($user == NULL) {
                 $status =404;
@@ -47,8 +44,6 @@ class UserController extends Controller
             } elseif (Auth::attempt(['email' => $request->email,'password' => $request->password])) {
                 $user=Auth::User();
                 $userView=TeacherView::where('user_id','=',$user['id'])->first();
-
-
                 if(Empty($userView) && $user['role_id']==4 || $userView['mobile_view']==1)
                 {
                     $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -93,12 +88,10 @@ class UserController extends Controller
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)
                                 ->count();
-
                             $data['Badge_count']['user_id']=$userData['id'];
                             $data['Badge_count']['body_id']=$user['body_id'];
                             $data['Badge_count']['message_count'] = $messageCount;
                             $data['Badge_count']['auto_notification_count'] = $messageCount;
-
                     }else{
                         $messageCount=Message::where('to_id',$user['id'])
                             ->where('read_status','=',0)
@@ -125,7 +118,6 @@ class UserController extends Controller
         }
         $response = ["message" => $message,"status" => $status,"data" =>$data,];
         return response($response,$status);
-
     }
     public function getBatchesTeacher(Request $request){
         try{
@@ -293,7 +285,6 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
     public function getDivisions(Request $request, $class_id){
         try{
             $data = $request->all();
@@ -357,7 +348,6 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
     public function getSwitchingDetails(Request $request){
         try{
             $data=$request->all();
@@ -371,7 +361,7 @@ class UserController extends Controller
                                      $finalData['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
                                      $finalData['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
                                        $i++;
-                                   }
+                                 }
             $message="Successfully Listed";
             $status=200;
         }
@@ -386,5 +376,4 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
 }
