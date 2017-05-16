@@ -6,6 +6,7 @@ use App\Body;
 use App\Division;
 use App\Event;
 use App\EventImages;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
@@ -17,12 +18,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Mockery\CountValidator\Exception;
 
 class EventController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct()
     {
         $this->middleware('db');
@@ -66,7 +69,7 @@ class EventController extends Controller
 
     public function saveEvent(Requests\WebRequests\EventRequest $request)
     {
-
+         Log::info("bb");
         if($request->authorize() === true){
 
             $user=Auth::User();
@@ -110,19 +113,14 @@ class EventController extends Controller
                 $insertData['published_by'] = 0;
                 $insertData['status'] = 0;
             }
-
             $insertData['created_at'] = Carbon::now();
             $insertData['updated_at'] = Carbon::now();
-
             $lastInsertId=Event::insertGetId($insertData);
-
             $insertImageData['image'] = $filename;
             $insertImageData['event_id'] = $lastInsertId;
             $insertImageData['created_at'] = Carbon::now();
             $insertImageData['updated_at'] = Carbon::now();
-
             $result=EventImages::insert($insertImageData);
-
             if($result){
                 if($request->hiddenField == "Publish")
                 {
@@ -132,6 +130,9 @@ class EventController extends Controller
                         return 1;
                     } else {
                         Session::flash('message-success','Event created and published successfully !');
+                        $title="New Event Created";
+                        $message=$request->eventName;
+                        $this->CreatePushNotification($title,$message);
                         return 1;
                     }
 

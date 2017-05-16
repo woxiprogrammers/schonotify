@@ -10,6 +10,7 @@ use App\Division;
 use App\Message;
 use App\Module;
 use App\ModuleAcl;
+use App\PushToken;
 use App\SubjectClassDivision;
 use App\TeacherView;
 use App\User;
@@ -118,6 +119,13 @@ class UserController extends Controller
         }
         $response = ["message" => $message,"status" => $status,"data" =>$data,];
         return response($response,$status);
+    }
+    public function savePushToken(Request $request){
+        $data=$request->all();
+        $pushData['user_id']=$data['user_id'];
+        $pushData['push_token']=$data['pushToken'];
+        PushToken::create($pushData);
+
     }
     public function getBatchesTeacher(Request $request){
         try{
