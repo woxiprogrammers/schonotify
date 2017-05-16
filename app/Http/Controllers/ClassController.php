@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Batch;
 use App\Classes;
 use App\Division;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,7 +17,6 @@ use \Illuminate\Support\Facades\Session;
 
 class ClassController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('db');
