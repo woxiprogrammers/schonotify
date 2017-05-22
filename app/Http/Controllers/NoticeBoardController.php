@@ -8,6 +8,7 @@
     use App\Event;
     use App\EventImages;
     use App\EventUserRoles;
+    use App\Http\Controllers\CustomTraits\PushNotificationTrait;
     use App\Http\Requests\WebRequests\CreateAchievementRequest;
     use App\Http\Requests\WebRequests\CreateAnnouncementRequest;
     use App\Http\Requests\WebRequests\DeleteAchievementRequest;
@@ -31,6 +32,7 @@
 
     class NoticeBoardController extends Controller
     {
+        use PushNotificationTrait;
         public function __construct()
         {
             $this->middleware('db');
@@ -810,18 +812,13 @@
          */
         public function showCreateNoticeBoard(Request $request)
         {
-
             /***to unlink uploaded file from temp folder on page load ****/
-
             $filename = "uploads/achievement/".Auth::User()->id."/";
-
             $path = public_path($filename);
-
             foreach(glob($path.'*.*') as $file) {
                 if(is_file($file))
                     unlink($file);
             }
-
             $user = Auth::user();
             $classDivision = array();
             $batchList = array();
@@ -832,12 +829,10 @@
                 $user=Auth::user();
                 $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
                 $batchList = $batchData->toArray();
-
             } elseif ($user->role_id == 2 ) {
                 $userCheck = Division::where('class_teacher_id',$user->id)->first();
-                if ($userCheck != null) {
+                if ($userCheck != null){
                     $count=0;
-
                         $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
                             ->join('classes','divisions.class_id','=','classes.id')
                             ->join('batches','classes.batch_id','=','batches.id')
@@ -849,19 +844,15 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                             ->get()->toArray();
-
                         $mergedArray = array_merge($batchClassData,$divisionSubjects);
                         $mergedArray = array_unique($mergedArray, SORT_REGULAR);
-
                         foreach($mergedArray as $row) {
                             $batchList[$count]['id'] = $row['batch_id'];
                             $batchList[$count]['name'] = $row['batch_name'];
                             $count++;
                         }
                         $batchList = array_unique($batchList, SORT_REGULAR);
-
                 } else {
-
                         $count=0;
                         $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                             ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -869,7 +860,6 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                             ->get()->toArray();
-
                         $divisionSubjects = array_unique($divisionSubjects, SORT_REGULAR);
                         foreach($divisionSubjects as $row) {
                             $batchList[$count]['id'] = $row['batch_id'];
@@ -877,21 +867,16 @@
                             $count++;
                         }
                         $batchList = array_unique($batchList, SORT_REGULAR);
-
                 }
             }
-
                 $adminWithAcl = User::join('module_acls','module_acls.user_id','=','users.id')
                             ->where('module_id','=',13)
                             ->where('acl_id','=',5)
                             ->where('role_id','=',1)
                             ->select('users.id','users.first_name','users.last_name','users.username')
                             ->get()->toArray();
-
                 return view('createNoticeBoard')->with(compact('batchList','adminWithAcl'));
-
         }
-
         /**
          * Function Name: getAllAdmins
          * @param
@@ -900,15 +885,12 @@
          * Date: 03/03/2016
          * author manoj chaudahri
          */
-
         public function getAllAdmins()
         {
             $user = Auth::user();
             $adminList = User::where('role_id',1)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name','username')->get();
             return $adminList;
-
         }
-
         /*
         * Function Name : getAllAdminsForUpdate
         * Param : --
@@ -917,17 +899,12 @@
         * Developed By : Suraj Bande
         * Date : 3/4/2016
         */
-
-
         public function getAllAdminsForUpdate()
         {
             $user = Auth::user();
             $adminList = User::where('role_id',1)->where('body_id',$user->body_id)->select('id','first_name','last_name','username')->get();
             return $adminList;
-
         }
-
-
         /**
          * Function Name: getAllTeachers
          * @param
@@ -936,16 +913,12 @@
          * Date: 03/03/2016
          * author manoj chaudahri
          */
-
         public function getAllTeachers()
         {
             $user = Auth::user();
             $teacherList = User::where('role_id',2)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name','username')->get();
             return $teacherList;
-
         }
-
-
         /*
         * Function Name : createNoticeBoard
         * Param : $request
@@ -954,13 +927,9 @@
         * Developed By : Suraj Bande
         * Date : 3/4/2016
         */
-
         public function createNoticeBoard(CreateAnnouncementRequest $request)
         {
-
-            if ($request->authorize() === true)
-            {
-
+            if ($request->authorize() === true){
                 $annoucement =array();
                 $userEntry = array();
                 $user = Auth::user();
@@ -971,7 +940,6 @@
                 $annoucement['created_at'] = Carbon::now();
                 $annoucement['updated_at'] = Carbon::now();
                 $annoucement['created_by'] = $user->id;
-
                 if($user->role_id == 1) {
                     if($request->buttons == 'publish') {
                         $annoucement['published_by'] = $user->id;
@@ -981,19 +949,23 @@
                         $annoucement['status'] = 0;
                     }
                 } else {
-
                     $annoucement['published_by'] = $request->adminToPublish;
-
                     if($request->buttons == 'publish') {
                         $annoucement['status'] = 1;
                     } else {
                         $annoucement['status'] = 0;
                     }
-
                 }
-
-
                 $eventId = Event::insertGetId($annoucement);
+                $is_published = Event::where('status',$eventId)->pluck('status');
+                if($is_published == 2){
+                    $title="New Announcement Created";
+                    $message=$request->title;
+                    $allUser=0;
+                    $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
+                    $push_users=PushNotificationTrait::whereIn('user_id',$users_push)->lists('push_token');
+                        $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                }
                 if($eventId != null) {
                     if($request->adminList) {
                         $count = 0;
@@ -1017,13 +989,11 @@
                             $count++;
                         }
                     }
-
                     if($request->hidenValue == 1)
                     {
-
                         if($request->FirstDiv){
                             $count = 0;
-                            foreach($request->FirstDiv as $row) {
+                            foreach($request->FirstDiv as $row){
                                 $userEntry['event_id'] = $eventId;
                                 $userEntry['division_id'] = $row;
                                 $userEntry['created_at'] = Carbon::now();
@@ -1032,7 +1002,6 @@
                                 $count++;
                             }
                         } elseif(!($request->FirstDiv) && !($request->classFirst) && $request['batch-select'] ) {
-
                             if($user->role_id == 1) {
                                 $divisionData = Classes::join('divisions','classes.id','=','divisions.class_id')
                                     ->where('classes.body_id',$user->body_id)
@@ -1073,7 +1042,6 @@
                                         EventUserRoles::insert($userEntry);
                                         $count++;
                                     }
-
                                 } else {
                                     $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                                         ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -1129,7 +1097,6 @@
                                         EventUserRoles::insert($userEntry);
                                         $count++;
                                     }
-
                                 } else {
                                     $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                                         ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -1158,21 +1125,14 @@
                                 $count++;
                             }
                         }
-
                     }
-
-
                 }
                 Session::flash('message-success','Announcement created successfully');
                 return view('noticeBoard');
             } else {
                 return Redirect::back();
             }
-
-
         }
-
-
         /*
         * Function Name : getBatchClass
         * Param : $batchId
@@ -1271,7 +1231,6 @@
                     $classDivision = array_unique($classDivision, SORT_REGULAR);
 
                 } else {
-
                     $count=0;
                     $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                         ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -1314,14 +1273,10 @@
                         $countClass++;
                     }
                     $classDivision = array_unique($classDivision, SORT_REGULAR);
-
                 }
             }
-
             return $classDivision;
         }
-
-
         /*
         * Function Name : detailAnnouncement
         * Param : $id
@@ -1333,17 +1288,13 @@
 
         public function detailAnnouncement($id)
         {
-
             $events=Event::where('id','=',$id)->get();
-
             if(sizeOf($events) != 0)
             {
-
                 $announcements = Event::join('users','users.id','=','events.created_by')
                     ->where('events.id','=',$id)
                     ->select('events.id','title','events.status','events.detail','events.created_by','events.published_by','events.priority','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
                     ->get()->toArray();
-
                 $publishedBy = Event::join('users','users.id','=','events.published_by')
                     ->where('events.id','=',$id)
                     ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
@@ -1351,16 +1302,12 @@
 
                 $users = EventUserRoles::where('event_id','=',$id)
                     ->get();
-
                 $admins = array();
                 $teachers = array();
                 $divisions = array();
-
-
                 $selectedBatches = array();
                 $selectedClasses = array();
                 $selectedDivisions = array();
-
                 foreach($users as $user)
                 {
                     if($user->user_id != null)
@@ -1373,7 +1320,6 @@
                             array_push($teachers,$userRole);
                         }
                     }
-
                     if($user->division_id != null)
                     {
                         $batches = Classes::join('divisions','classes.id','=','divisions.class_id')
@@ -1381,34 +1327,21 @@
                             ->where('divisions.id','=',$user->division_id)
                             ->select('divisions.id','divisions.class_id','classes.batch_id','divisions.division_name','classes.class_name','batches.name as batch_name')
                             ->get();
-
                         array_push($divisions,$batches);
-
                         $batchesArray = $batches->toArray();
-
                         array_push($selectedBatches,$batchesArray[0]['batch_id']);
                         array_push($selectedClasses,$batchesArray[0]['class_id']);
                         array_push($selectedDivisions,$batchesArray[0]['id']);
-
                     }
                 }
-
                 $selectedBatches = array_unique($selectedBatches);
-
                 $selectedClasses = array_unique($selectedClasses);
-
                 $selectedDivisions = array_unique($selectedDivisions);
-
                 $admins =  array_unique($admins);
-
                 $teachers =  array_unique($teachers);
-
                 //////////////data to show on update page/////////////
-
                 $user = Auth::user();
-
                 $batchList = array();
-
                 if ($user->role_id == 1) {
                     $user=Auth::user();
                     $batchData = Batch::where('body_id',$user->body_id)->select('id','name')->get();
@@ -1418,7 +1351,6 @@
                     $userCheck = Division::where('class_teacher_id',$user->id)->first();
                     if ($userCheck != null) {
                         $count=0;
-
                         $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
                             ->join('classes','divisions.class_id','=','classes.id')
                             ->join('batches','classes.batch_id','=','batches.id')
@@ -1430,19 +1362,15 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                             ->get()->toArray();
-
                         $mergedArray = array_merge($batchClassData,$divisionSubjects);
                         $mergedArray = array_unique($mergedArray, SORT_REGULAR);
-
                         foreach($mergedArray as $row) {
                             $batchList[$count]['id'] = $row['batch_id'];
                             $batchList[$count]['name'] = $row['batch_name'];
                             $count++;
                         }
                         $batchList = array_unique($batchList, SORT_REGULAR);
-
                     } else {
-
                         $count=0;
                         $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                             ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -1450,7 +1378,6 @@
                             ->join('batches','classes.batch_id','=','batches.id')
                             ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                             ->get()->toArray();
-
                         $divisionSubjects = array_unique($divisionSubjects, SORT_REGULAR);
                         foreach($divisionSubjects as $row) {
                             $batchList[$count]['id'] = $row['batch_id'];
@@ -1458,40 +1385,27 @@
                             $count++;
                         }
                         $batchList = array_unique($batchList, SORT_REGULAR);
-
                     }
                 }
-
                 $adminWithAcl = User::join('module_acls','module_acls.user_id','=','users.id')
                     ->where('module_id','=',13)
                     ->where('acl_id','=',5)
                     ->where('role_id','=',1)
                     ->select('users.id','users.first_name','users.last_name','users.username')
                     ->get()->toArray();
-
                 if($announcements[0]['role_id'] == 2)
                 {
                     $allAdmins = $this::getAllAdminsForUpdate();
                 } else {
                     $allAdmins = $this::getAllAdmins();
                 }
-
                 $allTeachers = $this::getAllTeachers();
-
                 return view('detailAnnouncement')->with(compact('announcements','admins','teachers','divisions','publishedBy','batchList','adminWithAcl','selectedBatches','selectedClasses','selectedDivisions','allAdmins','allTeachers'));
-
-
             } else {
-
                 Session::flash('message-error','This announcement is not available !');
-
                 return Redirect::to('noticeBoard');
-
             }
-
         }
-
-
         /*
         * Function Name : getBatchClassWithSelected
         * Param : $batchId,$id
@@ -1500,22 +1414,16 @@
         * Developed By : Suraj Bande
         * Date : 13/4/2016
         */
-
         public function getBatchClassWithSelected($batchId,$id)
         {
-
             $users = EventUserRoles::where('event_id','=',$id)
                 ->get();
-
             $admins = array();
             $teachers = array();
             $divisions = array();
-
-
             $selectedBatches = array();
             $selectedClasses = array();
             $selectedDivisions = array();
-
             foreach($users as $user)
             {
                 if($user->user_id != null)
@@ -1558,7 +1466,6 @@
         */
         public function removeEmptySubFolders($path)
         {
-
                 foreach(scandir($path) as $file) {
 
                     if ('.' === $file || '..' === $file) continue;
@@ -1566,9 +1473,7 @@
                     else unlink("$path/$file");
                 }
                 rmdir($path);
-
         }
-
         /*
         * Function Name : detailAchievement
         * Param : $id
@@ -1577,33 +1482,25 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function detailAchievement($id)
         {
-
             if(file_exists(public_path("uploads/achievement/".Auth::User()->id)))
             {
                 $xx = $this::removeEmptySubFolders(public_path("uploads/achievement/".Auth::User()->id));
             }
-
             $path = public_path("uploads/achievement/".Auth::User()->id.'/'.$id.'/');
-
             if (! file_exists($path.'thumbnail/')) {
                 File::makeDirectory('uploads/achievement/'.Auth::User()->id.'/'.$id.'/thumbnail/', $mode = 0777, true, true);
             }
-
             $file = public_path("uploads/achievement/events/".$id.'/');
-
             if(! count(glob($file)) == 0)
             {
                 foreach(glob($file.'*.*') as $files)
                 {
                     $file_to_go = str_replace($file,$path,$files);
-
                     copy($files,$file_to_go);
                     chmod($file_to_go,0777);
                 }
-
                 foreach(glob($file.'thumbnail/*.*') as $thumbs)
                 {
                     $file_to_go = str_replace($file.'thumbnail/',$path.'thumbnail/',$thumbs);
@@ -1612,31 +1509,24 @@
                     chmod($file_to_go,0777);
                 }
             }
-
             $images = EventImages::where('event_id','=',$id)
                 ->select('image')
                 ->get()->toArray();
-
             $imageArray = array();
-
             foreach($images as $key=>$value)
             {
                 array_push($imageArray,$value['image']);
             }
-
             $achievements = Event::join('users','users.id','=','events.created_by')
                 ->where('events.id','=',$id)
                 ->select('events.id','title','events.status','events.detail','events.created_at','events.updated_at','users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
-
             $publishedBy = Event::join('users','users.id','=','events.published_by')
                 ->where('events.id','=',$id)
                 ->select('users.username','users.first_name','users.last_name','users.role_id','users.gender')
                 ->get()->toArray();
-
             return view('detailAchievement')->with(compact('achievements','imageArray','publishedBy'));
         }
-
         /*
         * Function Name : createAchievement
         * Param : $request
@@ -1645,16 +1535,12 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function createAchievement(CreateAchievementRequest $request)
         {
             if($request->authorize() === true ) {
-
                 $images = array();
-
                 $storeAchievement['title'] = $request->title;
                 $storeAchievement['detail'] = $request->achievement;
-
                 if($request->hiddenBtnCheck == 0)
                 {
                     if(Auth::User()->role_id == 1)
@@ -1665,7 +1551,6 @@
                         $storeAchievement['status'] = 1;
                         $storeAchievement['published_by'] = 0;
                     }
-
                 } else {
                     $storeAchievement['status'] = 0;
                     $storeAchievement['published_by'] = 0;
@@ -1674,9 +1559,7 @@
                 $storeAchievement['created_by'] = Auth::User()->id;
                 $storeAchievement['created_at'] = Carbon::now();
                 $storeAchievement['updated_at'] = Carbon::now();
-
                 $lastInsertId = Event::insertGetId($storeAchievement);
-
                 if(isset($request->uploadedFiles[0]))
                 {
                     foreach($request->uploadedFiles as $row)
@@ -1721,6 +1604,11 @@
                 {
                     if(Auth::User()->role_id == 1){
                         Session::flash('message-success','Achievement created and published successfully !');
+                        $title="New Achievement Created";
+                        $message=$request->title;
+                        $allUser=1;
+                        $push_users=null;
+                        $this->CreatePushNotification($title,$message,$allUser,$push_users);
                     } else {
                         Session::flash('message-success','Achievement created and sent for publish successfully !');
                     }
@@ -1874,7 +1762,6 @@
         * Developed By : Suraj Bande
         * Date : 5/3/2016
         */
-
         public function updateAchievement(EditAchievementRequest $request)
         {
             if($request->authorize() === true){
@@ -1934,16 +1821,12 @@
                 {
                     $xx = $this::removeEmptySubFolders(public_path("uploads/achievement/".Auth::User()->id));
                 }
-
                 Session::flash('message-success','Achievement updated successfully !');
-
                 return Redirect::back();
-
             } else {
                 return Redirect::back();
             }
         }
-
         /*
         * Function Name : updateAnnouncement
         * Param : $request
@@ -1952,33 +1835,24 @@
         * Developed By : Suraj Bande
         * Date : 13/4/2016
         */
-
         public function updateAnnouncement(EditAnnouncementRequest $request)
         {
             if($request->authorize() === true) {
 
                 $userEntry = array();
                 $user = Auth::user();
-
                 $announcements = Event::where('id','=',$request->hiddenAnnouncementId)->first();
                 $announcements->event_type_id = 1;
                 $announcements->title = $request->title;
                 $announcements->priority = $request->priority;
                 $announcements->detail = $request->announcement;
                 $announcements->updated_at = Carbon::now();
-
                 if($user->role_id == 2) {
-
                     $announcements->published_by = $request->adminToPublish;
-
                 }
-
                 $announcements->save();
-
                 EventUserRoles::where('event_id','=',$request->hiddenAnnouncementId)->delete();
-
                 $eventId = $request->hiddenAnnouncementId;
-
                 if($request->adminList) {
                     $count = 0;
                     foreach($request->adminList as $row) {
@@ -2001,10 +1875,8 @@
                         $count++;
                     }
                 }
-
                 if($request->hidenValue == 1)
                 {
-
                     if(sizeOf($request->FirstDiv) != 0){
                         $count = 0;
                         foreach($request->FirstDiv as $row) {
@@ -2057,7 +1929,6 @@
                                     EventUserRoles::insert($userEntry);
                                     $count++;
                                 }
-
                             } else {
                                 $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                                     ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -2113,7 +1984,6 @@
                                     EventUserRoles::insert($userEntry);
                                     $count++;
                                 }
-
                             } else {
                                 $divisionData = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
                                     ->join('divisions','division_subjects.division_id','=','divisions.id')
@@ -2142,9 +2012,7 @@
                             $count++;
                         }
                     }
-
                 }
-
                 Session::flash('message-success','Announcement updated successfully !');
                 return Redirect::to('detail-announcement/'.$request->hiddenAnnouncementId);
 
@@ -2152,7 +2020,6 @@
                 return Redirect::back();
             }
         }
-
         /*
         * Function Name : deleteAnnouncement
         * Param : $id
@@ -2161,40 +2028,26 @@
         * Developed By : Suraj Bande
         * Date : 15/4/2016
         */
-
         public function deleteAnnouncement(DeleteAnnouncementRequest $request,$id)
         {
-
             $event = Event::find($id);
-
             if($event->created_by == Auth::User()->id) {
                 EventUserRoles::where('event_id','=',$id)->delete();
-
                 Event::where('id','=',$id)->delete();
-
                 Session::flash('message-success','Announcement deleted successfully !');
-
                 return Redirect::to('noticeBoard');
             } else {
                 if($request->authorize() === true) {
-
                     EventUserRoles::where('event_id','=',$id)->delete();
-
                     Event::where('id','=',$id)->delete();
-
                     Session::flash('message-success','Announcement deleted successfully !');
-
                     return Redirect::to('noticeBoard');
-
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::back();
                 }
             }
-
-
         }
-
         /*
         * Function Name : deleteAchievement
         * Param : $id
@@ -2203,53 +2056,35 @@
         * Developed By : Suraj Bande
         * Date : 15/4/2016
         */
-
         public function deleteAchievement(DeleteAchievementRequest $request,$id)
         {
             $event = Event::find($id);
-
             if($event->created_by == Auth::User()->id) {
                 $filename = "uploads/achievement/events/".$id."/";
-
                 $path = public_path($filename);
-
                 if(file_exists($path))
                 {
                     $this::removeEmptySubFolders($path);
                 }
-
                 Event::where('id','=',$id)->delete();
-
                 Session::flash('message-success','Achievement deleted successfully !');
-
                 return Redirect::to('noticeBoard');
             } else {
                 if($request->authorize() === true) {
-
                     //EventImages::where('event_id','=',$id)->delete();
-
                     $filename = "uploads/achievement/events/".$id."/";
-
                     $path = public_path($filename);
-
                     if(file_exists($path))
                     {
                         $this::removeEmptySubFolders($path);
                     }
-
                     Event::where('id','=',$id)->delete();
-
                     Session::flash('message-success','Achievement deleted successfully !');
-
                     return Redirect::to('noticeBoard');
-
                 } else {
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::back();
                 }
             }
-
         }
-
-
     }

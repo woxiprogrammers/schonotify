@@ -109,7 +109,9 @@ class EventController extends Controller
                         Session::flash('message-success','Event created and published successfully !');
                         $title="New Event Created";
                         $message=$request->eventName;
-                        $this->CreatePushNotification($title,$message);
+                        $allUser=1;
+                        $push_users=null;
+                        $this->CreatePushNotification($title,$message,$allUser,$push_users);
                         return 1;
                     }
                 }else{
