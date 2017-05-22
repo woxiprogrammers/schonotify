@@ -12,7 +12,7 @@ trait PushNotificationTrait{
         else{
             $device_token=$push_users;
         }
-        $url = 'https://api.ionic.io/push/notifications';
+        $url = env('PushDomain');
         $data = array(
             'tokens' => $device_token,
             'notification' => array('title' => ''.$title,
@@ -26,8 +26,8 @@ trait PushNotificationTrait{
         curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'X-Ionic-Application-Id:39687151',
-            'Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMzdhZWRhNS00Y2IwLTQwMzYtOTVhMS1mZDdiNTI0NWRjZDgifQ.6c_-v7vrjshE8IIpYP5zfGyy1aWjQm5aKCgEzrNyjpE'
+            'X-Ionic-Application-Id:'.env('PushAPPId'),
+            'Authorization:Bearer'.env('APIToken')
         ));
         $result = curl_exec($ch);
         curl_close($ch);
