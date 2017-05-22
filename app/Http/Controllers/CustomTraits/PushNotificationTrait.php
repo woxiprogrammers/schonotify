@@ -17,7 +17,7 @@ trait PushNotificationTrait{
             'tokens' => $device_token,
             'notification' => array('title' => ''.$title,
                                     'message' =>$msg),
-            'profile' => 'shubham'
+            'profile' => env('SECURITY_PROFILE')
         );
         $content = json_encode($data);
         $ch = curl_init();

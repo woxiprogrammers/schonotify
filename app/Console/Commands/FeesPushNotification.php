@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Console\Commands;
-
 use App\FeeDueDate;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\PushToken;
@@ -9,7 +8,6 @@ use App\StudentFee;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-
 class FeesPushNotification extends Command
 {
     use PushNotificationTrait;
@@ -19,14 +17,12 @@ class FeesPushNotification extends Command
      * @var string
      */
     protected $signature = 'custom:pushFees';
-
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description.';
-
+    protected $description = 'Scheduling the push notifications for Fees module.';
     /**
      * Create a new command instance.
      *
@@ -67,7 +63,6 @@ class FeesPushNotification extends Command
         $dateOfPushNotification=date('d-m-Y', strtotime('+1 days'));
         $days=1;
         $this->setNotification($days,$dateOfPushNotification);
-
     }
     public function setNotification($days,$dateOfPushNotification){
         $fee_id=FeeDueDate::where('due_date',$dateOfPushNotification)->lists('fee_id');
