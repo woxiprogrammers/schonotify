@@ -538,6 +538,9 @@
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
 
+        //Push
+        Route::post('save-push','api\UserController@savePushToken');
+
 
 
 
