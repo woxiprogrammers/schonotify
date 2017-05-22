@@ -307,33 +307,25 @@
 <script src="/vendor/select2/select2.min.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="/assets/js/form-validation-edit.js"></script>
-
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
 <script>
     jQuery(document).ready(function() {
-
         getMsgCount();
         Main.init();
         FormValidator.init();
         FormElements.init();
         userAclModule();
         getbatches();
-
-
         if($('#checkbox8').is(":checked")==true)
         {
             clsTeacher(true);
-
         }
         getCls($('#batchID').val());
         getDivisions($('#classID').val());
-
-
     });
     function clsTeacher(chk){
         if(chk==true)
@@ -347,7 +339,6 @@
             $('#clstchr_div').hide();
         }
     }
-
     function getbatches()
     {
         var route='/get-batches';
@@ -364,7 +355,6 @@
         $('#batch').html(str);
     });
     }
-
     function userAclModule()
     {
         var route='/user-module-acl-edit/{!! $user->id !!}';
@@ -379,434 +369,280 @@
             var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
-
             var allAcls=res['allAcls'];
             var arr2= $.map(allAcls,function(index,value){
                 return [index];
             });
-
             var userModAclArr=res['userModAclArr'];
-
             var allModules=res['allModules'];
-
             str+='<tr>'+
                 '<th><b>Modules</b></th>';
             for(var j=0; j<arr2.length; j++)
             {
-
                 str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
             }
-
             str+='</tr>';
-
             for(var i=0; i<arr1.length; i++)
             {
-
                 str+="<tr>"+
                     "<td>"+(arr1[i]).toUpperCase()+"</td>";
                 for(var j=0; j<arr2.length; j++)
                 {
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
-
                     if($.inArray(arr2[j]['slug']+'_'+arr1[i],disableModules) === -1) {
-
                         if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
                         {
-
                             str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                                 '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                         }else{
                             str+='<input type="checkbox" class="'+arr1[i]+'" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'" >'+
                                 '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
                         }
-
                     } else {
                         str += "--";
                     }
                     str+='</div>'+
                         '</td>';
                 }
-
                 str+="</tr>";
             }
-
             $('#aclMod').html(str);
-
             ///////////user///////////
-
-
             $('.user').change(function(){
-
                 if($.inArray(this.id,["create_user","update_user"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.user').each(function() {
-
                             if(this.id == "view_user") {
                                 this.checked = true;
                             }
-
                         });
                     } else {
                         $('.user').each(function() {
-
                             if(this.id == "view_user") {
                                 this.checked = false;
                             }
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_user") {
                     $('.user').each(function() {
-
                         if($.inArray(this.id,["create_user","update_user"]) !== -1) {
                             this.checked = false;
                         }
-
                     });
                 }
-
             });
-
             /////////////////////Homework///////////
-
             $('.homework').change(function(){
-
                 if($.inArray(this.id,["create_homework","update_homework"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.homework').each(function() {
-
                             this.checked = true;
-
                         });
                     } else {
                         $('.homework').each(function() {
-
                             this.checked = false;
-
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_homework") {
                     $('.homework').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
             /////////////////////Leave///////////
-
             $('.leave').change(function(){
-
                 if($.inArray(this.id,["publish_leave"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.leave').each(function() {
-
                             this.checked = true;
-
                         });
                     } else {
                         $('.leave').each(function() {
-
                             this.checked = false;
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_leave") {
                     $('.leave').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
             /////////////////////Class///////////
-
             $('.class').change(function(){
-
                 if($.inArray(this.id,["create_class"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.class').each(function() {
-
                             if(this.id == "view_class") {
-
                                 this.checked = true;
-
                             }
-
                         });
                     } else {
                         $('.class').each(function() {
-
                             this.checked = false;
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_class") {
                     $('.class').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
             /////////////////////Subject///////////
-
             $('.subject').change(function(){
-
                 if($.inArray(this.id,["create_subject"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.subject').each(function() {
-
                             if(this.id == "view_subject") {
-
                                 this.checked = true;
-
                             }
-
                         });
                     } else {
                         $('.subject').each(function() {
-
                             this.checked = false;
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_subject") {
                     $('.subject').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
             /////////////////////Message///////////
-
             $('.message').change(function(){
-
                 if($.inArray(this.id,["create_message"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.message').each(function() {
-
                             this.checked = true;
-
                         });
                     } else {
                         $('.message').each(function() {
-
                             this.checked = false;
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_message") {
                     $('.message').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
-
             /////////////////////Announcement///////////
-
             $('.announcement').change(function(){
-
                 if($.inArray(this.id,["create_announcement","update_announcement"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.announcement').each(function() {
-
                             this.checked = true;
-
                         });
                     } else {
                         $('.announcement').each(function() {
-
                             this.checked = false;
-
-
-                        });
+                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_announcement") {
                     $('.announcement').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
             /////////////////////Achievement///////////
-
             $('.achievement').change(function(){
-
                 if($.inArray(this.id,["create_achievement","update_achievement"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.achievement').each(function() {
-
                             this.checked = true;
-
                         });
                     } else {
                         $('.achievement').each(function() {
-
                             this.checked = false;
-
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_achievement") {
                     $('.achievement').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
             /////////////////////Timetable///////////
-
             $('.timetable').change(function(){
-
                 if($.inArray(this.id,["create_timetable","update_timetable","delete_timetable"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.timetable').each(function() {
-
                             if(this.id == "view_timetable") {
                                 this.checked = true;
                             }
-
                         });
                     }else if($(this).prop('checked') == false) {
                         $('.timetable').each(function() {
-
                             if(this.id == "view_timetable") {
                                 this.checked = true;
                             }
-
                         });
                     } else {
                         $('.timetable').each(function() {
-
                             if(this.id == "view_timetable") {
-
                                 this.checked = false;
-
                             }
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_timetable") {
                     $('.timetable').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
-
             /////////////////////Attendance///////////
-
             $('.attendance').change(function(){
-
                 if($.inArray(this.id,["create_attendance","update_attendance"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.attendance').each(function() {
-
                             this.checked = true;
-
                         });
                     } else {
                         $('.attendance').each(function() {
-
                             this.checked = false;
-
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_attendance") {
                     $('.attendance').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
             /////////////////////Event///////////
-
             $('.event').change(function(){
-
                 if($.inArray(this.id,["create_event","update_event"]) !== -1)
                 {
                     if($(this).prop('checked') == true) {
                         $('.event').each(function() {
-
                             this.checked = true;
-
                         });
                     } else {
                         $('.event').each(function() {
-
                             this.checked = false;
-
-
                         });
                     }
-
                 } else if($(this).prop('checked') == false && this.id == "view_event") {
                     $('.event').each(function() {
-
                         this.checked = false;
-
                     });
                 }
-
             });
-
         });
     }
-
     $("#batch").change(function() {
         var id = this.value;
         getCls(id);
     });
-
     function getCls(id)
     {
         var route='/get-classes/'+id;
@@ -823,11 +659,9 @@
         $('#class').html(str);
         });
     }
-
     $("#class").change(function() {
         var id = this.value;
         getDivisions(id);
-
     });
     function getDivisions(id)
     {
@@ -869,26 +703,7 @@
             }
         });
     });
-
-
-
-
-
 </script>
-
-
 @stop
-
-
-
-
-
-
-
-
-
-
-
-
 
 

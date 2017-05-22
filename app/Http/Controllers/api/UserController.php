@@ -122,9 +122,17 @@ class UserController extends Controller
     }
     public function savePushToken(Request $request){
         $data=$request->all();
-        $pushData['user_id']=$data['user_id'];
-        $pushData['push_token']=$data['pushToken'];
-        PushToken::create($pushData);
+        $is_present=PushToken::where('user_id',$data['user_id'])->count();
+        if($is_present == 0){
+            $pushData['user_id']=$data['user_id'];
+            $pushData['push_token']=$data['pushToken'];
+            PushToken::create($pushData);
+        }
+        else{
+            $pushData['user_id']=$data['user_id'];
+            $pushData['push_token']=$data['pushToken'];
+            PushToken::where('user_id',$data['user_id'])->update($pushData);
+        }
 
     }
     public function getBatchesTeacher(Request $request){
