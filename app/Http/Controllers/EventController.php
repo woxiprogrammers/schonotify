@@ -147,8 +147,6 @@ class EventController extends Controller
         }
 
     }
-
-
     /*
          +   * Function Name: publishEditEvent
          +   * Param: $request,$id
