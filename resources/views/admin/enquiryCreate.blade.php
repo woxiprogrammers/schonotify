@@ -130,7 +130,8 @@
                <div class="col-md-6" id="toggle1" >
                    <div class="form-group"> <!-- Date input -->
                        <label class="control-label">State <span class="symbol required"></span></label>
-                       <select class="form-control" id="state1" name="state" style="-webkit-appearance: menulist;">
+                       <select class="form-control" id="state1" name="state" style="-webkit-appearance: menulist;" required>
+                        <option value="">Please select state</option>
                         <option value="AndamanandNicobarIslands">Andaman and Nicobar Islands</option>
                         <option value="AndhraPradesh">Andhra Pradesh</option>
                         <option value="ArunachalPradesh">Arunachal Pradesh</option>
