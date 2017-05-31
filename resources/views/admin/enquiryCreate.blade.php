@@ -20,6 +20,8 @@
     <div class="row">
         <div class="col-sm-7">
             <span class="mainDescription">Enquiry Form</span>
+            <br>
+            <h5 style="color:red">If you are already registered ,then <a href="http://nesswadia.woxi.co.in/check-enquiry">Click Here</a></h5>
         </div>
     </div>
 </section>
