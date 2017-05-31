@@ -67,42 +67,25 @@
                 <script src="/assets/js/custom-project.js"></script>
                 <script src="/assets/js/table-data.js"></script>
                 <script>
-
                     $(document).ready(function() {
                         var intaa ;
-                        //this calculates values automatically
-//                        calculateSum();
-
-
-
-
-
                         $(".1").on("keydown keyup", function() {
                             calculateSum();
-
-
-
                         });
                         $(".2").on("keydown keyup", function() {
                             calculateSum2();
-
                         });
                         $(".3").on("keydown keyup", function() {
                             calculateSum3();
-
                         });
                         $(".4").on("keydown keyup", function() {
                             calculateSum4();
-
                         });
                         $(".5").on("keydown keyup", function() {
                             calculateSum5();
-
                         });
-
                    function addition()
                    {
-
                        var l=parseInt($("#1_sum_id").val());
                        var m=parseInt($("#2_sum_id").val());
                        var n=parseInt($("#3_sum_id").val(),10);
@@ -113,7 +96,6 @@
 
                            if(inst_count == 1)
                                {
-
                                   var a=l;
                                   $("#total_fee").val(a);
                                }

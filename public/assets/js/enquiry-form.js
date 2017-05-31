@@ -1,14 +1,10 @@
 var FormValidator = function () {
-
-    "use strict";
+"use strict";
     var validateCheckRadio = function (val) {
         $("input[type='radio'], input[type='checkbox']").on('ifChecked', function(event) {
             $(this).parent().closest(".has-error").removeClass("has-error").addClass("has-success").find(".help-block").hide().end().find('.symbol').addClass('ok');
         });
     };
-
-
-
     var enquiryForm = function () {
         var form1 = $('#studentEnquiry');
         var errorHandler1 = $('.errorHandler', form1);
@@ -61,104 +57,90 @@ var FormValidator = function () {
                 }
             },
             ignore: "",
-
             rules: {
-                guardian_first_name: {
+                first_name: {
                     minlength: 2,
                     required: true,
                     alpha: true
                 },
-                guardian_last_name: {
+                last_name: {
                     minlength: 2,
-                    alpha: true
-                },
-                guardian_middle_name: {
-                    minlength: 2,
-                    alpha: true
-                },
-                student_first_name:{
-                    minlength: 2,
+                    alpha: true,
                     required: true,
-                    alpha: true
                 },
-                student_last_name: {
+                middle_name: {
                     minlength: 2,
-                    alpha: true
-                },
-                student_middle_name: {
-                    minlength: 2,
-                    alpha: true
-                },
-                current_class:{
-                    alpha_num: true
-
-                },
-                school_name:{
-                    required: function(element){
-                        return $("#current_class").val()!="";
-                    },
-                    alpha_num_space: true
-                },
-                admission_to_class:{
+                    alpha: true,
                     required: true,
-                    alpha_num: true
+                },
+                marks_obtained: {
+                    required: true,
+                },
+                outOf_marks: {
+                    required: true,
+                },
+                board: {
+                    required: true,
+                },
+                caste: {
+                    required: true,
+                },
+                date: {
+                    required: true,
+                },
+                examination_year: {
+                    required: true,
                 },
                 mobile_number:{
                     required: true,
-                    mobileNumber: true
-                },
-                alt_contact_no:{
                     mobileNumber: true
                 },
                 address:{
                     minlength:15,
                     required:true,
                     removespace:true
-                },
-                email: {
-                    chkMail: true
                 }
             },
             messages: {
-                guardian_first_name: {
-                    alpha: "only Alphabets are allowed"
+                first_name: {
+                    alpha: "only Alphabets are allowed",
+                    required: "First name is required",
+                    minlength:"Enter minimum 2 characters."
                 },
-                guardian_last_name: {
-                    alpha: "only Alphabets are allowed"
+                last_name: {
+                  alpha: "only Alphabets are allowed",
+                  required: "First name is required",
+                  minlength:"Enter minimum 2 characters."
                 },
-                guardian_middle_name: {
-                    alpha: "only Alphabets are allowed"
+                middle_name: {
+                  alpha: "only Alphabets are allowed",
+                  required: "First name is required",
+                  minlength:"Enter minimum 2 characters."
                 },
-                student_first_name:{
-                    alpha: "only Alphabets are allowed"
+                marks_obtained:{
+                    required: "Marks are required"
                 },
-                student_last_name: {
-                    alpha: "only Alphabets are allowed"
+                outOf_marks:{
+                      required: "Marks are required"
                 },
-                student_middle_name: {
-                    alpha: "only Alphabets are allowed"
+                board:{
+                    required: "Marks are required"
                 },
-                current_class:{
-                    alpha_num: "only Alpha and numbers are allowed "
-
+                caste:{
+                    required: "Caste is required"
                 },
-                school_name:{
-                    alpha_num: "only Alpha and numbers are allowed "
+                date:{
+                    required: "Date is required"
                 },
-                admission_to_class:{
-                    alpha_num: "only Alpha and numbers are allowed "
+                examination_year:{
+                    required:"Year is required"
                 },
                 mobile_number:{
-                    mobileNumber: "Only numbers are allowed"
-                },
-                alt_contact_no:{
                     mobileNumber: "Only numbers are allowed"
                 },
                 address:{
                     required:"Address is required",
                     address:"Address must contain at-least 15 characters"
-                },email: {
-                    chkMail: "Your email address must be in the format of name@domain.com"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
