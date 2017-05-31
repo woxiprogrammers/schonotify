@@ -1,436 +1,276 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
-    @include('sidebar')
-
-    <div class="app-content">
-        <!-- start: TOP NAVBAR -->
-        @include('header')
-
-        <!-- end: TOP NAVBAR -->
-        <div class="main-content" >
-            <div class="wrap-content container" id="container">
-                <!-- start: DASHBOARD TITLE -->
-
-                <div id="message-error-div"></div>
-                <section id="page-title" class="padding-top-15 padding-bottom-15">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <h1 class="mainTitle">Student</h1>
-                            <span class="mainDescription">Enquiry Form</span>
-                        </div>
-
-                    </div>
-                </section>
-                <!-- end: DASHBOARD TITLE -->
-                <!-- start: DYNAMIC TABLE -->
-                @include('alerts.errors')
-                <div class="col-md-12">
-                    <form method="post" action="/edit-enquiry/{{$enquiryInfo['id']}}" role="form" id="studentEnquiry">
-
-                    <fieldset>
-                        <legend>
-                            Enquiry Number
-                        </legend>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">
-                                        Enquiry Number
-                                    </label>
-                                    <input type="text" placeholder="Enter Enquiry Number" class="form-control" name="enquiry_number" value="{{$enquiryInfo['enquiry_number']}}" readonly/>
-                                </div>
-                            </div>
-                        </div>
-
-                    </fieldset>
-                        <fieldset>
-                            <legend>
-                                Name of Father/Mother/Guardian
-                            </legend>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            First Name <span class="symbol required"></span>
-                                        </label>
-                                        <input type="text" placeholder="Enter your First Name" class="form-control" name="guardian_first_name" value="{{$enquiryInfo['guardian_first_name']}}"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Middle Name
-                                        </label>
-                                        <input type="text" placeholder="Enter your Middle Name" class="form-control" name="guardian_middle_name" value="{{$enquiryInfo['guardian_middle_name']}}"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Last Name
-                                        </label>
-                                        <input type="text" placeholder="Enter your Last Name" class="form-control" name="guardian_last_name" value="{{$enquiryInfo['guardian_last_name']}}"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Email
-                                        </label>
-                                        <input type="text" placeholder="Enter Email" class="form-control" name="email" value="{{$enquiryInfo['email']}}"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </fieldset>
-                        <fieldset>
-                            <legend>
-                                Name of prospective student
-                            </legend>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            First Name <span class="symbol required"></span>
-                                        </label>
-                                        <input type="text" placeholder="Enter your First Name" class="form-control" name="student_first_name" value="{{$enquiryInfo['student_first_name']}}"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Middle Name
-                                        </label>
-                                        <input type="text" placeholder="Enter your Middle Name" class="form-control" name="student_middle_name" value="{{$enquiryInfo['student_middle_name']}}"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Last Name
-                                        </label>
-                                        <input type="text" placeholder="Enter your Last Name" class="form-control" name="student_last_name" value="{{$enquiryInfo['student_last_name']}}"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </fieldset>
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label" for="dob">Date Of Birth <span class="symbol required"></span></label>
-                                        <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{{$enquiryInfo['dob']}}" readonly/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label">Presently studying in class</label>
-                                        <input class="form-control" id="current_class" name="current_class" placeholder="Enter Current Class" type="text"  value="{{$enquiryInfo['current_class']}}"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label">School Name</label>
-                                        <input class="form-control" id="school_name" name="school_name" placeholder="Enter School Name" type="text" disabled value="{{$enquiryInfo['school_name']}}"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label">Seeking admission to class <span class="symbol required"></span></label>
-                                        <input class="form-control" id="admission_to_class" name="admission_to_class" placeholder="Seeking admission to class" type="text" value="{{$enquiryInfo['admission_to_class']}}"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>
-                                Contact details
-                            </legend>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label">Mobile Number <span class="symbol required"></span></label>
-                                        <input class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number" type="text" value="{{$enquiryInfo['mobile_number']}}" />
-                                    </div>
-                                    <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label">Alternate Mobile Number </label>
-                                        <input class="form-control" id="alt_contact_no" name="alt_contact_no" placeholder="Enter Mobile Number" type="text" value="{{$enquiryInfo['alt_contact_no']}}" />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="control-label">
-                                        Address
-                                    </label>
-
-                                    <div class="form-group">
-                                        <div class="note-editor">
-                                            <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['address']}}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>
-                                WRITTEN TEST DETAILS
-                            </legend>
-                            <div class="form-group">
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                       <label class="control-label">
-                                           Scheduled on
-                                         </label>
-                                         <div class='input-group date' id='datetimepicker1'>
-                                          <input type='text' class="form-control" id="written_test_scheduled_on" name="written_test_scheduled_on" value="{{$enquiryInfo['written_test_scheduled_on']}}"/>
-                                                <span class="input-group-addon">
-                                                  <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                         </div>
-
-                                </div>
-                                    </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Conducted By
-                                        </label>
-                                        <select class="form-control" name="written_test_conducted_by" id="written_test_conducted_by" value="{{$enquiryInfo['written_test_conducted_by']}}" >
-
-
-
-                                            @if($enquiryInfo['written_test_conducted_by']==NULL)
-                                                <option value="">Select...</option>
-                                                @foreach($interviewUser as $data)
-                                                <option value="{!! $data['id'] !!}" >{!! $data['first_name'] !!}</option>
-                                                @endforeach
-                                            @else
-                                                @foreach($interviewUser as $data)
-                                                <option value="{{ $data['id'] }}" @if($enquiryInfo['written_test_conducted_by']==$data['id']) selected='selected' @endif>{{ $data['first_name'] }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Test Status:
-                                        </label>
-                                        <select class="form-control" name="written_test_status" id="written_test_status" value="{{$enquiryInfo['written_test_status']}}">
-
-                                            @if($enquiryInfo['written_test_status'] != null)
-                                                <option value="pass" @if($enquiryInfo['written_test_status']=="pass") selected='selected' @endif>Pass</option>
-                                                <option value="fail" @if($enquiryInfo['written_test_status']=="fail") selected='selected' @endif>Fail</option>
-                                            @else
-                                                <option value="">Select ..</option>
-                                                <option value="pass">Pass</option>
-                                                <option value="fail">Fail</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Remarks
-                                        </label>
-                                        <div class="note-editor">
-                                            <textarea  name="written_test_remark" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px ;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['written_test_remark']}}</textarea>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <legend>
-                                INTERVIEW DETAILS
-                            </legend>
-                            <div class="container">
-
-                            </div>
-                            <div class="row">
-
-                                    <div class='col-md-6'>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Scheduled on
-                                            </label>
-                                            <div class='input-group date' id='datetimepicker2'>
-                                                <input type='text' class="form-control" value="{{$enquiryInfo['interview_scheduled_on']}}" id="interview_scheduled_on" name="interview_scheduled_on"/>
-                                                <span class="input-group-addon">
-                                                  <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Conducted By
-                                        </label>
-                                        <select class="form-control" name="interview_conducted_by" value="{{$enquiryInfo['interview_conducted_by']}}" id="interview_conducted_by" >
-                                            @if($enquiryInfo['interview_conducted_by']==NULL)
-                                            <option value="">Select...</option>
-                                            @foreach($interviewUser as $data)
-                                            <option value="{!! $data['id'] !!}" >{!! $data['first_name'] !!}</option>
-                                            @endforeach
-                                            @else
-                                            @foreach($interviewUser as $data)
-                                            <option value="{{ $data['id'] }}" @if($enquiryInfo['interview_conducted_by']==$data['id']) selected='selected' @endif>{{ $data['first_name'] }}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Interview Status:
-                                        </label>
-                                        <select class="form-control" name="interview_status" value="{{$enquiryInfo['interview_status']}}" id="interview_status" >
-
-                                            @if($enquiryInfo['interview_status'] != null)
-                                            <option value="pass" @if($enquiryInfo['interview_status']=="pass") selected='selected' @endif>Pass</option>
-                                            <option value="fail" @if($enquiryInfo['interview_status']=="fail") selected='selected' @endif>Fail</option>
-                                            @else
-                                            <option value="">Select ..</option>
-                                            <option value="pass">Pass</option>
-                                            <option value="fail">Fail</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="control-label">
-                                        Remarks
-                                    </label>
-                                    <div class="form-group">
-                                        <div class="note-editor">
-                                            <textarea  name="interview_remark"  data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['interview_remark']}}</textarea>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <legend>
-                                DOCUMENT DETAILS
-                            </legend>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Interview Status:
-                                        </label>
-                                        <select class="form-control" name="document_status" value="{{$enquiryInfo['document_status']}}" id="document_status" >
-
-                                            @if($enquiryInfo['document_status'] != null)
-                                            <option value="clear" @if($enquiryInfo['document_status']=="clear") selected='selected' @endif>Clear</option>
-                                            <option value="unclear" @if($enquiryInfo['document_status']=="unclear") selected='selected' @endif>Unclear</option>
-                                            @else
-                                            <option value="">Select ..</option>
-                                            <option value="clear">clear</option>
-                                            <option value="unclear">unclear</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="control-label">
-                                        Remarks
-                                    </label>
-                                    <div class="form-group">
-                                        <div class="note-editor">
-                                            <textarea  name="document_remark" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px;width:100%; cursor: url('/assets/images/pen.png') 0 32, auto;">{{$enquiryInfo['document_remark']}}</textarea>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">
-                                        Final admission Status:
-                                    </label>
-                                    <select class="form-control" name="final_status" value="{{$enquiryInfo['final_status']}}" id="final_status" >
-
-                                        @if($enquiryInfo['final_status'] != null)
-                                        <option value="pass" @if($enquiryInfo['final_status']=="pass") selected='selected' @endif>Pass</option>
-                                        <option value="fail" @if($enquiryInfo['final_status']=="fail") selected='selected' @endif>Fail</option>
-                                        @else
-                                        <option value="">Select ..</option>
-                                        <option value="pass">Pass</option>
-                                        <option value="fail">Fail</option>
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-
-                        </fieldset>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a href="/manage">
-                                    Back
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="btn btn-primary btn-o" href="/print-enquiry-form/{{$enquiryInfo['id']}}">
-                                    Download Enquiry form
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                    Admit
-                                </button>
-                            </div>
-
-                        </div>
-                    </form>
-                </div>
-
-                <!-- end: DYNAMIC TABLE -->
-
-                <!-- start: FOURTH SECTION -->
-                @include('rightSidebar')
-                <!-- end: FOURTH SECTION -->
-            </div>
+<div class="sidebar app-aside" id="sidebar" style="top: 0px!important;">
+    <img class="img-responsive" src="/assets/images/bodyLogo/wadia.jpg">
+</div>
+<div class="app-content">
+<!-- start: TOP NAVBAR -->
+<!-- end: TOP NAVBAR -->
+<div class="main-content" >
+<div class="wrap-content container" id="container">
+<!-- start: DASHBOARD TITLE -->
+<div id="message-error-div"></div>
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-7">
+            <h1 class="mainTitle"> Ness Wadia College of Commerce</h1>
+            <span class="mainDescription">Enquiry Form</span>
         </div>
     </div>
-
-    @include('footer')
+</section>
+<!-- end: DASHBOARD TITLE -->
+<!-- start: DYNAMIC TABLE -->
+    <div class="alert alert-success alert-dismissible" role="alert" id="step-2ss" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" area-lebel="close">
+            <span area-hidden="true">&times;</span>
+        </button>
+    </div>
+<div class="col-md-12">
+    <form method="post" action="edit-enquiry" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true">
+        <input type="hidden" value="{!!$enquiryInfo['id']!!}" name="id">
+        <fieldset>
+            <legend>
+                Personal info
+            </legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Medium <span class="symbol required"></span>
+                        </label>
+                            <select class="form-control" id="medium" name="medium" style="-webkit-appearance: menulist;">
+                                <option value="{!!$enquiryInfo['medium']!!}" disabled>{!!$enquiryInfo['medium']!!}</option>
+                                <option value='Hindi'>Hindi</option>
+                                <option value='English'>English</option>
+                                <option value='Marathi'>Marathi</option>
+                            </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Class Applied <span class="symbol required"></span>
+                        </label>
+                            <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
+                                <option value="{!!$enquiryInfo['class_applied']!!}" disabled>{!!$enquiryInfo['class_applied']!!}</option>
+                                <option value='BCOM'>B.COM.</option>
+                                <option value='BA'>B.A.</option>
+                            </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label class="control-label">
+                          First Name<span class="symbol required"></span>
+                      </label>
+                      <input type="text" placeholder="Enter your Middle Name" class="form-control" name="first_name" value="{!!$enquiryInfo['first_name']!!}" />
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label class="control-label">
+                          Middle Name<span class="symbol required"></span>
+                      </label>
+                      <input type="text" placeholder="Enter your Middle Name" class="form-control" name="middle_name" value="{!!$enquiryInfo['middle_name']!!}"/>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label class="control-label">
+                          Last Name<span class="symbol required"></span>
+                      </label>
+                      <input type="text" placeholder="Enter your Middle Name" class="form-control" name="last_name" value="{!!$enquiryInfo['last_name']!!}"/>
+                  </div>
+              </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+              Academic info
+            </legend>
+            <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group"> <!-- Date input -->
+                      <label class="control-label">Marks Obtained <span class="symbol required"></span></label>
+                      <input class="form-control" id="marks_obtained" name="marks_obtained" placeholder="Enter Marks obtained" type="number" value="{!!$enquiryInfo['marks_obtained']!!}" />
+                  </div>
+              </div>
+              <div class="col-md-6">
+                      <label class="control-label">Out of Marks <span class="symbol required"></span></label>
+                      <input class="form-control" id="outOf_marks" name="outOf_marks" placeholder="Enter Out Of Marks" type="number" value="{!!$enquiryInfo['outOf_marks']!!}"/>
+              </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"> <!-- Date input -->
+                        <label class="control-label">Board <span class="symbol required"></span></label>
+                        <input class="form-control" id="board" name="board" placeholder="Enter board" type="text" value="{!!$enquiryInfo['board']!!}"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                        <label class="control-label">Country <span class="symbol required"></span></label>
+                        <select class="form-control" id="country" name="country" style="-webkit-appearance: menulist;">
+                            <option value="{!!$enquiryInfo['country']!!}" disabled>{!!$enquiryInfo['country']!!}</option>
+                            <option value='India'>India</option>
+                            <option value='Other'>Other</option>
+                        </select>
+                </div>
+             </div>
+             <div class="row">
+               <div class="col-md-6" id="toggle" style="display:none">
+                   <div class="form-group"> <!-- Date input -->
+                       <label class="control-label">State <span class="symbol required"></span></label>
+                       <input class="form-control" id="state" name="state" placeholder="Enter state" type="text" value="{!!$enquiryInfo['state']!!}"/>
+                   </div>
+               </div>
+               <div class="col-md-6" id="toggle1" >
+                   <div class="form-group"> <!-- Date input -->
+                       <label class="control-label">State <span class="symbol required"></span></label>
+                       <select class="form-control" id="state1" name="state" style="-webkit-appearance: menulist;">
+                        <option value="{!!$enquiryInfo['state']!!}" disabled>{!!$enquiryInfo['state']!!}</option>
+                        <option value="AndamanandNicobarIslands">Andaman and Nicobar Islands</option>
+                        <option value="AndhraPradesh">Andhra Pradesh</option>
+                        <option value="ArunachalPradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="DadraandNagarHaveli">Dadra and Nagar Haveli</option>
+                        <option value="Daman and Diu">Daman and Diu</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="HimachalPradesh">Himachal Pradesh</option>
+                        <option value="JammuandKashmir">Jammu and Kashmir</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Lakshadweep">Lakshadweep</option>
+                        <option value="MadhyaPradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Orissa">Orissa</option>
+                        <option value="Pondicherry">Pondicherry</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="TamilNadu">Tamil Nadu</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttaranchal">Uttaranchal</option>
+                        <option value="UttarPradesh">Uttar Pradesh</option>
+                        <option value="WestBengal">West Bengal</option>
+                       </select>
+                   </div>
+              </div>
+           </div>
+           <div class="row">
+             <div class="col-md-6">
+                 <div class="form-group"> <!-- Date input -->
+                     <label class="control-label">Caste <span class="symbol required"></span></label>
+                     <input class="form-control" id="caste" name="caste" placeholder="Enter your caste" type="text" value="{!!$enquiryInfo['caste']!!}" />
+                 </div>
+             </div>
+             <div class="col-md-6">
+                 <div class="form-group"> <!-- Date input -->
+                     <label class="control-label">Category <span class="symbol required"></span></label>
+                     <select class="form-control" name="category" id="category" style="-webkit-appearance: menulist;">
+                                   <option value="{!!$enquiryInfo['category']!!}" disabled>{!!$enquiryInfo['category']!!}</option>
+                                   <option value="SC">SC</option>
+                                   <option value="ST">ST</option>
+                                   <option value="VJA">VJ(A)</option>
+                                   <option value="NTB">NT(B)</option>
+                                   <option value="NTC">NT(C)</option>
+                                   <option value="NTD">NT(D)</option>
+                                   <option value="OBC">OBC</option>
+                                   <option value="SBC">SBC</option>
+                                   <option value="OPEN">OPEN</option>
+                                   <option value="MARATHAESBC">MARATHA(ESBC)</option>
+                                   <option value="MUSLIMSBCA">MUSLIM(SBC-A)</option>
+                   	</select>
+                 </div>
+             </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+                <div class="form-group"> <!-- Date input -->
+                    <label class="control-label">Date<span class="symbol required"></span></label>
+                    <input class="form-control" id="date" name="date" placeholder="Select date" type="date" value="{!!$enquiryInfo['date']!!}" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Examination Year<span class="symbol required"></span></label>
+                    <input class="form-control" id="exam_year" name="examination_year" placeholder="Enter exam year" type="number" value="{!!$enquiryInfo['examination_year']!!}" />
+                </div>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                Contact details
+            </legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"> <!-- Date input -->
+                        <label class="control-label">Mobile Number <span class="symbol required"></span></label>
+                        <input class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile Number" type="text" value="{!!$enquiryInfo['mobile']!!}"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">
+                        Address <span class="symbol required"></span>
+                    </label>
+                    <div class="form-group">
+                        <div class="note-editor">
+                            <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!!$enquiryInfo['address']!!}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+          <legend>
+            Status
+          </legend>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                          <select class="form-control" id="final_status" name="final_status" style="-webkit-appearance: menulist;">
+                              <option value="{!!$enquiryInfo['final_status']!!}" disabled>{!!$enquiryInfo['final_status']!!}</option>
+                              <option value='pass'>Pass</option>
+                              <option value='fail'>Fail</option>
+                          </select>
+                  </div>
+              </div>
+          </div>
+        </fieldset>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary btn-wide pull-left" id="btn_submit" type="submit">
+                    Submit
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <p></p>
+        </div>
+    </form>
 </div>
-
+<!-- end: DYNAMIC TABLE -->
+<!-- start: FOURTH SECTION -->
+<!-- end: FOURTH SECTION -->
+</div>
+</div>
+</div>
+@include('footer')
+</div>
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -447,25 +287,6 @@
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="/assets/js/main.js"></script>
-
-
-
-
-
-<script src="/vendor/jquery-ui/jquery-ui-1.10.2.custom.min.js"></script>
-<script src="/vendor/moment/moment.min.js"></script>
-<script src="/vendor/fullcalendar/fullcalendar.min.js"></script>
-<script src="/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-<script src="/assets/js/pages-calendar.js"></script>
-
-
-
-
-
-
-
-<script src="/assets/js/custom-project.js"></script>
 <script src="/vendor/ckeditor/ckeditor.js"></script>
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/assets/js/form-validation.js"></script>
@@ -473,39 +294,40 @@
 <script src="/assets/js/enquiry-form.js"></script>
 <script>
     jQuery(document).ready(function() {
-        getMsgCount();
         Main.init();
         FormValidator.init();
-        Calendar.init();
-        var date_input=$('input[name="dob"]'); //our date input has the name "date"
-        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-        date_input.datepicker({
-            format: 'd-m-yyyy',
-            container: container,
-            todayHighlight: true,
-            autoclose: true,
-            endDate: '+0d',
-        })
-    });
-
-    $('#current_class').blur(function() {
-        if($(this).val()=="") {
-            $('#school_name').attr("disabled", "disabled");
+        $("#app").addClass("removePadding");
+        $('select[name="medium"]').find('option[value={!!$enquiryInfo['medium']!!}]').attr("selected",true);
+        $('select[name="class_applied"]').find('option[value={!!$enquiryInfo['class_applied']!!}]').attr("selected",true);
+        $('select[name="country"]').find('option[value={!!$enquiryInfo['country']!!}]').attr("selected",true);
+        $('select[name="state"]').find('option[value={!!$enquiryInfo['state']!!}]').attr("selected",true);
+        $('select[name="category"]').find('option[value={!!$enquiryInfo['category']!!}]').attr("selected",true);
+        $('select[name="final_status"]').find('option[value={!!$enquiryInfo['final_status']!!}]').attr("selected",true);
+        //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
+        if($('#country').val() == "Other"){
+            $("#toggle").show();
+            $("#toggle1").hide();
         }else{
-            $("#school_name").removeAttr("disabled");
+            $("#toggle1").show();
+            $("#toggle").hide();
         }
-    });
-</script>
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker1').datetimepicker({ format:'DD-MM-YYYY hh:mm:00 a' });
-    });
-</script>
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker2').datetimepicker({ format:'DD-MM-YYYY hh:mm:00 a' });
+        $("#country").change(function(){
+          if($('#country').val() == "Other"){
+              $("#toggle").show();
+              $("#toggle1").hide();
+          }else{
+              $("#toggle1").show();
+              $("#toggle").hide();
+          }
+        })
+       })
+    $("#state1").change(function(){
+       if($("#state1").val() != "Maharashtra" || $("#state").val() != "Maharashtra"){
+         $("#category").attr("disabled", 'disabled');
+         $("#category").val('OPEN');
+       }else {
+         $("#category").removeAttr("disabled", 'disabled');
+       }
     });
 </script>
 @stop
-
-
