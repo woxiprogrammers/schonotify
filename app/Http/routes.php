@@ -43,11 +43,9 @@
 
         });
     });*/
-
     Route::get('/','FrontController@index');
-
     //enquiry form
-    Route::get('/new-student-enquiry/{slug}','EnquiryController@viewEnquiryFormWithoutLogin');
+    Route::get('/new-student-enquiry','EnquiryController@viewEnquiryFormWithoutLogin');
     Route::post('/store-student-enquiry-without-login','EnquiryController@storeEnquiryFormWithoutLogin');
     Route::get('manage',array('uses' => 'EnquiryController@viewEnquiryList'));
     Route::post('enquiry-list',array('uses' => 'EnquiryController@enquiryListing'));
@@ -56,7 +54,7 @@
     Route::get('print-enquiry-form/{id}',array('uses' => 'EnquiryController@printEnquiryForm'));
     //public student registration
     Route::get('registration/{id}',array('uses' => 'RegistrationController@getStudentRegistrationView'));
-    Route::get('check-enquiry/{slug?}',array('uses' => 'RegistrationController@getCheckEnquiryView'));
+    Route::get('check-enquiry/',array('uses' => 'RegistrationController@getCheckEnquiryView'));
     Route::post('check-enquiry',array('uses' => 'RegistrationController@checkEnquiry'));
     Route::post('redirect',array('uses' => 'RegistrationController@redirectToRegistration'));
     Route::get('get-enquiry-parents',array('uses' => 'RegistrationController@getStudentParents'));
@@ -421,8 +419,6 @@
 
 //check class teacher
     Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
-
-
 //check email for edit user
     Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit'));
 //check roll number exists or not
@@ -430,7 +426,6 @@
 //check class name
     Route::get('check-class',array('uses' => 'ClassController@checkClass'));
     Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
-
 //enquiry form
     Route::get('/student-enquiry','EnquiryController@viewEnquiryForm');
     Route::get('/enquiry-listing','EnquiryController@viewEnquiryListing');
@@ -438,7 +433,6 @@
     Route::get('/enquiry-form-data','EnquiryController@viewEnquiryListingData');
     Route::post('/store-student-enquiry','EnquiryController@storeEnquiryForm');
     /* API Routes */
-
     Route::group(['prefix' => 'api/v1/user/'], function () {
 
     Route::post('auth','api\UserController@login');

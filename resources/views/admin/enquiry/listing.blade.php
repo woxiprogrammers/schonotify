@@ -64,11 +64,7 @@
 <thead>
 <tr>
     <th width="10%"> Form No </th>
-    <th width="20%"> Name </th>
-    <th width="10%"> Class appeared for </th>
-    <th width="10%">  Written Exam </th>
-    <th width="10%"> Interview </th>
-    <th width="10%"> Documents </th>
+    <th width="30%"> Name </th>
     <th width="10%"> Actions </th>
     <th width="10%"> Result </th>
 
@@ -78,14 +74,9 @@
     @foreach($masterEnquiry as $enquiry)
     <tr>
         <td>{!! $enquiry['form_no'] !!}</td>
-        <td>{!! $enquiry['name'] !!}</td>
-        <td>{!! $enquiry['current_class'] !!}</td>
-        <td>{!! $enquiry['written_test_status'] !!}</td>
-        <td>{!! $enquiry['interview_status'] !!}</td>
-        <td>{!! $enquiry['document_status'] !!}</td>
+        <td>{!! $enquiry['first_name'] !!} &nbsp;&nbsp;{!! $enquiry['last_name'] !!}</td>
         <td>{!! $enquiry['action'] !!}</td>
         <td>{!! $enquiry['final_status'] !!}</td>
-
     </tr>
     @endforeach
 </tbody>
