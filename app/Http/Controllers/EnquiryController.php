@@ -83,7 +83,6 @@ class EnquiryController extends Controller
           $data['address'] = $data['address'];
           $data['class_applied'] = $data['class_applied'];
           $newEnquiry = EnquiryFormClg::create($data);
-
           TCPDF::AddPage();
           TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
           TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
@@ -135,7 +134,6 @@ class EnquiryController extends Controller
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
             TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
-             dd("s");
             return Redirect::back();
         }catch(\Exception $e){
             $data = [
