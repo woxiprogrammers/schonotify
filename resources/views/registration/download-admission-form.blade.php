@@ -42,11 +42,6 @@
                 </button>
             </div>
          </form>
-        <div class="col-md-4">
-            <button class="btn btn-primary btn-wide">
-                Make Payment
-            </button>
-        </div>
     </div>
 <!-- end: DYNAMIC TABLE -->
 </div>

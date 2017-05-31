@@ -25,12 +25,8 @@
                 @include('alerts.errors')
                 <div class="col-md-12">
                     <form method="post" action="/redirect" role="form" id="checkEnquiry">
-                        <fieldset>
-                            <legend>
-                                Enquiry Number
-                            </legend>
-                        </fieldset>
                         <div class="row">
+                          <br><br><br><br><br>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label  class="control-label">
@@ -50,16 +46,11 @@
                         </div>
                     </form>
                 </div>
-
-                <!-- end: DYNAMIC TABLE -->
-
             </div>
         </div>
     </div>
-
     @include('footer')
 </div>
-
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -76,8 +67,6 @@
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="/assets/js/main.js"></script>
-
-
 <script src="/assets/js/custom-project.js"></script>
 <script src="/vendor/ckeditor/ckeditor.js"></script>
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
