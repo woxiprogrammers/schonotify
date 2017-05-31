@@ -3,8 +3,39 @@
 <div class="sidebar app-aside" id="sidebar">
 <div class="sidebar-container perfect-scrollbar">
 <nav>
-
 <ul class="main-navigation-menu">
+  @if(Auth::User()->role_id == 1)
+  <li class="active open">
+      <a href="javascript:void(0)">
+          <div class="item-content">
+              <div class="item-media">
+                  <i class="fa fa-phone" aria-hidden="true"></i>
+              </div>
+              <div class="item-inner">
+                  <span class="title">Admission Enquiry Form </span><i class="icon-arrow"></i>
+              </div>
+          </div>
+      </a>
+      <ul class="sub-menu">
+
+          <li>
+              <a href="/student-enquiry">
+                  <div class="item-inner">
+                      <span class="title"> Enquiry Form </span>
+                  </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage">
+                  <div class="item-inner">
+                      <span class="title"> Enquiry Listing </span>
+                  </div>
+              </a>
+          </li>
+      </ul>
+  </li>
+  @endif
+<!--
 <li class="active open">
     <a href="/">
         <div class="item-content">
@@ -256,39 +287,7 @@
         </li>
     </ul>
 </li>-->
-@if(Auth::User()->role_id == 1)
-
-<li>
-    <a href="javascript:void(0)">
-        <div class="item-content">
-            <div class="item-media">
-                <i class="fa fa-phone" aria-hidden="true"></i>
-            </div>
-            <div class="item-inner">
-                <span class="title">Admission Enquiry Form </span><i class="icon-arrow"></i>
-            </div>
-        </div>
-    </a>
-    <ul class="sub-menu">
-
-        <li>
-            <a href="/student-enquiry">
-                <div class="item-inner">
-                    <span class="title"> Enquiry Form </span>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="/manage">
-                <div class="item-inner">
-                    <span class="title"> Enquiry Listing </span>
-                </div>
-            </a>
-        </li>
-    </ul>
-</li>
-
-@endif
+<!--
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -301,7 +300,6 @@
         </div>
     </a>
     <ul class="sub-menu">
-
         <li>
             <a href="/fees/create">
                 <div class="item-inner">
@@ -309,8 +307,6 @@
                 </div>
             </a>
         </li>
-
-
         <li>
             <a href="/fees/feelisting">
                 <div class="item-inner">
@@ -318,11 +314,9 @@
                 </div>
             </a>
         </li>
-       
-
-
     </ul>
 </li>
+-->
 </ul>
 </nav>
 </div>

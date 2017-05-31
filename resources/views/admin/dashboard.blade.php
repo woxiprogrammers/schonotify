@@ -27,7 +27,7 @@
                         <div id="message-error-div"></div>
 						<!-- end: DASHBOARD TITLE -->
 						<!-- start: FEATURED BOX LINKS -->
-						<div class="container-fluid container-fullw bg-white">
+					<!--	<div class="container-fluid container-fullw bg-white">
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="panel panel-white no-radius text-center">
@@ -78,7 +78,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 						<!-- end: FEATURED BOX LINKS -->
 
 						<!-- start: FOURTH SECTION -->
@@ -97,6 +97,3 @@
         @include('dashboardJS')
 
 @stop
-
-
-

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\TeacherView;
 use App\User;
@@ -9,15 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Session;
-
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
-
-
-
-
 class LogController extends Controller
 {
     /**
@@ -30,12 +24,10 @@ class LogController extends Controller
         $this->middleware('db');
         $this->middleware('auth',['only'=>'logout']);
     }
-
     public function index()
     {
         //
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -45,17 +37,14 @@ class LogController extends Controller
     {
         //
     }
-
     public function logout(){
         Auth::logout();
         return Redirect::to('/');
     }
-
     public function forgot()
     {
         return view('login_forgot');
     }
-
     public function lockScreen()
     {
         return view('lockScreen');
@@ -68,9 +57,7 @@ class LogController extends Controller
      */
     public function store(LoginRequest $request)
     {
-
         $user=User::where('email','=',$request['email'])->first();
-
         if($user == NULL || !(\Hash::check($request['password'],$user->password)))
         {
             Session::flash('message-error','Wrong email or password');

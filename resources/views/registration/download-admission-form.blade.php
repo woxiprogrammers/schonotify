@@ -1,17 +1,12 @@
 @extends('master')
 
 @section('content')
-
 <div id="app">
 <div class="sidebar app-aside" id="sidebar" style="top: 0px!important;">
-    <img class="img-responsive" src="/assets/images/bodyLogo/sspss.jpg">
+    <img class="img-responsive" src="/assets/images/bodyLogo/wadia.jpg">
 </div>
-
-
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
-
-
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
 <div class="wrap-content container" id="container">
@@ -21,7 +16,7 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
-            <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
+            <h1 class="mainTitle">Ness Wadia College of Commerce</h1>
             <span class="mainDescription"></span>
         </div>
 
@@ -29,19 +24,14 @@
 </section>
 <!-- end: DASHBOARD TITLE -->
 <!-- start: DYNAMIC TABLE -->
-
     <div class="row">
         <p></p>
-
     </div>
-
     <h1>You have already registered with us.
-         Please contact school for further details.</h1>
+         Please contact college for further details.</h1>
     <div class="row">
         <p></p>
-
     </div>
-
     <div class="row">
         <div class="col-md-4">
         </div>
@@ -57,19 +47,13 @@
                 Make Payment
             </button>
         </div>
-
     </div>
-
 <!-- end: DYNAMIC TABLE -->
-
-
 </div>
 </div>
 </div>
-
 @include('footer')
 </div>
-
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -81,23 +65,18 @@
 <script src="vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
 <script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
-
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
-
 <script src="assets/js/student-form-wizard-public-registration.js"></script>
-
 <script src="assets/js/custom-project.js"></script>
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
-
 <script>
     jQuery(document).ready(function() {
         Main.init();
@@ -116,7 +95,6 @@
     });
 </script>
 <script type="text/javascript">
-
 $('#communication_address').hide();
 
 $("#student_communication_address").click(function(){
