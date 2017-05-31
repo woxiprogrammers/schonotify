@@ -78,7 +78,7 @@ class EnquiryController extends Controller
           $data['state'] = $data['state'];
           $data['caste'] = $data['caste'];
           $data['category'] = $data['category'];
-          $data['date'] = $data['date'];
+          $data['date'] = date('d/m/Y');
           $data['mobile'] = $data['mobile_number'];
           $data['address'] = $data['address'];
           $data['class_applied'] = $data['class_applied'];
@@ -126,7 +126,7 @@ class EnquiryController extends Controller
             $data['state'] = $data['state'];
             $data['caste'] = $data['caste'];
             $data['category'] = $data['category'];
-            $data['date'] = $data['date'];
+            $data['date'] = date('d/m/Y');
             $data['mobile'] = $data['mobile_number'];
             $data['address'] = $data['address'];
             $data['class_applied'] = $data['class_applied'];
@@ -200,7 +200,6 @@ class EnquiryController extends Controller
             $enquiryData['examination_year'] = $enquiryData['examination_year'];
             $enquiryData['mobile'] = $enquiryData['mobile'];
             $enquiryData['final_status'] = $enquiryData['final_status'];
-            $enquiryData['date'] = Carbon::parse($enquiryData['date'])->format('d-m-Y');
             $enquiryInfo = EnquiryFormClg::where('id',$enquiryData['id'])->update($enquiryData);
             $message = 'Enquiry Updated successfully';
             $request->session()->flash('message-success', $message);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Body;
 use App\EnquiryForm;
+use App\EnquiryFormClg;
 use App\ParentExtraInfo;
 use App\StudentDocument;
 use App\StudentDocumentMaster;
@@ -37,19 +38,13 @@ class RegistrationController extends Controller
             abort(500,$e->getMessage());
         }
     }
-
     public function getCheckEnquiryView($schoolSlug =NULL){
         try{
-            if($schoolSlug == 'gis' || $schoolSlug == 'gems'){
-                return view('registration.check-enquiry')->with(compact('schoolSlug'));
-            }else{
-                return view('errors.404');
-            }
+            return view('registration.check-enquiry')->with(compact('schoolSlug'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
     }
-
     public function checkEnquiry(Request $request){
         try{
             $body_id = NULL;
@@ -78,26 +73,11 @@ class RegistrationController extends Controller
             abort(500,$e->getMessage());
         }
     }
-
     public function redirectToRegistration(Request $request){
         try{
-            if($request->bodySlug == 'gis'){
-                $body_id = 1 ;
-            }elseif($request->bodySlug == 'gems'){
-                $body_id = 2 ;
-            }
-            $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->where('body_id',$body_id)->first();
-            $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
-            $bodies = Body::all();
-            $documents = StudentDocumentMaster::all();
-
-            if($userRegister!=null){
-                return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies','documents'));
-            }else{
-                return view('registration.student-registration')->with(compact('enquiryInfo','bodies','documents'));
-            }
-
-        }catch(\Exception $e){
+            $enquiryInfo = EnquiryFormClg::where('form_no',$request->enquiry_number)->first();
+            return view('registration.download-admission-form')->with(compact('enquiryInfo'));
+           }catch(\Exception $e){
             $data = [
                 'input_params' => $request->all(),
                 'action' => 'redirect To Registration',
@@ -107,7 +87,6 @@ class RegistrationController extends Controller
             abort(500,$e->getMessage());
         }
     }
-
     public function getStudentParents(){
         $userInformation =array();
         $userData = User::where('role_id',4)->get();
@@ -304,20 +283,10 @@ class RegistrationController extends Controller
 
     public function printAdmissionForm($enquiryNumber){
         try{
-            $newEnquiry = EnquiryForm::where('id',$enquiryNumber)->with('user')->first();
-            $documents = StudentDocumentMaster::all();
-            $studentExtraInfo = $newEnquiry->user->studentExtraInfo;
-            $studentFamilyInfo = ParentExtraInfo::where('parent_id',$newEnquiry->user->parent_id)->first();
-            $parentEmail = User::where('id',$newEnquiry->user->parent_id)->first();
-            $studentFamilyInfo['parent_email'] = $parentEmail['email'];
-            $studentSiblings = $newEnquiry->user->StudentSibling;
-            $previousSchool = $newEnquiry->user->StudentPreviousSchool;
-            $studentSpecialAptitudes = $newEnquiry->user->StudentSpecialAptitude;
-            $studentHobbies = $newEnquiry->user->StudentHobby;
-            $studentDocuments = StudentDocument::where('student_id',$newEnquiry->user->id)->lists('document_id')->toArray();
+            $newEnquiry = EnquiryFormClg::where('id',$enquiryNumber)->first();
             //return view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'));
             TCPDF::AddPage();
-            TCPDF::writeHTML(view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'))->render());
+            TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'))->render());
             TCPDF::Output("Admission Form".date('Y-m-d_H_i_s').".pdf", 'D');
 
 
