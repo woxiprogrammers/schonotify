@@ -282,16 +282,13 @@ var FormValidator = function () {
                 return true;
             }
         });
-
         CKEDITOR.disableAutoInline = true;
         $('textarea.ckeditor').ckeditor();
-
     };
 
     return {
         //main function to initiate template pages
         init: function () {
-            validateCheckRadio(m);
             runValidator1();
             runValidator2();
         }

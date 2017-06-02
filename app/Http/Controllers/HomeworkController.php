@@ -8,6 +8,8 @@ use App\Division;
 use App\Homework;
 use App\HomeworkTeacher;
 use App\HomeworkType;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\PushToken;
 use App\Subject;
 use App\SubjectClass;
 use App\SubjectClassDivision;
@@ -27,12 +29,12 @@ use DateTime;
 
 class HomeworkController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct()
     {
         $this->middleware('db');
         $this->middleware('auth');
     }
-
     /*
 +   * Function Name: homeworkListing
 +   * Param: Requests\WebRequests\HomeworkRequest $requests
@@ -41,20 +43,14 @@ class HomeworkController extends Controller
 +   * Developed By: Suraj Bande
 +   * Date: 3/2/2016
 +   */
-
     public function homeworkListing(Requests\WebRequests\HomeworkRequest $request)
     {
         if ($request->authorize() === true){
-
             return view('homeworkListing');
-
         }else{
-
             return Redirect::to('/');
-
         }
     }
-
     /*
 +   * Function Name: homeworkListing
 +   * Param: $id
@@ -63,7 +59,6 @@ class HomeworkController extends Controller
 +   * Developed By: Manoj Choudhary
 +   * Date: 3/2/2016
 +   */
-
     public function detailedHomework($id)
     {   $homeworkIdss=array();
         $homeworkdivs=array();
@@ -82,7 +77,6 @@ class HomeworkController extends Controller
             {
                 $subject_name=Subject::where('id',$home['subject_id'])->first();
                 $homework_type=HomeworkType::where('id',$home['homework_type_id'])->first();
-
                 $homeworkIdss[$home['id']]['homework_id']=$home['id'];
                 $homeworkIdss[$home['id']]['homework_type']=$homework_type['title'];
                 $homeworkIdss[$home['id']]['homework_type_id']=$homework_type['id'];
@@ -107,7 +101,6 @@ class HomeworkController extends Controller
                 $student_name=User::where('id',$row['student_id'])->first();
                 $division=Division::where('id',$student_name['division_id'])->first();
                 $class=Classes::where('id',$division['class_id'])->first();
-
                 $batch=Batch::where('id',$class['batch_id'])->first();
                 $editHomeworkDiv[$i]['division_name']=$division['division_name'];
                 $editHomeworkDiv[$i]['division_id']=$division['id'];
@@ -115,7 +108,6 @@ class HomeworkController extends Controller
                 $editHomeworkBatch[$i]['batch_id']=$batch['id'];
                 $editHomeworkClass[$i]['class_id']=$class['id'];
                 $editHomeworkClass[$i]['class_name']=$class['class_name'];
-
                 $homeworkIdss[$row['homework_id']]['homework_teacher']=$row['teacher_id'];
                 $homeworkIdss[$row['homework_id']]['homework_teacher_name']=$userName['first_name']." ".$userName['last_name'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['division']=$division['division_name'];
@@ -124,14 +116,9 @@ class HomeworkController extends Controller
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['roll_number']=$student_name['roll_number'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['class']=$class['class_name'];
                 $homeworkIdss[$row['homework_id']]['homework_student_list'][$student_name['id']]['batch']=$batch['name'];
-
                 $i++;
-
-
             $i=0;
-
                 foreach($homeworkIdss[$row['homework_id']]['homework_student_list'] as $row1){
-
                 $homeworkdiv[$row1['batch']][$row1['class']][$i]=$row1['division'];
                 $homeworkdiv['batch']=$row1['batch'];
                 $homeworkdiv['class']=$row1['class'];
@@ -140,8 +127,6 @@ class HomeworkController extends Controller
             $homeworkdivs = array_unique($homeworkdiv[$row1['batch']][$row1['class']], SORT_REGULAR);
             }
             $homeworkdiv['divisions']=$homeworkdivs;
-
-
             $homeworkType=HomeworkType::all();
             foreach($homeworkType as $type)
             {
@@ -153,8 +138,6 @@ class HomeworkController extends Controller
         $editHomeworkDiv = array_unique($editHomeworkDiv, SORT_REGULAR);
         $editHomeworkBatch = array_unique($editHomeworkBatch, SORT_REGULAR);
         $editHomeworkClass = array_unique($editHomeworkClass, SORT_REGULAR);
-
-
         $user= Auth::user();
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
@@ -178,9 +161,6 @@ class HomeworkController extends Controller
                 $i++;
             }
             $homework = array_unique($homework, SORT_REGULAR);
-
-
-
         }else{
             $divisionSubjects=SubjectClassDivision::where('teacher_id',$user->id)
                 ->join('subjects','division_subjects.subject_id','=','subjects.id')
@@ -192,19 +172,14 @@ class HomeworkController extends Controller
                 $homework[$i]['subject_id']=$row['id'];
                 $i++;
             }
-
         }
         $subjectId=array();
         foreach($homework as $row)
         {
             array_push($subjectId,$row['subject_id']);
         }
-
-
-
             return view('detailedHomework')->with(compact('homeworkIdss','homeworkdiv','homeworkTypes','homework','editHomeworkDiv','editHomeworkBatch','editHomeworkClass'));
     }
-
     public function getDownload($file_name){
         //PDF file is stored under project/public/download/info.pdf
         $file= public_path(). "/uploads/homework/$file_name";
@@ -213,11 +188,9 @@ class HomeworkController extends Controller
         );
         return Response::download($file, $file_name, $headers);
     }
-
     public function createHomework(Requests\WebRequests\CreateHomeworkRequest $request)
     {
-        if($request->authorize()===true)
-        {
+        if($request->authorize()===true){
         $user= Auth::user();
         $i=0;
         $homework=array();
@@ -228,10 +201,8 @@ class HomeworkController extends Controller
             $homeworkTypes[$i]['type_slug']=$type['slug'];
             $i++;
         }
-
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
-
             $subjects=SubjectClassDivision::where('division_id',$division->id)
                 ->join('subjects','division_subjects.subject_id','=','subjects.id')
                 ->select('subjects.id','subjects.slug','division_subjects.division_id')
@@ -254,9 +225,6 @@ class HomeworkController extends Controller
                     $divisionId['division_id'][$i]=$row['division_id'];
                     $i++;
                 }
-
-
-
         }else{
                 $divisionSubjects=SubjectClassDivision::where('teacher_id',$user->id)
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
@@ -268,22 +236,18 @@ class HomeworkController extends Controller
                     $homework[$i]['subject_id']=$row['id'];
                     $i++;
                 }
-
-
         }
-            $homework = array_unique($homework, SORT_REGULAR);
+        $homework = array_unique($homework, SORT_REGULAR);
         $subjectId=array();
         foreach($homework as $row)
         {
             array_push($subjectId,$row['subject_id']);
         }
-
-        return view('createHomework')->with(compact('homework','homeworkTypes','subjectClass'));
+        return view('createHomework')->with(compact('homework','homeworkTypes','subjectClass','batches'));
         }else{
             return Redirect::back();
         }
     }
-
     public function homeworkCreate(Requests\WebRequests\CreateHomeworkRequest $request)
     {
             $homeworkData= $request->all();
@@ -333,11 +297,22 @@ class HomeworkController extends Controller
                 $HomeworkTeacher['updated_at']= Carbon::now();
                 HomeworkTeacher::insert($HomeworkTeacher);
             }
-        Session::flash('message-success','homework created successfully');
-        return Redirect::to('/homework-listing');
-
+        $status=Homework::where('id',$homeworkId)->pluck('status');
+        if($status == "1"){
+                $title="New Homework Created";
+                $message=$homeworkData['title'];
+                $homeWork_push_users = HomeworkTeacher::where('homework_id',$homeworkId)->lists('student_id');
+                $push_user = User::whereIn('id',$homeWork_push_users)->lists('parent_id');
+                $allUser=0;
+                $push_users=PushToken::whereIn('user_id',$push_user)->lists('push_token');
+                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+            Session::flash('message-success','homework created successfully');
+            return Redirect::to('/homework-listing');
+        }else{
+            Session::flash('message-success','homework created successfully');
+            return Redirect::to('/homework-listing');
+        }
     }
-
     public function getSubjectBatches($subjectId)
     {
         $user=Auth::user();
@@ -393,10 +368,7 @@ class HomeworkController extends Controller
         }
         $batchInfo=array_unique($batchInfo,SORT_REGULAR);
         return $batchInfo;
-
-
     }
-
     public function getSubjectClass($id,$subject_id){
         $division=array();
         $user=Auth::user();
@@ -443,9 +415,7 @@ class HomeworkController extends Controller
         $classInfo=array_unique($classInfo,SORT_REGULAR);
         return $classInfo;
     }
-
     public function getSubjectDiv($id,$subject_id,$batch_id){
-
         $user=Auth::user();
         $i=0;
         $division=array();
@@ -493,7 +463,6 @@ class HomeworkController extends Controller
         $finalDivisions=array_unique($finalDivisions,SORT_REGULAR);
         return $finalDivisions;
     }
-
     public function getStudentData(Request $request)
     {
         $students = User::wherein('division_id',$request->id)->where('is_active',1)
@@ -513,7 +482,6 @@ class HomeworkController extends Controller
         $studentList = $students->toArray();
         return $studentList;
     }
-
     public function editHomework($id){
         $homeworkUpdate=array();
 
@@ -526,7 +494,6 @@ class HomeworkController extends Controller
                     }
 
     }
-
     public function deleteHomework(Request $request,$id){
             $homeworkUpdate=array();
             $homeworkUpdate['is_active']=0;

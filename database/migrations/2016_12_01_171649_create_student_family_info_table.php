@@ -15,7 +15,6 @@ class CreateStudentFamilyInfoTable extends Migration
         Schema::create('student_family_info', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('student_id')->unsigned();
-
             $table->string('father_first_name', 255)->nullable();
             $table->string('father_middle_name', 255)->nullable();
             $table->string('father_last_name', 255)->nullable();

@@ -366,20 +366,20 @@
                                                     </TR>
                                                 </TABLE>-->
                                                 <div class="row">
+                                                    @if(!empty($aptitude))
+                                                    @foreach($aptitude as $apti)
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            @if(!empty($aptitude))
-                                                            @foreach($aptitude as $apti)
-                                                            <input type="text" value="{!! $apti->special_aptitude !!}" placeholder="Enter Test" class="form-control"  name="special_aptitude[0][test]" id="test0"/>
+                                                           <input type="text" value="{!! $apti->special_aptitude !!}" placeholder="Enter Test" class="form-control"  name="special_aptitude[0][test]" id="test0"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <input type="number" value="{!! $apti->score !!}" placeholder="Enter Score" class="form-control" name="special_aptitude[0][score]" id="score0"/>
-                                                        @endforeach
-                                                        @endif
                                                         </div>
                                                     </div>
+                                                    @endforeach
+                                                    @endif
                                                 </div>
 
                                             </fieldset>
@@ -1088,11 +1088,10 @@
         $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
-        if({!!$chkstatus!!} == "null"){
+        if({!!$chkstatus!!} != "null"){
         var chkstatus = {!!$chkstatus!!};
-
         for(var i = 0; i< chkstatus.length; i++){
-        $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+           $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
         }
         }
         $('#2_concession_chk').change(function(){
@@ -1226,8 +1225,7 @@
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
 
                     }else{
-                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                        {
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1){
 
                             str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                                 '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';

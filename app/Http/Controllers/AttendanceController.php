@@ -1,15 +1,16 @@
 <?php
 
     namespace App\Http\Controllers;
-
     use App\Attendance;
     use App\AttendanceStatus;
     use App\Batch;
     use App\Classes;
     use App\Division;
+    use App\Http\Controllers\CustomTraits\PushNotificationTrait;
     use App\Http\Requests\WebRequests\CreateAttendanceRequest;
     use App\Http\Requests\WebRequests\ViewAttendanceRequest;
     use App\Leave;
+    use App\PushToken;
     use App\SubjectClassDivision;
     use App\User;
     use Carbon\Carbon;
@@ -19,9 +20,9 @@
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Redirect;
     use Illuminate\Support\Facades\Session;
-
     class AttendanceController extends Controller
     {
+        use PushNotificationTrait;
         public function __construct()
         {
             $this->middleware('db');
@@ -43,10 +44,9 @@
                 $dropDownData=array();
                 if ($request->ajax()) {
                     $data = Input::all();
-
                     $division = $data['division'];
                     $date=date('Y-m-d',strtotime($data['value']));
-                } else {
+                }else {
                     $date=date('Y-m-d', time());
                 }
                 if ($user->role_id == 2){
@@ -97,7 +97,6 @@
                     }
                 }
                 elseif ($user->role_id == 1) {
-
                     if ($request->ajax()) {
                         $data = Input::all();
                         $division=$data['division'];
@@ -137,7 +136,6 @@
                                         $dropDownData['student_list'][$count]['student_attendance_status'] = $attendanceStatus['status'];
                                         $dropDownData['student_list'][$count]['student_name'] = $student['first_name'] ." ".$student['last_name'];;
                                         $dropDownData['student_list'][$count]['roll_number'] = $student['roll_number'];
-
                                     } else {
                                         $dropDownData['student_list'][$count]['student_id'] = $student['id'];
                                         $dropDownData['student_list'][$count]['student_leave_status'] = null;
@@ -149,7 +147,6 @@
                                 }
                                } else {
                                          $dropDownData['student_list'] = '';
-
                                }
                     if ($request->ajax()) {
                          return $dropDownData;
@@ -175,7 +172,6 @@
          */
         public function attendanceMark(CreateAttendanceRequest $request)
         {
-
             $user = Auth::user();
             $saveData = array();
             $userIds=array();
@@ -206,20 +202,25 @@
                         $saveData['division_id'] = $row['division_id'];
                         $saveData['created_at'] = Carbon::now();
                         $saveData['updated_at'] = Carbon::now();
-                           Attendance::insert($saveData);
+                         $att_id=Attendance::insert($saveData);
                         $i++;
                     }
-
             $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
-
             $attendance = AttendanceStatus::where('date','=',$attendanceStatus['date'])->where('division_id','=',$request['division-select'])->get();
-            if(sizeOf($attendance) == 0) {
+            if(sizeOf($attendance) == 0){
                 $attendanceStatus['division_id'] = $request['division-select'];
                 $attendanceStatus['status'] = 1;
                 $attendanceStatus['created_at'] = Carbon::now();
                 $attendanceStatus['updated_at'] = Carbon::now();
-                $result=AttendanceStatus::insert($attendanceStatus);
-                if($result==true)
+                $result=AttendanceStatus::insertGetId($attendanceStatus);
+                $div_id=AttendanceStatus::where('id',$result)->pluck('division_id');
+                $push_users=User::where('division_id',$div_id)->lists('parent_id');
+                $title="Attendance marked";
+                $message="Please check attendance";
+                $allUser=0;
+                $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
+                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                if($result != "null")
                 {
                     return "1";
                 }else{
@@ -228,7 +229,6 @@
             } else {
                 return "0";
             }
-
         }
         /**
          * Function Name: getAllClasses
@@ -268,7 +268,6 @@
             }
             return $data;
         }
-
         /**
          * Function Name: getAllStudent
          * @param $id
@@ -278,7 +277,6 @@
          * Date: 10/2/2016
          * author manoj chaudahri
          */
-
         public function getAllStudent($id,$dateValue) {
             $data=array();
             $studentData=User::where('division_id',$id)->select('id','first_name','last_name','roll_number')->get();

@@ -83,9 +83,6 @@
     Route::group(['prefix' => 'payment'],function(){
         Route::post('make-payment',array('uses'=>'PaymentController@billPayment'));
         Route::get('payment-return',array('uses'=>'PaymentController@billReturnUrl'));
-        Route::get('temp',function(){
-            return view('fee.payment-success');
-        });
     });
 
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
@@ -485,6 +482,8 @@
     Route::get('getclasses/{batch_id}',array('uses' => 'api\UserController@getClassesTeacher'));
     Route::get('getdivisions/{class_id}',array('uses' => 'api\UserController@getDivisions'));
     Route::get('get-students-list/{division_id}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::get('get-admin-list',array('uses' => 'api\NoticeBoardController@getAdmin'));
+    Route::get('get-teacher-list',array('uses' => 'api\NoticeBoardController@getTeacher'));
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
@@ -520,16 +519,19 @@
         Route::get('get-divisions/{classId}','api\TimetableController@getDivisions');
 
         //Announcement
-        Route::post('create-announcement','api\NoticeBoardController@createAnnouncement');
+        Route::post('create-announcement','api\NoticeBoardController@announcementCreate');
         Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
+        Route::post('edit-achievement','api\NoticeBoardController@editAchievement');
+        Route::post('publish-achievement','api\NoticeBoardController@publishAchievement');
         Route::get('view-announcement/{id}','api\NoticeBoardController@viewAnnouncement');
 
         //Result
         Route::get('view-result/{id}','api\ResultController@viewResult');
         Route::get('view-test-chart/{uid}/{tid}','api\ResultController@viewTestGraph');
         Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
-        Route::post('create-achievement','api\NoticeBoardController@createAchievement');
+        Route::post('create-achievement','api\NoticeBoardController@createAchieve');
         Route::get('view-achievement/{id}','api\NoticeBoardController@viewAchievement');
+        Route::get('delete-achievement/{id}','api\NoticeBoardController@deleteAchievement');
 
 
         //Event
@@ -543,6 +545,9 @@
         Route::get('get-year-month','api\EventController@getYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
+
+        //Push
+        Route::post('save-push','api\UserController@savePushToken');
 
 
 
