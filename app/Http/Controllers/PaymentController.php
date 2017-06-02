@@ -18,13 +18,9 @@ class PaymentController extends Controller
     public function billPayment(Request $request){
         try{
             $data = $request->all();
-            $checksumkey = env('EASY_PAY_CHKSUM_KEY');//'axis';
-            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');//'axisbank12345678';
+            $checksumkey = env('EASY_PAY_CHKSUM_KEY');
+            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
             $aesJava = new AesForJava();
-//            $customerUniqueId = ($request->student_grn."".$request->student_body_id);  // For CRN
-            /*
-                Student GRN No.|Student Name|Section|Standard|Academic Year|Fee Type|Parents Name|Email|Contact Number|Amount
-            */
             $referenceId = NetBankingTransaction::first();
             if($referenceId == null){
                 NetBankingTransaction::create(['transactions_count' => 1]);
@@ -45,41 +41,13 @@ class PaymentController extends Controller
                 "TYP=".env('EASY_PAY_TYPE'),
                 "CNY=INR",
                 "RTU=http://".env('DOMAIN_NAME')."/payment/payment-return",
-                "PPI=".$ppiParameters,//411|Ameya Joshi|B|8|2017-2018|1|Sanjay Joshi|ameya.woxi@gmail.com|9158898159|1.0",
+                "PPI=".$ppiParameters,
                 "RE1=MN",
                 "RE2=custom1",
                 "RE3=custom2",
                 "RE4=custom3",
                 "RE5=custom4",
             );
-                /*
-                 *  1. Corporate Code: 3223
-                    2. PPI format:
-                        Student GRN No.|Student Name|Section|Standard|Academic Year|Fee Type|Parents Name|Email|Contact Number|Amount
-
-                CRN =>  Customer Reference Number
-                        which will be unique for the
-                        customer for doing payment.
-
-                RID => This Reference ID is used by
-                        payment gateway to identify the
-                        order. Ensure that you send a
-                        unique reference id with each
-                        request. Payment Gateway will
-                        check the uniqueness of this
-                        reference id as it generates a
-                        unique payment reference
-                        number for each order which is
-                        sent by the payment gateway.
-
-                RTU => Payment Gateway will post the
-                        status of the order along with
-                        the parameters to this URL.
-
-                CKS => Concatenation of ( CID + RID +
-                       CRN + AMT + key) and need to
-                       be hashed by SHA256 hashed.
-                */
             $chksm = "";
             for ($i = 0; $i < 4; $i++) {
                 $valarr = explode("=", $paramArr[$i]);
@@ -105,16 +73,37 @@ class PaymentController extends Controller
 
     public function billReturnUrl(Request $request){
         try{
-            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');;
+            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
             $aesJava = new AesForJava();
             $responseDataString = $aesJava->decrypt($request->i,$encryption_key, 128);
             $responseData = explode('&',$responseDataString);
             $chksm = "";
-            for ($i = 0; $i < 4; $i++) {
+            $newResponse = array();
+            for ($i = 0; $i < count($responseData); $i++) {
                 $valarr = explode("=", $responseData[$i]);
-                $chksm .= $valarr[1];
+                $newResponse[$valarr[0]] = $valarr[1];
+                if($i < 4){
+                    $chksm .= $valarr[1];
+                }
             }
-            dd($request->all());
+            $newResponse['chksm'] = $chksm;
+            $data = array();
+            if($newResponse['RMK'] == 'success' || $newResponse == 'SUCCESS'){
+                $data['message_title'] = 'Payment Successful.';
+                $data['color'] = 'green';
+                $data['message'] = 'Following are details of your transaction. Your account will be updated after admin confirms your payment';
+            }else{
+                $data['message_title'] = 'Payment Failed.';
+                $data['color'] = 'red';
+                $data['message'] = 'Your Transaction has been failed.';
+            }
+            $data['transaction_id'] = $newResponse['TRN'];
+            $data['reference_id'] = $newResponse['RID'];
+            $data['amount'] = $newResponse['AMT'];
+            $data['date'] = $newResponse['TET'];
+
+            return view('fee.transaction_success')->with(compact('data'));
+
         }catch(\Exception $e){
             $data = [
                 'action' => 'Bill return Url',
