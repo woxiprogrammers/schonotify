@@ -194,14 +194,6 @@
                    	</select>
                  </div>
             </div>
-                 <div class="col-md-6" id="Cat1" style="display:none">
-                     <div class="form-group"> <!-- Date input -->
-                         <label class="control-label">Category <span class="symbol required"></span></label>
-                         <select class="form-control" name="category" id="category1" style="-webkit-appearance: menulist;" readonly="true">
-                                  <option value="OPEN">OPEN</option>
-                         </select>
-                     </div>
-                </div>
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -298,27 +290,17 @@
     });
     $('#country').change(function(){
        if($('#country').val() == "Other"){
-         $('#Cat').hide();
-         $('#Cat1').show();
+         $('#category').val('Open');
        }else{
-         $('#Cat').show();
-         $('#Cat1').hide();
+
        }
     })
-    $("#state1").change(function(){
-       if($("#state1").val() != "Maharashtra"){
-         $("#category").attr("disabled", 'disabled');
-         $("#category").val('OPEN');
-       }else {
-         $("#category").removeAttr("disabled", 'disabled');
+    $('#state').change(function(){
+       if($('#state').val() != "Maharasgtra"){
+         $('#category').val('Open');
+       }else{
+
        }
-    });
-    $('#current_class').blur(function() {
-        if($(this).val()=="") {
-            $('#school_name').attr("disabled", "disabled");
-        }else{
-            $("#school_name").removeAttr("disabled");
-        }
-    });
-</script>
+    })
+    </script>
 @stop

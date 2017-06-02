@@ -108,7 +108,9 @@ class EnquiryController extends Controller
     }
     public function storeEnquiryFormWithoutLogin(Request $request){
       try{
+
             $data = $request->all();
+dd($data);
             $now = Carbon::now();
             $bodyEnquiryCount = EnquiryFormClg:: select('id')->count();
             $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
