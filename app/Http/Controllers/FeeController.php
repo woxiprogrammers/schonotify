@@ -249,7 +249,12 @@ class FeeController extends Controller
                         ->where('users.body_id',$request->school)
                         ->where('students_extra_info.grn',$request->grn)
                         ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
-                        ->first()->toArray();
+                        ->first();
+            if($student == null){
+                return response()->json("Enter valid data.",400);
+            }else{
+                $student = $student->toArray();
+            }
             $divisionData = Division::where('id',$student['division_id'])->select('division_name','class_id')->first()->toArray();
             $student['division'] = $divisionData['division_name'];
             $student['standard'] = Classes::where('id',$divisionData['class_id'])->pluck('class_name');

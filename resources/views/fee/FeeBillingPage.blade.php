@@ -150,11 +150,12 @@
                         type: "POST",
                         async: true,
                         success:function(data,textStatus,xhr){
-                            console.log('in success');
                             $("#student_details").html(data);
                         },
-                        error: function(){
-                            console.log('in error');
+                        error: function(xhr,errorStatus){
+                            if(xhr.status == 400){
+                                alert(xhr.responseText);
+                            }
                         }
                     });
                 }
