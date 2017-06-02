@@ -237,6 +237,12 @@ class FeeController extends Controller
         return redirect('/edit-user/'.$user);
     }
 
+
+    /**
+     * Function getStudentDetails()
+     * Developed By Ameya Joshi
+     * Date: 2/6/17
+     */
     public function getStudentDetails(Request $request){
         try{
             $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
