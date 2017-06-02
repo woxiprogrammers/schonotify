@@ -93,7 +93,8 @@
                             </td>
                         </tr>
                     </table>
-                <form id="billGeneratorForm_{{$id}}">
+                @if($installment['is_paid'] == false)
+                    <form id="billGeneratorForm_{{$id}}">
                         <input type="hidden" value="{{$student['grn']}}" name="student_grn">
                         <input type="hidden" value="{{$student['body_id']}}" name="student_body_id">
                         <input type="hidden" value="{{$student['first_name'].' '.$student['last_name']}}" name="student_name">
@@ -108,7 +109,8 @@
                         <button class="btn btn-primary btn-wide" type="button" onclick="submitForm({{$id}})" style="margin-left: 20%; margin-top: 10px">
                             Make Payment
                         </button>
-                </form>
+                    </form>
+                @endif
         </div>
 
                 @endforeach

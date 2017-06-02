@@ -228,6 +228,7 @@ class FeeController extends Controller
          $transaction_details['transaction_detail']=$request->transaction_detail;
          $transaction_details['transaction_amount']=$request->transaction_amount;
          $transaction_details['date']=$request->date;
+         $transaction_details['installment_id']=$request->installment_id;
          $query=TransactionDetails::create($transaction_details);
          if($query)
          {
