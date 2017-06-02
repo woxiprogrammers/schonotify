@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\NetBankingTransaction;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -10,24 +11,36 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
+    public function __construct(){
+        $this->middleware('db');
+    }
+
     public function billPayment(Request $request){
         try{
             $data = $request->all();
-            $checksumkey = 'axis';
-            $encryption_key = 'axisbank12345678';
+            $checksumkey = env('EASY_PAY_CHKSUM_KEY');//'axis';
+            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');//'axisbank12345678';
             $aesJava = new AesForJava();
-            $customerUniqueId = ($request->student_grn."".$request->student_body_id);  // For CRN
-            $date = date('YmdHis');
-            $referenceId = ($request->student_grn."".$request->student_body_id.''.$date);
+//            $customerUniqueId = ($request->student_grn."".$request->student_body_id);  // For CRN
             /*
                 Student GRN No.|Student Name|Section|Standard|Academic Year|Fee Type|Parents Name|Email|Contact Number|Amount
             */
+            $referenceId = NetBankingTransaction::first();
+            if($referenceId == null){
+                NetBankingTransaction::create(['transactions_count' => 1]);
+                $referenceId = 1;
+            }else{
+                $count = $referenceId['transactions_count'];
+                $referenceId = $count+1;
+                NetBankingTransaction::where('id', 1)->update(['transactions_count' => $referenceId]);
+            }
+            $crn = $referenceId+1;
             $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|1.0";//.$data['amount'];
             $paramArr = array(
                 "CID=".env('EASY_PAY_CORPORATE_CODE'),
-                "RID=13",
-                "CRN=128",
-                "AMT=1.0",
+                "RID=".$referenceId,
+                "CRN=".$crn,
+                "AMT=1.0",//$request->amount,
                 "VER=".env('EASY_PAY_VERSION'),
                 "TYP=".env('EASY_PAY_TYPE'),
                 "CNY=INR",
@@ -75,7 +88,8 @@ class PaymentController extends Controller
             $paramArr[] = "CKS=" . hash("sha256", $chksm .$checksumkey );
             $i = $aesJava->encrypt(implode("&", $paramArr),$encryption_key , 128);
             $data = [
-                'i' => $i
+                'i' => $i,
+                'amount' => $request->amount
             ];
             return response()->json($data);
         }catch(\Exception $e){
@@ -91,18 +105,16 @@ class PaymentController extends Controller
 
     public function billReturnUrl(Request $request){
         try{
-            Log::info('in return Url');
-            $encryption_key = 'axisbank12345678';
+            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');;
             $aesJava = new AesForJava();
             $responseDataString = $aesJava->decrypt($request->i,$encryption_key, 128);
             $responseData = explode('&',$responseDataString);
-            dd($responseData);
             $chksm = "";
             for ($i = 0; $i < 4; $i++) {
                 $valarr = explode("=", $responseData[$i]);
                 $chksm .= $valarr[1];
             }
-            dd($chksm);
+            dd($request->all());
         }catch(\Exception $e){
             $data = [
                 'action' => 'Bill return Url',

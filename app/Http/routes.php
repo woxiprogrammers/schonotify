@@ -83,6 +83,9 @@
     Route::group(['prefix' => 'payment'],function(){
         Route::post('make-payment',array('uses'=>'PaymentController@billPayment'));
         Route::get('payment-return',array('uses'=>'PaymentController@billReturnUrl'));
+        Route::get('temp',function(){
+            return view('fee.payment-success');
+        });
     });
 
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
