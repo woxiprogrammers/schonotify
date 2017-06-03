@@ -248,7 +248,7 @@ class FeeController extends Controller
                 ->where('users.body_id',$request->school)
                 ->where('students_extra_info.grn',$request->grn)
                 ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
-                ->first()->toArray();
+                ->first();
             if($student == null){
                 return response()->json("Enter valid data.",400);
             }else{
