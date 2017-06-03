@@ -44,6 +44,14 @@
                             <span> {{$data['date']}}</span>
                         </div>
                     </div>
+                    <div class="row" style="margin-top: 10%">
+                        <div class="col-sm-6 col-md-offset-4">
+                            <a class="btn btn-primary btn-wide" href="/fees/billing-page">
+                                Back to Billing Page
+                            </a>
+                        </div>
+
+                    </div>
                 </fieldset>
             </div>
         </div>
