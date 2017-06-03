@@ -958,7 +958,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="control-label">
-                                                                Voucher No / NEFT  no:<span class="symbol required"></span>
+                                                                Voucher No / NEFT  no / Transaction Id:<span class="symbol required"></span>
                                                             </label>
                                                             <div>
                                                                 <input type="text" name="transaction_detail">
@@ -985,9 +985,27 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary pull-right" type="submit" >
-                                                        Update <i class="fa fa-arrow-circle-right"></i>
-                                                    </button>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Installment Id:<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <select name="installment_id" id="installment_id" style="width: 20%">
+                                                                    @foreach($installmentIds as $id)
+                                                                        <option value="{{$id['installment_id']}}"> {{$id['installment_id']}} </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-md-offset-7">
+                                                            <button class="btn btn-primary pull-right" type="submit" >
+                                                                Update <i class="fa fa-arrow-circle-right"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
