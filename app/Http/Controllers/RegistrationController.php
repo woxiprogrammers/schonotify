@@ -279,15 +279,13 @@ class RegistrationController extends Controller
             return "Please Insert Data";
         }
     }
-
-
     public function printAdmissionForm($enquiryNumber){
         try{
             $newEnquiry = EnquiryFormClg::where('id',$enquiryNumber)->first();
-            //return view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'));
+            // return view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'));
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'))->render());
-            TCPDF::Output("Admission Form".date('Y-m-d_H_i_s').".pdf", 'D');
+            TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
         }catch(\Exception $e){
             $data = [
                 'action' => 'print Admission Form',
@@ -297,7 +295,6 @@ class RegistrationController extends Controller
             abort(500,$e->getMessage());
         }
     }
-
     public function checkAadharNumber(Request $request){
         try{
             $aadharCount= StudentExtraInfo::where('aadhar_number',$request->aadhar_number)->count();

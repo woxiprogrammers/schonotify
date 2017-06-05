@@ -76,6 +76,16 @@ var FormValidator = function () {
                 marks_obtained: {
                     required: true,
                 },
+                diff_categories: {
+                    required: true,
+                },
+                category: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email:true
+                },
                 outOf_marks: {
                     required: true,
                 },
@@ -119,6 +129,16 @@ var FormValidator = function () {
                 },
                 marks_obtained:{
                     required: "Marks are required"
+                },
+                diff_categories:{
+                      required: "Category is required"
+                },
+                category: {
+                    required: "Category is required"
+                },
+                email:{
+                      required: "Email required",
+                      email:"Email is required"
                 },
                 outOf_marks:{
                       required: "Marks are required"
