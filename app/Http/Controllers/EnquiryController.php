@@ -2,6 +2,10 @@
 namespace App\Http\Controllers;
 use App\EnquiryForm;
 use App\EnquiryFormClg;
+use App\category_types;
+use App\diff_categories;
+use App\ExtraCategories;
+use App\CasteCategories;
 use App\User;
 use Carbon\Carbon;
 use Elibyy\TCPDF\Facades\TCPDF;
@@ -21,7 +25,9 @@ class EnquiryController extends Controller
     }
     public function viewEnquiryForm(){
         try{
-            return view('admin.enquiryCreate');
+            $categories=category_types::get()->toArray();
+            $extra_categories=ExtraCategories::get()->toarray();
+            return view('admin.enquiryCreate')->with(compact('categories','extra_categories'));
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage()
@@ -74,8 +80,9 @@ class EnquiryController extends Controller
           $data['percentage'] = ($data['marks_obtained'] / $data['outOf_marks'])*100;
           $data['examination_year'] = $data['examination_year'];
           $data['board'] = $data['board'];
-          $data['country'] = $data['country'];
           $data['state'] = $data['state'];
+          $data['email'] = $data['email'];
+          $data['diff_category'] = $data['diff_categories'];
           $data['caste'] = $data['caste'];
           $data['category'] = $data['category'];
           $data['date'] = date('d/m/Y');
@@ -83,6 +90,8 @@ class EnquiryController extends Controller
           $data['address'] = $data['address'];
           $data['class_applied'] = $data['class_applied'];
           $newEnquiry = EnquiryFormClg::create($data);
+          $newEnquiry['category'] = CasteCategories::where('slug',$newEnquiry['category'])->pluck('caste_category');
+          $newEnquiry['diff_category'] = ExtraCategories::where('slug',$newEnquiry['diff_category'])->pluck('categories');
           TCPDF::AddPage();
           TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
           TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
@@ -97,7 +106,9 @@ class EnquiryController extends Controller
     }
     public function viewEnquiryFormWithoutLogin(){
         try{
-                return view('admin.enquiryCreateWithoutLogin');
+          $categories=category_types::get()->toArray();
+          $extra_categories=ExtraCategories::get()->toarray();
+          return view('admin.enquiryCreateWithoutLogin')->with(compact('categories','extra_categories'));
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage()
@@ -108,9 +119,7 @@ class EnquiryController extends Controller
     }
     public function storeEnquiryFormWithoutLogin(Request $request){
       try{
-
             $data = $request->all();
-dd($data);
             $now = Carbon::now();
             $bodyEnquiryCount = EnquiryFormClg:: select('id')->count();
             $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
@@ -124,15 +133,18 @@ dd($data);
             $data['percentage'] = ($data['marks_obtained'] / $data['outOf_marks'])*100;
             $data['examination_year'] = $data['examination_year'];
             $data['board'] = $data['board'];
-            $data['country'] = $data['country'];
             $data['state'] = $data['state'];
             $data['caste'] = $data['caste'];
+            $data['email'] = $data['email'];
+            $data['diff_category'] = $data['diff_categories'];
             $data['category'] = $data['category'];
             $data['date'] = date('d/m/Y');
             $data['mobile'] = $data['mobile_number'];
             $data['address'] = $data['address'];
             $data['class_applied'] = $data['class_applied'];
             $newEnquiry = EnquiryFormClg::create($data);
+            $newEnquiry['category'] = CasteCategories::where('slug',$newEnquiry['category'])->pluck('caste_category');
+            $newEnquiry['diff_category'] = ExtraCategories::where('slug',$newEnquiry['diff_category'])->pluck('categories');
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
             TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
@@ -176,8 +188,10 @@ dd($data);
     }
     public function editEnquiryView(Request $request,$enquiryId){
         try{
+            $categories=category_types::get()->toArray();
             $enquiryInfo = EnquiryFormClg::where('id',$enquiryId)->first();
-            return view('admin.enquiry.enquiry-edit')->with(compact('enquiryInfo'));
+            $extra_categories=ExtraCategories::get()->toarray();
+            return view('admin.enquiry.enquiry-edit')->with(compact('enquiryInfo','categories','extra_categories'));
         }catch (\Exception $e){
             Log::critical('exception:'.$e->getMessage());
             abort(500,$e->getMessage());
@@ -185,7 +199,7 @@ dd($data);
     }
     public function editEnquiry(Request $request){
         try{
-            $enquiryData = $request->all();
+        $enquiryData = $request->all();
             $enquiryData['address'] = ltrim($enquiryData['address']);
             $enquiryData['medium'] = trim($enquiryData['medium']);
             $enquiryData['first_name'] = trim($enquiryData['first_name']);
@@ -194,14 +208,17 @@ dd($data);
             $enquiryData['marks_obtained'] = $enquiryData['marks_obtained'];
             $enquiryData['outOf_marks'] = $enquiryData['outOf_marks'];
             $enquiryData['board'] = $enquiryData['board'];
-            $enquiryData['country'] = $enquiryData['country'];
             $enquiryData['state'] = $enquiryData['state'];
             $enquiryData['caste'] = $enquiryData['caste'];
+            $enquiryData['email'] = $enquiryData['email'];
+            $enquiryData['diff_category'] = $enquiryData['diff_category'];
             $enquiryData['category'] = $enquiryData['category'];
             $enquiryData['caste'] = $enquiryData['caste'];
             $enquiryData['examination_year'] = $enquiryData['examination_year'];
             $enquiryData['mobile'] = $enquiryData['mobile'];
+            if(!empty($enquiryData['final_status'])){
             $enquiryData['final_status'] = $enquiryData['final_status'];
+            }
             $enquiryInfo = EnquiryFormClg::where('id',$enquiryData['id'])->update($enquiryData);
             $message = 'Enquiry Updated successfully';
             $request->session()->flash('message-success', $message);
