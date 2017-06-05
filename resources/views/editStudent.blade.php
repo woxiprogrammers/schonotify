@@ -1,17 +1,10 @@
-
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
 @include('sidebar')
-
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
 @include('header')
-
-
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
 <div class="wrap-content container" id="container">
@@ -1125,9 +1118,12 @@
         getMsgCount();
         if({!!$chkstatus!!} != "null"){
         var chkstatus = {!!$chkstatus!!};
-        for(var i = 0; i< chkstatus.length; i++){
-           $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+        if(chkstatus != null){
+          for(var i = 0; i< chkstatus.length; i++){
+             $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+          }
         }
+
         }
         $('#2_concession_chk').change(function(){
            if($('#2_concession_chk').is(":checked")){
