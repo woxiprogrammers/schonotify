@@ -13,10 +13,6 @@ class extra_categories_table_seeder extends Seeder
     {
       DB::table('extra_categories')->insert([
         [
-          'categories'=> 'CASTE',
-           'slug' => 'caste'
-        ],
-        [
           'categories'=> 'DEFENCE',
            'slug' => 'defence'
         ],
