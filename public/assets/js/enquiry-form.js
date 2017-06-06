@@ -75,6 +75,7 @@ var FormValidator = function () {
                 },
                 marks_obtained: {
                     required: true,
+                    number:true
                 },
                 diff_categories: {
                     required: true,
@@ -88,6 +89,7 @@ var FormValidator = function () {
                 },
                 outOf_marks: {
                     required: true,
+                    number:true
                 },
                 board: {
                     required: true,
@@ -128,7 +130,8 @@ var FormValidator = function () {
                   minlength:"Enter minimum 2 characters."
                 },
                 marks_obtained:{
-                    required: "Marks are required"
+                    required: "Marks are required",
+                    number:"Only numbers are allowed"
                 },
                 diff_categories:{
                       required: "Category is required"
@@ -141,7 +144,8 @@ var FormValidator = function () {
                       email:"Email is required"
                 },
                 outOf_marks:{
-                      required: "Marks are required"
+                      required: "Marks are required",
+                      number:"Only numbers are allowed"
                 },
                 board:{
                     required: "Marks are required"

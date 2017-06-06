@@ -13,7 +13,7 @@
 <section id="page-title" class="padding-top-100">
     <div class="row">
         <div class="col-sm-7">
-            <span class="mainDescription">Enquiry Form</span>
+            <span class="mainDescription">Waiting / Merit List Form</span>
             <br>
             <h5 style="color:red">If you are already registered ,then <a href="http://nesswadia.woxi.co.in/check-enquiry">Click Here</a></h5>
         </div>
@@ -48,7 +48,7 @@
                             Class <span class="symbol required"></span>
                         </label>
                             <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
-                                <option value='BCOM'>FYBCOM.</option>
+                                <option value='FYBCOM'>FYBCOM.</option>
                                 <option value='FYBBA'>FYBBA.</option>
                                 <option value='FYBBAIB'>FYBBA(IB)</option>
                                 <option value='FYBBACA'>FYBBA(CA)</option>
@@ -86,12 +86,12 @@
               <div class="col-md-6">
                   <div class="form-group"> <!-- Date input -->
                       <label class="control-label">Total Marks Obtained <span class="symbol required"></span></label>
-                      <input class="form-control" id="marks_obtained" name="marks_obtained" placeholder="Enter Marks obtained" type="number" />
+                      <input class="form-control" id="marks_obtained" name="marks_obtained" placeholder="Enter Marks obtained" type="text"/>
                   </div>
               </div>
               <div class="col-md-6">
                       <label class="control-label">Total Marks Out of <span class="symbol required"></span></label>
-                      <input class="form-control" id="outOf_marks" name="outOf_marks" placeholder="Enter Out Of Marks" type="number" />
+                      <input class="form-control" id="outOf_marks" name="outOf_marks" placeholder="Enter Out Of Marks" type="text" />
               </div>
               </div>
               <div class="row">
@@ -130,7 +130,7 @@
              <div class="col-md-6">
                  <div class="form-group"> <!-- Date input -->
                      <div class="form-group"> <!-- Date input -->
-                         <label class="control-label">Category <span class="symbol required"></span></label>
+                         <label class="control-label">Special Category <span class="symbol required"></span></label>
                          <select class="form-control" id="diff_categories" name="diff_categories" style="-webkit-appearance: menulist;">
                                  <option value="" selected>Please select category</option>
                                  @foreach($extra_categories as $category)
@@ -226,66 +226,16 @@
         $("#app").addClass("removePadding");
         //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
     });
-        $("#diff_categories").change(function(){
-            if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","true");
-              $('#category').css('pointer-events','true');
-              $("#other_state").css("display","none");
-              $("#open").css("display","none")
-            }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Maharashtra")){
-                 $("#Cat").css("display","true");
-                 $('#category').css('pointer-events','none');
-                 $('#category').val('open');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled"  ) && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","none");
-             }else if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Other")){
-                  $("#Cat").css("display","true");
-               $('#category').val('other_state');
-               $('#category').css('pointer-events','none');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled" ) && ($('#state').val() == "Other" || $('#state').val() == "Maharashtra")){
-                  $("#Cat").css("display","none");
+    $("#state").change(function(){
+              if($('#state').val() == "Maharashtra"){
+                  $("#other_state").css("display","none");
                   $('#category').val('');
-             }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Other")){
-                    $("#Cat").css("display","true");
-                  $('#category').val('other_state');
-                  $('#category').css('pointer-events','none');
-             }else{
-                      $('#category').css('pointer-events','true');
-                      $("#Cat").css("display","true");
-                      $('#category').css('pointer-events','true');
-             }
-          })
-          $("#state").change(function(){
-            if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","true");
-              $('#category').css('pointer-events','true');
-              $("#other_state").css("display","none");
-              $("#open").css("display","none")
-            }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Maharashtra")){
-                 $("#Cat").css("display","true");
-                 $('#category').css('pointer-events','none');
-                 $('#category').val('open');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled"  ) && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","none");
-             }else if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Other")){
-                  $("#Cat").css("display","true");
-               $('#category').val('other_state');
-               $('#category').css('pointer-events','none');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled" ) && ($('#state').val() == "Other" || $('#state').val() == "Maharashtra")){
-                  $("#Cat").css("display","none");
-                  $('#category').val('');
-             }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Other")){
-                  $('#category').val('other_state');
-                  $('#category').css('pointer-events','none');
-             }else{
-                      $('#category').css('pointer-events','true');
-                      $("#Cat").css("display","true");
-                      $('#category').css('pointer-events','true');
-             }
-          })
+                  $('#category').css('pointer-events','true');
+              }else{
+                $("#other_state").css("display","true");
+                $('#category').val('other_state');
+                $('#category').css('pointer-events','none');
+              }
+    })
 </script>
 @stop

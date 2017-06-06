@@ -52,8 +52,10 @@
                         </label>
                             <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
                                 <option value="{!!$enquiryInfo['class_applied']!!}" disabled>{!!$enquiryInfo['class_applied']!!}</option>
-                                <option value='BCOM'>B.COM.</option>
-                                <option value='BA'>B.A.</option>
+                                <option value='FYBCOM'>FYBCOM</option>
+                                <option value='FYBBA'>FYBBA</option>
+                                <option value='FYBBAIB'>FYBBA(IB)</option>
+                                <option value='FYBBACA'>FYBBA(CA)</option>
                             </select>
                     </div>
                 </div>
@@ -88,12 +90,12 @@
               <div class="col-md-6">
                   <div class="form-group"> <!-- Date input -->
                       <label class="control-label">Total Marks Obtained <span class="symbol required"></span></label>
-                      <input class="form-control" id="marks_obtained" name="marks_obtained" placeholder="Enter Marks obtained" type="number" value="{!!$enquiryInfo['marks_obtained']!!}" />
+                      <input class="form-control" id="marks_obtained" name="marks_obtained" placeholder="Enter Marks obtained" type="text" value="{!!$enquiryInfo['marks_obtained']!!}" />
                   </div>
               </div>
               <div class="col-md-6">
                       <label class="control-label">Total Marks Out of<span class="symbol required"></span></label>
-                      <input class="form-control" id="outOf_marks" name="outOf_marks" placeholder="Enter Out Of Marks" type="number" value="{!!$enquiryInfo['outOf_marks']!!}"/>
+                      <input class="form-control" id="outOf_marks" name="outOf_marks" placeholder="Enter Out Of Marks" type="text" value="{!!$enquiryInfo['outOf_marks']!!}"/>
               </div>
               </div>
               <div class="row">
@@ -117,10 +119,10 @@
                        <input class="form-control" id="email" name="email" placeholder="Enter email" type="email"  value="{!!$enquiryInfo['email']!!}"/>
                    </div>
                </div>
-               <div class="col-md-6" id="toggle1" >
+               <div class="col-md-6">
                    <div class="form-group"> <!-- Date input -->
                        <label class="control-label">State from which XII st. passed <span class="symbol required"></span></label>
-                        <select class="form-control" id="state1" name="state" style="-webkit-appearance: menulist;" required>
+                        <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
                         <option value="">Please select state</option>
                         <option value="Maharashtra">Maharashtra</option>
                         <option value="Other">Other</option>
@@ -133,18 +135,9 @@
                  <div class="form-group"> <!-- Date input -->
                      <label class="control-label">Caste Category <span class="symbol required"></span></label>
                      <select class="form-control" name="category" id="category" style="-webkit-appearance: menulist;">
-                                   <option value="{!!$enquiryInfo['category']!!}" disabled>{!!$enquiryInfo['category']!!}</option>
-                                   <option value="SC">SC</option>
-                                   <option value="ST">ST</option>
-                                   <option value="VJA">VJ(A)</option>
-                                   <option value="NTB">NT(B)</option>
-                                   <option value="NTC">NT(C)</option>
-                                   <option value="NTD">NT(D)</option>
-                                   <option value="OBC">OBC</option>
-                                   <option value="SBC">SBC</option>
-                                   <option value="OPEN">OPEN</option>
-                                   <option value="MARATHAESBC">MARATHA(ESBC)</option>
-                                   <option value="MUSLIMSBCA">MUSLIM(SBC-A)</option>
+                       @foreach($categories as $category)
+                       <option value="{!!$category['slug']!!}" id="{!!$category['slug']!!}">{!!$category['caste_category']!!}</option>
+                        @endforeach
                    	</select>
                  </div>
              </div>
@@ -257,66 +250,17 @@
         $('select[name="final_status"]').find('option[value={!!$enquiryInfo['final_status']!!}]').attr("selected",true);
         $('select[name="diff_category"]').find('option[value={!!$enquiryInfo['diff_category']!!}]').attr("selected",true);
         //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
-        $("#diff_categories").change(function(){
-            if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","true");
-              $('#category').css('pointer-events','true');
-              $("#other_state").css("display","none");
-              $("#open").css("display","none")
-            }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Maharashtra")){
-                 $("#Cat").css("display","true");
-                 $('#category').css('pointer-events','none');
-                 $('#category').val('open');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled"  ) && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","none");
-             }else if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Other")){
-                  $("#Cat").css("display","true");
-               $('#category').val('other_state');
-               $('#category').css('pointer-events','none');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled" ) && ($('#state').val() == "Other" || $('#state').val() == "Maharashtra")){
-                  $("#Cat").css("display","none");
-                  $('#category').val('');
-             }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Other")){
-                    $("#Cat").css("display","true");
-                  $('#category').val('other_state');
-                  $('#category').css('pointer-events','none');
-             }else{
+   })
+   $("#state").change(function(){
+                  if($('#state').val() == "Maharashtra"){
+                      $("#other_state").css("display","none");
+                      $('#category').val('');
                       $('#category').css('pointer-events','true');
-                      $("#Cat").css("display","true");
-                      $('#category').css('pointer-events','true');
-             }
-          })
-          $("#state").change(function(){
-            if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","true");
-              $('#category').css('pointer-events','true');
-              $("#other_state").css("display","none");
-              $("#open").css("display","none")
-            }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Maharashtra")){
-                 $("#Cat").css("display","true");
-                 $('#category').css('pointer-events','none');
-                 $('#category').val('open');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled"  ) && ($('#state').val() == "Maharashtra")){
-                $('#category').val('');
-                $("#Cat").css("display","none");
-             }else if(($('#diff_categories').val() == "caste") && ($('#state').val() == "Other")){
-                  $("#Cat").css("display","true");
-               $('#category').val('other_state');
-               $('#category').css('pointer-events','none');
-             }else if(($('#diff_categories').val() == "defence" || $('#diff_categories').val() == "differently_abled" ) && ($('#state').val() == "Other" || $('#state').val() == "Maharashtra")){
-                  $("#Cat").css("display","none");
-                  $('#category').val('');
-             }else if(($('#diff_categories').val() == "na") && ($('#state').val() == "Other")){
-                  $('#category').val('other_state');
-                  $('#category').css('pointer-events','none');
-             }else{
-                      $('#category').css('pointer-events','true');
-                      $("#Cat").css("display","true");
-                      $('#category').css('pointer-events','true');
-             }
-          })
+                  }else{
+                    $("#other_state").css("display","true");
+                    $('#category').val('other_state');
+                    $('#category').css('pointer-events','none');
+                  }
+        })
 </script>
 @stop
