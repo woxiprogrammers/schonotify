@@ -16,7 +16,7 @@
 <section id="page-title" class="padding-top-100 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
-            <span class="mainDescription">Enquiry Form</span>
+            <span class="mainDescription">Waiting / Merit List Form</span>
         </div>
     </div>
 </section>
@@ -121,14 +121,14 @@
                </div>
                <div class="col-md-6">
                    <div class="form-group"> <!-- Date input -->
-                       <label class="control-label">State from which XII st. passed <span class="symbol required"></span></label>
-                        <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
-                        <option value="">Please select state</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Other">Other</option>
+                       <label class="control-label">SpecialCategory <span class="symbol required"></span></label>
+                       <select class="form-control" id="diff_category" name="diff_category" style="-webkit-appearance: menulist;">
+                               @foreach($extra_categories as $category)
+                                <option value="{!! $category['slug'] !!}">{!! $category['categories'] !!}</option>
+                               @endforeach
                        </select>
                    </div>
-              </div>
+               </div>
            </div>
            <div class="row">
              <div class="col-md-6">
@@ -151,14 +151,15 @@
           <div class="row">
             <div class="col-md-6">
                 <div class="form-group"> <!-- Date input -->
-                    <label class="control-label">Defence / Differently Abled Category <span class="symbol required"></span></label>
-                    <select class="form-control" id="diff_category" name="diff_category" style="-webkit-appearance: menulist;">
-                            @foreach($extra_categories as $category)
-                             <option value="{!! $category['slug'] !!}">{!! $category['categories'] !!}</option>
-                            @endforeach
+                    <label class="control-label">State from which XII st. passed <span class="symbol required"></span></label>
+                     <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
+                     <option value="">Please select state</option>
+                     <option value="Maharashtra">Maharashtra</option>
+                     <option value="Other">Other</option>
                     </select>
                 </div>
-            </div>
+           </div>
+
           </div>
             <div class="row">
                 <div class="col-md-6">

@@ -48,8 +48,8 @@
                             Class <span class="symbol required"></span>
                         </label>
                             <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
-                                <option value='FYBCOM'>FYBCOM.</option>
-                                <option value='FYBBA'>FYBBA.</option>
+                                <option value='FYBCOM'>FYBCOM</option>
+                                <option value='FYBBA'>FYBBA</option>
                                 <option value='FYBBAIB'>FYBBA(IB)</option>
                                 <option value='FYBBACA'>FYBBA(CA)</option>
                             </select>
@@ -117,29 +117,30 @@
                </div>
                <div class="col-md-6">
                    <div class="form-group"> <!-- Date input -->
-                       <label class="control-label">State from which XII st. passed <span class="symbol required"></span></label>
-                       <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
-                        <option value="">Please select state</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Other">Other</option>
-                       </select>
+                       <div class="form-group"> <!-- Date input -->
+                           <label class="control-label">Special Category <span class="symbol required"></span></label>
+                           <select class="form-control" id="diff_categories" name="diff_categories" style="-webkit-appearance: menulist;">
+                                   <option value="" selected>Please select category</option>
+                                   @foreach($extra_categories as $category)
+                                    <option value="{!! $category['slug'] !!}">{!! $category['categories'] !!}</option>
+                                   @endforeach
+                           </select>
+                       </div>
                    </div>
-              </div>
+               </div>
+
            </div>
            <div class="row">
              <div class="col-md-6">
                  <div class="form-group"> <!-- Date input -->
-                     <div class="form-group"> <!-- Date input -->
-                         <label class="control-label">Special Category <span class="symbol required"></span></label>
-                         <select class="form-control" id="diff_categories" name="diff_categories" style="-webkit-appearance: menulist;">
-                                 <option value="" selected>Please select category</option>
-                                 @foreach($extra_categories as $category)
-                                  <option value="{!! $category['slug'] !!}">{!! $category['categories'] !!}</option>
-                                 @endforeach
-                         </select>
-                     </div>
+                     <label class="control-label">State from which XII st. passed <span class="symbol required"></span></label>
+                     <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
+                      <option value="">Please select state</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Other">Other</option>
+                     </select>
                  </div>
-             </div>
+            </div>
              <div class="col-md-6" id="Cat">
                  <div class="form-group"> <!-- Date input -->
                      <label class="control-label">Caste Category<span class="symbol required"></span></label>
