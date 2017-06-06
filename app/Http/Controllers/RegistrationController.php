@@ -285,7 +285,7 @@ class RegistrationController extends Controller
             // return view('registration.admission-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'));
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','studentExtraInfo','studentFamilyInfo','studentSiblings','previousSchool','studentSpecialAptitudes','studentHobbies','documents','studentDocuments'))->render());
-            TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+            TCPDF::Output("First Year Waiting List Form".date('Y-m-d_H_i_s').".pdf", 'D');
         }catch(\Exception $e){
             $data = [
                 'action' => 'print Admission Form',

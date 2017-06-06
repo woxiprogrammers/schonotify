@@ -47,7 +47,7 @@
   <tr style="font-weight:bolder">
     <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->marks_obtained)}}</td><td  style="width:6%"></td>
     <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->outOf_marks)}}</td><td  style="width:6%"></td>
-    <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->percentage)}}</td><td  style="width:6%"></td>
+    <td style="border-bottom:1px solid black;width:20%">{{number_format($newEnquiry->percentage,2)}}</td><td  style="width:6%"></td>
     <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->board)}}</td>
   </tr>
   <tr style="font-size:10px">
@@ -90,8 +90,8 @@
                                        4) Differently abled certificate(if applicable) 5) Defence Certificate issued by Zilla Sainik Board ,Pune(if applicable)
 </span><br>
 <span  style="font-weight:bolder;font-size:10px">Important Notes:</span><br>
-<span style="font-size:9px;padding:5px">1. Once Category / Medium offered can not be changed.&nbsp;&nbsp;&nbsp;&nbsp;Student will offer one category at a time.
-<br>2. I know that this is a waitinglist form and not admission form.I will not claim over
+<span style="font-size:9px;padding:5px">1. Once offered Category / Medium offered can not be changed.&nbsp;&nbsp;&nbsp;&nbsp;Student can offer one category at a time.
+<br>2. I know that this is a waitinglist form and not admission form.I will not have claim over
 admission if I do not fulfill the terms and conditions.
 <br>3. Student has to mention all subject marks and not Best Four/Five marks.
 <br><span style="font-weight:bolder;">4. Kindly note that the Reserved Category students from other than Maharashtra State will not be considered for

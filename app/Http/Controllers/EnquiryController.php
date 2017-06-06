@@ -94,7 +94,7 @@ class EnquiryController extends Controller
           $newEnquiry['diff_category'] = ExtraCategories::where('slug',$newEnquiry['diff_category'])->pluck('categories');
           TCPDF::AddPage();
           TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
-          TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+          TCPDF::Output("First Year Waiting List Form".date('Y-m-d_H_i_s').".pdf", 'D');
           return redirect('/student-enquiry');
         }catch(\Exception $e){
             $data = [
@@ -147,7 +147,7 @@ class EnquiryController extends Controller
             $newEnquiry['diff_category'] = ExtraCategories::where('slug',$newEnquiry['diff_category'])->pluck('categories');
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
-            TCPDF::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+            TCPDF::Output("First Year Waiting List Form".date('Y-m-d_H_i_s').".pdf", 'D');
             return Redirect::back();
         }catch(\Exception $e){
             $data = [
@@ -235,7 +235,7 @@ class EnquiryController extends Controller
             $enquiryId = $now->year."-".str_pad($enquiryNumber,4,"0",STR_PAD_LEFT);
             TCPdf::AddPage();
             TCPdf::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry','enquiryId'))->render());
-            TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+            TCPdf::Output("First Year Waiting List Form".date('Y-m-d_H_i_s').".pdf", 'D');
             return redirect('/student-enquiry');
         }catch(\Exception $e){
             $data = [
