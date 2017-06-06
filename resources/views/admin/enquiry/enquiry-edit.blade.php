@@ -119,10 +119,10 @@
                        <input class="form-control" id="email" name="email" placeholder="Enter email" type="email"  value="{!!$enquiryInfo['email']!!}"/>
                    </div>
                </div>
-               <div class="col-md-6" id="toggle1" >
+               <div class="col-md-6">
                    <div class="form-group"> <!-- Date input -->
                        <label class="control-label">State from which XII st. passed <span class="symbol required"></span></label>
-                        <select class="form-control" id="state1" name="state" style="-webkit-appearance: menulist;" required>
+                        <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
                         <option value="">Please select state</option>
                         <option value="Maharashtra">Maharashtra</option>
                         <option value="Other">Other</option>
@@ -135,18 +135,9 @@
                  <div class="form-group"> <!-- Date input -->
                      <label class="control-label">Caste Category <span class="symbol required"></span></label>
                      <select class="form-control" name="category" id="category" style="-webkit-appearance: menulist;">
-                                   <option value="{!!$enquiryInfo['category']!!}" disabled>{!!$enquiryInfo['category']!!}</option>
-                                   <option value="SC">SC</option>
-                                   <option value="ST">ST</option>
-                                   <option value="VJA">VJ(A)</option>
-                                   <option value="NTB">NT(B)</option>
-                                   <option value="NTC">NT(C)</option>
-                                   <option value="NTD">NT(D)</option>
-                                   <option value="OBC">OBC</option>
-                                   <option value="SBC">SBC</option>
-                                   <option value="OPEN">OPEN</option>
-                                   <option value="MARATHAESBC">MARATHA(ESBC)</option>
-                                   <option value="MUSLIMSBCA">MUSLIM(SBC-A)</option>
+                       @foreach($categories as $category)
+                       <option value="{!!$category['slug']!!}" id="{!!$category['slug']!!}">{!!$category['caste_category']!!}</option>
+                        @endforeach
                    	</select>
                  </div>
              </div>
@@ -172,7 +163,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group"> <!-- Date input -->
-                        <label class="control-label">Mobile Number <span class="symbol required"></span></label>>
+                        <label class="control-label">Mobile Number <span class="symbol required"></span></label>
                         <input class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile Number" type="text" value="{!!$enquiryInfo['mobile']!!}"/>
                     </div>
                 </div>
@@ -259,7 +250,8 @@
         $('select[name="final_status"]').find('option[value={!!$enquiryInfo['final_status']!!}]').attr("selected",true);
         $('select[name="diff_category"]').find('option[value={!!$enquiryInfo['diff_category']!!}]').attr("selected",true);
         //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
-        $("#state").change(function(){
+   })
+   $("#state").change(function(){
                   if($('#state').val() == "Maharashtra"){
                       $("#other_state").css("display","none");
                       $('#category').val('');
