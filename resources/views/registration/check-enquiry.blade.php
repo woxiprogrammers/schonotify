@@ -16,7 +16,7 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
-                            <span class="mainDescription">Enquiry Form</span>
+                            <span class="mainDescription">Waiting/Merit Form</span>
                         </div>
                     </div>
                 </section>
@@ -30,9 +30,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label  class="control-label">
-                                        Enter Enquiry Number
+                                        Enter Waiting/Merit Form Number
                                     </label>
-                                    <input type="text" placeholder="Enter enquiry number" class="form-control" name="enquiry_number" id="enquiry_number"/>
+                                    <input type="text" placeholder="Enter Waiting/Merit Form Number" class="form-control" name="enquiry_number" id="enquiry_number"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
