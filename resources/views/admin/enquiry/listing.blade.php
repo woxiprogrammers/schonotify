@@ -8,7 +8,7 @@
 <!--<![endif]-->
 <!-- start: HEAD -->
 <head>
-    <title>VEZA- Enquiry Listing</title>
+    <title>VEZA- Waiting/Merit Form Listing</title>
     <!-- start: META -->
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
     <meta charset="utf-8" />
@@ -58,7 +58,7 @@
 <div class="container-fluid container-fullw bg-white">
 <div class="row">
 <div class="col-md-12">
-<h5 class="over-title margin-bottom-15"><h2>Enquiry Listing</h2></h5>
+<h5 class="over-title margin-bottom-15"><h2>Waiting/Merit Listing</h2></h5>
     @include('alerts.errors')
 <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
 <thead>

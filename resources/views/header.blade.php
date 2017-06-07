@@ -22,7 +22,7 @@
     <!-- start: NAVBAR COLLAPSE -->
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-right">
-
+<!--
             <li class="dropdown">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
                     <span class="badge partition-red">12</span> <i class="ti-bell"></i> <span>Notifications</span>
@@ -89,7 +89,7 @@
                     </li>
                 </ul>
             </li>
-
+-->
             @if($user->role_id == 1)
             <li class="dropdown">
             </li>
@@ -132,10 +132,10 @@
             <!-- start: USER OPTIONS DROPDOWN -->
             <li class="dropdown current-user">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
-                    <img class ="profile-image-new" src="/uploads/profile-picture/{!! $user->avatar !!}" alt="Peter"> <span class="username">{!! $user->username !!}</span><i class="ti-angle-down"></i></i></span>
+                <span class="username">{!! $user->username !!}</span><i class="ti-angle-down"></i></i></span>
                 </a>
                 <ul class="dropdown-menu dropdown-dark">
-                    <li>
+                    <!--<li>
                         <a href="/myProfile">
                             My Profile
                         </a>
