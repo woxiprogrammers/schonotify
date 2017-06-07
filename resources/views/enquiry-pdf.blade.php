@@ -106,8 +106,8 @@ admission if I do not fulfill the terms and conditions.
 <hr>
 <h2 style="text-align:center">Receipt</h2>
 <div style="text-align:right">Form No : <b>{{ucwords($newEnquiry->form_no)}}</b></div>
-<p>Received from Mr. /Miss <u>  {{ucwords($newEnquiry->last_name)}}  {{ucwords($newEnquiry->first_name)}}  {{ucwords($newEnquiry->middle_name)}} </u>
-   the<u> waiting/Merit List </u> form for  <u>{{ucwords($newEnquiry->class_applied)}}</u>  Class for 2017-2018.</p>
+<p>Received from Mr. /Miss <u><b>  {{ucwords($newEnquiry->last_name)}}  {{ucwords($newEnquiry->first_name)}}  {{ucwords($newEnquiry->middle_name)}} </b></u>
+   the<u> Waiting/Merit List </u> form for  <u><b>{{ucwords($newEnquiry->class_applied)}}</b></u>  Class for 2017-2018.</p>
 Date : <b>{{ucwords($newEnquiry->date)}}</b><div style="text-align:right">Signature Of Clerk</div>
 
 

@@ -12,7 +12,7 @@
                   <i class="fa fa-phone" aria-hidden="true"></i>
               </div>
               <div class="item-inner">
-                  <span class="title">Admission Enquiry Form </span><i class="icon-arrow"></i>
+                  <span class="title">Manage Waiting/Merit List  </span><i class="icon-arrow"></i>
               </div>
           </div>
       </a>
@@ -21,14 +21,14 @@
           <li>
               <a href="/student-enquiry">
                   <div class="item-inner">
-                      <span class="title"> Enquiry Form </span>
+                      <span class="title"> Waiting/Merit List Form </span>
                   </div>
               </a>
           </li>
           <li>
               <a href="/manage">
                   <div class="item-inner">
-                      <span class="title"> Enquiry Listing </span>
+                      <span class="title"> Waiting/Merit Listing </span>
                   </div>
               </a>
           </li>
