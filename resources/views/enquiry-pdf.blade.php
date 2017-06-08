@@ -61,8 +61,8 @@
 <table style="text-align:center;font-size:13px">
   <tr style="font-weight:bolder">
     <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->state)}}</td><td  style="width:6%"></td>
-    <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->diff_category)}}</td><td  style="width:6%"></td>
-    <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->category)}}</td><td  style="width:6%"></td>
+    <td style="border-bottom:1px solid black;width:20%">{{$newEnquiry->diff_category}}</td><td  style="width:6%"></td>
+    <td style="border-bottom:1px solid black;width:20%">{{$newEnquiry->category}}</td><td  style="width:6%"></td>
     <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->caste)}}</td>
   </tr>
   <tr style="font-size:10px">
@@ -90,7 +90,7 @@
                                        4) Differently abled certificate(if applicable) 5) Defence Certificate issued by Zilla Sainik Board ,Pune(if applicable)
 </span><br>
 <span  style="font-weight:bolder;font-size:10px">Important Notes:</span><br>
-<span style="font-size:9px;padding:5px">1. Once offered Category / Medium offered can not be changed.&nbsp;&nbsp;&nbsp;&nbsp;Student can offer one category at a time.
+<span style="font-size:9px;padding:5px">1. Once offered Category / Medium can not be changed.&nbsp;&nbsp;&nbsp;&nbsp;Student can offer one category at a time.
 <br>2. I know that this is a waitinglist form and not admission form.I will not have claim over
 admission if I do not fulfill the terms and conditions.
 <br>3. Student has to mention all subject marks and not Best Four/Five marks.
