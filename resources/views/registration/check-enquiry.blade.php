@@ -32,7 +32,7 @@
                                     <label  class="control-label">
                                         Enter Waiting/Merit Form Number
                                     </label>
-                                    <input type="text" placeholder="Enter Waiting/Merit Form Number" class="form-control" name="enquiry_number" id="enquiry_number"/>
+                                    <input type="text" placeholder="Enter Waiting/Merit Form Number" class="form-control" name="enquiry_number" id="enquiry_number" required/>
                                 </div>
                             </div>
                             <div class="col-md-6">
