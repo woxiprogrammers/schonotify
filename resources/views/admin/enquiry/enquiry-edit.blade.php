@@ -151,11 +151,11 @@
           <div class="row">
             <div class="col-md-6">
                 <div class="form-group"> <!-- Date input -->
-                    <label class="control-label">State from which XII st. passed <span class="symbol required"></span></label>
+                    <label class="control-label">State from which XII Std. passed <span class="symbol required"></span></label>
                      <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
                      <option value="">Please select state</option>
                      <option value="Maharashtra">Maharashtra</option>
-                     <option value="Other">Other</option>
+                     <option value="Other State">Other State</option>
                     </select>
                 </div>
            </div>
