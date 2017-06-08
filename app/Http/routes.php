@@ -487,12 +487,8 @@
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
-
-
     Route::get('get-acl-details','api\MessageController@getAclDetails');
     Route::get('get-switching-details','api\UserController@getSwitchingDetails');
-
-
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
     Route::post('homework-create','api\HomeworkController@createHomework');
