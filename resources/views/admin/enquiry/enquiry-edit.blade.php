@@ -28,9 +28,9 @@
         </button>
     </div>
 <div class="col-md-12">
+    <input type="hidden" value="{!!$enquiryInfo['final_status']!!}" name="check" id="check">
     <form method="post" action="edit-enquiry" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true">
         <input type="hidden" value="{!!$enquiryInfo['id']!!}" name="id">
-        <input type="hidden" value="{!!$enquiryInfo['final_status']!!}" name="check" id="check">
         <fieldset>
             <div class="row">
                 <div class="col-md-6">
@@ -251,7 +251,7 @@
         $('select[name="diff_category"]').find('option[value={!!$enquiryInfo['diff_category']!!}]').attr("selected",true);
         if($('#check').val() == "fail"){
           $('#status').prop("checked",true);
-        }else{
+        }else if($('#check').val() == "pass"){
             $('#final').prop("checked",true);
         }
         //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
