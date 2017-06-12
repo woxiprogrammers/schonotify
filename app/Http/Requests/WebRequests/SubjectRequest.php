@@ -1,13 +1,10 @@
 <?php
-
 namespace App\Http\Requests\WebRequests;
-
 use App\Http\Requests\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-
 class SubjectRequest extends Request
 {
     /**
@@ -26,13 +23,10 @@ class SubjectRequest extends Request
             ->select('users.id','acl_master.slug as acl','modules.slug as module_slug')
             ->get();
         $resultArr=array();
-
-
         foreach($val1 as $val)
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
         }
-
         switch($ch)
         {
             case 'GET':
@@ -43,13 +37,9 @@ class SubjectRequest extends Request
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::to('/');
                 }
-
                 break;
-
             case 'PUT':
-                dd('put');
                 break;
-
             case 'POST':
                 if(in_array('create_subject',$resultArr)) {
                     return true;
@@ -77,7 +67,7 @@ class SubjectRequest extends Request
             case 'GET': return [];
                 break;
             case 'POST':return [
-                'subject_name'=>'required|min:1|unique:subjects',
+                'subject_name'=>'required|min:1',
                 'class'=>'required|min:1'
             ];
                 break;

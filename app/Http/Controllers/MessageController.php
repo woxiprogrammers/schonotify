@@ -26,7 +26,6 @@ class MessageController extends Controller
 
     }
     public function getMessageCount(Request $request){
-      dd($request->all())
         $userId = Auth::user()->id;
         $unreadMsgCount=Message::where('to_id',$userId)->where('read_status',0)->count();
         return $unreadMsgCount;
