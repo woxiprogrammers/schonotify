@@ -76,7 +76,14 @@
         <td>{!! $enquiry['form_no'] !!}</td>
         <td>{!! $enquiry['first_name'] !!} &nbsp;&nbsp;{!! $enquiry['last_name'] !!}</td>
         <td>{!! $enquiry['action'] !!}</td>
-        <td>{!! $enquiry['final_status'] !!}</td>
+        @if($enquiry['final_status'] != null)
+          @if($enquiry['final_status'] == 'fail')
+            <td>Disapprove</td>
+          @else
+            <td>Approve</td>
+          @endif
+          @else <td></td>
+        @endif
     </tr>
     @endforeach
 </tbody>

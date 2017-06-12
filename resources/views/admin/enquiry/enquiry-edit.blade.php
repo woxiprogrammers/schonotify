@@ -30,6 +30,7 @@
 <div class="col-md-12">
     <form method="post" action="edit-enquiry" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true">
         <input type="hidden" value="{!!$enquiryInfo['id']!!}" name="id">
+        <input type="hidden" value="{!!$enquiryInfo['final_status']!!}" name="check" id="check">
         <fieldset>
             <div class="row">
                 <div class="col-md-6">
@@ -187,11 +188,10 @@
           <div class="row">
               <div class="col-md-12">
                   <div class="form-group">
-                          <select class="form-control" id="final_status" name="final_status" style="-webkit-appearance: menulist;">
-                              <option value="{!!$enquiryInfo['final_status']!!}" disabled>{!!$enquiryInfo['final_status']!!}</option>
-                              <option value='pass'>Pass</option>
-                              <option value='fail'>Fail</option>
-                          </select>
+                    <input type="radio" class="final" id="final" name="final_status" value='pass'/>
+                    <label for="final"><span></span>Approve</label>
+                    <input type="radio" class="status" id="status" name="final_status" value='fail'/>
+                    <label for="status"><span></span>Disapprove</label>
                   </div>
               </div>
           </div>
@@ -248,10 +248,15 @@
         $('select[name="state"]').find('option[value={!!$enquiryInfo['state']!!}]').attr("selected",true);
         $('select[name="category"]').find('option[value={!!$enquiryInfo['category']!!}]').attr("selected",true);
         $('select[name="examination_year"]').find('option[value={!!$enquiryInfo['examination_year']!!}]').attr("selected",true);
-        $('select[name="final_status"]').find('option[value={!!$enquiryInfo['final_status']!!}]').attr("selected",true);
         $('select[name="diff_category"]').find('option[value={!!$enquiryInfo['diff_category']!!}]').attr("selected",true);
+        if($('#check').val() == "fail"){
+          $('#status').prop("checked",true);
+        }else{
+            $('#final').prop("checked",true);
+        }
         //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
    })
+
    $("#state").change(function(){
                   if($('#state').val() == "Maharashtra"){
                       $("#other_state").css("display","none");

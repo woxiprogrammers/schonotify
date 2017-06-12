@@ -161,6 +161,7 @@ class EnquiryController extends Controller
         try{
             $user = Auth::User();
             $enquiryData = EnquiryFormClg::orderBy('id','DESC')->get()->toArray();
+
             $masterEnquiry = array();
             foreach($enquiryData as $enquiry){
                 $now = Carbon::now();
@@ -199,7 +200,7 @@ class EnquiryController extends Controller
     }
     public function editEnquiry(Request $request){
         try{
-        $enquiryData = $request->all();
+            $enquiryData = $request->all();
             $enquiryData['address'] = ltrim($enquiryData['address']);
             $enquiryData['medium'] = trim($enquiryData['medium']);
             $enquiryData['first_name'] = trim($enquiryData['first_name']);
