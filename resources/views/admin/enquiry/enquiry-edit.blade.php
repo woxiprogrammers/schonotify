@@ -156,7 +156,7 @@
                      <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
                      <option value="">Please select state</option>
                      <option value="Maharashtra">Maharashtra</option>
-                     <option value="Other State">Other State</option>
+                     <option id="xyz" value="Other State">Other State</option>
                     </select>
                 </div>
            </div>
@@ -245,7 +245,7 @@
         $('select[name="medium"]').find('option[value={!!$enquiryInfo['medium']!!}]').attr("selected",true);
         $('select[name="class_applied"]').find('option[value={!!$enquiryInfo['class_applied']!!}]').attr("selected",true);
         $('select[name="country"]').find('option[value={!!$enquiryInfo['country']!!}]').attr("selected",true);
-        $('select[name="state"]').find('option[value={!!$enquiryInfo['state']!!}]').attr("selected",true);
+        $('select[name="state"]').find('option[value="{!!$enquiryInfo['state']!!}"]').attr("selected",true);
         $('select[name="category"]').find('option[value={!!$enquiryInfo['category']!!}]').attr("selected",true);
         $('select[name="examination_year"]').find('option[value={!!$enquiryInfo['examination_year']!!}]').attr("selected",true);
         $('select[name="diff_category"]').find('option[value={!!$enquiryInfo['diff_category']!!}]').attr("selected",true);
