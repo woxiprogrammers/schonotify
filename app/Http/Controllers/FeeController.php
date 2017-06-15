@@ -226,7 +226,7 @@ class FeeController extends Controller
 
     public function billiingPageView(){
         try{
-            $bodies = Body::get()->toArray();
+            $bodies = Body::where('id',1)->get()->toArray();             // Only for Ganesh International School
             return view('fee.FeeBillingPage')->with(compact('bodies'));
         }catch (\Exception $e){
             $data = [
@@ -250,7 +250,7 @@ class FeeController extends Controller
                 ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
                 ->first();
             if($student == null){
-                return response()->json("Enter valid data.",400);
+                return response()->json("GR number not found",400);
             }else{
                 $student = $student->toArray();
             }

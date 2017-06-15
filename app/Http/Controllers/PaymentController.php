@@ -31,12 +31,12 @@ class PaymentController extends Controller
                 NetBankingTransaction::where('id', 1)->update(['transactions_count' => $referenceId]);
             }
             $crn = $referenceId+1;
-            $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|1.0";//.$data['amount'];
+            $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
             $paramArr = array(
                 "CID=".env('EASY_PAY_CORPORATE_CODE'),
                 "RID=".$referenceId,
                 "CRN=".$crn,
-                "AMT=1.0",//$request->amount,
+                "AMT=".$request->amount,
                 "VER=".env('EASY_PAY_VERSION'),
                 "TYP=".env('EASY_PAY_TYPE'),
                 "CNY=INR",
@@ -89,11 +89,11 @@ class PaymentController extends Controller
             if($newResponse['RMK'] == 'success' || $newResponse == 'SUCCESS'){
                 $data['message_title'] = 'Payment Successful.';
                 $data['color'] = 'green';
-                $data['message'] = 'Following are details of your transaction. Your account will be updated after admin confirms your payment';
+                $data['message'] = 'Following are details of your transaction. Fees will be updated against the student after admin confirmation.';
             }else{
                 $data['message_title'] = 'Payment Failed.';
                 $data['color'] = 'red';
-                $data['message'] = 'Your Transaction has been failed.';
+                $data['message'] = 'Your transaction has been failed. Following are details of your transaction.';
             }
             $data['transaction_id'] = $newResponse['TRN'];
             $data['reference_id'] = $newResponse['RID'];
