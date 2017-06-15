@@ -76,7 +76,15 @@
         Route::get('classes',array('uses' => 'FeeController@classesView'));
         Route::get('feeListingTable',array('uses' => 'FeeController@feeListingTableView'));
         Route::post('transactions',array('uses' => 'FeeController@createTransactions'));
+        Route::get('billing-page',array('uses' => 'FeeController@billiingPageView'));
+        Route::post('get-student-details',array('uses' => 'FeeController@getStudentDetails'));
     });
+
+    Route::group(['prefix' => 'payment'],function(){
+        Route::post('make-payment',array('uses'=>'PaymentController@billPayment'));
+        Route::get('payment-return',array('uses'=>'PaymentController@billReturnUrl'));
+    });
+
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
 
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
