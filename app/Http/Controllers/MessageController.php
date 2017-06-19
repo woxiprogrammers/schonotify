@@ -30,8 +30,6 @@ class MessageController extends Controller
         $unreadMsgCount=Message::where('to_id',$userId)->where('read_status',0)->count();
         return $unreadMsgCount;
     }
-
-
     public function getUnreadMessageListing(Request $request){
         $userId = Auth::user()->id;
         $senderArray = array();
@@ -44,7 +42,6 @@ class MessageController extends Controller
         $messagesLists = array();
         $profileImagePath = URL::asset(env('PROFILE_IMAGE_UPLOAD'));
         $ProfileDirectory = $profileImagePath . "/";
-
         foreach($messageContactLists as $messageList){
             $messages = Message::where('to_id',$userId)
                 ->where('read_status',0)
@@ -62,9 +59,7 @@ class MessageController extends Controller
             array_push($messagesLists,$message);
         }
         return $messagesLists;
-
     }
-
     public function getMessageList(){
         $userId = Auth::user()->id;
         $senderArray = array();
@@ -80,9 +75,7 @@ class MessageController extends Controller
         $messagesLists = array();
         $profileImagePath = URL::asset(env('PROFILE_IMAGE_UPLOAD'));
         $ProfileDirectory = $profileImagePath . "/";
-
         foreach($messageContactLists as $messageList){
-
             $message['user_id'] = $messageList['id'];
             $userRoleId = User::where('id',$messageList['id'])->select('role_id')->first();
             $userRole = UserRoles::where('id',$userRoleId->role_id)->select('name')->first();
@@ -104,11 +97,7 @@ class MessageController extends Controller
             ->update(['read_status' => 1]);
         return $messagesLists;
     }
-
-
-
     public function sendMessage(Request $request){
-
         if($request->ajax()){
            $data = $request->all();
             $userId = Auth::user()->id;
@@ -121,9 +110,7 @@ class MessageController extends Controller
             $newMessage = Message::insert($messageData);
             $messagesLists = $this->getDetailMessageListing($userId,$data['id']);
             return $messagesLists;
-
         }
-
     }
     public function getDetailMessageListing($sender,$receiver){
         $message = array();
@@ -153,7 +140,6 @@ class MessageController extends Controller
         }
         return $messagesLists;
     }
-
     public function composeMessage(Requests\WebRequests\MessageRequest $request){
         try{
         $data = $request->all();
@@ -170,7 +156,6 @@ class MessageController extends Controller
         }catch (Exception $e){
             Session::flash('message-error',  "Message Not Successfully send");
             return Redirect::back();
-
         }
     }
 }

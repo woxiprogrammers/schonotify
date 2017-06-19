@@ -1,15 +1,10 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
     @include('sidebar')
-
     <div class="app-content">
         <!-- start: TOP NAVBAR -->
         @include('header')
-
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
             <div class="wrap-content container" id="container">
@@ -44,62 +39,25 @@
                 <!-- end: DASHBOARD TITLE -->
                 <div class="container-fluid container-fullw bg-white">
                     <div class="row">
-
                         <div class="col-md-12" id="tableContent2">
-
                             <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
                                 <thead>
                                 <tr>
                                     <th>Subject Title</th>
                                     <th>Action</th>
-
                                 </tr>
                                 </thead>
                                 <tbody>
+                                   @foreach($results as $rows)
                                    <tr>
-                                       <td>Marathi</td>
+                                       <td>{!!$rows['subject_name']!!}</td>
                                        <td><a class="btn btn-default"> View More </a></td>
                                    </tr>
-                                   <tr>
-                                       <td>Maths</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Hindi</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
-                                   <tr>
-                                       <td>History</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Biology</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
-                                   <tr>
-                                       <td>English</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Sanskrit</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Geography</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
-                                   <tr>
-                                       <td>Science</td>
-                                       <td><a class="btn btn-default"> View More </a></td>
-                                   </tr>
+                                   @endforeach
                                 </tbody>
-
                             </table>
-
                         </div>
-
                     </div>
-
                 </div>
                 <!-- start: FOURTH SECTION -->
                 @include('rightSidebar')
@@ -107,13 +65,7 @@
             </div>
         </div>
     </div>
-
     @include('footer')
-
     @include('searchJS')
-
 </div>
 @stop
-
-
-

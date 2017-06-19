@@ -1149,14 +1149,13 @@ var FormValidator = function () {
                     remote: {
                         url: "/check-subject",
                         type: "GET"
-
                     }
                 }
             },
             messages: {
                 subject_name:{
                     required:"Please enter subject title.",
-                    remote:"The subject name has already been taken !"
+										remote:"Subject already exists"
                 },
                 'class[]':{
                     required:"Please select atleast one class",

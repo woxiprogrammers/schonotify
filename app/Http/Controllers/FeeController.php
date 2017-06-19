@@ -20,7 +20,9 @@ use App\StudentFee;
 use App\StudentFeeConcessions;
 use App\TransactionDetails;
 use App\User;
+use App\PushToken;
 use Carbon\Carbon;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\Installments;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -33,6 +35,7 @@ use Illuminate\Support\Facades\Session;
 
 class FeeController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct()
     {
         $this->middleware('db');
@@ -218,6 +221,10 @@ class FeeController extends Controller
             return view('fee.feetable')->with(compact('fees'));
         }
     }
+    /**
+     * Function createTransactions()
+     * Developed By Shubham Chaudhari
+     */
     public function createTransactions(Request $request)
     {    $user=$request->student_id;
          $fee_id=StudentFee::where('student_id',$user)->pluck('fee_id');
@@ -230,15 +237,17 @@ class FeeController extends Controller
          $transaction_details['date']=$request->date;
          $transaction_details['installment_id']=$request->installment_id;
          $query=TransactionDetails::create($transaction_details);
-         if($query)
-         {
+         if($query){
              Session::flash('message-success','Fee transaction created successfully');
+             $title="Fee payment";
+             $message="Payment of Rs".$request->transaction_amount."received by school.";
+             $allUser=0;
+             $users_push=User::where('id',$request->student_id)->pluck('parent_id');
+             $push_users=PushToken::where('user_id',$users_push)->lists('push_token');
+             $this->CreatePushNotification($title,$message,$allUser,$push_users);
          }
-
         return redirect('/edit-user/'.$user);
     }
-
-
     /**
      * Function getStudentDetails()
      * Developed By Ameya Joshi

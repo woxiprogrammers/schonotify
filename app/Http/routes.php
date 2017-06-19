@@ -487,12 +487,8 @@
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
-
-
     Route::get('get-acl-details','api\MessageController@getAclDetails');
     Route::get('get-switching-details','api\UserController@getSwitchingDetails');
-
-
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
     Route::post('homework-create','api\HomeworkController@createHomework');
@@ -524,6 +520,7 @@
         Route::post('edit-achievement','api\NoticeBoardController@editAchievement');
         Route::post('publish-achievement','api\NoticeBoardController@publishAchievement');
         Route::get('view-announcement/{id}','api\NoticeBoardController@viewAnnouncement');
+        Route::get('request-to-publish-announcement/{id}','api\NoticeBoardController@requestToPublishAnnouncement');
 
         //Result
         Route::get('view-result/{id}','api\ResultController@viewResult');
@@ -545,6 +542,9 @@
         Route::get('get-year-month','api\EventController@getYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
+
+        //Fees
+        Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
 
         //Push
         Route::post('save-push','api\UserController@savePushToken');

@@ -14,6 +14,11 @@ use App\PushToken;
 use App\SubjectClassDivision;
 use App\TeacherView;
 use App\User;
+use App\StudentFee;
+use App\StudentFeeConcessions;
+use App\FeeInstallments;
+use App\fee_installments;
+use App\fee_particulars;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -364,6 +369,39 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
+    public function studentInstallmentview(Request $request,$id,$student_id)
+    {
+      try{
+           $installment_data = array();
+           $student_fee=StudentFee::where('student_id',$student_id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toArray();
+           foreach($student_fee as $key => $a){
+               $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->where('installment_id',$id)->select('particulars_id','amount')->get()->toarray();
+           }
+           $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
+            if(!empty($installment_info)){
+                 $iterator = 0;
+                 foreach($installment_info as $i){
+                   $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
+                   $iterator++;
+               }
+               $sum=array_sum(array_column($installment_info,'amount'));
+               $installment_data= $installment_info;
+               $installment_data['total']=$sum;
+              }
+               $message = "suceess";
+               $status=200;
+           }catch (\Exception $e){
+               echo $e->getMessage();
+               $status = 500;
+               $message = "something went wrong";
+           }
+           $response = [
+               "message" => $message,
+               "status" => $status,
+               "data" => $installment_data,
+           ];
+           return response($response);
+    }
     public function getSwitchingDetails(Request $request){
         try{
             $data=$request->all();
@@ -375,7 +413,13 @@ class UserController extends Controller
                                  {
                                      $finalData['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
                                      $finalData['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
-                                     $finalData['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
+                                     $division_name=Division::where('id',$val->division_id)->pluck('division_name');
+                                     $class=Division::where('id',$val->division_id)->pluck('class_id');
+                                     $class_name=Classes::where('id',$class)->pluck('class_name');
+                                     $finalData['Parent_student_relation']['Students'][$i]['class_name']=$class_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_div']=$division_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['last_name']=$val->last_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['roll_number']=$val->roll_number;
                                        $i++;
                                  }
             $message="Successfully Listed";

@@ -10,6 +10,7 @@ use App\EventImages;
 use App\EventUserRoles;
 use App\ModuleAcl;
 use App\User;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\File;
 
 class NoticeBoardController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct(Request $request)
     {
        $this->middleware('db');
@@ -152,15 +154,20 @@ class NoticeBoardController extends Controller
 
     }
     public  function publishAchievement(Request $request){
-        $data=$request->all();
         try{
+            $data=$request->all();
             $editAchievement['title'] = $data['title'];
             $editAchievement['detail'] = $data['detail'];
             $editAchievement['status'] = $data['status'];
             $update=Event::where('id',$data['event_id'])->update($editAchievement);
             $message="Achievement published successfully";
             $status=200;
-
+            $title="New Achievement created";
+            $message=$editAchievement['title'] = $data['title'];
+            $allUser=1;
+            $users_push=0;
+            $push_users=0;
+            $this->CreatePushNotification($title,$message,$allUser,$push_users);
         }catch (\Exception $e){
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
@@ -180,7 +187,6 @@ class NoticeBoardController extends Controller
             $update=Event::where('id',$data['event_id'])->update($editAchievement);
             $message="Achievement updated successfully";
             $status=200;
-
         }catch (\Exception $e){
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
@@ -191,46 +197,32 @@ class NoticeBoardController extends Controller
         ];
         return response($response);
     }
-    public function viewAnnouncement(Requests\ViewAnnouncement $request)
+    public function requestToPublishAnnouncement(Request $request,$id){
+      $announcement['status']=1;
+      $query = Event::where('id',$id)->update($announcement);
+      if($query == 1){
+        $status = 200;
+        $message = "Publish request sent to admin successfully !";
+      }else{
+        $status = 500;
+        $message = "Something went wrong !";
+      }
+      $response = [
+          "message" => $message,
+          "status" =>$status
+      ];
+      return response($response);
+    }
+    public function viewAnnouncement(Request $request,$id)
     {
-       /*$data=$request->all();
-        try{
-            $user =User::where('remember_token',$data['token'])->first();
-            $unreadAnnouncement =Announcement::where('user_id', '=',$user['id'])
-                ->get();
-            $unreadAnnouncementArray=$unreadAnnouncement->toArray();
-            $i=0;
-
-                $unreadAnnouncementData[$i]['event_id']=$value['event_id'];
-                $event =Event::where('id', '=',$value['event_id'])->first();
-                $user=User::where('id', '=',$event ['user_id'])->first();
-                if($user!=null){
-                    $unreadAnnouncementData[$i]['created_by']=$user['first_name']." ".$user['last_name'];
-                }else{
-                    $unreadAnnouncementData[$i]['created_by']=null;
-                }
-                $unreadAnnouncementData[$i]['title']=$event['title'];
-                $unreadAnnouncementData[$i]['detail']=$event['detail'];
-                $unreadAnnouncementData[$i]['date']=$event['date'];
-                $i++;
-
-            $status = 200;
-            $message = "Success";
-            $responseData=$unreadAnnouncementData;
-        }catch (\Exception $e) {
-                $status = 500;
-                $message = "Something went wrong"  .  $e->getMessage();
-            }
-        $response = [
-            "message" => $message,
-            "status" =>$status,
-            "data" => $responseData
-        ];*/
-        $event =Event::where('event_type_id',1)->
-                        whereIn('status',[0,1,2])->get()->toArray();
+        $eventNotPublished = Event::where('event_type_id',1)->
+                        whereIn('status',[0,1])->where('created_by',$id)->orderBy('id','desc')->get()->toArray();
+        $eventPublished = Event::where('event_type_id',1)->
+                        where('status',2)->orderBy('id','desc')->get()->toArray();
+        $event = array_merge($eventNotPublished,$eventPublished);
         foreach($event as $key => $val){
-            $event[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
-            $event[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first();
+            $event[$key]['createdBy'] = User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+            $event[$key]['publishedBy'] = User::where('id',$val['published_by'])->select('first_name','last_name')->first();
             if(!empty($event[$key]['publishedBy'])){
                 $event[$key]['publishedBy']->toArray();
             }

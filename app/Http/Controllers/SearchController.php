@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Batch;
 use App\Classes;
 use App\Division;
+use App\Subject;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
@@ -245,7 +246,7 @@ class SearchController extends Controller
 
 
         }
-       
+
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
 
         $str.="<thead><tr>";
@@ -380,7 +381,6 @@ class SearchController extends Controller
         $user=Auth::User();
         $result= Batch::where('body_id','=',$user->body_id)
             ->get();
-
         return view('admin.searchBatch')->with('results',$result);
     }
 
@@ -398,6 +398,8 @@ class SearchController extends Controller
 
     public function searchSubjects()
     {
-        return view('admin.searchSubjects');
+         $body_id = Auth::user()->body_id;
+         $result=Subject::where('body_id',$body_id)->get()->toArray();
+         return view('admin.searchSubjects')->with('results',$result);
     }
 }

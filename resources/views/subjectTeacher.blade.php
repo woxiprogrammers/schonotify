@@ -1,15 +1,10 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
     @include('sidebar')
-
     <div class="app-content">
         <!-- start: TOP NAVBAR -->
         @include('header')
-
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
             <div class="wrap-content container" id="container">
@@ -21,10 +16,8 @@
                         <div class="col-sm-7">
                             <h1 class="mainTitle">Assign Subject</h1>
                         </div>
-
                     </div>
                 </section>
-
                 <div class="container-fluid container-fullw">
                     <div class="row">
                         <div class="col-md-11 col-md-offset-1">
@@ -344,5 +337,3 @@
 </script>
 
 @stop
-
-
