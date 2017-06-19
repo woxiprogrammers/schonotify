@@ -520,6 +520,7 @@
         Route::post('edit-achievement','api\NoticeBoardController@editAchievement');
         Route::post('publish-achievement','api\NoticeBoardController@publishAchievement');
         Route::get('view-announcement/{id}','api\NoticeBoardController@viewAnnouncement');
+        Route::get('request-to-publish-announcement/{id}','api\NoticeBoardController@requestToPublishAnnouncement');
 
         //Result
         Route::get('view-result/{id}','api\ResultController@viewResult');
@@ -541,6 +542,9 @@
         Route::get('get-year-month','api\EventController@getYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
+
+        //Fees
+        Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
 
         //Push
         Route::post('save-push','api\UserController@savePushToken');

@@ -34,7 +34,7 @@ class TimetableController extends Controller
     */
     public function getBatches(Request $requests)
     {
-        try{
+      try{
             $batches = array();
             $data=$requests->all();
             $teacherId = UserRoles::where('slug',['teacher'])->pluck('id');

@@ -7,6 +7,7 @@
     use App\Division;
     use App\Event;
     use App\EventImages;
+    use App\PushToken;
     use App\EventUserRoles;
     use App\Http\Controllers\CustomTraits\PushNotificationTrait;
     use App\Http\Requests\WebRequests\CreateAchievementRequest;
@@ -963,7 +964,7 @@
                     $message=$request->title;
                     $allUser=0;
                     $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
-                    $push_users=PushNotificationTrait::whereIn('user_id',$users_push)->lists('push_token');
+                    $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
                         $this->CreatePushNotification($title,$message,$allUser,$push_users);
                 }
                 if($eventId != null) {
