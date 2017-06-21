@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\api;
 use App\Announcement;
 use App\Batch;
+use App\PushToken;
 use App\Classes;
 use App\Division;
 use App\Event;
 use App\EventImages;
 use App\EventUserRoles;
 use App\ModuleAcl;
-use App\User;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -20,7 +21,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-
 
 class NoticeBoardController extends Controller
 {
@@ -35,6 +35,22 @@ class NoticeBoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function requestToPublishAnnouncement(Request $request,$id){
+          $announcement['status']=1;
+          $query = Event::where('id',$id)->update($announcement);
+            if($query == 1){
+                $status = 200;
+                $message = "Publish request sent to admin successfully !";
+            }else{
+                $status = 500;
+                $message = "Something went wrong !";
+           }
+            $response = [
+                "message" => $message,
+                "status" =>$status
+            ];
+      return response($response);
+     }
     public function announcementCreate(Request $request){
         $data=$request->all();
         $module_id=13;
@@ -67,10 +83,11 @@ class NoticeBoardController extends Controller
                 EventUserRoles::insert($announcementData);
             }
             $status=200;
-            $message="Announcement Created successfully !";
+            $message="Announcement Created Successfully !";
         }catch(\Exception $e){
             $status=500;
             $message="Something went wrong !";
+          dd($e->getMessage());
         }
         }else{
             $status=401;
@@ -81,7 +98,6 @@ class NoticeBoardController extends Controller
             "message" => $message
         ];
          return response($response);
-
     }
     public function createAnnouncement(Request $request)
     {
@@ -94,6 +110,7 @@ class NoticeBoardController extends Controller
             $Division = Division::where('slug',$data['division'])
                 ->where('class_id', '=',$Class->id)
                 ->first();
+
             $creator =User::where('remember_token',$request->token)->first();
             $eventData['user_id']=$creator->id;
             $eventData['event_type_id']=1 ; //event type is 1 for announcement
@@ -142,6 +159,7 @@ class NoticeBoardController extends Controller
        catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
+            Log::info($message);
         }
         $response = [
             "message" => $message,
@@ -154,20 +172,15 @@ class NoticeBoardController extends Controller
 
     }
     public  function publishAchievement(Request $request){
+        $data=$request->all();
         try{
-            $data=$request->all();
             $editAchievement['title'] = $data['title'];
             $editAchievement['detail'] = $data['detail'];
             $editAchievement['status'] = $data['status'];
             $update=Event::where('id',$data['event_id'])->update($editAchievement);
             $message="Achievement published successfully";
             $status=200;
-            $title="New Achievement created";
-            $message=$editAchievement['title'] = $data['title'];
-            $allUser=1;
-            $users_push=0;
-            $push_users=0;
-            $this->CreatePushNotification($title,$message,$allUser,$push_users);
+
         }catch (\Exception $e){
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
@@ -187,6 +200,7 @@ class NoticeBoardController extends Controller
             $update=Event::where('id',$data['event_id'])->update($editAchievement);
             $message="Achievement updated successfully";
             $status=200;
+
         }catch (\Exception $e){
             $status = 500;
             $message = "Something went wrong"  .  $e->getMessage();
@@ -197,32 +211,13 @@ class NoticeBoardController extends Controller
         ];
         return response($response);
     }
-    public function requestToPublishAnnouncement(Request $request,$id){
-      $announcement['status']=1;
-      $query = Event::where('id',$id)->update($announcement);
-      if($query == 1){
-        $status = 200;
-        $message = "Publish request sent to admin successfully !";
-      }else{
-        $status = 500;
-        $message = "Something went wrong !";
-      }
-      $response = [
-          "message" => $message,
-          "status" =>$status
-      ];
-      return response($response);
-    }
-    public function viewAnnouncement(Request $request,$id)
+    public function viewAnnouncement(Request $request)
     {
-        $eventNotPublished = Event::where('event_type_id',1)->
-                        whereIn('status',[0,1])->where('created_by',$id)->orderBy('id','desc')->get()->toArray();
-        $eventPublished = Event::where('event_type_id',1)->
-                        where('status',2)->orderBy('id','desc')->get()->toArray();
-        $event = array_merge($eventNotPublished,$eventPublished);
+        $event =Event::where('event_type_id',1)->
+                        whereIn('status',[0,1,2])->orderBy('id','desc')->get()->toArray();
         foreach($event as $key => $val){
-            $event[$key]['createdBy'] = User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
-            $event[$key]['publishedBy'] = User::where('id',$val['published_by'])->select('first_name','last_name')->first();
+            $event[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+            $event[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first();
             if(!empty($event[$key]['publishedBy'])){
                 $event[$key]['publishedBy']->toArray();
             }
@@ -257,7 +252,6 @@ class NoticeBoardController extends Controller
     }
     public function createAchieve(Request $request){
         $data=$request->all();
-
         try{
             $module_id=12;
             $acl=1;
@@ -267,7 +261,6 @@ class NoticeBoardController extends Controller
                 $achievement['detail']=$data['detail'];
                 $achievement['status']=0;
                 $achievement['event_type_id']=2;
-                $achievement['priority']=$data['priority'];
                 $achievement['created_by']=$data['user_id'];
                 $achievement['created_at']=Carbon::now();
                 $a=Event::insertGetId($achievement);
@@ -371,111 +364,86 @@ class NoticeBoardController extends Controller
         ];
         return response($response, $status);
     }
-   /* public function viewAchievement(Requests\ViewAnnouncement $request)
-    {
-        try{
-            $achievementsData =Event::join('event_user_roles','events.id', '=', 'event_user_roles.event_id')
-                ->where('events.event_type_id','=',2)
-                ->where('event_user_roles.status','=',1)
-                ->select('events.id','events.user_id','events.title','events.detail','events.date')
-                ->orderBy('events.id', 'desc')
-                ->get();
-            $achievementDataArray=$achievementsData->toArray();
-            $i=0;
-            foreach($achievementDataArray as $value){
-                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['event_id']=$achievementDataArray[$i]['id'];
-                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['user_id']=$value['user_id'];
-                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['title']=$value['title'];
-                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['detail']=$value['detail'];
-                $finalAchievementDataArray[$achievementDataArray[$i]['id']]['date']=$value['date'];
-                     $i++;
-            }
-            $i=0;
-            foreach($achievementDataArray as $value){
-                  $result=EventImages::where('event_id','=',$value['id'])
-                                             ->groupby('image')
-                                             ->orderBy('event_id', 'asc')
-                                             ->get();
-                $resultArray=$result->toArray();
-                $key=$resultArray[0]['event_id'];
-                $images[$key]=$resultArray;
-                          $i++;
-            }
-            $i=0;
-           foreach($images as $key=>$value){
-               foreach($value as $val){
-                   $achievementImageArray[$key][$i]=$val['image'];
-                   $i++;
+    public function viewAchievement(Request $request,$id){
+      $data=$request->all();
+      if($id == 'teacher'){
+           $user_id=$data['teacher']['id'];
+           $role_id=UserRoles::where('slug',$id)->pluck('id');
+           $teacherAchievementAllPublished = Event::where('event_type_id','=',2)
+              ->wherein('status',[0,1])
+              ->where('created_by',$user_id)
+              ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
+              ->orderBy('id')
+              ->get();
+           $teacherAchievementPublished = Event::where('event_type_id','=',2)
+                 ->where('status',2)
+                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
+                 ->orderBy('id')
+                 ->get();
+                 if((!empty($teacherAchievementPublished->toArray())) && (!empty($teacherAchievementAllPublished->toArray()))){
+                   $teacherAchievementAllPublished = array_merge($teacherAchievementAllPublished->toArray(),$teacherAchievementPublished->toArray());
+                 }else if(!empty($teacherAchievementAllPublished->toArray())){
+                   $teacherAchievementAllPublished = $teacherAchievementAllPublished;
+                 }else{
+                   $teacherAchievementAllPublished = $teacherAchievementPublished;
+                 }
+          if($role_id == 0)
+          {
+              $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
+                  ->where('event_type_id','=',2)
+                  ->wherein('status',[0,1])
+                  ->orderBy('id')
+                  ->min('events.created_at');
+              $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
+                  ->where('event_type_id','=',2)
+                  ->where('status','=',2)
+                  ->min('events.created_at');
+              $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
+              $lastDate = date('');
+              foreach(array_unique($arrayMergedForLastDate) as $row){
+                  if($row != null){
+                      if(strtotime($lastDate) < strtotime($row)){
+                          $lastDate = $row;
+                      }
+                  }
+              }
+              $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
+          }else{
+              $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
+          }
+          $imageArray=array();
+           foreach($teacherAchievement as $key => $val){
+               $teacherAchievement[$key]['path']=url();
+               $teacherAchievement[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+               if($val['published_by'] != 0){
+                   $teacherAchievement[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first()->toArray();
                }
-              $i=0;
-            }
-            $finalDataImageArray   = array();
-            foreach($finalAchievementDataArray as $key=>$value){
-                if(array_key_exists($key,$achievementImageArray)){
-                    $value['image']= $achievementImageArray[$key];
-                }
-                $finalDataImageArray[$key]   = $value;
-            }
-            $status = 200;
-            $message = "Success";
-            $data=$finalDataImageArray;
-        }catch (\Exception $e) {
-            $status = 500;
-            $message = "Something went wrong"  .  $e->getMessage();
-        }
-        $response = [
-            "message" => $message,
-            "status" =>$status,
-            "data"=>$data
-        ];
-        return response($response, $status);
-    }*/
-    public function viewAchievement($id){
-        $role_id=UserRoles::where('slug',$id)->pluck('id');
-        $teacherAchievementAllPublished = Event::where('event_type_id','=',2)
-            ->wherein('status',[0,1,2])
-            ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-            ->get();
-
-        if($role_id == 0)
-        {
-            $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
-                ->where('event_type_id','=',2)
-                ->wherein('status',[0,1])
-                ->min('events.created_at');
-            $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
-                ->where('event_type_id','=',2)
-                ->where('status','=',2)
-                ->min('events.created_at');
-            $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
-            $lastDate = date('');
-            foreach(array_unique($arrayMergedForLastDate) as $row){
-                if($row != null){
-                    if(strtotime($lastDate) < strtotime($row)){
-                        $lastDate = $row;
-                    }
-                }
-            }
-            $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
-   }else{
-            $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
-        }
-        $imageArray=array();
-         foreach($teacherAchievement as $key => $val){
-             $teacherAchievement[$key]['path']=url();
-             $teacherAchievement[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
-             if($val['published_by'] != 0){
-                 $teacherAchievement[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first()->toArray();
-             }
-             $imageArray[$key]= EventImages::where('event_id',$val['id'])->select('event_id','image')->get()->toArray();
+               $imageArray[$key]= EventImages::where('event_id',$val['id'])->select('event_id','image')->get()->toArray();
+           }
+           $response=[
+               "imageData"=>$imageArray,
+               "teacherAchievement"=>$teacherAchievement
+           ];
+      }else{
+               $teacherAchievementPublished = Event::where('event_type_id','=',2)
+                      ->where('status',2)
+                      ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
+                      ->orderBy('id')
+                      ->get();
+                      $imageArray=array();
+               foreach($teacherAchievement as $key => $val){
+                   $teacherAchievement[$key]['path']=url();
+                   $teacherAchievement[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+                   if($val['published_by'] != 0){
+                       $teacherAchievement[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first()->toArray();
+                   }
+                   $imageArray[$key]= EventImages::where('event_id',$val['id'])->select('event_id','image')->get()->toArray();
+               }
+               $response=[
+                   "imageData"=>$imageArray,
+                   "teacherAchievement"=>$teacherAchievement
+               ];
          }
-         $response=[
-             "imageData"=>$imageArray,
-             "teacherAchievement"=>$teacherAchievement
-         ];
-
          return response()->json($response);
    }
-
-
 }

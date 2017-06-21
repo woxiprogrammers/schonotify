@@ -67,6 +67,8 @@ class UserController extends Controller
                         $data['users']['token']=$val['token'];
                         $data['users']['email']=$val['email'];
                         $data['users']['avatar']=$val['avatar'];
+                        $data['users']['firstname']=$val['firstname'];
+                        $data['users']['lastname']=$val['lastname'];
                     }
                     $acl_module=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
                         ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
