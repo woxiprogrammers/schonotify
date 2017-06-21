@@ -51,9 +51,6 @@
                       </label>
                           <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
                               <option value='FYBCOM'>FYBCOM</option>
-                              <option value='FYBBA'>FYBBA</option>
-                              <option value='FYBBAIB'>FYBBA(IB)</option>
-                              <option value='FYBBACA'>FYBBA(CA)</option>
                           </select>
                   </div>
               </div>
