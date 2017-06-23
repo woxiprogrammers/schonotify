@@ -930,48 +930,49 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <form id="fee_transaction_form" method="post" action="/fees/transactions">
-                                                <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Select Transaction Type :<span class="symbol required"></span>
-                                                        </label>
-                                                        <div>
-                                                            <select name="transaction_type">
-                                                                @foreach($transaction_types as $transaction_type)
-                                                                <option value="{{$transaction_type['transaction_type']}}">{{$transaction_type['transaction_type']}}</option>
-                                                                @endforeach
-                                                            </select>
+                                                    <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Select Transaction Type :<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <select name="transaction_type">
+                                                                    @foreach($transaction_types as $transaction_type)
+                                                                    <option value="{{$transaction_type['transaction_type']}}">{{$transaction_type['transaction_type']}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Voucher No / NEFT  no /Transaction Id::<span class="symbol required"></span>
-                                                        </label>
-                                                        <div>
-                                                            <input type="text" name="transaction_detail">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Voucher No / NEFT  no /Transaction Id::<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <input type="text" name="transaction_detail">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Paid Amount:<span class="symbol required"></span>
-                                                        </label>
-                                                        <div>
-                                                            <input type="number" name="transaction_amount">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Paid Amount:<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <input type="number" name="transaction_amount">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Transaction Date:<span class="symbol required"></span>
-                                                        </label>
-                                                        <div>
-                                                            <input type="text" name="date" placeholder="DD-MM-YYYY">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Transaction Date:<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <input type="text" name="date" placeholder="DD-MM-YYYY">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -982,7 +983,7 @@
                                                             <div>
                                                                 <select name="installment_id" id="installment_id" style="width: 20%">
                                                                     @foreach($installmentIds as $id)
-                                                                        <option value="{{$id['installment_id']}}"> {{$id['installment_id']}} </option>
+                                                                    <option value="{{$id['installment_id']}}"> {{$id['installment_id']}} </option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -996,41 +997,6 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3 col-md-offset-5">
-                                                &nbsp;&nbsp;&nbsp;<h4>OR</h4>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3 col-md-offset-4">
-                                                    <a class="btn btn-primary btn-wide" style="margin-left: 20%" href="/fees/billing-page">
-                                                        Make Payment
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Installment Id:<span class="symbol required"></span>
-                                                        </label>
-                                                        <div>
-                                                            <select name="installment_id" id="installment_id" style="width: 20%">
-                                                                @foreach($installmentIds as $id)
-                                                                <option value="{{$id['installment_id']}}"> {{$id['installment_id']}} </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4 col-md-offset-7">
-                                                        <button class="btn btn-primary pull-right" type="submit" >
-                                                            Update <i class="fa fa-arrow-circle-right"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                </form>
-                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-3 col-md-offset-5">
