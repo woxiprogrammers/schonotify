@@ -50,9 +50,9 @@
     <div class="row">
         @foreach($installments as $id => $installment)
         @if($installment['is_paid'] == true)
-            <div class="col-md-3" style="border:2px solid black;margin-top: 1%;margin-left: 0.2%">
+            <div class="col-md-3" style="border:2px solid green;margin-top: 1%;margin-left: 0.2%">
         @else
-            <div class="col-md-3" style="margin-top: 1%;margin-left: 0.2%; padding-bottom: 10px;">
+            <div class="col-md-3" style="border:2px solid black;margin-top: 1%;margin-left: 0.2%; padding-bottom: 10px;">
         @endif
             <span style="font-size: 20px; margin-left: 25%"> Installment {{$id}}</span>
             <table style="margin-top: 5%">
