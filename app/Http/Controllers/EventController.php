@@ -56,7 +56,6 @@ class EventController extends Controller
      +   * Date: 5/3/2016
      +   */
     public function saveEvent(Requests\WebRequests\EventRequest $request) {
-
         if($request->authorize() === true){
             $user=Auth::User();
             $endDate = date_format(date_create($request->eventEndDate),'Y-m-d H:i:s');
@@ -107,6 +106,7 @@ class EventController extends Controller
                         return 1;
                     } else {
                         Session::flash('message-success','Event created and published successfully !');
+                        Log::info("sss");
                         $title="New Event Created";
                         $message=$request->eventName;
                         $allUser=1;

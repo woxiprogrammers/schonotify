@@ -4,6 +4,7 @@ use App\PushToken;
 use Illuminate\Support\Facades\Log;
 trait PushNotificationTrait{
     public function CreatePushNotification($PushTitle,$PushMsg,$allUser,$push_users){
+        Log::info("ssddd");
         $title = $PushTitle;
         $msg = $PushMsg;
         if($allUser == 1){
@@ -27,9 +28,11 @@ trait PushNotificationTrait{
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
             'X-Ionic-Application-Id:'.env('PushAPPId'),
-            'Authorization:Bearer'.env('APIToken')
+            'Authorization:Bearer '.'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMzdhZWRhNS00Y2IwLTQwMzYtOTVhMS1mZDdiNTI0NWRjZDgifQ.6c_-v7vrjshE8IIpYP5zfGyy1aWjQm5aKCgEzrNyjpE'
         ));
+        Log::info($ch['CURLOPT_HTTPHEADER']);
         $result = curl_exec($ch);
+        Log::info($result);
         curl_close($ch);
     }
 }

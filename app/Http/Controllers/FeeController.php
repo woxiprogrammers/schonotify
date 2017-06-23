@@ -30,7 +30,6 @@ use Illuminate\Support\Facades\Log;
 use App\Batch;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use App\Body;
 use App\Division;
 use App\StudentFeeConcessions;
 use App\User;

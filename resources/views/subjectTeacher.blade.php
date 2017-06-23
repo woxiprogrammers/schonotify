@@ -271,7 +271,7 @@
                 var str="<option value=''>Select Teacher</option>";
                 for(var i=0; i<res.length; i++)
                 {
-                    str+="<option value='"+res[i]['id']+"'>"+res[i]['firstname']+""+res[i]['lastname']+","+res[i]['username']+"</option>"
+                    str+="<option value='"+res[i]['id']+"'>"+res[i]['firstname']+"      "+res[i]['lastname']+"</option>"
                 }
                 $('#teacherDropdown').html(str);
             });

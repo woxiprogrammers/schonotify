@@ -50,49 +50,50 @@
     <div class="row">
         @foreach($installments as $id => $installment)
         @if($installment['is_paid'] == true)
-        <div class="col-md-2" style="width: 19%;border: 1px solid #46AF18;margin-top: 1%;margin-left: 0.2%">
-            @else
-            <div class="col-md-2" style="width: 19%;border: 1px solid #000000;margin-top: 1%;margin-left: 0.2%; padding-bottom: 10px;">
-                @endif
-                <span style="font-size: 20px; margin-left: 25%"> Installment {{$id}}</span>
-                <table style="margin-top: 5%">
-                    @foreach($installment['particulars'] as $particulars)
-                    <tr>
-                        <td style="width: 90%;font-weight: bold">
-                            {{$particulars['particulars_name']}}
-                        </td>
-                        <td>
-                            {{$particulars['amount']}}
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
-                <table style="margin-top: 10%">
-                    <tr>
-                        <td style="width: 95%;font-weight: bold">
-                            Caste Concession
-                        </td>
-                        <td>
-                            {{round($installment['caste_concession_amount'],2)}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 95%;font-weight: bold">
-                            Fees Concession
-                        </td>
-                        <td>
-                            {{round($installment['fee_concession_amount'],2)}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 95%;font-weight: bold">
-                            Total
-                        </td>
-                        <td>
-                            {{round($installment['final_total'],2)}}
-                        </td>
-                    </tr>
-                </table>
+            <div class="col-md-3" style="border:2px solid black;margin-top: 1%;margin-left: 0.2%">
+        @else
+            <div class="col-md-3" style="margin-top: 1%;margin-left: 0.2%; padding-bottom: 10px;">
+        @endif
+            <span style="font-size: 20px; margin-left: 25%"> Installment {{$id}}</span>
+            <table style="margin-top: 5%">
+                @foreach($installment['particulars'] as $particulars)
+                        <tr>
+                            <td style="width: 90%;font-weight: bold">
+                                {{$particulars['particulars_name']}}
+                            </td>
+                            <td>
+                                {{$particulars['amount']}}
+                            </td>
+                        </tr>
+                @endforeach
+            </table>
+            <hr>
+                    <table style="margin-top: 10%;width: 95%;">
+                        <tr style="width: 95%;">
+                            <td style="width: 95%;font-weight: bold">
+                                Caste Concession
+                            </td>
+                            <td>
+                                {{round($installment['caste_concession_amount'],2)}}
+                            </td>
+                        </tr>
+                        <tr style="width: 95%;">
+                            <td style="width: 95%;font-weight: bold">
+                                Fees Concession
+                            </td>
+                            <td>
+                                {{round($installment['fee_concession_amount'],2)}}
+                            </td>
+                        </tr>
+                        <tr style="width: 95%;">
+                            <td style="width: 95%;font-weight: bold">
+                                Total
+                            </td>
+                            <td>
+                                {{round($installment['final_total'],2)}}
+                            </td>
+                        </tr>
+                    </table>
                 @if($installment['is_paid'] == false)
                     <form id="billGeneratorForm_{{$id}}">
                         <input type="hidden" value="{{$student['grn']}}" name="student_grn">
@@ -115,6 +116,8 @@
             </div>
             @endforeach
         </div>
+    </div>
+  </div>
 </fieldset>
 <!--Student GRN No.|Student Name|Section|Standard|Academic Year|Fee Type|Parents Name|Email|Contact Number|Amount-->
 <div id ="confirm-payment" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
