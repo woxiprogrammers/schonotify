@@ -105,7 +105,7 @@
                         <input type="hidden" value="{{$student['academic_year']}}" name="academic_year">
                         <input type="hidden" value="{{$student['fee_type']}}" name="fee_type">
                         <input type="hidden" value="{{$parent['first_name'].' '.$parent['last_name']}}" name="parent_name">
-                        <input type="hidden" value="{{$parent['first_name']}}" name="email">
+                        <input type="hidden" value="{{$parent['email']}}" name="email">
                         <input type="hidden" value="{{$parent['mobile']}}" name="contact">
                         <input type="hidden" value="{{round($installment['final_total'],2)}}" name="amount">
                         <button class="btn btn-primary btn-wide" type="button" onclick="submitForm({{$id}})" style="margin-left: 20%; margin-top: 10px">
