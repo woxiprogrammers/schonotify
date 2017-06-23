@@ -520,6 +520,7 @@
         Route::post('edit-achievement','api\NoticeBoardController@editAchievement');
         Route::post('publish-achievement','api\NoticeBoardController@publishAchievement');
         Route::get('view-announcement/{id}','api\NoticeBoardController@viewAnnouncement');
+        Route::get('view-announcement-parent/','api\NoticeBoardController@viewAnnouncementParent');
         Route::get('request-to-publish-announcement/{id}','api\NoticeBoardController@requestToPublishAnnouncement');
 
         //Result
@@ -528,6 +529,7 @@
         Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
         Route::post('create-achievement','api\NoticeBoardController@createAchieve');
         Route::get('view-achievement/{id}','api\NoticeBoardController@viewAchievement');
+        Route::get('view-achievement-parent','api\NoticeBoardController@viewAchievementParent');
         Route::get('delete-achievement/{id}','api\NoticeBoardController@deleteAchievement');
 
 

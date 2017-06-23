@@ -14,11 +14,9 @@ use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-
 
 class AttendanceController extends Controller
 {
@@ -33,10 +31,25 @@ class AttendanceController extends Controller
    * Param : Request $requests
    * Return :Return the data of batches as JSON array
    * Desc : Display list of batches to the teacher to mark attendance
-   * Developed By : Amol Rokade
+   * Developed By : shubham chaudhari
    * Date : 6/2/2016
    */
-
+   public function getAttendanceBatches(Request $request){
+     $data=$request->all();
+     $batches = Batch::where('body_id',$data['teacher']['body_id'])->get()->toArray();
+     return response($batches);
+   }
+    public function getAttendanceClasses(Request $request,$batchId){
+     $data=$request->all();
+     $classes = Classes::where('batch_id',$batchId)->get()->toArray();
+     return response($classes);
+    }
+    public function getAttendanceDivisions(Request $request,$classId){
+     $data=$request->all();
+     $Division = Division::where('class_id',$classId)->get()->toArray();
+     return response($Division);
+    }
+    /*
     public function getAttendanceBatches(Request $requests)
     {
         try{
@@ -48,6 +61,7 @@ class AttendanceController extends Controller
             $divisionArray = array();
             $k = 0;
             $divisions = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            $division_id=
             if (!Empty($divisions)) {
                 $divisionData = SubjectClassDivision::where('division_id','=',$divisions['id'])
                     ->orwhere('teacher_id','=',$data['teacher']['id'])
@@ -102,6 +116,7 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
+    */
 
     /*
     * Function Name: getAttendanceClasses
@@ -111,7 +126,7 @@ class AttendanceController extends Controller
     * Developed By : Amol Rokade
     * Date : 6/2/2016
     */
-
+/*
     public function getAttendanceClasses(Request $requests , $batchId)
     {
         try{
@@ -168,7 +183,7 @@ class AttendanceController extends Controller
             "data" => $finalClasses
         ];
         return response($response, $status);
-    }
+    }*/
 
 
     /*
@@ -179,7 +194,7 @@ class AttendanceController extends Controller
     * Developed By : Amol Rokade
     * Date : 6/2/2016
     */
-
+    /*
     public function getAttendanceDivisions(Request $requests , $classId)
     {
         try{
@@ -220,7 +235,7 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
-
+*/
     /*
    * Function Name: markAttendance
    * Param : Request $requests $classId
@@ -234,7 +249,6 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
-
             $status = 200;
             $message = "Attendance Successfully Marked";
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
@@ -249,7 +263,6 @@ class AttendanceController extends Controller
                         Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                         $status = 200;
                         $message = "Attendance Successfully updated";
-
                         if(sizeof($studentData) > 0) {
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
@@ -285,11 +298,9 @@ class AttendanceController extends Controller
                         }
                     }
                 } else {
-
                     Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                     $status = 200;
-                    $message = "Attendance Successfully updated";
-
+                    $message = "Attendance Successfully edited";
                 }
             } else {
                 $status=404;
@@ -305,7 +316,6 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
-
     /*
     * Function Name: getStudentsList
     * Param : Request $requests $date
@@ -337,6 +347,7 @@ class AttendanceController extends Controller
                         ->where('division_id','=', $divisionId['id'])
                         ->where('is_active','=',1)
                         ->select('id','first_name','last_name','roll_number')
+                        ->orderBy('roll_number','asc')
                         ->get();
                     if (!Empty($studentList)) {
                         $status = 200;
@@ -409,7 +420,7 @@ class AttendanceController extends Controller
     * Param : Request $requests $date
     * Return : $status $message
     * Desc : A teacher related to division i.e. class teacher/subject teacher can view attendance of perticular day.
-    * Developed By : Amol Rokade
+    * Developed By : Shubham Chaudhari
     * Date : 15/2/2016
     */
 

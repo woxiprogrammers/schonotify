@@ -1,10 +1,11 @@
-
 @extends('master')
 
 @section('content')
 
 <div id="app">
-
+    <div class="sidebar app-aside" id="sidebar" style="top: 0px!important;">
+        <img style="margin-left: 20%;" class="img-responsive" src="/assets/images/bodyLogo/sspss.jpg">
+    </div>
     <div class="app-content">
 
         <!-- end: TOP NAVBAR -->
@@ -14,6 +15,7 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
+                            <h1 class="mainTitle">Ganesh International School , Chikhali</h1> <br>
                             <h1 class="mainTitle">Payment</h1>
                             <span class="mainDescription">Fee</span>
                         </div>
@@ -56,7 +58,29 @@
                 <div id="student_details">
 
                 </div>
+                <div style="height: 100px">
 
+                </div>
+                <hr>
+                <div style="word-wrap: break-word" class="row">
+                    <div class="col-md-7 col-md-offset-2" style="text-align: center">
+                        <h3> Disclaimer and Terms & Conditions for Online Payment Facility</h3>
+                        <h4>Please read these conditions of the Disclaimer carefully.</h4></span>
+                    </div>
+                    <div class="col-md-12">
+                        <p>By using the online payment facility, you agree to be bound by these terms contained herein.<br>
+                            <span style="margin-left: 5%">
+                                S.S.P. Shikshan Sanstha offers you the option of the fees by using the online payment facilities.
+                            For making online payment, you will access a third party site. S.S.P. Shikshan Sanstha does not in any way warrant the accuracy or completeness of the information, materials, services or the reliability of any service, advice, opinion, statement or other information displayed or distributed through such third party site. Parents may access this site solely for purposes of fees and acknowledge that availing of any services offered on the site or your reliance on any opinion, advice, statement, memorandum, or information available on the site shall be at your sole risk and discretion. It remains the Customer’s responsibility to verify success of the payment, with its bank.
+                            Due to the way transactions are processed by the such third party bank sites, there may be delays in updating your payment in our records.
+                            S.S.P. Shikshan Sanstha Terms and Conditions for online payments are subject to change at any time.
+                            S.S.P. Shikshan Sanstha and its affiliates, subsidiaries, employees, officers, directors and agents, expressly disclaim any liability for any deficiency in the services of the Payment Gateway Provider. Neither S.S.P. Shikshan Sanstha nor any of its affiliates nor their directors, officers and employees will be liable to or have any responsibility of any kind for any loss that you incur arising out of any deficiency in the services of the Payment Gateway Provider to whom the site belongs, failure or disruption of the site of Payment Gateway Provider, or resulting from the act or omission of any other party involved in making this site or the data contained therein available to you, or from any other cause relating to your access to, inability to access, or use of the site or these materials.
+                            S.S.P. Shikshan Sanstha may change the terms of this disclaimer, at any time and without notice. It is recommended that you review the terms of this disclaimer, periodically for changes.  S.S.P. Shikshan Sanstha shall not be held responsible for all or any actions that may subsequently result in any loss, damage and or liability on account of such change in the information on this website.
+                            </span>
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -106,7 +130,6 @@
             var form = $("#getStudentDetialsForm");
             var errorHandler = $('.errorHandler', form);
             var successHandler = $('.successHandler', form);
-
             form.validate({
                 rules: {
                     school :{
@@ -161,14 +184,12 @@
                 }
             });
         }
-
         return{
             init: function(){
                 detailsFormValidate();
             }
         }
     }();
-
 
     jQuery(document).ready(function()
     {
@@ -177,17 +198,3 @@
     })
 </script>
 @stop
-
-
-
-
-
-
-
-
-
-
-
-
-
-

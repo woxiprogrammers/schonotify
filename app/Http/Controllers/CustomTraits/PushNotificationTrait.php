@@ -3,27 +3,24 @@ namespace App\Http\Controllers\CustomTraits;
 use App\PushToken;
 use Illuminate\Support\Facades\Log;
 trait PushNotificationTrait{
+
     public function CreatePushNotification($PushTitle,$PushMsg,$allUser,$push_users){
-       Log::info("here");
         $title = $PushTitle;
         $msg = $PushMsg;
         if($allUser == 1){
             $device_token=PushToken::lists('push_token')->toArray();
-           Log::info($device_token);
-        }
+         }
         else{
             $device_token=$push_users;
         }
         $url = env('PushDomain');
-        Log::info($url);
         $data = array(
             'tokens' => $device_token,
             'notification' => array('title' => ''.$title,
                                     'message' =>$msg),
             'profile' => env('SECURITY_PROFILE')
         );
-        Log::info($data);
-        $content = json_encode($data);
+         $content = json_encode($data);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, TRUE);
@@ -34,7 +31,6 @@ trait PushNotificationTrait{
             'Authorization:Bearer '.env('APIToken')
         ));
         $result = curl_exec($ch);
-        log::info($result);
         curl_close($ch);
     }
 }

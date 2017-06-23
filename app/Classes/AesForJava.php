@@ -5,24 +5,20 @@
  * Date: 17/4/17
  * Time: 4:00 PM
  */
-
 namespace App\Classes;
 
 class AesForJava {
-
     const M_CBC = 'cbc';
     const M_CFB = 'cfb';
     const M_ECB = 'ecb';
     const M_NOFB = 'nofb';
     const M_OFB = 'ofb';
     const M_STREAM = 'stream';
-
     protected $key;
     protected $cipher;
     protected $data;
     protected $mode;
     protected $IV;
-
     /**
      *
      * @param type $data
@@ -45,7 +41,6 @@ class AesForJava {
     public function setData($data) {
         $this->data = $data;
     }
-
     /**
      *
      * @param type $key
@@ -63,17 +58,14 @@ class AesForJava {
             case 128:
                 $this->cipher = MCRYPT_RIJNDAEL_128;
                 break;
-
             case 192:
                 $this->cipher = MCRYPT_RIJNDAEL_192;
                 break;
-
             case 256:
                 $this->cipher = MCRYPT_RIJNDAEL_256;
                 break;
         }
     }
-
     /**
      *
      * @param type $mode
@@ -103,7 +95,6 @@ class AesForJava {
                 break;
         }
     }
-
     /**
      *
      * @return boolean
@@ -128,7 +119,6 @@ class AesForJava {
         }
         return $this->IV;
     }
-
     /**
      * @return type
      * @throws Exception
@@ -149,7 +139,6 @@ class AesForJava {
             throw new Exception('Invalid params!');
         }
     }
-
     /**
      *
      * @return type
@@ -164,13 +153,9 @@ class AesForJava {
         $this->setBlockSize($blockSize);
         $this->setMode($mode);
         $this->setIV("");
-
-
-
         if ($this->validateParams()) {
             //echo base64_decode($this->data); exit;
             $depcryptedStr = trim(mcrypt_decrypt($this->cipher, $this->key, base64_decode($this->data), $this->mode, $this->getIV()));
-
             $unpaddedStr =  $this->pkcs5_unpad(utf8_encode($depcryptedStr));
             //$unpaddedStr =  $this->pkcs5_unpad(utf8_encode(trim(mcrypt_decrypt(
             //          $this->cipher, $this->key, base64_decode($this->data), $this->mode, $this->getIV()))));
@@ -184,7 +169,6 @@ class AesForJava {
             throw new Exception('Invlid params!');
         }
     }
-
     function pkcs5_pad ($text, $blocksize=16){
         $pad = $blocksize - (strlen($text) % $blocksize);
         return $text . str_repeat(chr($pad), $pad);
@@ -195,12 +179,9 @@ class AesForJava {
         if ($pad > strlen($text)) {
             return false;
         }
-
         if (strspn($text, chr($pad), strlen($text) - $pad) != $pad) {
             return false;
         }
         return substr($text, 0, -1 * $pad);
-
     }
-
 }
