@@ -35,6 +35,44 @@ class NoticeBoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function viewAnnouncementParent(Request $request){
+             $event =Event::where('event_type_id',1)
+                            -> where('status',2)
+                            ->orderBy('id','desc')
+                            ->get()
+                            ->toArray();
+             foreach($event as $key => $val){
+                 $event[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+                 $event[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first();
+                 if(!empty($event[$key]['publishedBy'])){
+                     $event[$key]['publishedBy']->toArray();
+                 }
+             }
+             $response=$event;
+             return response($response);
+     }
+     public function viewAchievementParent(Request $request){
+            $data=$request->all();
+            $parentAchievementPublished = Event::where('event_type_id','=',2)
+                  ->where('status',2)
+                  ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
+                  ->orderBy('id','desc')
+                  ->get();
+            $imageArray=array();
+            foreach($parentAchievementPublished as $key => $val){
+                $parentAchievementPublished[$key]['path']=url();
+                $parentAchievementPublished[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+                if($val['published_by'] != 0){
+                    $parentAchievementPublished[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first()->toArray();
+                }
+                $imageArray[$key]= EventImages::where('event_id',$val['id'])->select('event_id','image')->get()->toArray();
+             }
+             $response=[
+                "imageData"=>$imageArray,
+                "teacherAchievement"=>$parentAchievementPublished
+             ];
+             return response()->json($response);
+    }
      public function requestToPublishAnnouncement(Request $request,$id){
           $announcement['status']=1;
           $query = Event::where('id',$id)->update($announcement);
@@ -302,8 +340,6 @@ class NoticeBoardController extends Controller
             "status" => $status,
             "message" => $message
         ];
-
-
         return response($response);
     }
     public function createAchievement(Requests\CreateAchievement $request)

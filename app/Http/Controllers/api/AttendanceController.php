@@ -249,7 +249,6 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
-
             $status = 200;
             $message = "Attendance Successfully Marked";
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
@@ -264,7 +263,6 @@ class AttendanceController extends Controller
                         Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                         $status = 200;
                         $message = "Attendance Successfully updated";
-
                         if(sizeof($studentData) > 0) {
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
@@ -300,11 +298,9 @@ class AttendanceController extends Controller
                         }
                     }
                 } else {
-
                     Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                     $status = 200;
-                    $message = "Attendance Successfully updated";
-
+                    $message = "Attendance Successfully edited";
                 }
             } else {
                 $status=404;
@@ -320,7 +316,6 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
-
     /*
     * Function Name: getStudentsList
     * Param : Request $requests $date

@@ -33,7 +33,7 @@ class EditStudentRequest extends Request
             'avatar' => 'mimes:jpeg,jpg,png,gif|max:10000',
             'roll_number'=>'required|integer',
             'DOB'=>'required',
-            'birth_place'=>'alpha',
+            'birth_place'=>'required',
             'nationality'=>'required',
             'mother_tongue'=>'required'
 

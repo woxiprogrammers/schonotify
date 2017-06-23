@@ -670,7 +670,6 @@
                                     </div>
                                 </div>-->
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label  class="control-label">
@@ -686,7 +685,6 @@
                                             <label  class="control-label">
                                                 Communication Address <span class="symbol required"></span>
                                             </label><br>
-
                                             <input type="checkbox" name="parent_communication_address" id="parent_communication_address"  checked> Same as Permanent Address
                                             <div class="note-editor" id="communication_address_parent">
                                                 <textarea class="form-control autosize area-animated" tabindex="-1" name="communication_address_parent" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!!$family_info['communication_address']!!}</textarea>
@@ -694,7 +692,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!--<div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
