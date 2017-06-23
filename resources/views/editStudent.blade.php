@@ -1035,18 +1035,6 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-3 col-md-offset-5">
-                                                &nbsp;&nbsp;&nbsp;<h4>OR</h4>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3 col-md-offset-4">
-                                                    <a class="btn btn-primary btn-wide" style="margin-left: 20%" href="/fees/billing-page">
-                                                        Make Payment
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
                                    </fieldset>
                                    <fieldset>
                                        <span class="mainDescription"><h3>Transaction Details</h3></span>

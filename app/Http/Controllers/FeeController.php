@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Body;
 use App\CASTECONCESSION;
 use App\category_types;
@@ -36,7 +34,6 @@ use App\Body;
 use App\Division;
 use App\StudentFeeConcessions;
 use App\User;
-
 class FeeController extends Controller
 {
     use PushNotificationTrait;
@@ -44,7 +41,6 @@ class FeeController extends Controller
     {
         $this->middleware('db');
         $this->middleware('auth',['except'=>['billiingPageView','getStudentDetails']]);
-
     }
     public function createFeeStructureView(){
         try{
@@ -54,7 +50,6 @@ class FeeController extends Controller
                 ->get();
             $batches=array();
             $classArray=array();
-
             $i=0;
             foreach($classes->toArray() as $row)
             {
@@ -68,15 +63,12 @@ class FeeController extends Controller
             return view('fee.create')->with(compact('classes','batches','concession_types','caste_types','installment_number'));
         }catch(\Exception $e){
             $data = [
-
                 'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());
         }
-
     }
-
     public function concessionTypes()
     {
         $batchData =ConcessionTypes::select('id','name')->get();
@@ -91,13 +83,10 @@ class FeeController extends Controller
         $fee_installment_amount=fee_installments::select('id','amount')->take($total_no_of_installments)->get();
         return view('fee.installments')->with(compact('installment_details','fee_particulars','fee_installment_amount'));
     }
-
-
     public function installmentCount(Request $request)
         {
           return view('fee.installments');
         }
-
     public function billiingPageView(){
         try{
             $bodies = Body::get()->toArray();
@@ -110,7 +99,6 @@ class FeeController extends Controller
             Log::critical(json_encode($data));
         }
     }
-
     public function create(Request $request)
     {
         $fee_details['fee_name']=$request->fee_name;
@@ -157,7 +145,6 @@ class FeeController extends Controller
                     $class_details['amount']=$request->total_fee;
                     $query2=FeeClass::create($class_details);
                 }
-
             }
             foreach($request->concessions as $concession)
             {
@@ -182,7 +169,6 @@ class FeeController extends Controller
                 $installment_details['amount']=$value;
                 $query5=FeeInstallments::create($installment_details);
             }
-
             }
             foreach($request->fee_due_date as $key=>$due_date)
             {
@@ -190,26 +176,20 @@ class FeeController extends Controller
                 $caste_types['installment_id']=$key;
                 $caste_types['due_date']=$due_date;
                 $query7=FeeDueDate::create($caste_types);
-
             }
              Session::flash('message-success','Fee structure created successfully');
              return Redirect::back();
         }
-
     }
-
     public function feeListingView()
     {
-
         $batches=Batch::select('id','name')->get()->toArray();
-
         return view('fee.feelisting')->with(compact('batches'));
     }
     public function classesView(Request $request)
     {
        $classes=Classes::where('batch_id',$request->str1)->select('id','class_name')->get()->toArray();
         return view('fee.claasses')->with(compact('classes'));
-
     }
     public function feeListingTableView(Request $request)
     {
@@ -349,7 +329,6 @@ class FeeController extends Controller
             Log::info(json_encode($data));
         }
     }
-
     public function billiingPageView(){
         try{
             $bodies = Body::where('id',1)->get()->toArray();             // Only for Ganesh International School
@@ -362,7 +341,6 @@ class FeeController extends Controller
             Log::critical(json_encode($data));
         }
     }
-
     /**
      * Function getStudentDetails()
      * Developed By Ameya Joshi
