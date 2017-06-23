@@ -341,7 +341,6 @@ class LeaveController extends Controller
                 $total_installment_amount[$amount['installment_id']] = $amount['amount'];
             }
         }
-
         $total_fee_amount=array_sum ($total_installment_amount );
         $installment_percent_amount=array();
         foreach($total_installment_amount as $key => $installment_amounts)
@@ -349,7 +348,6 @@ class LeaveController extends Controller
             $installment_amounts=($installment_amounts/$total_fee_amount)*100;
             $installment_percent_amount[$key]=$installment_amounts;
         }
-
         $caste_concession_type=StudentFee::where('student_id',$id)->pluck('caste_concession');
         $caste_concn_amnt= CASTECONCESSION::where('caste_id', $caste_concession_type)->where('fee_id',$feedata)->pluck('concession_amount');
         $collection=collect($installment_percent_amount);
@@ -444,7 +442,6 @@ class LeaveController extends Controller
         $queryn=category_types::select('caste_category','id')->get()->toArray();
         $querym=StudentFee::where('student_id',$id)->pluck('caste_concession');
         $chkstatus=StudentFeeConcessions::where('student_id',$id)->select('fee_concession_type')->first();
-        $chkstatus = $chkstatus->fee_concession_type;
         return response ($fee_due_date);
     }
     public function getFeesDetails($id){
@@ -587,7 +584,6 @@ class LeaveController extends Controller
         $queryn=category_types::select('caste_category','id')->get()->toArray();
         $querym=StudentFee::where('student_id',$id)->pluck('caste_concession');
         $chkstatus=StudentFeeConcessions::where('student_id',$id)->select('fee_concession_type')->first();
-        $chkstatus = $chkstatus->fee_concession_type;
         $student_pending_fee=array();
         $student_pending_fee['pending_fee']=$total_due_fee_for_current_year;
         $total_student_fee_for_current_year=array();

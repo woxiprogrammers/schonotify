@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\AclMaster;
 use App\Attendance;
 use App\Batch;
@@ -1251,7 +1249,8 @@ class UsersController extends Controller
             $communication_address_parent = $data['communication_address_parent'];
         }
         $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
-        $familyInfo['permanent_address'] = $communication_address_parent;
+        $familyInfo['permanent_address'] = $data['permanent_address'];
+        $familyInfo['communication_address'] = $communication_address_parent;
         $familyInfo['updated_at'] = Carbon::now();
         $userFamilyUpdate=ParentExtraInfo::where('parent_id',$request->userId)->update($familyInfo);
         $chk=StudentSibling::exists($id);
