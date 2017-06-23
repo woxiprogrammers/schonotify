@@ -34,12 +34,12 @@ class PaymentController extends Controller
                 NetBankingTransaction::where('id', 1)->update(['transactions_count' => $referenceId]);
             }
             $crn = $referenceId+1;
-            $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|1.0";//.$data['amount'];
+            $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
             $paramArr = array(
                 "CID=".env('EASY_PAY_CORPORATE_CODE'),
                 "RID=".$referenceId,
                 "CRN=".$crn,
-                "AMT=1.0",//$request->amount,
+                "AMT=".$request->amount,
                 "VER=".env('EASY_PAY_VERSION'),
                 "TYP=".env('EASY_PAY_TYPE'),
                 "CNY=INR",
