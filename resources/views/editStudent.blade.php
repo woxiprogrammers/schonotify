@@ -1,17 +1,10 @@
-
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
 @include('sidebar')
-
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
 @include('header')
-
-
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
 <div class="wrap-content container" id="container">
@@ -984,6 +977,39 @@
                                                             <input type="text" name="date" placeholder="DD-MM-YYYY">
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Installment Id:<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <select name="installment_id" id="installment_id" style="width: 20%">
+                                                                    @foreach($installmentIds as $id)
+                                                                        <option value="{{$id['installment_id']}}"> {{$id['installment_id']}} </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-md-offset-7">
+                                                            <button class="btn btn-primary pull-right" type="submit" >
+                                                                Update <i class="fa fa-arrow-circle-right"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3 col-md-offset-5">
+                                                &nbsp;&nbsp;&nbsp;<h4>OR</h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3 col-md-offset-4">
+                                                    <a class="btn btn-primary btn-wide" style="margin-left: 20%" href="/fees/billing-page">
+                                                        Make Payment
+                                                    </a>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -1124,9 +1150,12 @@
         getMsgCount();
         if({!!$chkstatus!!} != "null"){
         var chkstatus = {!!$chkstatus!!};
-        for(var i = 0; i< chkstatus.length; i++){
-           $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+        if(chkstatus != null){
+          for(var i = 0; i< chkstatus.length; i++){
+             $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
+          }
         }
+
         }
         $('#2_concession_chk').change(function(){
            if($('#2_concession_chk').is(":checked")){
@@ -1259,8 +1288,7 @@
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
 
                     }else{
-                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1)
-                        {
+                        if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1){
 
                             str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" name="acls[]" value="'+arr2[j]['id']+'_'+allModules[i]['id']+'"  checked>'+
                                 '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';

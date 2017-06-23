@@ -10,9 +10,15 @@ use App\Division;
 use App\Message;
 use App\Module;
 use App\ModuleAcl;
+use App\PushToken;
 use App\SubjectClassDivision;
 use App\TeacherView;
 use App\User;
+use App\StudentFee;
+use App\StudentFeeConcessions;
+use App\FeeInstallments;
+use App\fee_installments;
+use App\fee_particulars;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -30,13 +36,10 @@ class UserController extends Controller
         $this->middleware('remember.user.token');
         $this->middleware('authenticate.user',['except' => ['login']]);
     }
-
-
     protected function login(Requests\LoginRequest $request)
     {
         $data=array();
         try{
-
             $user = User::where('email', $request->email)->first();
             if ($user == NULL) {
                 $status =404;
@@ -47,8 +50,6 @@ class UserController extends Controller
             } elseif (Auth::attempt(['email' => $request->email,'password' => $request->password])) {
                 $user=Auth::User();
                 $userView=TeacherView::where('user_id','=',$user['id'])->first();
-
-
                 if(Empty($userView) && $user['role_id']==4 || $userView['mobile_view']==1)
                 {
                     $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -93,12 +94,10 @@ class UserController extends Controller
                                 ->where('read_status','=',0)
                                 ->where('is_delete','=',0)
                                 ->count();
-
                             $data['Badge_count']['user_id']=$userData['id'];
                             $data['Badge_count']['body_id']=$user['body_id'];
                             $data['Badge_count']['message_count'] = $messageCount;
                             $data['Badge_count']['auto_notification_count'] = $messageCount;
-
                     }else{
                         $messageCount=Message::where('to_id',$user['id'])
                             ->where('read_status','=',0)
@@ -125,6 +124,20 @@ class UserController extends Controller
         }
         $response = ["message" => $message,"status" => $status,"data" =>$data,];
         return response($response,$status);
+    }
+    public function savePushToken(Request $request){
+        $data=$request->all();
+        $is_present=PushToken::where('user_id',$data['user_id'])->count();
+        if($is_present == 0){
+            $pushData['user_id']=$data['user_id'];
+            $pushData['push_token']=$data['pushToken'];
+            PushToken::create($pushData);
+        }
+        else{
+            $pushData['user_id']=$data['user_id'];
+            $pushData['push_token']=$data['pushToken'];
+            PushToken::where('user_id',$data['user_id'])->update($pushData);
+        }
 
     }
     public function getBatchesTeacher(Request $request){
@@ -293,7 +306,6 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
     public function getDivisions(Request $request, $class_id){
         try{
             $data = $request->all();
@@ -357,7 +369,39 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
+    public function studentInstallmentview(Request $request,$id,$student_id)
+    {
+      try{
+           $installment_data = array();
+           $student_fee=StudentFee::where('student_id',$student_id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toArray();
+           foreach($student_fee as $key => $a){
+               $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->where('installment_id',$id)->select('particulars_id','amount')->get()->toarray();
+           }
+           $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
+            if(!empty($installment_info)){
+                 $iterator = 0;
+                 foreach($installment_info as $i){
+                   $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
+                   $iterator++;
+               }
+               $sum=array_sum(array_column($installment_info,'amount'));
+               $installment_data= $installment_info;
+               $installment_data['total']=$sum;
+              }
+               $message = "suceess";
+               $status=200;
+           }catch (\Exception $e){
+               echo $e->getMessage();
+               $status = 500;
+               $message = "something went wrong";
+           }
+           $response = [
+               "message" => $message,
+               "status" => $status,
+               "data" => $installment_data,
+           ];
+           return response($response);
+    }
     public function getSwitchingDetails(Request $request){
         try{
             $data=$request->all();
@@ -369,9 +413,15 @@ class UserController extends Controller
                                  {
                                      $finalData['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
                                      $finalData['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
-                                     $finalData['Parent_student_relation']['Students'][$i]['student_div']=$val->division_id;
+                                     $division_name=Division::where('id',$val->division_id)->pluck('division_name');
+                                     $class=Division::where('id',$val->division_id)->pluck('class_id');
+                                     $class_name=Classes::where('id',$class)->pluck('class_name');
+                                     $finalData['Parent_student_relation']['Students'][$i]['class_name']=$class_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['student_div']=$division_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['last_name']=$val->last_name;
+                                     $finalData['Parent_student_relation']['Students'][$i]['roll_number']=$val->roll_number;
                                        $i++;
-                                   }
+                                 }
             $message="Successfully Listed";
             $status=200;
         }
@@ -386,5 +436,4 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
 }

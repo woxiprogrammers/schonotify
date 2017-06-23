@@ -220,8 +220,6 @@
             });
         }
     });
-
-
     function validate() {
         $("#file_error").html("");
         $(".demoInputBox").css("border-color","#F0F0F0");
@@ -233,8 +231,6 @@
         }
         return true;
     }
-
-
     $('#subjectsDropdown').change(function(){
         $('#btnSubmit').attr('disabled','true');
         $('#saveSubmit').attr('disabled','true');
@@ -260,13 +256,11 @@
             }
         });
     });
-
     $('#batch-select').change(function(){
         var id=this.value;
         var subject_id= $('#subjectsDropdown').val();
         var route='get-subject-classes/'+id+'/'+subject_id;
         $.get(route,function(res){
-
             if(res.length == 0)
             {
                 $('#classDropdown').html("no record found");
@@ -282,7 +276,6 @@
             }
             });
     });
-
     $("#classDropdown").change(function() {
         var id = this.value;
         var subject_id= $('#subjectsDropdown').val();

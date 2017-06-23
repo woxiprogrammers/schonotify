@@ -113,7 +113,6 @@
                     </form>
                 @endif
             </div>
-
             @endforeach
         </div>
 </fieldset>

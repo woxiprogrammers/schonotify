@@ -17,7 +17,7 @@
                         <div class="col-sm-9 col-sm-offset-2">
                             <h1 class="mainTitle">Ganesh International School , Chikhali</h1> <br><br>
                             <h2 class="mainTitle" style="margin-left:20%;color: {{$data['color']}};">{{$data['message_title']}}</h2>
-                        </div>
+                      </div>
                     </div>
                 </section>
                 <div class="row">
@@ -53,7 +53,6 @@
                         </fieldset>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -95,4 +94,8 @@
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
 <script src="/assets/js/table-data.js"></script>
+<<<<<<< HEAD
 <script src="/assets/js/form-validation.js"></script>
+=======
+<script src="/assets/js/form-validation.js"></script>
+>>>>>>> develop

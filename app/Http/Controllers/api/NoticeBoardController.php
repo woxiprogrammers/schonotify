@@ -8,17 +8,23 @@ use App\Division;
 use App\Event;
 use App\EventImages;
 use App\EventUserRoles;
+use App\ModuleAcl;
 use App\User;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 
 class NoticeBoardController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct(Request $request)
     {
        $this->middleware('db');
@@ -29,10 +35,58 @@ class NoticeBoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function createAnnouncement(Requests\createAnnouncement $request)
+    public function announcementCreate(Request $request){
+        $data=$request->all();
+        $module_id=13;
+        $acl=1;
+        $isCreate=ModuleAcl::where('user_id',$data['user_id'])->where('acl_id',$acl)->where('module_id',$module_id)->get();
+        if(!empty($isCreate)){
+        try{
+            $data=$request->all();
+            $announcement['title']=$data['title'];
+            $announcement['detail']=$data['detail'];
+            $announcement['created_by']=$data['user_id'];
+            $announcement['created_at']=Carbon::now();
+            $announcement['status']=$data['status'];
+            $announcement['priority']=$data['priority'];
+            $announcement['event_type_id']=1;
+            $new_event=Event::insertGetId($announcement);
+            foreach($data['teacherrr'] as $value){
+                $announcementData['event_id']=$new_event;
+                $announcementData['user_id']=$value;
+                EventUserRoles::insert($announcementData);
+            }
+            foreach($data['studenttt'] as $value){
+                $announcementData['event_id']=$new_event;
+                $announcementData['user_id']=$value;
+                EventUserRoles::insert($announcementData);
+            }
+            foreach($data['adminnn'] as $value){
+                $announcementData['event_id']=$new_event;
+                $announcementData['user_id']=$value;
+                EventUserRoles::insert($announcementData);
+            }
+            $status=200;
+            $message="Announcement Created successfully !";
+        }catch(\Exception $e){
+            $status=500;
+            $message="Something went wrong !";
+        }
+        }else{
+            $status=401;
+            $message="You do not have ACL for this module !";
+        }
+        $response=[
+            "status" => $status,
+            "message" => $message
+        ];
+         return response($response);
+
+    }
+    public function createAnnouncement(Request $request)
     {
         $data=$request->all();
-     try{
+       try{
             $Batch = Batch::where('slug',$data['batch'])->first();
             $Class = Classes::where('slug',$data['class'])
                 ->where('batch_id', '=',$Batch->id)
@@ -97,45 +151,166 @@ class NoticeBoardController extends Controller
     }
     public function editAnnouncement(Requests\editAnnouncement $request, $id)
     {
-           $data=$request->all();
+
     }
-    public function viewAnnouncement(Requests\ViewAnnouncement $request)
-    {
-       /*$data=$request->all();
+    public  function publishAchievement(Request $request){
         try{
-            $user =User::where('remember_token',$data['token'])->first();
-            $unreadAnnouncement =Announcement::where('user_id', '=',$user['id'])
-                ->get();
-            $unreadAnnouncementArray=$unreadAnnouncement->toArray();
-            $i=0;
-
-                $unreadAnnouncementData[$i]['event_id']=$value['event_id'];
-                $event =Event::where('id', '=',$value['event_id'])->first();
-                $user=User::where('id', '=',$event ['user_id'])->first();
-                if($user!=null){
-                    $unreadAnnouncementData[$i]['created_by']=$user['first_name']." ".$user['last_name'];
-                }else{
-                    $unreadAnnouncementData[$i]['created_by']=null;
-                }
-                $unreadAnnouncementData[$i]['title']=$event['title'];
-                $unreadAnnouncementData[$i]['detail']=$event['detail'];
-                $unreadAnnouncementData[$i]['date']=$event['date'];
-                $i++;
-
-            $status = 200;
-            $message = "Success";
-            $responseData=$unreadAnnouncementData;
-        }catch (\Exception $e) {
-                $status = 500;
-                $message = "Something went wrong"  .  $e->getMessage();
-            }
+            $data=$request->all();
+            $editAchievement['title'] = $data['title'];
+            $editAchievement['detail'] = $data['detail'];
+            $editAchievement['status'] = $data['status'];
+            $update=Event::where('id',$data['event_id'])->update($editAchievement);
+            $message="Achievement published successfully";
+            $status=200;
+            $title="New Achievement created";
+            $message=$editAchievement['title'] = $data['title'];
+            $allUser=1;
+            $users_push=0;
+            $push_users=0;
+            $this->CreatePushNotification($title,$message,$allUser,$push_users);
+        }catch (\Exception $e){
+            $status = 500;
+            $message = "Something went wrong"  .  $e->getMessage();
+        }
         $response = [
             "message" => $message,
-            "status" =>$status,
-            "data" => $responseData
-        ];*/
-        $event =Event::where('event_type_id',1)->where('status',2)->get()->toArray();
+            "status" =>$status
+        ];
+        return response($response);
+    }
+    public function editAchievement(Request $request)
+    {
+        $data=$request->all();
+        try{
+            $editAchievement['title'] = $data['title'];
+            $editAchievement['detail'] = $data['detail'];
+            $update=Event::where('id',$data['event_id'])->update($editAchievement);
+            $message="Achievement updated successfully";
+            $status=200;
+        }catch (\Exception $e){
+            $status = 500;
+            $message = "Something went wrong"  .  $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" =>$status
+        ];
+        return response($response);
+    }
+    public function requestToPublishAnnouncement(Request $request,$id){
+      $announcement['status']=1;
+      $query = Event::where('id',$id)->update($announcement);
+      if($query == 1){
+        $status = 200;
+        $message = "Publish request sent to admin successfully !";
+      }else{
+        $status = 500;
+        $message = "Something went wrong !";
+      }
+      $response = [
+          "message" => $message,
+          "status" =>$status
+      ];
+      return response($response);
+    }
+    public function viewAnnouncement(Request $request,$id)
+    {
+        $eventNotPublished = Event::where('event_type_id',1)->
+                        whereIn('status',[0,1])->where('created_by',$id)->orderBy('id','desc')->get()->toArray();
+        $eventPublished = Event::where('event_type_id',1)->
+                        where('status',2)->orderBy('id','desc')->get()->toArray();
+        $event = array_merge($eventNotPublished,$eventPublished);
+        foreach($event as $key => $val){
+            $event[$key]['createdBy'] = User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+            $event[$key]['publishedBy'] = User::where('id',$val['published_by'])->select('first_name','last_name')->first();
+            if(!empty($event[$key]['publishedBy'])){
+                $event[$key]['publishedBy']->toArray();
+            }
+        }
         $response=$event;
+        return response($response);
+    }
+
+    public function deleteAchievement($id){
+                   try{
+                       $a=EventImages::where('event_id',$id)->delete();
+                       $ab=Event::where('id',$id)->delete();
+                       $status = 200;
+                       $message = "Achievement deleted successfully !";
+                   }catch (\Exception $e) {
+                       $status = 500;
+                       $message = "Something went wrong";
+                   }
+        $response=[
+                   "status" => $status,
+                   "message" => $message
+                  ];
+        return response($response);
+    }
+    public function getAdmin(){
+          $response=User::where('role_id',1)->select()->get();
+        return response($response);
+    }
+    public function getTeacher(){
+          $response=User::where('role_id',2)->select()->get();
+        return response($response);
+    }
+    public function createAchieve(Request $request){
+        $data=$request->all();
+
+        try{
+            $module_id=12;
+            $acl=1;
+            $isCreate=ModuleAcl::where('user_id',$data['user_id'])->where('acl_id',$acl)->where('module_id',$module_id)->get();
+            if($isCreate != null){
+                $achievement['title']=$data['title'];
+                $achievement['detail']=$data['detail'];
+                $achievement['status']=0;
+                $achievement['event_type_id']=2;
+                $achievement['priority']=$data['priority'];
+                $achievement['created_by']=$data['user_id'];
+                $achievement['created_at']=Carbon::now();
+                $a=Event::insertGetId($achievement);
+                $tempImagePath = "uploads/achievement/events/".$a.'/';
+                $path = public_path('uploads/achievement/events/'.$a);
+                if (!file_exists($path)) {
+                    File::makeDirectory('uploads/achievement/events/'.$a, $mode = 0777, true,true);
+                }
+                foreach($data['image'] as $key => $value){
+                    $mytime = Carbon::now();
+                    $tempImageName = (strtotime($mytime)).$key.".jpg";
+                    if($data['image'] != null){
+                    $storeAchievementImages['event_id'] = $a;
+                    $storeAchievementImages['image'] = $tempImageName;
+                    $storeAchievementImages['created_at'] = Carbon::now();
+                    EventImages::insert($storeAchievementImages);
+                    }
+                    file_put_contents($tempImagePath.$tempImageName,base64_decode($value));
+                }
+                if($data['image'] == null){
+                    $storeAchievementImages['event_id'] = $a;
+                    $storeAchievementImages['image'] = null;
+                    $storeAchievementImages['created_at'] = Carbon::now();
+                    $storeAchievementImages['updated_at'] = Carbon::now();
+                    EventImages::insert($storeAchievementImages);
+                }
+                $status=200;
+                $message="Achievement created successfully !";
+            }
+            else{
+                $status=401;
+                $message="You do not have ACL for this module !";
+            }
+        }catch(\Exception $e){
+            $status=500;
+            $message=$e -> getMessage();
+        }
+        $response=[
+            "status" => $status,
+            "message" => $message
+        ];
+
+
         return response($response);
     }
     public function createAchievement(Requests\CreateAchievement $request)
@@ -256,65 +431,51 @@ class NoticeBoardController extends Controller
         return response($response, $status);
     }*/
     public function viewAchievement($id){
-        $teacherAchievementSelfPendingAndCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
-            ->where('event_type_id','=',2)
-            ->wherein('status',[0,1])
-            ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
-
-        $teacherAchievementAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
-            ->where('event_type_id','=',2)
-            ->where('status','=',2)
-            ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
-            ->union($teacherAchievementSelfPendingAndCreated)
-            ->orderby('created_at','desc')
+        $role_id=UserRoles::where('slug',$id)->pluck('id');
+        $teacherAchievementAllPublished = Event::where('event_type_id','=',2)
+            ->wherein('status',[0,1,2])
+            ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
             ->get();
-        //oldest date of event
 
-        if($id == 0)
+        if($role_id == 0)
         {
             $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->wherein('status',[0,1])
                 ->min('events.created_at');
-
             $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('status','=',2)
                 ->min('events.created_at');
-
             $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
-
             $lastDate = date('');
-
-            foreach(array_unique($arrayMergedForLastDate) as $row)
-            {
-                if($row != null)
-                {
-
-                    if(strtotime($lastDate) < strtotime($row))
-                    {
+            foreach(array_unique($arrayMergedForLastDate) as $row){
+                if($row != null){
+                    if(strtotime($lastDate) < strtotime($row)){
                         $lastDate = $row;
                     }
-
                 }
-
             }
-            $path=array();
-            $path['path']=(url()."/achievement");
-            $teacherAchievement[$lastDate] = json_decode(json_encode($teacherAchievementAllPublished),true);
-            array_push($teacherAchievement,$path);
-
-        } else {
-            $path=array();
-            $path['path']=(url()."/achievement");
-
             $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
-            $teacherAchievement=array_merge($teacherAchievement,$path);
-
+   }else{
+            $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
         }
-       return response($teacherAchievement);
+        $imageArray=array();
+         foreach($teacherAchievement as $key => $val){
+             $teacherAchievement[$key]['path']=url();
+             $teacherAchievement[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
+             if($val['published_by'] != 0){
+                 $teacherAchievement[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first()->toArray();
+             }
+             $imageArray[$key]= EventImages::where('event_id',$val['id'])->select('event_id','image')->get()->toArray();
+         }
+         $response=[
+             "imageData"=>$imageArray,
+             "teacherAchievement"=>$teacherAchievement
+         ];
 
-    }
+         return response()->json($response);
+   }
 
 
 }

@@ -31,7 +31,7 @@
                                 </label>
                                 <select name="school" class="form-control">
                                     @foreach($bodies as $body)
-                                    <option value="{{$body['id']}}"> {{$body['name']}} </option>
+                                        <option value="{{$body['id']}}"> {{$body['name']}} </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -83,7 +83,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     @include('footer')
@@ -95,7 +94,7 @@
 <script src="/vendor/jquery-modal/jquery.modal.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
-<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>4a
 <script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
@@ -176,8 +175,10 @@
                         success:function(data,textStatus,xhr){
                             $("#student_details").html(data);
                         },
-                        error: function(data){
-                            alert(data.responseText);
+                        error: function(xhr,errorStatus){
+                            if(xhr.status == 400){
+                                alert(xhr.responseText);
+                            }
                         }
                     });
                 }
@@ -189,6 +190,7 @@
             }
         }
     }();
+
     jQuery(document).ready(function()
     {
         Main.init();

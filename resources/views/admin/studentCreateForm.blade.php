@@ -222,7 +222,7 @@
             <label class="control-label">
                 Category
             </label>
-    
+
 	<select class="form-control" name="category" id="batch-select" style="-webkit-appearance: menulist;">
          <option value="">Please Select </option>
                 <option value="SC">SC</option>
@@ -236,7 +236,7 @@
                 <option value="OPEN">OPEN</option>
                 <option value="MARATHAESBC">MARATHA(ESBC)</option>
                 <option value="MUSLIMSBCA">MUSLIM(SBC-A)</option>
-    
+
 	</select>
         </div>
     </div>

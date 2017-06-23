@@ -2,8 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
-
-
 class AclMasterSeeder extends Seeder
 {
     /**

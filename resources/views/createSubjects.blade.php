@@ -1,15 +1,10 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
     @include('sidebar')
-
     <div class="app-content">
         <!-- start: TOP NAVBAR -->
         @include('header')
-
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
             <div class="wrap-content container" id="container">
@@ -25,11 +20,9 @@
 
                     </div>
                 </section>
-
                 <div class="container-fluid container-fullw">
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
-
                             <form method="post" action="subject-create" role="form" id="createSubject">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -45,7 +38,7 @@
                                             <label class="control-label">
                                                 Enter Subject name <span class="symbol required"></span>
                                             </label>
-                                            <input type="text" placeholder="Insert new subject name" class="form-control" id="subject_name" name="subject_name">
+                                            <input type="text" placeholder="Enter new subject name" class="form-control" id="subject_name" name="subject_name">
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
@@ -54,15 +47,12 @@
                                             <textarea class="form-control" id="description" name="description"></textarea>
                                         </div>
                                         <div class="form-group">
-
                                             <label class="control-label">
                                                 Select Classes <span class="symbol required"></span>
                                             </label>
                                             <div>
-
                                                 @foreach($batches as $batch)
                                                     <div>
-
                                                     <table class="table table-responsive batchClassTab">
                                                         <tr>
                                                             <th>{!! $batch !!}</th>
@@ -70,7 +60,6 @@
                                                         </tr>
                                                         <?php $i=0; ?>
                                                     @foreach($classes as $class)
-
                                                         @if($batch==$class['batch'])
                                                                 @if($i%2==0)
                                                                 <tr>
@@ -93,36 +82,29 @@
                                                         <?php $i++;?>
 
                                                     @endforeach
-
-
                                                     </table>
                                                     </div>
                                                 @endforeach
                                             </div>
                                         </div>
-
                                         <div class="form-group">
                                             <button class="btn btn-primary btn-wide pull-right" type="submit">
                                                 Create <i class="fa fa-arrow-circle-right"></i>
                                             </button>
                                         </div>
                                     </div>
-
                             </form>
                         </div>
                     </div>
 
                 </div>
             </div>
-
             @include('rightSidebar')
         </div>
     </div>
 </div>
 @include('footer')
 </div>
-
-
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -132,7 +114,6 @@
 <script src="vendor/switchery/switchery.min.js"></script>
 <script src="vendor/selectFx/classie.js"></script>
 <script src="vendor/selectFx/selectFx.js"></script>
-
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
@@ -142,12 +123,9 @@
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
-
 <script src="assets/js/form-wizard.js"></script>
-
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/custom-project.js"></script>
-
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
@@ -155,10 +133,5 @@
         FormWizard.init();
         FormValidator.init();
     });
-
-
 </script>
-
 @stop
-
-

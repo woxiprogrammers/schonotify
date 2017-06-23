@@ -3,6 +3,7 @@
  * Developed By Ameya Joshi
  * Date: 2/6/17
  */
+
 namespace App\Http\Controllers;
 use App\NetBankingTransaction;
 use Illuminate\Http\Request;
@@ -10,11 +11,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AesForJava;
 use Illuminate\Support\Facades\Log;
+
 class PaymentController extends Controller
 {
     public function __construct(){
         $this->middleware('db');
     }
+
     public function billPayment(Request $request){
         try{
             $data = $request->all();
@@ -31,12 +34,12 @@ class PaymentController extends Controller
                 NetBankingTransaction::where('id', 1)->update(['transactions_count' => $referenceId]);
             }
             $crn = $referenceId+1;
-            $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
+            $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|1.0";//.$data['amount'];
             $paramArr = array(
                 "CID=".env('EASY_PAY_CORPORATE_CODE'),
                 "RID=".$referenceId,
                 "CRN=".$crn,
-                "AMT=".$request->amount,
+                "AMT=1.0",//$request->amount,
                 "VER=".env('EASY_PAY_VERSION'),
                 "TYP=".env('EASY_PAY_TYPE'),
                 "CNY=INR",
@@ -69,6 +72,7 @@ class PaymentController extends Controller
             Log::critical(json_encode($data));
         }
     }
+
     public function billReturnUrl(Request $request){
         try{
             $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
