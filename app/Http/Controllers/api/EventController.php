@@ -88,8 +88,6 @@ class EventController extends Controller
             $status = 500;
             $message = "Something went wrong";
         }
-   
-
         $response = [
             "message" => $message,
             "status" => $status,
@@ -306,9 +304,7 @@ class EventController extends Controller
             $mytime = Carbon::now();
             $tempImageName = (strtotime($mytime)).".jpg";
             $tempImagePath = "uploads/events/";
-
             file_put_contents($tempImagePath.$tempImageName,base64_decode($request->img) );
-
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $eventData['event_type_id'] = $eventTypesId;
@@ -384,31 +380,6 @@ class EventController extends Controller
                 $eventData['end_date'] = $data['end_date'];
                 $eventData['updated_at'] = Carbon::now();
                 Event::where('id','=',$data['event_id'])->update($eventData);
-                /*if($data['flag'] == 1){
-                    $image = EventImages::where('event_id','=',$data['event_id'])->pluck('image');
-
-                    if(!Empty($image)) {
-                        unlink('uploads/events/'.$image);
-                    }
-                    if ($request->hasFile('image')) {
-                        $image = $request->file('image');
-                        $name = $request->file('image')->getClientOriginalName();
-                        $filename = time()."_".$name;
-                        $path = public_path('uploads/events/');
-                        if (!file_exists($path)) {
-                            File::makeDirectory('uploads/events/', $mode = 0777, true,true);
-                        }
-                        $image->move($path,$filename);
-                        $eventImageData['image'] = $filename;
-                        $eventImageData['updated_at'] = Carbon::now();
-                        EventImages::where('event_id','=',$data['event_id'])->update($eventImageData);
-                    }
-                } else if($data['flag'] == 2) {
-                        $filename = null;
-                    $eventImageData['image'] = $filename;
-                    $eventImageData['updated_at'] = Carbon::now();
-                    EventImages::where('event_id','=',$data['event_id'])->update($eventImageData);
-                }*/
                 $status = 200;
                 $message = 'Event Successfully updated';
             } else {

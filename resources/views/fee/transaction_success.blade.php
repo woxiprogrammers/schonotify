@@ -17,7 +17,7 @@
                         <div class="col-sm-9 col-sm-offset-2">
                             <h1 class="mainTitle">Ganesh International School , Chikhali</h1> <br><br>
                             <h2 class="mainTitle" style="margin-left:20%;color: {{$data['color']}};">{{$data['message_title']}}</h2>
-                        </div>
+                      </div>
                     </div>
                 </section>
                 <div class="row">
@@ -53,7 +53,6 @@
                         </fieldset>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -86,9 +85,7 @@
 <script src="/vendor/select2/select2.min.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-
 <!-- start: JavaScript Event Handlers for this page -->
-
 <script src="/assets/js/form-validation-edit.js"></script>
 <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
 <script src="/assets/js/main.js"></script>

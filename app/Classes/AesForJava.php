@@ -6,6 +6,7 @@
  * Time: 4:00 PM
  */
 namespace App\Classes;
+
 class AesForJava {
     const M_CBC = 'cbc';
     const M_CFB = 'cfb';
@@ -32,6 +33,7 @@ class AesForJava {
         $this->setMode($mode);
         $this->setIV("");
     }
+
     /**
      *
      * @param type $data
@@ -46,6 +48,7 @@ class AesForJava {
     public function setKey($key) {
         $this->key = $key;
     }
+
     /**
      *
      * @param type $blockSize
@@ -105,9 +108,11 @@ class AesForJava {
             return FALSE;
         }
     }
+
     public function setIV($IV) {
         $this->IV = $IV;
     }
+
     protected function getIV() {
         if ($this->IV == "") {
             $this->IV = mcrypt_create_iv(mcrypt_get_iv_size($this->cipher, $this->mode), MCRYPT_RAND);
@@ -124,6 +129,7 @@ class AesForJava {
         $this->setBlockSize($blockSize);
         $this->setMode($mode);
         $this->setIV("");
+
 //        $padded_data = $this->pkcs5_pad($this->data);
         if ($this->validateParams()) {
             return trim(base64_encode(
@@ -167,6 +173,7 @@ class AesForJava {
         $pad = $blocksize - (strlen($text) % $blocksize);
         return $text . str_repeat(chr($pad), $pad);
     }
+
     function pkcs5_unpad ($text) {
         $pad = ord($text{strlen($text)-1});
         if ($pad > strlen($text)) {

@@ -3,6 +3,7 @@
  * Developed By Ameya Joshi
  * Date: 2/6/17
  */
+
 namespace App\Http\Controllers;
 use App\NetBankingTransaction;
 use Illuminate\Http\Request;
@@ -10,11 +11,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AesForJava;
 use Illuminate\Support\Facades\Log;
+
 class PaymentController extends Controller
 {
     public function __construct(){
         $this->middleware('db');
     }
+
     public function billPayment(Request $request){
         try{
             $data = $request->all();
@@ -69,6 +72,7 @@ class PaymentController extends Controller
             Log::critical(json_encode($data));
         }
     }
+
     public function billReturnUrl(Request $request){
         try{
             $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');

@@ -1,6 +1,6 @@
 <?php
-use Illuminate\Database\Schema\Blueprint;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AddInstallmentIdColumnInTransactionDetailsTable extends Migration
@@ -16,6 +16,7 @@ class AddInstallmentIdColumnInTransactionDetailsTable extends Migration
             $table->unsignedInteger('installment_id')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      *

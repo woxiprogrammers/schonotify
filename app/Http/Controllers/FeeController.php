@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Body;
 use App\CASTECONCESSION;
 use App\category_types;
 use App\Classes;
 use App\ConcessionTypes;
+use App\Division;
 use App\fee_installments;
 use App\fee_particulars;
 use App\FeeClass;
@@ -15,8 +17,12 @@ use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
 use App\StudentFee;
+use App\StudentFeeConcessions;
 use App\TransactionDetails;
+use App\User;
+use App\PushToken;
 use Carbon\Carbon;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\Installments;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -26,13 +32,10 @@ use Illuminate\Support\Facades\Log;
 use App\Batch;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use App\Body;
-use App\Division;
-use App\StudentFeeConcessions;
-use App\User;
 
 class FeeController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct()
     {
         $this->middleware('db');
@@ -161,7 +164,6 @@ class FeeController extends Controller
                 $installment_details['amount']=$value;
                 $query5=FeeInstallments::create($installment_details);
             }
-
             }
             foreach($request->fee_due_date as $key=>$due_date)
             {
@@ -174,9 +176,7 @@ class FeeController extends Controller
              Session::flash('message-success','Fee structure created successfully');
              return Redirect::back();
         }
-
     }
-
     public function feeListingView()
     {
 
@@ -204,6 +204,10 @@ class FeeController extends Controller
             return view('fee.feetable')->with(compact('fees'));
         }
     }
+    /**
+     * Function createTransactions()
+     * Developed By Shubham Chaudhari
+     */
     public function createTransactions(Request $request)
     {    $user=$request->student_id;
          $fee_id=StudentFee::where('student_id',$user)->pluck('fee_id');
@@ -216,27 +220,17 @@ class FeeController extends Controller
          $transaction_details['date']=$request->date;
          $transaction_details['installment_id']=$request->installment_id;
          $query=TransactionDetails::create($transaction_details);
-         if($query)
-         {
+         if($query){
              Session::flash('message-success','Fee transaction created successfully');
+             $title="Fee payment";
+             $message="Payment of Rs".$request->transaction_amount."received by school.";
+             $allUser=0;
+             $users_push=User::where('id',$request->student_id)->pluck('parent_id');
+             $push_users=PushToken::where('user_id',$users_push)->lists('push_token');
+             $this->CreatePushNotification($title,$message,$allUser,$push_users);
          }
-
         return redirect('/edit-user/'.$user);
     }
-
-    public function billiingPageView(){
-        try{
-            $bodies = Body::where('id',1)->get()->toArray();             // Only for Ganesh International School
-            return view('fee.FeeBillingPage')->with(compact('bodies'));
-        }catch (\Exception $e){
-            $data = [
-                'action' => 'Get billing page View',
-                'message' => $e->getMessage()
-            ];
-            Log::critical(json_encode($data));
-        }
-    }
-
     /**
      * Function getStudentDetails()
      * Developed By Ameya Joshi
@@ -245,12 +239,12 @@ class FeeController extends Controller
     public function getStudentDetails(Request $request){
         try{
             $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
-                ->where('users.body_id',$request->school)
-                ->where('students_extra_info.grn',$request->grn)
-                ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
-                ->first();
+                        ->where('users.body_id',$request->school)
+                        ->where('students_extra_info.grn',$request->grn)
+                        ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
+                        ->first();
             if($student == null){
-                return response()->json("GR number not found",400);
+                return response()->json("Enter valid data.",400);
             }else{
                 $student = $student->toArray();
             }
@@ -297,6 +291,7 @@ class FeeController extends Controller
             $concession_amount_array=array();
             foreach($collection as $key => $percent_discout_collection)
             {
+
                 $discounted_amount_for_installment=($percent_discout_collection/100)*$caste_concn_amnt;
                 $concession_amount_array[$key] = $discounted_amount_for_installment;
                 $installments[$key]['caste_concession_amount'] = $discounted_amount_for_installment;
@@ -333,4 +328,17 @@ class FeeController extends Controller
             Log::info(json_encode($data));
         }
     }
+
+    public function billiingPageView(){
+        try{
+            $bodies = Body::where('id',1)->get()->toArray();             // Only for Ganesh International School
+            return view('fee.FeeBillingPage')->with(compact('bodies'));
+        }catch (\Exception $e){
+            $data = [
+                'action' => 'Get billing page View',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }    
 }

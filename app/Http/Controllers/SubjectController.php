@@ -25,7 +25,6 @@ class SubjectController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
-
     public function createSubjects(Requests\WebRequests\SubjectRequest $request)
     {
         if($request->authorize()===true)
@@ -36,7 +35,6 @@ class SubjectController extends Controller
                 ->get();
             $batches=array();
             $classArray=array();
-
             $i=0;
             foreach($classes->toArray() as $row)
             {
@@ -53,17 +51,17 @@ class SubjectController extends Controller
     }
     public function create(Requests\WebRequests\SubjectRequest $request)
     {
+        $body_id = Auth::user()->body_id;
         if($request->authorize()===true)
         {
-
             $subject['subject_name']=$request->subject_name;
             $subject['description']=strtolower($request->description);
             $subject['slug']=strtolower($request->subject_name);
+            $subject['body_id']=$body_id;
             $subject['created_at'] = Carbon::now();
             $subject['updated_at'] = Carbon::now();
             $query=Subject::insertGetId($subject);
             $subject_class=array();
-
             if($query!="")
             {
                 $i=0;
@@ -72,18 +70,13 @@ class SubjectController extends Controller
                     $time=Carbon::now();
                     $subject_class[$i]=array('class_id'=>$classes,'subject_id'=>$query,'created_at'=>$time,'updated_at'=>$time);
                     $i++;
-
                 }
-
                 $query1=SubjectClass::insert($subject_class);
-
                 if($query1)
                 {
-
                     Session::flash('message-success','Subject created successfully.');
                     return Redirect::back();
                 }
-
             }
         }else{
             return Redirect::to('/');
@@ -91,15 +84,13 @@ class SubjectController extends Controller
     }
     public function checkSubject(Request $request)
     {
-        $cnt=Subject::where('subject_name',$request->subject_name)->count();
-
+        $body_id = Auth::user()->body_id;
+        $cnt=Subject::where('body_id',$body_id)->where('subject_name',$request->subject_name)->count();
         if($cnt>=1)
         {
             return 'false';
-        }{
+        }else{
          return 'true';
         }
     }
-
-
 }

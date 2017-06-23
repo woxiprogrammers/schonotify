@@ -1,15 +1,10 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
     @include('sidebar')
-
     <div class="app-content">
         <!-- start: TOP NAVBAR -->
         @include('header')
-
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
             <div class="wrap-content container" id="container">
@@ -21,10 +16,8 @@
                         <div class="col-sm-7">
                             <h1 class="mainTitle">Assign Subject</h1>
                         </div>
-
                     </div>
                 </section>
-
                 <div class="container-fluid container-fullw">
                     <div class="row">
                         <div class="col-md-11 col-md-offset-1">
@@ -278,7 +271,7 @@
                 var str="<option value=''>Select Teacher</option>";
                 for(var i=0; i<res.length; i++)
                 {
-                    str+="<option value='"+res[i]['id']+"'>"+res[i]['firstname']+""+res[i]['lastname']+","+res[i]['username']+"</option>"
+                    str+="<option value='"+res[i]['id']+"'>"+res[i]['firstname']+"      "+res[i]['lastname']+"</option>"
                 }
                 $('#teacherDropdown').html(str);
             });
@@ -344,5 +337,3 @@
 </script>
 
 @stop
-
-

@@ -482,15 +482,13 @@
     Route::get('getclasses/{batch_id}',array('uses' => 'api\UserController@getClassesTeacher'));
     Route::get('getdivisions/{class_id}',array('uses' => 'api\UserController@getDivisions'));
     Route::get('get-students-list/{division_id}',array('uses' => 'api\MessageController@getStudentList'));
+    Route::get('get-admin-list',array('uses' => 'api\NoticeBoardController@getAdmin'));
+    Route::get('get-teacher-list',array('uses' => 'api\NoticeBoardController@getTeacher'));
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
-
-
     Route::get('get-acl-details','api\MessageController@getAclDetails');
     Route::get('get-switching-details','api\UserController@getSwitchingDetails');
-
-
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
     Route::post('homework-create','api\HomeworkController@createHomework');
@@ -517,16 +515,22 @@
         Route::get('get-divisions/{classId}','api\TimetableController@getDivisions');
 
         //Announcement
-        Route::post('create-announcement','api\NoticeBoardController@createAnnouncement');
+        Route::post('create-announcement','api\NoticeBoardController@announcementCreate');
         Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
+        Route::post('edit-achievement','api\NoticeBoardController@editAchievement');
+        Route::post('publish-achievement','api\NoticeBoardController@publishAchievement');
         Route::get('view-announcement/{id}','api\NoticeBoardController@viewAnnouncement');
+        Route::get('view-announcement-parent/','api\NoticeBoardController@viewAnnouncementParent');
+        Route::get('request-to-publish-announcement/{id}','api\NoticeBoardController@requestToPublishAnnouncement');
 
         //Result
         Route::get('view-result/{id}','api\ResultController@viewResult');
         Route::get('view-test-chart/{uid}/{tid}','api\ResultController@viewTestGraph');
         Route::get('view-subject-chart/{uid}/{tid}','api\ResultController@viewSubjectGraph');
-        Route::post('create-achievement','api\NoticeBoardController@createAchievement');
+        Route::post('create-achievement','api\NoticeBoardController@createAchieve');
         Route::get('view-achievement/{id}','api\NoticeBoardController@viewAchievement');
+        Route::get('view-achievement-parent','api\NoticeBoardController@viewAchievementParent');
+        Route::get('delete-achievement/{id}','api\NoticeBoardController@deleteAchievement');
 
 
         //Event
@@ -540,6 +544,12 @@
         Route::get('get-year-month','api\EventController@getYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
+
+        //Fees
+        Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
+
+        //Push
+        Route::post('save-push','api\UserController@savePushToken');
 
 
 
