@@ -93,20 +93,6 @@ class FeeController extends Controller
         {
           return view('fee.installments');
         }
-
-    public function billiingPageView(){
-        try{
-            $bodies = Body::get()->toArray();
-            return view('fee.FeeBillingPage')->with(compact('bodies'));
-        }catch (\Exception $e){
-            $data = [
-                'action' => 'Get billing page View',
-                'message' => $e->getMessage()
-            ];
-            Log::critical(json_encode($data));
-        }
-    }
-
     public function create(Request $request)
     {
         $fee_details['fee_name']=$request->fee_name;
@@ -178,7 +164,6 @@ class FeeController extends Controller
                 $installment_details['amount']=$value;
                 $query5=FeeInstallments::create($installment_details);
             }
-
             }
             foreach($request->fee_due_date as $key=>$due_date)
             {
@@ -191,9 +176,7 @@ class FeeController extends Controller
              Session::flash('message-success','Fee structure created successfully');
              return Redirect::back();
         }
-
     }
-
     public function feeListingView()
     {
 
@@ -346,4 +329,16 @@ class FeeController extends Controller
         }
     }
 
+    public function billiingPageView(){
+        try{
+            $bodies = Body::where('id',1)->get()->toArray();             // Only for Ganesh International School
+            return view('fee.FeeBillingPage')->with(compact('bodies'));
+        }catch (\Exception $e){
+            $data = [
+                'action' => 'Get billing page View',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }    
 }

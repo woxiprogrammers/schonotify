@@ -97,6 +97,7 @@
                 @if($installment['is_paid'] == false)
                     <form id="billGeneratorForm_{{$id}}">
                         <input type="hidden" value="{{$student['grn']}}" name="student_grn">
+                        <input type="hidden" value="{{$id}}" name="installment_id">
                         <input type="hidden" value="{{$student['body_id']}}" name="student_body_id">
                         <input type="hidden" value="{{$student['first_name'].' '.$student['last_name']}}" name="student_name">
                         <input type="hidden" value="{{$student['division']}}" name="section">
@@ -112,9 +113,9 @@
                         </button>
                     </form>
                 @endif
+            </div>
+            @endforeach
         </div>
-
-                @endforeach
     </div>
   </div>
 </fieldset>
@@ -162,7 +163,6 @@
                 $("#confirm-payment").modal('show');
             },
             error: function(data, errStatus){
-
             }
         });
     }

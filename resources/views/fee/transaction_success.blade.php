@@ -3,56 +3,56 @@
 @section('content')
 
 <div id="app">
-
+    <div class="sidebar app-aside" id="sidebar" style="top: 0px!important;">
+        <img style="margin-left: 20%;" class="img-responsive" src="/assets/images/bodyLogo/sspss.jpg">
+    </div>
     <div class="app-content">
 
         <!-- end: TOP NAVBAR -->
         <div class="main-content" >
-            <div class="wrap-content container"  style="width: 80% !important; margin-top: 10%" id="container">
+            <div class="wrap-content container"  style="width: 80% !important;" id="container">
                 @include('alerts.errors')
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
-                        <div class="col-sm-7 col-sm-offset-3">
-                            <h1 class="mainTitle" style="color: {{$data['color']}}">{{$data['message_title']}}</h1>
-                        </div>
+                        <div class="col-sm-9 col-sm-offset-2">
+                            <h1 class="mainTitle">Ganesh International School , Chikhali</h1> <br><br>
+                            <h2 class="mainTitle" style="margin-left:20%;color: {{$data['color']}};">{{$data['message_title']}}</h2>
+                      </div>
                     </div>
                 </section>
                 <div class="row">
-                    <div class="col-sm-9 col-sm-offset-1">
+                    <div class="col-sm-11 col-sm-offset-1">
                         <h4> {{$data['message']}} </h4>
+                        <fieldset>
+                            <legend style="font-size: 18px"> Transaction Details</legend>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <span> Transaction Id: </span>
+                                    <span> {{$data['transaction_id']}}</span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <span> Reference Id: </span>
+                                    <span> {{$data['reference_id']}}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <span> Amount: </span>
+                                    <span> {{$data['amount']}}</span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <span> Date: </span>
+                                    <span> {{$data['date']}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-offset-3" style="margin-top: 10%">
+                                <a class="btn btn-primary btn-wide"  href="/fees/billing-page">
+                                    Go to Fees Payment Page
+                                </a>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
-                <fieldset>
-                    <legend style="font-size: 18px"> Transaction Details</legend>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <span> Transaction Id: </span>
-                            <span> {{$data['transaction_id']}}</span>
-                        </div>
-                        <div class="col-sm-6">
-                            <span> Reference Id: </span>
-                            <span> {{$data['reference_id']}}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <span> Amount: </span>
-                            <span> {{$data['amount']}}</span>
-                        </div>
-                        <div class="col-sm-6">
-                            <span> Date: </span>
-                            <span> {{$data['date']}}</span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 10%">
-                        <div class="col-sm-6 col-md-offset-4">
-                            <a class="btn btn-primary btn-wide" href="/fees/billing-page">
-                                Back to Billing Page
-                            </a>
-                        </div>
-
-                    </div>
-                </fieldset>
             </div>
         </div>
     </div>
@@ -85,9 +85,7 @@
 <script src="/vendor/select2/select2.min.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-
 <!-- start: JavaScript Event Handlers for this page -->
-
 <script src="/assets/js/form-validation-edit.js"></script>
 <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
 <script src="/assets/js/main.js"></script>
