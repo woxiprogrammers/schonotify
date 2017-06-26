@@ -28,8 +28,7 @@ trait PushNotificationTrait{
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
             'X-Ionic-Application-Id:'.env('PushAPPId'),
-            'Authorization:Bearer '.env('APIToken')
-        ));
+            'Authorization:Bearer '.'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhMjRmZjNhYy0zZGYyLTQ0YjYtYjZlMi1hODYxYWM0ODRmYjUifQ.vMJjD1u1PVa4vIkwNNsf_Am-zEx6O9FNm6P4mMdQRK4'        ));
         $result = curl_exec($ch);
         curl_close($ch);
     }
