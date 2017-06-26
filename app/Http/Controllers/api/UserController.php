@@ -30,7 +30,6 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('db');
@@ -112,10 +111,6 @@ class UserController extends Controller
                         $data['Badge_count']['message_count'] = $messageCount;
                         $data['Badge_count']['auto_notification_count'] = $messageCount;
                     }
-                    $loggedin_Id = Auth()->User();
-                    $tokenData=array();
-                    $tokenData['is_loggedIn']=1;
-                    User::where('id',$loggedin_Id['id'])->update($tokenData);
                     $message = 'login successfully';
                     $status =200;
                 }else{
@@ -219,80 +214,6 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-    public function checkLogin(Request $request , $id )
-       {
-         $user=Auth::User();
-         $userView=TeacherView::where('user_id','=',$user['id'])->first();
-         if(Empty($userView) && $user['role_id']==4 || $userView['mobile_view']==1)
-         {
-             $userData=User::join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                 ->where('users.id','=',$user->id)
-                 ->select('users.id','users.role_id','users.id','users.email','users.username as username','users.first_name as firstname','users.last_name as lastname','users.avatar','user_roles.slug','users.remember_token as token','users.password as pass')
-                 ->get()->toArray();
-             foreach($userData as $val)
-             {
-                 $data['users']['user_id']=$val['id'];
-                 $data['users']['role_type']=$val['slug'];
-                 $data['users']['role_id']=$val['role_id'];
-                 $data['users']['user_id']=$val['id'];
-                 $data['users']['username']=$val['firstname'].''.$val['lastname'];
-                 $data['users']['password']=$val['pass'];
-                 $data['users']['token']=$val['token'];
-                 $data['users']['email']=$val['email'];
-                 $data['users']['avatar']=$val['avatar'];
-                 $data['users']['firstname']=$val['firstname'];
-                 $data['users']['lastname']=$val['lastname'];
-                 $grn=StudentExtraInfo::where('student_id',$val['id'])->select('gr');
-             }
-             $acl_module=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
-                 ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
-                 ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
-                 ->where('users.id','=',$user->id)
-                 ->select('users.id','acl_master.title as acl','modules.title as module','modules.slug as module_slug')
-                 ->get();
-             $AclModuleArray=array();
-             foreach($acl_module as $val)
-             {
-                 array_push($AclModuleArray,$val->acl.'_'.$val->module_slug);
-             }
-             $data['Acl_Modules']['user_id']=$user->id;
-             $i=0;
-             foreach($AclModuleArray as $val)
-             {
-                 $data['Acl_Modules']['acl_module '][$i]=$val;
-                 $i++;
-             }
-             if($data['users']['role_id']==4)
-             {
-                 $i=0;
-                 $userData=User::where('parent_id','=',$data['users']['user_id'])->first();
-                 $messageCount=Message::where('to_id',$userData['id'])
-                         ->where('read_status','=',0)
-                         ->where('is_delete','=',0)
-                         ->count();
-                     $data['Badge_count']['user_id']=$userData['id'];
-                     $data['Badge_count']['body_id']=$user['body_id'];
-                     $data['Badge_count']['message_count'] = $messageCount;
-                     $data['Badge_count']['auto_notification_count'] = $messageCount;
-             }else{
-                 $messageCount=Message::where('to_id',$user['id'])
-                     ->where('read_status','=',0)
-                     ->where('is_delete','=',0)
-                     ->count();
-                 $data['Badge_count']['user_id']=$user['id'];
-                 $data['Badge_count']['body_id']=$user['body_id'];
-                 $data['Badge_count']['message_count'] = $messageCount;
-                 $data['Badge_count']['auto_notification_count'] = $messageCount;
-             }
-             $message = 'login successfully';
-             $status =200;
-         }else{
-             $status =406;
-             $message = 'Sorry!! you do not have mobile view';
-         }
-           $response = ["message" => $message,"status" => $status,"data" =>$data,];
-           return response($response, $status);
-       }
     public function getTeachersList(Request $request , $id )
        {
            try{
