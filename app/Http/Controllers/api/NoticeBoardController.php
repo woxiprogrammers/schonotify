@@ -409,12 +409,12 @@ class NoticeBoardController extends Controller
               ->wherein('status',[0,1])
               ->where('created_by',$user_id)
               ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-              ->orderBy('id')
+              ->orderBy('id','desc')
               ->get();
            $teacherAchievementPublished = Event::where('event_type_id','=',2)
                  ->where('status',2)
                  ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                 ->orderBy('id')
+                 ->orderBy('id','desc')
                  ->get();
                  if((!empty($teacherAchievementPublished->toArray())) && (!empty($teacherAchievementAllPublished->toArray()))){
                    $teacherAchievementAllPublished = array_merge($teacherAchievementAllPublished->toArray(),$teacherAchievementPublished->toArray());
@@ -428,7 +428,7 @@ class NoticeBoardController extends Controller
               $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                   ->where('event_type_id','=',2)
                   ->wherein('status',[0,1])
-                  ->orderBy('id')
+                  ->orderBy('id','desc')
                   ->min('events.created_at');
               $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                   ->where('event_type_id','=',2)
@@ -464,7 +464,7 @@ class NoticeBoardController extends Controller
                $teacherAchievementPublished = Event::where('event_type_id','=',2)
                       ->where('status',2)
                       ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                      ->orderBy('id')
+                      ->orderBy('id','desc')
                       ->get();
                       $imageArray=array();
                foreach($teacherAchievement as $key => $val){

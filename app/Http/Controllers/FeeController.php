@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Body;
 use App\CASTECONCESSION;
 use App\category_types;
@@ -32,7 +30,9 @@ use Illuminate\Support\Facades\Log;
 use App\Batch;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-
+use App\Division;
+use App\StudentFeeConcessions;
+use App\User;
 class FeeController extends Controller
 {
     use PushNotificationTrait;
@@ -40,7 +40,6 @@ class FeeController extends Controller
     {
         $this->middleware('db');
         $this->middleware('auth',['except'=>['billiingPageView','getStudentDetails']]);
-
     }
     public function createFeeStructureView(){
         try{
@@ -50,7 +49,6 @@ class FeeController extends Controller
                 ->get();
             $batches=array();
             $classArray=array();
-
             $i=0;
             foreach($classes->toArray() as $row)
             {
@@ -64,15 +62,12 @@ class FeeController extends Controller
             return view('fee.create')->with(compact('classes','batches','concession_types','caste_types','installment_number'));
         }catch(\Exception $e){
             $data = [
-
                 'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());
         }
-
     }
-
     public function concessionTypes()
     {
         $batchData =ConcessionTypes::select('id','name')->get();
@@ -87,12 +82,22 @@ class FeeController extends Controller
         $fee_installment_amount=fee_installments::select('id','amount')->take($total_no_of_installments)->get();
         return view('fee.installments')->with(compact('installment_details','fee_particulars','fee_installment_amount'));
     }
-
-
     public function installmentCount(Request $request)
         {
           return view('fee.installments');
         }
+    public function billiingPageView(){
+        try{
+            $bodies = Body::get()->toArray();
+            return view('fee.FeeBillingPage')->with(compact('bodies'));
+        }catch (\Exception $e){
+            $data = [
+                'action' => 'Get billing page View',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
     public function create(Request $request)
     {
         $fee_details['fee_name']=$request->fee_name;
@@ -139,7 +144,6 @@ class FeeController extends Controller
                     $class_details['amount']=$request->total_fee;
                     $query2=FeeClass::create($class_details);
                 }
-
             }
             foreach($request->concessions as $concession)
             {
@@ -171,7 +175,6 @@ class FeeController extends Controller
                 $caste_types['installment_id']=$key;
                 $caste_types['due_date']=$due_date;
                 $query7=FeeDueDate::create($caste_types);
-
             }
              Session::flash('message-success','Fee structure created successfully');
              return Redirect::back();
@@ -179,16 +182,13 @@ class FeeController extends Controller
     }
     public function feeListingView()
     {
-
         $batches=Batch::select('id','name')->get()->toArray();
-
         return view('fee.feelisting')->with(compact('batches'));
     }
     public function classesView(Request $request)
     {
        $classes=Classes::where('batch_id',$request->str1)->select('id','class_name')->get()->toArray();
         return view('fee.claasses')->with(compact('classes'));
-
     }
     public function feeListingTableView(Request $request)
     {
@@ -328,7 +328,6 @@ class FeeController extends Controller
             Log::info(json_encode($data));
         }
     }
-
     public function billiingPageView(){
         try{
             $bodies = Body::where('id',1)->get()->toArray();             // Only for Ganesh International School
@@ -340,5 +339,101 @@ class FeeController extends Controller
             ];
             Log::critical(json_encode($data));
         }
-    }    
+    }
+    /**
+     * Function getStudentDetails()
+     * Developed By Ameya Joshi
+     * Date: 2/6/17
+     */
+    public function getStudentDetails(Request $request){
+        try{
+            $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
+                ->where('users.body_id',$request->school)
+                ->where('students_extra_info.grn',$request->grn)
+                ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
+                ->first();
+            if($student == null){
+                return response()->json("GR number not found",400);
+            }else{
+                $student = $student->toArray();
+            }
+            $divisionData = Division::where('id',$student['division_id'])->select('division_name','class_id')->first()->toArray();
+            $student['division'] = $divisionData['division_name'];
+            $student['standard'] = Classes::where('id',$divisionData['class_id'])->pluck('class_name');
+            $student['grn'] = $request->grn;
+            $parent = User::where('id',$student['parent_id'])->select('first_name','last_name','email','mobile')->first()->toArray();
+            $student_fee=StudentFee::where('student_id',$student['id'])->select('fee_id','year','fee_concession_type','caste_concession')->first()->toarray();
+            $student['fee_type'] = $student_fee['fee_id'];
+            $student['academic_year'] = $student_fee['year'];
+            $installment_info=FeeInstallments::where('fee_id',$student_fee['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
+            $installments = array();
+            $total_fee_amount = 0;
+            $total_installment_amount = array();
+            if(!empty($installment_info))
+            {
+                foreach($installment_info as $installment)
+                {
+                    if(!array_key_exists($installment['installment_id'],$installments)){
+                        $installments[$installment['installment_id']] = array();
+                        $installments[$installment['installment_id']]['particulars'][$installment['particulars_id']]['amount'] = $installment['amount'];
+                        $installments[$installment['installment_id']]['particulars'][$installment['particulars_id']]['particulars_name'] = fee_particulars::where('id',$installment['particulars_id'])->pluck('particular_name');
+                        $total_installment_amount[$installment['installment_id']] = $installment['amount'];
+                        $total_fee_amount += $installment['amount'];
+                    }else{
+                        $installments[$installment['installment_id']]['particulars'][$installment['particulars_id']]['amount'] = $installment['amount'];
+                        $installments[$installment['installment_id']]['particulars'][$installment['particulars_id']]['particulars_name'] = fee_particulars::where('id',$installment['particulars_id'])->pluck('particular_name');
+                        $total_installment_amount[$installment['installment_id']] += $installment['amount'];
+                        $total_fee_amount += $installment['amount'];
+                    }
+                    $installments[$installment['installment_id']]['subTotal'] = $total_installment_amount[$installment['installment_id']];
+                }
+            }
+            /*Applying Concessions*/
+            $installment_percent_amount=array();
+            foreach($total_installment_amount as $key => $installment_amounts)
+            {
+                $installment_amounts=($installment_amounts/$total_fee_amount)*100;
+                $installment_percent_amount[$key]=$installment_amounts;
+            }
+            $caste_concn_amnt= CASTECONCESSION::where('caste_id', $student_fee['caste_concession'])->where('fee_id',$student_fee['fee_id'])->pluck('concession_amount');
+            $collection=collect($installment_percent_amount);
+            $concession_amount_array=array();
+            foreach($collection as $key => $percent_discout_collection)
+            {
+                $discounted_amount_for_installment=($percent_discout_collection/100)*$caste_concn_amnt;
+                $concession_amount_array[$key] = $discounted_amount_for_installment;
+                $installments[$key]['caste_concession_amount'] = $discounted_amount_for_installment;
+            }
+            $feeConcessions = StudentFeeConcessions::where('student_id',$student['id'])->where('fee_id',$student_fee['fee_id'])->pluck('fee_concession_type');
+            $feeConcessions = json_decode($feeConcessions);
+            if($feeConcessions != 'null' || $feeConcessions != null){
+                $feeConcessionAmounts = FeeConcessionAmount::where('fee_id',$student_fee['fee_id'])->whereIn('concession_type',$feeConcessions)->lists('amount')->toArray();
+                $totalFeeConcessionAmount = array_sum($feeConcessionAmounts);
+            }else{
+                $totalFeeConcessionAmount = 0;
+            }
+            $payableAmount = -1;
+            foreach($installments as $installmentId => $values ){
+                $installments[$installmentId]['fee_concession_amount'] = ($installment_percent_amount[$installmentId]/100) * $totalFeeConcessionAmount;
+                $installments[$installmentId]['final_total'] = $installments[$installmentId]['subTotal'] - $installments[$installmentId]['caste_concession_amount'] - $installments[$installmentId]['fee_concession_amount'];
+                $transactionCount = TransactionDetails::where('fee_id',$student_fee['fee_id'])->where('student_id',$student['id'])->where('installment_id',$installmentId)->count();
+                if($transactionCount > 0){
+                    $installments[$installmentId]['is_paid'] = true;
+                }else{
+                    if($payableAmount == -1){
+                        $payableAmount = $installments[$installmentId]['final_total'];
+                    }
+                    $installments[$installmentId]['is_paid'] = false;
+                }
+            }
+            return view('fee.installments_details_partial')->with(compact('student','parent','installments','payableAmount'));
+        }catch(\Exception $e){
+            $data = [
+                'action' => 'Get Student details for payment',
+                'data' => $request->all(),
+                'message' => $e->getMessage()
+            ];
+            Log::info(json_encode($data));
+        }
+    }
 }
