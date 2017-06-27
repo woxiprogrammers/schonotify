@@ -30,7 +30,6 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('db');
@@ -62,6 +61,7 @@ class UserController extends Controller
                         $data['users']['user_id']=$val['id'];
                         $data['users']['role_type']=$val['slug'];
                         $data['users']['role_id']=$val['role_id'];
+                        $data['users']['user_id']=$val['id'];
                         $data['users']['username']=$val['firstname'].''.$val['lastname'];
                         $data['users']['password']=$val['pass'];
                         $data['users']['token']=$val['token'];
@@ -69,7 +69,8 @@ class UserController extends Controller
                         $data['users']['avatar']=$val['avatar'];
                         $data['users']['firstname']=$val['firstname'];
                         $data['users']['lastname']=$val['lastname'];
-                      }
+                        $grn=StudentExtraInfo::where('student_id',$val['id'])->select('gr');
+                    }
                     $acl_module=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
                         ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
                         ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
@@ -213,7 +214,6 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-
     public function getTeachersList(Request $request , $id )
        {
            try{
@@ -422,8 +422,6 @@ class UserController extends Controller
                                      $finalData['Parent_student_relation']['Students'][$i]['student_div']=$division_name;
                                      $finalData['Parent_student_relation']['Students'][$i]['last_name']=$val->last_name;
                                      $finalData['Parent_student_relation']['Students'][$i]['roll_number']=$val->roll_number;
-                                     $grn=StudentExtraInfo::where('student_id',$val->id)->pluck('grn');
-                                     $finalData['Parent_student_relation']['Students'][$i]['grn']=$grn;
                                        $i++;
                                  }
             $message="Successfully Listed";
