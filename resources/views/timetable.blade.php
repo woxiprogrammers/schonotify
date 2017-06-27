@@ -393,7 +393,9 @@ $(document).ready(function(){
     Main.init();
     FormValidator.init();
 
-    $('.timepicker1').timepicker();
+    $('.timepicker1').timepicker({
+      minuteStep: 5
+    });
 
     var sessionBatchVal = sessionStorage.getItem('batch');
 
@@ -1452,4 +1454,3 @@ function minFromMidnight(tm){
 
 </div>
 @stop
-
