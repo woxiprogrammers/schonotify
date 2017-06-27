@@ -490,6 +490,12 @@ class HomeworkController extends Controller
                     if($homeworkStatus ==1)
                     {
                         Session::flash('message-success','homework published successfully');
+                        $title="Homework";
+                        $message="New Homework Created";
+                        $allUser=0;
+                        $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
+                        $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
+                            $this->CreatePushNotification($title,$message,$allUser,$push_users);
                         return Redirect::to('/homework-listing');
                     }
 
