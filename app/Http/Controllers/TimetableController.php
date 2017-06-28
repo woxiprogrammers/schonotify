@@ -232,24 +232,16 @@ class TimetableController extends Controller
 +   * Developed By: Suraj Bande
 +   * Date: 10/2/2016
 +   */
-
     public function create(Requests\WebRequests\CreateTimetableRequest $request)
     {
         if ( $request->authorize() === true ) {
             $divisions = session('timetable_batch_class_division_id');
-
             $days = DayMaster::get();
-
             return view('createTimetable')->with(compact('divisions','days'));
-
         } else {
-
             return Redirect::to('/');
-
         }
-
     }
-
     /*
 +   * Function Name: createTimetable
 +   * Param: $requests, $id

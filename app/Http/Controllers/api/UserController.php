@@ -69,7 +69,8 @@ class UserController extends Controller
                         $data['users']['avatar']=$val['avatar'];
                         $data['users']['firstname']=$val['firstname'];
                         $data['users']['lastname']=$val['lastname'];
-                        $grn=StudentExtraInfo::where('student_id',$val['id'])->select('gr');
+                        $grn=StudentExtraInfo::where('student_id',$val['id'])->select('grn');
+                        $data['users']['grn']=$grn;
                     }
                     $acl_module=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
                         ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
@@ -418,10 +419,13 @@ class UserController extends Controller
                                      $division_name=Division::where('id',$val->division_id)->pluck('division_name');
                                      $class=Division::where('id',$val->division_id)->pluck('class_id');
                                      $class_name=Classes::where('id',$class)->pluck('class_name');
+                                     $grn=StudentExtraInfo::where('student_id',$val->id)->pluck('grn');
+                                     $finalData['Parent_student_relation']['Students'][$i]['grn']=$grn;
                                      $finalData['Parent_student_relation']['Students'][$i]['class_name']=$class_name;
                                      $finalData['Parent_student_relation']['Students'][$i]['student_div']=$division_name;
                                      $finalData['Parent_student_relation']['Students'][$i]['last_name']=$val->last_name;
                                      $finalData['Parent_student_relation']['Students'][$i]['roll_number']=$val->roll_number;
+                                     $finalData['Parent_student_relation']['Students'][$i]['body_id']=$val->body_id;
                                        $i++;
                                  }
             $message="Successfully Listed";

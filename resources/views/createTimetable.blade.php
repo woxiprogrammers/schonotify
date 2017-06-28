@@ -182,9 +182,13 @@
             getMsgCount();
             Main.init();
             FormValidator.init();
-
+            $('.input-small timepicker1').timepicker({
+              minuteStep: 5
+            });
+            $('#endTime1').timepicker({
+              minuteStep: 5
+            });
             $('#periods-structure-save-btn').hide();
-
             $('#main-div-periods').hide();
 
             });
@@ -392,4 +396,3 @@
 
 </div>
 @stop
-

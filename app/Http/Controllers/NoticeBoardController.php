@@ -39,7 +39,6 @@
             $this->middleware('db');
             $this->middleware('auth');
         }
-
         /*
         * Function Name : show
         * Param : Request $request
@@ -48,22 +47,14 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function show(NoticeBoardRequest $request)
         {
-
             if($request->authorize() == 4) {
-
                 return Redirect::to('/');
-
             } else {
-
                 return view('noticeBoard');
-
             }
-
         }
-
         /*
         * Function Name : getListing
         * Param : Request $request,$id
@@ -72,44 +63,30 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function getListing(NoticeBoardRequest $request,$id)
         {
             $user = Auth::User();
             $latestEventDate = date('Y-m');
             $month = date('m', strtotime(date($latestEventDate)." -".$id." month"));
             $year = date('Y', strtotime(date($latestEventDate)." -".$id." month"));
-
             if($request->authorize() === 1) {
-
                 if($user->role_id == 1) {
                     //admin will get self created , assigned for publish, assigned published and self pending announcement / achievement [1,2]
-
                     $adminAnnouncement = $this::getAdminAnnouncement($month,$year,$id);
-
                     $adminAchievement = $this::getAdminAchievement($month,$year,$id);
-
                     if($id == 0) {
-
                         $adminAnnouncementArray = array();
-
                         $adminAchievementArray = array();
-
                         foreach($adminAnnouncement as $key=>$value)
                         {
                             $lastDateAnnouncement = $key;
-
                             $adminAnnouncementArray = $value;
                         }
-
                         foreach($adminAchievement as $key=>$value)
                         {
                             $lastDateAchievement = $key;
-
                             $adminAchievementArray = $value;
                         }
-
-
                         if($lastDateAnnouncement != "" && $lastDateAchievement != "")
                         {
                             if(strtotime($lastDateAnnouncement) > strtotime($lastDateAchievement))
@@ -125,7 +102,6 @@
                         } else {
                             $lastDate = "";
                         }
-
                         $result = array_merge($adminAnnouncementArray,$adminAchievementArray);
                         $temp_array = array();
                         foreach ($result as $key=>$value) {
@@ -138,19 +114,12 @@
                             $price[$key] = $row['created_at'];
                         }
                         array_multisort($price, SORT_DESC, $temp_array);
-
                         $uniqueResult[$lastDate] = array_values($temp_array);
-
                     } else {
-
                         $result = array_merge($adminAchievement,$adminAnnouncement);
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
                         }
                         $price = array();
@@ -164,31 +133,21 @@
                     return $uniqueResult;
                 } elseif ($user->role_id == 2) {
                     //teacher will get self created , self pending and all publish announcement / achievement [1,2]
-
                     $teacherAnnouncement = $this::getTeacherAnnouncement($month,$year,$id);
-
                     $teacherAchievement = $this::getTeacherAchievement($month,$year,$id);
-
                     if($id == 0) {
-
                         $teacherAnnouncementArray = array();
-
                         $teacherAchievementArray = array();
-
                         foreach($teacherAnnouncement as $key=>$value)
                         {
                             $lastDateAnnouncement = $key;
-
                             $teacherAnnouncementArray = $value;
                         }
-
                         foreach($teacherAchievement as $key=>$value)
                         {
                             $lastDateAchievement = $key;
-
                             $teacherAchievementArray = $value;
                         }
-
                         if($lastDateAnnouncement != "" && $lastDateAchievement != "")
                         {
                             if(strtotime($lastDateAnnouncement) > strtotime($lastDateAchievement))
@@ -204,243 +163,137 @@
                         } else {
                             $lastDate = "";
                         }
-
                         $result = array_merge($teacherAnnouncementArray,$teacherAchievementArray);
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $price = array();
                         foreach ($temp_array as $key => $row)
                         {
                             $price[$key] = $row['created_at'];
                         }
                         array_multisort($price, SORT_DESC, $temp_array);
-
-                        $uniqueResult[$lastDate] = array_values($temp_array);
-
-
+                       $uniqueResult[$lastDate] = array_values($temp_array);
                     } else {
                         $result = array_merge($teacherAnnouncement,$teacherAchievement);
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $price = array();
                         foreach ($temp_array as $key => $row)
                         {
                             $price[$key] = $row['created_at'];
                         }
                         array_multisort($price, SORT_DESC, $temp_array);
-
                         $uniqueResult = array_values($temp_array);
-
                     }
-
                     return $uniqueResult;
-
                 }
-
             } elseif ( $request->authorize() === 2 ) {
                 if($user->role_id == 1) {
-
                     $adminAnnouncement = $this::getAdminAnnouncement($month,$year,$id);
-
                     if($id == 0) {
-
                         $adminAnnouncementArray = array();
-
                         foreach($adminAnnouncement as $key=>$value)
                         {
                             $lastDateAnnouncement = $key;
-
                             $adminAnnouncementArray = $value;
                         }
-
                         $result = $adminAnnouncementArray;
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
                             if (isset($temp_array))
-
-                                $temp_array[$value['id']] = $value;
-
+                               $temp_array[$value['id']] = $value;
                         }
-
                         $uniqueResult[$lastDateAnnouncement] = array_values($temp_array);
-
                     } else {
-
                         $temp_array = array();
-
                         foreach ($adminAnnouncement as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $uniqueResult = array_values($temp_array);
-
                     }
-
                     return $uniqueResult;
-
                 } elseif ( $user->role_id == 2 ) {
-
                     $teacherAnnouncement = $this::getTeacherAnnouncement($month,$year,$id);
-
                     if($id == 0) {
-
                         $teacherAnnouncementArray = array();
-
                         foreach($teacherAnnouncement as $key=>$value)
                         {
                             $lastDateAnnouncement = $key;
-
                             $teacherAnnouncementArray = $value;
                         }
-
                         $result = $teacherAnnouncementArray;
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $uniqueResult[$lastDateAnnouncement] = array_values($temp_array);
-
                     } else {
-
                     $temp_array = array();
-
                     foreach ($teacherAnnouncement as $key=>$value) {
-
                         if (isset($temp_array))
-
                             $temp_array[$value['id']] = $value;
-
                     }
-
                     $uniqueResult = array_values($temp_array);
                     }
-                    return $uniqueResult;
-
+                   return $uniqueResult;
                 }
-
             } elseif( $request->authorize() === 3 ) {
                 if($user->role_id == 1) {
-
                     $adminAchievement = $this::getAdminAchievement($month,$year,$id);
-
                     if($id == 0) {
-
                         $adminAchievementArray = array();
-
                         foreach($adminAchievement as $key=>$value)
                         {
                             $lastDateAnnouncement = $key;
-
                             $adminAchievementArray = $value;
                         }
-
                         $result = $adminAchievementArray;
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $uniqueResult[$lastDateAnnouncement] = array_values($temp_array);
-
                     } else {
-
                         $temp_array = array();
-
                         foreach ($adminAchievement as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $uniqueResult = array_values($temp_array);
-
                     }
-
                     return $uniqueResult;
-
                 } elseif ($user->role_id == 2) {
-
                     $teacherAchievement = $this::getTeacherAchievement($month,$year,$id);
-
                     if($id == 0) {
-
                         $teacherAchievementArray = array();
-
                         foreach($teacherAchievement as $key=>$value)
                         {
                             $lastDateAnnouncement = $key;
-
                             $teacherAchievementArray = $value;
                         }
-
                         $result = $teacherAchievementArray;
-
                         $temp_array = array();
-
                         foreach ($result as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $uniqueResult[$lastDateAnnouncement] = array_values($temp_array);
-
                     } else {
-
                         $temp_array = array();
-
                         foreach ($teacherAchievement as $key=>$value) {
-
                             if (isset($temp_array))
-
                                 $temp_array[$value['id']] = $value;
-
                         }
-
                         $uniqueResult = array_values($temp_array);
-
                     }
                         return $uniqueResult;
                 }
@@ -454,19 +307,15 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function getAdminAnnouncement($month,$year,$id)
         {
-
             $user = Auth::user();
-
             $adminAnnouncementSelfCreatedAndPending = DB::table('events')->where('event_type_id','=',1)
                 ->where('created_by','=',$user->id)
                 ->wherein('status',[0,1,2])
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
-
             $adminAnnouncementAssignedPublished = DB::table('events')->join('event_user_roles','event_user_roles.event_id','=','events.id')
                 ->where('event_type_id','=',1)
                 ->where('events.status','=',2)
@@ -474,7 +323,6 @@
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
-
             $adminAnnouncementOthersPending = DB::table('events')->where('status','=',1)
                 ->where('published_by','=',$user->id)
                 ->where('event_type_id','=',1)
@@ -485,61 +333,41 @@
                 ->union($adminAnnouncementAssignedPublished)
                 ->orderby('created_at','desc')
                 ->get();
-
             if($id == 0)
             {
-
                 $adminAnnouncementSelfCreatedAndPendingLastDate = Event::where('event_type_id','=',1)
                     ->where('created_by','=',$user->id)
                     ->wherein('status',[0,1,2])
                     ->min('events.created_at');
-
                 $adminAnnouncementAssignedPublishedLastDate = Event::join('event_user_roles','event_user_roles.event_id','=','events.id')
                     ->where('event_type_id','=',1)
                     ->where('events.status','=',2)
                     ->where('event_user_roles.user_id','=',$user->id)
                     ->min('events.created_at');
-
                 $adminAnnouncementOthersPendingLastDate = Event::where('status','=',1)
                     ->where('published_by','=',$user->id)
                     ->where('event_type_id','=',1)
                     ->min('events.created_at');
-
-
                 $arrayMergedForLastDate = array_merge(array($adminAnnouncementSelfCreatedAndPendingLastDate),array($adminAnnouncementAssignedPublishedLastDate));
-
                 $finalMergedLastEvent = array_merge(array($adminAnnouncementOthersPendingLastDate),$arrayMergedForLastDate);
-
                 $lastDate = date('');
-
                 foreach(array_unique($finalMergedLastEvent) as $row)
                 {
                     if($row != null)
                     {
-
                         if(strtotime($lastDate) < strtotime($row))
                         {
                             $lastDate = $row;
                         }
-
                     }
-
                 }
-
                 $mergedArray = json_decode(json_encode($adminAnnouncementOthersPending),true);
                 $adminAnnouncement[$lastDate] = $mergedArray;
-
-
             } else {
-
                 $adminAnnouncement = json_decode(json_encode($adminAnnouncementOthersPending),true);
-
             }
-
             return $adminAnnouncement;
-
         }
-
         /*
         * Function Name : getAdminAchievement
         * Param : $month,$year,$id
@@ -548,12 +376,9 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function getAdminAchievement($month,$year,$id)
         {
-
             $user = Auth::user();
-
             $adminAchievementSelfCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('events.created_by','=',$user->id)
@@ -561,7 +386,6 @@
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
-
             $adminAchievementOthersPending = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('created_by','!=',$user->id)
@@ -569,7 +393,6 @@
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
-
             $adminAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('status','=',2)
@@ -580,61 +403,41 @@
                 ->unionAll($adminAchievementSelfCreated)
                 ->orderby('created_at','desc')
                 ->get();
-
             if($id == 0 ) {
-
                 $adminAchievementSelfCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('events.created_by','=',$user->id)
                     ->wherein('status',[0,2])
                     ->min('events.created_at');
-
                 $adminAchievementOthersPendingLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('published_by','=',$user->id)
                     ->where('status','=',1)
                     ->min('events.created_at');
-
                 $adminAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('status','=',2)
                     ->min('events.created_at');
-
                 $arrayMergedForLastDate = array_merge(array($adminAchievementSelfCreatedLastDate),array($adminAchievementOthersPendingLastDate));
-
                 $finalMergedLastEvent = array_merge(array($adminAllPublishedLastDate),$arrayMergedForLastDate);
-
                 $lastDate = date('');
-
                     foreach(array_unique($finalMergedLastEvent) as $row)
                     {
                         if($row != null)
                         {
-
                             if(strtotime($lastDate) < strtotime($row))
                             {
                                 $lastDate = $row;
                             }
-
                         }
-
                     }
-
                     $mergedArray = json_decode(json_encode($adminAllPublished),true);
-
                     $adminAchievement[$lastDate] = $mergedArray;
-
-
             } else {
-
                 $adminAchievement = json_decode(json_encode($adminAllPublished),true);
-
             }
-
             return $adminAchievement;
-
         }
-
         /*
         * Function Name : getTeacherAnnouncement
         * Param : $month,$year,$id
@@ -643,18 +446,15 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function getTeacherAnnouncement($month,$year,$id)
         {
             $user = Auth::User();
-
             $teacherAnnouncementSelfCreatedAndPendingAndPublished = DB::table('events')->where('event_type_id','=',1)
                 ->wherein('status',[0,1,2])
                 ->where('created_by','=',$user->id)
                 ->whereraw('YEAR(created_at) ='.date($year))
                 ->whereraw('MONTH(created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
-
             $teacherAnnouncementAssignedPublished = DB::table('events')->join('event_user_roles','event_user_roles.event_id','=','events.id')
                 ->where('event_type_id','=',1)
                 ->where('status','=',2)
@@ -665,51 +465,36 @@
                 ->union($teacherAnnouncementSelfCreatedAndPendingAndPublished)
                 ->orderby('created_at','desc')
                 ->get();
-
             if($id == 0)
             {
                 $teacherAnnouncementSelfCreatedAndPendingAndPublishedLastDate = Event::where('event_type_id','=',1)
                     ->wherein('status',[0,1,2])
                     ->where('created_by','=',$user->id)
                     ->max('events.created_at');
-
                 $teacherAnnouncementAssignedPublishedLastDate = Event::join('event_user_roles','event_user_roles.event_id','=','events.id')
                     ->where('event_type_id','=',1)
                     ->where('status','=',2)
                     ->where('event_user_roles.user_id','=',$user->id)
                     ->max('events.created_at');
-
                 $arrayMergedForLastDate = array_merge(array($teacherAnnouncementSelfCreatedAndPendingAndPublishedLastDate),array($teacherAnnouncementAssignedPublishedLastDate));
-
                 $lastDate = date('');
-
                 foreach(array_unique($arrayMergedForLastDate) as $row)
                 {
                     if($row != null)
                     {
-
                         if(strtotime($lastDate) < strtotime($row))
                         {
                             $lastDate = $row;
                         }
-
                     }
-
                 }
-
                 $mergedArray = json_decode(json_encode($teacherAnnouncementAssignedPublished),true);
-
                 $teacherAnnouncement[$lastDate] = $mergedArray;
-
             } else {
                 $teacherAnnouncement = json_decode(json_encode($teacherAnnouncementAssignedPublished),true);
-
             }
-
             return $teacherAnnouncement;
-
         }
-
         /*
         * Function Name : getTeacherAchievement
         * Param : $month,$year,$id
@@ -718,12 +503,9 @@
         * Developed By : Suraj Bande
         * Date : 28/3/2016
         */
-
         public function getTeacherAchievement($month,$year,$id)
         {
-
             $user = Auth::User();
-
             $teacherAchievementSelfPendingAndCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                         ->where('event_type_id','=',2)
                         ->where('created_by','=',$user->id)
@@ -731,7 +513,6 @@
                         ->whereraw('YEAR(events.created_at) ='.date($year))
                         ->whereraw('MONTH(events.created_at) ='.date($month))
                         ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
-
             $teacherAchievementAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                         ->where('event_type_id','=',2)
                         ->where('status','=',2)
@@ -742,7 +523,6 @@
                         ->orderby('created_at','desc')
                         ->get();
             //oldest date of event
-
             if($id == 0)
             {
                 $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
@@ -750,42 +530,28 @@
                     ->where('created_by','=',$user->id)
                     ->wherein('status',[0,1])
                     ->min('events.created_at');
-
                 $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('status','=',2)
                     ->min('events.created_at');
-
                 $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
-
                 $lastDate = date('');
-
                 foreach(array_unique($arrayMergedForLastDate) as $row)
                 {
                     if($row != null)
                     {
-
                         if(strtotime($lastDate) < strtotime($row))
                         {
                             $lastDate = $row;
                         }
-
                     }
-
                 }
-
                 $teacherAchievement[$lastDate] = json_decode(json_encode($teacherAchievementAllPublished),true);
-
             } else {
-
                 $teacherAchievement = json_decode(json_encode($teacherAchievementAllPublished),true);
-
             }
-
             return $teacherAchievement;
-
         }
-
         public function loadMore()
         {
             $str='{"august":[
@@ -800,7 +566,6 @@
                  { "day":"Thursday", "date":"13", "time":" 10:30 AM" , "type":"announcement", "title":"Zonal Sport timetable" },
                  { "day":"Thursday", "date":"13", "time":" 10:00 AM" , "type":"announcement" , "title":"Zonal Sport teams"}
              ]}';
-
             return $str;
         }
         /**
