@@ -484,7 +484,6 @@ class HomeworkController extends Controller
     }
     public function editHomework($id){
         $homeworkUpdate=array();
-
                $homeworkUpdate['status']=1;
               $homeworkStatus= Homework::where('id',$id)->update($homeworkUpdate);
                     if($homeworkStatus ==1)
@@ -498,7 +497,6 @@ class HomeworkController extends Controller
                             $this->CreatePushNotification($title,$message,$allUser,$push_users);
                         return Redirect::to('/homework-listing');
                     }
-
     }
     public function deleteHomework(Request $request,$id){
             $homeworkUpdate=array();
@@ -510,12 +508,7 @@ class HomeworkController extends Controller
                 Session::flash('message-success','homework deleted successfully');
                 return Redirect::to('/homework-listing');
             }
-
-
     }
-
-
-
     public function updateHomeworkDetail(Requests\WebRequests\EditHomeworkRequest $request)
     {
         if ($request->authorize() === true)

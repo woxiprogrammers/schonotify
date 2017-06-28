@@ -1649,7 +1649,7 @@ var FormValidator = function () {
                                     '<td class="col-sm-3">'+
                                         '<div class="form-group">' +
                                             '<div class=" bootstrap-timepicker timepicker">'+
-                                                '<input id="startTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="startTime[]">'+
+                                                '<input id="startTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="startTime[]"   data-minute-step="5">'+
                                                 '<span id="startTimeError'+(i+1)+'" class="has-error" style="display:none; color:#a94442;"></span>'+
                                             '</div>'+
                                         '</div>'+
@@ -1657,7 +1657,7 @@ var FormValidator = function () {
                                     '<td class="col-sm-3">' +
                                         '<div class="form-group">' +
                                             '<div class=" bootstrap-timepicker timepicker">'+
-                                                '<input id="endTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="endTime[]">'+
+                                                '<input id="endTime'+(i+1)+'" type="text" readonly class="form-control input-small timepicker1" name="endTime[]"   data-minute-step="5">'+
                                             '</div>'+
                                         '</div>' +
                                     '</td>';
@@ -2293,6 +2293,9 @@ var FormValidator = function () {
             runValidatorclassCreate();
             runValidatorSubjectTeacher();
             runValidatorCreateStructure();
+						$('.input-small timepicker1').timepicker({
+              minuteStep: 5
+            });
             runValidatorMarkAttendance();
             runValidatorCreateAnnouncement();
             runvalidatorCreateAcheivement();
