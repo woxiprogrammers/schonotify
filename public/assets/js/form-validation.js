@@ -2293,9 +2293,6 @@ var FormValidator = function () {
             runValidatorclassCreate();
             runValidatorSubjectTeacher();
             runValidatorCreateStructure();
-						$('.input-small timepicker1').timepicker({
-              minuteStep: 5
-            });
             runValidatorMarkAttendance();
             runValidatorCreateAnnouncement();
             runvalidatorCreateAcheivement();
@@ -2303,9 +2300,6 @@ var FormValidator = function () {
             runValidatorUpdateAnnouncement();
             FeeSturctureCreate();
             FeeTransaction();
-
-
-
         }
     };
 }();
