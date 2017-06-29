@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\api;
-
 use App\Event;
 use App\EventImages;
 use App\EventTypes;
@@ -14,7 +12,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-
 class EventController extends Controller
 {
 
@@ -23,7 +20,6 @@ class EventController extends Controller
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-
     /*
   * Function Name : viewFiveEvent
   * Param : Request $requests
@@ -32,7 +28,6 @@ class EventController extends Controller
   * Developed By : Amol Rokade
   * Date : 3/3/2016
   */
-
     public function viewFiveEvent(Requests\EventRequest $request)
     {
         try {
@@ -188,7 +183,6 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
-
     /*
     * Function Name : viewMonthsEvent
     * Param : Request $requests , $month_id
@@ -197,7 +191,6 @@ class EventController extends Controller
     * Developed By : Amol Rokade
     * Date : 3/3/2016
     */
-
     public function viewMonthsEvent(Requests\EventRequest $request, $year,$month_id)
     {
         try {
@@ -287,7 +280,6 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
-
     /*
     * Function Name : createEvent
     * Param : Request $requests
@@ -343,9 +335,6 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
-
-
-
     /*
     * Function Name : editEvent
     * Param : Request $requests
@@ -354,7 +343,6 @@ class EventController extends Controller
     * Developed By : Amol Rokade
     * Date : 8/3/2016
     */
-
     public function editEvent(Requests\EventRequest $request)
     {
         try {
@@ -396,7 +384,6 @@ class EventController extends Controller
         ];
         return response($response, $status);
         }
-
     /*
     * Function Name : sendForPublishEventTeacher
     * Param : Request $requests , $event_id
@@ -435,7 +422,6 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
-
         /*
     * Function Name : deleteEventTeacher
     * Param : Request $requests
@@ -444,7 +430,6 @@ class EventController extends Controller
     * Developed By : Amol Rokade
     * Date : 8/3/2016
     */
-
     public function deleteEventTeacher(Requests\DeleteEventRequest $request)
     {
         try {
@@ -471,7 +456,6 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
-
     /*
     * Function Name : detailView
     * Param : Request $requests, $event_id
@@ -480,7 +464,6 @@ class EventController extends Controller
     * Developed By : Amol Rokade
     * Date : 8/3/2016
     */
-
     public function detailView(Requests\EventRequest $request ,$event_id)
     {
         try {

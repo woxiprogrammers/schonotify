@@ -15,6 +15,8 @@ use App\FeeConcessionAmount;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\PushToken;
 use App\LeaveRequest;
 use App\LeaveType;
 use App\StudentFee;
@@ -35,12 +37,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LeaveController extends Controller
 {
+   use PushNotificationTrait;
     public function __construct(Request $request)
     {
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-
     /*
        * Function Name : getLeaveListParent
        * Param : Request $requests $leave_id $student_id
@@ -209,6 +211,13 @@ class LeaveController extends Controller
                     LeaveRequest::where('id', $data['leave_id'])->update(['status' => 2,'approved_by' => $data['teacher']['id'],'updated_at'=>Carbon::now()]);
                     $message = 'Leave Approved Successfully';
                     $status = 200;
+                    $title="Leave Approved";
+                    $message="Please Check Leave !";
+                    $allUser=0;
+                    $students = LeaveRequest::where('id',$data['leave_id']) -> lists($student_id);
+                    $parents = User::where('id',$students)->lists('parent_id');
+                    $push_users = PushToken::whereIn('user_id',$parents)->lists('push_token');
+                    $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 } else {
                     $message = 'Operation Not allowed.';
                     $status = 406;

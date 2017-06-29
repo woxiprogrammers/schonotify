@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Batch;
 use App\Classes;
 use App\Division;
@@ -26,7 +24,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use DateTime;
-
 class HomeworkController extends Controller
 {
     use PushNotificationTrait;
@@ -580,17 +577,13 @@ class HomeworkController extends Controller
 +   * Developed By: Suraj Bande
 +   * Date: 3/2/2016
 +   */
-
     public function loadMore(Requests\WebRequests\HomeworkRequest $request,$id)
     {
         if ( $request->authorize() === true )
         {
-
             $user=Auth::user();
             $isClassTeacher=Division::where('class_teacher_id',$user->id)->first();
-
             if($isClassTeacher){
-
                 $ownHomeworks=DB::table('homework_teacher')->join('homeworks','homeworks.id','=','homework_teacher.homework_id')
                     ->join('subjects','homeworks.subject_id','=','subjects.id')
                     ->join('users','users.id','=','homework_teacher.teacher_id')
@@ -599,7 +592,6 @@ class HomeworkController extends Controller
                     ->where('users.id','=',$user->id)
                     ->where('homeworks.is_active','=',1)
                     ->distinct('homeworks.id');
-
                 $ClassTeacherAllSubjects=DB::table('homework_teacher')->join('homeworks','homeworks.id','=','homework_teacher.homework_id')
                     ->join('users','users.id','=','homework_teacher.teacher_id')
                     ->join('subjects','homeworks.subject_id','=','subjects.id')
@@ -612,13 +604,11 @@ class HomeworkController extends Controller
                     ->orderBy('status','asc')
                     ->skip($id*4)->take(4)
                     ->get();
-
                 if($ClassTeacherAllSubjects){
                     return $ClassTeacherAllSubjects;
                 }else{
                     return [];
                 }
-
             }else{
                 $ownHomeworks=DB::table('homework_teacher')->join('homeworks','homeworks.id','=','homework_teacher.homework_id')
                     ->join('subjects','homeworks.subject_id','=','subjects.id')
@@ -637,19 +627,14 @@ class HomeworkController extends Controller
                 }else{
                     return [];
                 }
-
             }
-
             return $ownHomeworks;
-
         }else{
             return Redirect::to('/');
         }
     }
-
     public function deleteFile(Requests\WebRequests\EditHomeworkRequest $request,$file_name,$homework_id)
     {
-
         if( $request->authorize() === true )
         {
             $homework=array();
@@ -663,9 +648,7 @@ class HomeworkController extends Controller
         }else{
             return Redirect::back();
         }
-
     }
-
     /*
 +   * Function Name: classBatchDivision
 +   * Param: $id
@@ -674,7 +657,6 @@ class HomeworkController extends Controller
 +   * Developed By: Suraj Bande
 +   * Date: 3/2/2016
 +   */
-
     public function classBatchDivision($id)
     {
         $divisions=HomeworkTeacher::join('divisions','divisions.id','=','homework_teacher.division_id')
@@ -684,8 +666,6 @@ class HomeworkController extends Controller
                 ->where('homework_teacher.homework_id','=',$id)
                 ->distinct()
                 ->get();
-
         return $divisions;
     }
-
 }

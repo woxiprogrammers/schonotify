@@ -2276,7 +2276,6 @@ var FormValidator = function () {
     };
 
     return {
-
         init: function () {
         	validateCheckRadio();
             runValidator1();
