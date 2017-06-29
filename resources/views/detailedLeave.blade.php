@@ -1,15 +1,10 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
 @include('sidebar')
-
 <div class="app-content">
     <!-- start: TOP NAVBAR -->
     @include('header')
-
     <!-- end: TOP NAVBAR -->
     <div class="main-content" >
         <div class="wrap-content container" id="container">
@@ -88,9 +83,7 @@
         </div>
     </div>
 </div>
-
 @include('footer')
-
 @include('rightSidebar')
 </div>
 <!-- start: MAIN JAVASCRIPTS -->
@@ -109,15 +102,12 @@
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script>
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function(){
         getMsgCount();
         Main.init();
         FormValidator.init();
-
         $('#btnStatus').html('<h5> Status :<i class="fa fa-warning"></i> <i>Pending</i></h5>');
-
     });
-
 </script>
 <!-- start: MAIN JAVASCRIPTS -->
 @stop
