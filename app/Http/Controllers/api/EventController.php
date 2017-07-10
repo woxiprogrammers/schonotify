@@ -4,6 +4,7 @@ use App\Event;
 use App\EventImages;
 use App\EventTypes;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Faker\Provider\File;
 use Illuminate\Http\Request;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 
 class EventController extends Controller
 {
-
     public function __construct(Request $request)
     {
         $this->middleware('db');
@@ -30,12 +30,14 @@ class EventController extends Controller
   */
     public function viewFiveEvent(Requests\EventRequest $request)
     {
+        $user=Auth::user();
         try {
             $finalFiveEvents = array();
             $recentFiveEvents = array();
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $recentFiveEvents = Event::join('event_images','events.id','=','event_images.event_id')
                 ->where('events.status','=',2)
+                ->where('events.body_id','=',$user->body_id)
                 ->where('events.event_type_id' , '=' , $eventTypesId)
                 ->orderBy('start_date', 'desc')
                 ->get()
@@ -123,7 +125,6 @@ class EventController extends Controller
         * Developed By : Amol Rokade
         * Date : 12/4/2016
         */
-
     public function getYearMonth(Request $request)
     {
         $message = "Successfully Listed";
@@ -193,6 +194,7 @@ class EventController extends Controller
     */
     public function viewMonthsEvent(Requests\EventRequest $request, $year,$month_id)
     {
+        $user = Auth::user();
         try {
             $data = $request->all();
             $monthsEvents = array();
@@ -206,16 +208,19 @@ class EventController extends Controller
             $endDate = $year."-".$month_id ."-"."31"." 23".":"."59".":"."59";
             $pendingEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('created_by',$data['teacher']['id'])
+                ->where('body_id',$user->body_id)
                 ->where('status','=',1) //1 is for pending events i.e. Not published and not in draft
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate);
             $publishedEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('status','=',2) //1 is for pending events i.e. Not published.
+                ->where('body_id',$user->body_id)
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate);
             $monthsEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('created_by',$data['teacher']['id'])
                 ->where('status','=',0) // 0 is for draft
+                ->where('body_id',$user->body_id)
                 ->union($pendingEvents)
                 ->union($publishedEvents)
                 ->where('start_date','>=',$startDate)
@@ -288,9 +293,9 @@ class EventController extends Controller
     * Developed By : Amol Rokade
     * Date : 7/3/2016
     */
-
     public function createEvent(Requests\EventRequest $request)
     {
+        $user=Auth::user();
         try {
             $data = $request->all();
             $mytime = Carbon::now();
@@ -310,6 +315,7 @@ class EventController extends Controller
             $eventData['end_date'] = $data['end_date'];
             $eventData['created_at'] = Carbon::now();
             $eventData['updated_at'] = Carbon::now();
+            $eventData['body_id'] = $user->body_id;
             $event_id = Event::insertGetId($eventData);
             if($event_id != null) {
                 $eventImageData['event_id'] = $event_id ;
@@ -395,7 +401,6 @@ class EventController extends Controller
     public function sendForPublishEventTeacher(Requests\SendForPublishEventRequest $request)
     {
         try {
-
             $data = $request->all();
             $eventStatus = Event::where('id','=',$data['event_id'])->pluck('status');
             if($eventStatus == "0" | (!Empty($eventStatus))) {
@@ -412,7 +417,6 @@ class EventController extends Controller
                 $status = 406;
             }
         } catch (\Exception $e) {
-
             $status = 500;
             $message = "Something went wrong";
         }

@@ -13,7 +13,6 @@
 <script src="vendor/sweetalert/sweet-alert.min.js"></script>
 <script src="vendor/toastr/toastr.min.js"></script>
 <script src="assets/js/ui-notifications.js"></script>
-
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
 <!-- start: JavaScript Event Handlers for this page -->
@@ -23,8 +22,6 @@
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="assets/js/form-validation.js"></script>
-
-
 <script type="text/javascript">
     $(document).ready(function(){
         getMsgCount();
@@ -37,7 +34,6 @@
         Main.init();
         FormValidator.init();
     });
-
     $('#checkbox').change(function(){
         $('div#loadmoreajaxloader').show();
         var Division= "-1";
@@ -51,10 +47,8 @@
                 $("#tableContent").html(res);
                 $('div#loadmoreajaxloader').hide();
                 var switcheryHandler = function() {
-
                     var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-
-                    elements.forEach(function(html) {
+                   elements.forEach(function(html) {
                         var switchery = new Switchery(html);
                     });
                 };

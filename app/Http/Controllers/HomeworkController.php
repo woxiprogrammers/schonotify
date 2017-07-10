@@ -201,6 +201,7 @@ class HomeworkController extends Controller
         $division=Division::where('class_teacher_id',$user->id)->first();
         if($division != null){
             $subjects=SubjectClassDivision::where('division_id',$division->id)
+                ->where('teacher_id',$user->id)
                 ->join('subjects','division_subjects.subject_id','=','subjects.id')
                 ->select('subjects.id','subjects.slug','division_subjects.division_id')
                 ->get();
