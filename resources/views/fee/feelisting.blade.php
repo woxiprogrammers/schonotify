@@ -1,18 +1,11 @@
-
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
 @include('sidebar')
-
 <div class="app-content">
-
 @include('header')
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
-
 <div class="wrap-content container" id="container">
     @include('alerts.errors')
     <section id="page-title" class="padding-top-15 padding-bottom-15">
@@ -20,12 +13,9 @@
             <div class="col-sm-7">
                 <h1 class="mainTitle">Fee structure</h1>
                 <span class="mainDescription">Listing</span>
-
             </div>
-
         </div>
     </section>
-
     <fieldset>
         <div class="col-md-6">
             <div class="form-group">
@@ -47,7 +37,6 @@
                 </label>
                 <div id="classesDropdown">
                 </div>
-
             </div>
         </div>
         <div class="col-md-12">
@@ -58,31 +47,13 @@
                 </fieldset>
             </div>
         </div>
-
     </fieldset>
-
-
-
-
-
-
-
-
-
-
-
 </div>
-
 @include('rightSidebar')
 </div>
-
 </div>
-
 @include('footer')
 </div>
-
-
-
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
@@ -106,28 +77,22 @@
 <script src="/vendor/select2/select2.min.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-
 <!-- start: JavaScript Event Handlers for this page -->
-
 <script src="/assets/js/form-validation-edit.js"></script>
 <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
-
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
 <script src="/assets/js/table-data.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script>
-    jQuery(document).ready(function()
-    {
-
+    jQuery(document).ready(function(){
         Main.init();
-        callAllFess();
         FormValidator.init();
         FormElements.init();
         TableData.init();
         event.stopPropagation();
-
+        callAllFess();
     })
 </script>
 <script>
@@ -156,29 +121,6 @@
                     $("#classesDropdown").html(response);
                 }
             });
-
-
-
         })
-
 </script>
-
-
-
-
-
 @stop
-
-
-
-
-
-
-
-
-
-
-
-
-
-

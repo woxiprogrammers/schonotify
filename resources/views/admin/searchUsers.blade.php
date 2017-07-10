@@ -20,14 +20,14 @@
 								<div class="col-sm-5">
 									<!-- start: MINI STATS WITH SPARKLINE -->
 									<ul class="mini-stats pull-right">
-                                        <li>
+                    <li>
 											<div class="values">
-                                                <a href="/createUsers/1" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
-                                                    Create New User <i class="fa fa-angle-right"></i>
-                                                </a>
+                          <a href="/createUsers/1" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                Create New User <i class="fa fa-angle-right"></i>
+                          </a>
 											</div>
 										</li>
-         							</ul>
+         					</ul>
 									<!-- end: MINI STATS WITH SPARKLINE -->
 								</div>
 							</div>
@@ -48,7 +48,6 @@
                         </div>
                         <!-- start: DYNAMIC TABLE -->
                         <div class="container-fluid container-fullw bg-white">
-
                         <div class="row">
                             <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
                         <div class="col-md-12" id="tableContent">
@@ -56,19 +55,16 @@
                         </div>
                         </div>
                         <!-- end: DYNAMIC TABLE -->
-
 						<!-- start: FOURTH SECTION -->
 						@include('rightSidebar')
 						<!-- end: FOURTH SECTION -->
 					</div>
 				</div>
 			</div>
-
             @include('footer')
 		</div>
         @include('searchJS')
 <script>
-
     function statusUser(status,id)
     {
        if(status==false)
@@ -105,6 +101,7 @@
                     swal("Activated!", "User has been activated.", "success");
                 }
              });
+             TableData.init();
         }
     }
 </script>

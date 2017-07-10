@@ -49,7 +49,7 @@ class HomeworkController extends Controller
             $i=0;
             $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
             if($division != null){
-                $classesSubjects=SubjectClassDivision::where('division_id',$division->id)->get();
+                $classesSubjects=SubjectClassDivision::where('division_id',$division->id)->where('teacher_id',$data['teacher']['id'])->get();
                 foreach($classesSubjects as $row)
                 {
                     $subjects=Subject::where('id','=',$row['subject_id'])->first();
