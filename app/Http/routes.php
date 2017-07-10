@@ -472,6 +472,7 @@
     Route::get('get-acl-details','api\MessageController@getAclDetails');
     Route::get('get-switching-details','api\UserController@getSwitchingDetails');
     Route::get('check-login','api\UserController@checkLogin');
+    Route::get('check-acl/{id}','api\UserController@checkAcl');
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
     Route::post('homework-create','api\HomeworkController@createHomework');

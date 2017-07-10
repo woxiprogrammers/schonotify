@@ -16,7 +16,6 @@
             <h1 class="mainTitle">Edit</h1>
             <span class="mainDescription">Student</span>
         </div>
-
     </div>
     <div id="error-div"></div>
 </section>
@@ -56,7 +55,6 @@
                     </ul>
                     <div class="tab-content">
                         <div id="panel_edit_account" class="tab-pane fade in active ">
-
                             <form id="formEditStudentAccount" method="post" action="/edit-student/{!! $user->id !!}"  enctype="multipart/form-data">
                                 <input name="_method" type="hidden" value="PUT">
                                 <input type="hidden" name="userId" id="userId" value="{!! $user->id !!}">
@@ -77,12 +75,9 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4" id="ClassSearchStudent">
-
                                         </div>
                                         <div class="col-md-4" id="DivSearch">
-
                                         </div>
-
                                     </div>
                                 </fieldset>
                              @foreach($student_info as $student_info)
@@ -188,7 +183,6 @@
                                                     <option value="12">12</option>
                                                     <option value="Not Attended">Not Attended</option>
                                                 </select>
-
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -211,9 +205,7 @@
                                                 <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
                                             </div>
                                             <div class="form-group">
-
                                             </div>
-
                                             <div class="form-group">
                                                 <label class="control-label">
                                                     Place Of Birth: <span class="symbol required">
@@ -266,7 +258,6 @@
                                                     <option value="O+">O+</option>
                                                     <option value="O-">O-</option>
                                                 </select>
-
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -279,6 +270,15 @@
                                                     Academic session applied from
                                                 </label>
                                                 <input type="text"  value="{!! $student_info->academic_from !!}" class="form-control" name="academic_from"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label  class="control-label">
+                                                    Communication Address <span class="symbol required"></span>
+                                                </label><br>
+                                                <input type="checkbox" name="student_communication_address" id="student_communication_address"  checked> Same as Student Address
+                                                <div class="note-editor" id="communication_address_student">
+                                                    <textarea class="form-control autosize area-animated" tabindex="-1" name="communication_address_student" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!! $student_info->communication_address !!}</textarea>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -323,7 +323,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
@@ -343,9 +342,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </fieldset>
-
                                             <fieldset>
                                                 <legend>
                                                     SPECIAL APTITUDE
@@ -355,7 +352,6 @@
                                                     <TR>
                                                         <TD><INPUT type="text" name="special_aptitude[0][test]" placeholder="Test"/></TD>
                                                         <TD><INPUT type="number" name="special_aptitude[0][score]" placeholder="Score"/></TD>
-
                                                     </TR>
                                                 </TABLE>-->
                                                 <div class="row">
@@ -374,7 +370,6 @@
                                                     @endforeach
                                                     @endif
                                                 </div>
-
                                             </fieldset>
                                             <fieldset>
                                                 <legend>
@@ -407,7 +402,6 @@
                                                      </TR>
                                                  </TABLE>-->
                                                 @foreach($documents as $document)
-
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         @if(in_array($document['id'],$doc))
@@ -428,7 +422,6 @@
                                                     </div>
                                                 </div>
                                                 @endforeach
-
                                             </fieldset>
                                         </div>
                                     </div>
@@ -475,13 +468,11 @@
                                                 </label>
                                                 <div>
                                                     <select name="caste1"  style="-webkit-appearance: menulist;">
-
                                                         @foreach($queryn as $castes)
                                                         <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </fieldset>
@@ -508,7 +499,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </fieldset>
@@ -521,9 +511,7 @@
                                     </div>
                                 </div>
                             </form>
-
                         </div>
-
                         <div id="panel_edit_Parent" class="tab-pane fade in">
                             <div class="panel-body">
                                  <form id="formEditAccount" method="post" action="/edit-parent/{!! $user->parent_id !!}"  enctype="multipart/form-data">
@@ -578,7 +566,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -631,7 +618,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -658,7 +644,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!--<div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -821,7 +806,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </fieldset>
@@ -835,13 +819,11 @@
                             </form>
                             </div>
                         </div>
-
                         <div id="panel_module_assigned" class="tab-pane fade" id="aclMod">
                             <div class="panel-body">
                                 <div class="col-sm-10">
                                     <form id="editAcl" method="post" action="/acl-update/{!! $user->parent_id !!}">
                                         <table class="table table-responsive" id="aclMod">
-
                                         </table>
                                         <div class="row">
                                             <div class="col-md-4">
@@ -851,7 +833,6 @@
                                             </div>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
@@ -1042,7 +1023,6 @@
                                            </div>  <div class="col-md-12">
                                            </div>
                                            <div class="col-md-12">
-
                                                <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
                                                    <thead>
                                                    <tr>
@@ -1084,7 +1064,6 @@
 </div>
 </div>
 @include('footer')
-
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
@@ -1108,7 +1087,6 @@
 <script src="/vendor/select2/select2.min.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="/assets/js/form-validation-edit.js"></script>
 <script src="/assets/js/form-validation.js"></script>
@@ -1140,7 +1118,6 @@
              $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
           }
         }
-
         }
         $('#2_concession_chk').change(function(){
            if($('#2_concession_chk').is(":checked")){
@@ -1154,16 +1131,14 @@
         FormElements.init();
         TableData.init();
         userAclModule();
-
-    $('#communication_address').hide();
+    $('#communication_address_student').hide();
     $("#student_communication_address").click(function(){
-        $('#communication_address').toggle();
+        $('#communication_address_student').toggle();
     });
     $('#communication_address_parent').hide();
     $("#parent_communication_address").click(function(){
         $('#communication_address_parent').toggle();
     });
-
     if($('#checkbox8').is(":checked")==true)
         {
             clsTeacher(true);
@@ -1176,7 +1151,6 @@
                 $(this).parent().next().slideDown();
                 return false;
             });
-
         })(jQuery);
     $('#Batchdropdown').change(function(){
         $('div#loadmoreajaxloader').show();
@@ -1192,10 +1166,6 @@
                 $('div#loadmoreajaxloader').hide();
         })
     })
-
-
-
-
     });
   $('#email').on('keyup',function(){
         var email = $(this).val();
@@ -1230,48 +1200,35 @@
         var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message'];
         var route='/user-module-acl-edit/{!! $user->parent_id !!}';
         $.get(route,function(res){
-
             var str;
-
             var allModAclArr=res['allModAclArr'];
-
             var arr1= $.map(allModAclArr,function(index,value){
                 return [value];
             });
-
             var allAcls=res['allAcls'];
             var arr2= $.map(allAcls,function(index,value){
                 return [index];
             });
-
             var userModAclArr=res['userModAclArr'];
-
             var allModules=res['allModules'];
-
             str+='<tr>'+
                 '<th><b>Modules</b></th>';
             for(var j=0; j<arr2.length; j++)
             {
-
                 str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
             }
-
             str+='</tr>';
-
             for(var i=0; i<arr1.length; i++)
             {
-
                 str+="<tr>"+
                     "<td>"+(arr1[i]).toUpperCase()+"</td>";
                 for(var j=0; j<arr2.length; j++)
                 {
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
-
                     if($.inArray(arr2[j]['slug']+'_'+arr1[i],enabled_modules)==-1){
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" disabled value="" >'+
                             '<label for="'+arr2[j]['slug']+'_'+arr1[i]+'"></label>';
-
                     }else{
                         if($.inArray(arr2[j]['slug']+'_'+arr1[i],userModAclArr)!=-1){
 
@@ -1285,10 +1242,8 @@
                     str+='</div>'+
                         '</td>';
                 }
-
                 str+="</tr>";
             }
-
             $('#aclMod').html(str);
         });
     }
@@ -1297,7 +1252,6 @@
         var division = $('#division').val();
         var userId = $('#userId').val();
         var route='/check-roll-number';
-
         $.post(route,{roll_number:roll_number,division:division},function(res){
             for(var i=0; i<res.length; i++){
                 var confirmation =confirm("For Selected Batch Class Division "+res[i]['first_name']+"  "+ res[i]['last_name']+" is having this Roll number .Do you want to change ?");
@@ -1321,11 +1275,7 @@
                     $("#installment_table").html(response);
                 }
             });
-
-
-
         })
-
 </script>
 <script src="/assets/js/student-edit.js" ></script>
 @stop

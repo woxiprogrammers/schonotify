@@ -1,12 +1,7 @@
-
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
 @include('sidebar')
-
 <div class="app-content">
     @include('header')
     <!-- end: TOP NAVBAR -->
@@ -209,7 +204,6 @@
 <script src="/assets/js/form-validation.js"></script>
 <script>
 jQuery(document).ready(function() {
-
     Main.init();
     FormValidator.init();
     FormElements.init();
@@ -271,17 +265,3 @@ $("#4_concession_chk").click(function(){
       })
 </script>
 @stop
-
-
-
-
-
-
-
-
-
-
-
-
-
-

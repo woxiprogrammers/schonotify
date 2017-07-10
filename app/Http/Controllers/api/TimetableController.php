@@ -13,6 +13,7 @@ use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class TimetableController extends Controller
@@ -40,7 +41,7 @@ class TimetableController extends Controller
             $teacherId = UserRoles::where('slug',['teacher'])->pluck('id');
             if($teacherId != null){
                 if($data['teacher']['role_id'] == $teacherId){
-                    $batches = Batch::select('id as id ','name as name')->get()->toArray();
+                    $batches = Batch::select('id as id ','name as name')->where('body_id',$data['teacher']['body_id'])->get()->toArray();
                 }
             }
             $status = 200;
