@@ -907,8 +907,7 @@
                                     </fieldset>
                                     <fieldset>
                                         <span class="mainDescription"><h3>Add Fee Transaction </h3></span>
-                                        <hr>
-                                        <div class="row">
+                                        <hr>                                        <div class="row">
                                             <div class="col-md-12">
                                                 <form id="fee_transaction_form" method="post" action="/fees/transactions">
                                                 <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">

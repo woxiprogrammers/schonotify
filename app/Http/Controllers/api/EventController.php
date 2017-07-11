@@ -25,19 +25,19 @@ class EventController extends Controller
   * Param : Request $requests
   * Return : $message $status , recent 5 event array
   * Desc : when teacher want to see events then by default he/she can able to see latest five events.
-  * Developed By : Amol Rokade
+  * Developed By : Shubham chaudhari
   * Date : 3/3/2016
   */
     public function viewFiveEvent(Requests\EventRequest $request)
     {
-        $user=Auth::user();
+        $user=$request->all();
         try {
             $finalFiveEvents = array();
             $recentFiveEvents = array();
             $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
             $recentFiveEvents = Event::join('event_images','events.id','=','event_images.event_id')
                 ->where('events.status','=',2)
-                ->where('events.body_id','=',$user->body_id)
+                ->where('events.body_id','=',$user['teacher']['body_id'])
                 ->where('events.event_type_id' , '=' , $eventTypesId)
                 ->orderBy('start_date', 'desc')
                 ->get()
@@ -97,7 +97,7 @@ class EventController extends Controller
       * Param : Request $requests , $imageName
       * Return : $file
       * Desc : get image path if file exits
-      * Developed By : Amol Rokade
+      * Developed By : Shubham chaudhari
       * Date : 12/4/2016
       */
     public function getEventImagePath($imageName){
@@ -122,7 +122,7 @@ class EventController extends Controller
         * Param : Request $requests
         * Return : $message $status , array of years and  months
         * Desc : when user want to see events the months from Jan to Dec of current month selected by user.
-        * Developed By : Amol Rokade
+        * Developed By : Shubham chaudhari
         * Date : 12/4/2016
         */
     public function getYearMonth(Request $request)
@@ -189,7 +189,7 @@ class EventController extends Controller
     * Param : Request $requests , $month_id
     * Return : $message $status , event array of current month
     * Desc : when user want to see events the months from Jan to Dec of current month selected by user.
-    * Developed By : Amol Rokade
+    * Developed By : Shubham chaudhari
     * Date : 3/3/2016
     */
     public function viewMonthsEvent(Requests\EventRequest $request, $year,$month_id)
@@ -290,14 +290,14 @@ class EventController extends Controller
     * Param : Request $requests
     * Return : $message $status
     * Desc : when teacher can create event if he/she have an ACL.
-    * Developed By : Amol Rokade
+    * Developed By : Shubham chaudhari
     * Date : 7/3/2016
     */
     public function createEvent(Requests\EventRequest $request)
     {
-        $user=Auth::user();
         try {
             $data = $request->all();
+            $body = User::where('id',$data->id)->pluck('body_id');
             $mytime = Carbon::now();
             $tempImageName = (strtotime($mytime)).".jpg";
             $tempImagePath = "uploads/events/";
@@ -315,7 +315,8 @@ class EventController extends Controller
             $eventData['end_date'] = $data['end_date'];
             $eventData['created_at'] = Carbon::now();
             $eventData['updated_at'] = Carbon::now();
-            $eventData['body_id'] = $user->body_id;
+            dd($data);
+            $eventData['body_id'] = $data->body_id;
             $event_id = Event::insertGetId($eventData);
             if($event_id != null) {
                 $eventImageData['event_id'] = $event_id ;
@@ -346,7 +347,7 @@ class EventController extends Controller
     * Param : Request $requests
     * Return : $message $status
     * Desc : Teacher can edit unpublished events if he/she have an ACL.
-    * Developed By : Amol Rokade
+    * Developed By : Shubham chaudhari
     * Date : 8/3/2016
     */
     public function editEvent(Requests\EventRequest $request)
@@ -395,7 +396,7 @@ class EventController extends Controller
     * Param : Request $requests , $event_id
     * Return : $message $status
     * Desc : Teacher can send to publish unpublished events if he/she have an ACL of publish.
-    * Developed By : Amol Rokade
+    * Developed By : Shubham chaudhari
     * Date : 8/3/2016
     */
     public function sendForPublishEventTeacher(Requests\SendForPublishEventRequest $request)
@@ -431,7 +432,7 @@ class EventController extends Controller
     * Param : Request $requests
     * Return : $message $status
     * Desc : Teacher can delete his/her own unpublished events if he/she have an ACL.
-    * Developed By : Amol Rokade
+    * Developed By : Shubham chaudhari
     * Date : 8/3/2016
     */
     public function deleteEventTeacher(Requests\DeleteEventRequest $request)
