@@ -319,7 +319,7 @@ class AttendanceController extends Controller
             "status" => $status,
             "message" => $messag
         ];
-        return response($response, $status);
+        return response()->json($response, $status);
     }
     /*
     * Function Name: getStudentsList
