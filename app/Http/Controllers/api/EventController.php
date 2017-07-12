@@ -315,7 +315,6 @@ class EventController extends Controller
             $eventData['end_date'] = $data['end_date'];
             $eventData['created_at'] = Carbon::now();
             $eventData['updated_at'] = Carbon::now();
-            dd($data);
             $eventData['body_id'] = $data->body_id;
             $event_id = Event::insertGetId($eventData);
             if($event_id != null) {

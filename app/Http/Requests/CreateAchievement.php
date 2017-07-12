@@ -37,7 +37,6 @@ class CreateAchievement extends Request
             return false;
         }
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
