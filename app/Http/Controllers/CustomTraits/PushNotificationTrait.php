@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Log;
 trait PushNotificationTrait{
 
     public function CreatePushNotification($PushTitle,$PushMsg,$allUser,$push_users){
+      Log::info("Inside a push function ");
         $title = $PushTitle;
         $msg = $PushMsg;
         if($allUser == 1){
@@ -30,7 +31,6 @@ trait PushNotificationTrait{
             'X-Ionic-Application-Id:'.env('PushAPPId'),
             'Authorization:Bearer '.env('APIToken')
         ));
-        $result = curl_exec($ch);
         curl_close($ch);
     }
 }
