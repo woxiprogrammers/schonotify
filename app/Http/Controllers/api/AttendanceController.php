@@ -268,7 +268,7 @@ class AttendanceController extends Controller
                                 $attendanceData['date'] = $data['date'];
                                 $attendanceData['division_id'] = $role['id'];
                                 $attendanceData['student_id'] = $value;
-                                $parent = User::where('student_id',$value)->lists('parent_id');
+                                $parent = User::where('id',$value)->lists('parent_id');
                                 $attendanceData['status'] = 1;
                                 $attendanceData['created_at'] = Carbon::now();
                                 $attendanceData['updated_at'] = Carbon::now();
@@ -297,7 +297,6 @@ class AttendanceController extends Controller
                                 AttendanceStatus::insert($attendanceStatus);
                         }
                     }
-                                Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                                 $status = 200;
                                 $messag = "Attendance Successfully edited";
                                 $push_users=User::where('division_id',$role['id'])->lists('parent_id');
@@ -647,7 +646,6 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
-
     /*
     * Function Name: viewDefaultAttendanceTeacher
     * Param : Request $requests
