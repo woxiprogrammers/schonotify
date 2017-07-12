@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\api;
 use App\Announcement;
 use App\Batch;
@@ -11,6 +10,7 @@ use App\EventImages;
 use App\EventUserRoles;
 use App\ModuleAcl;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\Http\Requests\createAnnouncementRequest;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
@@ -21,7 +21,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-
 class NoticeBoardController extends Controller
 {
     use PushNotificationTrait;
@@ -98,7 +97,7 @@ class NoticeBoardController extends Controller
         $data=$request->all();
         $module_id=13;
         $acl=1;
-        $isCreate=ModuleAcl::where('user_id',$data['user_id'])->where('acl_id',$acl)->where('module_id',$module_id)->get();
+        $isCreate=ModuleAcl::where('user_id',$data['user_id'])->where('acl_id',$acl)->where('module_id',$module_id)->get()->toArray();
         if(!empty($isCreate)){
         try{
             $data=$request->all();
@@ -109,7 +108,7 @@ class NoticeBoardController extends Controller
             $announcement['status']=$data['status'];
             $announcement['priority']=$data['priority'];
             $announcement['event_type_id']=1;
-            $announcement['body_id']=$user->body_id;
+            $announcement['body_id']=$data['teacher']['body_id'];
             $new_event=Event::insertGetId($announcement);
             foreach($data['teacherrr'] as $value){
                 $announcementData['event_id']=$new_event;
@@ -259,9 +258,9 @@ class NoticeBoardController extends Controller
     }
     public function viewAnnouncement(Request $request)
     {
-        $user=Auth::user();
+        $user=$request->all();
         $event =Event::where('event_type_id',1)
-                       ->where('body_id',$user->body_id)
+                       ->where('body_id',$user['teacher']['body_id'])
                        ->whereIn('status',[0,1,2])
                        ->orderBy('id','desc')
                        ->get()
@@ -276,7 +275,6 @@ class NoticeBoardController extends Controller
         $response=$event;
         return response($response);
     }
-
     public function deleteAchievement($id){
                    try{
                        $a=EventImages::where('event_id',$id)->delete();
@@ -305,17 +303,17 @@ class NoticeBoardController extends Controller
     }
     public function createAchieve(Request $request){
         $data=$request->all();
-        $user=Auth::user();
+        $user=$request->teacher;
         try{
             $module_id=12;
             $acl=1;
-            $isCreate=ModuleAcl::where('user_id',$data['user_id'])->where('acl_id',$acl)->where('module_id',$module_id)->get();
-            if($isCreate != null){
+            $isCreate=ModuleAcl::where('user_id',$data['user_id'])->where('acl_id',$acl)->where('module_id',$module_id)->get()->toArray();
+            if(!empty($isCreate)){
                 $achievement['title']=$data['title'];
                 $achievement['detail']=$data['detail'];
                 $achievement['status']=0;
                 $achievement['event_type_id']=2;
-                $achievement['created_by']=$data['user_id'];
+                $achievement['created_by']=$user->id;
                 $achievement['created_at']=Carbon::now();
                 $achievement['body_id']=$user->body_id;
                 $a=Event::insertGetId($achievement);
@@ -420,10 +418,9 @@ class NoticeBoardController extends Controller
         return response($response, $status);
     }
     public function viewAchievement(Request $request,$id){
-      $user=Auth::user();
-      $data=$request->all();
+      $user = $request->teacher;
       if($id == 'teacher'){
-           $user_id=$data['teacher']['id'];
+           $user_id=$user->id;
            $role_id=UserRoles::where('slug',$id)->pluck('id');
            $teacherAchievementAllPublished = Event::where('event_type_id','=',2)
               ->wherein('status',[0,1])

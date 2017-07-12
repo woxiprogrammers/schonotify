@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\AclMaster;
 use App\Attendance;
 use App\Batch;

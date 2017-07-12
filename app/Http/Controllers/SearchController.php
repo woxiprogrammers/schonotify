@@ -107,6 +107,7 @@ class SearchController extends Controller
         if($role_id == 3)
         {
             $str.="<th>Parent Name</th>";
+            $str.="<th>Parent Email</th>";
         }
         if(sizeof($result->toArray()) != 0 )
         {
@@ -136,6 +137,7 @@ class SearchController extends Controller
                         foreach($parent as $row1)
                         {
                             $str.="<td>".$row1->first_name." ".$row1->last_name."</td>";
+                            $str.="<td>".$row1->email."</td>";
                         }
                     }
                 }
@@ -218,7 +220,11 @@ class SearchController extends Controller
           {
               $str.="<th>GRN No.</th>";
           }
-          $str.="<th>Name</th></th><th>Username</th><th>Email</th><th>Gender</th>";
+          if($role_id == 2){
+            $str.="<th>Name</th><th>CLass Teacher</th><th>Email</th><th>Gender</th>";
+          }else{
+            $str.="<th>Name</th><th>Username</th><th>Email</th><th>Gender</th>";
+          }
           if($role_id == 3)
           {
               $str.="<th>Parent Name</th>";
@@ -231,6 +237,13 @@ class SearchController extends Controller
               }
               $str.="<th>Action</th>";
               $str.="</tr></thead><tbody>";
+              foreach($result as  $teacher){
+                      $class_name = Division::where('class_teacher_id',$teacher->id)->pluck('division_name');
+                      $classes = Division::where('class_teacher_id',$teacher->id)->pluck('class_id');
+                      $Class_namee = Classes::where('id',$classes)->pluck('class_name');
+                      $teacher['class'] = $class_name;
+                      $teacher['div'] = $Class_namee;
+              }
               foreach($result as $row)
               {
                   if($row['user_role'] == 'student')
@@ -240,10 +253,13 @@ class SearchController extends Controller
                       $str.="<tr>";
                   }
                   $str.="<td>".$row['firstname']." ".$row['lastname']."</td>";
-                  $str.="<td>".$row['user_name']."</td>";
+                  if($role_id == 2){
+                         $str.="<td>".$row['div']." - ".$row['class']."</td>";
+                  }else{
+                    $str.="<td>".$row['user_name']."</td>";
+                  }
                   $str.="<td>".$row['email']."</td>";
                   $str.="<td>".$row['gender']."</td>";
-
                   if($row['user_role']=='student') {
                       $parent=User::all()->where('id',$row['parent_id']);
                       if($parent->toArray() == null) {
