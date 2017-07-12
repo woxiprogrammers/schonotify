@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Requests\WebRequests;
-
 use App\Http\Requests\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +16,6 @@ class CreateAchievementRequest extends Request
     public function authorize()
     {
         $ch=Request::method();
-
         $val1=User::join('module_acls', 'users.id', '=', 'module_acls.user_id')
             ->Join('acl_master', 'module_acls.acl_id', '=', 'acl_master.id')
             ->Join('modules', 'modules.id', '=', 'module_acls.module_id')
@@ -30,10 +27,8 @@ class CreateAchievementRequest extends Request
         {
             array_push($resultArr,$val->acl.'_'.$val->module_slug);
         }
-
         switch($ch)
         {
-
             case 'POST':
                 if(in_array('create_achievement',$resultArr)) {
                     return true;
@@ -41,11 +36,9 @@ class CreateAchievementRequest extends Request
                     Session::flash('message-error','Currently you do not have permission to access this functionality. Please contact administrator to grant you access !');
                     return Redirect::back();
                 }
-
             default:break;
         }
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -65,6 +58,5 @@ class CreateAchievementRequest extends Request
                 break;
             default:break;
         }
-
     }
 }

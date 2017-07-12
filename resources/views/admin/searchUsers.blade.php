@@ -101,7 +101,11 @@
                     swal("Activated!", "User has been activated.", "success");
                 }
              });
-             TableData.init();
+             TableData.init(
+               "scrollY":        "200px",
+               "scrollX":        "200px",
+                "scrollCollapse": true
+             );
         }
     }
 </script>
