@@ -1,23 +1,23 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Batch;
 use App\Classes;
 use App\Division;
 use App\Leave;
 use App\LeaveType;
 use App\User;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use Illuminate\Http\Request;
+use App\PushToken;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
-
 class LeaveController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct()
     {
         $this->middleware('db');
@@ -251,9 +251,16 @@ class LeaveController extends Controller
             $user = Auth::user();
             $leaveUpdate['status'] = 2;
             $leaveUpdate['approved_by'] = $user->id;
-            $leaveStatus= Leave::where('id',$id)->update($leaveUpdate);
+            $leaveStatus = Leave::where('id',$id)->update($leaveUpdate);
             if ($leaveStatus == 1)
             {
+                $student = Leave::where('id',$id)->pluck('student_id');
+                $parent = User::where('id',$student)->lists('parent_id');
+                $title = "Leave Approved";
+                $message = "Your Leave Is Approved By Faculty";
+                $allUser=0;
+                $push_users=PushToken::whereIn('user_id',$parent)->lists('push_token');
+                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 Session::flash('message-success','Leave published successfully');
                 return Redirect::back();
             }
@@ -355,6 +362,5 @@ class LeaveController extends Controller
         } else {
             return Redirect::to('/');
         }
-
     }
 }

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\AclMaster;
 use App\Attendance;
 use App\Batch;
@@ -1074,6 +1072,7 @@ class UsersController extends Controller
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
+        $dataStudent=$request->all();
         $divisionStudent=User::where('id',$id)->pluck('division_id');
         if($divisionStudent == null){
             $div=array();
@@ -1197,13 +1196,13 @@ class UsersController extends Controller
                 }
             }
         }
-        if(isset($reqsest['student_communication_address'])){
-            $student_communication_address = $request['address'];
+        if(empty($dataStudent['communication_address_student'])){
+            $communication_address_student = $dataStudent['address'];
         }else{
-            $student_communication_address = $request['communication_address'];
+            $communication_address_student = $dataStudent['communication_address_student'];
         }
         $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
-        $extraInfo['communication_address']=$student_communication_address;
+        $extraInfo['communication_address']=$communication_address_student;
         $extraInfo['student_id'] = $id;
         $extraInfo['created_at'] = Carbon::now();
         $extraInfo['updated_at'] = Carbon::now();

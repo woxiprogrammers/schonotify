@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Body;
 use App\Division;
 use App\Event;
@@ -22,7 +20,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Mockery\CountValidator\Exception;
-
 class EventController extends Controller
 {
     use PushNotificationTrait;
@@ -93,6 +90,7 @@ class EventController extends Controller
             }
             $insertData['created_at'] = Carbon::now();
             $insertData['updated_at'] = Carbon::now();
+            $insertData['body_id'] = $user->body_id;
             $lastInsertId=Event::insertGetId($insertData);
             $insertImageData['image'] = $filename;
             $insertImageData['event_id'] = $lastInsertId;
@@ -106,12 +104,6 @@ class EventController extends Controller
                         return 1;
                     } else {
                         Session::flash('message-success','Event created and published successfully !');
-                        Log::info("sss");
-                        $title="New Event Created";
-                        $message=$request->eventName;
-                        $allUser=1;
-                        $push_users=null;
-                        $this->CreatePushNotification($title,$message,$allUser,$push_users);
                         return 1;
                     }
                 }else{
@@ -150,6 +142,11 @@ class EventController extends Controller
                  return 1;
              } else {
                  Session::flash('message-success','Event published successfully !');
+                 $title="Event";
+                 $message="New Event Created";
+                 $allUser=1;
+                 $push_users=null;
+                 $this->CreatePushNotification($title,$message,$allUser,$push_users);
                  return 1;
              }
          } else {
@@ -168,6 +165,11 @@ class EventController extends Controller
                      Session::flash('message-success','Event sent for publish successfully !');
                      return 1;
                  } else {
+                     $title="Event";
+                     $message="New Event Created";
+                     $allUser=1;
+                     $push_users=null;
+                     $this->CreatePushNotification($title,$message,$allUser,$push_users);
                      Session::flash('message-success','Event published successfully !');
                      return 1;
                  }
@@ -223,11 +225,13 @@ class EventController extends Controller
                 $selfEvents = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',$statusArray)
                     ->where('created_by','=',$user->id)
+                    ->where('body_id',$user->body_id)
                     ->where('event_type_id','=',3)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by');
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',['2'])
                     ->where('event_type_id','=',3)
+                    ->where('body_id',$user->body_id)
                     ->union($selfEvents)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
@@ -235,6 +239,7 @@ class EventController extends Controller
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',['1'])
                     ->where('event_type_id','=',3)
+                    ->where('body_id',$user->body_id)
                     ->where('created_by','=',$user->id)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
@@ -242,6 +247,7 @@ class EventController extends Controller
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',['2'])
                     ->where('event_type_id','=',3)
+                    ->where('body_id',$user->body_id)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
             }
@@ -251,11 +257,13 @@ class EventController extends Controller
                 $selfEvents = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',$statusArray)
                     ->where('created_by','=',$user->id)
+                    ->where('body_id',$user->body_id)
                     ->where('event_type_id','=',3)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by');
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->wherein('status',['1','2'])
                     ->where('event_type_id','=',3)
+                    ->where('body_id',$user->body_id)
                     ->union($selfEvents)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
@@ -263,12 +271,14 @@ class EventController extends Controller
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->where('status',1)
                     ->where('event_type_id','=',3)
+                    ->where('body_id',$user->body_id)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
             } else {
                 $events = DB::table('events')->join('event_images','events.id','=','event_images.event_id')
                     ->where('status',2)
                     ->where('event_type_id','=',3)
+                    ->where('body_id',$user->body_id)
                     ->select('events.id','title','start_date as start','end_date as end','detail as content','status','image','events.created_at','events.updated_at','events.created_by','events.published_by')
                     ->get();
             }

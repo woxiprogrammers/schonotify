@@ -467,7 +467,6 @@
         FormValidator.init();
 
         var id = $('#batch-select').val();
-
         batchChange(id);
 
         $('#parentClass').hide();
@@ -491,12 +490,9 @@
             $('.adminList').show();
         }
     });
-
-
     $(window).load(function() {
         $('#loadmoreajaxloader').hide();
     });
-
     $('.parentChk').change(function(){
         if($(this).prop('checked') == true)
         {
@@ -521,7 +517,6 @@
             $('.adminList').hide();
         }
     });
-
     $('.classFirst').change(function(){
         var classId = this.id;
         if($(this).prop('checked') == true)
@@ -546,13 +541,7 @@
                 }
             });
         }
-
-
     });
-
-
-
-
    $('#service4').click(function(){
         var route='/get-all-admins/';
         $.get(route,function(data){
@@ -605,21 +594,16 @@
 
     });
     function batchChange(batch_id) {
-
         var route = '/get-announcement-batch-class/'+batch_id;
-
         $.get(route,function(data){
-
                 var res= $.map(data,function(value){
                     return value;
                 });
-
                     if (res.length == 0) {
                         $('#save').prop('disabled',true);
                         $('#btnSubmit').prop('disabled',true);
                     } else {
                     var str = "";
-
                              for(var i=0; i<res.length; i++)
                              {
                                str +='<div class="checkbox clip-check check-primary">' +
@@ -628,12 +612,11 @@
                                             + res[i]['class_name'] +
                                          '</label>'+
                              '</div>';
-
-                                 var res1= $.map(res[i]['division'],function(value){
-                                     return value;
-                                 });
-                               for(var j=0; j<res1.length; j++) {
-
+                              var res1= $.map(res[i]['division'],function(value){
+                                   return value;
+                              });
+                              console.log(res1.length);
+                              for(var j=0; j<res1.length; j++){
                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
                                        '<input type="checkbox" value="'+res1[j]['division_id']+'" name="FirstDiv[]" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+
                                        '<label for="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'">'
@@ -642,8 +625,7 @@
                                    str +='</div> ';
                                }
                                str+="<p></p>"
-
-                             }
+                              }
                     }
                 $('#batch-class-div-data').html(str);
                 $('.classFirst').change(function(){
@@ -674,7 +656,6 @@
                 }
         );
     }
-
     $('#service2').click(function(){
         if(this.checked == true){
             $('#hidenValue').val(1);
@@ -682,25 +663,16 @@
             $('#hidenValue').val(0);
         }
     });
-
     $('#createAchievBtn').click(
         function(){
-
             $('#hiddenBtnCheck').val(1);
         }
     );
-
     $('#publishAchievBtn').click(
         function(){
             $('#hiddenBtnCheck').val(0);
         }
     );
-
 </script>
-
-
-
-
 <!-- start: MAIN JAVASCRIPTS -->
-
 @stop

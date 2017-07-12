@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\api;
 
 use App\Batch;
@@ -15,6 +14,8 @@ use App\SubjectClassDivision;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
+use App\PushToken;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use Faker\Provider\DateTime;
 use Faker\Provider\File;
 use Illuminate\Http\Request;
@@ -24,12 +25,12 @@ use Illuminate\Support\Facades\DB;
 
 class HomeworkController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct(Request $request)
     {
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-
     /*
      * Function Name: getTeacherSubject
      * Param : Request $request
@@ -48,7 +49,7 @@ class HomeworkController extends Controller
             $i=0;
             $division=Division::where('class_teacher_id',$data['teacher']['id'])->first();
             if($division != null){
-                $classesSubjects=SubjectClassDivision::where('division_id',$division->id)->get();
+                $classesSubjects=SubjectClassDivision::where('division_id',$division->id)->where('teacher_id',$data['teacher']['id'])->get();
                 foreach($classesSubjects as $row)
                 {
                     $subjects=Subject::where('id','=',$row['subject_id'])->first();
@@ -526,15 +527,23 @@ class HomeworkController extends Controller
         try{
             $homework_id= Homework::where('id',$request->homework_id)->update(array('status'=>2));
             $status = 200;
-            $message = "Homework Published";
+            $messag = "Homework Published";
+
+            $students=HomeworkTeacher::where('homework_id',$request->homework_id)->lists('student_id');
+            $title="Homework generated";
+            $message="Please check the homework !";
+            $allUser=0;
+            $push_users_parents=User::whereIn('id',$students->toArray())->lists('parent_id');
+            $push_users=PushToken::whereIn('user_id',$push_users_parents)->lists('push_token');
+            $this -> CreatePushNotification($title,$message,$allUser,$push_users);
         }
         catch (\Exception $e) {
             $status = 500;
-            $message = "Something went wrong";
+            $messag = $e->getmessage();
         }
         $response = [
             "status"=>$status,
-            "message" => $message
+            "message" => $messag
         ];
         return response($response, $status);
     }

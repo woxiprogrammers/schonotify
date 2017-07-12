@@ -26,7 +26,6 @@ class EditStudentRequest extends Request
         return [
 
             'firstname' => 'required|min:2|max:20',
-            'lastname' => 'required|min:2|max:20',
             'email' => 'email',
             'mobile' =>'required|digits:10',
             'address' =>'required',

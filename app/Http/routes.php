@@ -382,19 +382,12 @@
     Route::get('/delete-period/{id}','TimetableController@deletePeriod');
 
     Route::get('/create-copy-structure/{division}/{day}/{selectedDay}','TimetableController@copyStructure');
-
     Route::get('/get-events/{id}','EventController@getEvents');
-
     Route::get('/check-acl-edit-event/','EventController@editEventAcl');
-
     Route::get('/delete-event/{id}','EventController@deleteEvent');
-
     Route::post('/save-edit-event','EventController@saveEditEvent');
-
     Route::get('/get-user-event/{id}','EventController@getUserEvent');
-
     Route::get('/publish-edit-event/{id}','EventController@publishEditEvent');
-
     Route::get('get-classes/{id}',array('uses' => 'UsersController@getClasses'));
     Route::get('get-classes-search',array('uses' => 'UsersController@getClassesForSearch'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
@@ -414,23 +407,16 @@
 // Password reset link request routes...
     Route::get('password/email', 'Auth\PasswordController@getEmail');
     Route::post('password/email', 'Auth\PasswordController@postEmail');
-
 // Password reset routes...
     Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
     Route::post('password/reset', 'Auth\PasswordController@postReset');
-
     Route::get('/home','FrontController@index');
-
 // Send email and verification routes...
     Route::post('send-email','UsersController@sendMail');
     Route::get('verify/{confirmationCode}',array('uses' => 'UsersController@verifyUser'));
-
     Route::get('get-subject-classes/{id}/{subject_id}','HomeworkController@getSubjectClass');
-
 //check class teacher
     Route::get('check-class-teacher/{id}',array('uses'=>'UsersController@checkClassTeacher'));
-
-
 //check email for edit user
     Route::post('check-email-edit',array('uses' => 'UsersController@checkEmailEdit'));
 //check roll number exists or not
@@ -438,7 +424,6 @@
 //check class name
     Route::get('check-class',array('uses' => 'ClassController@checkClass'));
     Route::post('check-parent',array('uses' => 'UsersController@checkParent'));
-
 //enquiry form
     Route::get('/student-enquiry','EnquiryController@viewEnquiryForm');
     Route::get('/enquiry-listing','EnquiryController@viewEnquiryListing');
@@ -446,11 +431,8 @@
     Route::get('/enquiry-form-data','EnquiryController@viewEnquiryListingData');
     Route::post('/store-student-enquiry','EnquiryController@storeEnquiryForm');
     /* API Routes */
-
     Route::group(['prefix' => 'api/v1/user/'], function () {
-
     Route::post('auth','api\UserController@login');
-
     //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
     Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
@@ -490,6 +472,7 @@
     Route::get('get-acl-details','api\MessageController@getAclDetails');
     Route::get('get-switching-details','api\UserController@getSwitchingDetails');
     Route::get('check-login','api\UserController@checkLogin');
+    Route::get('check-acl/{id}','api\UserController@checkAcl');
  //Homework related
     Route::get('get-homework-types','api\HomeworkController@getHomeworkType');
     Route::post('homework-create','api\HomeworkController@createHomework');
@@ -505,8 +488,6 @@
     Route::get('view-homework','api\HomeworkController@viewHomeWork');
     Route::get('view-unpublished-homework',array('uses' => 'api\HomeworkController@viewUnpublishedHomeWork'));
     Route::get('view-detail-homework/{homework_id}',array('uses' => 'api\HomeworkController@viewDetailHomeWork'));
-
-
         //Timetable
         Route::get('view-timetable-parent/{studentId}/{day_id}','api\TimetableController@viewTimetableParent');
         Route::get('view-timetable-teacher/{div_id}/{day_id}','api\TimetableController@viewTimetableTeacher');
@@ -514,7 +495,6 @@
         Route::get('get-batches','api\TimetableController@getBatches');
         Route::get('get-classes/{batchId}','api\TimetableController@getClasses');
         Route::get('get-divisions/{classId}','api\TimetableController@getDivisions');
-
         //Announcement
         Route::post('create-announcement','api\NoticeBoardController@announcementCreate');
         Route::post('edit-announcement/{id}','api\NoticeBoardController@editAnnouncement');
@@ -523,7 +503,6 @@
         Route::get('view-announcement/{id}','api\NoticeBoardController@viewAnnouncement');
         Route::get('view-announcement-parent/','api\NoticeBoardController@viewAnnouncementParent');
         Route::get('request-to-publish-announcement/{id}','api\NoticeBoardController@requestToPublishAnnouncement');
-
         //Result
         Route::get('view-result/{id}','api\ResultController@viewResult');
         Route::get('view-test-chart/{uid}/{tid}','api\ResultController@viewTestGraph');
@@ -532,8 +511,6 @@
         Route::get('view-achievement/{id}','api\NoticeBoardController@viewAchievement');
         Route::get('view-achievement-parent','api\NoticeBoardController@viewAchievementParent');
         Route::get('delete-achievement/{id}','api\NoticeBoardController@deleteAchievement');
-
-
         //Event
         Route::get('view-top-five-event','api\EventController@viewFiveEvent');
         Route::get('view-months-event/{year}/{month_id}','api\EventController@viewMonthsEvent');// BOTH FOR PARENT AND TEACHER
@@ -545,14 +522,8 @@
         Route::get('get-year-month','api\EventController@getYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
-
         //Fees
         Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
-
         //Push
         Route::post('save-push','api\UserController@savePushToken');
-
-
-
-
     });

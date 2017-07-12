@@ -1,7 +1,5 @@
 <?php
-
     namespace App\Http\Controllers;
-
     use App\Batch;
     use App\Classes;
     use App\Division;
@@ -179,7 +177,7 @@
                     } else {
                         $result = array_merge($teacherAnnouncement,$teacherAchievement);
                         $temp_array = array();
-                        foreach ($result as $key=>$value) {
+                        foreach ($result as $key=>$value){
                             if (isset($temp_array))
                                 $temp_array[$value['id']] = $value;
                         }
@@ -310,6 +308,7 @@
         public function getAdminAnnouncement($month,$year,$id)
         {
             $user = Auth::user();
+            $user_id=$user->id;
             $adminAnnouncementSelfCreatedAndPending = DB::table('events')->where('event_type_id','=',1)
                 ->where('created_by','=',$user->id)
                 ->wherein('status',[0,1,2])
@@ -382,6 +381,7 @@
             $adminAchievementSelfCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('events.created_by','=',$user->id)
+                ->where('events.body_id','=',$user->body_id)
                 ->wherein('status',[0,2])
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
@@ -390,12 +390,14 @@
                 ->where('event_type_id','=',2)
                 ->where('created_by','!=',$user->id)
                 ->where('status','=',1)
+                ->where('events.body_id','=',$user->body_id)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority');
             $adminAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                 ->where('event_type_id','=',2)
                 ->where('status','=',2)
+                ->where('events.body_id','=',$user->body_id)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
@@ -407,16 +409,19 @@
                 $adminAchievementSelfCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('events.created_by','=',$user->id)
+                    ->where('events.body_id','=',$user->body_id)
                     ->wherein('status',[0,2])
                     ->min('events.created_at');
                 $adminAchievementOthersPendingLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('published_by','=',$user->id)
+                    ->where('events.body_id','=',$user->body_id)
                     ->where('status','=',1)
                     ->min('events.created_at');
                 $adminAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('status','=',2)
+                    ->where('events.body_id','=',$user->body_id)
                     ->min('events.created_at');
                 $arrayMergedForLastDate = array_merge(array($adminAchievementSelfCreatedLastDate),array($adminAchievementOthersPendingLastDate));
                 $finalMergedLastEvent = array_merge(array($adminAllPublishedLastDate),$arrayMergedForLastDate);
@@ -452,6 +457,7 @@
             $teacherAnnouncementSelfCreatedAndPendingAndPublished = DB::table('events')->where('event_type_id','=',1)
                 ->wherein('status',[0,1,2])
                 ->where('created_by','=',$user->id)
+                ->where('events.body_id','=',$user->body_id)
                 ->whereraw('YEAR(created_at) ='.date($year))
                 ->whereraw('MONTH(created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
@@ -459,6 +465,7 @@
                 ->where('event_type_id','=',1)
                 ->where('status','=',2)
                 ->where('event_user_roles.user_id','=',$user->id)
+                ->where('events.body_id','=',$user->body_id)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
@@ -470,10 +477,12 @@
                 $teacherAnnouncementSelfCreatedAndPendingAndPublishedLastDate = Event::where('event_type_id','=',1)
                     ->wherein('status',[0,1,2])
                     ->where('created_by','=',$user->id)
+                    ->where('events.body_id','=',$user->body_id)
                     ->max('events.created_at');
                 $teacherAnnouncementAssignedPublishedLastDate = Event::join('event_user_roles','event_user_roles.event_id','=','events.id')
                     ->where('event_type_id','=',1)
                     ->where('status','=',2)
+                    ->where('events.body_id','=',$user->body_id)
                     ->where('event_user_roles.user_id','=',$user->id)
                     ->max('events.created_at');
                 $arrayMergedForLastDate = array_merge(array($teacherAnnouncementSelfCreatedAndPendingAndPublishedLastDate),array($teacherAnnouncementAssignedPublishedLastDate));
@@ -509,6 +518,7 @@
             $teacherAchievementSelfPendingAndCreated = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                         ->where('event_type_id','=',2)
                         ->where('created_by','=',$user->id)
+                        ->where('events.body_id','=',$user->body_id)
                         ->wherein('status',[0,1])
                         ->whereraw('YEAR(events.created_at) ='.date($year))
                         ->whereraw('MONTH(events.created_at) ='.date($month))
@@ -516,6 +526,7 @@
             $teacherAchievementAllPublished = DB::table('events')->join('event_images','event_images.event_id','=','events.id')
                         ->where('event_type_id','=',2)
                         ->where('status','=',2)
+                        ->where('events.body_id','=',$user->body_id)
                         ->whereraw('YEAR(events.created_at) ='.date($year))
                         ->whereraw('MONTH(events.created_at) ='.date($month))
                         ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','image','published_by','created_by','priority')
@@ -528,11 +539,13 @@
                 $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('created_by','=',$user->id)
+                    ->where('events.body_id','=',$user->body_id)
                     ->wherein('status',[0,1])
                     ->min('events.created_at');
                 $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                     ->where('event_type_id','=',2)
                     ->where('status','=',2)
+                    ->where('events.body_id','=',$user->body_id)
                     ->min('events.created_at');
                 $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
                 $lastDate = date('');
@@ -693,8 +706,7 @@
         * Developed By : Suraj Bande
         * Date : 3/4/2016
         */
-        public function createNoticeBoard(CreateAnnouncementRequest $request)
-        {
+        public function createNoticeBoard(CreateAnnouncementRequest $request){
             if ($request->authorize() === true){
                 $annoucement =array();
                 $userEntry = array();
@@ -706,6 +718,7 @@
                 $annoucement['created_at'] = Carbon::now();
                 $annoucement['updated_at'] = Carbon::now();
                 $annoucement['created_by'] = $user->id;
+                $annoucement['body_id'] = $user->body_id;
                 if($user->role_id == 1) {
                     if($request->buttons == 'publish') {
                         $annoucement['published_by'] = $user->id;
@@ -894,7 +907,7 @@
                     }
                 }
                 Session::flash('message-success','Announcement created successfully');
-                return view('noticeBoard');
+                return redirect('/noticeBoard');
             } else {
                 return Redirect::back();
             }
@@ -904,10 +917,9 @@
         * Param : $batchId
         * Return : it will return array.
         * Desc : it will return btch class to create announcement.
-        * Developed By : Suraj Bande
-        * Date : 13/4/2016
+        * Developed By : Shubham Chaudhari
+        * Date : 3-07-2017
         */
-
         public function getBatchClass($batchId)
         {
             $user = Auth::User();
@@ -916,7 +928,6 @@
                 $batch = Batch::where('body_id',$user->body_id)->select('id','name')->first();
                 $classData = Classes::where('batch_id',$batchId)->select('id','class_name')->get();
                 $classList = $classData->toArray();
-
                 $count = 0;
                     foreach($classList as $row) {
                         $classDivision[$count]['class_id'] = $row['id'];
@@ -930,15 +941,10 @@
                         }
                         $count++;
                     }
-
             } else {
-
                 $userCheck = Division::where('class_teacher_id',$user->id)->first();
-
                 if ($userCheck != null) {
-
                     $count=0;
-
                     $batchClassData = Division::where('divisions.class_teacher_id',$user->id)
                         ->join('classes','divisions.class_id','=','classes.id')
                         ->join('batches','classes.batch_id','=','batches.id')
@@ -952,10 +958,8 @@
                         ->where('batches.id','=',$batchId)
                         ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                         ->get()->toArray();
-
                     $mergedArray = array_merge($batchClassData,$divisionSubjects);
                     $mergedArray = array_unique($mergedArray, SORT_REGULAR);
-
                     foreach($mergedArray as $row) {
                         $batchList[$count]['id'] = $row['batch_id'];
                         $batchList[$count]['name'] = $row['batch_name'];
@@ -995,7 +999,6 @@
                         $countClass++;
                     }
                     $classDivision = array_unique($classDivision, SORT_REGULAR);
-
                 } else {
                     $count=0;
                     $divisionSubjects = SubjectClassDivision::where('division_subjects.teacher_id',$user->id)
@@ -1004,7 +1007,6 @@
                         ->join('batches','classes.batch_id','=','batches.id')
                         ->select('divisions.id as division_id','divisions.division_name','classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                         ->get()->toArray();
-
                     $divisionSubjects = array_unique($divisionSubjects, SORT_REGULAR);
                     foreach($divisionSubjects as $row) {
                         $batchList[$count]['id'] = $row['batch_id'];
@@ -1051,7 +1053,6 @@
         * Developed By : Suraj Bande
         * Date : 13/4/2016
         */
-
         public function detailAnnouncement($id)
         {
             $events=Event::where('id','=',$id)->get();
@@ -1313,11 +1314,11 @@
                     {
                         $storeAchievement['status'] = 2;
                         $storeAchievement['published_by'] = Auth::User()->id;
-                    } else {
+                    }else{
                         $storeAchievement['status'] = 1;
                         $storeAchievement['published_by'] = 0;
                     }
-                } else {
+                }else{
                     $storeAchievement['status'] = 0;
                     $storeAchievement['published_by'] = 0;
                 }
@@ -1325,6 +1326,7 @@
                 $storeAchievement['created_by'] = Auth::User()->id;
                 $storeAchievement['created_at'] = Carbon::now();
                 $storeAchievement['updated_at'] = Carbon::now();
+                $storeAchievement['body_id'] = Auth::User()->body_id;
                 $lastInsertId = Event::insertGetId($storeAchievement);
                 if(isset($request->uploadedFiles[0]))
                 {

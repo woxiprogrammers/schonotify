@@ -4,6 +4,7 @@ use App\PushToken;
 use Illuminate\Support\Facades\Log;
 trait PushNotificationTrait{
     public function CreatePushNotification($PushTitle,$PushMsg,$allUser,$push_users){
+      Log::info("Inside a push function ");
         $title = $PushTitle;
         $msg = $PushMsg;
         if($allUser == 1){
@@ -30,8 +31,6 @@ trait PushNotificationTrait{
             'Authorization:Bearer '.env('APIToken')
         ));
         Log::info($ch['CURLOPT_HTTPHEADER']);
-        $result = curl_exec($ch);
-        Log::info($result);
         curl_close($ch);
     }
 }

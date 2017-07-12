@@ -1,20 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\EnquiryForm;
 use App\User;
 use Carbon\Carbon;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
-
 class EnquiryController extends Controller
 {
     public function __construct()

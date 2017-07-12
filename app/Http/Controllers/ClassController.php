@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Batch;
 use App\Classes;
 use App\Division;
@@ -14,7 +12,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use \Illuminate\Support\Facades\Session;
-
 class ClassController extends Controller
 {
     public function __construct()
@@ -48,7 +45,6 @@ class ClassController extends Controller
             Session::flash('message-error','Something went wrong!');
             return Redirect::back();
         }
-
     }
     public function createBatch($batchName)
     {
@@ -72,7 +68,6 @@ class ClassController extends Controller
     }
     public function deleteBatch(Request $request,$id)
     {
-
         Batch::where('id',$id)->delete();
         if($request->ajax())
         {
@@ -81,7 +76,6 @@ class ClassController extends Controller
             Session::flash('message-success','Batch has been deleted.');
             return Redirect::back();
         }
-
     }
     public function createDivision(Requests\WebRequests\DivisionRequest $request)
     {
@@ -94,21 +88,18 @@ class ClassController extends Controller
             return Redirect::to('/');
         }
     }
-
     public function SearchBatch(Requests\WebRequests\DivisionRequest $request)
     {
-            $batches=Batch::select('id','name')->get();
+            $user = Auth::user();
+            $batches = Batch::where('body_id',$user->body_id)->select('id','name')->get();
             return view('batch')->with(compact('batches'));
     }
-
     public function saveDivision(Requests\WebRequests\DivisionRequest $request)
     {
-
         $div['class_id']=$request->classDropdown;
         $div['division_name']=strtoupper($request->division);
         $div['slug']=strtolower($request->division);
         $cnt=Division::where($div)->count();
-
         if($cnt>0)
         {
             Session::flash('message-error','Division Name for this class is already in use.');
@@ -124,13 +115,10 @@ class ClassController extends Controller
                 return Redirect::back();
             }
         }
-
     }
-
     public function divisionCheck(Request $request)
     {
         $cnt=Division::where('class_id','=',$request->class_id)->where('division_name','=',$request->division_name)->count();
-
         if($cnt>=1)
         {
             return 'false';
@@ -146,6 +134,5 @@ class ClassController extends Controller
         }else{
             return 'true';
         }
-
     }
 }

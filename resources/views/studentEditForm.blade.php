@@ -1,17 +1,10 @@
-
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
 @include('sidebar')
-
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
 @include('header')
-
-
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
 <div class="wrap-content container" id="container">
@@ -36,19 +29,13 @@
 <div class="container-fluid container-fullw bg-white">
 <div class="row">
 <div class="col-md-12">
-
-
 <div class="tabbable">
 <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
-
     <li class="active">
         <a data-toggle="tab" href="#panel_edit_account">
             Edit Account
         </a>
     </li>
-
-
-
 </ul>
 <div class="tab-content">
 <div id="panel_edit_account" class="tab-pane fade in active ">
@@ -121,7 +108,6 @@
                         </label>
                         <input type="text" value="{!! $user->last_name !!}" class="form-control" id="lastname" name="lastname">
                     </div>
-
                     <div class="form-group">
                         <label class="control-label">
                             Email Address
@@ -134,10 +120,7 @@
                             Phone
                         </label>
                         <input type="text" placeholder="{!! $user->mobile !!}" value="{!! $user->mobile !!}" class="form-control" id="mobile" name="mobile">
-
                     </div>
-
-
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -149,9 +132,7 @@
                             <label for="us-female">
                                 Female
                             </label>
-
                             <input type="radio" value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
-
                             <label for="us-male">
                                 Male
                             </label>
@@ -172,7 +153,6 @@
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button> </span>
                         </div>
-
                         <!--                            <input class="form-control format-datepicker" type="text">-->
                     </div>
                     <div class="form-group">
@@ -182,16 +162,13 @@
                         <input type="text" placeholder="{!! $user->alternate_number !!}" value="{!! $user->alternate_number !!}" class="form-control" id="Alternate_number" name="Alternate_number">
 
                     </div>
-
                     <div class="form-group">
                         <label>
                             Image Upload
                         </label>
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail  col-sm-4">
-
                                 <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
-
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
                             <div class="user-edit-image-buttons pull-right col-sm-6">
@@ -204,13 +181,9 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
         </fieldset>
-
         <div class="row">
-
             <div class="col-md-4">
                 <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
                     Update <i class="fa fa-arrow-circle-right"></i>
@@ -219,26 +192,19 @@
         </div>
     </form>
 </div>
-
-
-</div>
-
 </div>
 </div>
 </div>
 </div>
 </div>
-
+</div>
 @include('rightSidebar')
 <!-- end: FOURTH SECTION -->
 </div>
 </div>
 </div>
-
 @include('footer')
 </div>
-
-
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
@@ -262,10 +228,8 @@
 <script src="/vendor/select2/select2.min.js"></script>
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="/assets/js/form-validation.js"></script>
-
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/form-elements.js"></script>
 <script src="/assets/js/custom-project.js"></script>
@@ -276,7 +240,6 @@
         FormValidator.init();
         FormElements.init();
         userAclModule();
-
     });
     $('#email').on('keyup',function(){
         var email = $(this).val();
@@ -299,47 +262,33 @@
     {
         var route='/user-module-acl';
         $.get(route,function(res){
-
             var str;
-
             var arr=res['allModAclArr'];
-
             var arr1= $.map(arr,function(index,value){
                 return [value];
             });
-
             var arr3=res['allAcls'];
             var arr2= $.map(arr3,function(index,value){
                 return [index];
             });
-
             var arr4=res['userModAclArr'];
-
             str+='<tr>'+
                 '<th><b>Modules</b></th>';
             for(var j=0; j<arr2.length; j++)
             {
-
                 str+='<th><span class="label label-default" >'+arr2[j]['title']+'</span></th>';
             }
-
             str+='</tr>';
-
-
             for(var i=0; i<arr1.length; i++)
             {
-
                 str+="<tr>"+
                     "<td>"+(arr1[i]).toUpperCase()+"</td>";
                 for(var j=0; j<arr2.length; j++)
                 {
                     str+='<td>'+
                         '<div class="checkbox clip-check check-primary checkbox-inline">';
-
-
                     if($.inArray(arr2[j]['slug']+'_'+arr1[i],arr4)!=-1)
                     {
-
                         str+='<input type="checkbox" id="'+arr2[j]['slug']+'_'+arr1[i]+'" value="1"  checked>'+
                             '<label for="checkbox"></label>';
                     }else{
@@ -349,32 +298,10 @@
                     str+='</div>'+
                         '</td>';
                 }
-
                 str+="</tr>";
             }
-
             $('#aclMod').html(str);
         });
     }
-
-
-
-
 </script>
-
-
 @stop
-
-
-
-
-
-
-
-
-
-
-
-
-
-

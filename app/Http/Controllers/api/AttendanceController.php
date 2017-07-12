@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\api;
-
 use App\Attendance;
 use App\AttendanceStatus;
 use App\Batch;
@@ -17,15 +15,16 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\PushToken;
 class AttendanceController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct(Request $request)
     {
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-
     /*
    * Function Name: getAttendanceBatches
    * Param : Request $requests
@@ -250,7 +249,7 @@ class AttendanceController extends Controller
         try{
             $data = $request->all();
             $status = 200;
-            $message = "Attendance Successfully Marked";
+            $messag = "Attendance Successfully Marked";
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
             $attendanceData = array();
             $role = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
@@ -262,13 +261,14 @@ class AttendanceController extends Controller
                     if (!Empty($markedAttendance)) {
                         Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
                         $status = 200;
-                        $message = "Attendance Successfully updated";
+                        $messag = "Attendance Successfully updated";
                         if(sizeof($studentData) > 0) {
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];
                                 $attendanceData['division_id'] = $role['id'];
                                 $attendanceData['student_id'] = $value;
+                                $parent = User::where('id',$value)->lists('parent_id');
                                 $attendanceData['status'] = 1;
                                 $attendanceData['created_at'] = Carbon::now();
                                 $attendanceData['updated_at'] = Carbon::now();
@@ -289,32 +289,36 @@ class AttendanceController extends Controller
                             }
                         }
                         if(!(AttendanceStatus::where('date','=',$data['date'])->count())) {
-                            $attendanceStatus['division_id'] = $role['id'];
-                            $attendanceStatus['date'] = $data['date'];
-                            $attendanceStatus['status'] = 1;
-                            $attendanceStatus['created_at'] = Carbon::now();
-                            $attendanceStatus['updated_at'] = Carbon::now();
-                            AttendanceStatus::insert($attendanceStatus);
+                                $attendanceStatus['division_id'] = $role['id'];
+                                $attendanceStatus['date'] = $data['date'];
+                                $attendanceStatus['status'] = 1;
+                                $attendanceStatus['created_at'] = Carbon::now();
+                                $attendanceStatus['updated_at'] = Carbon::now();
+                                AttendanceStatus::insert($attendanceStatus);
                         }
                     }
-                } else {
-                    Attendance::where('division_id','=',$role['id'])->where('date',$data['date'])->delete();
-                    $status = 200;
-                    $message = "Attendance Successfully edited";
+                                $status = 200;
+                                $messag = "Attendance Successfully edited";
+                                $push_users=User::where('division_id',$role['id'])->lists('parent_id');
+                                $title="Attendance";
+                                $message="Attendance Marked for the day.";
+                                $allUser=0;
+                                $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
+                                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 }
             } else {
                 $status=404;
-                $message="Sorry!! Only class teacher can mark attendance";
+                $messag="Sorry!! Only class teacher can mark attendance";
             }
         } catch (\Exception $e) {
             $status = 500;
-            $message = "Something went wrong";
+            $messag = "Something went wrong";
         }
         $response = [
             "status" => $status,
-            "message" => $message
+            "message" => $messag
         ];
-        return response($response, $status);
+        return response()->json($response, $status);
     }
     /*
     * Function Name: getStudentsList
@@ -642,7 +646,6 @@ class AttendanceController extends Controller
         ];
         return response($response, $status);
     }
-
     /*
     * Function Name: viewDefaultAttendanceTeacher
     * Param : Request $requests
