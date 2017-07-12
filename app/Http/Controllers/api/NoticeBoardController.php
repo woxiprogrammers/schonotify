@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\api;
 use App\Announcement;
 use App\Batch;
@@ -14,6 +13,7 @@ use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
+use App\Http\Requests\createAnnouncementRequest;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -21,7 +21,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-
 class NoticeBoardController extends Controller
 {
     use PushNotificationTrait;
@@ -36,8 +35,10 @@ class NoticeBoardController extends Controller
      * @return \Illuminate\Http\Response
      */
      public function viewAnnouncementParent(Request $request){
+             $user=Auth::user();
              $event =Event::where('event_type_id',1)
                             -> where('status',2)
+                            ->where('body_id',$user->body_id)
                             ->orderBy('id','desc')
                             ->get()
                             ->toArray();
@@ -52,10 +53,12 @@ class NoticeBoardController extends Controller
              return response($response);
      }
      public function viewAchievementParent(Request $request){
+            $user=Auth::user();
             $data=$request->all();
             $parentAchievementPublished = Event::where('event_type_id','=',2)
                   ->where('status',2)
                   ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
+                  ->where('body_id',$user->body_id)
                   ->orderBy('id','desc')
                   ->get();
             $imageArray=array();
@@ -89,7 +92,8 @@ class NoticeBoardController extends Controller
             ];
       return response($response);
      }
-    public function announcementCreate(Request $request){
+    public function announcementCreate(Requests\createAnnouncement $request){
+        $user=Auth::user();
         $data=$request->all();
         $module_id=13;
         $acl=1;
@@ -104,6 +108,7 @@ class NoticeBoardController extends Controller
             $announcement['status']=$data['status'];
             $announcement['priority']=$data['priority'];
             $announcement['event_type_id']=1;
+            $announcement['body_id']=$user->body_id;
             $new_event=Event::insertGetId($announcement);
             foreach($data['teacherrr'] as $value){
                 $announcementData['event_id']=$new_event;
@@ -139,6 +144,7 @@ class NoticeBoardController extends Controller
     }
     public function createAnnouncement(Request $request)
     {
+        $user=Auth::user();
         $data=$request->all();
        try{
             $Batch = Batch::where('slug',$data['batch'])->first();
@@ -158,6 +164,7 @@ class NoticeBoardController extends Controller
             $eventData['date']=$date;
             $eventData['created_at']= Carbon::now();
             $eventData['updated_at']= Carbon::now();
+            $eventData['body_id']=$user->body_id;
             $event_id=Event::insertGetId($eventData);
            if($event_id != null)
             {
@@ -251,8 +258,13 @@ class NoticeBoardController extends Controller
     }
     public function viewAnnouncement(Request $request)
     {
-        $event =Event::where('event_type_id',1)->
-                        whereIn('status',[0,1,2])->orderBy('id','desc')->get()->toArray();
+        $user=Auth::user();
+        $event =Event::where('event_type_id',1)
+                       ->where('body_id',$user->body_id)
+                       ->whereIn('status',[0,1,2])
+                       ->orderBy('id','desc')
+                       ->get()
+                       ->toArray();
         foreach($event as $key => $val){
             $event[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
             $event[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first();
@@ -280,16 +292,19 @@ class NoticeBoardController extends Controller
                   ];
         return response($response);
     }
-    public function getAdmin(){
-          $response=User::where('role_id',1)->select()->get();
+    public function getAdmin(Request $request){
+          $user = $request->all();
+          $response=User::where('role_id',1)->where('body_id',$user['teacher']['body_id'])->select()->get();
         return response($response);
     }
-    public function getTeacher(){
-          $response=User::where('role_id',2)->select()->get();
+    public function getTeacher(Request $request){
+          $user = $request->all();
+          $response=User::where('role_id',2)->where('body_id',$user['teacher']['body_id'])->select()->get();
         return response($response);
     }
     public function createAchieve(Request $request){
         $data=$request->all();
+        $user=Auth::user();
         try{
             $module_id=12;
             $acl=1;
@@ -301,6 +316,7 @@ class NoticeBoardController extends Controller
                 $achievement['event_type_id']=2;
                 $achievement['created_by']=$data['user_id'];
                 $achievement['created_at']=Carbon::now();
+                $achievement['body_id']=$user->body_id;
                 $a=Event::insertGetId($achievement);
                 $tempImagePath = "uploads/achievement/events/".$a.'/';
                 $path = public_path('uploads/achievement/events/'.$a);
@@ -344,6 +360,7 @@ class NoticeBoardController extends Controller
     }
     public function createAchievement(Requests\CreateAchievement $request)
     {
+        $user=Auth::user();
         $data=$request->all();
         try{
             $creator =User::where('remember_token',$request->token)->first();
@@ -368,6 +385,7 @@ class NoticeBoardController extends Controller
             $eventData['date']=$date;
             $eventData['created_at']= Carbon::now();
             $eventData['updated_at']= Carbon::now();
+            $eventData['body_id']= $user->body_id;
             $event_id=Event::insertGetId($eventData);
             if($event_id != null)
             {
@@ -384,7 +402,7 @@ class NoticeBoardController extends Controller
                 $eventImageData['updated_at']= Carbon::now();
                 EventImages::insert($eventImageData);
                 $status = 200;
-                $message = "Achievement Broadcast Successfully";
+                $message = "Achievement Broadcasted Successfully";
             }
             else{
                 $status = 202;
@@ -401,18 +419,21 @@ class NoticeBoardController extends Controller
         return response($response, $status);
     }
     public function viewAchievement(Request $request,$id){
+      $user=Auth::user();
       $data=$request->all();
       if($id == 'teacher'){
            $user_id=$data['teacher']['id'];
            $role_id=UserRoles::where('slug',$id)->pluck('id');
            $teacherAchievementAllPublished = Event::where('event_type_id','=',2)
               ->wherein('status',[0,1])
+              ->where('events.body_id',$user->body_id)
               ->where('created_by',$user_id)
               ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
               ->orderBy('id','desc')
               ->get();
            $teacherAchievementPublished = Event::where('event_type_id','=',2)
                  ->where('status',2)
+                 ->where('events.body_id',$user->body_id)
                  ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
                  ->orderBy('id','desc')
                  ->get();
@@ -427,11 +448,13 @@ class NoticeBoardController extends Controller
           {
               $teacherAchievementSelfPendingAndCreatedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                   ->where('event_type_id','=',2)
+                  ->where('events.body_id',$user->body_id)
                   ->wherein('status',[0,1])
                   ->orderBy('id','desc')
                   ->min('events.created_at');
               $teacherAchievementAllPublishedLastDate = Event::join('event_images','event_images.event_id','=','events.id')
                   ->where('event_type_id','=',2)
+                  ->where('events.body_id',$user->body_id)
                   ->where('status','=',2)
                   ->min('events.created_at');
               $arrayMergedForLastDate = array_merge(array($teacherAchievementSelfPendingAndCreatedLastDate),array($teacherAchievementAllPublishedLastDate));
@@ -463,6 +486,7 @@ class NoticeBoardController extends Controller
       }else{
                $teacherAchievementPublished = Event::where('event_type_id','=',2)
                       ->where('status',2)
+                      ->where('events.body_id',$user->body_id)
                       ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
                       ->orderBy('id','desc')
                       ->get();
