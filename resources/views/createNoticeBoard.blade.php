@@ -1,15 +1,10 @@
 @extends('master')
-
 @section('content')
-
 <div id="app">
-
 @include('sidebar')
-
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
 @include('header')
-
 <!-- end: TOP NAVBAR -->
 <div class="main-content" >
 <div class="wrap-content container" id="container">
@@ -22,16 +17,13 @@
             <h1 class="mainTitle">Create</h1>
             <span class="mainDescription">Notice Board</span>
         </div>
-
     </div>
 </section>
 <!-- end: DASHBOARD TITLE -->
 <div class="container-fluid container-fullw bg-white">
-
     <div class="row">
         <div class="col-md-12">
             <div class="col-lg-10">
-
                 <p>
                    *Please select the tab to create Announcement or Achievement
                 </p>
@@ -114,7 +106,6 @@
                                                         </select>
                                                         <em id="">Please Use CTRL Button to select multiple options.</em>
                                                     </div>
-
                                                 </div>
                                             </div>
                                             <div class="checkbox clip-check check-primary">
@@ -122,7 +113,6 @@
                                                 <label for="service1">
                                                     Teacher
                                                 </label>
-
                                                 <div class="form-group">
                                                     <br>
                                                     <div class="teacherList">
@@ -152,21 +142,13 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group" id="batch-class-div-data">
-
-
                                                 </div>
-
                                                 <input type="hidden" name="hidenValue" id="hidenValue" value="0">
-
                                             </div>
-
                                         </div>
-
                                     </div>
                                     <div class="col-md-12">
-
                                         @if(Auth::User()->role_id != 1)
-
                                         <div class="form-group col-sm-6">
                                             <label class="control-label">
                                                 Select Admin  <span class="symbol required" aria-required="true"></span>
@@ -180,13 +162,9 @@
                                                 @endforeach
                                             </select>
                                         </div>
-
-
                                         @endif
                                     </div>
-
                                     <div class="col-md-12">
-
                                         <button class="btn btn-wide btn-primary " type="submit" name="buttons" value="save" >
                                             <span class="">Save</span>
                                         </button>
@@ -196,10 +174,8 @@
                                     </div>
                                  </div>
                             </form>
-
                         </div>
                         <div class="tab-pane fade" id="myTab2_example2">
-
                             <form action="/create-achievement" role="form" method="post" id="createAchievementForm" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -225,14 +201,12 @@
                                         </div>
                                     <input type="hidden" id="hiddenUserId" name="hiddenUserId" value="{{ Auth::User()->id }}">
                                     </div>
-
-                                    <div id="fileupload" class="col-sm-10">
+                                   <div id="fileupload" class="col-sm-10">
                                         <!-- Redirect browsers with JavaScript disabled to the origin page -->
                                         <noscript>
                                             <input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/">
                                         </noscript>
                                         <h3>Upload Images</h3>
-
                                         <table role="presentation" class="table table-striped">
                                             <tbody class="files"></tbody>
                                         </table>
@@ -240,9 +214,9 @@
                                         <div class="row fileupload-buttonbar">
                                             <div class="col-lg-12">
                                                 <!-- The fileinput-button span is used to style the file input field as button -->
-												<span class="btn btn-success fileinput-button"> <i class="glyphicon glyphicon-plus"></i> <span>Add files...</span>
-													<input type="file" name="files[]" multiple>
-												</span>
+                												<span class="btn btn-success fileinput-button"> <i class="glyphicon glyphicon-plus"></i> <span>Add files...</span>
+                													<input type="file" name="files[]" multiple>
+                												</span>
                                                 <button type="submit" class="btn btn-primary start">
                                                     <i class="glyphicon glyphicon-upload"></i>
                                                     <span>Start upload</span>
@@ -270,11 +244,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-
                                     <input type="hidden" name="hiddenBtnCheck" id="hiddenBtnCheck">
-
                                     <div class="col-md-12">
                                         <button class="btn btn-primary btn-wide" type="submit" id="publishAchievBtn">
                                             Publish
@@ -283,34 +254,21 @@
                                             Create <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
-
                                 </div>
-
                             </form>
-
-
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
-
-
 </div>
 </div>
-
 </div>
 <div id="loadmoreajaxloader" style="display: block;" class="loader-position-event" ><center><img src="/assets/images/loader1.gif" /></center></div>
 @include('footer')
-
 @include('rightSidebar')
-
-
 </div>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -329,10 +287,6 @@
 <!-- start: JavaScript Event Handlers for this page -->
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/custom-project.js"></script>
-
-
-
-
 <script id="template-upload" type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-upload fade">
@@ -370,9 +324,7 @@
 			{% } %}
 		</script>
 <!-- The template to display files available for download -->
-
 <script id="template-download" type="text/x-tmpl">
-
 			{%for (var i=0, file; file=o.files[i]; i++) { %}
 			<tr class="template-download fade">
 			<td>
@@ -454,37 +406,24 @@
 <![endif]-->
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <script src="assets/js/custom-project.js"></script>
-
-
-
-
-
-
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
         Main.init();
         FormValidator.init();
-
         var id = $('#batch-select').val();
         batchChange(id);
-
         $('#parentClass').hide();
-
         $('.teacherList').hide();
-
         $('.adminList').hide();
-
         if($('.parentChk').prop('checked') == true)
         {
             $('#parentClass').show();
         }
-
         if($('.teacherChk').prop('checked') == true)
         {
             $('.teacherList').show();
         }
-
         if($('.adminChk').prop('checked') == true)
         {
             $('.adminList').show();
@@ -562,7 +501,6 @@
                 $('#adminList').html(str);
             }
         });
-
     });
     $('#service1').click(function(){
         var route='/get-all-teachers/';
@@ -584,14 +522,11 @@
                 $('#teacherList').html(str);
             }
         });
-
     });
-
     $('#batch-select').change(function(){
         $('#batch-class-div-data').html('');
         var id=this.value;
         batchChange(id);
-
     });
     function batchChange(batch_id) {
         var route = '/get-announcement-batch-class/'+batch_id;
