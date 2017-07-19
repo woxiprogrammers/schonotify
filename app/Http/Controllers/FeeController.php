@@ -181,7 +181,8 @@ class FeeController extends Controller
     }
     public function feeListingView()
     {
-        $batches=Batch::select('id','name')->get()->toArray();
+        $user = Auth::user()->toArray();
+        $batches=Batch::where('body_id',$user['body_id'])->select('id','name')->get()->toArray();
         return view('fee.feelisting')->with(compact('batches'));
     }
     public function classesView(Request $request)
