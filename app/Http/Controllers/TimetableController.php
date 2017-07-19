@@ -25,7 +25,7 @@ class TimetableController extends Controller
 +   * Param: Requests\WebRequests\TimetableRequest $requests
 +   * Return: Timetable view
 +   * Desc: this method returns to view of timetable.
-+   * Developed By: Suraj Bande
++   * Developed By: Shubham Chaudhari
 +   * Date: 10/2/2016
 +   */
     public function index(Requests\WebRequests\TimetableRequest $request)
@@ -42,7 +42,7 @@ class TimetableController extends Controller
 +   * Param: Requests\WebRequests\TimetableRequest $requests, $id
 +   * Return: Timetable view on the basis of division selection
 +   * Desc: this method returns to view of timetable for perticular division.
-+   * Developed By: Suraj Bande
++   * Developed By: Shubham Chaudhari
 +   * Date: 10/2/2016
 +   */
     public function timetableShow(Requests\WebRequests\TimetableRequest $request,$id)
@@ -70,10 +70,11 @@ class TimetableController extends Controller
                 if( $row['division_subject_id'] != 0 ) {
                     $subject = SubjectClassDivision::join('subjects','subjects.id','=','division_subjects.subject_id')
                         ->join('users','users.id','=','division_subjects.teacher_id')
-                        ->select('users.username as teacher','subjects.subject_name','users.is_active')
+                        ->select('users.first_name as teacher','users.last_name as teacher_last_name','subjects.subject_name','users.is_active')
                         ->where('division_subjects.id',$row['division_subject_id'])
                         ->get()->toArray();
                    $row['teacher'] = $subject[0]['teacher'];
+                   $row['teacher_last_name'] = $subject[0]['teacher_last_name'];
                     $row['teacher_is_active'] = $subject[0]['is_active'];
                     $row['subject'] = $subject[0]['subject_name'];
                 } else {
@@ -156,7 +157,7 @@ class TimetableController extends Controller
 +   * Param:
 +   * Return: Timetable structure create page
 +   * Desc: this method returns to view of timetable create.
-+   * Developed By: Suraj Bande
++   * Developed By: Shubham Chaudhari
 +   * Date: 10/2/2016
 +   */
     public function create(Requests\WebRequests\CreateTimetableRequest $request)
@@ -174,7 +175,7 @@ class TimetableController extends Controller
 +   * Param: $requests, $id
 +   * Return: Timetable create
 +   * Desc: this method returns to the successful creation of timetable.
-+   * Developed By: Suraj Bande
++   * Developed By: Shubham Chaudhari
 +   * Date: 15/2/2016
 +   */
     public function createTimetable(Request $request)
@@ -239,7 +240,7 @@ class TimetableController extends Controller
             ->join('subjects','subjects.id','=','division_subjects.subject_id')
             ->join('users','users.id','=','division_subjects.teacher_id')
             ->where('users.is_active','=',1)
-            ->select('subjects.subject_name','division_subjects.id','users.username')
+            ->select('subjects.subject_name','division_subjects.id','users.first_name','users.last_name')
             ->get();
         return $subjects;
     }
@@ -442,7 +443,7 @@ class TimetableController extends Controller
  +   * Param: $division,$day,$selectedDay
  +   * Return: it will create another structure of the another day.
  +   * Desc:  it will create timetable structure for selected day and division with respect to available structure.
- +   * Developed By: Suraj Bande
+ +   * Developed By: Shubham Chaudhari
  +   * Date: 23/2/2016
  +   */
 
@@ -477,7 +478,7 @@ class TimetableController extends Controller
          +   * Param: $request
          +   * Return: it will check teacher and time availability for  period.
          +   * Desc: this method checks wheather the teacher or time is available to modified period with respect to period id.
-         +   * Developed By: Suraj Bande
+         +   * Developed By: Shubham Chaudhari
          +   * Date: 28/2/2016
          +   */
 
@@ -567,7 +568,7 @@ class TimetableController extends Controller
          +   * Param: $request
          +   * Return: it will update period.
          +   * Desc: this method update period with respect to period id.
-         +   * Developed By: Suraj Bande
+         +   * Developed By: Shubham Chaudhari
          +   * Date: 28/2/2016
          +   */
     public function updatePeriod(Request $request)
@@ -598,7 +599,7 @@ class TimetableController extends Controller
              +   * Param: $request
              +   * Return: it will returns teacher avilability.
              +   * Desc: this method will return teacher availabilty with respect to teacher division id.
-             +   * Developed By: Suraj Bande
+             +   * Developed By: Shubham Chaudhari
              +   * Date: 28/2/2016
              +   */
 
@@ -713,7 +714,7 @@ class TimetableController extends Controller
              +   * Param: $request
              +   * Return: it will add period.
              +   * Desc: this method will create period.
-             +   * Developed By: Suraj Bande
+             +   * Developed By: Shubham Chaudhari
              +   * Date: 28/2/2016
              +   */
     public function addPeriod(Request $request)

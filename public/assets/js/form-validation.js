@@ -1717,7 +1717,7 @@ var FormValidator = function () {
                         {
                             for(var i=0; i<res.length; i++)
                             {
-                                subjects+="<option value='"+res[i]['id']+"'>"+res[i]['subject_name']+" ("+res[i]['username']+")</option>";
+                                subjects+="<option value='"+res[i]['id']+"'>"+res[i]['subject_name']+" ("+res[i]['first_name']+" "+res[i]['last_name']+")</option>";
                             }
                         }else{
                             subjects+="<option value='unavailable'>No subjects available.</option>";

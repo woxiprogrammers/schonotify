@@ -442,7 +442,4 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-    public function checkAcl(Request $Request,$id){
-             dd($id);
-    }
 }
