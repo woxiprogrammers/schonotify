@@ -181,7 +181,8 @@ class FeeController extends Controller
     }
     public function feeListingView()
     {
-        $batches=Batch::select('id','name')->get()->toArray();
+        $user = Auth::user()->toArray();
+        $batches=Batch::where('body_id',$user['body_id'])->select('id','name')->get()->toArray();
         return view('fee.feelisting')->with(compact('batches'));
     }
     public function classesView(Request $request)
@@ -191,9 +192,13 @@ class FeeController extends Controller
     }
     public function feeListingTableView(Request $request)
     {
+       $user = Auth::user()->toarray();
+       $batches = Batch::where('body_id',$user['body_id'])->lists('id');
+       $classes = Classes::whereIn('batch_id',$batches)->lists('id');
+       $fee_classes = FeeClass::whereIn('class_id',$classes)->lists('fee_id');
        if($request->str1 == 0)
        {
-           $fees=Fees::select()->get();
+           $fees=Fees::whereIn('id',$fee_classes)->select()->get();
            return view('fee.feetable')->with(compact('fees'));
        }
         else
