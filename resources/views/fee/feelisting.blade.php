@@ -22,7 +22,7 @@
                 <label class="control-label">
                     Batch <span class="symbol required"></span>
                 </label>
-                <select name="batch" class="form-control" id="batchDropdown">
+                <select name="batch" class="form-control" id="batchDropdown" style="-webkit-appearance: menulist;">
                     <option selected>Select Batch...</option>
                     @foreach($batches as $batch)
                     <option value='{{$batch['id']}}'>{{$batch['name']}}</option>
