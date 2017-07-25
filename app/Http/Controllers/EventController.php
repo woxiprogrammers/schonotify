@@ -6,6 +6,7 @@ use App\Event;
 use App\EventImages;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\User;
+use App\Module;
 use App\UserRoles;
 use Carbon\Carbon;
 use Faker\Provider\DateTime;
@@ -32,7 +33,7 @@ class EventController extends Controller
      +   * Param: $id
      +   * Return: by default all events.
      +   * Desc: it returns by default all events and selected category id to view.
-     +   * Developed By: Suraj Bande
+     +   * Developed By: shubham chaudhari
      +   * Date: 5/3/2016
      +   */
     public function index(Requests\WebRequests\EventRequest $request,$id){
@@ -49,7 +50,7 @@ class EventController extends Controller
      +   * Param: $request
      +   * Return: save event.
      +   * Desc: it will save event data in database or save and publish event.
-     +   * Developed By: Suraj Bande
+     +   * Developed By: shubham chaudhari
      +   * Date: 5/3/2016
      +   */
     public function saveEvent(Requests\WebRequests\EventRequest $request) {
@@ -120,7 +121,7 @@ class EventController extends Controller
          +   * Param: $request,$id
          +   * Return: status of event publish.
          +   * Desc: it will return published event if it is already created.
-         +   * Developed By: Suraj Bande
+         +   * Developed By: shubham chaudhari
          +   * Date: 13/3/2016
          +   */
     public function publishEditEvent(Requests\WebRequests\EventPublishRequest $request,$id){
@@ -146,7 +147,8 @@ class EventController extends Controller
                  $message="New Event Created";
                  $allUser=1;
                  $push_users=null;
-                 $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                 $state = Module::where('id',3)->pluck('slug');
+                 $this->CreatePushNotification($title,$message,$allUser,$push_users,$state);
                  return 1;
              }
          } else {
@@ -169,7 +171,8 @@ class EventController extends Controller
                      $message="New Event Created";
                      $allUser=1;
                      $push_users=null;
-                     $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                     $state = Module::where('id',3)->pluck('slug');
+                     $this->CreatePushNotification($title,$message,$allUser,$push_users,$state);
                      Session::flash('message-success','Event published successfully !');
                      return 1;
                  }
@@ -181,7 +184,7 @@ class EventController extends Controller
          +   * Param: $request
          +   * Return: access true or false.
          +   * Desc: it will check acl to create event.
-         +   * Developed By: Suraj Bande
+         +   * Developed By: shubham chaudhari
          +   * Date: 8/3/2016
          +   */
     public function saveEventCheckAcl(Requests\WebRequests\EventCreateRequest $request)
@@ -197,7 +200,7 @@ class EventController extends Controller
          +   * Param: $request
          +   * Return: access true or false.
          +   * Desc: it will check acl to edit event.
-         +   * Developed By: Suraj Bande
+         +   * Developed By: shubham chaudhari
          +   * Date: 8/3/2016
          +   */
     public function editEventAcl(Requests\WebRequests\EditEventRequest $request)
@@ -213,7 +216,7 @@ class EventController extends Controller
      +   * Param: $status
      +   * Return: get events.
      +   * Desc: it will return events array on the basis of filter status selected.
-     +   * Developed By: Suraj Bande
+     +   * Developed By: shubham chaudhari
      +   * Date: 5/3/2016
      +   */
     public function getEvents($status){
@@ -290,7 +293,7 @@ class EventController extends Controller
      +   * Param: $id
      +   * Return: return array of user details.
      +   * Desc: it will return first name last name array of user.
-     +   * Developed By: Suraj Bande
+     +   * Developed By: shubham chaudhari
      +   * Date: 5/3/2016
      +   */
     public function getUserEvent($id)
@@ -303,7 +306,7 @@ class EventController extends Controller
      +   * Param: $id
      +   * Return: 1.
      +   * Desc: it will delete event.
-     +   * Developed By: Suraj Bande
+     +   * Developed By: shubham chaudhari
      +   * Date: 15/3/2016
      +   */
     public function deleteEvent(Requests\WebRequests\DeleteEventRequest $request,$id)
@@ -337,7 +340,7 @@ class EventController extends Controller
      +   * Param: $request
      +   * Return: 1.
      +   * Desc: it will update event.
-     +   * Developed By: Suraj Bande
+     +   * Developed By: shubham chaudhari
      +   * Date: 15/3/2016
      +   */
     public function saveEditEvent(Requests\WebRequests\EditEventRequest $request)

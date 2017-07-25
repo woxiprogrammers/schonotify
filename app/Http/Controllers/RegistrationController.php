@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Body;
 use App\EnquiryForm;
 use App\ParentExtraInfo;

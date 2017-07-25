@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\api;
-
 use App\Batch;
 use App\Classes;
 use App\DayMaster;

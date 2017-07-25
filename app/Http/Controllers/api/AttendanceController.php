@@ -6,6 +6,7 @@ use App\Batch;
 use App\Classes;
 use App\Division;
 use App\Leave;
+use App\Module;
 use App\LeaveRequest;
 use App\SubjectClassDivision;
 use App\User;
@@ -303,8 +304,9 @@ class AttendanceController extends Controller
                                 $title="Attendance";
                                 $message="Attendance Marked for the day.";
                                 $allUser=0;
+                                $state = Module::where('id',2)->pluck('slug');
                                 $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
-                                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                                $this -> CreatePushNotification($title,$message,$allUser,$push_users,$state);
                 }
             } else {
                 $status=404;

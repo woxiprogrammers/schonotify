@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -23,7 +21,6 @@ class ResultController extends Controller
             return Redirect::to('/');
         }
     }
-
     public function examResults()
     {
         $str='{
@@ -51,7 +48,6 @@ class ResultController extends Controller
 
         return $str;
     }
-
     public function subjectResults()
     {
         $str='{
@@ -79,7 +75,6 @@ class ResultController extends Controller
 
         return $str;
     }
-
     public function getStudents()
     {
          $results='[
@@ -98,10 +93,6 @@ class ResultController extends Controller
             { "data": "113", "value": "113 Manoj" },
             { "data": "114", "value": "114 Bharat Makhwana" }
         ]';
-
        return $results;
     }
-
 }
-
-

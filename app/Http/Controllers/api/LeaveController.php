@@ -15,6 +15,7 @@ use App\FeeConcessionAmount;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\Module;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\PushToken;
 use App\LeaveRequest;
@@ -217,7 +218,8 @@ class LeaveController extends Controller
                     $students = LeaveRequest::where('id',$data['leave_id']) -> lists($student_id);
                     $parents = User::where('id',$students)->lists('parent_id');
                     $push_users = PushToken::whereIn('user_id',$parents)->lists('push_token');
-                    $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                    $state = Module::where('id',8)->pluck('slug');
+                    $this -> CreatePushNotification($title,$message,$allUser,$push_users,$state);
                 } else {
                     $message = 'Operation Not allowed.';
                     $status = 406;

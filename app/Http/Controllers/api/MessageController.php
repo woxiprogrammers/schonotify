@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\api;
-
 use App\Batch;
 use App\Classes;
 use App\Division;
@@ -9,11 +7,9 @@ use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Message;
-
 class MessageController extends Controller
 {
     public function __construct(Request $request)

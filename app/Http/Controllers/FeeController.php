@@ -18,6 +18,7 @@ use App\StudentFee;
 use App\StudentFeeConcessions;
 use App\TransactionDetails;
 use App\User;
+use App\Module;
 use App\PushToken;
 use Carbon\Carbon;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
@@ -230,8 +231,9 @@ class FeeController extends Controller
              $message="Payment of Rs ".$request->transaction_amount." received by school.";
              $allUser=0;
              $users_push=User::where('id',$request->student_id)->pluck('parent_id');
+             $state = "fees";
              $push_users=PushToken::where('user_id',$users_push)->lists('push_token');
-             $this->CreatePushNotification($title,$message,$allUser,$push_users);
+             $this->CreatePushNotification($title,$message,$allUser,$push_users,$state);
          }
         return redirect('/edit-user/'.$user);
     }

@@ -6,6 +6,7 @@ use App\Division;
 use App\Leave;
 use App\LeaveType;
 use App\User;
+use App\Module;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use Illuminate\Http\Request;
 use App\PushToken;
@@ -259,8 +260,9 @@ class LeaveController extends Controller
                 $title = "Leave Approved";
                 $message = "Your Leave Is Approved By Faculty";
                 $allUser=0;
+                $state = Module::where('id',8)->pluck('slug');
                 $push_users=PushToken::whereIn('user_id',$parent)->lists('push_token');
-                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                $this -> CreatePushNotification($title,$message,$allUser,$push_users,$state);
                 Session::flash('message-success','Leave published successfully');
                 return Redirect::back();
             }

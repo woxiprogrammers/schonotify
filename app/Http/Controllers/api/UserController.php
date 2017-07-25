@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\api;
-
 use App\AclMaster;
 use App\Batch;
 use App\ClassData;
@@ -26,8 +24,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
-
 class UserController extends Controller
 {
     public function __construct()

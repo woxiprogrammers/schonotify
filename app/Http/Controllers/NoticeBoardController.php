@@ -19,6 +19,7 @@
     use App\Http\Requests\WebRequests\PublishAnnouncementRequest;
     use App\SubjectClassDivision;
     use App\User;
+    use App\Module;
     use Carbon\Carbon;
     use Illuminate\Http\Request;
     use App\Http\Controllers\Controller;
@@ -743,7 +744,8 @@
                     $allUser=0;
                     $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
                     $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
-                        $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                    $state = "announcement";
+                    $this->CreatePushNotification($title,$message,$allUser,$push_users,$state);
                 }
                 if($eventId != null) {
                     if($request->adminList) {
@@ -1376,7 +1378,8 @@
                         $message=$request->title;
                         $allUser=1;
                         $push_users=null;
-                        $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                        $state="achievement";
+                        $this->CreatePushNotification($title,$message,$allUser,$push_users,$state);
                     } else {
                         Session::flash('message-success','Achievement created and sent for publish successfully !');
                     }

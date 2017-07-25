@@ -12,6 +12,7 @@ use App\Subject;
 use App\SubjectClass;
 use App\SubjectClassDivision;
 use App\User;
+use App\Module;
 use App\UserRoles;
 use Carbon\Carbon;
 use App\PushToken;
@@ -36,7 +37,7 @@ class HomeworkController extends Controller
      * Param : Request $request
      * Return :Return the data of subjects as JSON array
      * Desc: Display list of subjects to the teacher
-     * Developed By: Amol Rokade
+     * Developed By: Shubham Chaudhari
      * Date: 1/2/2016
      */
 
@@ -104,7 +105,7 @@ class HomeworkController extends Controller
      * Param : Request $request, $subjectId
      * Return :Return the data of batches as JSON array
      * Desc: Display list of subjects to the teacher
-     * Developed By: Amol Rokade
+     * Developed By: Shubham Chaudhari
      * Date: 1/2/2016
      */
 
@@ -186,7 +187,7 @@ class HomeworkController extends Controller
     * Param : $subjectId $batch_id Request $requests
     * Return :Return the data of batches as JSON array
     * Desc: Display list of batches to the teacher for homework creation
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     * Date: 1/2/2016
     */
 
@@ -254,7 +255,7 @@ class HomeworkController extends Controller
     * Param :Request $requests $subjectId $batch_id $class_id
     * Return :Return the data of divisions as JSON array
     * Desc: Display list of divisions to the teacher for homework creation
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     * Date: 1/2/2016
     */
 
@@ -323,7 +324,7 @@ class HomeworkController extends Controller
     * Param :Request $requests , $division as JSON array
     * Return :Return the data of divisions students as JSON array
     * Desc: Display list of divisions students to the teacher for homework creation
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     * Date: 1/2/2016
     */
 
@@ -362,7 +363,7 @@ class HomeworkController extends Controller
     * Param :Request $requests
     * Return :Return the data of homework type  as JSON array
     * Desc: Display list of homework type to the teacher for homework creation
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     *Date: 1/2/2016
     */
     public function getHomeworkType(Request $request)
@@ -390,7 +391,7 @@ class HomeworkController extends Controller
     * Param :Request $requests
     * Return :Return the message and status after homework creation.
     * Desc:Create a homework for specific batch, class, division ,Students
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     *Date: 1/2/2016
      */
     public function createHomework(Requests\HomeworkRequest $request)
@@ -452,7 +453,7 @@ class HomeworkController extends Controller
      * Param :Request $requests $homeworkId
      * Return :Return the message and status after update homework.
      * Desc:Update a specific homework for specific batch, class, division ,Students
-     * Developed By: Amol Rokade
+     * Developed By: Shubham Chaudhari
      *Date: 1/2/2016
       */
 
@@ -519,7 +520,7 @@ class HomeworkController extends Controller
      * Param :Request $requests $homeworkId
      * Return :Return the message and status after Publish homework.
      * Desc:Publish a specific homework for specific batch, class, division ,Students
-     * Developed By: Amol Rokade
+     * Developed By: Shubham Chaudhari
      *Date: 1/2/2016
       */
     public function publishHomeWork(Requests\PublishRequest $request)
@@ -535,7 +536,8 @@ class HomeworkController extends Controller
             $allUser=0;
             $push_users_parents=User::whereIn('id',$students->toArray())->lists('parent_id');
             $push_users=PushToken::whereIn('user_id',$push_users_parents)->lists('push_token');
-            $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+            $state = Module::where('id',9)->pluck('slug');
+            $this -> CreatePushNotification($title,$message,$allUser,$push_users,$state);
         }
         catch (\Exception $e) {
             $status = 500;
@@ -553,7 +555,7 @@ class HomeworkController extends Controller
     * Param :Request $requests
     * Return :Homework Array
     * Desc: Teacher can view published homework related to his/her division.
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     *Date: 1/2/2016
   */
     public function viewHomeWork(Requests\HomeworkRequest $request)
@@ -683,7 +685,7 @@ class HomeworkController extends Controller
     * Param :Request $requests $homeWork_id
     * Return :Detail Homework Array
     * Desc: Teacher can view published/Unpublished homework.
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     *Date: 1/2/2016
     */
 
@@ -719,7 +721,7 @@ class HomeworkController extends Controller
    * Param :Request $requests
    * Return :Detail Homework Array
    * Desc: Teacher can view Unpublished homework related o his/her class.
-   * Developed By: Amol Rokade
+   * Developed By: Shubham Chaudhari
    *Date: 1/2/2016
    */
     public function viewUnpublishedHomeWork(Requests\HomeworkRequest $request)
@@ -809,7 +811,7 @@ class HomeworkController extends Controller
     * Param :Request $requests $homework_id
     * Return :$message $status
     * Desc: User can delete a homework which is unpublished created by them.
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     *Date: 1/2/2016
     */
 
@@ -842,7 +844,7 @@ class HomeworkController extends Controller
     * Param :Request $requests $student_id
     * Return :$message $status
     * Desc: Parent can view homework assigned to his/her student
-    * Developed By: Amol Rokade
+    * Developed By: Shubham Chaudhari
     *Date: 1/2/2016
     */
     public function viewHomeworkParent(Requests\HomeworkRequest $request,$student_id)

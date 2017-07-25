@@ -3,7 +3,7 @@ namespace App\Http\Controllers\CustomTraits;
 use App\PushToken;
 use Illuminate\Support\Facades\Log;
 trait PushNotificationTrait{
-    public function CreatePushNotification($PushTitle,$PushMsg,$allUser,$push_users){
+    public function CreatePushNotification($PushTitle,$PushMsg,$allUser,$push_users,$state){
       Log::info("Inside a push  ");
         $title = $PushTitle;
         $msg = $PushMsg;
@@ -17,7 +17,7 @@ trait PushNotificationTrait{
         $data = array(
             'tokens' => $device_token,
             'notification' => array('title' => ''.$title,
-                                    'message' =>$msg),
+                                    'message' =>$msg,'state' => $state),
             'profile' => env('SECURITY_PROFILE')
         );
         $content = json_encode($data);

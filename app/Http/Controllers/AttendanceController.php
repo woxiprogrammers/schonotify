@@ -9,6 +9,7 @@
     use App\Http\Requests\WebRequests\CreateAttendanceRequest;
     use App\Http\Requests\WebRequests\ViewAttendanceRequest;
     use App\Leave;
+    use App\Module;
     use App\PushToken;
     use App\SubjectClassDivision;
     use App\User;
@@ -217,8 +218,9 @@
                 $title="Attendance marked";
                 $message="Please check attendance";
                 $allUser=0;
+                $state = Module::where('id',2)->pluck('slug');
                 $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
-                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                $this -> CreatePushNotification($title,$message,$allUser,$push_users,$state);
                 if($result != "null")
                 {
                     return "1";

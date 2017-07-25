@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\TeacherView;
 use App\User;
@@ -9,15 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Session;
-
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
-
-
-
-
 class LogController extends Controller
 {
     /**

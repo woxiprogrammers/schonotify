@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\api;
-
 use App\Exams;
 use App\ExamSubjects;
 use App\Result;
@@ -10,7 +8,6 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 class ResultController extends Controller
 {
     public function __construct(Request $request)
@@ -18,7 +15,6 @@ class ResultController extends Controller
         $this->middleware('db');
         $this->middleware('authenticate.user');
     }
-
     /**
      * Display a listing of the resource.
      *

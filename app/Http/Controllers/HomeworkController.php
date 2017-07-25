@@ -8,6 +8,7 @@ use App\HomeworkTeacher;
 use App\HomeworkType;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\PushToken;
+use App\Module;
 use App\Subject;
 use App\SubjectClass;
 use App\SubjectClassDivision;
@@ -302,8 +303,9 @@ class HomeworkController extends Controller
                 $homeWork_push_users = HomeworkTeacher::where('homework_id',$homeworkId)->lists('student_id');
                 $push_user = User::whereIn('id',$homeWork_push_users)->lists('parent_id');
                 $allUser=0;
+                $state = Module::where('id',9)->pluck('slug');
                 $push_users=PushToken::whereIn('user_id',$push_user)->lists('push_token');
-                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                $this -> CreatePushNotification($title,$message,$allUser,$push_users,$state);
             Session::flash('message-success','homework created successfully');
             return Redirect::to('/homework-listing');
         }else{
@@ -492,14 +494,14 @@ class HomeworkController extends Controller
                         $allUser=0;
                         $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
                         $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
-                            $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                        $state = Module::where('id',9)->pluck('slug');
+                        $this->CreatePushNotification($title,$message,$allUser,$push_users,$state);
                         return Redirect::to('/homework-listing');
                     }
     }
     public function deleteHomework(Request $request,$id){
             $homeworkUpdate=array();
             $homeworkUpdate['is_active']=0;
-
             $homeworkStatus= Homework::where('id',$id)->update($homeworkUpdate);
             if($homeworkStatus ==1)
             {

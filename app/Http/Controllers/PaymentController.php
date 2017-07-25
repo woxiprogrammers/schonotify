@@ -3,7 +3,6 @@
  * Developed By Ameya Joshi
  * Date: 2/6/17
  */
-
 namespace App\Http\Controllers;
 use App\NetBankingTransaction;
 use Illuminate\Http\Request;

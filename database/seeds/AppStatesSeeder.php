@@ -11,6 +11,6 @@ class AppStatesSeeder extends Seeder
      */
     public function run()
     {
-        //
+      
     }
 }
