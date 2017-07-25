@@ -54,18 +54,10 @@
         <input type="hidden" name="classID" id="classID" value="{!! $user->class_id !!}">
         <input type="hidden" name="divisionID" id="divisionID" value="{!! $user->division_id !!}">
         <input type="hidden" name="divisionName" id="divisionName" value="{!! $user->division_name !!}">
-
         <input name="_method" type="hidden" value="PUT">
         <fieldset>
-
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">
-                            Username
-                        </label>
-                        <input type="text" value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
-                    </div>
                     <div class="form-group">
                         <label class="control-label">
                             First name
@@ -108,6 +100,7 @@
                             <option value='part_time' {!!($user->emp_type == 'part_time' ? ' selected="selected"' : ''); !!}>Part Time</option>
                         </select>
                     </div>
+
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -142,8 +135,6 @@
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button> </span>
                         </div>
-
-
                     </div>
                     <div class="form-group">
                             <label>
@@ -195,9 +186,17 @@
                             <label for="checkbox8">
                                 Approve
                             </label>
-
                         </div>
                     </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Description
+                        </label>
+                        <textarea placeholder="Enter the description" id="description"></textarea>
+                    </div>
+                </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" id="clstchr_batch" style="display:none;" >
@@ -705,5 +704,3 @@
     });
 </script>
 @stop
-
-

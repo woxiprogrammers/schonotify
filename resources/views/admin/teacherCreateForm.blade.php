@@ -147,7 +147,6 @@
                                 <option value="divorced">Divorced</option>
                                 <option value="separated">Separated</option>
                                 <option value="widowed">Widowed</option>
-
                             </select>
                         </div>
                     </div>
@@ -264,6 +263,14 @@
                                 <option value="full_time">Full Time  </option>
                                 <option value="part_time">Part Time</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                              Discription
+                            </label>
+                            <textarea placeholder="Enter the description" class="form-control" name="description" id="description"></textarea>
                         </div>
                     </div>
                 </div>
@@ -610,13 +617,11 @@
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
 <script src="assets/js/main.js"></script>
-
 <script src="assets/js/form-wizard.js"></script>
 <script src="assets/js/custom-project.js"></script>
 <script src="vendor/ckeditor/ckeditor.js"></script>
 <script src="vendor/ckeditor/adapters/jquery.js"></script>
 <script src="assets/js/form-validation.js"></script>
-
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script>
     jQuery(document).ready(function() {
@@ -650,35 +655,28 @@
     });
 </script>
 <script type="text/javascript">
-
-
 function addRowEducationlQualification(tableID){
     var table = document.getElementById(tableID);
-
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
-
     var cell2 = row.insertCell(0);
     var element2 = document.createElement("input");
     element2.type = "text";
     element2.placeholder = "Certificate/Degree";
     element2.name = "qualification["+rowCount+"][certificate]";
     cell2.appendChild(element2);
-
     var cell3 = row.insertCell(1);
     var element3 = document.createElement("input");
     element3.type = "text";
     element3.placeholder = "Passing Year";
     element3.name = "qualification["+rowCount+"][passing_year]";
     cell3.appendChild(element3);
-
     var cell4 = row.insertCell(2);
     var element4 = document.createElement("input");
     element4.type = "text";
     element4.placeholder = "University/Board";
     element4.name = "qualification["+rowCount+"][university]";
     cell4.appendChild(element4);
-
     var cell5 = row.insertCell(3);
     var element5 = document.createElement("input");
     element5.type = "text";
@@ -686,27 +684,22 @@ function addRowEducationlQualification(tableID){
     element5.name = "qualification["+rowCount+"][subjects]";
     cell5.appendChild(element5);
 }
-
 function addRowWorkExperience(tableID){
     var table = document.getElementById(tableID);
-
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
-
     var cell2 = row.insertCell(0);
     var element2 = document.createElement("input");
     element2.type = "text";
     element2.placeholder = "Organisation	  ";
     element2.name = "work_experience["+rowCount+"][organisation]";
     cell2.appendChild(element2);
-
     var cell3 = row.insertCell(1);
     var element3 = document.createElement("input");
     element3.type = "text";
     element3.placeholder = "Designation";
     element3.name = "work_experience["+rowCount+"][designation]";
     cell3.appendChild(element3);
-
     var cell4 = row.insertCell(2);
     var element4 = document.createElement("input");
     element4.type = "text";
@@ -714,10 +707,8 @@ function addRowWorkExperience(tableID){
     element4.name = "work_experience["+rowCount+"][duration]";
     cell4.appendChild(element4);
 }
-
 function addRowReference(tableID){
     var table = document.getElementById(tableID);
-
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
     var cell2 = row.insertCell(0);
@@ -726,7 +717,6 @@ function addRowReference(tableID){
     element2.placeholder = "Reference Name	  ";
     element2.name = "reference["+rowCount+"][reference_name]";
     cell2.appendChild(element2);
-
     var cell3 = row.insertCell(1);
     var element3 = document.createElement("input");
     element3.type = "text";
@@ -753,29 +743,18 @@ function addRowUploadDoc(tableID){
     element2.name = "upload_doc[]";
     cell3.appendChild(element2);
 }
-
-
-
-
 $('#communication_address_teacher').hide();
-
 $("#teacher_communication_address").click(function(){
     $('#communication_address_teacher').toggle();
 });
     $('#role-select').on('change',function(){
-
         var par=this.value;
-
         if(isNaN(par)==false)
         {
             var route= "/createUsers/"+par;
-
             window.location.replace(route);
-
         }
-
     });
-
     function clsTeacher(chk){
         if(chk==true)
         {
