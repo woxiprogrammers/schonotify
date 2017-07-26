@@ -133,15 +133,6 @@ var FormWizard = function () {
                     required:true,
                     minlength:1
                 },
-                "work_experience[0][organisation]":{
-                    required: true
-                },
-                "work_experience[0][designation]":{
-                    required: true
-                },
-                "work_experience[0][duration]":{
-                    required: true
-                },
                 "qualification[0][certificate]":{
                     required: true
                 },
@@ -336,9 +327,9 @@ var FormWizard = function () {
         	for (i=nextstep; i<=stepnumber; i++){
         		$('.anchor').children("li:nth-child(" + i + ")").children("a").addClass('wait').children('.stepNumber').removeClass('animated tada');
         	}
-            
+
             return true;
-        } 
+        }
     };
     var validateAllSteps = function () {
         return true;

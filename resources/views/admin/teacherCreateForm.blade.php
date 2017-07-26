@@ -31,7 +31,6 @@
 <div class="col-md-12">
     @include('admin.userRoleDropdownCreate')
 </div>
-
 <form action="#" role="form" class="smart-wizard" id="registrationForm" enctype="multipart/form-data">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
@@ -96,7 +95,6 @@
                             <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <!--<div class="col-md-6">
@@ -125,9 +123,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group"> <!-- Date input -->
@@ -135,7 +131,6 @@
                             <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
                         </div>
                     </div>
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="form-field-select-2">
@@ -147,7 +142,6 @@
                                 <option value="divorced">Divorced</option>
                                 <option value="separated">Separated</option>
                                 <option value="widowed">Widowed</option>
-
                             </select>
                         </div>
                     </div>
@@ -169,7 +163,6 @@
                             <input type="password" placeholder="Repeat Password" class="form-control" name="password2"/>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -188,7 +181,6 @@
                             <input type="text" placeholder="Enter a Alternate Contact Number" class="form-control" name="alt_number"/>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -212,7 +204,7 @@
                                 </label>
                             </div>
                             <div class="checkbox clip-check check-primary">
-                                <input type="checkbox" value="mobile" name="access[]" id="checkbox7">
+                                <input type="checkbox" value="mobile" name="access[]" id="checkbox7" checked>
                                 <label class="control-label" for="checkbox7">
                                     Mobile Access
                                 </label>
@@ -258,7 +250,6 @@
                         <label class="control-label">
                             Employee Type <span class="symbol required"></span>
                         </label>
-
                         <div class="form-group">
                             <select class="form-control" id="emp_type" name="emp_type" style="-webkit-appearance: menulist;">
                                 <option value="full_time">Full Time  </option>
@@ -278,7 +269,6 @@
                                 <label for="checkbox9">
                                     Approve
                                 </label>
-
                             </div>
                         </div>
                     </div>
@@ -309,12 +299,8 @@
                             </select>
                         </div>
                     </div>
-
                 </div>
-
-
             </fieldset>
-
             <fieldset>
                 <legend>
                     Name of Spouse
@@ -345,8 +331,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -358,15 +342,13 @@
                     </div>
                 </div>
                 <div class="row">
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label  class="control-label">
                                 Permanent Address <span class="symbol required"></span>
                             </label>
                             <div class="note-editor">
-                                <textarea class="form-control autosize area-animated" name="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
-                                </textarea>
+                                <textarea class="form-control autosize area-animated" name="permanent_address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -375,7 +357,6 @@
                             <label  class="control-label">
                                 Communication Address <span class="symbol required"></span>
                             </label><br>
-
                             <input type="checkbox" name="teacher_communication_address" id="teacher_communication_address" checked> Same as Permanent Address
                             <div class="note-editor" id="communication_address_teacher">
                                 <textarea class="form-control autosize area-animated" name="communication_address_teacher" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">
@@ -384,9 +365,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -405,7 +383,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -422,12 +399,7 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </fieldset>
-
-
             <fieldset>
                 <legend>
                     EDUCATIONAL QUALIFICATIONS

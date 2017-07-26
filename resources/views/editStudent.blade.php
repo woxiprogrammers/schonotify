@@ -277,7 +277,7 @@
                                                 </label><br>
                                                 <input type="checkbox" name="student_communication_address" id="student_communication_address"  checked> Same as Student Address
                                                 <div class="note-editor" id="communication_address_student">
-                                                    <textarea class="form-control autosize area-animated" tabindex="-1" name="communication_address_student" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!! $student_info->communication_address !!}</textarea>
+                                                    <textarea class="form-control" tabindex="-1" name="communication_address_student" data-autosize-on="true"  style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;">{!! $student_info->communication_address !!}</textarea>
                                                 </div>
                                             </div>
                                         </div>
