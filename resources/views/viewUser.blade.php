@@ -97,12 +97,12 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <!-- <div class="form-group">
                                                         <label class="control-label">
                                                             Username
                                                         </label>
                                                         <input type="text" disabled value="{!! $user->username !!}" readonly class="form-control" id="username" name="username">
-                                                    </div>
+                                                    </div> -->
                                                     <div class="form-group">
                                                         <label class="control-label">
                                                             First name
@@ -606,17 +606,3 @@
 
 
 @stop
-
-
-
-
-
-
-
-
-
-
-
-
-
-

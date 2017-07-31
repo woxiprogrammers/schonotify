@@ -75,6 +75,7 @@ var FormValidation = function(){
                 },
                 grn:{
                     required:true,
+                    alphanumeric:true,
                     remote: {
                         url: "/check-grn",
                         type: "POST",
@@ -87,7 +88,13 @@ var FormValidation = function(){
                             }
                         }
                     }
-                }
+                },
+                aadhar_number:{
+                  remote: {
+                      url: "/check-aadhar",
+                      type: "POST"
+                          }
+                              }
 
             },
             messages: {
@@ -137,8 +144,12 @@ var FormValidation = function(){
                 },
                 grn:{
                     required:"GRN is required.",
-                    remote: "GRN number must be unique"
-                                 }
+                    remote: "GRN number must be unique",
+                    alphanumeric:"It should be alphanumeric"
+                    },
+                aadhar_number:{
+                  remote:"Adhar number should be unique",
+                }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler.hide();
@@ -381,4 +392,3 @@ var FormValidation = function(){
 $(document).ready(function(){
     FormValidation.init();
 });
-

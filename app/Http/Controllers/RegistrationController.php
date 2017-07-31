@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Body;
 use App\EnquiryForm;
 use App\ParentExtraInfo;
+use App\TeacherExtraInfo;
 use App\StudentDocument;
 use App\StudentDocumentMaster;
 use App\StudentExtraInfo;
@@ -49,6 +50,25 @@ class RegistrationController extends Controller
             abort(500,$e->getMessage());
         }
     }
+    public function checkPanNumber(Request $request){
+      try{
+        Log::info(123);
+          $panCount= TeacherExtraInfo::where('pan_card',$request->pan_card)->count();
+          if($panCount > 0){
+            Log::info('$panCount');
+            Log::info($panCount);
+              return 'false';
+          }else{
+              return 'true';
+          }
+      }catch(\Exception $e){
+          $data = [
+              'exception' => $e->getMessage()
+          ];
+          Log::critical(json_encode($data));
+          abort(500,$e->getMessage());
+      }
+  }
 
     public function checkEnquiry(Request $request){
         try{
@@ -333,6 +353,7 @@ class RegistrationController extends Controller
 
     public function checkAadharNumber(Request $request){
         try{
+          Log::info('inside ardhar');
             $aadharCount= StudentExtraInfo::where('aadhar_number',$request->aadhar_number)->count();
             if($aadharCount > 0){
                 return 'false';

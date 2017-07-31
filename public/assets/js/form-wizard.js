@@ -126,6 +126,18 @@ var FormWizard = function () {
                 class:{
                     requiredIfChecked:true
                 },
+									pan_card:{
+											remote: {
+													url: "/check-pan",
+													type: "POST",
+													data:{
+														pan_card: function()
+															{
+																return $("#pan").val();
+															}
+														}
+                			}
+								},
                 division:{
                     requiredIfChecked:true
                 },
@@ -191,6 +203,9 @@ var FormWizard = function () {
                     number:"Alternate number must be numeric",
                     mobileNumber : "Mobile number must be 10 digit only"
                 },
+								pan_card:{
+									remote:"PAN number should be unique"
+								},
                 'access[]':{
                     required:"Please select al least one",
                     minlength: jQuery.validator.format("Please select  at least {0} types of Access")

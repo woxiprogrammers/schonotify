@@ -165,7 +165,7 @@
                                                     @if($row['student_attendance_status'] == 1  )
                                                     <input type="checkbox"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}"  /> <label for="{!! $row['student_id'] !!}"></label>
                                                     @else
-                                                    <input type="checkbox"   name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}" checked /><label for="{!! $row['student_id'] !!}"></label>
+                                                    <input type="checkbox"  name="student[]" id="{!! $row['student_id'] !!}" value="{!! $row['student_id'] !!}" checked /><label for="{!! $row['student_id'] !!}"></label>
                                                     @endif
                                                 </td>
                                                 <td>{!! $row['roll_number'] !!}</td>

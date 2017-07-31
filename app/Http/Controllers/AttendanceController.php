@@ -19,6 +19,8 @@
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Redirect;
     use Illuminate\Support\Facades\Session;
+    use Illuminate\Support\Facades\Log;
+
     class AttendanceController extends Controller
     {
         use PushNotificationTrait;
@@ -206,7 +208,7 @@
                     }
             $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
             $attendance = AttendanceStatus::where('date','=',$attendanceStatus['date'])->where('division_id','=',$request['division-select'])->get();
-            if(sizeOf($attendance) == 0){
+            if(count($attendance) != 0){
                 $attendanceStatus['division_id'] = $request['division-select'];
                 $attendanceStatus['status'] = 1;
                 $attendanceStatus['created_at'] = Carbon::now();
@@ -218,7 +220,7 @@
                 $message="Please check attendance";
                 $allUser=0;
                 $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
-                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+              //  $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 if($result != "null")
                 {
                     return "1";

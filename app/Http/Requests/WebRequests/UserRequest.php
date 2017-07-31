@@ -96,7 +96,7 @@ class UserRequest extends Request
                         'password2' => 'required|min:6',
                         'mobile' => 'required|min:10',
                         'alt_number' => 'min:10',
-                        'email' => 'required|email'
+                        'email' => 'required|email',
                     ];
                     break;
                 }
@@ -108,7 +108,7 @@ class UserRequest extends Request
                         'password2' => 'required|min:6',
                         'mobile' => 'required|min:10',
                         'alt_number' => 'min:10',
-                        'email' => 'required|email'
+                        'email' => 'required|email',
                     ];
                     break;
                 }

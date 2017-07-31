@@ -89,6 +89,8 @@
 
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
 
+    Route::post('check-pan',array('uses' => 'RegistrationController@checkPanNumber'));
+
     Route::get('fees/get-concession-types',array('uses' => 'FeeController@concessionTypes'));
 
     Route::get('get-intallment-number',array('uses' => 'FeeController@installmentCount'));

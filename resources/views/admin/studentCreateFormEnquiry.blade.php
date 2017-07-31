@@ -725,11 +725,8 @@
                     <div id="panel_module_assigned" class="tab-pane">
                         <div class="panel-body">
                             <div class="col-sm-10">
-
                                 <table class="table table-responsive" id="aclModCreate">
-
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -828,6 +825,9 @@
             autoclose: true,
             endDate: '+0d',
         })
+        $("#create_message").click(function(){
+          alert("");
+        });
     });
 </script>
 <script type="text/javascript">

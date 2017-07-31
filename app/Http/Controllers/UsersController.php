@@ -338,6 +338,7 @@ class UsersController extends Controller
                 $userData->save();
                 $LastInsertId = $userData->id;
             }elseif($data['role_name']== 'teacher'){
+                //$userData['description'] = $data['description'];
                 $userData->email = $data['email'];
                 $userData->middle_name = $data['middleName'];
                 $date = str_replace('/', '-', $data['dob']);
@@ -952,7 +953,7 @@ class UsersController extends Controller
                     $divisionStudent="null";
                 }
                 $installmentIds = FeeInstallments::where('fee_id',$assigned_fee)->select('installment_id')->distinct()->get()->toArray();
-                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email'));
+                return view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -1046,7 +1047,7 @@ class UsersController extends Controller
         else{
             $filename=$userImage->avatar;
         }
-        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $date = date('d-m-y', strtotime(str_replace('-', '/', $request->DOB)));
         $userData['username']= $request->username;
         $userData['first_name']= $request->firstname;
         $userData['email']= trim($request->email);
@@ -1136,7 +1137,7 @@ class UsersController extends Controller
         else{
             $filename=$userImage->avatar;
         }
-        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
+        $date = date('d-m-y', strtotime(str_replace('-', '/', $request->DOB)));
         $userData['username']= $request->username;
         $userData['first_name']= $request->firstname;
         $userData['email']= $request->email;
@@ -1244,13 +1245,14 @@ class UsersController extends Controller
     public function updateParent(Requests\WebRequests\EditParentRequest $request,$id)
     {
         $data=$request->all();
-        if(isset($data['parent_communication_address'])){
-            $communication_address_parent = $data['permanent_address'];
-        }else{
+        if(isset($data['communication_address_parent'])){
             $communication_address_parent = $data['communication_address_parent'];
+        }else{
+          $communication_address_parent = $data['permanent_address'];
         }
-        $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address');
-        $familyInfo['permanent_address'] = $communication_address_parent;
+        $familyInfo = $request->only('father_first_name','father_middle_name','father_last_name','father_occupation','father_income','father_contact','mother_first_name','mother_middle_name','mother_last_name','mother_occupation','mother_income','mother_contact','parent_email','permanent_address','communication_address');
+        $familyInfo['permanent_address'] = $data['permanent_address'];
+        $familyInfo['communication_address'] = $communication_address_parent;
         $familyInfo['updated_at'] = Carbon::now();
         $userFamilyUpdate=ParentExtraInfo::where('parent_id',$request->userId)->update($familyInfo);
         $chk=StudentSibling::exists($id);
@@ -1282,6 +1284,7 @@ class UsersController extends Controller
         $userData['confirmation_code'] = str_random(30);
         $userData['address']= $request->address;
         $userData['avatar']= $filename;
+        $userData['description']= $request->description;
         $userData['birth_date']= $date;
         $userData['division_id']=$request->division;
         $userData['roll_number']=$request->roll_number;
@@ -1328,8 +1331,8 @@ class UsersController extends Controller
         }else{
             $teacherView['mobile_view']=0;
           }
-        $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
-        $userData['username']= $request->username;
+        $date = date('d-m-y', strtotime(str_replace('-', '/', $request->DOB)));
+        // $userData['username']= $request->username;
         $userData['first_name']= $request->firstname;
         $userData['email']= $request->email;
         $userData['last_name']= $request->lastname;
@@ -1377,7 +1380,7 @@ class UsersController extends Controller
             return response()->json($result1->toArray());
         }elseif($userRole[0]->role_slug == 'teacher')
         {
-            $result1=User::select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.email','bodies.name as body_name','user_roles.name as user_role','users.is_active','teacher_views.web_view','teacher_views.mobile_view')
+            $result1=User::select('users.id','users.first_name as firstname','users.last_name as lastname','users.email','bodies.name as body_name','user_roles.name as user_role','users.is_active','teacher_views.web_view','teacher_views.mobile_view')
                 ->Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                 ->Join('bodies', 'users.body_id', '=', 'bodies.id')
                 ->Join('teacher_views', 'users.id', '=', 'teacher_views.user_id')
@@ -1729,7 +1732,7 @@ class UsersController extends Controller
     public function checkGrnNumber(Request $request){
         try{
             $body_id=User::where('id',$request->userId)->pluck('body_id');
-            $grnCount= StudentExtraInfo::where('body_id',$body_id)->where('student_id','!=',$request->userId)->where('grn',$request->grn)->count();
+            $grnCount= StudentExtraInfo::where('student_id','!=',$request->userId)->where('grn',$request->grn)->count();
             if($grnCount > 0){
                 return 'false';
             }else{

@@ -115,7 +115,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Date of Birth: <span class="symbol required"> </label>
-                                                <div class="input-group input-append datepicker date col-sm-6">
+                                                <div class="input-group input-append datepicker date col-sm-6" data-date-format="-mm-yyyy">
                                                     <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
                                                         <span class="input-group-btn">
                                                             <button type="button" class="btn btn-default">

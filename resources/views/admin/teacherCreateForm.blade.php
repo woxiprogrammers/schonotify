@@ -371,7 +371,7 @@
                             <label  class="control-label">
                                 Pan Card No.
                             </label>
-                            <input type="text" placeholder="Enter Pan Card No." class="form-control" name="pan_card"/>
+                            <input type="text" placeholder="Enter Pan Card No." class="form-control" id="pan" name="pan_card"/>
                         </div>
                     </div>
                     <div class="col-md-6">

@@ -60,6 +60,7 @@ var FormWizard = function () {
             errorClass: 'help-block',
             ignore: ':hidden',
             rules: {
+
                 firstName: {
                     minlength: 2,
                     required: true,
@@ -140,7 +141,19 @@ var FormWizard = function () {
                 },
                 grn:{
                     required: true,
-                    alphanumeric: true
+                    alphanumeric: true,
+                    remote: {
+                        url: "/check-grn",
+                        type: "POST",
+                        data: {
+                            grn: function() {
+                                return $( "#grn" ).val();
+                            },
+                            userId:function() {
+                                return $( "#userId" ).val();
+                            }
+                        }
+                    }
                 },
                 birth_place:{
                     required: true,
@@ -158,7 +171,10 @@ var FormWizard = function () {
                 },
 
                 aadhar_number:{
-                    alphanumeric: true
+                    remote: {
+                        url: "/check-aadhar",
+                        type: "POST"
+                            }
                 },
                 mother_tongue:{
                     required: true,
@@ -254,11 +270,12 @@ var FormWizard = function () {
             },
             messages: {
                 grn:{
+                  remote:"GRN should be unique",
                     required: "GRN required",
                     alphanumeric:"GRN must contain only alphabets and numbers"
                 },
                 aadhar_number:{
-                    alphanumeric:"Aadhar Card Number must contain only alphabets and numbers"
+                  remote:"aadhar number should be unique"
                 },
                 birth_place:{
                     required: "Birth Place is required" ,

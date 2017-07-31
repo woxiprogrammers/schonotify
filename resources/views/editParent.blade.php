@@ -99,9 +99,7 @@
                                                                 <label for="us-female">
                                                                     Female
                                                                 </label>
-
                                                                 <input type="radio" value="M" name="gender" id="us-male" @if($user->gender=='M') checked @endif>
-
                                                                 <label for="us-male">
                                                                     Male
                                                                 </label>
@@ -408,13 +406,3 @@
 
 
 @stop
-
-
-
-
-
-
-
-
-
-

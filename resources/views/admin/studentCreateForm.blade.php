@@ -820,7 +820,6 @@
                                 <table class="table table-responsive" id="aclModCreate">
 
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -996,6 +995,54 @@ function userAclModule()
                     this.checked = false;
                 });
             }
+        });
+        $('#create_message').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_message').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_leave').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_exam').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_attendance').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_event').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_timetable').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_homework').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_result').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_achievement').each(function()
+        {
+          this.checked = true;
+        });
+        $('#view_announcement').each(function()
+        {
+          this.checked = true;
+        });
+        $('#create_leave').each(function()
+        {
+          this.checked = true;
         });
     });
 }

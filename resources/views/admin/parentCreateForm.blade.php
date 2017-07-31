@@ -139,7 +139,6 @@
                             <input type="text" placeholder="Enter a Alternate Contact Number" class="form-control" name="alt_number"/>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -170,7 +169,6 @@
                     </div>
                 </div>
                 <div class="row">
-
                     <div class="col-md-6">
                         <label class="block">
                             Address
@@ -183,9 +181,7 @@
                         </div>
                     </div>
                 </div>
-
             </fieldset>
-
             <div class="form-group">
                 <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser" disabled>
                     Next <i class="fa fa-arrow-circle-right"></i>
@@ -202,11 +198,8 @@
                     <div id="panel_module_assigned" class="tab-pane">
                         <div class="panel-body">
                             <div class="col-sm-10">
-
                                 <table class="table table-responsive" id="aclModCreate">
-
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -432,5 +425,3 @@
 </script>
 
 @stop
-
-
