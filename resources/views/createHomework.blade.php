@@ -98,9 +98,6 @@
                             Select Batch
                         </label>
                         <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;" name="batch">
-
-
-
                         </select>
                     </div>
                     <div class="form-group">
@@ -108,9 +105,6 @@
                             Class <span class="symbol required"></span>
                         </label>
                         <select class="form-control" style="-webkit-appearance: menulist;" name="classDropdown" id="classDropdown">
-
-
-
                         </select>
                     </div>
                     <div class="form-group">
@@ -257,21 +251,20 @@
         });
     });
     $('#batch-select').change(function(){
+      alert("b");
         var id=this.value;
         var subject_id= $('#subjectsDropdown').val();
         var route='get-subject-classes/'+id+'/'+subject_id;
         $.get(route,function(res){
-            if(res.length == 0)
+            if(Object.keys(res).length == 0)
             {
                 $('#classDropdown').html("no record found");
             }
             else{
-
                 var str='<option value="">please select class</option>';
-                for(var i=0; i<res.length; i++)
-                {
-                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
-                }
+                $.each(res, function( key, value ) {
+                     str+='<option value="'+value['class_id']+'">'+value['class_name']+'</option>';
+                });
                 $('#classDropdown').html(str);
             }
             });

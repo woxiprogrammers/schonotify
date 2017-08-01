@@ -2,7 +2,6 @@
     <label class="control-label">
         Class
     </label>
-
     <select class="form-control" id="Classdropdown" name="Classdropdown" style="-webkit-appearance: menulist;">
         <option value="">Select Batch</option>
         @if(!empty($classList))
