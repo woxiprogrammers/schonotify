@@ -285,6 +285,7 @@
                 {
                     if (res == "1" )
                     {
+                         $(window).scrollTop(0);
                         $('#message-error-div').html('');
                         var str='<div class="alert alert-success alert-dismissible" role="alert">'+
                             'Attendance successfully saved .'+
@@ -293,9 +294,10 @@
                     '</button>';
                         $('#message-error-div').html(str);
                     } else {
+                         $(window).scrollTop(0);
                         $('#message-error-div').html('');
-                        var str='<div class="alert alert-error alert-dismissible" role="alert">'+
-                            'Something went wrong .'+
+                        var str='<div class="alert alert-success alert-dismissible" role="alert">'+
+                            'Attendance edited successfully'+
                             '<button type="button" class="close" data-dismiss="alert" area-lebel="close">'+
                             '<span area-hidden="true">&times;</span>'+
                             '</button>';
