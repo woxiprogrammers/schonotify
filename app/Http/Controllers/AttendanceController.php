@@ -219,7 +219,7 @@
                 $message="Please check attendance";
                 $allUser=0;
                 $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
-              //  $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 if($result != "null")
                 {
                     return "1";
