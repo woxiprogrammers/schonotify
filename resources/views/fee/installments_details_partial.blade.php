@@ -96,6 +96,7 @@
                     </table>
                 @if($installment['is_paid'] == false)
                     <form id="billGeneratorForm_{{$id}}">
+                        <input type="hidden" name="slug" value="{{$slug}}">
                         <input type="hidden" value="{{$student['grn']}}" name="student_grn">
                         <input type="hidden" value="{{$id}}" name="installment_id">
                         <input type="hidden" value="{{$student['body_id']}}" name="student_body_id">
