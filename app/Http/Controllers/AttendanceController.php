@@ -117,7 +117,7 @@
                                 $dropDownData['division_name'] = $batchClassDivisionData->division_name;
                                 $dropDownData['class_id'] = $batchClassDivisionData->class_id;
                                 $dropDownData['class_name'] = $batchClassDivisionData->class_name;
-                                $batch=Batch::get();
+                                $batch=Batch::where('body_id',$user->body_id)->get();
                                 $count=0;
                                 foreach ($batch as $row) {
                                     $dropDownData['batch'][$count]['batch_id'] = $row['id'];
@@ -361,7 +361,7 @@
                         $dropDownData['division_name'] = $batchClassDivisionData->division_name;
                         $dropDownData['class_id'] = $batchClassDivisionData->class_id;
                         $dropDownData['class_name'] = $batchClassDivisionData->class_name;
-                        $batch=Batch::get();
+                        $batch=Batch::where('body_id',$user->body_id)->get();
                         $i=0;
                         foreach ($batch as $row) {
                             $dropDownData['batch'][$i]['batch_id'] = $row['id'];
