@@ -117,7 +117,7 @@
                                 $dropDownData['division_name'] = $batchClassDivisionData->division_name;
                                 $dropDownData['class_id'] = $batchClassDivisionData->class_id;
                                 $dropDownData['class_name'] = $batchClassDivisionData->class_name;
-                                $batch=Batch::get();
+                                $batch=Batch::where('body_id',$user->body_id)->get();
                                 $count=0;
                                 foreach ($batch as $row) {
                                     $dropDownData['batch'][$count]['batch_id'] = $row['id'];
@@ -206,12 +206,13 @@
                     }
             $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
             $attendance = AttendanceStatus::where('date','=',$attendanceStatus['date'])->where('division_id','=',$request['division-select'])->get();
-            if(sizeOf($attendance) == 0){
+            if(count($attendance) == 0){
                 $attendanceStatus['division_id'] = $request['division-select'];
                 $attendanceStatus['status'] = 1;
                 $attendanceStatus['created_at'] = Carbon::now();
                 $attendanceStatus['updated_at'] = Carbon::now();
                 $result=AttendanceStatus::insertGetId($attendanceStatus);
+
                 $div_id=AttendanceStatus::where('id',$result)->pluck('division_id');
                 $push_users=User::where('division_id',$div_id)->lists('parent_id');
                 $title="Attendance marked";
@@ -360,7 +361,7 @@
                         $dropDownData['division_name'] = $batchClassDivisionData->division_name;
                         $dropDownData['class_id'] = $batchClassDivisionData->class_id;
                         $dropDownData['class_name'] = $batchClassDivisionData->class_name;
-                        $batch=Batch::get();
+                        $batch=Batch::where('body_id',$user->body_id)->get();
                         $i=0;
                         foreach ($batch as $row) {
                             $dropDownData['batch'][$i]['batch_id'] = $row['id'];
