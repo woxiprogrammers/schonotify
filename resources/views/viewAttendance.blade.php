@@ -37,6 +37,7 @@
                                         </label>
 
                                         <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
+                                            <option value="">Please select batch</option>
                                             @foreach($dropDownData['batch'] as $row)
                                             <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
                                             @endforeach
@@ -47,6 +48,7 @@
                                             Select Class
                                         </label>
                                         <select class="form-control" name="class-select" id="class-select" style="-webkit-appearance: menulist;">
+                                            <option value="">Please select class</option>
                                             <option value="{!!$dropDownData['class_id']!!}">{!!$dropDownData['class_name']!!}</option>
                                         </select>
                                     </div>
@@ -55,6 +57,7 @@
                                             Select Division
                                         </label>
                                         <select class="form-control" name="division-select" id="division-select" style="-webkit-appearance: menulist;">
+                                            <option value="">Please select division</option>
                                             <option value="{!!$dropDownData['division_id']!!}">{!!$dropDownData['division_name']!!}</option>
                                         </select>
                                     </div>
@@ -66,6 +69,7 @@
                                             Select Batch
                                         </label>
                                         <select class="form-control" id="batch-select" style="-webkit-appearance: menulist;">
+                                           <option value="">Please select batch</option>
                                             @foreach($dropDownData['batch'] as $row)
                                             <option value="{!!$row['batch_id']!!}" >{!!$row['batch_name']!!}</option>
                                             @endforeach
@@ -240,7 +244,7 @@
 
             if (res.length != 0)
             {
-
+                var str='<option value="">Please select division</option>';
                 for(var i=0;i<res.length; i++)
                 {
                     str+="<option value='"+res[i]['division_id']+"'>"+res[i]['division_name']+"</option>"
@@ -276,7 +280,7 @@
 
             if (res.length != 0)
             {
-
+                var str='<option value="">Please select class</option>';
                 for(var i=0;i<res.length; i++)
                 {
                     str+="<option value='"+res[i]['class_id']+"'>"+res[i]['class_name']+"</option>"
@@ -322,7 +326,7 @@
                 $('#class-select').html("no record found");
                 $('div#loadmoreajaxloaderClass').hide();
             } else {
-                var str = '<option value="">please select class</option>';
+                var str = '<option value="">Please select class</option>';
                 for(var i=0; i<res.length; i++)
                 {
                     str += '<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
@@ -345,7 +349,7 @@
                 $('#division-select').html("no record found");
                 $('div#loadmoreajaxloaderDivision').hide();
             } else {
-                var str = '<option value="">please select division</option>';
+                var str = '<option value="">Please select division</option>';
                 for(var i=0; i<res.length; i++)
                 {
                     str += '<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
@@ -360,4 +364,3 @@
 </script>
 
 @stop
-
