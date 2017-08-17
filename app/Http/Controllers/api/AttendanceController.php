@@ -293,7 +293,13 @@ class AttendanceController extends Controller
                             }
                         }
                 }else{
-                  $status=404;
+                  $attendanceStatus['division_id'] = $role['id'];
+                  $attendanceStatus['date'] = $data['date'];
+                  $attendanceStatus['status'] = 1;
+                  $attendanceStatus['created_at'] = Carbon::now();
+                  $attendanceStatus['updated_at'] = Carbon::now();
+                  $a=AttendanceStatus::insert($attendanceStatus);
+                  $status=200;
                   $messag="All students marked present.";
                 }
             }else{
@@ -526,6 +532,11 @@ class AttendanceController extends Controller
                         ->get()->toArray();
                 }
                 if(Empty($markedAttendance)) {
+                    $finalList[1]['id'] = "";
+                    $finalList[1]['name'] = "All students are present";
+                    $finalList[1]['roll_number'] = "";
+                    $finalList[1]['absent_status'] = "";
+                    $finalList[1]['leave_status'] = "";
                     $status = 200;
                     $message = "All students were present on this day";
                 }
@@ -686,7 +697,6 @@ class AttendanceController extends Controller
     * Developed By : Amol Rokade
     * Date : 04/03/2016
     */
-
     public function viewDateAttendanceTeacher(Requests\ViewRequest $request , $div_id  )
     {
         try{
@@ -701,14 +711,13 @@ class AttendanceController extends Controller
             $students = User::where('division_id',$div_id)
                 ->where('role_id','=',$roleId)
                 ->lists('id');
-            $studentAttendance = Attendance::wherein('student_id',$students)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
+            $studentAttendance = AttendanceStatus::where('division_id',$div_id)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
         } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
         $response = [
             "status" => $status,
-
             "message" => $message,
             "data" => $studentAttendance
         ];
