@@ -248,6 +248,77 @@ class AttendanceController extends Controller
     {
         try{
             $data = $request->all();
+            $attendanceStatus=array();
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
+            $attendanceData = array();
+            $role = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
+            if (!Empty($role)) {
+                $studentData = $data['student_id'];
+                if(!Empty($studentData)){
+                  $markedAttendance = AttendanceStatus::where('date','=',$data['date'])->get()->toArray();
+                        if (Empty($markedAttendance)){
+                            foreach($studentData as $value) {
+                                $attendanceData['teacher_id'] = $data['teacher']['id'];
+                                $attendanceData['date'] = $data['date'];
+                                $attendanceData['division_id'] = $role['id'];
+                                $attendanceData['student_id'] = $value;
+                                $parent = User::where('id',$value)->lists('parent_id');
+                                $attendanceData['status'] = 1;
+                                $attendanceData['created_at'] = Carbon::now();
+                                $attendanceData['updated_at'] = Carbon::now();
+                                Attendance::insert($attendanceData);
+                                $status=200;
+                                $messag="Attendance marked successfully ";
+                            }
+                                $attendanceStatus['division_id'] = $role['id'];
+                                $attendanceStatus['date'] = $data['date'];
+                                $attendanceStatus['status'] = 1;
+                                $attendanceStatus['created_at'] = Carbon::now();
+                                $attendanceStatus['updated_at'] = Carbon::now();
+                                $a=AttendanceStatus::insert($attendanceStatus);
+                        }else{
+                            $deleteOldAttendance = Attendance::where('date',$data['date'])->delete();
+                            foreach($studentData as $value) {
+                                $attendanceData['teacher_id'] = $data['teacher']['id'];
+                                $attendanceData['date'] = $data['date'];
+                                $attendanceData['division_id'] = $role['id'];
+                                $attendanceData['student_id'] = $value;
+                                $parent = User::where('id',$value)->lists('parent_id');
+                                $attendanceData['status'] = 1;
+                                $attendanceData['created_at'] = Carbon::now();
+                                $attendanceData['updated_at'] = Carbon::now();
+                                Attendance::insert($attendanceData);
+                                $status=200;
+                                $messag="Attendance edited successfully !";
+                            }
+                        }
+                }else{
+                  $attendanceStatus['division_id'] = $role['id'];
+                  $attendanceStatus['date'] = $data['date'];
+                  $attendanceStatus['status'] = 1;
+                  $attendanceStatus['created_at'] = Carbon::now();
+                  $attendanceStatus['updated_at'] = Carbon::now();
+                  $a=AttendanceStatus::insert($attendanceStatus);
+                  $status=200;
+                  $messag="All students marked present.";
+                }
+            }else{
+                $status=404;
+                $messag="Sorry!! Only class teacher can mark attendance";
+            }
+
+        }catch (\Exception $e) {
+            $status = 500;
+            $messag = "Something went wrong";
+        }
+        $response = [
+            "status" => $status,
+            "message" => $messag
+        ];
+        return response()->json($response, $status);
+
+        /*try{
+            $data = $request->all();
             $status = 200;
             $messag = "Attendance Successfully Marked";
             $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
@@ -305,6 +376,9 @@ class AttendanceController extends Controller
                                 $allUser=0;
                                 $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
                                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
+                }else{
+                  $status=200;
+                  $messag="All students marked as present";
                 }
             } else {
                 $status=404;
@@ -318,7 +392,7 @@ class AttendanceController extends Controller
             "status" => $status,
             "message" => $messag
         ];
-        return response()->json($response, $status);
+        return response()->json($response, $status);*/
     }
     /*
     * Function Name: getStudentsList
@@ -458,6 +532,11 @@ class AttendanceController extends Controller
                         ->get()->toArray();
                 }
                 if(Empty($markedAttendance)) {
+                    $finalList[1]['id'] = "";
+                    $finalList[1]['name'] = "All students are present";
+                    $finalList[1]['roll_number'] = "";
+                    $finalList[1]['absent_status'] = "";
+                    $finalList[1]['leave_status'] = "";
                     $status = 200;
                     $message = "All students were present on this day";
                 }
@@ -618,7 +697,6 @@ class AttendanceController extends Controller
     * Developed By : Amol Rokade
     * Date : 04/03/2016
     */
-
     public function viewDateAttendanceTeacher(Requests\ViewRequest $request , $div_id  )
     {
         try{
@@ -633,14 +711,13 @@ class AttendanceController extends Controller
             $students = User::where('division_id',$div_id)
                 ->where('role_id','=',$roleId)
                 ->lists('id');
-            $studentAttendance = Attendance::wherein('student_id',$students)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
+            $studentAttendance = AttendanceStatus::where('division_id',$div_id)->select('date')->groupBy('date')->orderBy('date','ASC')->get()->toArray();
         } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";
         }
         $response = [
             "status" => $status,
-
             "message" => $message,
             "data" => $studentAttendance
         ];

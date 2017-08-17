@@ -434,8 +434,12 @@
                         i++;
                     });
                 }
-                TableData.init();
-
+                $('#sample_2').DataTable(
+                    {
+                        scrollY: 450,
+                        paging: false,
+                        ordering:true
+                    });
                 $('.checkedStud').change(function(){
 
                     if(this.checked==true)
@@ -496,7 +500,6 @@
         $.get(route,function(res) {
             if(res.length == 0)
             {
-                alert(1);
                     $('#division-select').html("no record found");
                     $('div#loadmoreajaxloaderDivision').hide();
             } else {

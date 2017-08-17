@@ -179,9 +179,9 @@
             $date=date("Y-m-d",strtotime($request->datePiker));
             if($request->student) {
                 $userIds = $request->student;
-                $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->select('id','division_id')->get();
+                $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->where('is_active',1)->select('id','division_id')->get();
             } else {
-                $userData = User::where('division_id',$request['division-select'])->select('id','division_id')->get();
+                $userData = User::where('division_id',$request['division-select'])->where('is_active',1)->select('id','division_id')->get();
             }
             $i=0;
             foreach ($userData as $data) {
