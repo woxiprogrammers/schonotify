@@ -255,9 +255,8 @@ class AttendanceController extends Controller
             if (!Empty($role)) {
                 $studentData = $data['student_id'];
                 if(!Empty($studentData)){
-                  $markedAttendance = Attendance::where('teacher_id','=',$data['teacher']['id'])
-                      ->where('date','=',$data['date'])->get()->toArray();
-                        if (!Empty($markedAttendance)){
+                  $markedAttendance = AttendanceStatus::where('date','=',$data['date'])->get()->toArray();
+                        if (Empty($markedAttendance)){
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];
@@ -268,13 +267,15 @@ class AttendanceController extends Controller
                                 $attendanceData['created_at'] = Carbon::now();
                                 $attendanceData['updated_at'] = Carbon::now();
                                 Attendance::insert($attendanceData);
+                                $status=200;
+                                $messag="Attendance marked successfully ";
+                            }
                                 $attendanceStatus['division_id'] = $role['id'];
                                 $attendanceStatus['date'] = $data['date'];
                                 $attendanceStatus['status'] = 1;
                                 $attendanceStatus['created_at'] = Carbon::now();
                                 $attendanceStatus['updated_at'] = Carbon::now();
                                 $a=AttendanceStatus::insert($attendanceStatus);
-                            }
                         }else{
                             $deleteOldAttendance = Attendance::where('date',$data['date'])->delete();
                             foreach($studentData as $value) {
