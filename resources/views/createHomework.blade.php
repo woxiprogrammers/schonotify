@@ -257,24 +257,22 @@
         });
     });
     $('#batch-select').change(function(){
-        var id=this.value;
-        var subject_id= $('#subjectsDropdown').val();
-        var route='get-subject-classes/'+id+'/'+subject_id;
-        $.get(route,function(res){
-            if(res.length == 0)
-            {
-                $('#classDropdown').html("no record found");
-            }
-            else{
-
-                var str='<option value="">please select class</option>';
-                for(var i=0; i<res.length; i++)
-                {
-                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
-                }
-                $('#classDropdown').html(str);
-            }
-            });
+      var id=this.value;
+      var subject_id= $('#subjectsDropdown').val();
+      var route='get-subject-classes/'+id+'/'+subject_id;
+      $.get(route,function(res){
+          if(Object.keys(res).length == 0)
+          {
+              $('#classDropdown').html("no record found");
+          }
+          else{
+              var str='<option value="">please select class</option>';
+              $.each(res, function( key, value ) {
+                   str+='<option value="'+value['class_id']+'">'+value['class_name']+'</option>';
+              });
+              $('#classDropdown').html(str);
+          }
+          });
     });
     $("#classDropdown").change(function() {
         var id = this.value;
