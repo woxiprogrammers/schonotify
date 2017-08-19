@@ -15,7 +15,7 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
-                            <h1 class="mainTitle">Ganesh International School , Chikhali</h1> <br>
+                            <h1 class="mainTitle">{{$schoolTitle}}</h1> <br>
                             <h1 class="mainTitle">Payment</h1>
                             <span class="mainDescription">Fee</span>
                         </div>
@@ -24,6 +24,7 @@
                 <fieldset>
                     <legend> Enter Details</legend>
                     <form id="getStudentDetialsForm" role="form">
+                        <input type="hidden" name="slug" value="{{$slug}}">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">
