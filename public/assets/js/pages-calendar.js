@@ -1,6 +1,5 @@
 var Calendar = function() {"use strict";
 	var dateToShow, calendar, demoCalendar, eventClass, eventCategory, subViewElement, subViewContent, $eventDetail;
-
 	var defaultRange = new Object;
 	defaultRange.start = moment();
 	defaultRange.end = moment().add(1, 'days');
@@ -497,7 +496,6 @@ var Calendar = function() {"use strict";
 	};
 
 	var runFullCalendarValidation = function(el) {
-
 		var formEvent = $('#create_event_form');
 
         $.validator.addMethod("greaterThan",
@@ -528,12 +526,11 @@ var Calendar = function() {"use strict";
                 },
 				eventStartDate: {
 					required: true,
-					date: true
+					date: true,
 				},
 				eventEndDate: {
 					required: true,
 					date: true,
-                    greaterThan:'#start-date-time'
 				}
 
 			},
@@ -564,6 +561,7 @@ var Calendar = function() {"use strict";
 			submitHandler: function(form) {
 
                 var file=$(form);
+                $('#create_event_form').unbind('submit');
                 var isEdit=$('#hiddenEventId').val();
                 if(isEdit=="create")
                 {
@@ -594,7 +592,6 @@ var Calendar = function() {"use strict";
                     }else{
                         saveEditPublish(file);
                     }
-
                 }
 
 			}

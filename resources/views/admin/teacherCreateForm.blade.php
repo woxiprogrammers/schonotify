@@ -125,9 +125,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group"> <!-- Date input -->
@@ -135,7 +133,6 @@
                             <input class="form-control" id="dob" name="dob" placeholder="MM/DD/YYY" type="text" value="{!! date('d/m/Y', time());!!}"/>
                         </div>
                     </div>
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="form-field-select-2">
@@ -188,7 +185,6 @@
                             <input type="text" placeholder="Enter a Alternate Contact Number" class="form-control" name="alt_number"/>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -278,7 +274,6 @@
                                 <label for="checkbox9">
                                     Approve
                                 </label>
-
                             </div>
                         </div>
                     </div>
@@ -309,12 +304,8 @@
                             </select>
                         </div>
                     </div>
-
                 </div>
-
-
             </fieldset>
-
             <fieldset>
                 <legend>
                     Name of Spouse
@@ -345,8 +336,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -358,7 +347,6 @@
                     </div>
                 </div>
                 <div class="row">
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label  class="control-label">
@@ -384,10 +372,7 @@
                         </div>
                     </div>
                 </div>
-
-
-
-                <div class="row">
+               <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label  class="control-label">
@@ -405,7 +390,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -422,12 +406,7 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </fieldset>
-
-
             <fieldset>
                 <legend>
                     EDUCATIONAL QUALIFICATIONS
@@ -447,7 +426,6 @@
                         <TD> <INPUT type="text" name="qualification[0][subjects]" placeholder="Subject(s)"/> </TD>
                     </TR>
                 </TABLE>
-
             </fieldset>
             <fieldset>
                 <div class="row">

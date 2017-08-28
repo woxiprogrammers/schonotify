@@ -214,11 +214,11 @@
                 $result=AttendanceStatus::insertGetId($attendanceStatus);
 
                 $div_id=AttendanceStatus::where('id',$result)->pluck('division_id');
-                $push_users=User::where('division_id',$div_id)->lists('parent_id');
+                $users_push=User::where('division_id',$div_id)->lists('parent_id');
                 $title="Attendance marked";
                 $message="Please check attendance";
                 $allUser=0;
-                $push_users=PushToken::whereIn('user_id',$push_users)->lists('push_token');
+                $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 if($result != "null")
                 {
