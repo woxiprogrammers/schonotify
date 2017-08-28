@@ -190,15 +190,6 @@ class FeeController extends Controller
     }
     public function feeListingView()
     {
-
-        $var = TransactionDetails::join('users','users.id','=','transaction_details.student_id')
-                    ->join('divisions','divisions.id','=','users.division_id')
-                    ->join('classes','classes.id','=','divisions.class_id')
-                    ->join('batches','batches.id','=','classes.batch_id')
-                    ->where('users.body_id',1)
-                    ->select('batches.name as batch_name','classes.class_name as class_name','divisions.division_name as division_name','users.first_name as first_name','users.last_name as last_name','users.roll_number as roll_number','transaction_details.transaction_type as transaction_type','transaction_details.transaction_detail as transaction_detail','transaction_details.transaction_amount as transaction_amount','transaction_details.date as date')
-                    ->toSql();
-        dd($var);
         $user = Auth::user()->toArray();
         $batches=Batch::where('body_id',$user['body_id'])->select('id','name')->get()->toArray();
         return view('fee.feelisting')->with(compact('batches'));
