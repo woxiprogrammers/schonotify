@@ -28,7 +28,7 @@
     use Illuminate\Support\Facades\Input;
     use Illuminate\Support\Facades\Redirect;
     use Illuminate\Support\Facades\Session;
-
+    use Illuminate\Support\Facades\Log;
     class NoticeBoardController extends Controller
     {
         use PushNotificationTrait;
@@ -317,7 +317,7 @@
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority');
             $adminAnnouncementAssignedPublished = DB::table('events')->join('event_user_roles','event_user_roles.event_id','=','events.id')
                 ->where('event_type_id','=',1)
-                ->where('events.status','=',2)
+                ->where('events.status','=',1)
                 ->where('event_user_roles.user_id','=',$user->id)
                 ->whereraw('YEAR(events.created_at) ='.date($year))
                 ->whereraw('MONTH(events.created_at) ='.date($month))
@@ -906,6 +906,14 @@
                         }
                     }
                 }
+                    $title="New Announcement Created";
+                    $message=$request->title;
+                    $allUser=0;
+                    $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
+                  Log::info($users_push);   
+                 $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
+                  Log::info($push_users);               
+         $this->CreatePushNotification($title,$message,$allUser,$push_users);
                 Session::flash('message-success','Announcement created successfully');
                 return redirect('/noticeBoard');
             } else {
@@ -1444,6 +1452,11 @@
                     $achievement->published_by = Auth::User()->id;
                     $achievement->status = 2;
                     $achievement->save();
+                    $title="New Achievement";
+                    $message="Please check the new achievement";
+                    $allUser=1;
+                    $push_users=0;
+                    $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                     Session::flash('message-success','Achievement published successfully !');
                 } else {
                     $achievement = Event::find($id);
@@ -1461,6 +1474,11 @@
                         $achievement->published_by = Auth::User()->id;
                         $achievement->status = 2;
                         $achievement->save();
+                        $title="New Achievement";
+                        $message="Please check the new achievement";
+                        $allUser=1;
+                        $push_users=0;
+                        $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                         Session::flash('message-success','Achievement published successfully !');
                     } else {
                         $achievement = Event::find($id);
@@ -1492,6 +1510,11 @@
                     $announcement = Event::find($id);
                     $announcement->status = 2;
                     $announcement->save();
+                    $title="New Announcement";
+                    $message="Please check the new announcement";
+                    $allUser=1;
+                    $push_users=0;
+                    $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                     Session::flash('message-success','Announcement published successfully !');
                 } else {
                     $announcement = Event::find($id);
@@ -1508,6 +1531,11 @@
                         $announcement = Event::find($id);
                         $announcement->status = 2;
                         $announcement->save();
+                        $title="New Announcement";
+                        $message="Please check the new announcement";
+                        $allUser=1;
+                        $push_users=0;
+                        $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                         Session::flash('message-success','Announcement published successfully !');
                     } else {
                         $announcement = Event::find($id);

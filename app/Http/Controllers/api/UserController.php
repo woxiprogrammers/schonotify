@@ -133,14 +133,14 @@ class UserController extends Controller
         $data=$request->all();
         $is_present=PushToken::where('user_id',$data['user_id'])->count();
         if($is_present == 0){
-            $pushData['user_id']=$data['user_id'];
+            $pushData['user_id']=$data['teacher']['id'];
             $pushData['push_token']=$data['pushToken'];
             PushToken::create($pushData);
         }
         else{
-            $pushData['user_id']=$data['user_id'];
+            $pushData['user_id']=$data['teacher']['id'];
             $pushData['push_token']=$data['pushToken'];
-            PushToken::where('user_id',$data['user_id'])->update($pushData);
+            PushToken::where('user_id',$data['teacher']['id'])->update($pushData);
         }
 
     }

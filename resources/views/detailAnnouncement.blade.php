@@ -295,7 +295,7 @@
                                                 <a class="btn btn-primary btn-wide pull-right" href="/check-publish-announcement/{{ $announcement['id'] }}" id="btnPublish">
                                                     <i class="fa fa-cloud-upload"></i> Publish
                                                 </a>
-                                            @elseif($announcement['status'] == 1 && $announcement['published_by'] == Auth::User()->id)
+                                            @elseif($announcement['status'] == 1 )
                                                 <button class="btn btn-primary btn-wide pull-left" type="button" id="btnEdit">
                                                     <i class="fa fa-wrench"></i> Update
                                                 </button>
