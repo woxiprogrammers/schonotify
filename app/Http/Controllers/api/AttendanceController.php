@@ -240,7 +240,7 @@ class AttendanceController extends Controller
    * Param : Request $requests $classId
    * Return : $status $message
    * Desc : A class teacher can mark attendance of his/her own class.
-   * Developed By : Amol Rokade
+   * Developed By : shubham chaudhari
    * Date : 6/2/2016
    */
 
@@ -276,6 +276,12 @@ class AttendanceController extends Controller
                                 $attendanceStatus['created_at'] = Carbon::now();
                                 $attendanceStatus['updated_at'] = Carbon::now();
                                 $a=AttendanceStatus::insert($attendanceStatus);
+                                $title="Attendance";
+                                $message="Attendance Marked for the day.";
+                                $allUser=0;
+                                $user_push = User::where('division_id',$role['id'])->lists('parent_id');
+                                $push_users=PushToken::whereIn('user_id',$user_push)->lists('push_token');
+                                $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                         }else{
                             $deleteOldAttendance = Attendance::where('date',$data['date'])->delete();
                             foreach($studentData as $value) {
@@ -301,6 +307,12 @@ class AttendanceController extends Controller
                   $a=AttendanceStatus::insert($attendanceStatus);
                   $status=200;
                   $messag="All students marked present.";
+                  $title="Attendance";
+                  $message="Attendance Marked for the day.";
+                  $allUser=0;
+                  $user_push = User::where('division_id',$role['id'])->lists('parent_id');
+                  $push_users=PushToken::whereIn('user_id',$user_push)->lists('push_token');
+                  $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 }
             }else{
                 $status=404;

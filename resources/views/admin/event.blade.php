@@ -73,7 +73,6 @@
                                         <div class="form-group ">
                                             <div id="error-div"></div>
                                             <h4>Event</h4>
-
                                         </div>
                                         <div class="form-group">
                                             <label>
@@ -212,9 +211,7 @@
     @include('rightSidebar')
 
 </div>
-
 <div id="loadmoreajaxloader" class="loader-position-event" ><center><img src="/assets/images/loader1.gif" /></center></div>
-
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
@@ -237,8 +234,6 @@
 <script src="/vendor/ckeditor/ckeditor.js"></script>
 <script src="/vendor/ckeditor/adapters/jquery.js"></script>
 <script src="/assets/js/form-validation.js"></script>
-
-
 <script>
     jQuery(document).ready(function() {
         getMsgCount();
@@ -326,13 +321,8 @@
                 }
 
             }
-
         });
-
     });
-
-
-
     function deleteEventImage()
     {
         $('.editImageDiv').hide();

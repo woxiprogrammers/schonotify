@@ -194,7 +194,7 @@ class EventController extends Controller
     */
     public function viewMonthsEvent(Requests\EventRequest $request, $year,$month_id)
     {
-        $user = Auth::user();
+        $user = $request->all();
         try {
             $data = $request->all();
             $monthsEvents = array();
@@ -208,19 +208,19 @@ class EventController extends Controller
             $endDate = $year."-".$month_id ."-"."31"." 23".":"."59".":"."59";
             $pendingEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('created_by',$data['teacher']['id'])
-                ->where('body_id',$user->body_id)
+                ->where('body_id',$user['teacher']['body_id'])
                 ->where('status','=',1) //1 is for pending events i.e. Not published and not in draft
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate);
             $publishedEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('status','=',2) //1 is for pending events i.e. Not published.
-                ->where('body_id',$user->body_id)
+                ->where('body_id',$user['teacher']['body_id'])
                 ->where('start_date','>=',$startDate)
                 ->where('start_date','<=',$endDate);
             $monthsEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
                 ->where('created_by',$data['teacher']['id'])
                 ->where('status','=',0) // 0 is for draft
-                ->where('body_id',$user->body_id)
+                ->where('body_id',$user['teacher']['body_id'])
                 ->union($pendingEvents)
                 ->union($publishedEvents)
                 ->where('start_date','>=',$startDate)
@@ -297,7 +297,7 @@ class EventController extends Controller
     {
         try {
             $data = $request->all();
-            $body = User::where('id',$data->id)->pluck('body_id');
+            $body = User::where('remember_token',$data['token'])->pluck('body_id');
             $mytime = Carbon::now();
             $tempImageName = (strtotime($mytime)).".jpg";
             $tempImagePath = "uploads/events/";
@@ -315,7 +315,7 @@ class EventController extends Controller
             $eventData['end_date'] = $data['end_date'];
             $eventData['created_at'] = Carbon::now();
             $eventData['updated_at'] = Carbon::now();
-            $eventData['body_id'] = $data->body_id;
+            $eventData['body_id'] = $body;
             $event_id = Event::insertGetId($eventData);
             if($event_id != null) {
                 $eventImageData['event_id'] = $event_id ;
