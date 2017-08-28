@@ -28,7 +28,7 @@
     use Illuminate\Support\Facades\Input;
     use Illuminate\Support\Facades\Redirect;
     use Illuminate\Support\Facades\Session;
-
+    use Illuminate\Support\Facades\Log;
     class NoticeBoardController extends Controller
     {
         use PushNotificationTrait;
@@ -906,6 +906,14 @@
                         }
                     }
                 }
+                    $title="New Announcement Created";
+                    $message=$request->title;
+                    $allUser=0;
+                    $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
+                  Log::info($users_push);   
+                 $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
+                  Log::info($push_users);               
+         $this->CreatePushNotification($title,$message,$allUser,$push_users);
                 Session::flash('message-success','Announcement created successfully');
                 return redirect('/noticeBoard');
             } else {
