@@ -84,10 +84,19 @@ class FeeController extends Controller
           return view('fee.installments');
         }
 
-    public function billiingPageView(){
+    public function billiingPageView(Request $request,$slug=null){
         try{
-            $bodies = Body::where('id',1)->get()->toArray();   // Only for Ganesh International School
-            return view('fee.FeeBillingPage')->with(compact('bodies'));
+            if($slug == null || $slug == 'gis'){
+                $slug = 'gis';
+                $bodies = Body::where('id',1)->get()->toArray();   // Only for Ganesh International School
+                $schoolTitle = 'Ganesh International School , Chikhali';
+            }elseif($slug == 'gems'){
+                $bodies = Body::where('id',2)->get()->toArray();   // Only for Ganesh English Medium School
+                $schoolTitle = 'Ganesh English Medium School';
+            }else{
+                return redirect()->back();
+            }
+            return view('fee.FeeBillingPage')->with(compact('bodies','schoolTitle','slug'));
         }catch (\Exception $e){
             $data = [
                 'action' => 'Get billing page View',
@@ -251,6 +260,7 @@ class FeeController extends Controller
      */
     public function getStudentDetails(Request $request){
         try{
+            $slug = $request->slug;
             $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
                         ->where('users.body_id',$request->school)
                         ->where('students_extra_info.grn',$request->grn)
@@ -331,7 +341,7 @@ class FeeController extends Controller
                     $installments[$installmentId]['is_paid'] = false;
                 }
             }
-            return view('fee.installments_details_partial')->with(compact('student','parent','installments','payableAmount'));
+            return view('fee.installments_details_partial')->with(compact('student','parent','installments','payableAmount','slug'));
         }catch(\Exception $e){
             $data = [
                 'action' => 'Get Student details for payment',
