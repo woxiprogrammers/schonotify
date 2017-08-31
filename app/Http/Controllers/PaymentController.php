@@ -40,6 +40,7 @@ class PaymentController extends Controller
                 $corporateCode = env('EASY_PAY_CORPORATE_CODE');
                 $version = env('EASY_PAY_VERSION');
                 $type = env('EASY_PAY_TYPE');
+                $paymentUrl = env('EASY_PAY_PAYMENT_URL');
                 $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
             }else{
                 $checksumkey = env('GEMS_EASY_PAY_CHKSUM_KEY');
@@ -47,6 +48,7 @@ class PaymentController extends Controller
                 $corporateCode = env('GEMS_EASY_PAY_CORPORATE_CODE');
                 $version = env('GEMS_EASY_PAY_VERSION');
                 $type = env('GEMS_EASY_PAY_TYPE');
+                $paymentUrl = env('GEMS_EASY_PAY_PAYMENT_URL');
                 $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['installment_id'].'|'.$data['email']."|".$data['contact']."|1.0";//.$data['amount'];
             }
             $paramArr = array(
@@ -74,7 +76,8 @@ class PaymentController extends Controller
             $i = $aesJava->encrypt(implode("&", $paramArr),$encryption_key , 128);
             $data = [
                 'i' => $i,
-                'amount' => $request->amount
+                'amount' => $request->amount,
+                'payment_url' => $paymentUrl
             ];
             return response()->json($data);
         }catch(\Exception $e){
