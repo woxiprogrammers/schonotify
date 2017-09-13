@@ -49,11 +49,8 @@
                 <span class="title"> Subjects  </span>
             </a>
         </li>
-
     </ul>
-
 </li>
-
 <li>
     <a href="/createUsers/1">
         <div class="item-content">
@@ -66,7 +63,6 @@
         </div>
     </a>
 </li>
-
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -79,7 +75,6 @@
         </div>
     </a>
     <ul class="sub-menu">
-
         <li>
             <a href="/create-class">
                 <div class="item-inner">
@@ -94,10 +89,8 @@
                 </div>
             </a>
         </li>
-
     </ul>
 </li>
-
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -110,7 +103,6 @@
         </div>
     </a>
     <ul class="sub-menu">
-
         <li>
             <a href="/create-subject">
                 <div class="item-inner">
@@ -125,10 +117,8 @@
                 </div>
             </a>
         </li>
-
     </ul>
 </li>
-
 <li>
     <a href="/timetable">
         <div class="item-content">
@@ -141,7 +131,6 @@
         </div>
     </a>
 </li>
-
 <li>
     <a href="/event/1">
         <div class="item-content">
@@ -154,7 +143,6 @@
         </div>
     </a>
 </li>
-
 <li>
     <a href="/noticeBoard">
         <div class="item-content">
@@ -257,7 +245,6 @@
     </ul>
 </li>-->
 @if(Auth::User()->role_id == 1)
-
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -270,7 +257,6 @@
         </div>
     </a>
     <ul class="sub-menu">
-
         <li>
             <a href="/student-enquiry">
                 <div class="item-inner">
@@ -287,7 +273,6 @@
         </li>
     </ul>
 </li>
-
 @endif
 <li>
     <a href="javascript:void(0)">
@@ -301,7 +286,6 @@
         </div>
     </a>
     <ul class="sub-menu">
-
         <li>
             <a href="/fees/create">
                 <div class="item-inner">
@@ -309,8 +293,6 @@
                 </div>
             </a>
         </li>
-
-
         <li>
             <a href="/fees/feelisting">
                 <div class="item-inner">
@@ -318,11 +300,43 @@
                 </div>
             </a>
         </li>
-       
-
-
     </ul>
 </li>
+    <li>
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-money"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title">Exam </span><i class="icon-arrow"></i>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a href="/exam/create-subject">
+                    <div class="item-inner">
+                        <span class="title"> Create Subject </span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/exam/create">
+                    <div class="item-inner">
+                        <span class="title"> Create Structure </span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/fees/feelisting">
+                    <div class="item-inner">
+                        <span class="title"> View Marks </span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
 </ul>
 </nav>
 </div>
