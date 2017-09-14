@@ -20,7 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam/create-subject" role="form" id="classCreateForm">
+                        <form method="post" action="/exam/create-subject" role="form" id="examSubjectCreateForm">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
                                 <div class="col-md-6">
@@ -67,12 +67,12 @@
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/form-wizard.js"></script>
-    <script src="/assets/js/form-validation.js"></script>
+    <script src="/assets/js/exam-form-validation.js"></script>
     <script src="/assets/js/custom-project.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            FormValidator.init();
         });
     </script>
 @stop
