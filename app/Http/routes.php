@@ -527,10 +527,11 @@
         //Push
         Route::post('save-push','api\UserController@savePushToken');
     });
-
+        //Exam
     Route::group(['prefix' => 'exam'], function () {
         Route::get('create',array('uses' => 'ExamController@createExamStructureView'));
         Route::get('create-subject',array('uses' => 'ExamController@createExamSubjectView'));
         Route::post('create-subject',array('uses' => 'ExamController@createExamSubject'));
+        Route::post('table-create',array('uses' => 'ExamController@createTable'));
         Route::get('get-classes/{str}',array('uses' => 'ExamController@getClasses'));
     });

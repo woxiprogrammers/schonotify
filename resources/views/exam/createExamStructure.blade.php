@@ -61,7 +61,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     Sub Subject
-                                    <input type="text" id="sub_subject" class="form-control" placeholder="Sub Subject">
+                                    <input type="text" id="sub_subject" name="sub_subject" class="form-control" placeholder="Sub Subject">
                                 </div>
                             </div>
                         </div>
@@ -77,23 +77,15 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw" style="margin-bottom:400px ">
-
-                        <form method="post" action="class-create" role="form" id="termCreateForm">
+                        <form method="post" action="table-create" role="form" id="termCreateForm">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Term Name <span class="symbol required"></span>
-                                        </label>
-                                        <input type="text" id="term_name" class="form-control" placeholder="Name of Term">
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Number of Term<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="termDrpdn" name="Term_number" style="-webkit-appearance: menulist;">
+                                            <option>select number of terms</option>
                                             <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
@@ -102,63 +94,42 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Number of coloums: <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="columnDrpdn" name="batch" style="-webkit-appearance: menulist;">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                            <option>6</option>
-                                            <option>7</option>
-                                            <option>8</option>
-                                            <option>9</option>
-                                            <option>10</option>
+                                            <option>select number of coloumn</option>
+                                            <option >1</option>
+                                            <option >2</option>
+                                            <option >3</option>
+                                            <option >4</option>
+                                            <option >5</option>
+                                            <option >6</option>
+                                            <option >7</option>
+                                            <option >8</option>
+                                            <option >9</option>
+                                            <option >10</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div id="extra">
-                                  <table border="1" style="width: 100%">
-                                      <tr>
-                                          <th></th>
-                                          <th></th>
-                                          <th colspan="8"></th>
-                                      </tr>
-                                      <tr>
-                                      <td rowspan="2">
-                                          term1
-                                      </td>
-                                          <td>marks</td>
-                                          <td><input type="text"></td>
-                                      </tr>
-                                      <tr>
-                                          <td>out of</td>
-                                      </tr>
-                                      <tr>
-                                          <td rowspan="2">
-                                              term2
-                                          </td>
-                                          <td>marks</td>
-                                      </tr>
-                                      <tr>
-                                          <td>out of</td>
-                                      </tr>
-                                  </table>
+                            <div style="overflow: scroll" hidden>
+                                <table border="1" id="table1">
+
+                                </table>
+                            </div>
+                            <div class="row" id="extra">
+                                <input type="text" placeholder="term">
+                                <div class="form-control col-lg-2" id="abc">
+                                    <input type="text" placeholder="coloumn">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div id="append">
-                                </div>
-                            </div>
+                            <div class="row" id="append"></div>
+                            <button class="btn btn-primary btn-wide" type="submit">
+                                Create <i class="fa fa-arrow-circle-right"></i>
+                            </button>
                         </form>
                     </div>
                 @include('rightSidebar')
@@ -192,31 +163,40 @@
         jQuery(document).ready(function() {
             Main.init();
             $('#extra').hide();
-        });
-    </script>
-    <script>
-        $('#batchDrpdn').change(function(){
-            var str = this.value;
-            $.ajax({
-                method: "get",
-                url: "/exam/get-classes/"+str,
-                success: function(response)
-                {
-                    $("#classesDropdown").html(response);
-                }
+            $('#abc').hide();
+            $('#batchDrpdn').change(function(){
+                var str = this.value;
+                $.ajax({
+                    method: "get",
+                    url: "/exam/get-classes/"+str,
+                    success: function(response)
+                    {
+                        $("#classesDropdown").html(response);
+                    }
+                });
+            });
+            $('#columnDrpdn').change(function(){
+                var b=  this.value;
+                var a=$('#termDrpdn').val();
+                generate(a,b);
             });
         });
-        $('#termDrpdn').change(function(){
-            var a=  this.value;
-            generate(a);
-        });
-        function generate(a) {
-
-            for (i= 0; i < a; i++) {
-                ($('#extra').clone()).appendTo('#append');
-                $('#extra').show();
+        function generate(a,b) {
+            var termString = '';
+            for (var i= 0; i < a; i++) {
+                var termNumber = i+1;
+                termString += "<tr><td rowspan='2' style='width: 15%'>Term "+termNumber+"</td><td style='width: 15%'>Marks</td>";
+                for(var j = 0; j < b; j++){
+                    termString += "<td><input class='form-control' type='text' class='form-control' style='width: 95%; mar' name='marks[]'></td>";
+                }
+                termString += "</tr><tr> <td> Out of </td>";
+                for(var j = 0; j < b; j++){
+                    termString += "<td><input class='form-control' type='text' name='out_of[]'></td>";
+                }
+                termString += "</tr>";
             }
+            $("#table1").html(termString);
+            $("#table1").parent().show();
         }
-
     </script>
 @stop

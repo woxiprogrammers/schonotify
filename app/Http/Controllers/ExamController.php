@@ -49,5 +49,6 @@ class ExamController extends Controller
         $classes = Classes::where('batch_id',$str)->select('id','class_name')->get()->toArray();
         return view('/exam/examClasses')->with(compact('classes'));
     }
-
+    public function createTable(Request $request){
+    }
 }
