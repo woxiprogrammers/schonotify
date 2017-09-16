@@ -20,7 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="class-create" role="form" id="classCreateForm">
+                        <form method="post" action="structure-create" role="form" id="examStructureForm">
                         <div class="row">
                              <div class="col-md-6">
                                   <div class="form-group">
@@ -50,7 +50,7 @@
                                         <label class="control-label">
                                             Subject <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="batchDrpdn" name="batch" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="batchDrpdn" name="select_subject" style="-webkit-appearance: menulist;">
                                             <option value="">Select Subject</option>
                                             @foreach($examSubjects as $examSubject)
                                                 <option value="{!! $examSubject['id'] !!}">{!! $examSubject['subject_name'] !!}</option>
@@ -65,9 +65,8 @@
                                 </div>
                             </div>
                         </div>
-                        </form>
-                    </div>
-                    <section id="page-title" class="padding-top-15 padding-bottom-15">
+
+                    <section id="page-title">
                         <div class="row">
                             <div class="col-sm-7">
                                 <fieldset style="margin-bottom: -50%">
@@ -76,8 +75,6 @@
                             </div>
                         </div>
                     </section>
-                    <div class="container-fluid container-fullw" style="margin-bottom:400px ">
-                        <form method="post" action="table-create" role="form" id="termCreateForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -120,13 +117,6 @@
 
                                 </table>
                             </div>
-                            <div class="row" id="extra">
-                                <input type="text" placeholder="term">
-                                <div class="form-control col-lg-2" id="abc">
-                                    <input type="text" placeholder="coloumn">
-                                </div>
-                            </div>
-                            <div class="row" id="append"></div>
                             <button class="btn btn-primary btn-wide" type="submit">
                                 Create <i class="fa fa-arrow-circle-right"></i>
                             </button>
@@ -156,12 +146,12 @@
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/form-wizard.js"></script>
-    <script src="/assets/js/form-validation.js"></script>
+    <script src="/assets/js/exam-form-validation.js"></script>
     <script src="/assets/js/custom-project.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            FormValidator.init();
             $('#extra').hide();
             $('#abc').hide();
             $('#batchDrpdn').change(function(){
@@ -182,19 +172,28 @@
             });
         });
         function generate(a,b) {
-            var termString = '';
-            for (var i= 0; i < a; i++) {
-                var termNumber = i+1;
-                termString += "<tr><td rowspan='2' style='width: 15%'>Term "+termNumber+"</td><td style='width: 15%'>Marks</td>";
-                for(var j = 0; j < b; j++){
-                    termString += "<td><input class='form-control' type='text' class='form-control' style='width: 95%; mar' name='marks[]'></td>";
+            var termString = '<tr>';
+            var hg = parseInt(b)+2;
+            for (var j = 0; j < hg; j++) {
+                if(j==0 || j==1){
+                    termString += "<th><input type='text' style='width: 100%;' readonly></th>";
+                } else{
+                    termString += "<th><input type='text' style='width: 100%;' name='head[]' ></th>";
                 }
-                termString += "</tr><tr> <td> Out of </td>";
-                for(var j = 0; j < b; j++){
-                    termString += "<td><input class='form-control' type='text' name='out_of[]'></td>";
-                }
-                termString += "</tr>";
             }
+            termString += "</tr>";
+                for (var i = 0; i < a; i++) {
+                    var termNumber = i + 1;
+                    termString += "<tr><td rowspan='2' style='width: 15%'>Term " + termNumber + "</td><td style='width: 15%'>Marks</td>";
+                    for (var j = 0; j < b; j++) {
+                        termString += "<td><input type='text' style='width: 100%;' name='marks[]' readonly></td>";
+                    }
+                    termString += "</tr><tr><td> Out of <span class='symbol required'></td>";
+                    for (var j = 0; j < b; j++) {
+                        termString += "<td><input type='text' style='width: 100%;' name='out_of_marks_id[]'></td>";
+                    }
+                    termString +="</tr>";
+                }
             $("#table1").html(termString);
             $("#table1").parent().show();
         }
