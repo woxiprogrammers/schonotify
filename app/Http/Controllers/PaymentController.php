@@ -21,8 +21,8 @@ class PaymentController extends Controller
     public function billPayment(Request $request){
         try{
             $data = $request->all();
-            $checksumkey = env('EASY_PAY_CHKSUM_KEY');
-            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
+            $slug = $request->slug;
+
             $aesJava = new AesForJava();
             $referenceId = NetBankingTransaction::first();
             if($referenceId == null){
@@ -34,14 +34,28 @@ class PaymentController extends Controller
                 NetBankingTransaction::where('id', 1)->update(['transactions_count' => $referenceId]);
             }
             $crn = $referenceId+1;
-            $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
+            if($slug == 'gis'){
+                $checksumkey = env('EASY_PAY_CHKSUM_KEY');
+                $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
+                $corporateCode = env('EASY_PAY_CORPORATE_CODE');
+                $version = env('EASY_PAY_VERSION');
+                $type = env('EASY_PAY_TYPE');
+                $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
+            }else{
+                $checksumkey = env('GEMS_EASY_PAY_CHKSUM_KEY');
+                $encryption_key = env('GEMS_EASY_PAY_ENCRYPTION_KEY');
+                $corporateCode = env('GEMS_EASY_PAY_CORPORATE_CODE');
+                $version = env('GEMS_EASY_PAY_VERSION');
+                $type = env('GEMS_EASY_PAY_TYPE');
+                $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['installment_id'].'|'.$data['email']."|".$data['contact']."|1.0";//.$data['amount'];
+            }
             $paramArr = array(
-                "CID=".env('EASY_PAY_CORPORATE_CODE'),
+                "CID=".$corporateCode,
                 "RID=".$referenceId,
                 "CRN=".$crn,
-                "AMT=".$request->amount,
-                "VER=".env('EASY_PAY_VERSION'),
-                "TYP=".env('EASY_PAY_TYPE'),
+                "AMT=1.0",//.$request->amount,
+                "VER=".$version,
+                "TYP=".$type,
                 "CNY=INR",
                 "RTU=http://".env('DOMAIN_NAME')."/payment/payment-return",
                 "PPI=".$ppiParameters,

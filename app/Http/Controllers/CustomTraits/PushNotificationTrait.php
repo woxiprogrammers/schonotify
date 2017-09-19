@@ -9,7 +9,7 @@ trait PushNotificationTrait{
         $msg = $PushMsg;
         if($allUser == 1){
             $device_token=PushToken::lists('push_token')->toArray();
-        }
+         }
         else{
             $device_token=$push_users;
         }
@@ -20,7 +20,7 @@ trait PushNotificationTrait{
                                     'message' =>$msg),
             'profile' => env('SECURITY_PROFILE')
         );
-        $content = json_encode($data);
+         $content = json_encode($data);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, TRUE);
@@ -33,6 +33,7 @@ trait PushNotificationTrait{
         ));
         $result = curl_exec($ch);
         Log::info($result);
+
         curl_close($ch);
     }
 }

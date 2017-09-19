@@ -259,12 +259,32 @@ class NoticeBoardController extends Controller
     public function viewAnnouncement(Request $request)
     {
         $user=$request->all();
-        $event =Event::where('event_type_id',1)
+        $eventUnpublished =Event::where('event_type_id',1)
+            ->where('body_id',$user['teacher']['body_id'])
+            ->where('created_by',$user['teacher']['id'])
+            ->whereIn('status',[0,1])
+            ->orderBy('id','desc')
+            ->get()
+            ->toArray();
+        $assignedEvents = EventUserRoles::where('user_id',$user['teacher']['id'])
+                                        ->lists('event_id');
+        $announcement =Event::where('event_type_id',1)
                        ->where('body_id',$user['teacher']['body_id'])
-                       ->whereIn('status',[0,1,2])
+                       ->whereIn('id',$assignedEvents)
+                       ->where('status',2)
                        ->orderBy('id','desc')
                        ->get()
                        ->toArray();
+        if(empty($eventUnpublished)){
+            $event = $announcement;
+        }else if(empty($announcement)){
+            $event = $eventUnpublished;
+        }else{
+            $event = array_merge($eventUnpublished,$announcement);
+        }
+        usort($event, function ($item1, $item2) {
+            return $item1['id'] < $item2['id'];
+        });
         foreach($event as $key => $val){
             $event[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
             $event[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first();

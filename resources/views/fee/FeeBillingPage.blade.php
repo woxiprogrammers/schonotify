@@ -15,7 +15,7 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-7">
-                            <h1 class="mainTitle">Ganesh International School , Chikhali</h1> <br>
+                            <h1 class="mainTitle">{{$schoolTitle}}</h1> <br>
                             <h1 class="mainTitle">Payment</h1>
                             <span class="mainDescription">Fee</span>
                         </div>
@@ -95,7 +95,7 @@
 <script src="/vendor/jquery-modal/jquery.modal.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="/vendor/modernizr/modernizr.js"></script>
-<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>4a
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
 <script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/vendor/switchery/switchery.min.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
