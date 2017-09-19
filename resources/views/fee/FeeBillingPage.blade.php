@@ -21,40 +21,41 @@
                         </div>
                     </div>
                 </section>
-                <fieldset>
-                    <legend> Enter Details</legend>
-                    <form id="getStudentDetialsForm" role="form">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label">
-                                    School: <span class="symbol required"></span>
-                                </label>
-                                <select name="school" class="form-control">
-                                    @foreach($bodies as $body)
-                                        <option value="{{$body['id']}}"> {{$body['name']}} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group" >
-                                <label class="control-label">
-                                    GRN <span class="symbol required"></span>
-                                </label>
-                                <input name="grn" id="grn" type="text" PLACEHOLDER="Enter you GRN" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group" >
-                                <label class="control-label">
-                                </label>
-                                <button class="btn btn-primary btn-wide form-control" type="submit">
-                                    Get Details
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </fieldset>
+                {{--<fieldset>--}}
+                    {{--<legend> Enter Details</legend>--}}
+                    {{--<form id="getStudentDetialsForm" role="form">--}}
+                        {{--<div class="col-md-4">--}}
+                            {{--<div class="form-group">--}}
+                                {{--<label class="control-label">--}}
+                                    {{--School: <span class="symbol required"></span>--}}
+                                {{--</label>--}}
+                                {{--<select name="school" class="form-control">--}}
+                                    {{--@foreach($bodies as $body)--}}
+                                        {{--<option value="{{$body['id']}}"> {{$body['name']}} </option>--}}
+                                    {{--@endforeach--}}
+                                {{--</select>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-4">--}}
+                            {{--<div class="form-group" >--}}
+                                {{--<label class="control-label">--}}
+                                    {{--GRN <span class="symbol required"></span>--}}
+                                {{--</label>--}}
+                                {{--<input name="grn" id="grn" type="text" PLACEHOLDER="Enter you GRN" class="form-control">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-1">--}}
+                            {{--<div class="form-group" >--}}
+                                {{--<label class="control-label">--}}
+                                {{--</label>--}}
+                                {{--<button class="btn btn-primary btn-wide form-control" type="submit">--}}
+                                    {{--Get Details--}}
+                                {{--</button>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</form>--}}
+                {{--</fieldset>--}}
+                <div style="color: red; align-self: center; font-size: 40px; margin-left: 28%; margin-top:10%"> This page is under maintenance.</div>
                 <div id="student_details">
 
                 </div>
