@@ -143,11 +143,9 @@ var FormValidator = function () {
                 errorHandler2.hide();
                 examStructureForm.submit();
                 // submit form
-
             }
         });
     };
-
     return {
         init: function () {
             validateCheckRadio();

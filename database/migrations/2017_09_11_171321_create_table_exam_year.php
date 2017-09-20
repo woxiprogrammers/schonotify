@@ -17,7 +17,7 @@ class CreateTableExamYear extends Migration
             $table->text('start_year');
             $table->text('end_year');
             $table->unsignedInteger('exam_structure_id');
-            $table->foreign('exam_structure_id')->references('id')->on('exam_subject_structure')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('exam_structure_id')->references('id')->on('exam_sub_subject_structure')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

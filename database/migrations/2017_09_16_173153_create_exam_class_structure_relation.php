@@ -15,7 +15,7 @@ class CreateExamClassStructureRelation extends Migration
         Schema::create('exam_class_structure_relation', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('exam_subject_id');
-            $table->foreign('exam_subject_id')->references('id')->on('exam_subject_structure')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('exam_subject_id')->references('id')->on('exam_sub_subject_structure')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedInteger('class_id');
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade')->onDelete('cascade');
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateExamClassStructureRelation extends Migration
      */
     public function down()
     {
-        schema::drop('exam_class_structure_relation');
+        Schema::drop('exam_class_structure_relation');
     }
 }

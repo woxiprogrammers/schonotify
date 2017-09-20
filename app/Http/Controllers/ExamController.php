@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Classes;
+use App\ExamClassStructureRelation;
 use App\ExamSubjectStructure;
+use App\ExamSubSubjectStructure;
+use App\ExamYear;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Carbon\Carbon;
@@ -11,6 +14,7 @@ use \Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Batch;
+//use function Stringy\create;
 
 class ExamController extends Controller
 {
@@ -50,6 +54,26 @@ class ExamController extends Controller
         return view('/exam/examClasses')->with(compact('classes'));
     }
     public function createStructureTable(Request $request){
-        //$batches=;
+//      dd($request->all());
+
+        $subjectDetails ['sub_subject_name'] = $request->sub_subject;
+        $subjectDetails ['subject_id'] = $request->select_subject;
+        $subjectDetails ['created_at'] = Carbon::now();
+        $subSubject = ExamSubSubjectStructure::insertGetId($subjectDetails);
+
+        $years ['exam_structure_id'] = $subSubject;
+        $years ['start_year'] = $request->startYear;
+        $years ['end_year'] = $request->endYear;
+        $years ['created_at'] = Carbon::now();
+        $yearsCreated = ExamYear::insertGetId($years);
+
+        $classes = $request->classes;
+        foreach ($classes as $class)
+        {
+            $inserData['exam_subject_id'] = $subSubject;
+            $inserData['class_id']=$class;
+            $query1 = CreateExamClassStructureRelation::insert($inserData);
+        }
+        return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','query1'));
     }
 }

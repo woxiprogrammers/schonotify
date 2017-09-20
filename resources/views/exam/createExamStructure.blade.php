@@ -40,7 +40,9 @@
                                         <label class="control-label">
                                             Class <span class="symbol required"></span>
                                         </label>
-                                        <div id="classesDropdown"></div>
+                                        <div id="classesDropdown">
+
+                                        </div>
                                   </div>
                              </div>
                         </div>
@@ -65,7 +67,46 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Start Year <span class="symbol required"></span>
+                                    </label>
+                                    <select class="form-control" id="startYear" name="startYear" style="-webkit-appearance: menulist;" required>
+                                        <option>Start Year</option>
+                                        <option>2017</option>
+                                        <option>2018</option>
+                                        <option>2019</option>
+                                        <option>2020</option>
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        End Year <span class="symbol required"></span>
+                                    </label>
+                                    <select class="form-control" id="endYear" name="endYear" style="-webkit-appearance: menulist;" required>
+                                        <option>End Year</option>
+                                        <option>2018</option>
+                                        <option>2019</option>
+                                        <option>2020</option>
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                        <option>2026</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     <section id="page-title">
                         <div class="row">
                             <div class="col-sm-7">
@@ -81,7 +122,7 @@
                                         <label class="control-label">
                                             Number of Term<span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="termDrpdn" name="Term_number" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="termDrpdn" name="Term_number" style="-webkit-appearance: menulist;" required>
                                             <option>select number of terms</option>
                                             <option>1</option>
                                             <option>2</option>
@@ -96,7 +137,7 @@
                                         <label class="control-label">
                                             Number of coloums: <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="columnDrpdn" name="batch" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="columnDrpdn" name="batch" style="-webkit-appearance: menulist;" required>
                                             <option>select number of coloumn</option>
                                             <option >1</option>
                                             <option >2</option>
@@ -178,19 +219,19 @@
                 if(j==0 || j==1){
                     termString += "<th><input type='text' style='width: 100%;' readonly></th>";
                 } else{
-                    termString += "<th><input type='text' style='width: 100%;' name='head[]' ></th>";
+                    termString += "<th><input type='text' style='width: 100%;' name='head[]' required></th>";
                 }
             }
             termString += "</tr>";
                 for (var i = 0; i < a; i++) {
                     var termNumber = i + 1;
-                    termString += "<tr><td rowspan='2' style='width: 15%'>Term " + termNumber + "</td><td style='width: 15%'>Marks</td>";
+                    termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term' name='terms_id[]' required>" + termNumber + "</td><td style='width: 15%'>Marks</td>";
                     for (var j = 0; j < b; j++) {
                         termString += "<td><input type='text' style='width: 100%;' name='marks[]' readonly></td>";
                     }
                     termString += "</tr><tr><td> Out of <span class='symbol required'></td>";
                     for (var j = 0; j < b; j++) {
-                        termString += "<td><input type='text' style='width: 100%;' name='out_of_marks_id[]'></td>";
+                        termString += "<td><input type='text' style='width: 100%;' name='out_of_marks_id[][term_id[termNumber]]' required></td>";
                     }
                     termString +="</tr>";
                 }
