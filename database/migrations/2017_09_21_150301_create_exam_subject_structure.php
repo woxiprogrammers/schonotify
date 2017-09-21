@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableExamSubjectStructure extends Migration
+class CreateExamSubjectStructure extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateTableExamSubjectStructure extends Migration
             $table->increments('id');
             $table->unsignedInteger('body_id');
             $table->foreign('body_id')->references('id')->on('bodies')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('subject_name',255);
+            $table->string('subject_name', 255);
             $table->timestamps();
         });
     }

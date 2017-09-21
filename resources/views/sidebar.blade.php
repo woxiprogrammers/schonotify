@@ -329,7 +329,7 @@
                 </a>
             </li>
             <li>
-                <a href="/fees/feelisting">
+                <a href="/exam/listing">
                     <div class="item-inner">
                         <span class="title"> View Marks </span>
                     </div>

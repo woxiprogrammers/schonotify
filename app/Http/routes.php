@@ -530,6 +530,7 @@
         //Exam
     Route::group(['prefix' => 'exam'], function () {
         Route::get('create',array('uses' => 'ExamController@createExamStructureView'));
+        Route::get('listing',array('uses' => 'ExamController@ExamStructureListing'));
         Route::get('create-subject',array('uses' => 'ExamController@createExamSubjectView'));
         Route::post('create-subject',array('uses' => 'ExamController@createExamSubject'));
         Route::post('structure-create',array('uses' => 'ExamController@createStructureTable'));

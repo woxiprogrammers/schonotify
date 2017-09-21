@@ -27,8 +27,8 @@
                                        <label class="control-label">
                                               Batch <span class="symbol required"></span>
                                        </label>
-                                       <select class="form-control" id="batchDrpdn" name="batch" style="-webkit-appearance: menulist;">
-                                           <option value="">Select Batch</option>
+                                       <select class="form-control" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                           <option>Select Batch</option>
                                            @foreach($batches as $batch)
                                                   <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
                                             @endforeach
@@ -214,8 +214,8 @@
         });
         function generate(a,b) {
             var termString = '<tr>';
-            var hg = parseInt(b)+2;
-            for (var j = 0; j < hg; j++) {
+            var terms = parseInt(b)+2;
+            for (var j = 0; j < terms; j++) {
                 if(j==0 || j==1){
                     termString += "<th><input type='text' style='width: 100%;' readonly></th>";
                 } else{
@@ -227,11 +227,11 @@
                     var termNumber = i + 1;
                     termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term' name='terms_id[]' required>" + termNumber + "</td><td style='width: 15%'>Marks</td>";
                     for (var j = 0; j < b; j++) {
-                        termString += "<td><input type='text' style='width: 100%;' name='marks[]' readonly></td>";
+                        termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly></td>";
                     }
                     termString += "</tr><tr><td> Out of <span class='symbol required'></td>";
                     for (var j = 0; j < b; j++) {
-                        termString += "<td><input type='text' style='width: 100%;' name='out_of_marks_id[][term_id[termNumber]]' required></td>";
+                        termString += "<td><input type='number' style='width: 100%;' name='out_of_marks_id[]' required></td>";
                     }
                     termString +="</tr>";
                 }

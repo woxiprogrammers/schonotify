@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableExamTeacherConfirmation extends Migration
+class CreateExamTeacherConfirmation extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class CreateTableExamTeacherConfirmation extends Migration
             $table->unsignedInteger('class_id');
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('exam_structure_id');
-            $table->foreign('exam_structure_id')->references('id')->on('exam_subject_structure')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('exam_structure_id')->references('id')->on('exam_sub_subject_structure')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('status');
             $table->text('remark');
             $table->timestamps();

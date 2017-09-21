@@ -5,6 +5,8 @@ use App\Classes;
 use App\ExamClassStructureRelation;
 use App\ExamSubjectStructure;
 use App\ExamSubSubjectStructure;
+use App\ExamTermDetails;
+use App\ExamTerms;
 use App\ExamYear;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -54,8 +56,6 @@ class ExamController extends Controller
         return view('/exam/examClasses')->with(compact('classes'));
     }
     public function createStructureTable(Request $request){
-//      dd($request->all());
-
         $subjectDetails ['sub_subject_name'] = $request->sub_subject;
         $subjectDetails ['subject_id'] = $request->select_subject;
         $subjectDetails ['created_at'] = Carbon::now();
@@ -68,12 +68,42 @@ class ExamController extends Controller
         $yearsCreated = ExamYear::insertGetId($years);
 
         $classes = $request->classes;
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
         foreach ($classes as $class)
         {
             $inserData['exam_subject_id'] = $subSubject;
-            $inserData['class_id']=$class;
-            $query1 = CreateExamClassStructureRelation::insert($inserData);
+            $inserData['class_id'] = $class;
+            $inserData['created_at'] = Carbon::now();
+            $query1 = ExamClassStructureRelation::insert($inserData);
         }
-        return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','query1'));
+
+        $terms = $request->terms_id;
+        foreach ($terms as $key => $term)
+        {
+            $termData['term_name']= $term;
+            $termData['exam_structure_id'] = $subSubject;
+            $termData['created_at'] = Carbon::now();
+            $CreatedTerm = ExamTerms::insertGetId($termData);
+
+            $orderKey = $request->out_of_marks_id[$key];
+            $headKey = $request->head[$key];
+            $termDetail['exam_type'] = $headKey;
+            $termDetail['out_of_marks'] = $orderKey;
+            $termDetail['term_id'] = $CreatedTerm;
+            $termDetail['exam_structure_id'] = $subSubject;
+            $termDetail['created_at']=Carbon::now();
+            $CreateTeamDetails = ExamTermDetails::insert($termDetail);
+        }
+
+        Session::flash('message-success','Subject created successfully .');
+        return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','batches','examSubjects','CreatedTerm','CreateTeamDetails'));
+
+    }
+    public function ExamStructureListing(Request $request){
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
+        return view('/exam/examListing')->with(compact('batches','examSubjects'));
+
     }
 }
