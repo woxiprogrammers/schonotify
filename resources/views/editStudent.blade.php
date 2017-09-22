@@ -1174,7 +1174,7 @@
         }
     }
     function userAclModule(){
-        var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message'];
+        var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message','view_announcement','view_achievement'];
         var route='/user-module-acl-edit/{!! $user->parent_id !!}';
         $.get(route,function(res){
             var str;

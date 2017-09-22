@@ -141,7 +141,7 @@
                         <select border="1" class="inst_no" id="inst_no"   name="installment_count">
                             <option  border="1">Select Total Number of Installments</option>
                             @foreach($installment_number as $installments)
-                            <option value="{{ $installments['installment_id'] }}"  >{{ $installments['installment_number'] }}</option>
+                            <option value="{{ $installments['installment_id'] }}">{{ $installments['installment_number'] }}</option>
                             @endforeach
                         </select>
                     </div>
