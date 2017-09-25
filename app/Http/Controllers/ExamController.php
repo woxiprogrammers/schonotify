@@ -102,8 +102,27 @@ class ExamController extends Controller
     }
     public function ExamStructureListing(Request $request){
         $batches = Batch::where('body_id',Auth::user()->body_id)->get();
-        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
         return view('/exam/examListing')->with(compact('batches','examSubjects'));
-
     }
+    public function getAllClasses($id){
+        $data=array();
+        $classData = Classes::where('batch_id',$id)->get();
+        $i=0;
+        foreach ($classData as $row) {
+            $data[$i]['class_id'] = $row['id'] ;
+            $data[$i]['class_name']= $row['class_name'] ;
+            $i++;
+        }
+        return $data;
+    }
+    public function getSubjects(){
+        $subjectData=array();
+        $subjectData = ExamSubSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
+                                                   ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.subject_id')
+                                                   ->where('')
+                                                   ->select('exam_subject_structure.subject_name')
+                                                   ->get();
+        return $subjectData;
+    }
+
 }

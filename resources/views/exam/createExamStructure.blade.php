@@ -62,7 +62,9 @@
                                 </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    Sub Subject
+                                    <label class="control-label">
+                                        Sub Subject <span class="symbol required"></span>
+                                    </label>
                                     <input type="text" id="sub_subject" name="sub_subject" class="form-control" placeholder="Sub Subject">
                                 </div>
                             </div>
