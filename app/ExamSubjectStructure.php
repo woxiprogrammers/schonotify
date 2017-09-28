@@ -10,8 +10,7 @@ class ExamSubjectStructure extends Model
 
     protected $fillable = array('body_id','subject_name');
 
-    public function ExamSubSubjectStructure()
-    {
-        return $this->belongsTo('ExamSubSubjectStructure');
+    public function ExamSubSubjectStructure(){
+        return $this->belongsTo('App\ExamSubSubjectStructure','subject_id');
     }
 }

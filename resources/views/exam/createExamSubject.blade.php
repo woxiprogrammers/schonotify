@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-sm-7">
                                 <h1 class="mainTitle">Create</h1>
-                                <span class="mainDescription">Class</span>
+                                <span class="mainDescription">Subject</span>
                             </div>
                         </div>
                     </section>

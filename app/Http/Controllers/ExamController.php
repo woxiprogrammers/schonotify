@@ -115,14 +115,23 @@ class ExamController extends Controller
         }
         return $data;
     }
-    public function getSubjects(){
-        $subjectData=array();
-        $subjectData = ExamSubSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
-                                                   ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.subject_id')
-                                                   ->where('')
-                                                   ->select('exam_subject_structure.subject_name')
-                                                   ->get();
-        return $subjectData;
+    public function getSubjects($id){
+        $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
+                                          ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+                                          ->where('exam_class_structure_relation.class_id','=',$id)
+                                          ->select('exam_subject_structure.id as id','exam_subject_structure.subject_name as name')
+                                          ->get();
+       return $subjects;
     }
-
+    public function getSubSubjects($id){
+        $subSubjects = ExamSubSubjectStructure::where('subject_id',$id)->select('id','sub_subject_name')->get();
+    return $subSubjects;
+    }
+    public function getDetails($id){
+        $termName = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get();
+        foreach ($termName as $value) {
+           $termDetails = ExamTermDetails::where('exam_structure_id', $value['id'])->select('exam_type', 'out_of_marks')->get();
+           dd($termDetails);
+       }
+    }
 }

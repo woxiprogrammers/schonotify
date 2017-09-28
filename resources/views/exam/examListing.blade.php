@@ -42,9 +42,9 @@
                                         </label>
                                             <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
                                             </select>
-                                        <div id="loadmoreajaxloaderClass" style="display:none;"></div>
                                     </div>
                                 </div>
+                                <div id="loadmoreajaxloaderClass" style="display:none;"></div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="control-label">
@@ -54,6 +54,18 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Sub Subject <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="sub-subject-select" name="sub-subject_select" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                </div>
+                                <table border="1" id="table1">
+
+                                </table>
                             </div>
                         </form>
                     </div>
@@ -86,7 +98,6 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            FormValidator.init();
             $('#batchDrpdn').change(function(){
                 var id=this.value;
                 var route='get-all-classes/'+id;
@@ -109,7 +120,7 @@
             });
             $('#class-select').change(function(){
                 var id=this.value;
-                var route='get-subjects/';
+                var route='get-subjects/'+id;
                 $('div#loadmoreajaxloaderClass').show();
                 $.get(route,function(res){
                     if (res.length == 0)
@@ -120,12 +131,39 @@
                         var str='<option value="">Please select subject</option>';
                         for(var i=0; i<res.length; i++)
                         {
-                            str+='<option value="'+res[i]['subject_id']+'">'+res[i]['subject_name']+'</option>';
+                            str+='<option value="'+res[i]['id']+'">'+res[i]['name']+'</option>';
                         }
                         $('#subject-select').html(str);
                         $('div#loadmoreajaxloaderClass').hide();
                     }
                 });
+            });
+            $('#subject-select').change(function(){
+                var id=this.value;
+                var route='get-sub-subjects/'+id;
+                $('div#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
+                    {
+                        $('#sub-subject-select').html("no record found");
+                        $('div#loadmoreajaxloaderClass').hide();
+                    } else {
+                        var str='<option value="">Please select sub subject</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['id']+'">'+res[i]['sub_subject_name']+'</option>';
+                        }
+                        $('#sub-subject-select').html(str);
+                        $('div#loadmoreajaxloaderClass').hide();
+                    }
+                });
+            });
+            $('#sub-subject-select').change(function(){
+                var id=this.value;
+                var route='get-structure/'+id;
+                $.get(route,function(){
+
+                })
             });
         });
 
