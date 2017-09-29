@@ -63,10 +63,11 @@
                                         </select>
                                     </div>
                                 </div>
-                                <table border="1" id="table1">
 
-                                </table>
                             </div>
+                            <table border="1" id="table1" width="100%">
+
+                            </table>
                         </form>
                     </div>
                     @include('rightSidebar')
@@ -160,10 +161,15 @@
             });
             $('#sub-subject-select').change(function(){
                 var id=this.value;
-                var route='get-structure/'+id;
-                $.get(route,function(){
-
-                })
+                $.ajax({
+                    method: "get",
+                    url: "/exam/get-structure/"+id,
+                    success: function(response)
+                    {
+                        $("#table1").html(response);
+                        $("#table1").parent().show();
+                    }
+                });
             });
         });
 

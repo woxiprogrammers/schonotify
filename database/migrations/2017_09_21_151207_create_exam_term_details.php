@@ -19,7 +19,7 @@ class CreateExamTermDetails extends Migration
             $table->unsignedInteger('term_id');
             $table->foreign('term_id')->references('id')->on('exam_terms')->onDelete('cascade')->onUpdate('cascade');
             $table->string('exam_type',255);
-            $table->unsignedInteger('out_of_marks');
+            $table->text('out_of_marks');
             $table->timestamps();
         });
     }

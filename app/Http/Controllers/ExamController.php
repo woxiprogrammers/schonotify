@@ -56,6 +56,7 @@ class ExamController extends Controller
         return view('/exam/examClasses')->with(compact('classes'));
     }
     public function createStructureTable(Request $request){
+        dd($request->all());
         $subjectDetails ['sub_subject_name'] = $request->sub_subject;
         $subjectDetails ['subject_id'] = $request->select_subject;
         $subjectDetails ['created_at'] = Carbon::now();
@@ -86,10 +87,11 @@ class ExamController extends Controller
             $termData['created_at'] = Carbon::now();
             $CreatedTerm = ExamTerms::insertGetId($termData);
 
-            $orderKey = $request->out_of_marks_id[$key];
-            $headKey = $request->head[$key];
+            $outOfMarks = implode(',',$request->out_of_marks_id);
+            $headKey = $request->head;
+
             $termDetail['exam_type'] = $headKey;
-            $termDetail['out_of_marks'] = $orderKey;
+            $termDetail['out_of_marks'] = $outOfMarks;
             $termDetail['term_id'] = $CreatedTerm;
             $termDetail['exam_structure_id'] = $subSubject;
             $termDetail['created_at']=Carbon::now();
@@ -129,9 +131,9 @@ class ExamController extends Controller
     }
     public function getDetails($id){
         $termName = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get();
-        foreach ($termName as $value) {
-           $termDetails = ExamTermDetails::where('exam_structure_id', $value['id'])->select('exam_type', 'out_of_marks')->get();
-           dd($termDetails);
-       }
+        $termDetails = ExamTermDetails::where('exam_structure_id',$id)->select('exam_type')->get();
+        $outOfMarks = ExamTermDetails::where('exam_structure_id',$id)->lists('out_of_marks');
+        dd($outOfMarks);
+        return view('/exam/examStructureList')->with(compact('termName','termDetails'));
     }
 }

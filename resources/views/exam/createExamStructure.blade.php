@@ -221,7 +221,7 @@
                 if(j==0 || j==1){
                     termString += "<th><input type='text' style='width: 100%;' readonly></th>";
                 } else{
-                    termString += "<th><input type='text' style='width: 100%;' name='head[]' required></th>";
+                    termString += "<th><input type='text' style='width: 100%;' name='exam_types["+(j-2)+"]["+'head'+"]' required></th>";
                 }
             }
             termString += "</tr>";
@@ -233,7 +233,7 @@
                     }
                     termString += "</tr><tr><td> Out of <span class='symbol required'></td>";
                     for (var j = 0; j < b; j++) {
-                        termString += "<td><input type='number' style='width: 100%;' name='out_of_marks_id[]' required></td>";
+                        termString += "<td><input type='number' style='width: 100%;' name='exam_types["+(j)+"]["+i+"]["+'out_of_marks'+"]' required></td>";
                     }
                     termString +="</tr>";
                 }
