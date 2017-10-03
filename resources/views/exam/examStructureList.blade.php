@@ -18,7 +18,6 @@
         </td>
     </tr>
 <tr>
-
     <td>out-Of-Marks</td>
     <td>
         @foreach($termDetails as $value1)
