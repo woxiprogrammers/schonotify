@@ -38,6 +38,7 @@
                                             <i class="fa fa-ok"></i> Your form validation is successful!
                                         </div>
                                     </div>
+
                                     @if ($dropDownData != null)
                                       @if (Auth::User()->role_id == 2)
                                             <div class="row">
@@ -45,7 +46,6 @@
                                                     <label for="form-field-select-2">
                                                         Select Batch
                                                     </label>
-
                                                     <select class="form-control" name="batch-select" id="batch-select"  style="-webkit-appearance: menulist;">
                                                         <option value="">Please select batch</option>
                                                         @foreach($dropDownData['batch'] as $row)

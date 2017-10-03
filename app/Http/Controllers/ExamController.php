@@ -85,25 +85,53 @@ class ExamController extends Controller
             $termData['exam_structure_id'] = $subSubject;
             $termData['created_at'] = Carbon::now();
             $CreatedTerm = ExamTerms::insertGetId($termData);
-
-            $orderKey = $request->out_of_marks_id[$key];
-            $headKey = $request->head[$key];
-            $termDetail['exam_type'] = $headKey;
-            $termDetail['out_of_marks'] = $orderKey;
-            $termDetail['term_id'] = $CreatedTerm;
-            $termDetail['exam_structure_id'] = $subSubject;
-            $termDetail['created_at']=Carbon::now();
-            $CreateTeamDetails = ExamTermDetails::insert($termDetail);
+            $examTermInfoData = array();
+            $examTermInfoData['term_id'] = $CreatedTerm;
+            $examTermInfoData['exam_structure_id'] = $subSubject;
+            foreach($request->exam_types as $examInfo){
+                $examTermInfoData['exam_type'] = $examInfo['head'];
+                $examTermInfoData['out_of_marks'] = $examInfo['out_of_marks'][$key];
+                ExamTermDetails::create($examTermInfoData);
+            }
         }
-
         Session::flash('message-success','Subject created successfully .');
         return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','batches','examSubjects','CreatedTerm','CreateTeamDetails'));
-
     }
     public function ExamStructureListing(Request $request){
         $batches = Batch::where('body_id',Auth::user()->body_id)->get();
-        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
         return view('/exam/examListing')->with(compact('batches','examSubjects'));
+    }
+    public function getAllClasses($id){
+        $data=array();
+        $classData = Classes::where('batch_id',$id)->get();
+        $i=0;
+        foreach ($classData as $row) {
+            $data[$i]['class_id'] = $row['id'] ;
+            $data[$i]['class_name']= $row['class_name'] ;
+            $i++;
+        }
+        return $data;
+    }
+    public function getSubjects($id){
+        $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
+                                          ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+                                          ->where('exam_class_structure_relation.class_id','=',$id)
+                                          ->select('exam_subject_structure.id as id','exam_subject_structure.subject_name as name')
+                                          ->get();
+       return $subjects;
+    }
+    public function getSubSubjects($id){
+        $subSubjects = ExamSubSubjectStructure::where('subject_id',$id)->select('id','sub_subject_name')->get();
+    return $subSubjects;
+    }
+    public function getDetails($id){
+        $termName = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get();
+        return $termName;
 
+    }
+    public function showStructure($id){
+        $termDetails1 = ExamTerms::where('id',$id)->select('term_name')->get();
+        $termDetails = ExamTermDetails::where('term_id' ,$id)->select('exam_type','out_of_marks')->get();
+        return view('/exam/examStructureList')->with(compact('termDetails','termDetails1'));
     }
 }

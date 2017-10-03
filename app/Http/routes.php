@@ -535,4 +535,9 @@
         Route::post('create-subject',array('uses' => 'ExamController@createExamSubject'));
         Route::post('structure-create',array('uses' => 'ExamController@createStructureTable'));
         Route::get('get-classes/{str}',array('uses' => 'ExamController@getClasses'));
+        Route::get('get-all-classes/{id}','ExamController@getAllClasses');
+        Route::get('get-subjects/{id}',array('uses' => 'ExamController@getSubjects'));
+        Route::get('get-sub-subjects/{id}',array('uses' => 'ExamController@getSubSubjects'));
+        Route::get('get-structure/{id}',array('uses' => 'ExamController@getDetails'));
+        Route::get('show-structure/{id}',array('uses' => 'ExamController@showStructure'));
     });

@@ -22,7 +22,7 @@
                     <div class="container-fluid container-fullw">
                         <form method="post" action="structure-create" role="form" id="examStructureForm">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
@@ -35,35 +35,47 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-sm-4" id="class-select-div" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Class <span class="symbol required"></span>
+                                            Select Class
                                         </label>
-                                        <div id="classesDropdown">
-
-                                        </div>
+                                            <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
+                                            </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
+                                <div id="loadmoreajaxloaderClass" style="display:none;"></div>
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Subject <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="batchDrpdn" name="select_subject" style="-webkit-appearance: menulist;">
-                                            <option value="">Select Subject</option>
-                                            @foreach($examSubjects as $examSubject)
-                                                <option value="{!! $examSubject['id'] !!}">{!! $examSubject['subject_name'] !!}</option>
-                                            @endforeach
+                                        <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Sub Subject <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="sub-subject-select" name="sub-subject_select" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Select Term <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="show-structure" name="show-structure" style="-webkit-appearance: menulist;">
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-primary btn-wide" type="submit">
-                                Create <i class="fa fa-arrow-circle-right"></i>
-                            </button>
+                            <table border="1" id="table1" width="100%">
+
+                            </table>
                         </form>
                     </div>
                     @include('rightSidebar')
@@ -95,19 +107,97 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            FormValidator.init();
-            $('#extra').hide();
-            $('#abc').hide();
             $('#batchDrpdn').change(function(){
-                var str = this.value;
-                $.ajax({
-                    method: "get",
-                    url: "/exam/get-classes/"+str,
-                    success: function(response)
+                var id=this.value;
+                var route='get-all-classes/'+id;
+                $('#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
                     {
-                        $("#classesDropdown").html(response);
+                        $('#class-select,#subject-select,#sub-subject-select,#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
+                    } else {
+                        var str='<option value="">Please select class</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                        }
+                        $('#class-select').html(str);
+                        $('#loadmoreajaxloaderClass').hide();
                     }
                 });
+            });
+            $('#class-select').change(function(){
+                var id=this.value;
+                var route='get-subjects/'+id;
+                $('#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
+                    {
+                        $('#subject-select,#sub-subject-select,#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
+                    } else {
+                        var str='<option value="">Please select subject</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['id']+'">'+res[i]['name']+'</option>';
+                        }
+                        $('#subject-select').html(str);
+                        $('#loadmoreajaxloaderClass').hide();
+                    }
+                });
+            });
+            $('#subject-select').change(function(){
+                var id=this.value;
+                var route='get-sub-subjects/'+id;
+                $('#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
+                    {
+                        $('#sub-subject-select,#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
+                    } else {
+                        var str='<option value="">Please select sub subject</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['id']+'">'+res[i]['sub_subject_name']+'</option>';
+                        }
+                        $('#sub-subject-select').html(str);
+                        $('#loadmoreajaxloaderClass').hide();
+                    }
+                });
+            });
+            $('#sub-subject-select').change(function(){
+                var id=this.value;
+                var route='get-structure/'+id;
+                $('#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
+                    {
+                        $('#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
+                    } else {
+                        var str='<option value="">Please select term name</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['id']+'">'+res[i]['term_name']+'</option>';
+                        }
+                        $('#show-structure').html(str);
+                        $('#loadmoreajaxloaderClass').hide();
+                    }
+                });
+            });
+            $('#show-structure').change(function(){
+               var id=this.value;
+                $.ajax({
+                  method :"get",
+                  url : "/exam/show-structure/"+id,
+                    success:function(response)
+                    {
+                        $("#table1").html(response);
+                        $("#table1").parent().show();
+                    }
+                })
             });
         });
 
