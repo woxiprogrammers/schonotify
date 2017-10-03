@@ -63,7 +63,15 @@
                                         </select>
                                     </div>
                                 </div>
-
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Select Term <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="show-structure" name="show-structure" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <table border="1" id="table1" width="100%">
 
@@ -102,12 +110,12 @@
             $('#batchDrpdn').change(function(){
                 var id=this.value;
                 var route='get-all-classes/'+id;
-                $('div#loadmoreajaxloaderClass').show();
+                $('#loadmoreajaxloaderClass').show();
                 $.get(route,function(res){
                     if (res.length == 0)
                     {
-                        $('#class-select').html("no record found");
-                        $('div#loadmoreajaxloaderClass').hide();
+                        $('#class-select,#subject-select,#sub-subject-select,#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
                     } else {
                         var str='<option value="">Please select class</option>';
                         for(var i=0; i<res.length; i++)
@@ -115,19 +123,19 @@
                             str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                         }
                         $('#class-select').html(str);
-                        $('div#loadmoreajaxloaderClass').hide();
+                        $('#loadmoreajaxloaderClass').hide();
                     }
                 });
             });
             $('#class-select').change(function(){
                 var id=this.value;
                 var route='get-subjects/'+id;
-                $('div#loadmoreajaxloaderClass').show();
+                $('#loadmoreajaxloaderClass').show();
                 $.get(route,function(res){
                     if (res.length == 0)
                     {
-                        $('#subject-select').html("no record found");
-                        $('div#loadmoreajaxloaderClass').hide();
+                        $('#subject-select,#sub-subject-select,#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
                     } else {
                         var str='<option value="">Please select subject</option>';
                         for(var i=0; i<res.length; i++)
@@ -135,19 +143,19 @@
                             str+='<option value="'+res[i]['id']+'">'+res[i]['name']+'</option>';
                         }
                         $('#subject-select').html(str);
-                        $('div#loadmoreajaxloaderClass').hide();
+                        $('#loadmoreajaxloaderClass').hide();
                     }
                 });
             });
             $('#subject-select').change(function(){
                 var id=this.value;
                 var route='get-sub-subjects/'+id;
-                $('div#loadmoreajaxloaderClass').show();
+                $('#loadmoreajaxloaderClass').show();
                 $.get(route,function(res){
                     if (res.length == 0)
                     {
-                        $('#sub-subject-select').html("no record found");
-                        $('div#loadmoreajaxloaderClass').hide();
+                        $('#sub-subject-select,#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
                     } else {
                         var str='<option value="">Please select sub subject</option>';
                         for(var i=0; i<res.length; i++)
@@ -155,21 +163,41 @@
                             str+='<option value="'+res[i]['id']+'">'+res[i]['sub_subject_name']+'</option>';
                         }
                         $('#sub-subject-select').html(str);
-                        $('div#loadmoreajaxloaderClass').hide();
+                        $('#loadmoreajaxloaderClass').hide();
                     }
                 });
             });
             $('#sub-subject-select').change(function(){
                 var id=this.value;
+                var route='get-structure/'+id;
+                $('#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
+                    {
+                        $('#show-structure').html("no record found");
+                        $('#loadmoreajaxloaderClass,#table1').hide();
+                    } else {
+                        var str='<option value="">Please select term name</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['id']+'">'+res[i]['term_name']+'</option>';
+                        }
+                        $('#show-structure').html(str);
+                        $('#loadmoreajaxloaderClass').hide();
+                    }
+                });
+            });
+            $('#show-structure').change(function(){
+               var id=this.value;
                 $.ajax({
-                    method: "get",
-                    url: "/exam/get-structure/"+id,
-                    success: function(response)
+                  method :"get",
+                  url : "/exam/show-structure/"+id,
+                    success:function(response)
                     {
                         $("#table1").html(response);
                         $("#table1").parent().show();
                     }
-                });
+                })
             });
         });
 

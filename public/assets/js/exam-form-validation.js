@@ -105,23 +105,31 @@ var FormValidator = function () {
 
             rules: {
                 batch: {
-                    required: true
+                    required : true
                 },
                 select_subject : {
-                    required: true
+                    required : true
                 },
                 Term_number : {
-                    required:true
+                    required : true
                 },
                 sub_subject : {
-                    required:true
+                    required : true
+                },
+                startYear :{
+                    required : true
+                },
+                endYear :{
+                    required : true
                 }
             },
             messages: {
                 batch: "batch name is required",
                 select_subject: "subject is required",
                 Term_number:"term number is required",
-                sub_subject:"Sub-Subject is required"
+                sub_subject:"Sub-Subject is required",
+                endYear :"please select end year",
+                startYear :"please select start year"
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler2.hide();

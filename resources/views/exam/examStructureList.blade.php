@@ -1,25 +1,29 @@
-@foreach($termName as $value)
-    <tr>
+
+@foreach($termDetails1 as $value)
+<tr>
     <th></th>
+    <th>Exam Type</th>
     <th>
-            @foreach($termDetails as $value1)
-                {{$value1['exam_type']}}
-                @endforeach
+    @foreach($termDetails as $value1)
+        <input type="text" value="{!! $value1['exam_type']!!}" readonly>
+    @endforeach
     </th>
 </tr>
     <tr>
         <td rowspan="2">
-            {{$value['term_name']}}
+            <input type="text" value="{!!$value['term_name']!!}" readonly>
         </td>
         <td>
-            marks
+
         </td>
     </tr>
 <tr>
+
+    <td>out-Of-Marks</td>
     <td>
-        @foreach(explode(',', $value1->out_of_marks) as $string)
-            {{ $string }}
-            @endforeach
-        </td>
+        @foreach($termDetails as $value1)
+         <input type="text" value="{!!  $value1['out_of_marks']!!}" readonly>
         @endforeach
-    </tr>
+    </td>
+</tr>
+@endforeach

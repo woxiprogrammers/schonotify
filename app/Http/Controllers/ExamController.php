@@ -56,7 +56,6 @@ class ExamController extends Controller
         return view('/exam/examClasses')->with(compact('classes'));
     }
     public function createStructureTable(Request $request){
-        dd($request->all());
         $subjectDetails ['sub_subject_name'] = $request->sub_subject;
         $subjectDetails ['subject_id'] = $request->select_subject;
         $subjectDetails ['created_at'] = Carbon::now();
@@ -86,21 +85,17 @@ class ExamController extends Controller
             $termData['exam_structure_id'] = $subSubject;
             $termData['created_at'] = Carbon::now();
             $CreatedTerm = ExamTerms::insertGetId($termData);
-
-            $outOfMarks = implode(',',$request->out_of_marks_id);
-            $headKey = $request->head;
-
-            $termDetail['exam_type'] = $headKey;
-            $termDetail['out_of_marks'] = $outOfMarks;
-            $termDetail['term_id'] = $CreatedTerm;
-            $termDetail['exam_structure_id'] = $subSubject;
-            $termDetail['created_at']=Carbon::now();
-            $CreateTeamDetails = ExamTermDetails::insert($termDetail);
+            $examTermInfoData = array();
+            $examTermInfoData['term_id'] = $CreatedTerm;
+            $examTermInfoData['exam_structure_id'] = $subSubject;
+            foreach($request->exam_types as $examInfo){
+                $examTermInfoData['exam_type'] = $examInfo['head'];
+                $examTermInfoData['out_of_marks'] = $examInfo['out_of_marks'][$key];
+                ExamTermDetails::create($examTermInfoData);
+            }
         }
-
         Session::flash('message-success','Subject created successfully .');
         return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','batches','examSubjects','CreatedTerm','CreateTeamDetails'));
-
     }
     public function ExamStructureListing(Request $request){
         $batches = Batch::where('body_id',Auth::user()->body_id)->get();
@@ -131,9 +126,12 @@ class ExamController extends Controller
     }
     public function getDetails($id){
         $termName = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get();
-        $termDetails = ExamTermDetails::where('exam_structure_id',$id)->select('exam_type')->get();
-        $outOfMarks = ExamTermDetails::where('exam_structure_id',$id)->lists('out_of_marks');
-        dd($outOfMarks);
-        return view('/exam/examStructureList')->with(compact('termName','termDetails'));
+        return $termName;
+
+    }
+    public function showStructure($id){
+        $termDetails1 = ExamTerms::where('id',$id)->select('term_name')->get();
+        $termDetails = ExamTermDetails::where('term_id' ,$id)->select('exam_type','out_of_marks')->get();
+        return view('/exam/examStructureList')->with(compact('termDetails','termDetails1'));
     }
 }

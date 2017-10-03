@@ -75,17 +75,17 @@
                                     <label class="control-label">
                                         Start Year <span class="symbol required"></span>
                                     </label>
-                                    <select class="form-control" id="startYear" name="startYear" style="-webkit-appearance: menulist;" required>
-                                        <option>Start Year</option>
-                                        <option>2017</option>
-                                        <option>2018</option>
-                                        <option>2019</option>
-                                        <option>2020</option>
-                                        <option>2021</option>
-                                        <option>2022</option>
-                                        <option>2023</option>
-                                        <option>2024</option>
-                                        <option>2025</option>
+                                    <select class="form-control" id="startYear" name="startYear" style="-webkit-appearance: menulist;" required="required">
+                                        <option value="" selected="">Start Year</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
                                     </select>
                                 </div>
                             </div>
@@ -94,17 +94,17 @@
                                     <label class="control-label">
                                         End Year <span class="symbol required"></span>
                                     </label>
-                                    <select class="form-control" id="endYear" name="endYear" style="-webkit-appearance: menulist;" required>
-                                        <option>End Year</option>
-                                        <option>2018</option>
-                                        <option>2019</option>
-                                        <option>2020</option>
-                                        <option>2021</option>
-                                        <option>2022</option>
-                                        <option>2023</option>
-                                        <option>2024</option>
-                                        <option>2025</option>
-                                        <option>2026</option>
+                                    <select class="form-control" id="endYear" name="endYear" style="-webkit-appearance: menulist;" required="required">
+                                        <option value="" selected="">End Year</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
                                     </select>
                                 </div>
                             </div>
@@ -125,12 +125,12 @@
                                             Number of Term<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="termDrpdn" name="Term_number" style="-webkit-appearance: menulist;" required>
-                                            <option>select number of terms</option>
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                            <option value="" selected="">select number of terms</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
                                         </select>
                                     </div>
                                 </div>
@@ -139,18 +139,18 @@
                                         <label class="control-label">
                                             Number of coloums: <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="columnDrpdn" name="batch" style="-webkit-appearance: menulist;" required>
-                                            <option>select number of coloumn</option>
-                                            <option >1</option>
-                                            <option >2</option>
-                                            <option >3</option>
-                                            <option >4</option>
-                                            <option >5</option>
-                                            <option >6</option>
-                                            <option >7</option>
-                                            <option >8</option>
-                                            <option >9</option>
-                                            <option >10</option>
+                                        <select class="form-control" id="columnDrpdn" name="coloumn_number" style="-webkit-appearance: menulist;" required>
+                                            <option value="" selected="">select number of coloumn</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
                                         </select>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@
 
                                 </table>
                             </div>
-                            <button class="btn btn-primary btn-wide" type="submit">
+                            <button class="btn btn-primary btn-wide" type="submit" value="submit" >
                                 Create <i class="fa fa-arrow-circle-right"></i>
                             </button>
                         </form>
@@ -233,12 +233,20 @@
                     }
                     termString += "</tr><tr><td> Out of <span class='symbol required'></td>";
                     for (var j = 0; j < b; j++) {
-                        termString += "<td><input type='number' style='width: 100%;' name='exam_types["+(j)+"]["+i+"]["+'out_of_marks'+"]' required></td>";
+                        termString += "<td><input type='number' style='width: 100%;' name='exam_types["+(j)+"]["+'out_of_marks'+"][]' required></td>";
                     }
                     termString +="</tr>";
                 }
             $("#table1").html(termString);
             $("#table1").parent().show();
         }
+        $(document).ready(function() {
+            $(window).keydown(function(event){
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
     </script>
 @stop

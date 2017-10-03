@@ -539,4 +539,5 @@
         Route::get('get-subjects/{id}',array('uses' => 'ExamController@getSubjects'));
         Route::get('get-sub-subjects/{id}',array('uses' => 'ExamController@getSubSubjects'));
         Route::get('get-structure/{id}',array('uses' => 'ExamController@getDetails'));
+        Route::get('show-structure/{id}',array('uses' => 'ExamController@showStructure'));
     });
