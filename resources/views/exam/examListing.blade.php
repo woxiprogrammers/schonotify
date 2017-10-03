@@ -189,6 +189,7 @@
             });
             $('#show-structure').change(function(){
                var id=this.value;
+               $("#table1").show();
                 $.ajax({
                   method :"get",
                   url : "/exam/show-structure/"+id,
@@ -200,6 +201,5 @@
                 })
             });
         });
-
     </script>
 @stop
