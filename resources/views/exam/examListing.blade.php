@@ -143,7 +143,7 @@
                             str+='<option value="'+res[i]['id']+'">'+res[i]['name']+'</option>';
                         }
                         $('#subject-select').html(str);
-                        $('#loadmoreajaxloaderClass').hide();
+                        $('#loadmoreajaxloaderClass,#table1').hide();
                     }
                 });
             });
@@ -163,7 +163,7 @@
                             str+='<option value="'+res[i]['id']+'">'+res[i]['sub_subject_name']+'</option>';
                         }
                         $('#sub-subject-select').html(str);
-                        $('#loadmoreajaxloaderClass').hide();
+                        $('#loadmoreajaxloaderClass,#table1').hide();
                     }
                 });
             });

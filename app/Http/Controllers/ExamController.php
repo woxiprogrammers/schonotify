@@ -134,4 +134,14 @@ class ExamController extends Controller
         $termDetails = ExamTermDetails::where('term_id' ,$id)->select('exam_type','out_of_marks')->get();
         return view('/exam/examStructureList')->with(compact('termDetails','termDetails1'));
     }
+
+    public function ExamStructureEdit(Request $request){
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
+        $classes = ExamClassStructureRelation::select('class_id')->get();
+
+        return view('/exam/examEdit')->with(compact('batches','examSubjects','classes'));
+    }
+    public function editStructure(Request $request){
+    }
 }
