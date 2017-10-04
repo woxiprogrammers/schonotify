@@ -133,7 +133,7 @@
             <div class="modal-body row">
                 <div class="col-md-8">
                     <span id="confirm-statement"> <h4>  </h4> </span>
-                    <form id="paymentForm" method="post" action="{{env('EASY_PAY_PAYMENT_URL')}}">
+                    <form id="paymentForm" method="post">
                         <input name="i" type="hidden">
                         <div class="form-group row">
                             <div class="col-md-4">
@@ -152,6 +152,7 @@
 </div>
 <script>
     function submitForm(id){
+
         var formData = $("#billGeneratorForm_"+id).serializeArray();
         $.ajax({
             url: '/payment/make-payment',
@@ -159,6 +160,7 @@
             type: 'POST',
             async: true,
             success: function(data,testStatus,xhr){
+                $("#paymentForm").attr('action',data.payment_url);
                 $("#paymentForm input").val(data.i);
                 $("#confirm-statement h4").html("Payable Amount:"+data.amount+"<br>Do you want to continue payment?");
                 $("#confirm-payment").modal('show');
