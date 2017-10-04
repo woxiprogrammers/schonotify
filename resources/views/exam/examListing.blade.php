@@ -45,37 +45,10 @@
                                     </div>
                                 </div>
                                 <div id="loadmoreajaxloaderClass" style="display:none;"></div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Subject <span class="symbol required"></span>
-                                        </label>
-                                        <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Sub Subject <span class="symbol required"></span>
-                                        </label>
-                                        <select class="form-control" id="sub-subject-select" name="sub-subject_select" style="-webkit-appearance: menulist;">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Select Term <span class="symbol required"></span>
-                                        </label>
-                                        <select class="form-control" id="show-structure" name="show-structure" style="-webkit-appearance: menulist;">
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
-                            <table border="1" id="table1" width="100%">
+                                 <div id="structures">
 
-                            </table>
+                                 </div>
                         </form>
                     </div>
                     @include('rightSidebar')
@@ -84,29 +57,44 @@
         </div>
         @include('footer')
     </div>
-    <!-- start: MAIN JAVASCRIPTS -->
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/modernizr/modernizr.js"></script>
-    <script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+    <script src="/vendor/jquery-cookie/jquery.cookie.js"></script>4a
     <script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/vendor/switchery/switchery.min.js"></script>
-    <script src="/vendor/selectFx/classie.js"></script>
-    <script src="/vendor/selectFx/selectFx.js"></script>
-    <script src="/vendor/ckeditor/ckeditor.js"></script>
-    <script src="/vendor/ckeditor/adapters/jquery.js"></script>
     <!-- end: MAIN JAVASCRIPTS -->
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+    <script src="/vendor/bootstrap-fileinput/jasny-bootstrap.js"></script>
+    <script src="/vendor/ckeditor/ckeditor.js"></script>
+    <script src="/vendor/ckeditor/adapters/jquery.js"></script>
+    <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
-    <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
+    <script src="/vendor/maskedinput/jquery.maskedinput.min.js"></script>
+    <script src="/vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="/vendor/autosize/autosize.min.js"></script>
+    <script src="/vendor/selectFx/classie.js"></script>
+    <script src="/vendor/selectFx/selectFx.js"></script>
+    <script src="/vendor/select2/select2.min.js"></script>
+    <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+    <!-- start: JavaScript Event Handlers for this page -->
+    <script src="/assets/js/form-validation-edit.js"></script>
+    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/exam-form-validation.js"></script>
+    <script src="/assets/js/form-elements.js"></script>
     <script src="/assets/js/custom-project.js"></script>
+    <script src="/assets/js/table-data.js"></script>
+    <script src="/assets/js/form-validation.js"></script>
+
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            FormElements.init();
+            TableData.init();
+        });
             $('#batchDrpdn').change(function(){
                 var id=this.value;
                 var route='get-all-classes/'+id;
@@ -114,8 +102,8 @@
                 $.get(route,function(res){
                     if (res.length == 0)
                     {
-                        $('#class-select,#subject-select,#sub-subject-select,#show-structure').html("no record found");
-                        $('#loadmoreajaxloaderClass,#table1').hide();
+                        $('#class-select').html("no record found");
+                        $('#loadmoreajaxloaderClass').hide();
                     } else {
                         var str='<option value="">Please select class</option>';
                         for(var i=0; i<res.length; i++)
@@ -127,78 +115,14 @@
                     }
                 });
             });
-            $('#class-select').change(function(){
-                var id=this.value;
-                var route='get-subjects/'+id;
-                $('#loadmoreajaxloaderClass').show();
-                $.get(route,function(res){
-                    if (res.length == 0)
-                    {
-                        $('#subject-select,#sub-subject-select,#show-structure').html("no record found");
-                        $('#loadmoreajaxloaderClass,#table1').hide();
-                    } else {
-                        var str='<option value="">Please select subject</option>';
-                        for(var i=0; i<res.length; i++)
-                        {
-                            str+='<option value="'+res[i]['id']+'">'+res[i]['name']+'</option>';
-                        }
-                        $('#subject-select').html(str);
-                        $('#loadmoreajaxloaderClass,#table1').hide();
-                    }
-                });
-            });
-            $('#subject-select').change(function(){
-                var id=this.value;
-                var route='get-sub-subjects/'+id;
-                $('#loadmoreajaxloaderClass').show();
-                $.get(route,function(res){
-                    if (res.length == 0)
-                    {
-                        $('#sub-subject-select,#show-structure').html("no record found");
-                        $('#loadmoreajaxloaderClass,#table1').hide();
-                    } else {
-                        var str='<option value="">Please select sub subject</option>';
-                        for(var i=0; i<res.length; i++)
-                        {
-                            str+='<option value="'+res[i]['id']+'">'+res[i]['sub_subject_name']+'</option>';
-                        }
-                        $('#sub-subject-select').html(str);
-                        $('#loadmoreajaxloaderClass,#table1').hide();
-                    }
-                });
-            });
-            $('#sub-subject-select').change(function(){
-                var id=this.value;
-                var route='get-structure/'+id;
-                $('#loadmoreajaxloaderClass').show();
-                $.get(route,function(res){
-                    if (res.length == 0)
-                    {
-                        $('#show-structure').html("no record found");
-                        $('#loadmoreajaxloaderClass,#table1').hide();
-                    } else {
-                        var str='<option value="">Please select term name</option>';
-                        for(var i=0; i<res.length; i++)
-                        {
-                            str+='<option value="'+res[i]['id']+'">'+res[i]['term_name']+'</option>';
-                        }
-                        $('#show-structure').html(str);
-                        $('#loadmoreajaxloaderClass').hide();
-                    }
-                });
-            });
-            $('#show-structure').change(function(){
-               var id=this.value;
-               $("#table1").show();
-                $.ajax({
-                  method :"get",
-                  url : "/exam/show-structure/"+id,
-                    success:function(response)
-                    {
-                        $("#table1").html(response);
-                        $("#table1").parent().show();
-                    }
-                })
+        $('#class-select').change(function(){
+            var id=this.value;
+            var route='get-subject-structures/'+id;
+            $('#loadmoreajaxloaderClass').show();
+            $.get(route,function(res){
+
+                    $('#loadmoreajaxloaderClass').hide();
+                    $('#structures').html(res);
             });
         });
     </script>
