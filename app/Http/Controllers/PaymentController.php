@@ -22,7 +22,6 @@ class PaymentController extends Controller
         try{
             $data = $request->all();
             $slug = $request->slug;
-
             $aesJava = new AesForJava();
             $referenceId = NetBankingTransaction::first();
             if($referenceId == null){
@@ -39,6 +38,8 @@ class PaymentController extends Controller
                 $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
                 $corporateCode = env('EASY_PAY_CORPORATE_CODE');
                 $version = env('EASY_PAY_VERSION');
+                $paymentUrl = env('EASY_PAY_PAYMENT_URL');
+                $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gis";
                 $type = env('EASY_PAY_TYPE');
                 $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
             }else{
@@ -47,6 +48,8 @@ class PaymentController extends Controller
                 $corporateCode = env('GEMS_EASY_PAY_CORPORATE_CODE');
                 $version = env('GEMS_EASY_PAY_VERSION');
                 $type = env('GEMS_EASY_PAY_TYPE');
+                $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gems";
+                $paymentUrl = env('GEMS_EASY_PAY_PAYMENT_URL');
                 $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['installment_id'].'|'.$data['email']."|".$data['contact']."|1.0";//.$data['amount'];
             }
             $paramArr = array(
@@ -57,7 +60,7 @@ class PaymentController extends Controller
                 "VER=".$version,
                 "TYP=".$type,
                 "CNY=INR",
-                "RTU=http://".env('DOMAIN_NAME')."/payment/payment-return",
+                "RTU=".$rtu,
                 "PPI=".$ppiParameters,
                 "RE1=MN",
                 "RE2=custom1",
@@ -74,7 +77,8 @@ class PaymentController extends Controller
             $i = $aesJava->encrypt(implode("&", $paramArr),$encryption_key , 128);
             $data = [
                 'i' => $i,
-                'amount' => $request->amount
+                'amount' => $request->amount,
+                'payment_url' => $paymentUrl
             ];
             return response()->json($data);
         }catch(\Exception $e){
@@ -87,9 +91,13 @@ class PaymentController extends Controller
         }
     }
 
-    public function billReturnUrl(Request $request){
+    public function billReturnUrl(Request $request , $slug){
         try{
-            $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
+            if($slug == 'gis'){
+                $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
+            }elseif($slug == 'gems'){
+                $encryption_key = env('GEMS_EASY_PAY_ENCRYPTION_KEY');
+            }
             $aesJava = new AesForJava();
             $responseDataString = $aesJava->decrypt($request->i,$encryption_key, 128);
             $responseData = explode('&',$responseDataString);
