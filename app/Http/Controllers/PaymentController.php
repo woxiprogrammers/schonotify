@@ -7,7 +7,6 @@
 namespace App\Http\Controllers;
 use App\NetBankingTransaction;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AesForJava;
 use Illuminate\Support\Facades\Log;
@@ -41,6 +40,8 @@ class PaymentController extends Controller
                 $paymentUrl = env('EASY_PAY_PAYMENT_URL');
                 $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gis";
                 $type = env('EASY_PAY_TYPE');
+                $paymentUrl = env('EASY_PAY_PAYMENT_URL');
+                $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gis";
                 $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['email']."|".$data['contact']."|".$data['installment_id']."|".$data['amount'];
             }else{
                 $checksumkey = env('GEMS_EASY_PAY_CHKSUM_KEY');
