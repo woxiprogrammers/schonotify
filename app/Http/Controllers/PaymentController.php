@@ -50,13 +50,13 @@ class PaymentController extends Controller
                 $type = env('GEMS_EASY_PAY_TYPE');
                 $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gems";
                 $paymentUrl = env('GEMS_EASY_PAY_PAYMENT_URL');
-                $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['installment_id'].'|'.$data['email']."|".$data['contact']."|1.0";//.$data['amount'];
+                $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['installment_id'].'|'.$data['email']."|".$data['contact']."|".$data['amount'];
             }
             $paramArr = array(
                 "CID=".$corporateCode,
                 "RID=".$referenceId,
                 "CRN=".$crn,
-                "AMT=1.0",//.$request->amount,
+                "AMT=".$request->amount,
                 "VER=".$version,
                 "TYP=".$type,
                 "CNY=INR",
@@ -93,10 +93,15 @@ class PaymentController extends Controller
 
     public function billReturnUrl(Request $request , $slug){
         try{
+            $data = array();
             if($slug == 'gis'){
                 $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
+                $data['school_name'] = 'Ganesh International School , Chikhali';
+                $data['payment_url'] = '/fees/billing-page';
             }elseif($slug == 'gems'){
                 $encryption_key = env('GEMS_EASY_PAY_ENCRYPTION_KEY');
+                $data['school_name'] = 'Ganesh English Medium School , Dapodi';
+                $data['payment_url'] = '/fees/billing-page/gems';
             }
             $aesJava = new AesForJava();
             $responseDataString = $aesJava->decrypt($request->i,$encryption_key, 128);
@@ -111,7 +116,6 @@ class PaymentController extends Controller
                 }
             }
             $newResponse['chksm'] = $chksm;
-            $data = array();
             if($newResponse['RMK'] == 'success' || $newResponse == 'SUCCESS'){
                 $data['message_title'] = 'Payment Successful.';
                 $data['color'] = 'green';
