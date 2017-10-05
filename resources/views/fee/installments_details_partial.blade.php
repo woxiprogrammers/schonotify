@@ -152,6 +152,7 @@
 </div>
 <script>
     function submitForm(id){
+
         var formData = $("#billGeneratorForm_"+id).serializeArray();
         $.ajax({
             url: '/payment/make-payment',

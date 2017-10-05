@@ -7,7 +7,6 @@
 namespace App\Http\Controllers;
 use App\NetBankingTransaction;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AesForJava;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +21,6 @@ class PaymentController extends Controller
         try{
             $data = $request->all();
             $slug = $request->slug;
-
             $aesJava = new AesForJava();
             $referenceId = NetBankingTransaction::first();
             if($referenceId == null){
@@ -39,6 +37,8 @@ class PaymentController extends Controller
                 $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
                 $corporateCode = env('EASY_PAY_CORPORATE_CODE');
                 $version = env('EASY_PAY_VERSION');
+                $paymentUrl = env('EASY_PAY_PAYMENT_URL');
+                $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gis";
                 $type = env('EASY_PAY_TYPE');
                 $paymentUrl = env('EASY_PAY_PAYMENT_URL');
                 $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gis";
@@ -92,12 +92,17 @@ class PaymentController extends Controller
         }
     }
 
-    public function billReturnUrl(Request $request, $slug){
+    public function billReturnUrl(Request $request , $slug){
         try{
+            $data = array();
             if($slug == 'gis'){
                 $encryption_key = env('EASY_PAY_ENCRYPTION_KEY');
+                $data['school_name'] = 'Ganesh International School , Chikhali';
+                $data['payment_url'] = '/fees/billing-page';
             }elseif($slug == 'gems'){
                 $encryption_key = env('GEMS_EASY_PAY_ENCRYPTION_KEY');
+                $data['school_name'] = 'Ganesh English Medium School , Dapodi';
+                $data['payment_url'] = '/fees/billing-page/gems';
             }
             $aesJava = new AesForJava();
             $responseDataString = $aesJava->decrypt($request->i,$encryption_key, 128);
@@ -112,7 +117,7 @@ class PaymentController extends Controller
                 }
             }
             $newResponse['chksm'] = $chksm;
-            $data = array();
+
             if($newResponse['RMK'] == 'success' || $newResponse == 'SUCCESS'){
                 $data['message_title'] = 'Payment Successful.';
                 $data['color'] = 'green';
