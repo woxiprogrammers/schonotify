@@ -335,13 +335,6 @@
                     </div>
                 </a>
             </li>
-            <li>
-                <a href="/exam/edit">
-                    <div class="item-inner">
-                        <span class="title"> Edit Structure </span>
-                    </div>
-                </a>
-            </li>
         </ul>
     </li>
 </ul>

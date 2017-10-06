@@ -531,7 +531,7 @@
     Route::group(['prefix' => 'exam'], function () {
         Route::get('create',array('uses' => 'ExamController@createExamStructureView'));
         Route::get('listing',array('uses' => 'ExamController@ExamStructureListing'));
-        Route::get('edit',array('uses' => 'ExamController@ExamStructureEdit'));
+        Route::get('edit/{id}',array('uses' => 'ExamController@ExamStructureEdit'));
         Route::get('create-subject',array('uses' => 'ExamController@createExamSubjectView'));
         Route::post('create-subject',array('uses' => 'ExamController@createExamSubject'));
         Route::post('structure-edit',array('uses' => 'ExamController@editStructure'));
@@ -539,7 +539,4 @@
         Route::get('get-classes/{str}',array('uses' => 'ExamController@getClasses'));
         Route::get('get-all-classes/{id}','ExamController@getAllClasses');
         Route::get('get-subject-structures/{class_id}',array('uses' => 'ExamController@getExamStructures'));
-        Route::get('get-sub-subjects/{id}',array('uses' => 'ExamController@getSubSubjects'));
-        Route::get('get-structure/{id}',array('uses' => 'ExamController@getDetails'));
-        Route::get('show-structure/{id}',array('uses' => 'ExamController@showStructure'));
     });

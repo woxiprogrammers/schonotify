@@ -42,8 +42,10 @@
                                         </label>
                                         <div id="classesDropdown">
                                             @foreach($classes as $class)
-                                                <input type="checkbox" value={{$class['id']}}>
-                                                <label for={{$class['id']}}>{{$class['class_name']}}</label>
+                                                <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
+                                                    <input type="checkbox"  id="{{ $class['id'] }}_class_chk" name="class[]" value="{{ $class['id'] }}">
+                                                    <label for="{{ $class['id'] }}_class_chk">{{ $class['name'] }}</label>
+                                                </div>
                                             @endforeach
                                         </div>
                                     </div>
@@ -57,9 +59,12 @@
                                         </label>
                                         <select class="form-control" id="subjectDrpdn" name="edit_subject" style="-webkit-appearance: menulist;">
                                             <option value="">Select Subject</option>
-                                            @foreach($examSubjects as $examSubject)
-                                                <option value="{!! $examSubject['id'] !!}">{!! $examSubject['subject_name'] !!}</option>
+                                            @foreach($subjects as $subject)
+                                                <option id="{{$subject['id']}}" class="form-control " value="{{$subject['id']}}" >{{$subject['subject_name']}}</option>
                                             @endforeach
+                                           {{-- @foreach($examSubjects as $examSubject)
+                                                <option value="{!! $examSubject['id'] !!}">{!! $examSubject['subject_name'] !!}</option>
+                                            @endforeach--}}
                                         </select>
                                     </div>
                                 </div>
@@ -68,7 +73,7 @@
                                         <label class="control-label">
                                             Sub Subject <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" id="sub_subject"  name="edit_sub_subject" class="form-control" placeholder="Sub Subject">
+                                        <input type="text" id="sub_subject" name="edit_sub_subject" class="form-control" placeholder="Sub Subject">
                                     </div>
                                 </div>
                             </div>
@@ -196,6 +201,7 @@
     <script src="/assets/js/custom-project.js"></script>
     <script>
         jQuery(document).ready(function() {
+
             Main.init();
             FormValidator.init();
             $('#extra').hide();

@@ -13,7 +13,7 @@
         <td>{!!  $structure['name'] !!}</td>
         <td>{!!  $structure['sub_subject_name'] !!}</td>
         <td>{!!  $structure['start_year'] !!}-{!! $structure['end_year'] !!}</td>
-        <td><a href="#" class="edit-row">Edit</a></td>
+        <td><a href="/exam/edit/{{$structure['id']}}" class="edit-row" id="edit_structure">Edit</a></td>
         </tbody>
     @endforeach
 </table>

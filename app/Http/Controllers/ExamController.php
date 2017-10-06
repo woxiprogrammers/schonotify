@@ -113,23 +113,36 @@ class ExamController extends Controller
         return $data;
     }
     public function getExamStructures(Request $request,$class_id){
-          $structure_lists = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
+        $structure_lists = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
                                                     ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
                                                     ->join('exam_year','exam_sub_subject_structure.id','=','exam_year.exam_structure_id')
                                                     ->where('exam_class_structure_relation.class_id','=',$class_id)
-                                                    ->select('exam_subject_structure.subject_name as name','exam_sub_subject_structure.sub_subject_name','exam_year.start_year','exam_year.end_year')
+                                                    ->select('exam_sub_subject_structure.id','exam_subject_structure.subject_name as name','exam_sub_subject_structure.sub_subject_name','exam_year.start_year','exam_year.end_year')
                                                     ->get()->toArray();
         return view('/exam/examStructureList')->with(compact('structure_lists'));
     }
 
-    public function ExamStructureEdit(Request $request){
-        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
-        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
-        $classes = ExamClassStructureRelation::select('class_id')->get();
+    public function ExamStructureEdit(Request $request,$id){
+        $user=Auth::user();
+        $batches = Batch::where('body_id',$user->body_id)->get();
+        $selectedClass = ExamClassStructureRelation::where('exam_structure_id',$id)->pluck('class_id');
+        dd($selectedClass);
+        $examSubjects = ExamSubjectStructure::where('body_id',$user->body_id)->get();
+        $classes = ExamClassStructureRelation::where('exam_subject_id',$id)->select('class_id')->get();
+        $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('sub_subject_name')->get();
+        $examyear = ExamYear::where('exam_structure_id',$id)->select('start_year','end_year')->get();
+        $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
+                                            ->where('exam_sub_subject_structure.id','=',$id)
+                                            ->select('exam_subject_structure.subject_name')
+                                            ->get();
 
-        return view('/exam/examEdit')->with(compact('batches','examSubjects','classes'));
+        $examTerm = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get();
+        $examType = ExamTermDetails::where('exam_structure_id',$id)->select('exam_type')->get();
+        $examOutOfMarks = ExamTermDetails::where('exam_structure_id',$id)->select('out_of_marks')->get();
+        return view('/exam/examEdit')->with(compact('batches','examSubjects','classes','examSubSubject','examyear','subjects','examTerm','examType','examOutOfMarks'));
+
     }
     public function editStructure(Request $request){
 
-    }
+     }
 }
