@@ -1,28 +1,24 @@
 
-@foreach($termDetails1 as $value)
-<tr>
-    <th></th>
-    <th>Exam Type</th>
-    <th>
-    @foreach($termDetails as $value1)
-        <input type="text" value="{!! $value1['exam_type']!!}" readonly>
-    @endforeach
-    </th>
-</tr>
+<table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+    <thead>
     <tr>
-        <td rowspan="2">
-            <input type="text" value="{!!$value['term_name']!!}" readonly>
-        </td>
-        <td>
-
-        </td>
+        <th width="10%"> Subject </th>
+        <th width="10%"> Sub Subject </th>
+        <th width="10%">Academic Year </th>
+        <th width="5%">Action</th>
     </tr>
-<tr>
-    <td>out-Of-Marks</td>
-    <td>
-        @foreach($termDetails as $value1)
-         <input type="text" value="{!!  $value1['out_of_marks']!!}" readonly>
-        @endforeach
-    </td>
-</tr>
-@endforeach
+    </thead>
+    @foreach($structure_lists  as $structure)
+        <tbody>
+        <td>{!!  $structure['name'] !!}</td>
+        <td>{!!  $structure['sub_subject_name'] !!}</td>
+        <td>{!!  $structure['start_year'] !!}-{!! $structure['end_year'] !!}</td>
+        <td><a href="{{--/exam/edit/{{$structure['id']}}--}}" class="edit-row" id="edit_structure">Edit</a></td>
+        </tbody>
+    @endforeach
+</table>
+<script>
+    jQuery(document).ready(function(){
+        TableData.init();
+    })
+</script>
