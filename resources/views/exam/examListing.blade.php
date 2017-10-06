@@ -60,7 +60,7 @@
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/modernizr/modernizr.js"></script>
-    <script src="/vendor/jquery-cookie/jquery.cookie.js"></script>4a
+    <script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
     <script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/vendor/switchery/switchery.min.js"></script>
     <!-- end: MAIN JAVASCRIPTS -->
