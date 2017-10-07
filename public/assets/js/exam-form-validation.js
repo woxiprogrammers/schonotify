@@ -195,9 +195,7 @@ var FormValidator = function () {
                 edit_subject : {
                     required : true
                 },
-                Term_number : {
-                    required : true
-                },
+
                 edit_sub_subject : {
                     required : true
                 },
@@ -211,7 +209,6 @@ var FormValidator = function () {
             messages: {
                 batch: "batch name is required",
                 edit_subject: "subject is required",
-                Term_number:"term number is required",
                 edit_sub_subject:"Sub-Subject is required",
                 end_Year :"please select end year",
                 start_Year :"please select start year"

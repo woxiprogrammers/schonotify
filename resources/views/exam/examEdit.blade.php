@@ -20,7 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="structure-edit" role="form" id="examStructureEditForm">
+                        <form method="post" action="" role="form" id="examStructureEditForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -28,9 +28,13 @@
                                             Batch <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="batchDrpdn" style="-webkit-appearance: menulist;">
-                                            <option>Select Batch</option>
-                                            @foreach($batches as $batch)
-                                                <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
+                                            <option></option>
+                                            @foreach($batches as $bat)
+                                                @if($bat['body_id'] == $batch)
+                                                    <option value="{!! $bat['id'] !!}" selected>{!! $bat['name'] !!}</option>
+                                                @else
+                                                    <option value="{!! $bat['id'] !!}">{!! $bat['name'] !!}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -40,14 +44,19 @@
                                         <label class="control-label">
                                             Class <span class="symbol required"></span>
                                         </label>
-                                        <div id="classesDropdown">
-                                            @foreach($classes as $class)
-                                                <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
-                                                    <input type="checkbox"  id="{{ $class['id'] }}_class_chk" name="class[]" value="{{ $class['id'] }}">
-                                                    <label for="{{ $class['id'] }}_class_chk">{{ $class['name'] }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                        @foreach($classes as $examclass)
+                                            @if(in_array($examclass['id'],$class))
+                                            <div class="checkbox clip-check check-primary">
+                                                <input type="checkbox" value="{{$examclass['id']}}" id="{{$examclass['id']}}" name="classes[]" checked="checked">
+                                                <label for={{$examclass['id']}} >{{$examclass['class_name']}} </label>
+                                            </div>
+                                            @else
+                                            <div class="checkbox clip-check check-primary">
+                                                <input type="checkbox" value="{{$examclass['id']}}" id="{{$examclass['id']}}" name="classes[]">
+                                                <label for={{$examclass['id']}} >{{$examclass['class_name']}} </label>
+                                            </div>
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -58,13 +67,13 @@
                                             Subject <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="subjectDrpdn" name="edit_subject" style="-webkit-appearance: menulist;">
-                                            <option value="">Select Subject</option>
-                                            @foreach($subjects as $subject)
-                                                <option id="{{$subject['id']}}" class="form-control " value="{{$subject['id']}}" >{{$subject['subject_name']}}</option>
+                                            @foreach($examSubjects as $examSubject)
+                                                @if($examSubject['id'] == $subjects['id'])
+                                                <option value="{!! $examSubject['id'] !!}" selected>{!! $examSubject['subject_name'] !!}</option>
+                                               @else
+                                                <option value="{{$examSubject['subject_name']}} {{$examSubject['id']}}">{!! $examSubject['subject_name'] !!}</option>
+                                                @endif
                                             @endforeach
-                                           {{-- @foreach($examSubjects as $examSubject)
-                                                <option value="{!! $examSubject['id'] !!}">{!! $examSubject['subject_name'] !!}</option>
-                                            @endforeach--}}
                                         </select>
                                     </div>
                                 </div>
@@ -73,7 +82,9 @@
                                         <label class="control-label">
                                             Sub Subject <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" id="sub_subject" name="edit_sub_subject" class="form-control" placeholder="Sub Subject">
+                                        @foreach($examSubSubject as $subSubject)
+                                            <input type="text" id="sub_subject" value= " {!! $subSubject['sub_subject_name'] !!}" name="edit_sub_subject" class="form-control" placeholder="Sub Subject" readonly>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -83,8 +94,11 @@
                                         <label class="control-label">
                                             Start Year <span class="symbol required"></span>
                                         </label>
+                                        @foreach($examStartYear as $Startyear)
+                                        <input type="hidden" name="Startyear" id="Startyear" value="{!! $Startyear['start_year'] !!}">
+                                        @endforeach
                                         <select class="form-control" id="startYear" name="start_Year" style="-webkit-appearance: menulist;" required="required">
-                                            <option value="" selected="">Start Year</option>
+                                            <option value=""></option>
                                             <option value="2017">2017</option>
                                             <option value="2018">2018</option>
                                             <option value="2019">2019</option>
@@ -102,8 +116,11 @@
                                         <label class="control-label">
                                             End Year <span class="symbol required"></span>
                                         </label>
+                                        @foreach($examEndYear as $Endyear)
+                                            <input type="hidden" name="Endyear" id="Endyear" value="{!! $Endyear['end_year'] !!}">
+                                        @endforeach
                                         <select class="form-control" id="endYear" name="end_Year" style="-webkit-appearance: menulist;" required="required">
-                                            <option value="" selected="">End Year</option>
+                                            <option value=""></option>
                                             <option value="2018">2018</option>
                                             <option value="2019">2019</option>
                                             <option value="2020">2020</option>
@@ -163,13 +180,34 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="overflow: scroll" hidden>
-                                <table border="1" id="table1">
+                            <div style="overflow: scroll">
+                                <table border=1 id="table1" width="100%">
+                                    <?php foreach($detail as $key => $value) { ?>
+                                    <tr>
+                                        <td>{{$key}}</td>
+                                        <td>
+                                        <table border=1 width="100%" cellspacing="10px" cellpadding="10px">
+                                            <tr>
+                                                <td style="padding: 10px;">Exam Type</td>
+                                            <?php foreach($value as $data) {  ?>
+                                                <td style="padding: 10px;">{{$data['exam_type']}}</td>
+                                            <?php }?>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px;">Out Of Marks</td>
+                                                <?php foreach($value as $data) {  ?>
+                                                <td style="padding: 10px;">{{$data['out_of_marks']}}</td>
+                                                <?php }?>
+                                            </tr>
+                                        </table>
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
 
                                 </table>
                             </div>
                             <button class="btn btn-primary btn-wide" type="submit" value="submit" >
-                                Create <i class="fa fa-arrow-circle-right"></i>
+                                Update <i class="fa fa-arrow-circle-right"></i>
                             </button>
                         </form>
                     </div>
@@ -204,19 +242,12 @@
 
             Main.init();
             FormValidator.init();
+            var Startyear = $('#Startyear').val();
+            var Endyear = $('#Endyear').val();
+            $("#startYear option[value='"+Startyear+"']").prop('selected',true);
+            $("#endYear option[value='"+Endyear+"']").prop('selected',true);
             $('#extra').hide();
             $('#abc').hide();
-            $('#batchDrpdn').change(function(){
-                var str = this.value;
-                $.ajax({
-                    method: "get",
-                    url: "/exam/get-classes/"+str,
-                    success: function(response)
-                    {
-                        $("#classesDropdown").html(response);
-                    }
-                });
-            });
             $('#columnDrpdn').change(function(){
                 var b=  this.value;
                 var a=$('#termDrpdn').val();
@@ -236,7 +267,7 @@
             termString += "</tr>";
             for (var i = 0; i < a; i++) {
                 var termNumber = i + 1;
-                termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term' name='edit_terms_id[]' required>" + termNumber + "</td><td style='width: 15%'>Marks</td>";
+                termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term' name='edit_terms_id[]' required>" + "</td><td style='width: 15%'>Marks</td>";
                 for (var j = 0; j < b; j++) {
                     termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly></td>";
                 }

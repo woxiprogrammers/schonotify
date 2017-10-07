@@ -125,24 +125,59 @@ class ExamController extends Controller
     public function ExamStructureEdit(Request $request,$id){
         $user=Auth::user();
         $batches = Batch::where('body_id',$user->body_id)->get();
-        $selectedClass = ExamClassStructureRelation::where('exam_structure_id',$id)->pluck('class_id');
-        dd($selectedClass);
+        $batchh = Batch::where('body_id',$user->body_id)->pluck('id');
+        $selectedClass = ExamClassStructureRelation::where('exam_subject_id',$id)->pluck('class_id');
+        $batch = Classes::where('id',$selectedClass)->pluck('body_id');
         $examSubjects = ExamSubjectStructure::where('body_id',$user->body_id)->get();
-        $classes = ExamClassStructureRelation::where('exam_subject_id',$id)->select('class_id')->get();
-        $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('sub_subject_name')->get();
-        $examyear = ExamYear::where('exam_structure_id',$id)->select('start_year','end_year')->get();
+        $classes = Classes::where('batch_id',$batchh)->select('batch_id','id','class_name')->get()->toArray();
+        $class = ExamClassStructureRelation::where('exam_subject_id',$id)->lists('class_id')->toArray();
+        $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('id','sub_subject_name')->get()->toArray();
+        $examStartYear = ExamYear::where('exam_structure_id',$id)->select('start_year')->get();
+        $examEndYear = ExamYear::where('exam_structure_id',$id)->select('end_year')->get();
         $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
                                             ->where('exam_sub_subject_structure.id','=',$id)
-                                            ->select('exam_subject_structure.subject_name')
-                                            ->get();
-
-        $examTerm = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get();
-        $examType = ExamTermDetails::where('exam_structure_id',$id)->select('exam_type')->get();
-        $examOutOfMarks = ExamTermDetails::where('exam_structure_id',$id)->select('out_of_marks')->get();
-        return view('/exam/examEdit')->with(compact('batches','examSubjects','classes','examSubSubject','examyear','subjects','examTerm','examType','examOutOfMarks'));
-
+                                            ->select('exam_subject_structure.id')
+                                            ->first()->toArray();
+        $examTerm = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get()->toArray();
+        $Term = ExamTerms::where('exam_structure_id',$id)->lists('id');
+        $detail = array();
+        foreach ($examTerm as $key => $value) {
+            $detail[$value['term_name']] = ExamTermDetails::where('term_id', $value['id'])->select('exam_type', 'out_of_marks')->get()->toArray();
+        }
+        return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch'));
     }
-    public function editStructure(Request $request){
-
+    public function editStructure(Request $request,$id){
+        dd($request->all());
+        $classData = $request->classes;
+        $deleteOldRecordsClass = ExamClassStructureRelation::where('exam_subject_id',$id)->whereNotIn('class_id',$classData)->delete();
+        foreach ($classData as $class){
+            $ClassData['class_id'] = $class;
+            $query1 = ExamClassStructureRelation::insert($ClassData);
+        }
+        $year['start_year'] = $request->start_Year;
+        $year['end_year'] = $request->end_Year;
+        $year['updated_at'] = Carbon::now();
+        $updateYear = ExamYear:: where('exam_structure_id',$id)->update($year);
+        $deleteOldRecordsTerm = ExamTerms::where('exam_structure_id',$id)->delete();
+        $deleteOldRecordsType = ExamTermDetails::where('exam_structure_id',$id)->delete();
+        $terms = $request->edit_terms_id;
+        foreach ($terms as $key => $term)
+        {
+            $termData['term_name']= $term;
+            $termData['exam_structure_id'] = $id;
+            $termData['created_at'] = Carbon::now();
+            $termData['updated_at'] = Carbon::now();
+            $CreatedTerm = ExamTerms::insertGetId($termData);
+            $examTermInfoData = array();
+            $examTermInfoData['term_id'] = $CreatedTerm;
+            $examTermInfoData['exam_structure_id'] = $id;
+            foreach($request->exam_types as $examInfo){
+                $examTermInfoData['exam_type'] = $examInfo['edit_head'];
+                $examTermInfoData['out_of_marks'] = $examInfo['edit_out_of_marks'][$key];
+                ExamTermDetails::create($examTermInfoData);
+            }
+        }
+        Session::flash('message-success','Structure updated successfully .');
+        return view('/exam/createExamStructure')->with(compact('Examclass','updateYear'));
      }
 }
