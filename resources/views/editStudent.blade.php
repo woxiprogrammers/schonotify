@@ -404,7 +404,7 @@
                                                 @foreach($documents as $document)
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        @if(in_array($document['id'],$doc))
+                                                    @if(in_array($document['id'],$doc))
                                                             <input type="checkbox" value="{{$document['id']}}" name="documents[]" checked>
                                                         @else
                                                             <input type="checkbox" value="{{$document['id']}}" name="documents[]">
