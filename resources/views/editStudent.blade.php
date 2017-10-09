@@ -984,7 +984,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-3 col-md-offset-4">
-                                                    <a class="btn btn-primary btn-wide" style="margin-left: 20%" href="/fees/billing-page">
+                                                    <a class="btn btn-primary btn-wide" style="margin-left: 20%" href="{{$paymentLink}}">
                                                         Make Payment
                                                     </a>
                                                 </div>

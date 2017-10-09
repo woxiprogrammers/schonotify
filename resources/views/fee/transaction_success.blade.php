@@ -15,7 +15,7 @@
                 <section id="page-title" class="padding-top-15 padding-bottom-15">
                     <div class="row">
                         <div class="col-sm-9 col-sm-offset-2">
-                            <h1 class="mainTitle">Ganesh International School , Chikhali</h1> <br><br>
+                            <h1 class="mainTitle">{{$data['school_name']}}</h1> <br><br>
                             <h2 class="mainTitle" style="margin-left:20%;color: {{$data['color']}};">{{$data['message_title']}}</h2>
                       </div>
                     </div>
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="col-md-offset-3" style="margin-top: 10%">
-                                <a class="btn btn-primary btn-wide"  href="/fees/billing-page">
+                                <a class="btn btn-primary btn-wide"  href="{{$data['payment_url']}}">
                                     Go to Fees Payment Page
                                 </a>
                             </div>
