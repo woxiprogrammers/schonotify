@@ -139,7 +139,6 @@ class ExamController extends Controller
                                             ->select('exam_subject_structure.id')
                                             ->first()->toArray();
         $examTerm = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get()->toArray();
-        $Term = ExamTerms::where('exam_structure_id',$id)->lists('id');
         $detail = array();
         foreach ($examTerm as $key => $value) {
             $detail[$value['term_name']] = ExamTermDetails::where('term_id', $value['id'])->select('exam_type', 'out_of_marks')->get()->toArray();
@@ -147,13 +146,19 @@ class ExamController extends Controller
         return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch'));
     }
     public function editStructure(Request $request,$id){
-        dd($request->all());
         $classData = $request->classes;
         $deleteOldRecordsClass = ExamClassStructureRelation::where('exam_subject_id',$id)->whereNotIn('class_id',$classData)->delete();
-        foreach ($classData as $class){
-            $ClassData['class_id'] = $class;
-            $query1 = ExamClassStructureRelation::insert($ClassData);
-        }
+           foreach ($classData as  $class){
+               $query= ExamClassStructureRelation::where('exam_subject_id',$id)->where('class_id',$class)->first();
+               if($query == null){
+                   $inserData['exam_subject_id'] = $id;
+                   $inserData['class_id'] = $class;
+                   $inserData['created_at'] = Carbon::now();
+                   $inserData['updated_at'] = Carbon::now();
+                   $query1 = ExamClassStructureRelation::insert($inserData);
+               }
+           }
+
         $year['start_year'] = $request->start_Year;
         $year['end_year'] = $request->end_Year;
         $year['updated_at'] = Carbon::now();
@@ -178,6 +183,6 @@ class ExamController extends Controller
             }
         }
         Session::flash('message-success','Structure updated successfully .');
-        return view('/exam/createExamStructure')->with(compact('Examclass','updateYear'));
-     }
+            return Redirect::back();
+    }
 }
