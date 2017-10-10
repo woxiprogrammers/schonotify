@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 use App\Classes;
+use App\Division;
 use App\ExamClassStructureRelation;
 use App\ExamSubjectStructure;
 use App\ExamSubSubjectStructure;
 use App\ExamTermDetails;
 use App\ExamTerms;
 use App\ExamYear;
+use App\User;
+use App\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use \Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -184,5 +188,40 @@ class ExamController extends Controller
         }
         Session::flash('message-success','Structure updated successfully .');
             return Redirect::back();
+    }
+    public function studentEntry(Request $request){
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
+
+        return view('exam/subjectMarksEntry')->with(compact('batches','examSubjects'));
+    }
+    public function getAllDivision(Request $request,$id)
+    {
+        $divisions= Division::where('class_id',$id)->select('id','division_name')->get();
+
+        return $divisions;
+    }
+    public function getSubject(Request $request,$id){
+        $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
+            ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+            ->where('exam_class_structure_relation.class_id','=',$id)
+            ->select('exam_subject_structure.id','exam_subject_structure.subject_name')
+            ->get()->toArray();
+        return $subjects;
+    }
+    public function subjectStructure(Request $request,$subject_id,$div_id){
+        $details = ExamSubSubjectStructure::where('subject_id',$subject_id)->select('id')->get()->toArray();
+        $term =ExamTerms::where('exam_structure_id',$details)->select('id','term_name')->get()->toArray();
+        $detail = array();
+        foreach ($term as $key => $value) {
+            $detail[$value['term_name']] = ExamTermDetails::where('term_id', $value['id'])->select('exam_type', 'out_of_marks')->get()->toArray();
+        }
+        $students = User::where('division_id',$div_id)->where('role_id','=',3)->select('id','first_name','last_name')->get()->toArray();
+        $student = array();
+        foreach ($students as $studnt)
+        {
+            $student[$studnt['first_name']] = $detail;
+        }
+        return view('exam/marksStructure')->with(compact('detail','student'));
     }
 }

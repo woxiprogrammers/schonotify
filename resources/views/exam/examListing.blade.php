@@ -44,7 +44,7 @@
                                             </select>
                                     </div>
                                 </div>
-                                <div id="loadmoreajaxloaderClass" style="display:none;"></div>
+                                <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                             </div>
                                  <div id="structures">
 
