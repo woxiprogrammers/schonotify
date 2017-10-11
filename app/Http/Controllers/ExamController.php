@@ -203,25 +203,29 @@ class ExamController extends Controller
     }
     public function getSubject(Request $request,$id){
         $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
-            ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
-            ->where('exam_class_structure_relation.class_id','=',$id)
-            ->select('exam_subject_structure.id','exam_subject_structure.subject_name')
-            ->get()->toArray();
+                                      ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+                                      ->where('exam_class_structure_relation.class_id','=',$id)
+                                      ->select('exam_subject_structure.id','exam_subject_structure.subject_name')
+                                      ->get()->toArray();
         return $subjects;
     }
-    public function subjectStructure(Request $request,$subject_id,$div_id){
-        $details = ExamSubSubjectStructure::where('subject_id',$subject_id)->select('id')->get()->toArray();
-        $term =ExamTerms::where('exam_structure_id',$details)->select('id','term_name')->get()->toArray();
-        $detail = array();
-        foreach ($term as $key => $value) {
-            $detail[$value['term_name']] = ExamTermDetails::where('term_id', $value['id'])->select('exam_type', 'out_of_marks')->get()->toArray();
-        }
-        $students = User::where('division_id',$div_id)->where('role_id','=',3)->select('id','first_name','last_name')->get()->toArray();
-        $student = array();
-        foreach ($students as $studnt)
-        {
-            $student[$studnt['first_name']] = $detail;
-        }
-        return view('exam/marksStructure')->with(compact('detail','student'));
+    public function getSubSubject(Request $request,$id){
+        $subSubjects = ExamSubSubjectStructure::where('subject_id',$id)->select('id','sub_subject_name')->get();
+
+        return $subSubjects;
+    }
+    public function getTerms(Request $request,$id){
+        $termData = ExamTerms::where('exam_structure_id',$id)->select('id','term_name')->get();
+        return $termData;
+    }
+    public function subjectStructure(Request $request,$term_id,$div_id){
+        $termDetails = ExamTermDetails::where('term_id',$term_id)->select('id','exam_type','out_of_marks')->get()->toArray();
+        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->select('first_name','last_name','roll_number')->get()->toArray();
+
+        return view('exam/marksStructure')->with(compact('termDetails','StudentsDetails'));
+    }
+
+    public function createSubjectStructureDetails(Request $request){
+        dd($request->all());
     }
 }
