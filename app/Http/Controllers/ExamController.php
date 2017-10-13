@@ -9,6 +9,8 @@ use App\ExamSubSubjectStructure;
 use App\ExamTermDetails;
 use App\ExamTerms;
 use App\ExamYear;
+use App\StudentExamDetails;
+use App\StudentExamMarks;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
@@ -219,13 +221,36 @@ class ExamController extends Controller
         return $termData;
     }
     public function subjectStructure(Request $request,$term_id,$div_id){
+        $termName = ExamTerms::where('id',$term_id)->pluck('term_name');
         $termDetails = ExamTermDetails::where('term_id',$term_id)->select('id','exam_type','out_of_marks')->get()->toArray();
-        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->select('first_name','last_name','roll_number')->get()->toArray();
+        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->select('id','first_name','last_name','roll_number')->take(2)->get()->toArray();
 
-        return view('exam/marksStructure')->with(compact('termDetails','StudentsDetails'));
+        return view('exam/marksStructure')->with(compact('termDetails','StudentsDetails','termName'));
     }
 
     public function createSubjectStructureDetails(Request $request){
-        dd($request->all());
+        $studentId = $request->details;
+        foreach ($studentId as $key => $student) {
+            $studentsDetails['student_id'] = $student['student_id'];
+            $studentsDetails['term_id'] = $request->term_select;
+            $studentsDetails['exam_structure_id'] = $request->sub_subject_select;
+            $studentsDetails['updated_at'] = Carbon::now();
+            $studentsDetails['created_at'] = Carbon::now();
+            $query = StudentExamDetails::insertGetId($studentsDetails);
+            foreach ($student['marks_details'] as $index => $mark) {
+                if(array_key_exists('marks_obtain',$mark)){
+                    $StudentsMarks['student_exam_details_id'] = $query;
+                    $StudentsMarks['term_id'] = $request->term_select;
+                    $StudentsMarks['exam_structure_id'] = $request->sub_subject_select;
+                    $StudentsMarks['exam_term_details_id'] = $mark['exam_type_id'];
+                    $StudentsMarks['updated_at'] = Carbon::now();
+                    $StudentsMarks['created_at'] = Carbon::now();
+                    $StudentsMarks['marks_obtained'] = $mark['marks_obtain'];
+                    $insertMarks = StudentExamMarks::insert($StudentsMarks);
+                }
+            }
+        }
+        Session::flash('message-success','Students Marks updated successfully .');
+        return Redirect::back();
     }
 }

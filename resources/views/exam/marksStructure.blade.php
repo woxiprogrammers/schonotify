@@ -1,27 +1,49 @@
-   <div class="row">
-       <table style="overflow: scroll" border="1" width="100%">
+   <div class="row" style="overflow: scroll">
+       <div style="margin-left: 50px "> <strong> TermName : {{ $termName}} </strong></div>
+       <table border="1" width="100%" cellpadding="10px" style="text-align: center">
             <tr>
-                <th>Students Name:</th>
-                <th>Students Roll Number:</th>
-                @for($i=0 ; $i<=count($termDetails) ; $i++) //$i=0
-                <th>{{$termDetails['exam_type']}} <input type="checkbox" class="checked_{{$i}}_{{$termDetails['id']}}"></th>
+                <th style="text-align: center">Students Roll Number:</th>
+                <th style="text-align: center">Students Name:</th>
+                @for($i=0 ; $i < count($termDetails) ; $i++)
+                <th style="text-align: center">{{$termDetails[$i]['exam_type']}} <input type="checkbox" class="checked_{{$i}}" id="checkbox"></th>
                 @endfor
             </tr>
            <tr>
-               <td></td>
-               <td></td>
+               <th style="text-align: center"></th>
+               <th style="text-align: center"></th>
                @foreach($termDetails as $terms)
-               <td>{{$terms['out_of_marks']}}</td>
+               <th style="text-align: center">{{$terms['out_of_marks']}}</th>
                 @endforeach
            </tr>
-           @foreach($StudentsDetails as $students)
-           <tr>
-               <td>{{$students['first_name']}} {{$students['last_name']}}</td>
-               <td>{{$students['roll_number']}}</td>
-                @for($i=0 ; $i<=count($termDetails) ; $i++)
-               <td><input type="text" name="marks[]_{{$students['roll_number']}}" class="checked_{{$i}}_{{$termDetails['id']}}"></td>
+           {{--@foreach($StudentsDetails as $students)--}}
+           @for($k = 0 ; $k < count($StudentsDetails) ; $k++)
+               <tr>
+               <input type="hidden" name="details[{{$k}}][student_id]" value="{{$StudentsDetails[$k]['id']}}">
+               <td>{{$StudentsDetails[$k]['roll_number']}}</td>
+               <td>{{$StudentsDetails[$k]['first_name']}} {{$StudentsDetails[$k]['last_name']}}</td>
+                @for($i=0 ; $i < count($termDetails) ; $i++)
+               <input type="hidden" name="details[{{$k}}][marks_details][{{$i}}][exam_type_id]" value="{{$termDetails[$i]['id']}}">
+               <td><input id="marks" placeholder="Enter Marks" type="text" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" {{--name='marks[{{$termDetails[$i]['id']}}][{{$students['id']}}]'--}} class="checked_{{$i}}" disabled required></td>
                @endfor
            </tr>
-           @endforeach
+           @endfor
+         {{--  @endforeach--}}
        </table>
    </div>
+   <script>
+       $("document").ready(function(){
+           $('input[type = "checkbox"]').change(function() {
+               var classes = $(this).attr("class");
+               console.log(classes);
+               if (($(this).prop('checked')==true)) {
+                   $('.'+classes).not('input[type="checkbox"]').each(function(){
+                       $(this).prop("disabled", false);
+                   })
+               }else {
+                        $('.'+classes).not('input[type="checkbox"]').each(function() {
+                        $(this).prop("disabled", true);
+                        });
+                    }
+             })
+           });
+   </script>

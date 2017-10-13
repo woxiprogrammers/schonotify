@@ -27,7 +27,7 @@
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
                                             <option>Select Batch</option>
                                             @foreach($batches as $batch)
                                                 <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
@@ -38,45 +38,45 @@
                                 <div class="col-md-4" id="class-select-div" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Class
+                                            Select Class <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-4" id="select-div" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Div
+                                            Select Div <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="div-select" name="div-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-4" id="select-subject" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Subject
+                                            Select Subject <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-4" id="select-sub-subject" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Sub Subject
+                                            Select Sub Subject <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="sub-subject-select" name="sub-subject-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="sub-subject-select" name="sub_subject_select" style="-webkit-appearance: menulist;">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-4" id="select-term" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Terms
+                                            Select Terms <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="term-select" name="term-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="term-select" name="term_select" style="-webkit-appearance: menulist;">
                                         </select>
                                     </div>
                                 </div>
@@ -119,6 +119,7 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            FormValidator.init();
             $('#batchDrpdn').change(function(){
                 var id=this.value;
                 var route='get-all-classes/'+id;
