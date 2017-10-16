@@ -15,19 +15,26 @@
                <th style="text-align: center">{{$terms['out_of_marks']}}</th>
                 @endforeach
            </tr>
-           {{--@foreach($StudentsDetails as $students)--}}
-           @for($k = 0 ; $k < count($StudentsDetails) ; $k++)
+               @for($k = 0 ; $k < count($StudentsDetails) ; $k++)
                <tr>
-               <input type="hidden" name="details[{{$k}}][student_id]" value="{{$StudentsDetails[$k]['id']}}">
-               <td>{{$StudentsDetails[$k]['roll_number']}}</td>
-               <td>{{$StudentsDetails[$k]['first_name']}} {{$StudentsDetails[$k]['last_name']}}</td>
-                @for($i=0 ; $i < count($termDetails) ; $i++)
-               <input type="hidden" name="details[{{$k}}][marks_details][{{$i}}][exam_type_id]" value="{{$termDetails[$i]['id']}}">
-               <td><input id="marks" placeholder="Enter Marks" type="text" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" {{--name='marks[{{$termDetails[$i]['id']}}][{{$students['id']}}]'--}} class="checked_{{$i}}" disabled required></td>
-               @endfor
-           </tr>
+                   <input type="hidden" name="details[{{$k}}][student_id]" value="{{$StudentsDetails[$k]['id']}}">
+                   <th style="text-align: center">{{$StudentsDetails[$k]['full_name']}}</th>
+                   <th style="text-align: center">{{$StudentsDetails[$k]['roll_no']}}</th>
+                   @for($i=0 ; $i < count($termDetails) ; $i++)
+                       @if(array_key_exists('term_marks',$StudentsDetails[$k]))
+                           @for($iterator = 0 ; $iterator < count($StudentsDetails[$k]['term_marks']) ; $iterator++)
+                               @if($StudentsDetails[$k]['term_marks'][$iterator]['term_id'] == $termDetails[$i]['id'])
+                                   <input type="hidden" name="details[{{$k}}][marks_details][{{$i}}][exam_type_id]" value="{{$termDetails[$i]['id']}}">
+                                   <td style="text-align: center"><input type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" value="{{$StudentsDetails[$k]['term_marks'][$iterator]['marks']}}" class="checked_{{$i}}" disabled ></td>
+                               @endif
+                           @endfor
+                       @else
+                           <input type="hidden" name="details[{{$k}}][marks_details][{{$i}}][exam_type_id]" value="{{$termDetails[$i]['id']}}">
+                           <td><input id="marks" placeholder="Enter Marks" type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" class="checked_{{$i}}" disabled required></td>
+                       @endif
+                   @endfor
+               </tr>
            @endfor
-         {{--  @endforeach--}}
        </table>
    </div>
    <script>
@@ -40,10 +47,10 @@
                        $(this).prop("disabled", false);
                    })
                }else {
-                        $('.'+classes).not('input[type="checkbox"]').each(function() {
-                        $(this).prop("disabled", true);
-                        });
-                    }
+                    $('.'+classes).not('input[type="checkbox"]').each(function() {
+                    $(this).prop("disabled", true);
+                    });
+                   }
              })
            });
    </script>

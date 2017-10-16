@@ -209,7 +209,7 @@
                     if (res.length == 0)
                     {
                         $('#term-select').html("no record found");
-                        $('#loadmoreajaxloaderClass').hide();
+                        $('#loadmoreajaxloaderClass,#structures').hide();
                     } else {
                         var str='<option value="">Please select subject</option>';
                         for(var i=0; i<res.length; i++)

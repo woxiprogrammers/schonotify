@@ -222,35 +222,64 @@ class ExamController extends Controller
     }
     public function subjectStructure(Request $request,$term_id,$div_id){
         $termName = ExamTerms::where('id',$term_id)->pluck('term_name');
-        $termDetails = ExamTermDetails::where('term_id',$term_id)->select('id','exam_type','out_of_marks')->get()->toArray();
-        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->select('id','first_name','last_name','roll_number')->take(2)->get()->toArray();
-
-        return view('exam/marksStructure')->with(compact('termDetails','StudentsDetails','termName'));
+        $termDetails = ExamTermDetails::where('term_id',$term_id)->select('id','exam_type','out_of_marks')->orderBy('term_id','asc')->get()->toArray();
+        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->select('id','first_name','last_name','roll_number')->get()->toArray();
+        $studentMarks=array();
+        $iterator = 0;
+        foreach($StudentsDetails as $key => $student){
+            $studentExamDetail = StudentExamDetails::where('student_id',$student['id'])->where('term_id',$term_id)->first();
+            $studentMarks[$iterator]['full_name'] = $student['first_name'].' '.$student['last_name'];
+            $studentMarks[$iterator]['id'] = $student['id'];
+            $studentMarks[$iterator]['roll_no'] = $student['roll_number'];
+            $jIterator = 0;
+            foreach($termDetails as $key1 => $termData){
+                $studentExamMarks = StudentExamMarks::where('student_exam_details_id',$studentExamDetail['id'])->where('exam_term_details_id',$termData['id'])->first();
+                $studentMarks[$iterator]['term_marks'][$jIterator]['term_id'] = $termData['id'];
+                $studentMarks[$iterator]['term_marks'][$jIterator]['marks'] = $studentExamMarks['marks_obtained'];
+                $jIterator++;
+            }
+            $iterator++;
+        }
+        $StudentsDetails = $studentMarks;
+        return view('exam/marksStructure')->with(compact('termDetails','StudentsDetails','termName','studentMarks'));
     }
-
     public function createSubjectStructureDetails(Request $request){
         $studentId = $request->details;
         foreach ($studentId as $key => $student) {
+            $studentExamDetail = StudentExamDetails::where('student_id',$student['student_id'])->where('term_id',$request->term_select)
+                ->where('exam_structure_id',$request->sub_subject_select)->first();
             $studentsDetails['student_id'] = $student['student_id'];
             $studentsDetails['term_id'] = $request->term_select;
             $studentsDetails['exam_structure_id'] = $request->sub_subject_select;
-            $studentsDetails['updated_at'] = Carbon::now();
-            $studentsDetails['created_at'] = Carbon::now();
-            $query = StudentExamDetails::insertGetId($studentsDetails);
+
+            if(count($studentExamDetail) > 0){
+                StudentExamDetails::where('id',$studentExamDetail['id'])->update($studentsDetails);
+                $query = $studentExamDetail['id'];
+            }else{
+                $studentsDetails['updated_at'] = Carbon::now();
+                $studentsDetails['created_at'] = Carbon::now();
+                $query = StudentExamDetails::insertGetId($studentsDetails);
+            }
             foreach ($student['marks_details'] as $index => $mark) {
                 if(array_key_exists('marks_obtain',$mark)){
+                    $studentExamMarks = StudentExamMarks::where('student_exam_details_id',$query)->where('term_id',$request->term_select)->where('exam_structure_id',$request->sub_subject_select)
+                        ->where('exam_term_details_id',$mark['exam_type_id'])->first();
                     $StudentsMarks['student_exam_details_id'] = $query;
                     $StudentsMarks['term_id'] = $request->term_select;
                     $StudentsMarks['exam_structure_id'] = $request->sub_subject_select;
                     $StudentsMarks['exam_term_details_id'] = $mark['exam_type_id'];
-                    $StudentsMarks['updated_at'] = Carbon::now();
-                    $StudentsMarks['created_at'] = Carbon::now();
                     $StudentsMarks['marks_obtained'] = $mark['marks_obtain'];
-                    $insertMarks = StudentExamMarks::insert($StudentsMarks);
+                    if(count($studentExamMarks) > 0){
+                        StudentExamMarks::where('id',$studentExamMarks['id'])->update($StudentsMarks);
+                    }else{
+                        $StudentsMarks['updated_at'] = Carbon::now();
+                        $StudentsMarks['created_at'] = Carbon::now();
+                        $insertMarks = StudentExamMarks::insert($StudentsMarks);
+                    }
                 }
             }
         }
-        Session::flash('message-success','Students Marks updated successfully .');
+        Session::flash('message-success','Students Marks updated successfully ..');
         return Redirect::back();
     }
 }
