@@ -18,8 +18,8 @@
                @for($k = 0 ; $k < count($StudentsDetails) ; $k++)
                <tr>
                    <input type="hidden" name="details[{{$k}}][student_id]" value="{{$StudentsDetails[$k]['id']}}">
-                   <th style="text-align: center">{{$StudentsDetails[$k]['full_name']}}</th>
                    <th style="text-align: center">{{$StudentsDetails[$k]['roll_no']}}</th>
+                   <th style="text-align: center">{{$StudentsDetails[$k]['full_name']}}</th>
                    @for($i=0 ; $i < count($termDetails) ; $i++)
                        @if(array_key_exists('term_marks',$StudentsDetails[$k]))
                            @for($iterator = 0 ; $iterator < count($StudentsDetails[$k]['term_marks']) ; $iterator++)
