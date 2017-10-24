@@ -538,5 +538,13 @@
         Route::post('structure-create',array('uses' => 'ExamController@createStructureTable'));
         Route::get('get-classes/{str}',array('uses' => 'ExamController@getClasses'));
         Route::get('get-all-classes/{id}','ExamController@getAllClasses');
+        Route::get('get-all-div/{id}','ExamController@getAllDivision');
+        Route::get('get-subjects/{id}','ExamController@getSubject');
+        Route::get('get-terms/{id}','ExamController@getTerms');
+        Route::get('get-sub-subjects/{id}','ExamController@getSubSubject');
+        Route::get('get-subject-marks/{term_id}/{div_id}',array('uses'=>'ExamController@subjectStructure'));
+        Route::get('get-students/{id}',array('uses'=>'ExamController@ExamStudent'));
         Route::get('get-subject-structures/{class_id}',array('uses' => 'ExamController@getExamStructures'));
+        Route::get('subjectMarksView',array('uses' => 'ExamController@studentEntry'));
+        Route::post('student-marks-entry',array('uses' => 'ExamController@createSubjectStructureDetails'));
     });
