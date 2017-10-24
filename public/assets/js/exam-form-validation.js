@@ -240,12 +240,100 @@ var FormValidator = function () {
             }
         });
     };
+
+    // validation for Marks Structure
+    var runValidator4 = function () {
+        var form3 = $('#subjectMarksEntryForm');
+        var errorHandler3 = $('.errorHandler', form3);
+        var successHandler3 = $('.successHandler', form3);
+
+        $.validator.addMethod("FullDate", function () {
+            //if all values are selected
+            if ($("#dd").val() != "" && $("#mm").val() != "" && $("#yyyy").val() != "") {
+                return true;
+            } else {
+                return false;
+            }
+        }, 'Please select a day, month, and year');
+        $('#subjectMarksEntryForm').validate({
+            errorElement: "span", // contain the error msg in a span tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.attr("name") == "dd" || element.attr("name") == "mm" || element.attr("name") == "yyyy") {
+                    error.insertAfter($(element).closest('.form-group').children('div'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+
+            rules: {
+                batch :{
+                    required :true
+                },
+                class_select: {
+                    required : true
+                },
+                div_select : {
+                    required : true
+                },
+
+                subject_select : {
+                    required : true
+                },
+                sub_subject_select :{
+                    required : true
+                },
+                term_select :{
+                    required : true
+                }
+            },
+            messages: {
+                batch:"batch name is required",
+                class_select: " Class Is Required",
+                div_select: "Division is required",
+                subject_select:"Subject is required",
+                sub_subject_select :"Sub-Subject is required",
+                term_select :"Term is required"
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler3.hide();
+                errorHandler3.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (examStructureEditForm) {
+                successHandler3.show();
+                errorHandler3.hide();
+                examStructureEditForm.submit();
+                // submit form
+            }
+        });
+    };
+
     return {
         init: function () {
             validateCheckRadio();
             runValidator1();
             runValidator2();
             runValidator3();
+            runValidator4();
         }
     };
 }();
