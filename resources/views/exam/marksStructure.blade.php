@@ -25,7 +25,7 @@
                            @for($iterator = 0 ; $iterator < count($StudentsDetails[$k]['term_marks']) ; $iterator++)
                                @if($StudentsDetails[$k]['term_marks'][$iterator]['term_id'] == $termDetails[$i]['id'])
                                    <input type="hidden" name="details[{{$k}}][marks_details][{{$i}}][exam_type_id]" value="{{$termDetails[$i]['id']}}">
-                                   <td style="text-align: center"><input type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" value="{{$StudentsDetails[$k]['term_marks'][$iterator]['marks']}}" class="checked_{{$i}}" disabled ></td>
+                                   <td style="text-align: center"><input type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" value="{{$StudentsDetails[$k]['term_marks'][$iterator]['marks']}}" class="checked_{{$i}}" disabled required></td>
                                @endif
                            @endfor
                        @else
