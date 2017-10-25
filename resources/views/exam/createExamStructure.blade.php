@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-sm-7">
                                 <h1 class="mainTitle">Create</h1>
-                                <span class="mainDescription">Class</span>
+                                <span class="mainDescription">Structure</span>
                             </div>
                         </div>
                     </section>
@@ -227,7 +227,7 @@
             termString += "</tr>";
                 for (var i = 0; i < a; i++) {
                     var termNumber = i + 1;
-                    termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term' name='terms_id[]' required>" + termNumber + "</td><td style='width: 15%'>Marks</td>";
+                    termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term"+termNumber+"' name='terms_id[]' required>" + "</td><td style='width: 15%'>Marks</td>";
                     for (var j = 0; j < b; j++) {
                         termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly></td>";
                     }

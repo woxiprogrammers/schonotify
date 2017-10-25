@@ -267,7 +267,7 @@
             termString += "</tr>";
             for (var i = 0; i < a; i++) {
                 var termNumber = i + 1;
-                termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term' name='edit_terms_id[]' required>" + "</td><td style='width: 15%'>Marks</td>";
+                termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term"+termNumber+"' name='edit_terms_id[]' required>" + "</td><td style='width: 15%'>Marks</td>";
                 for (var j = 0; j < b; j++) {
                     termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly></td>";
                 }
