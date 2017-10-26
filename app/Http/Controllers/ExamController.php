@@ -234,6 +234,7 @@ class ExamController extends Controller
         return view('exam/ExamMarksStructure')->with(compact('termDetails','StudentsDetails','termName','studentMarks'));
     }
     public function createSubjectStructureDetails(Request $request){
+        dd($request->all());
         $studentId = $request->details;
         foreach ($studentId as $key => $student) {
             $studentExamDetail = StudentExamDetails::where('student_id',$student['student_id'])->where('term_id',$request->term_select)

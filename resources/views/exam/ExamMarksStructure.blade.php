@@ -36,6 +36,20 @@
             </tr>
         @endfor
     </table>
+</div><br><br>
+<div class="row form-group" >
+      <div class="col-md-6">
+          <label style="color: darkred"  class="control-label pull-left"><p style="font-size: 140%">I have filled all the data and it is correct as per my knowledge.</p></label>
+      </div>
+      <div class="col-md-6">
+          <input type="checkbox" class="checkbox checkbox-success checkbox-inline"  name="teacher-checkbox" id="teacher-checkbox">
+      </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-12" style="text-align: center">
+        <label class="control-label pull-left"><p style="font-size: 130%">Remark:</p></label>
+        <input style="text-align: center" class="form-control pull-right" type="text"  name="teacher_remark" placeholder="Remark"  required>
+    </div>
 </div>
 <script>
     $("document").ready(function(){
