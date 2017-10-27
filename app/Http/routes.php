@@ -547,4 +547,6 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('get-subject-structures/{class_id}',array('uses' => 'ExamController@getExamStructures'));
     Route::get('subjectMarksView',array('uses' => 'ExamController@studentEntry'));
     Route::post('student-marks-entry',array('uses' => 'ExamController@createSubjectStructureDetails'));
+    Route::get('admin-publish-view',array('uses' => 'ExamController@adminPublishView'));
+    Route::get('admin-publish/{div_id}',array('uses' => 'ExamController@publish'));
 });

@@ -1,4 +1,5 @@
 <div class="row" style="overflow: scroll">
+    <input type="hidden" id="checkSign" name="checkSign">
     <div style="margin-left: 50px "> <strong> TermName : {{ $termName}} </strong></div>
     <table border="1" width="100%" cellpadding="10px" style="text-align: center">
         <tr>
@@ -36,13 +37,14 @@
             </tr>
         @endfor
     </table>
-</div><br><br>
+</div>
+<br><br>
 <div class="row form-group" >
       <div class="col-md-6">
-          <label style="color: darkred"  class="control-label pull-left"><p style="font-size: 140%">I have filled all the data and it is correct as per my knowledge.</p></label>
+          <label style="color: darkred"  class="control-label pull-left"><p style="font-size: 140%">I have filled all the Marks and it is correct as per my knowledge.</p></label>
       </div>
       <div class="col-md-6">
-          <input type="checkbox" class="checkbox checkbox-success checkbox-inline"  name="teacher-checkbox" id="teacher-checkbox">
+          <input type="checkbox" class="checkbox checkbox-success checkbox-inline" id="teacher-checkbox">
       </div>
 </div>
 <div class="row form-group">
@@ -51,20 +53,33 @@
         <input style="text-align: center" class="form-control pull-right" type="text"  name="teacher_remark" placeholder="Remark"  required>
     </div>
 </div>
-<script>
-    $("document").ready(function(){
-        $('input[type = "checkbox"]').change(function() {
-            var classes = $(this).attr("class");
-            console.log(classes);
-            if (($(this).prop('checked')==true)) {
-                $('.'+classes).not('input[type="checkbox"]').each(function(){
-                    $(this).prop("disabled", false);
-                })
-            }else {
-                $('.'+classes).not('input[type="checkbox"]').each(function() {
-                    $(this).prop("disabled", true);
+        <script>
+            $("document").ready(function(){
+                $('input[type = "checkbox"]').change(function() {
+                    var classes = $(this).attr("class");
+                    console.log(classes);
+                    if (($(this).prop('checked')==true)) {
+                        $('.'+classes).not('input[type="checkbox"]').each(function(){
+                            $(this).prop("disabled", false);
+                        })
+                    }else {
+                        $('.'+classes).not('input[type="checkbox"]').each(function() {
+                            $(this).prop("disabled", true);
+                        });
+                    }
                 });
-            }
-        })
-    });
-</script>
+                $('#checkSign').val(0);
+
+            });
+            $('#teacher-checkbox').change(function(){
+
+                if($('#teacher-checkbox').is(':checked')){
+                    $('#submitButton').attr('disabled',false);
+                    $('#checkSign').val(1);
+                }else{
+                    $('#submitButton').attr('disabled',true);
+                    $('#checkSign').val(0);
+                }
+            });
+        </script>
+

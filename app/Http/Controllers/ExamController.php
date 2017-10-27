@@ -5,6 +5,7 @@ use App\Division;
 use App\ExamClassStructureRelation;
 use App\ExamSubjectStructure;
 use App\ExamSubSubjectStructure;
+use App\ExamTeacherConfirmation;
 use App\ExamTermDetails;
 use App\ExamTerms;
 use App\ExamYear;
@@ -95,7 +96,7 @@ class ExamController extends Controller
                 ExamTermDetails::create($examTermInfoData);
             }
         }
-        Session::flash('message-success','Subject created successfully .');
+        Session::flash('message-success','Structure created successfully .');
         return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','batches','examSubjects','CreatedTerm','CreateTeamDetails'));
     }
     public function ExamStructureListing(Request $request){
@@ -199,6 +200,7 @@ class ExamController extends Controller
             ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
             ->where('exam_class_structure_relation.class_id','=',$id)
             ->select('exam_subject_structure.id','exam_subject_structure.subject_name')
+            ->groupBy('subject_name')
             ->get()->toArray();
         return $subjects;
     }
@@ -234,7 +236,7 @@ class ExamController extends Controller
         return view('exam/ExamMarksStructure')->with(compact('termDetails','StudentsDetails','termName','studentMarks'));
     }
     public function createSubjectStructureDetails(Request $request){
-        dd($request->all());
+        $user = Auth::user();
         $studentId = $request->details;
         foreach ($studentId as $key => $student) {
             $studentExamDetail = StudentExamDetails::where('student_id',$student['student_id'])->where('term_id',$request->term_select)
@@ -269,7 +271,32 @@ class ExamController extends Controller
                 }
             }
         }
+            $teacherConfirmation['class_id'] = $request->class_select;
+            $teacherConfirmation['div_id'] = $request->div_select;
+            $teacherConfirmation['exam_structure_id'] = $request->sub_subject_select;
+            $teacherConfirmation['check_sign'] = $request->checkSign;
+            $teacherConfirmation['remark'] = $request->teacher_remark;
+            $teacherConfirmation['teacher_id'] = $user['id'];
+            $teacherConfirmation['status'] = 0;
+            $teacherConfirmation['created_at'] = Carbon::now();
+            $teacherConfirmation['updated_at'] = Carbon::now();
+            ExamTeacherConfirmation::insert($teacherConfirmation);
         Session::flash('message-success','Students Marks updated successfully ..');
         return Redirect::back();
+    }
+    public function adminPublishView(Request $request){
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
+        return view('exam/adminPublish')->with(compact('batches','examSubjects'));
+
+    }
+    public function publish(Request $request,$div_id){
+        $classId = Classes::select('id')->lists('id');
+        $subSubject =  ExamSubSubjectStructure::join('exam_teacher_confirmation','exam_teacher_confirmation.exam_structure_id','=','exam_sub_subject_structure.id')
+                                                ->where('exam_teacher_confirmation.div_id','=',$div_id)
+                                                ->select('exam_sub_subject_structure.sub_subject_name')
+                                                ->get();
+        $teacherInfo = ExamTeacherConfirmation::where('div_id',$div_id)->select('check_sign','remark')->get()->toArray();
+        return view('exam/adminPublishPartial')->with(compact('subSubject','teacherInfo'));
     }
 }

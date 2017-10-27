@@ -342,6 +342,15 @@
                    </div>
                 </a>
             </li>
+            @if(Auth::User()->role_id == 1)
+            <li>
+                <a href="/exam/admin-publish-view">
+                    <div class="item-inner">
+                        <span class="title"> Admin Publish </span>
+                    </div>
+                </a>
+            </li>
+            @endif
         </ul>
     </li>
 </ul>
