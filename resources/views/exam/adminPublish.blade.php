@@ -151,10 +151,20 @@
                 });
             });
             $('#publishButton').click(function(){
+                $('.admin-check').each(function(){
+                    if(!($(this).is(':checked'))){
+                        $(this).closest('tr').remove()
+                    }
+                });
                 $('#adminPunlishForm').attr('action', "/exam/admin-publish-model");
                 $('#adminPunlishForm').submit();
             });
             $('#UnpublishButton').click(function(){
+                $('.admin-check').each(function(){
+                    if(!($(this).is(':checked'))){
+                        $(this).closest('tr').remove()
+                    }
+                });
                 $('#adminPunlishForm').attr('action', "/exam/admin-unPublish-model");
                 $('#adminPunlishForm').submit();
             })

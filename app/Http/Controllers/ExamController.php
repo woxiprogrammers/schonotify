@@ -318,16 +318,16 @@ class ExamController extends Controller
     public function publishStatus(Request $request){
         $user = Auth::user();
         $adminPublishTeacher = ExamTeacherConfirmation::where('class_id',$request->class_select)
-                                                        ->where('exam_structure_id',$request->sub_subject)
-                                                        ->where('remark',$request->remark)
+                                                        ->where('exam_structure_id',$request->sub_subject[0])
+                                                        ->where('remark',$request->remark[0])
                                                         ->where('div_id',$request->div_select)
                                                         ->where('check_sign',$request->checkedSign)
                                                         ->first();
         $teacherConfirmation['teacher_id'] = $user['id'];
         $adminPublish['class_id'] = $request->class_select;
-        $adminPublish['exam_structure_id'] = $request->sub_subject;
+        $adminPublish['exam_structure_id'] = $request->sub_subject[0];
         $adminPublish['status'] = 1;
-        $adminPublish['remark'] = $request->remark;
+        $adminPublish['remark'] = $request->remark[0];
         $adminPublish['div_id'] = $request->div_select;
         $adminPublish['check_sign'] = $request->checkedSign;
         $adminPublish['created_at'] = Carbon::now();
@@ -339,16 +339,16 @@ class ExamController extends Controller
     public function UnPublishStatus(Request $request){
         $user = Auth::user();
         $adminPublishTeacher = ExamTeacherConfirmation::where('class_id',$request->class_select)
-            ->where('exam_structure_id',$request->sub_subject)
+            ->where('exam_structure_id',$request->sub_subject[0])
             ->where('remark',$request->remark)
             ->where('div_id',$request->div_select)
             ->where('check_sign',$request->checkedSign)
             ->first();
         $teacherConfirmation['teacher_id'] = $user['id'];
         $adminPublish['class_id'] = $request->class_select;
-        $adminPublish['exam_structure_id'] = $request->sub_subject;
+        $adminPublish['exam_structure_id'] = $request->sub_subject[0];
         $adminPublish['status'] = 0;
-        $adminPublish['remark'] = $request->remark;
+        $adminPublish['remark'] = $request->remark[0];
         $adminPublish['div_id'] = $request->div_select;
         $adminPublish['check_sign'] = $request->checkedSign;
         $adminPublish['created_at'] = Carbon::now();
