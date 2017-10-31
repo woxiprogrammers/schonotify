@@ -223,8 +223,10 @@
                 });
             });
             $('#term-select').change(function(){
+                var class_id =$('#class-select').val();
+                var sub_subject_id =$('#sub-subject-select').val();
                 var term_id = this.value;
-                var route='get-subject-marks/'+term_id+'/'+div_id;
+                var route='get-subject-marks/'+term_id+'/'+div_id+'/'+class_id+'/'+sub_subject_id;
                 $('#loadmoreajaxloaderClass').show();
                 $.get(route,function(res){
                     $('#loadmoreajaxloaderClass').hide();

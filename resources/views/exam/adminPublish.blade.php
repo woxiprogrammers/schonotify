@@ -20,7 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="get" action="/exam/admin-publish" role="form" id="adminPunlishForm">
+                        <form method="post" action="#" role="form" id="adminPunlishForm">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -58,12 +58,13 @@
                             </div>
                             <div id="structures"></div>
                             <div class="form-group">
-                                <button class="btn btn-primary btn-wide" type="submit" id="submitButton">
+                                <a class="btn btn-primary btn-wide"  id="publishButton" disabled>
                                     Publish <i class="fa fa-arrow-circle-right"></i>
-                                </button>
-                                <button class="btn btn-primary btn-wide" type="submit" id="submitButton">
+                                </a>
+                                <a class="btn btn-primary btn-wide" id="UnpublishButton" disabled>
                                     Un Publish <i class="fa fa-arrow-circle-right"></i>
-                                </button>
+                                </a>
+
                             </div>
 
                         </form>
@@ -140,14 +141,23 @@
                 });
             });
             $('#div-select').change(function(){
+                var class_id = $('#class-select').val();
                 var div_id=this.value;
-                var route='admin-publish/'+div_id;
+                var route='admin-publish/'+div_id+'/'+class_id;
                 $('#loadmoreajaxloaderClass').show();
                 $.get(route,function(res){
                     $('#loadmoreajaxloaderClass').hide();
                     $('#structures').html(res);
                 });
             });
+            $('#publishButton').click(function(){
+                $('#adminPunlishForm').attr('action', "/exam/admin-publish-model");
+                $('#adminPunlishForm').submit();
+            });
+            $('#UnpublishButton').click(function(){
+                $('#adminPunlishForm').attr('action', "/exam/admin-unPublish-model");
+                $('#adminPunlishForm').submit();
+            })
         });
     </script>
 @stop
