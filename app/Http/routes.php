@@ -430,6 +430,8 @@
      Route::get('/enquiry-form-details','EnquiryController@viewEnquiryListingDetails');
     Route::get('/enquiry-form-data','EnquiryController@viewEnquiryListingData');
     Route::post('/store-student-enquiry','EnquiryController@storeEnquiryForm');
+
+
     /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
@@ -526,6 +528,10 @@
         Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
         //Push
         Route::post('save-push','api\UserController@savePushToken');
+        //Result
+        Route::get('get-exam-terms/{user_id}','api\ExamController@getExamTerms');
+        Route::get('get-subject-details/{id}','api\ExamController@getSubjectDetails');
+        Route::get('get-term-data/{id}/{user_id}','api\ExamController@getTermData');
     });
         //Exam
 Route::group(['prefix' => 'exam'], function () {
