@@ -215,7 +215,7 @@ class ExamController extends Controller
     public function subjectStructure(Request $request,$term_id,$div_id,$class_id,$sub_subject_id){
         $termName = ExamTerms::where('id',$term_id)->pluck('term_name');
         $termDetails = ExamTermDetails::where('term_id',$term_id)->select('id','exam_type','out_of_marks')->orderBy('term_id','asc')->get()->toArray();
-        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->select('id','first_name','last_name','roll_number')->get()->toArray();
+        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->where('is_active','=',1)->select('id','first_name','last_name','roll_number')->orderBy('roll_number','asc')->get()->toArray();
         $studentMarks=array();
         $iterator = 0;
         foreach($StudentsDetails as $key => $student){
@@ -313,7 +313,10 @@ class ExamController extends Controller
                                                 ->where('exam_teacher_confirmation.div_id','=',$div_id)
                                                 ->select('exam_sub_subject_structure.sub_subject_name','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark','exam_teacher_confirmation.exam_structure_id')
                                                 ->get()->toArray();
-         return view('exam/adminPublishPartial')->with(compact('teacherInfo'));
+            $subSubject = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+                                                    ->where('exam_class_structure_relation.class_id','=',$class_id)
+                                                    ->select('exam_sub_subject_structure.sub_subject_name')->get();
+         return view('exam/adminPublishPartial')->with(compact('teacherInfo','subSubject'));
     }
     public function publishStatus(Request $request){
         $user = Auth::user();
