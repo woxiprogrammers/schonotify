@@ -542,9 +542,13 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('get-subjects/{id}','ExamController@getSubject');
     Route::get('get-terms/{id}','ExamController@getTerms');
     Route::get('get-sub-subjects/{id}','ExamController@getSubSubject');
-    Route::get('get-subject-marks/{term_id}/{div_id}',array('uses'=>'ExamController@subjectStructure'));
+    Route::get('get-subject-marks/{term_id}/{div_id}/{class_id}/{sub_subject_id}',array('uses'=>'ExamController@subjectStructure'));
     Route::get('get-students/{id}',array('uses'=>'ExamController@ExamStudent'));
     Route::get('get-subject-structures/{class_id}',array('uses' => 'ExamController@getExamStructures'));
     Route::get('subjectMarksView',array('uses' => 'ExamController@studentEntry'));
     Route::post('student-marks-entry',array('uses' => 'ExamController@createSubjectStructureDetails'));
+    Route::get('admin-publish-view',array('uses' => 'ExamController@adminPublishView'));
+    Route::get('admin-publish/{div_id}/{class_id}',array('uses' => 'ExamController@publish'));
+    Route::post('admin-publish-model',array('uses' => 'ExamController@publishStatus'));
+    Route::post('admin-unPublish-model',array('uses' => 'ExamController@UnPublishStatus'));
 });

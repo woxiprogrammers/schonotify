@@ -149,6 +149,7 @@
                                         <label class="control-label">
                                             Number of Term<span class="symbol required"></span>
                                         </label>
+                                        {{--<input type="checkbox" id="term-check" value="checked">--}}
                                         <select class="form-control" id="termDrpdn" name="Term_number" style="-webkit-appearance: menulist;" required>
                                             <option value="" selected="">select number of terms</option>
                                             <option value="1">1</option>
@@ -162,8 +163,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Number of coloums: <span class="symbol required"></span>
+                                            Number of columns: <span class="symbol required"></span>
                                         </label>
+                                        {{--<input type="checkbox" id="column-check" value="checked">--}}
                                         <select class="form-control" id="columnDrpdn" name="coloumn_number" style="-webkit-appearance: menulist;" required>
                                             <option value="" selected="">select number of coloumn</option>
                                             <option value="1">1</option>
