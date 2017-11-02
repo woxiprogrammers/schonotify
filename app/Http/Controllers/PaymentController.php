@@ -51,13 +51,13 @@ class PaymentController extends Controller
                 $type = env('GEMS_EASY_PAY_TYPE');
                 $rtu = "http://".env('DOMAIN_NAME')."/payment/payment-return/gems";
                 $paymentUrl = env('GEMS_EASY_PAY_PAYMENT_URL');
-                $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['installment_id'].'|'.$data['email']."|".$data['contact']."|1.0";//.$data['amount'];
+                $ppiParameters = $data['student_grn']."|".$data['student_name']."|".$data['section']."|".$data['standard']."|".$data['academic_year']."|".$data['fee_type']."|".$data['parent_name']."|".$data['installment_id'].'|'.$data['email']."|".$data['contact']."|".$data['amount'];
             }
             $paramArr = array(
                 "CID=".$corporateCode,
                 "RID=".$referenceId,
                 "CRN=".$crn,
-                "AMT=1.0",//.$request->amount,
+                "AMT=".$request->amount,
                 "VER=".$version,
                 "TYP=".$type,
                 "CNY=INR",
@@ -117,7 +117,6 @@ class PaymentController extends Controller
                 }
             }
             $newResponse['chksm'] = $chksm;
-
             if($newResponse['RMK'] == 'success' || $newResponse == 'SUCCESS'){
                 $data['message_title'] = 'Payment Successful.';
                 $data['color'] = 'green';
