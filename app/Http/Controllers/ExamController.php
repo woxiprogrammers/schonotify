@@ -126,11 +126,11 @@ class ExamController extends Controller
     public function ExamStructureEdit(Request $request,$id){
         $user=Auth::user();
         $batches = Batch::where('body_id',$user->body_id)->get();
-        $batchh = Batch::where('body_id',$user->body_id)->pluck('id');
+        $batchs = Batch::where('body_id',$user->body_id)->pluck('id');
         $selectedClass = ExamClassStructureRelation::where('exam_subject_id',$id)->pluck('class_id');
         $batch = Classes::where('id',$selectedClass)->pluck('body_id');
         $examSubjects = ExamSubjectStructure::where('body_id',$user->body_id)->get();
-        $classes = Classes::where('batch_id',$batchh)->select('batch_id','id','class_name')->get()->toArray();
+        $classes = Classes::where('batch_id',$batchs)->select('batch_id','id','class_name')->get()->toArray();
         $class = ExamClassStructureRelation::where('exam_subject_id',$id)->lists('class_id')->toArray();
         $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('id','sub_subject_name')->get()->toArray();
         $examStartYear = ExamYear::where('exam_structure_id',$id)->select('start_year')->get();
@@ -311,7 +311,7 @@ class ExamController extends Controller
                                                 ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
                                                 ->where('exam_class_structure_relation.class_id','=',$class_id)
                                                 ->where('exam_teacher_confirmation.div_id','=',$div_id)
-                                                ->select('exam_sub_subject_structure.sub_subject_name','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark','exam_teacher_confirmation.exam_structure_id')
+                                                ->select('exam_sub_subject_structure.sub_subject_name','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark','exam_teacher_confirmation.exam_structure_id','status')
                                                 ->get()->toArray();
             $subSubject = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
                                                     ->where('exam_class_structure_relation.class_id','=',$class_id)
