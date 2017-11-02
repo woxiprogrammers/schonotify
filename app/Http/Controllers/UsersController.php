@@ -959,7 +959,6 @@ class UsersController extends Controller
                     $divisionStudent="null";
                 }
                 $installmentIds = FeeInstallments::where('fee_id',$assigned_fee)->select('installment_id')->distinct()->get()->toArray();
-
                 return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink'));
             }elseif($userRole->slug == 'parent')
             {
