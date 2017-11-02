@@ -291,7 +291,6 @@ class ExamController extends Controller
             $teacherConfirmation['status'] = 0;
             if($teacherConfirmationDetails != null ){
              $update =  ExamTeacherConfirmation::where('id',$teacherConfirmationDetails['id'])->update($teacherConfirmation);
-            dd($update);
             }else{
                 $teacherConfirmation['created_at'] = Carbon::now();
                 $teacherConfirmation['updated_at'] = Carbon::now();
