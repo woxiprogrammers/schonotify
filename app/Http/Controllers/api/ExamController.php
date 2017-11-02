@@ -7,6 +7,8 @@ use App\ExamClassStructureRelation;
 use App\ExamSubSubjectStructure;
 use App\ExamTermDetails;
 use App\ExamTerms;
+use App\StudentExamDetails;
+use App\StudentExamMarks;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -56,17 +58,23 @@ class ExamController extends Controller
         ];
         return response($response, $status);
     }
-    public function getTermData(Request $request,$id){
+    public function getTermData(Request $request,$id,$user_id){
         $examTermDetails = array();
         try{
-             $examTermDetails =  DB::table('exam_term_details')->join('student_exam_marks','exam_term_details.term_id','=','student_exam_marks.term_id')->
+             $student_exam_details_id = StudentExamDetails::where('student_id',$user_id)->pluck('id');
+            $termData =  DB::table('student_exam_marks')->join('exam_term_details','exam_term_details.id','=','student_exam_marks.exam_term_details_id')->
                                      where('exam_term_details.term_id',$id)->
                                      where('student_exam_marks.term_id',$id)->
+                                     where('student_exam_marks.student_exam_details_id',$student_exam_details_id)->
                                      select('exam_term_details.exam_type','exam_term_details.out_of_marks','student_exam_marks.marks_obtained')->
                                      get();
-             dd($examTermDetails);
+
+             $obtained_marks = StudentExamMarks::where('student_exam_details_id',$student_exam_details_id)->where('term_id',$id)->lists('marks_obtained')->toArray();
+             $totalMarks_obtained = array_sum($obtained_marks);
              $totalMarks = ExamTermDetails::where('term_id',$id)->lists('out_of_marks')->toArray();
+             $examTermDetails['term_data'] = $termData;
              $examTermDetails['total'] = array_sum($totalMarks);
+             $examTermDetails['total_marks_obtained'] = $totalMarks_obtained;
              $status = 200;
              $message = "Success";
         }catch(\Exception $e){

@@ -531,7 +531,7 @@
         //Result
         Route::get('get-exam-terms/{user_id}','api\ExamController@getExamTerms');
         Route::get('get-subject-details/{id}','api\ExamController@getSubjectDetails');
-        Route::get('get-term-data/{id}','api\ExamController@getTermData');
+        Route::get('get-term-data/{id}/{user_id}','api\ExamController@getTermData');
     });
         //Exam
 Route::group(['prefix' => 'exam'], function () {
