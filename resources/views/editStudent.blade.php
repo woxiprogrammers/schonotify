@@ -404,7 +404,7 @@
                                                 @foreach($documents as $document)
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        @if(in_array($document['id'],$doc))
+                                                    @if(in_array($document['id'],$doc))
                                                             <input type="checkbox" value="{{$document['id']}}" name="documents[]" checked>
                                                         @else
                                                             <input type="checkbox" value="{{$document['id']}}" name="documents[]">
@@ -1174,7 +1174,7 @@
         }
     }
     function userAclModule(){
-        var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message'];
+        var enabled_modules =['view_attendance','view_event','view_timetable','view_result','create_leave','view_leave','view_homework','create_message','delete_message','view_message','view_announcement','view_achievement'];
         var route='/user-module-acl-edit/{!! $user->parent_id !!}';
         $.get(route,function(res){
             var str;

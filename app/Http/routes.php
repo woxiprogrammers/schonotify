@@ -430,6 +430,8 @@
      Route::get('/enquiry-form-details','EnquiryController@viewEnquiryListingDetails');
     Route::get('/enquiry-form-data','EnquiryController@viewEnquiryListingData');
     Route::post('/store-student-enquiry','EnquiryController@storeEnquiryForm');
+
+
     /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
@@ -526,4 +528,33 @@
         Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
         //Push
         Route::post('save-push','api\UserController@savePushToken');
+        //Result
+        Route::get('get-exam-terms/{user_id}','api\ExamController@getExamTerms');
+        Route::get('get-subject-details/{id}','api\ExamController@getSubjectDetails');
+        Route::get('get-term-data/{id}/{user_id}','api\ExamController@getTermData');
     });
+        //Exam
+Route::group(['prefix' => 'exam'], function () {
+    Route::get('create',array('uses' => 'ExamController@createExamStructureView'));
+    Route::get('listing',array('uses' => 'ExamController@ExamStructureListing'));
+    Route::get('edit/{id}',array('uses' => 'ExamController@ExamStructureEdit'));
+    Route::post('edit/{id}',array('uses' => 'ExamController@editStructure'));
+    Route::get('create-subject',array('uses' => 'ExamController@createExamSubjectView'));
+    Route::post('create-subject',array('uses' => 'ExamController@createExamSubject'));
+    Route::post('structure-create',array('uses' => 'ExamController@createStructureTable'));
+    Route::get('get-classes/{str}',array('uses' => 'ExamController@getClasses'));
+    Route::get('get-all-classes/{id}','ExamController@getAllClasses');
+    Route::get('get-all-div/{id}','ExamController@getAllDivision');
+    Route::get('get-subjects/{id}','ExamController@getSubject');
+    Route::get('get-terms/{id}','ExamController@getTerms');
+    Route::get('get-sub-subjects/{id}','ExamController@getSubSubject');
+    Route::get('get-subject-marks/{term_id}/{div_id}/{class_id}/{sub_subject_id}',array('uses'=>'ExamController@subjectStructure'));
+    Route::get('get-students/{id}',array('uses'=>'ExamController@ExamStudent'));
+    Route::get('get-subject-structures/{class_id}',array('uses' => 'ExamController@getExamStructures'));
+    Route::get('subjectMarksView',array('uses' => 'ExamController@studentEntry'));
+    Route::post('student-marks-entry',array('uses' => 'ExamController@createSubjectStructureDetails'));
+    Route::get('admin-publish-view',array('uses' => 'ExamController@adminPublishView'));
+    Route::get('admin-publish/{div_id}/{class_id}',array('uses' => 'ExamController@publish'));
+    Route::post('admin-publish-model',array('uses' => 'ExamController@publishStatus'));
+    Route::post('admin-unPublish-model',array('uses' => 'ExamController@UnPublishStatus'));
+});
