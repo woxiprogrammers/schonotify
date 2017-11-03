@@ -61,6 +61,12 @@ class ExamController extends Controller
         return view('/exam/examClasses')->with(compact('classes'));
     }
     public function createStructureTable(Request $request){
+        if($request->is_scholastic == 'true'){
+
+            $subjectDetails['is_co_scholastic'] = true;
+        }else{
+            $subjectDetails['is_co_scholastic'] = false;
+        }
         $subjectDetails ['sub_subject_name'] = $request->sub_subject;
         $subjectDetails ['subject_id'] = $request->select_subject;
         $subjectDetails ['created_at'] = Carbon::now();
@@ -132,7 +138,7 @@ class ExamController extends Controller
         $examSubjects = ExamSubjectStructure::where('body_id',$user->body_id)->get();
         $classes = Classes::where('batch_id',$batchs)->select('batch_id','id','class_name')->get()->toArray();
         $class = ExamClassStructureRelation::where('exam_subject_id',$id)->lists('class_id')->toArray();
-        $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('id','sub_subject_name')->get()->toArray();
+        $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('id','sub_subject_name','is_co_scholastic')->get()->toArray();
         $examStartYear = ExamYear::where('exam_structure_id',$id)->select('start_year')->get();
         $examEndYear = ExamYear::where('exam_structure_id',$id)->select('end_year')->get();
         $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
@@ -147,6 +153,7 @@ class ExamController extends Controller
         return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch'));
     }
     public function editStructure(Request $request,$id){
+        dd($request->all());
         $classData = $request->classes;
         $deleteOldRecordsClass = ExamClassStructureRelation::where('exam_subject_id',$id)->whereNotIn('class_id',$classData)->delete();
         foreach ($classData as  $class){
@@ -204,8 +211,11 @@ class ExamController extends Controller
             ->get()->toArray();
         return $subjects;
     }
-    public function getSubSubject(Request $request,$id){
-        $subSubjects = ExamSubSubjectStructure::where('subject_id',$id)->select('id','sub_subject_name')->get();
+    public function getSubSubject(Request $request,$id,$class_id){
+        $subSubjects = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+                                                ->where('exam_sub_subject_structure.subject_id','=',$id)
+                                                ->where('exam_class_structure_relation.class_id','=',$class_id)
+                                                ->select('exam_sub_subject_structure.id','exam_sub_subject_structure.sub_subject_name')->get();
         return $subSubjects;
     }
     public function getTerms(Request $request,$id){
@@ -291,7 +301,6 @@ class ExamController extends Controller
             $teacherConfirmation['status'] = 0;
             if($teacherConfirmationDetails != null ){
              $update =  ExamTeacherConfirmation::where('id',$teacherConfirmationDetails['id'])->update($teacherConfirmation);
-            dd($update);
             }else{
                 $teacherConfirmation['created_at'] = Carbon::now();
                 $teacherConfirmation['updated_at'] = Carbon::now();

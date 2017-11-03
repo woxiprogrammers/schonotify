@@ -32,7 +32,6 @@
         @endif
 </table>
 </div>
-
 <script>
     $('.admin-check').change(function(){
         if($('.admin-check').is(':checked')){
