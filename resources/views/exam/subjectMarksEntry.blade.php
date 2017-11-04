@@ -184,7 +184,8 @@
             });
             $('#subject-select').change(function(){
                 var id=this.value;
-                var route='get-sub-subjects/'+id;
+                var class_id =$('#class-select').val();
+                var route='get-sub-subjects/'+id+'/'+class_id;
                 $('#loadmoreajaxloaderClass').show();
                 $.get(route,function(res){
                     if (res.length == 0)
