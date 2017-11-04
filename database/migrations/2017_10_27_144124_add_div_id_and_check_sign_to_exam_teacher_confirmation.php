@@ -13,7 +13,7 @@ class AddDivIdAndCheckSignToExamTeacherConfirmation extends Migration
     public function up()
     {
         Schema::table('exam_teacher_confirmation', function (Blueprint $table) {
-            $table->unsignedInteger('div_id');
+            $table->unsignedInteger('div_id')->nullable();
             $table->foreign('div_id')->references('id')->on('division')->onUpdated('cascade')->onDelete('cascade');
             $table->unsignedInteger('check_sign');
 

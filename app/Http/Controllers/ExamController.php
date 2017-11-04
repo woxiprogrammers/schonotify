@@ -61,6 +61,12 @@ class ExamController extends Controller
         return view('/exam/examClasses')->with(compact('classes'));
     }
     public function createStructureTable(Request $request){
+        if($request->is_scholastic == 'true'){
+
+            $subjectDetails['is_co_scholastic'] = true;
+        }else{
+            $subjectDetails['is_co_scholastic'] = false;
+        }
         $subjectDetails ['sub_subject_name'] = $request->sub_subject;
         $subjectDetails ['subject_id'] = $request->select_subject;
         $subjectDetails ['created_at'] = Carbon::now();
@@ -126,13 +132,13 @@ class ExamController extends Controller
     public function ExamStructureEdit(Request $request,$id){
         $user=Auth::user();
         $batches = Batch::where('body_id',$user->body_id)->get();
-        $batchh = Batch::where('body_id',$user->body_id)->pluck('id');
+        $batchs = Batch::where('body_id',$user->body_id)->pluck('id');
         $selectedClass = ExamClassStructureRelation::where('exam_subject_id',$id)->pluck('class_id');
         $batch = Classes::where('id',$selectedClass)->pluck('body_id');
         $examSubjects = ExamSubjectStructure::where('body_id',$user->body_id)->get();
-        $classes = Classes::where('batch_id',$batchh)->select('batch_id','id','class_name')->get()->toArray();
+        $classes = Classes::where('batch_id',$batchs)->select('batch_id','id','class_name')->get()->toArray();
         $class = ExamClassStructureRelation::where('exam_subject_id',$id)->lists('class_id')->toArray();
-        $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('id','sub_subject_name')->get()->toArray();
+        $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('id','sub_subject_name','is_co_scholastic')->get()->toArray();
         $examStartYear = ExamYear::where('exam_structure_id',$id)->select('start_year')->get();
         $examEndYear = ExamYear::where('exam_structure_id',$id)->select('end_year')->get();
         $subjects = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
@@ -204,8 +210,11 @@ class ExamController extends Controller
             ->get()->toArray();
         return $subjects;
     }
-    public function getSubSubject(Request $request,$id){
-        $subSubjects = ExamSubSubjectStructure::where('subject_id',$id)->select('id','sub_subject_name')->get();
+    public function getSubSubject(Request $request,$id,$class_id){
+        $subSubjects = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+                                                ->where('exam_sub_subject_structure.subject_id','=',$id)
+                                                ->where('exam_class_structure_relation.class_id','=',$class_id)
+                                                ->select('exam_sub_subject_structure.id','exam_sub_subject_structure.sub_subject_name')->get();
         return $subSubjects;
     }
     public function getTerms(Request $request,$id){
@@ -215,7 +224,7 @@ class ExamController extends Controller
     public function subjectStructure(Request $request,$term_id,$div_id,$class_id,$sub_subject_id){
         $termName = ExamTerms::where('id',$term_id)->pluck('term_name');
         $termDetails = ExamTermDetails::where('term_id',$term_id)->select('id','exam_type','out_of_marks')->orderBy('term_id','asc')->get()->toArray();
-        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->select('id','first_name','last_name','roll_number')->get()->toArray();
+        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->where('is_active','=',1)->select('id','first_name','last_name','roll_number')->orderBy('roll_number','asc')->get()->toArray();
         $studentMarks=array();
         $iterator = 0;
         foreach($StudentsDetails as $key => $student){
@@ -310,9 +319,12 @@ class ExamController extends Controller
                                                 ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
                                                 ->where('exam_class_structure_relation.class_id','=',$class_id)
                                                 ->where('exam_teacher_confirmation.div_id','=',$div_id)
-                                                ->select('exam_sub_subject_structure.sub_subject_name','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark','exam_teacher_confirmation.exam_structure_id')
+                                                ->select('exam_sub_subject_structure.sub_subject_name','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark','exam_teacher_confirmation.exam_structure_id','status')
                                                 ->get()->toArray();
-         return view('exam/adminPublishPartial')->with(compact('teacherInfo'));
+            $subSubject = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+                                                    ->where('exam_class_structure_relation.class_id','=',$class_id)
+                                                    ->select('exam_sub_subject_structure.sub_subject_name')->get();
+         return view('exam/adminPublishPartial')->with(compact('teacherInfo','subSubject'));
     }
     public function publishStatus(Request $request){
         $user = Auth::user();

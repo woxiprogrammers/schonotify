@@ -547,7 +547,7 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('get-all-div/{id}','ExamController@getAllDivision');
     Route::get('get-subjects/{id}','ExamController@getSubject');
     Route::get('get-terms/{id}','ExamController@getTerms');
-    Route::get('get-sub-subjects/{id}','ExamController@getSubSubject');
+    Route::get('get-sub-subjects/{id}/{class_id}','ExamController@getSubSubject');
     Route::get('get-subject-marks/{term_id}/{div_id}/{class_id}/{sub_subject_id}',array('uses'=>'ExamController@subjectStructure'));
     Route::get('get-students/{id}',array('uses'=>'ExamController@ExamStudent'));
     Route::get('get-subject-structures/{class_id}',array('uses' => 'ExamController@getExamStructures'));
