@@ -153,7 +153,6 @@ class ExamController extends Controller
         return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch'));
     }
     public function editStructure(Request $request,$id){
-        dd($request->all());
         $classData = $request->classes;
         $deleteOldRecordsClass = ExamClassStructureRelation::where('exam_subject_id',$id)->whereNotIn('class_id',$classData)->delete();
         foreach ($classData as  $class){
