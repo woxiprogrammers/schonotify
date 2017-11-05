@@ -312,6 +312,9 @@
                     $('#is_scholastic').val('false');
                 }
             });
+            if($('#scholastic').is(':checked')){
+                $('#is_scholastic').val('true');
+            }
         });
     </script>
 @stop
