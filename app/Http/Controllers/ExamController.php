@@ -102,7 +102,11 @@ class ExamController extends Controller
                 ExamTermDetails::create($examTermInfoData);
             }
         }
-        Session::flash('message-success','Structure created successfully .');
+        if($request->is_scholastic == 'true'){
+            Session::flash('message-success','Co-Scholastic Subject Structure created successfully .');
+        }else{
+            Session::flash('message-success','Scolastic Subject Structure created successfully .');
+        }
         return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','batches','examSubjects','CreatedTerm','CreateTeamDetails'));
     }
     public function ExamStructureListing(Request $request){
@@ -153,6 +157,13 @@ class ExamController extends Controller
         return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch'));
     }
     public function editStructure(Request $request,$id){
+        if($request->is_scholastic == 'true'){
+
+            $subjectDetails['is_co_scholastic'] = true;
+        }else{
+            $subjectDetails['is_co_scholastic'] = false;
+        }
+         ExamSubSubjectStructure::where('id',$id)->update($subjectDetails);
         $classData = $request->classes;
         $deleteOldRecordsClass = ExamClassStructureRelation::where('exam_subject_id',$id)->whereNotIn('class_id',$classData)->delete();
         foreach ($classData as  $class){
@@ -188,6 +199,7 @@ class ExamController extends Controller
                 ExamTermDetails::create($examTermInfoData);
             }
         }
+
         Session::flash('message-success','Structure updated successfully .');
         return Redirect::back();
     }
