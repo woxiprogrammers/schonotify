@@ -143,13 +143,29 @@
                                     </div>
                                 </div>
                             </section>
+                            <section>
+                                <div class="row">
+                                    <div class="col-md-6" >
+                                        <label class="control-label">
+                                            Co-Scholastic :
+                                        </label>
+                                        @foreach($examSubSubject as $scholastic)
+                                            @if($scholastic['is_co_scholastic'] == 1)
+                                                <input type="checkbox" id="scholastic" class="scholastic" checked value="true">
+                                            @else
+                                                <input type="checkbox" id="scholastic" class="scholastic" value="false">
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </section>
+                            <br>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Number of Term<span class="symbol required"></span>
                                         </label>
-                                        {{--<input type="checkbox" id="term-check" value="checked">--}}
                                         <select class="form-control" id="termDrpdn" name="Term_number" style="-webkit-appearance: menulist;" required>
                                             <option value="" selected="">select number of terms</option>
                                             <option value="1">1</option>
@@ -165,7 +181,6 @@
                                         <label class="control-label">
                                             Number of columns: <span class="symbol required"></span>
                                         </label>
-                                        {{--<input type="checkbox" id="column-check" value="checked">--}}
                                         <select class="form-control" id="columnDrpdn" name="coloumn_number" style="-webkit-appearance: menulist;" required>
                                             <option value="" selected="">select number of coloumn</option>
                                             <option value="1">1</option>
@@ -208,6 +223,7 @@
 
                                 </table>
                             </div>
+                            <input type="hidden" value="false" name="is_scholastic" id="is_scholastic">
                             <button class="btn btn-primary btn-wide" type="submit" value="submit" >
                                 Update <i class="fa fa-arrow-circle-right"></i>
                             </button>
@@ -289,6 +305,16 @@
                     return false;
                 }
             });
+            $('#scholastic').change(function(){
+                if($('#scholastic').is(':checked')){
+                    $('#is_scholastic').val('true');
+                }else{
+                    $('#is_scholastic').val('false');
+                }
+            });
+            if($('#scholastic').is(':checked')){
+                $('#is_scholastic').val('true');
+            }
         });
     </script>
 @stop

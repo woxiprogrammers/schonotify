@@ -111,13 +111,24 @@
                         </div>
                     <section id="page-title">
                         <div class="row">
-                            <div class="col-sm-7">
+                            <div class="col-md-7">
                                 <fieldset style="margin-bottom: -50%">
                                     <legend>Create Term</legend>
                                 </fieldset>
                             </div>
                         </div>
                     </section>
+                    <section>
+                        <div class="row">
+                            <div class="col-md-6" >
+                                <label class="control-label">
+                                Co-Scholastic :
+                                </label>
+                                <input type="checkbox" id="scholastic" class="scholastic">
+                            </div>
+                        </div>
+                    </section>
+                            <br>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -160,6 +171,7 @@
 
                                 </table>
                             </div>
+                            <input type="hidden" value="false" name="is_scholastic" id="is_scholastic">
                             <button class="btn btn-primary btn-wide" type="submit" value="submit" >
                                 Create <i class="fa fa-arrow-circle-right"></i>
                             </button>
@@ -245,6 +257,13 @@
                 if(event.keyCode == 13) {
                     event.preventDefault();
                     return false;
+                }
+            });
+            $('#scholastic').change(function(){
+                if($('#scholastic').is(':checked')){
+                    $('#is_scholastic').val('true');
+                }else{
+                    $('#is_scholastic').val('false');
                 }
             });
         });

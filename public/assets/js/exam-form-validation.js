@@ -204,7 +204,14 @@ var FormValidator = function () {
                 },
                 end_Year :{
                     required : true
+                },
+                Term_number : {
+                    required : false
+                },
+                coloumn_number : {
+                    required : false
                 }
+
             },
             messages: {
                 batch: "batch name is required",
