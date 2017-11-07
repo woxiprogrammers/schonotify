@@ -333,7 +333,101 @@ var FormValidator = function () {
             }
         });
     };
+// Validations For Grades Entry
+    var runValidator5 = function () {
+        var form3 = $('#gradeStructureForm');
+        var errorHandler3 = $('.errorHandler', form3);
+        var successHandler3 = $('.successHandler', form3);
 
+        $.validator.addMethod("FullDate", function () {
+            //if all values are selected
+            if ($("#dd").val() != "" && $("#mm").val() != "" && $("#yyyy").val() != "") {
+                return true;
+            } else {
+                return false;
+            }
+        }, 'Please select a day, month, and year');
+        $('#gradeStructureForm').validate({
+            errorElement: "span", // contain the error msg in a span tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.attr("name") == "dd" || element.attr("name") == "mm" || element.attr("name") == "yyyy") {
+                    error.insertAfter($(element).closest('.form-group').children('div'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+
+            rules: {
+                batch :{
+                    required :true
+                },
+                class_select: {
+                    required : true
+                },
+                min_marks : {
+                    required : true,
+                    maxlength:3,
+                    min:0,
+                    max:100
+                },
+
+                max_marks : {
+                    required : true,
+                    maxlength:3,
+                    min:0,
+                    max:100
+                },
+                grades :{
+                    required : true
+                }
+            },
+            messages: {
+                batch:"batch name is required",
+                class_select: " Class Is Required",
+                min_marks:{
+                    maxlength:"your Number length should not be more than 3",
+                    min:"your number should not be less than 0",
+                    max:"Your number should not be more than 100"
+                },
+                max_marks:{
+                    maxlength:"your Number length should not be more than 3",
+                    min:"your number should not be less than 0",
+                    max:"Your number should not be more than 100"
+                },
+                grades :"Grade Field is required"
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler3.hide();
+                errorHandler3.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (gradeStructureForm) {
+                successHandler3.show();
+                errorHandler3.hide();
+                gradeStructureForm.submit();
+                // submit form
+            }
+        });
+    };
     return {
         init: function () {
             validateCheckRadio();
@@ -341,6 +435,7 @@ var FormValidator = function () {
             runValidator2();
             runValidator3();
             runValidator4();
+            runValidator5();
         }
     };
 }();

@@ -557,4 +557,6 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('admin-publish/{div_id}/{class_id}',array('uses' => 'ExamController@publish'));
     Route::post('admin-publish-model',array('uses' => 'ExamController@publishStatus'));
     Route::post('admin-unPublish-model',array('uses' => 'ExamController@UnPublishStatus'));
+    Route::get('gradeEntry',array('uses' => 'ExamController@gradesEntryView'));
+    Route::post('grade-create',array('uses' => 'ExamController@gradesEntry'));
 });

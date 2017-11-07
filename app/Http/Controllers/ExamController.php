@@ -9,6 +9,7 @@ use App\ExamTeacherConfirmation;
 use App\ExamTermDetails;
 use App\ExamTerms;
 use App\ExamYear;
+use App\Grade;
 use App\StudentExamDetails;
 use App\StudentExamMarks;
 use App\User;
@@ -378,6 +379,21 @@ class ExamController extends Controller
         $adminPublish['updated_at'] = Carbon::now();
         $query = ExamTeacherConfirmation::where('id',$adminPublishTeacher['id'])->update($adminPublish);
         Session::flash('message-success','Students Marks are Un-Publish ..');
+        return Redirect::back();
+    }
+    public function gradesEntryView(Request $request){
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        return view('/exam/gradesEntry')->with(compact('batches','examSubjects'));
+    }
+    public function gradesEntry(Request $request){
+        $gradeData['class_id'] = $request->class_select;
+        $gradeData['min'] = $request->min_marks;
+        $gradeData['max'] = $request->max_marks;
+        $gradeData['grade'] = $request->grades;
+        $gradeData['created_at'] = Carbon::now();
+        $gradeData['updated_at'] = Carbon::now();
+        $create = Grade::insert($gradeData);
+        Session::flash('message-success','Grade Is Created successfully ..');
         return Redirect::back();
     }
 }
