@@ -349,6 +349,13 @@
                     </div>
                 </a>
             </li>
+            <li>
+                <a href="/exam/gradeView">
+                    <div class="item-inner">
+                        <span class="title"> Grades View </span>
+                    </div>
+                </a>
+            </li>
             @if(Auth::User()->role_id == 1)
             <li>
                 <a href="/exam/admin-publish-view">

@@ -559,4 +559,6 @@ Route::group(['prefix' => 'exam'], function () {
     Route::post('admin-unPublish-model',array('uses' => 'ExamController@UnPublishStatus'));
     Route::get('gradeEntry',array('uses' => 'ExamController@gradesEntryView'));
     Route::post('grade-create',array('uses' => 'ExamController@gradesEntry'));
+    Route::get('gradeView',array('uses' => 'ExamController@viewGrades'));
+    Route::get('get-grades/{id}',array('uses' => 'ExamController@gradeListing'));
 });
