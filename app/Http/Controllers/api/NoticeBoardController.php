@@ -35,10 +35,11 @@ class NoticeBoardController extends Controller
      * @return \Illuminate\Http\Response
      */
      public function viewAnnouncementParent(Request $request){
+             $body_id = $request['teacher']['body_id'];
              $user=Auth::user();
              $event =Event::where('event_type_id',1)
                             -> where('status',2)
-                            ->where('body_id',$user->body_id)
+                            ->where('body_id',$body_id)
                             ->orderBy('id','desc')
                             ->get()
                             ->toArray();
@@ -53,12 +54,13 @@ class NoticeBoardController extends Controller
              return response($response);
      }
      public function viewAchievementParent(Request $request){
-            $user=Auth::user();
+
+            $body_id = $request['teacher']['body_id'];
             $data=$request->all();
             $parentAchievementPublished = Event::where('event_type_id','=',2)
                   ->where('status',2)
                   ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                  ->where('body_id',$user->body_id)
+                  ->where('body_id',$body_id)
                   ->orderBy('id','desc')
                   ->get();
             $imageArray=array();
