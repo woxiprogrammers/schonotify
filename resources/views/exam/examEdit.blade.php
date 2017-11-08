@@ -71,7 +71,7 @@
                                                 @if($examSubject['id'] == $subjects['id'])
                                                 <option value="{!! $examSubject['id'] !!}" selected>{!! $examSubject['subject_name'] !!}</option>
                                                @else
-                                                <option value="{{$examSubject['subject_name']}} {{$examSubject['id']}}">{!! $examSubject['subject_name'] !!}</option>
+                                                <option disabled="disabled" value="{{$examSubject['subject_name']}} {{$examSubject['id']}}">{!! $examSubject['subject_name'] !!}</option>
                                                 @endif
                                             @endforeach
                                         </select>
