@@ -7,6 +7,7 @@
     <th style="text-align: center">Sub-Subject Name</th>
     <th style="text-align: center">Teacher Signature</th>
     <th style="text-align: center">Remark</th>
+            <th style="text-align: center">Status</th>
 </tr>
     @if(count($teacherInfo)>0)
     @foreach($teacherInfo as $details)
@@ -15,8 +16,9 @@
             <td><input type="checkbox" class="admin-check"></td>
             <td><input style="text-align: center" type="text" class="form-control" id="name" name="subject_name[]" value="{{$details['sub_subject_name']}}" readonly></td>
                 @if($details['check_sign'] == 1)
-                    <td><input type="checkbox" checked value="checked" readonly></td>
+                    <td><input type="checkbox" id="teacher-sign" checked="checked" class="teacher_sign" disabled></td>
                     <td><input style="text-align: center" type="text" class="form-control" id="remark" name="remark[]" value="{{$details['remark']}}" readonly></td>
+                    <td><input style="text-align: center" type="text" placeholder="Published" readonly></input></td>
                 @endif
             </tr>
     @endforeach
@@ -27,6 +29,7 @@
                     <td><input style="text-align: center" type="text" class="form-control" id="name" value="{{$subSubject[$i]['sub_subject_name']}}" readonly></td>
                     <td><input type="checkbox"></td>
                     <td><input type="text" readonly></td>
+                    <td><input type="text" readonly placeholder="Un-Publish"></td>
                 </tr>
             @endfor
         @endif
@@ -44,5 +47,6 @@
             $('#checkedSign').val(0);
         }
     });
+
 </script>
 <br><br>
