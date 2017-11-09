@@ -57,6 +57,7 @@
         </div>
         @include('footer')
     </div>
+    @include('searchJS')
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/modernizr/modernizr.js"></script>
@@ -93,7 +94,6 @@
         jQuery(document).ready(function() {
             Main.init();
             FormElements.init();
-            TableData.init();
         });
             $('#batchDrpdn').change(function(){
                 var id=this.value;
