@@ -282,7 +282,7 @@ class ExamController extends Controller
             ->where('exam_teacher_confirmation.exam_structure_id','=',$sub_subject_id)
             ->select('exam_sub_subject_structure.id','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark')
             ->get()->toArray();
-        return view('exam/ExamMarksStructure')->with(compact('termDetails','StudentsDetails','termName','studentMarks','details','studentGrade'));
+        return view('exam/ExamMarksStructure')->with(compact('termDetails','StudentsDetails','termName','studentMarks','details'));
     }
     public function createSubjectStructureDetails(Request $request){
         $user = Auth::user();
