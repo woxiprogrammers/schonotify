@@ -36,8 +36,8 @@
                         <td><input id="marks" placeholder="Enter Marks" type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" class="checked_{{$i}}" disabled required></td>
                     @endif
                 @endfor
-                @if(!empty($StudentsDetails[$k]['grades']))
-                <td>{{$StudentsDetails[$k]['grade']}}</td>
+                @if((!empty($StudentsDetails[$k]['grades'])) && $StudentsDetails[$k]['total'] != "")
+                    <td>{{$StudentsDetails[$k]['grade']}}</td>
                 @endif
             </tr>
         @endfor
