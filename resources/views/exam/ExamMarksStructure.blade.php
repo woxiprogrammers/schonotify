@@ -1,6 +1,8 @@
 <div class="row" style="overflow: scroll">
     <input type="hidden" id="checkSign" name="checkSign">
-    <div style="margin-left: 50px "> <strong> TermName : {{ $termName}} </strong></div>
+    <br>
+    <div style="margin-left: 50px"> <strong style="font-size: 150%"> TermName : {{ $termName}} </strong></div>
+    <br>
     <table border="1" width="100%" cellpadding="10px" style="text-align: center">
         <tr>
             <th style="text-align: center">Students Roll Number:</th>
@@ -38,6 +40,8 @@
                 @endfor
                 @if((!empty($StudentsDetails[$k]['grades'])) && $StudentsDetails[$k]['total'] != "")
                     <td>{{$StudentsDetails[$k]['grade']}}</td>
+                @else
+                    <td>No Grade</td>
                 @endif
             </tr>
         @endfor
