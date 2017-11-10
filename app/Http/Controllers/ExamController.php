@@ -256,6 +256,25 @@ class ExamController extends Controller
             $iterator++;
         }
         $StudentsDetails = $studentMarks;
+        $iterator = 0;
+        foreach ( $StudentsDetails as $students){
+            $total=0;
+            foreach($students['term_marks'] as $value){
+                $total += $value['marks'];
+            }
+            $StudentsDetails[$iterator]['grades'] = Grade::where('class_id',$class_id)->select('min','max','grade')->get()->toArray();
+            $StudentsDetails[$iterator]['total'] = $total;
+            $iterator++;
+        }
+        $iterator = 0;
+        foreach ($StudentsDetails as $data){
+            foreach ($data['grades'] as $grade){
+                if($data['total'] <= $grade['max'] && $data['total'] >= $grade['min']){
+                    $StudentsDetails[$iterator]['grade'] = $grade['grade'];
+                }
+            }
+            $iterator++;
+        }
         $details = ExamTeacherConfirmation::join('exam_sub_subject_structure','exam_sub_subject_structure.id','=','exam_teacher_confirmation.exam_structure_id')
             ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
             ->where('exam_teacher_confirmation.div_id','=',$div_id)
@@ -263,7 +282,7 @@ class ExamController extends Controller
             ->where('exam_teacher_confirmation.exam_structure_id','=',$sub_subject_id)
             ->select('exam_sub_subject_structure.id','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark')
             ->get()->toArray();
-        return view('exam/ExamMarksStructure')->with(compact('termDetails','StudentsDetails','termName','studentMarks','details'));
+        return view('exam/ExamMarksStructure')->with(compact('termDetails','StudentsDetails','termName','studentMarks','details','studentGrade'));
     }
     public function createSubjectStructureDetails(Request $request){
         $user = Auth::user();
