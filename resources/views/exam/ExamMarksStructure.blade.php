@@ -8,6 +8,7 @@
             @for($i=0 ; $i < count($termDetails) ; $i++)
                 <th style="text-align: center">{{$termDetails[$i]['exam_type']}} <input type="checkbox" class="checked_{{$i}}" id="checkbox"></th>
             @endfor
+            <th style="text-align: center">Grades</th>
         </tr>
         <tr>
             <th style="text-align: center"></th>
@@ -15,6 +16,7 @@
             @foreach($termDetails as $terms)
                 <th style="text-align: center">{{$terms['out_of_marks']}}</th>
             @endforeach
+            <th></th>
         </tr>
         @for($k = 0 ; $k < count($StudentsDetails) ; $k++)
             <tr>
@@ -34,6 +36,7 @@
                         <td><input id="marks" placeholder="Enter Marks" type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" class="checked_{{$i}}" disabled required></td>
                     @endif
                 @endfor
+                <td>{{$StudentsDetails[$k]['grade']}}</td>
             </tr>
         @endfor
     </table>

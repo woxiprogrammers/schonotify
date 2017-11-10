@@ -3,7 +3,6 @@
     <div class="panel panel-transparent">
 
         <div class="panel-body">
-
                 <div class="form-group">
                     <label for="form-field-select-2">
                         Select User Roles
