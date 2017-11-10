@@ -44,7 +44,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Min Marks:<span class="symbol required"></span>
@@ -52,7 +52,7 @@
                                         <input type="number" class="form-control" id="minMarks" name="min_marks" placeholder="Enter Minimum marks">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Max Marks:<span class="symbol required"></span>
@@ -60,7 +60,7 @@
                                         <input type="number" class="form-control" id="maxMarks" name="max_marks" placeholder="Enter Maximum marks">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Grades:<span class="symbol required"></span>
