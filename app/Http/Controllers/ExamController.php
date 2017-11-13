@@ -274,11 +274,10 @@ class ExamController extends Controller
         $iterator = 0;
         foreach ($StudentsDetails as $data){
             foreach ($data['grades'] as $grade){
-                if(array_key_exists('min',$grade)){
+                if(!empty($data['total'])){
                     if ($data['total'] <= $grade['max'] && $data['total'] >= $grade['min']) {
                         $StudentsDetails[$iterator]['grade'] = $grade['grade'];
                     }
-                    $StudentsDetails[$iterator]['grade'] = "Fail";
                 }
             }
             $iterator++;

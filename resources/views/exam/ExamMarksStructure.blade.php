@@ -38,8 +38,12 @@
                         <td><input id="marks" placeholder="Enter Marks" type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" class="checked_{{$i}}" disabled required></td>
                     @endif
                 @endfor
-                @if((!empty($StudentsDetails[$k]['grades'])) && $StudentsDetails[$k]['total'] != "")
+                @if((!empty($StudentsDetails[$k]['grades'])) && $StudentsDetails[$k]['total'] != "" )
+                    @if(array_key_exists('grade',$StudentsDetails[$k]))
                     <td>{{$StudentsDetails[$k]['grade']}}</td>
+                        @else
+                        <td>fail</td>
+                        @endif
                 @else
                     <td>No Grade</td>
                 @endif
