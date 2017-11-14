@@ -44,8 +44,8 @@
                         @else
                         <td>fail</td>
                         @endif
-                @else
-                    <td>No Grade</td>
+                    @else
+                        <td> -- </td>
                 @endif
             </tr>
         @endfor
