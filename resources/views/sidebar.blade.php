@@ -338,7 +338,7 @@
             <li>
                 <a href="/exam/subjectMarksView">
                    <div class="item-inner">
-                       <span class="title"> Subject Marks Structure </span>
+                       <span class="title"> Subject Marks Entry Structure </span>
                    </div>
                 </a>
             </li>
