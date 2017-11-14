@@ -25,7 +25,7 @@
 
             <li class="dropdown">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="badge partition-red">12</span> <i class="ti-bell"></i> <span>Notifications</span>
+                    <span class="badge partition-red">0</span> <i class="ti-bell"></i> <span>Notifications</span>
                 </a>
                 <ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large">
                     <li>
@@ -34,58 +34,8 @@
                     <li>
                         <div class="drop-down-wrapper ps-container flexcroll">
                             <ul>
-                                <li class="unread">
-                                    <a href="javascript:;">
-                                        <div class="clearfix">
-                                            <div class="thread-image">
-                                                <h1 class="tmln-h2-homework text-white text-center">H</h1>
-                                            </div>
-                                            <div class="thread-content col-sm-9 padding-left-0">
-                                                <span class="author">Homework have been created for Class Fifth.</span>
-                                                <span class="preview"><p>Assignment for class fifth on chapter no. 5 & 6</p>
-                                                <p>Due Date:<i> 8 Nov, 2015 </i></p></span>
-                                                <span class="time"> Just Now</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <div class="clearfix">
-                                            <div class="thread-image">
-                                                <h1 class="tmln-h2-leave text-white text-center">L</h1>
-                                            </div>
-                                            <div class="thread-content col-sm-9 padding-left-0">
-                                                <span class="author">Seek Leave for 2 days</span>
-                                                <span class="preview"><p>Applying leave for 2 days ...</p>
-                                                <p>Due Date:<i> 2 Nov, 2015 </i></p></span>
-                                                <span class="time">8 hrs ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;" data-toggle-class="app-offsidebar-open chat-open" data-toggle-target="#app,#users" data-toggle-click-outside="#off-sidebar">
-                                        <div class="clearfix">
-                                            <div class="thread-image">
-                                                <h1 class="tmln-h2-event text-white text-center">E</h1>
-                                            </div>
-                                            <div class="thread-content col-sm-9 padding-left-0">
-                                                <span class="author">Event Created</span>
-                                                <span class="preview"><p>Meeting for annual sport planning.</p>
-                                                <p>Due Date:<i> 2 Nov, 2015 </i></p></span>
-                                                <span class="time">8 hrs ago</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
                             </ul>
                         </div>
-                    </li>
-                    <li class="view-all">
-                        <a href="auto-notification" >
-                            See All
-                        </a>
                     </li>
                 </ul>
             </li>
