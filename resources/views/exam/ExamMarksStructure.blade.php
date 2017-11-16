@@ -82,7 +82,7 @@
 @endif
     </div>
 </div>
-        <script>
+<script>
             $("document").ready(function(){
                 $('input[type = "checkbox"]').change(function() {
                     var classes = $(this).attr("class");
@@ -97,7 +97,6 @@
                     }
                 });
                 $('#checkSign').val(0);
-
             });
             if($('#teacher-checkbox').is(':checked')) {
                 $('#submitButton').attr('disabled',false);
@@ -112,5 +111,4 @@
                     $('#checkSign').val(0);
                 }
             });
-        </script>
-
+</script>
