@@ -444,3 +444,4 @@ class ExamController extends Controller
         return Redirect::back();
     }
 }
+
