@@ -315,35 +315,49 @@
         </a>
         <ul class="sub-menu">
             <li>
-                <a href="/exam/create-subject">
-                    <div class="item-inner">
-                        <span class="title"> Create Subject </span>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="/exam/create">
-                    <div class="item-inner">
-                        <span class="title"> Create Structure </span>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="/exam/listing">
-                    <div class="item-inner">
-                        <span class="title"> View Structure </span>
-                    </div>
-                </a>
-            </li>
-            <li>
                 <a href="/exam/subjectMarksView">
                    <div class="item-inner">
-                       <span class="title"> Subject Marks Structure </span>
+                       <span class="title"> Subject Marks Entry Structure </span>
                    </div>
                 </a>
             </li>
             @if(Auth::User()->role_id == 1)
-            <li>
+                <li>
+                    <a href="/exam/create-subject">
+                        <div class="item-inner">
+                            <span class="title"> Create Subject </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exam/create">
+                        <div class="item-inner">
+                            <span class="title"> Create Structure </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exam/listing">
+                        <div class="item-inner">
+                            <span class="title"> View Structure </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exam/gradeEntry">
+                        <div class="item-inner">
+                            <span class="title"> Grades Entry </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exam/gradeView">
+                        <div class="item-inner">
+                            <span class="title"> Grades View </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
                 <a href="/exam/admin-publish-view">
                     <div class="item-inner">
                         <span class="title"> Admin Publish </span>

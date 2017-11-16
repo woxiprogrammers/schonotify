@@ -9,6 +9,7 @@ use App\ExamTeacherConfirmation;
 use App\ExamTermDetails;
 use App\ExamTerms;
 use App\ExamYear;
+use App\Grade;
 use App\StudentExamDetails;
 use App\StudentExamMarks;
 use App\User;
@@ -163,7 +164,7 @@ class ExamController extends Controller
         }else{
             $subjectDetails['is_co_scholastic'] = false;
         }
-         ExamSubSubjectStructure::where('id',$id)->update($subjectDetails);
+        $query = ExamSubSubjectStructure::where('id',$id)->update($subjectDetails);
         $classData = $request->classes;
         $deleteOldRecordsClass = ExamClassStructureRelation::where('exam_subject_id',$id)->whereNotIn('class_id',$classData)->delete();
         foreach ($classData as  $class){
@@ -180,26 +181,27 @@ class ExamController extends Controller
         $year['end_year'] = $request->end_Year;
         $year['updated_at'] = Carbon::now();
         $updateYear = ExamYear:: where('exam_structure_id',$id)->update($year);
-        $deleteOldRecordsTerm = ExamTerms::where('exam_structure_id',$id)->delete();
-        $deleteOldRecordsType = ExamTermDetails::where('exam_structure_id',$id)->delete();
+
         $terms = $request->edit_terms_id;
-        foreach ($terms as $key => $term)
-        {
-            $termData['term_name']= $term;
-            $termData['exam_structure_id'] = $id;
-            $termData['created_at'] = Carbon::now();
-            $termData['updated_at'] = Carbon::now();
-            $CreatedTerm = ExamTerms::insertGetId($termData);
-            $examTermInfoData = array();
-            $examTermInfoData['term_id'] = $CreatedTerm;
-            $examTermInfoData['exam_structure_id'] = $id;
-            foreach($request->exam_types as $examInfo){
-                $examTermInfoData['exam_type'] = $examInfo['edit_head'];
-                $examTermInfoData['out_of_marks'] = $examInfo['edit_out_of_marks'][$key];
-                ExamTermDetails::create($examTermInfoData);
+        if($terms != null){
+            $deleteOldRecordsTerm = ExamTerms::where('exam_structure_id',$id)->delete();
+            $deleteOldRecordsType = ExamTermDetails::where('exam_structure_id',$id)->delete();
+            foreach ($terms as $key => $term) {
+                $termData['term_name'] = $term;
+                $termData['exam_structure_id'] = $id;
+                $termData['created_at'] = Carbon::now();
+                $termData['updated_at'] = Carbon::now();
+                $CreatedTerm = ExamTerms::insertGetId($termData);
+                $examTermInfoData = array();
+                $examTermInfoData['term_id'] = $CreatedTerm;
+                $examTermInfoData['exam_structure_id'] = $id;
+                foreach ($request->exam_types as $examInfo) {
+                    $examTermInfoData['exam_type'] = $examInfo['edit_head'];
+                    $examTermInfoData['out_of_marks'] = $examInfo['edit_out_of_marks'][$key];
+                    ExamTermDetails::create($examTermInfoData);
+                }
             }
         }
-
         Session::flash('message-success','Structure updated successfully .');
         return Redirect::back();
     }
@@ -254,6 +256,32 @@ class ExamController extends Controller
             $iterator++;
         }
         $StudentsDetails = $studentMarks;
+        $iterator = 0;
+        foreach ( $StudentsDetails as $students){
+            $total=0;
+            foreach($students['term_marks'] as $value){
+                if($value['marks'] != null) {
+                    $total += $value['marks'];
+                }else{
+                    $total= "";
+                }
+
+            }
+            $StudentsDetails[$iterator]['grades'] = Grade::where('class_id',$class_id)->select('min','max','grade')->get()->toArray();
+            $StudentsDetails[$iterator]['total'] = $total;
+            $iterator++;
+        }
+        $iterator = 0;
+        foreach ($StudentsDetails as $data){
+            foreach ($data['grades'] as $grade){
+                if(!empty($data['total'])){
+                    if ($data['total'] <= $grade['max'] && $data['total'] >= $grade['min']) {
+                        $StudentsDetails[$iterator]['grade'] = $grade['grade'];
+                    }
+                }
+            }
+            $iterator++;
+        }
         $details = ExamTeacherConfirmation::join('exam_sub_subject_structure','exam_sub_subject_structure.id','=','exam_teacher_confirmation.exam_structure_id')
             ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
             ->where('exam_teacher_confirmation.div_id','=',$div_id)
@@ -335,8 +363,9 @@ class ExamController extends Controller
                                                 ->get()->toArray();
             $subSubject = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
                                                     ->where('exam_class_structure_relation.class_id','=',$class_id)
-                                                    ->select('exam_sub_subject_structure.sub_subject_name')->get();
-         return view('exam/adminPublishPartial')->with(compact('teacherInfo','subSubject'));
+                                                    ->select('exam_sub_subject_structure.sub_subject_name')->get()->toArray();
+           $all= array_merge($teacherInfo,$subSubject);
+         return view('exam/adminPublishPartial')->with(compact('teacherInfo','subSubject','all'));
     }
     public function publishStatus(Request $request){
         $user = Auth::user();
@@ -380,4 +409,40 @@ class ExamController extends Controller
         Session::flash('message-success','Students Marks are Un-Publish ..');
         return Redirect::back();
     }
+    public function gradesEntryView(Request $request){
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        return view('/exam/gradesEntry')->with(compact('batches','examSubjects'));
+    }
+    public function gradesEntry(Request $request){
+        $gradeData['class_id'] = $request->class_select;
+        $gradeData['min'] = $request->min_marks;
+        $gradeData['max'] = $request->max_marks;
+        $gradeData['grade'] = $request->grades;
+        $gradeData['created_at'] = Carbon::now();
+        $gradeData['updated_at'] = Carbon::now();
+        $create = Grade::insert($gradeData);
+        Session::flash('message-success','Grade Is Created successfully ..');
+        return Redirect::back();
+    }
+    public function viewGrades(Request $request){
+        $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+        return view('/exam/gradeView')->with(compact('batches','examSubjects'));
+    }
+    public function gradeListing(Request $request,$id){
+        $gradeList =Grade::where('class_id',$id)->select('id','min','max','grade')->get();
+        return view('/exam/gradeListingPartial')->with(compact('gradeList'));
+    }
+
+    public function changeShowResultFlag(Request $request){
+        $studentId = $request->student_id;
+        if($request->resultFlag == 'true'){
+
+            $hideResult['hide_result'] = true;
+        }else{
+            $hideResult['hide_result'] = false;
+        }
+       $update= User::where('id',$studentId)->update($hideResult);
+        return Redirect::back();
+    }
 }
+

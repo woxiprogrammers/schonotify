@@ -1,6 +1,8 @@
 <div class="row" style="overflow: scroll">
     <input type="hidden" id="checkSign" name="checkSign">
-    <div style="margin-left: 50px "> <strong> TermName : {{ $termName}} </strong></div>
+    <br>
+    <div style="margin-left: 50px"> <strong style="font-size: 150%"> TermName : {{ $termName}} </strong></div>
+    <br>
     <table border="1" width="100%" cellpadding="10px" style="text-align: center">
         <tr>
             <th style="text-align: center">Students Roll Number:</th>
@@ -8,6 +10,7 @@
             @for($i=0 ; $i < count($termDetails) ; $i++)
                 <th style="text-align: center">{{$termDetails[$i]['exam_type']}} <input type="checkbox" class="checked_{{$i}}" id="checkbox"></th>
             @endfor
+            <th style="text-align: center">Grades</th>
         </tr>
         <tr>
             <th style="text-align: center"></th>
@@ -15,6 +18,7 @@
             @foreach($termDetails as $terms)
                 <th style="text-align: center">{{$terms['out_of_marks']}}</th>
             @endforeach
+            <th></th>
         </tr>
         @for($k = 0 ; $k < count($StudentsDetails) ; $k++)
             <tr>
@@ -34,6 +38,15 @@
                         <td><input id="marks" placeholder="Enter Marks" type="number" name="details[{{$k}}][marks_details][{{$i}}][marks_obtain]" class="checked_{{$i}}" disabled required></td>
                     @endif
                 @endfor
+                @if((!empty($StudentsDetails[$k]['grades'])) && $StudentsDetails[$k]['total'] != "" )
+                    @if(array_key_exists('grade',$StudentsDetails[$k]))
+                    <td>{{$StudentsDetails[$k]['grade']}}</td>
+                        @else
+                        <td>fail</td>
+                        @endif
+                    @else
+                        <td> -- </td>
+                @endif
             </tr>
         @endfor
     </table>
@@ -69,7 +82,7 @@
 @endif
     </div>
 </div>
-        <script>
+<script>
             $("document").ready(function(){
                 $('input[type = "checkbox"]').change(function() {
                     var classes = $(this).attr("class");
@@ -84,7 +97,6 @@
                     }
                 });
                 $('#checkSign').val(0);
-
             });
             if($('#teacher-checkbox').is(':checked')) {
                 $('#submitButton').attr('disabled',false);
@@ -99,5 +111,4 @@
                     $('#checkSign').val(0);
                 }
             });
-        </script>
-
+</script>

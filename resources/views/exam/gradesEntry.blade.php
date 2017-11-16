@@ -15,19 +15,19 @@
                         <div class="row">
                             <div class="col-sm-7">
                                 <h1 class="mainTitle">Exam Structure</h1>
-                                <span class="mainDescription">Listing</span>
+                                <span class="mainDescription">Grades Entry</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="structure-create" role="form" id="examStructureForm">
+                        <form method="post" action="grade-create" role="form" id="gradeStructureForm">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
                                             <option>Select Batch</option>
                                             @foreach($batches as $batch)
                                                 <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
@@ -35,20 +35,46 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-4" id="class-select-div" >
+                                <div class="col-md-6" id="class-select-div" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Class
+                                            Select Class<span class="symbol required"></span>
                                         </label>
-                                            <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
-                                            </select>
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Min Marks:<span class="symbol required"></span>
+                                        </label>
+                                        <input type="number" class="form-control" id="minMarks" name="min_marks" placeholder="Enter Minimum marks">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Max Marks:<span class="symbol required"></span>
+                                        </label>
+                                        <input type="number" class="form-control" id="maxMarks" name="max_marks" placeholder="Enter Maximum marks">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Grades:<span class="symbol required"></span>
+                                        </label>
+                                        <input type="text" class="form-control" id="grades" name="grades" placeholder="Enter Grades">
                                     </div>
                                 </div>
                                 <div id="loadmoreajaxloaderClass" style="display:none;"></div>
                             </div>
-                                 <div id="structures">
-
-                                 </div>
+                            <div class="row">
+                                <button class="btn btn-primary btn-wide" type="submit" value="submit" >
+                                    Create <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </div>
                         </form>
                     </div>
                     @include('rightSidebar')
@@ -57,7 +83,6 @@
         </div>
         @include('footer')
     </div>
-    @include('searchJS')
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/modernizr/modernizr.js"></script>
@@ -83,46 +108,40 @@
     <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
     <!-- start: JavaScript Event Handlers for this page -->
     <script src="/assets/js/form-validation-edit.js"></script>
-    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/form-elements.js"></script>
-    <script src="/assets/js/custom-project.js"></script>
-    <script src="/assets/js/table-data.js"></script>
-    <script src="/assets/js/form-validation.js"></script>
+    <script src="/assets/js/exam-form-validation.js"></script>
+
 
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            FormElements.init();
+            FormValidator.init();
         });
-            $('#batchDrpdn').change(function(){
-                var id=this.value;
-                var route='get-all-classes/'+id;
-                $('#loadmoreajaxloaderClass').show();
-                $.get(route,function(res){
-                    if (res.length == 0)
-                    {
-                        $('#class-select').html("no record found");
-                        $('#loadmoreajaxloaderClass').hide();
-                    } else {
-                        var str='<option value="">Please select class</option>';
-                        for(var i=0; i<res.length; i++)
-                        {
-                            str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
-                        }
-                        $('#class-select').html(str);
-                        $('#loadmoreajaxloaderClass').hide();
-                    }
-                });
-            });
-        $('#class-select').change(function(){
+        $('#batchDrpdn').change(function(){
             var id=this.value;
-            var route='get-subject-structures/'+id;
+            var route='get-all-classes/'+id;
             $('#loadmoreajaxloaderClass').show();
             $.get(route,function(res){
-
+                if (res.length == 0)
+                {
+                    $('#class-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
-                    $('#structures').html(res);
+                } else {
+                    var str='<option value="">Please select class</option>';
+                    for(var i=0; i<res.length; i++)
+                    {
+                        str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                    }
+                    $('#class-select').html(str);
+                    $('#loadmoreajaxloaderClass').hide();
+                }
+            });
+        });
+        $('#class-select').change(function(){
+            var id=this.value;
+            $('#loadmoreajaxloaderClass').show();
+            $.get(route,function(res){
+                $('#loadmoreajaxloaderClass').hide();
             });
         });
     </script>

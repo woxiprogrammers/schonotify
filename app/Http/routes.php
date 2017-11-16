@@ -532,6 +532,7 @@
         Route::get('get-exam-terms/{user_id}','api\ExamController@getExamTerms');
         Route::get('get-subject-details/{id}','api\ExamController@getSubjectDetails');
         Route::get('get-term-data/{id}/{user_id}','api\ExamController@getTermData');
+        Route::get('check-fees/{id}','api\ExamController@checkFees');
     });
         //Exam
 Route::group(['prefix' => 'exam'], function () {
@@ -539,6 +540,7 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('listing',array('uses' => 'ExamController@ExamStructureListing'));
     Route::get('edit/{id}',array('uses' => 'ExamController@ExamStructureEdit'));
     Route::post('edit/{id}',array('uses' => 'ExamController@editStructure'));
+    Route::post('/change-show-result-flag',array('uses' => 'ExamController@changeShowResultFlag'));
     Route::get('create-subject',array('uses' => 'ExamController@createExamSubjectView'));
     Route::post('create-subject',array('uses' => 'ExamController@createExamSubject'));
     Route::post('structure-create',array('uses' => 'ExamController@createStructureTable'));
@@ -557,4 +559,8 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('admin-publish/{div_id}/{class_id}',array('uses' => 'ExamController@publish'));
     Route::post('admin-publish-model',array('uses' => 'ExamController@publishStatus'));
     Route::post('admin-unPublish-model',array('uses' => 'ExamController@UnPublishStatus'));
+    Route::get('gradeEntry',array('uses' => 'ExamController@gradesEntryView'));
+    Route::post('grade-create',array('uses' => 'ExamController@gradesEntry'));
+    Route::get('gradeView',array('uses' => 'ExamController@viewGrades'));
+    Route::get('get-grades/{id}',array('uses' => 'ExamController@gradeListing'));
 });

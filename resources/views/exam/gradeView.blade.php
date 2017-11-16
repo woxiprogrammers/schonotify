@@ -14,7 +14,7 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Exam Structure</h1>
+                                <h1 class="mainTitle">Grade Structure</h1>
                                 <span class="mainDescription">Listing</span>
                             </div>
                         </div>
@@ -40,15 +40,15 @@
                                         <label class="control-label">
                                             Select Class
                                         </label>
-                                            <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
-                                            </select>
+                                        <select class="form-control" id="class-select" name="class-select" style="-webkit-appearance: menulist;">
+                                        </select>
                                     </div>
                                 </div>
                                 <div id="loadmoreajaxloaderClass" style="display:none;"></div>
                             </div>
-                                 <div id="structures">
+                            <div id="structures">
 
-                                 </div>
+                            </div>
                         </form>
                     </div>
                     @include('rightSidebar')
@@ -57,7 +57,6 @@
         </div>
         @include('footer')
     </div>
-    @include('searchJS')
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/modernizr/modernizr.js"></script>
@@ -94,35 +93,36 @@
         jQuery(document).ready(function() {
             Main.init();
             FormElements.init();
+            TableData.init();
         });
-            $('#batchDrpdn').change(function(){
-                var id=this.value;
-                var route='get-all-classes/'+id;
-                $('#loadmoreajaxloaderClass').show();
-                $.get(route,function(res){
-                    if (res.length == 0)
+        $('#batchDrpdn').change(function(){
+            var id=this.value;
+            var route='get-all-classes/'+id;
+            $('#loadmoreajaxloaderClass').show();
+            $.get(route,function(res){
+                if (res.length == 0)
+                {
+                    $('#class-select').html("no record found");
+                    $('#loadmoreajaxloaderClass').hide();
+                } else {
+                    var str='<option value="">Please select class</option>';
+                    for(var i=0; i<res.length; i++)
                     {
-                        $('#class-select').html("no record found");
-                        $('#loadmoreajaxloaderClass').hide();
-                    } else {
-                        var str='<option value="">Please select class</option>';
-                        for(var i=0; i<res.length; i++)
-                        {
-                            str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
-                        }
-                        $('#class-select').html(str);
-                        $('#loadmoreajaxloaderClass').hide();
+                        str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                     }
-                });
+                    $('#class-select').html(str);
+                    $('#loadmoreajaxloaderClass').hide();
+                }
             });
+        });
         $('#class-select').change(function(){
             var id=this.value;
-            var route='get-subject-structures/'+id;
+            var route='get-grades/'+id;
             $('#loadmoreajaxloaderClass').show();
             $.get(route,function(res){
 
-                    $('#loadmoreajaxloaderClass').hide();
-                    $('#structures').html(res);
+                $('#loadmoreajaxloaderClass').hide();
+                $('#structures').html(res);
             });
         });
     </script>
