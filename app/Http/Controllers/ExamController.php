@@ -260,7 +260,12 @@ class ExamController extends Controller
         foreach ( $StudentsDetails as $students){
             $total=0;
             foreach($students['term_marks'] as $value){
-                $total += $value['marks'];
+                if($value['marks'] != null) {
+                    $total += $value['marks'];
+                }else{
+                    $total= "";
+                }
+
             }
             $StudentsDetails[$iterator]['grades'] = Grade::where('class_id',$class_id)->select('min','max','grade')->get()->toArray();
             $StudentsDetails[$iterator]['total'] = $total;
@@ -269,8 +274,10 @@ class ExamController extends Controller
         $iterator = 0;
         foreach ($StudentsDetails as $data){
             foreach ($data['grades'] as $grade){
-                if($data['total'] <= $grade['max'] && $data['total'] >= $grade['min']){
-                    $StudentsDetails[$iterator]['grade'] = $grade['grade'];
+                if(!empty($data['total'])){
+                    if ($data['total'] <= $grade['max'] && $data['total'] >= $grade['min']) {
+                        $StudentsDetails[$iterator]['grade'] = $grade['grade'];
+                    }
                 }
             }
             $iterator++;

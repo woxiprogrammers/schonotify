@@ -287,7 +287,6 @@ var FormValidator = function () {
                 div_select : {
                     required : true
                 },
-
                 subject_select : {
                     required : true
                 },

@@ -64,7 +64,8 @@ class ExamController extends Controller
     public function getTermData(Request $request,$id,$user_id){
         $examTermDetails = array();
         try{
-            $student_exam_details_id = StudentExamDetails::where('student_id',$user_id)->pluck('id');
+            $exam_sub_structure_id = ExamTerms::where('id',$id)->pluck('exam_structure_id');
+            $student_exam_details_id = StudentExamDetails::where('student_id',$user_id)->where('exam_structure_id',$exam_sub_structure_id)->pluck('id');
             $termData =  DB::table('student_exam_marks')->join('exam_term_details','exam_term_details.id','=','student_exam_marks.exam_term_details_id')->
                                      where('exam_term_details.term_id',$id)->
                                      where('student_exam_marks.term_id',$id)->
