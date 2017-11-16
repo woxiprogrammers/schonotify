@@ -94,4 +94,11 @@ class ExamController extends Controller
         ];
         return response($response, $status);
     }
+    public function checkFees(Request $request,$id){
+        $is_paid = User::where('id',$id)->pluck('hide_result');
+        if ($is_paid == null){
+            $is_paid = 0;
+        }
+        return response($is_paid);
+    }
 }
