@@ -539,6 +539,7 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('listing',array('uses' => 'ExamController@ExamStructureListing'));
     Route::get('edit/{id}',array('uses' => 'ExamController@ExamStructureEdit'));
     Route::post('edit/{id}',array('uses' => 'ExamController@editStructure'));
+    Route::post('/change-show-result-flag',array('uses' => 'ExamController@changeShowResultFlag'));
     Route::get('create-subject',array('uses' => 'ExamController@createExamSubjectView'));
     Route::post('create-subject',array('uses' => 'ExamController@createExamSubject'));
     Route::post('structure-create',array('uses' => 'ExamController@createStructureTable'));
