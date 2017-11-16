@@ -80,12 +80,12 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="assets/images/loader1.gif"></center></div>
                             </div>
+                            <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="/assets/images/loader1.gif"></center></div>
                             <div id="structures"></div>
                             <div class="form-group">
                                 <button class="btn btn-primary btn-wide" type="submit" id="submitButton" disabled>
-                                    Create <i class="fa fa-arrow-circle-right"></i>
+                                    Submit <i class="fa fa-arrow-circle-right"></i>
                                 </button>
                             </div>
 
