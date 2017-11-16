@@ -363,8 +363,9 @@ class ExamController extends Controller
                                                 ->get()->toArray();
             $subSubject = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
                                                     ->where('exam_class_structure_relation.class_id','=',$class_id)
-                                                    ->select('exam_sub_subject_structure.sub_subject_name')->get();
-         return view('exam/adminPublishPartial')->with(compact('teacherInfo','subSubject'));
+                                                    ->select('exam_sub_subject_structure.sub_subject_name')->get()->toArray();
+           $all= array_merge($teacherInfo,$subSubject);
+         return view('exam/adminPublishPartial')->with(compact('teacherInfo','subSubject','all'));
     }
     public function publishStatus(Request $request){
         $user = Auth::user();
