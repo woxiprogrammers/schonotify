@@ -101,6 +101,7 @@ class SearchController extends Controller
         $str.="<thead><tr>";
         if($role_id == 3)
         {
+            $str.="<th>Result</th>";
             $str.="<th>GRN No.</th>";
         }
         $str.="<th>Name</th></th><th>Roll No</th><th>Category</th><th>Gender</th>";
@@ -121,7 +122,8 @@ class SearchController extends Controller
             {
                 if($row->user_role=='student')
                 {
-                    $str.="<tr><td>".$row->rollno."</td>";
+                    $str.="<tr><td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'>"."</td>";
+                    $str.="<td>".$row->rollno."</td>";
                 }else{
                     $str.="<tr>";
                 }

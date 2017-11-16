@@ -431,4 +431,16 @@ class ExamController extends Controller
         $gradeList =Grade::where('class_id',$id)->select('id','min','max','grade')->get();
         return view('/exam/gradeListingPartial')->with(compact('gradeList'));
     }
+
+    public function changeShowResultFlag(Request $request){
+        $studentId = $request->student_id;
+        if($request->resultFlag == 'true'){
+
+            $hideResult['hide_result'] = true;
+        }else{
+            $hideResult['hide_result'] = false;
+        }
+       $update= User::where('id',$studentId)->update($hideResult);
+        return Redirect::back();
+    }
 }
