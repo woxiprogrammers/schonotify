@@ -21,10 +21,8 @@
                     <td><input style="text-align: center" type="text" class="form-control" id="remark" name="remark[]" value="{{$all[$i]['remark']}}" readonly></td>
                     @if(array_key_exists('status',$all[$i]) && $all[$i]['status'] == 1)
                         <td><input type="text" readonly="readonly" placeholder="puslished"></td>
-                        @elseif(array_key_exists('status',$all[$i]) && $all[$i]['status'] == 0)
-                             <td><input type="text" readonly="readonly" placeholder="Un-puslished"></td>
                         @else
-                        <td><input type="text" placeholder="teacher Checked"></td>
+                             <td><input type="text" readonly="readonly" placeholder="Un-puslished"></td>
                     @endif
                 @else
                     <td><input type="checkbox" id="teacher-sign" class="teacher_sign" disabled></td>

@@ -337,7 +337,7 @@ class ExamController extends Controller
             $teacherConfirmation['check_sign'] = $request->checkSign;
             $teacherConfirmation['remark'] = $request->teacher_remark;
             $teacherConfirmation['teacher_id'] = $user['id'];
-            $teacherConfirmation['status'] = 2;
+            $teacherConfirmation['status'] = 0;
             if($teacherConfirmationDetails != null ){
              $update =  ExamTeacherConfirmation::where('id',$teacherConfirmationDetails['id'])->update($teacherConfirmation);
             }else{
