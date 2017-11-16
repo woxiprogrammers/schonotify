@@ -103,5 +103,34 @@
              });
         }
     }
+
 </script>
+    <script>
+        function result(element){
+          if(element.checked){
+             var resultFlag = 'true';
+          }else{
+              var resultFlag = 'false';
+          }
+            var studentId = element.value;
+            $.ajax({
+                url:'/exam/change-show-result-flag',
+                type: "POST",
+                data: {
+                    resultFlag: resultFlag,
+                    student_id: studentId
+                },
+                success:function(data,textStatus,xhr){
+                    if(resultFlag == 'true'){
+                        swal("Result Will Not been Update For this student!");
+                    }else{
+                        swal("Result Will be Updated!");
+                    }
+                },
+                error:function(errorData){
+                    alert(errorData)
+                }
+            })
+        }
+    </script>
 @stop
