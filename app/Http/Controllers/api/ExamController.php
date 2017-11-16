@@ -64,7 +64,6 @@ class ExamController extends Controller
     public function getTermData(Request $request,$id,$user_id){
         $examTermDetails = array();
         try{
-            $is_hide = User::where('id',$user_id)->pluck('hide_result');
             $exam_sub_structure_id = ExamTerms::where('id',$id)->pluck('exam_structure_id');
             $student_exam_details_id = StudentExamDetails::where('student_id',$user_id)->where('exam_structure_id',$exam_sub_structure_id)->pluck('id');
             $termData =  DB::table('student_exam_marks')->join('exam_term_details','exam_term_details.id','=','student_exam_marks.exam_term_details_id')->
@@ -94,5 +93,12 @@ class ExamController extends Controller
             "data"   =>  $examTermDetails
         ];
         return response($response, $status);
+    }
+    public function checkFees(Request $request,$id){
+        $is_paid = User::where('id',$id)->pluck('hide_result');
+        if ($is_paid == null){
+            $is_paid = 0;
+        }
+        return response($is_paid);
     }
 }
