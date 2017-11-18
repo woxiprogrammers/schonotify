@@ -62,7 +62,7 @@
                         title: "Published!",
                         text: "Result will be Updated to Parents !",
                         type: "success",
-                        confirmButtonColor: "green",
+                        confirmButtonColor : "green",
                         closeOnCancel: false
                     });
                 }else{
