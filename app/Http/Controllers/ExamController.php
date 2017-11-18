@@ -360,53 +360,23 @@ class ExamController extends Controller
                                                 ->where('exam_class_structure_relation.class_id','=',$class_id)
                                                 ->where('exam_teacher_confirmation.div_id','=',$div_id)
                                                 ->select('exam_sub_subject_structure.sub_subject_name','exam_teacher_confirmation.check_sign','exam_teacher_confirmation.remark','exam_teacher_confirmation.exam_structure_id','status')
-                                                ->get()->toArray();
+                                                ->get();
             $subSubject = ExamSubSubjectStructure::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
                                                     ->where('exam_class_structure_relation.class_id','=',$class_id)
+                                                    ->whereNotIn('exam_sub_subject_structure.sub_subject_name',$teacherInfo->pluck('sub_subject_name'))
                                                     ->select('exam_sub_subject_structure.sub_subject_name')->get()->toArray();
-           $all= array_merge($teacherInfo,$subSubject);
+              $all= array_merge($teacherInfo->toArray(),$subSubject);
          return view('exam/adminPublishPartial')->with(compact('teacherInfo','subSubject','all'));
     }
     public function publishStatus(Request $request){
-        $user = Auth::user();
-        $adminPublishTeacher = ExamTeacherConfirmation::where('class_id',$request->class_select)
-                                                        ->where('exam_structure_id',$request->sub_subject[0])
-                                                        ->where('remark',$request->remark[0])
-                                                        ->where('div_id',$request->div_select)
-                                                        ->where('check_sign',$request->checkedSign)
-                                                        ->first();
-        $teacherConfirmation['teacher_id'] = $user['id'];
-        $adminPublish['class_id'] = $request->class_select;
-        $adminPublish['exam_structure_id'] = $request->sub_subject[0];
-        $adminPublish['status'] = 1;
-        $adminPublish['remark'] = $request->remark[0];
-        $adminPublish['div_id'] = $request->div_select;
-        $adminPublish['check_sign'] = $request->checkedSign;
-        $adminPublish['created_at'] = Carbon::now();
-        $adminPublish['updated_at'] = Carbon::now();
-       $query = ExamTeacherConfirmation::where('id',$adminPublishTeacher['id'])->update($adminPublish);
-        Session::flash('message-success','Students Marks are Publish ..');
-        return Redirect::back();
-    }
-    public function UnPublishStatus(Request $request){
-        $user = Auth::user();
-        $adminPublishTeacher = ExamTeacherConfirmation::where('class_id',$request->class_select)
-            ->where('exam_structure_id',$request->sub_subject[0])
-            ->where('remark',$request->remark)
-            ->where('div_id',$request->div_select)
-            ->where('check_sign',$request->checkedSign)
-            ->first();
-        $teacherConfirmation['teacher_id'] = $user['id'];
-        $adminPublish['class_id'] = $request->class_select;
-        $adminPublish['exam_structure_id'] = $request->sub_subject[0];
-        $adminPublish['status'] = 0;
-        $adminPublish['remark'] = $request->remark[0];
-        $adminPublish['div_id'] = $request->div_select;
-        $adminPublish['check_sign'] = $request->checkedSign;
-        $adminPublish['created_at'] = Carbon::now();
-        $adminPublish['updated_at'] = Carbon::now();
-        $query = ExamTeacherConfirmation::where('id',$adminPublishTeacher['id'])->update($adminPublish);
-        Session::flash('message-success','Students Marks are Un-Publish ..');
+        $subSubjectId = $request->sub_subject_id;
+        $classId = $request->classId;
+        if($request->publishStatus == '1'){
+            $publishStatus['status'] = 1;
+        }else{
+            $publishStatus['status'] = 0;
+        }
+        $update= ExamTeacherConfirmation::where('exam_structure_id',$subSubjectId)->where('class_id',$classId)->update($publishStatus);
         return Redirect::back();
     }
     public function gradesEntryView(Request $request){
