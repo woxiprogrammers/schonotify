@@ -116,7 +116,6 @@
         jQuery(document).ready(function() {
             Main.init();
             FormValidator.init();
-
         });
         $('#batchDrpdn').change(function(){
             var id=this.value;
