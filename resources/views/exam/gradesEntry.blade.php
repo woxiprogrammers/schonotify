@@ -71,7 +71,7 @@
                                 <div id="loadmoreajaxloaderClass" style="display:none;"></div>
                             </div>
                             <div class="row">
-                                <button class="btn btn-primary btn-wide" type="submit" value="submit" >
+                                <button class="btn btn-primary btn-wide" type="submit" id="gradeCreate" value="submit" >
                                     Create <i class="fa fa-arrow-circle-right"></i>
                                 </button>
                             </div>
@@ -143,6 +143,11 @@
             $.get(route,function(res){
                 $('#loadmoreajaxloaderClass').hide();
             });
+        });
+        $('#gradeCreate').on('click', function() {
+            $('#gradeStructureForm').attr('action', "/exam/grade-create");
+            $('#gradeStructureForm').submit();
+            $(this).prop('disabled', true);
         });
     </script>
 @stop
