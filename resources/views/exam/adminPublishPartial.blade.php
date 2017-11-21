@@ -62,7 +62,9 @@
                         title: "Published!",
                         text: "Result will be Updated to Parents !",
                         type: "success",
-                        confirmButtonColor : "green",
+                        confirmButtonColor : ["green", setTimeout(function () {
+                            location.reload()
+                        }, 1150)],
                         closeOnCancel: false
                     });
                 }else{
@@ -70,7 +72,9 @@
                         title: "Un-Published!",
                         text: "Result Will be Not Updated to Parents !",
                         type: "error",
-                        confirmButtonColor: "#DD6B55",
+                        confirmButtonColor:["#DD6B55", setTimeout(function () {
+                            location.reload()
+                        }, 1150)] ,
                         closeOnCancel: false
                     });
                 }
