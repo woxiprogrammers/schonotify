@@ -306,7 +306,7 @@
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
-                    <i class="fa fa-money"></i>
+                    <i class="fa fa-book fa-fw"></i>
                 </div>
                 <div class="item-inner">
                     <span class="title">Exam </span><i class="icon-arrow"></i>
