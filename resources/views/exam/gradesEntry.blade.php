@@ -148,6 +148,9 @@
             $('#gradeStructureForm').attr('action', "/exam/grade-create");
             $('#gradeStructureForm').submit();
             $(this).prop('disabled', true);
+            setTimeout(function () {
+                location.reload()
+            }, 550);
         });
     </script>
 @stop
