@@ -1,3 +1,4 @@
+
 <br><br>
 <input type="hidden" id="checkedSign" name="checkedSign">
 <div class="row" >
@@ -13,37 +14,75 @@
         <tr>
             @if(array_key_exists('exam_structure_id',$all[$i]))
             <input type="hidden" name="sub_subject[]" value="{{$all[$i]['exam_structure_id']}}">
+            @if($all[$i]['status'] == 1)
+            <td><input type="checkbox" onchange="publish(this)" value="{{$all[$i]['exam_structure_id']}}" class="admin-check" checked></td>
+            @else
+               <td><input type="checkbox" onchange="publish(this)" value="{{$all[$i]['exam_structure_id']}}" class="admin-check"></td>
             @endif
-            <td><input type="checkbox" class="admin-check"></td>
+                @else
+                <td><input type="checkbox"></td>
+            @endif
             <td><input style="text-align: center" type="text" class="form-control" id="name" name="subject_name[]" value="{{$all[$i]['sub_subject_name']}}" readonly></td>
                 @if(array_key_exists('check_sign',$all[$i]))
                     <td><input type="checkbox" id="teacher-sign" checked="checked" class="teacher_sign" disabled></td>
                     <td><input style="text-align: center" type="text" class="form-control" id="remark" name="remark[]" value="{{$all[$i]['remark']}}" readonly></td>
                     @if(array_key_exists('status',$all[$i]) && $all[$i]['status'] == 1)
-                        <td><input type="text" readonly="readonly" placeholder="puslished"></td>
+                        <td><input type="text" readonly="readonly" placeholder="published"></td>
                         @else
-                             <td><input type="text" readonly="readonly" placeholder="Un-puslished"></td>
+                         <td><input type="text" readonly="readonly" placeholder="Un-published"></td>
                     @endif
                 @else
                     <td><input type="checkbox" id="teacher-sign" class="teacher_sign" disabled></td>
                     <td><input style="text-align: center" type="text" class="form-control" id="remark" name="remark[]" readonly></td>
                 @endif
-            </tr>
+        </tr>
     @endfor
 </table>
 </div>
 <script>
-    $('.admin-check').change(function(){
-        if($('.admin-check').is(':checked')){
-            $('#publishButton').attr('disabled',false);
-            $('#UnpublishButton').attr('disabled',false);
-            $('#checkedSign').val(1);
+    function publish(element){
+        if(element.checked){
+            var publishStatus = '1';
         }else{
-            $('#publishButton').attr('disabled',true);
-            $('#UnpublishButton').attr('disabled',true);
-            $('#checkedSign').val(0);
+            var publishStatus = '0';
         }
-    });
-
+        var subSubjectId = element.value;
+        var class_id =$('#class-select').val();
+        $.ajax({
+            url:'/exam/admin-publish-model',
+            type: "POST",
+            data: {
+                classId:class_id,
+                publishStatus: publishStatus,
+                sub_subject_id: subSubjectId
+            },
+            success:function(data,textStatus,xhr){
+                if(publishStatus == 1){
+                    swal({
+                        title: "Published!",
+                        text: "Result will be Updated to Parents !",
+                        type: "success",
+                        confirmButtonColor : ["green", setTimeout(function () {
+                            location.reload()
+                        }, 1150)],
+                        closeOnCancel: false
+                    });
+                }else{
+                    swal({
+                        title: "Un-Published!",
+                        text: "Result Will be Not Updated to Parents !",
+                        type: "error",
+                        confirmButtonColor:["#DD6B55", setTimeout(function () {
+                            location.reload()
+                        }, 1150)] ,
+                        closeOnCancel: false
+                    });
+                }
+            },
+            error:function(errorData){
+                alert(errorData)
+            }
+        })
+    }
 </script>
 <br><br>

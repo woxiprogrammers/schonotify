@@ -57,18 +57,7 @@
                                 <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="assets/images/loader1.gif"></center></div>
                             </div>
                             <div id="structures"></div>
-                            <div class="form-group">
-                                <a class="btn btn-primary btn-wide"  id="publishButton" disabled>
-                                    Publish <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-                                <a class="btn btn-primary btn-wide" id="UnpublishButton" disabled>
-                                    Un Publish <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-
-                            </div>
-
                         </form>
-
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -91,11 +80,13 @@
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
+    <script src="/vendor/sweetalert/sweet-alert.js"></script>
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/exam-form-validation.js"></script>
     <script src="/assets/js/custom-project.js"></script>
+
     <script>
         jQuery(document).ready(function() {
             Main.init();

@@ -35,7 +35,7 @@
 						<!-- end: DASHBOARD TITLE -->
                        @include('admin.userRoleDropdown')
                         <div class="container-fluid container-fullw bg-white col-md-3" id="Student_without_division" style="display: none">
-                            <label for="checkbox">Show students without divsion.</label>
+                            <label for="checkbox">Show students without division.</label>
                             <input type="checkbox" class="checkbox" id="checkbox">
                             <br>
                             <br><br>
