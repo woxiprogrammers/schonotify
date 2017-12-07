@@ -435,7 +435,9 @@
     /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
-    //leave Related
+    Route::get('logout/{user_id}',array('uses' => 'api\UserController@logout'));
+
+        //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
     Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
     Route::get('leaves-parent/{flag}/{student_id}',array('uses' => 'api\LeaveController@getLeaveListParent'));
@@ -562,4 +564,5 @@ Route::group(['prefix' => 'exam'], function () {
     Route::post('grade-create',array('uses' => 'ExamController@gradesEntry'));
     Route::get('gradeView',array('uses' => 'ExamController@viewGrades'));
     Route::get('get-grades/{id}',array('uses' => 'ExamController@gradeListing'));
+
 });
