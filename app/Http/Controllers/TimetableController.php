@@ -30,8 +30,9 @@ class TimetableController extends Controller
 +   */
     public function index(Requests\WebRequests\TimetableRequest $request)
     {
+        $user=Auth::user();
         if ($request->authorize() === true) {
-            $batches = Batch::get();
+            $batches = Batch::where('body_id',$user->body_id)->get();
             return view('timetable')->with(compact('batches'));
         } else {
             return Redirect::to('/');
