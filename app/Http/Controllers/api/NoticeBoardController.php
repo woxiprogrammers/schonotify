@@ -21,15 +21,13 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Mockery\Exception;
-
 class NoticeBoardController extends Controller
 {
     use PushNotificationTrait;
     public function __construct(Request $request)
     {
        $this->middleware('db');
-        $this->middleware('authenticate.user',['except' =>['viewAchievementParentData']]);
+        $this->middleware('authenticate.user');
     }
     /**
      * Display a listing of the resource.
@@ -56,50 +54,15 @@ class NoticeBoardController extends Controller
              return response($response);
      }
      public function viewAchievementParent(Request $request){
-         try{
-             $status = 200;
-             $message = "success";
-             $body_id = $request['teacher']['body_id'];
-             $data=$request->all();
-             $parentAchievementPublished = Event::where('event_type_id','=',2)
-                 ->where('status',2)
-                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                 ->where('body_id',$body_id)
-                 ->orderBy('id','desc')
-                 ->get();
-             $imageArray=array();
-             foreach($parentAchievementPublished as $key => $val){
-                 $parentAchievementPublished[$key]['path']=url();
-                 $parentAchievementPublished[$key]['createdBy']=User::where('id',$val['created_by'])->select('first_name','last_name')->first()->toArray();
-                 if($val['published_by'] != 0){
-                     $parentAchievementPublished[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first()->toArray();
-                 }
-                 $imageArray[$key]= EventImages::where('event_id',$val['id'])->select('event_id','image')->get()->toArray();
-             }
-             $response=[
-                 "imageData"=>$imageArray,
-                 "teacherAchievement"=>$parentAchievementPublished
-             ];
-             return response()->json($response);
 
-         }catch (Exception $e){
-             $status = 500;
-             $message = "Something went wrong";
-             abort(500,$e->getMessage());
-         }
-
-    }
-    public function viewAchievementParentData(Request $request){
-        try{
-            $status = 200;
-            $message = "success";
-            $body_id = $request->body_id;
+            $body_id = $request['teacher']['body_id'];
+            $data=$request->all();
             $parentAchievementPublished = Event::where('event_type_id','=',2)
-                ->where('status',2)
-                ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
-                ->where('body_id',$body_id)
-                ->orderBy('id','desc')
-                ->get();
+                  ->where('status',2)
+                  ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
+                  ->where('body_id',$body_id)
+                  ->orderBy('id','desc')
+                  ->get();
             $imageArray=array();
             foreach($parentAchievementPublished as $key => $val){
                 $parentAchievementPublished[$key]['path']=url();
@@ -108,20 +71,12 @@ class NoticeBoardController extends Controller
                     $parentAchievementPublished[$key]['publishedBy']=User::where('id',$val['published_by'])->select('first_name','last_name')->first()->toArray();
                 }
                 $imageArray[$key]= EventImages::where('event_id',$val['id'])->select('event_id','image')->get()->toArray();
-            }
-
-        }catch (Exception $e){
-            $status = 500;
-            $message = "Something went wrong";
-            abort(500,$e->getMessage());
-        }
-        $response = [
-            "message" => $message,
-            "status" => $status,
-            "data" => $parentAchievementPublished
-        ];
-        return response()->json($response);
-
+             }
+             $response=[
+                "imageData"=>$imageArray,
+                "teacherAchievement"=>$parentAchievementPublished
+             ];
+             return response()->json($response);
     }
      public function requestToPublishAnnouncement(Request $request,$id){
           $announcement['status']=1;

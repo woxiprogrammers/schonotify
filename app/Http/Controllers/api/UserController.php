@@ -129,24 +129,6 @@ class UserController extends Controller
         $response = ["message" => $message,"status" => $status,"data" =>$data,];
         return response($response,$status);
     }
-
-    public function logout(Request $request,$user_id){
-         try{
-             $message = "User logged out successfully";
-             $status = 200;
-             $query = PushToken::where('user_id',$user_id)->delete();
-
-         }catch (\Exception $e) {
-             $status = 500;
-             $message = "Something went wrong";
-         }
-        $response = [
-            "message" => $message,
-            "status" => $status,
-        ];
-        return response($response, $status);
-    }
-
     public function savePushToken(Request $request){
         $data=$request->all();
         $is_present=PushToken::where('user_id',$data['user_id'])->count();
