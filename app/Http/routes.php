@@ -435,9 +435,7 @@
     /* API Routes */
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
-    Route::get('logout/{user_id}',array('uses' => 'api\UserController@logout'));
-
-        //leave Related
+    //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
     Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
     Route::get('leaves-parent/{flag}/{student_id}',array('uses' => 'api\LeaveController@getLeaveListParent'));
@@ -514,11 +512,9 @@
         Route::post('create-achievement','api\NoticeBoardController@createAchieve');
         Route::get('view-achievement/{id}','api\NoticeBoardController@viewAchievement');
         Route::get('view-achievement-parent','api\NoticeBoardController@viewAchievementParent');
-        Route::post('view-achievement-parent','api\NoticeBoardController@viewAchievementParentData');
         Route::get('delete-achievement/{id}','api\NoticeBoardController@deleteAchievement');
         //Event
         Route::get('view-top-five-event','api\EventController@viewFiveEvent');
-        Route::post('view-top-five-event-new','api\EventController@newViewFiveEvent');
         Route::get('view-months-event/{year}/{month_id}','api\EventController@viewMonthsEvent');// BOTH FOR PARENT AND TEACHER
         Route::post('create-event','api\EventController@createEvent');
         Route::put('send-for-publish-event','api\EventController@sendForPublishEventTeacher');
@@ -566,5 +562,4 @@ Route::group(['prefix' => 'exam'], function () {
     Route::post('grade-create',array('uses' => 'ExamController@gradesEntry'));
     Route::get('gradeView',array('uses' => 'ExamController@viewGrades'));
     Route::get('get-grades/{id}',array('uses' => 'ExamController@gradeListing'));
-
 });
