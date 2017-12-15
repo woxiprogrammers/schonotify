@@ -526,6 +526,7 @@
         Route::get('detail-view/{event_id}','api\EventController@detailView');
         Route::put('edit-event','api\EventController@editEvent');
         Route::get('get-year-month','api\EventController@getYearMonth');
+        Route::get('public-get-year-month','api\EventController@publicGetYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
         //Fees

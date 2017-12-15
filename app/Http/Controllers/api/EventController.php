@@ -18,7 +18,7 @@ class EventController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user',['except' =>['newViewFiveEvent','getEventImagePath']]);
+        $this->middleware('authenticate.user',['except'=>['publicGetYearMonth']]);
     }
     /*
   * Function Name : viewFiveEvent
@@ -192,6 +192,65 @@ class EventController extends Controller
         * Date : 12/4/2016
         */
     public function getYearMonth(Request $request)
+    {
+        $message = "Successfully Listed";
+        $status = 200;
+        $startMonth = 6;
+        $endMonth = 5;
+        $currentMonth = date('n');
+        $data = array();
+        $i = 1 ;
+        if($currentMonth < $startMonth) {
+            $previousYear = strval(date('Y')-1);
+            $currentYear = strval(date('Y'));
+            $j = 0;
+            $i = $startMonth;
+            $previousYearData["year"] = $previousYear;
+            for($month = $startMonth ; $month<=12 ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+            $i =1;
+            $j = 0;
+            $nextYearData["year"] = $currentYear;
+            for($month = 1 ; $month <= $endMonth ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+        } else {
+            $previousYear = strval(date('Y')+1);
+            $currentYear = strval(date('Y')) ;
+            $j = 0;
+            $nextYearData["year"] = $previousYear;
+            for($month = 1 ; $month <= $endMonth ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+            $j = 0;
+            $previousYearData["year"] = $currentYear;
+            for($month = $startMonth ; $month<=12 ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+        }
+        $data[0] = $previousYearData;
+        $data[1] = $nextYearData;
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $data
+        ];
+        return response($response, $status);
+    }
+    public function publicGetYearMonth(Request $request)
     {
         $message = "Successfully Listed";
         $status = 200;
