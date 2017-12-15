@@ -514,9 +514,11 @@
         Route::post('create-achievement','api\NoticeBoardController@createAchieve');
         Route::get('view-achievement/{id}','api\NoticeBoardController@viewAchievement');
         Route::get('view-achievement-parent','api\NoticeBoardController@viewAchievementParent');
+        Route::post('view-achievement-parent','api\NoticeBoardController@viewAchievementParentData');
         Route::get('delete-achievement/{id}','api\NoticeBoardController@deleteAchievement');
         //Event
         Route::get('view-top-five-event','api\EventController@viewFiveEvent');
+        Route::post('view-top-five-event-new','api\EventController@newViewFiveEvent');
         Route::get('view-months-event/{year}/{month_id}','api\EventController@viewMonthsEvent');// BOTH FOR PARENT AND TEACHER
         Route::post('create-event','api\EventController@createEvent');
         Route::put('send-for-publish-event','api\EventController@sendForPublishEventTeacher');

@@ -92,6 +92,72 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
+    public function newViewFiveEvent(Request $request)
+    {
+        try {
+            $status = 200;
+            $message = "success";
+            $finalFiveEvents = array();
+            $recentFiveEvents = array();
+            $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
+            $recentFiveEvents = Event::join('event_images','events.id','=','event_images.event_id')
+                ->where('events.status','=',2)
+                ->where('events.body_id','=',$request->body_id)
+                ->where('events.event_type_id' , '=' , $eventTypesId)
+                ->orderBy('start_date', 'desc')
+                ->get()
+                ->take(5)->toArray();
+            $counter = 0;
+            foreach ($recentFiveEvents as $event) {
+                $finalFiveEvents[$counter]['id'] =  $event['id'];
+                $creatorUser = User::where ('id','=', $event['created_by'])->select('first_name','last_name')->first();
+                $finalFiveEvents[$counter]['created_by'] = $creatorUser['first_name']." ".$creatorUser['last_name'];
+                $publishedUser = User::where ('id','=', $event['published_by'])->select('first_name','last_name')->first();
+                $finalFiveEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
+                $finalFiveEvents[$counter]['status'] ="Published";
+                $finalFiveEvents[$counter]['title'] = $event['title'];
+                $finalFiveEvents[$counter]['created_at'] = $event['created_at'];
+                if($event['status'] == 2) {
+                    $finalFiveEvents[$counter]['published_at'] = $event['updated_at'];
+                } else {
+                    $finalFiveEvents[$counter]['published_at'] = ' ';
+                }
+                if($event['image'] != null) {
+                    $file = $this->getEventImagePath($event['image']);
+                    if($file['status']){
+                        $finalFiveEvents[$counter]['image'] = $event['image'];
+                        $finalFiveEvents[$counter]['path'] = $file['path'];
+                    } else {
+                        $finalFiveEvents[$counter]['image'] =$event['image'];
+
+                        $finalFiveEvents[$counter]['path'] =url()."/uploads/events/".$event['image'];
+
+                    }
+                } else {
+                    $finalFiveEvents[$counter]['image'] = $event['image'];
+                    $imageName=$event['image'];
+                    $finalFiveEvents[$counter]['path'] = url()."/uploads/events/".$imageName;
+
+                }
+                $finalFiveEvents[$counter]['detail'] = $event['detail'];
+                $finalFiveEvents[$counter]['start_date'] = date("j M y, g:i a",strtotime( $event['start_date']));
+                $finalFiveEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event['end_date']));
+                $counter++;
+            }
+
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+            abort(500,$e->getMessage());
+
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $finalFiveEvents
+        ];
+        return response($response, $status);
+    }
     /*
       * Function Name : getEventImagePath
       * Param : Request $requests , $imageName
