@@ -18,7 +18,7 @@ class EventController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user',['except'=>['publicGetYearMonth']]);
+        $this->middleware('authenticate.user',['except'=>['publicGetYearMonth','newViewFiveEvent']]);
     }
     /*
   * Function Name : viewFiveEvent
