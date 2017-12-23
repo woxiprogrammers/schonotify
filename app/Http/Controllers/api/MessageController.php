@@ -19,7 +19,7 @@ class MessageController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user');
+        $this->middleware('authenticate.user',['except'=>'publicGetMessageCount']);
     }
   public function getMessages(Requests\Message $request ){
         try {
@@ -222,6 +222,29 @@ class MessageController extends Controller
         ];
         return response($response, $status);
 }
+    public function publicGetMessageCount(Request $request,$id){
+        try{
+            $finalMessageCount=array();
+            $messageCount=Message::where('to_id',$id)
+                ->where('read_status','=',0)
+                ->where('is_delete','=',0)
+                ->count();
+            $finalMessageCount['Badge_count']['user_id']=$id;
+            $finalMessageCount['Badge_count']['message_count'] = $messageCount;
+            $finalMessageCount['Badge_count']['auto_notification_count'] = $messageCount;
+            $status=200;
+            $message="Success";
+        }catch(\Exception $e){
+            $status = 500;
+            $message = "something went wrong". $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $finalMessageCount
+        ];
+        return response($response,$status);
+    }
     public function getAclDetails(Request $request ){
     try {
         $data=$request->all();
