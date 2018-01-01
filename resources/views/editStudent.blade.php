@@ -10,8 +10,8 @@
 <div class="wrap-content container" id="container">
 @include('alerts.errors')
 <div id="message-error-div"></div>
-<section id="page-title" class="padding-top-15 padding-bottom-15">
-    <div class="row">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
         <div class="col-sm-7">
             <h1 class="mainTitle">Edit</h1>
             <span class="mainDescription">Student</span>
@@ -67,11 +67,7 @@
                                             </label>
                                             <select class="form-control" id="Batchdropdown" name="Batchdropdown" style="-webkit-appearance: menulist;">
                                                 <option value="">Select Batch</option>
-                                                @if(!empty($batches))
-                                                @foreach($batches as $batch)
-                                                <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
-                                                @endforeach
-                                                @endif
+                                                <option value="{!! $batches->id !!}">{!! $batches->name !!}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4" id="ClassSearchStudent">
