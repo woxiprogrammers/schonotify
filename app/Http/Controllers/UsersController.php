@@ -56,6 +56,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Collective\Html\HtmlFacade;
 use Illuminate\Support\Facades\Log;
+use SebastianBergmann\Environment\Console;
 use Symfony\Component\CssSelector\Tests\Parser\Shortcut\EmptyStringParserTest;
 
 
@@ -1080,17 +1081,24 @@ class UsersController extends Controller
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
         $dataStudent=$request->all();
-        dd($dataStudent);
+//        dd($dataStudent);
         $divisionStudent=User::where('id',$id)->pluck('division_id');
+        Log::info('Division pluck');
+        Log::info($divisionStudent);
         if($divisionStudent == null){
             $div=array();
             $div['division_id']=$request->division_id;
             $divisionupdate=User::where('id',$id)->update($div);
         }
         foreach ($request->student_fee as $studentFee) {
+            Log::info('in foreach');
+            Log::info($studentFee);
             $query = Fees::where('id', $studentFee)->pluck('year');
-            $query2 = StudentFee::where('student_id', $id)->select('fee_id')->get();
+            Log::info($query);
+            $query2 = StudentFee::where('student_id', $id)->pluck('fee_id');
+            Log::info($query2);
             if ($studentFee != null) {
+                Log::info('not null');
                 if ($query2->isEmpty()) {
                     $student_fee['student_id'] = $id;
                     if ($studentFee == null) {
@@ -1111,6 +1119,8 @@ class UsersController extends Controller
                         $itrator ++;
                     }
                     $a = StudentFee::insert($student_fee);
+                    Log::info('Student Fee Insert');
+                    Log::info($a);
                 } else {
                     foreach ($dataStudent['student_fee'] as $value1) {
                         $student_fee['student_id'] = $id;
@@ -1126,6 +1136,8 @@ class UsersController extends Controller
                              $itrator ++;
                          }
                         $a = StudentFee::where('student_id', $id)->update($student_fee);
+                        Log::info('Student Fee Update');
+                        Log::info($a);
                     }
                 }
             }
@@ -1143,6 +1155,8 @@ class UsersController extends Controller
                         $itrator1 ++;
                     }
                     $b=StudentFeeConcessions::where('student_id',$id)->update($concessions);
+                    Log::info('Student Fee concession Update');
+                    Log::info($b);
                 }else{
                     $concessions=array();
                     $concessions['fee_id'] = $studentConcession;
@@ -1153,6 +1167,8 @@ class UsersController extends Controller
                         $itrator2 ++;
                     }
                     $b=StudentFeeConcessions::create($concessions);
+                    Log::info('Student Fee concession create');
+                    Log::info($b);
                 }
             }
         }
