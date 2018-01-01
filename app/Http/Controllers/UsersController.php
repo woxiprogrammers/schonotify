@@ -1100,6 +1100,7 @@ class UsersController extends Controller
             if ($studentFee != null) {
                 Log::info('not null');
                 if ($query2->isEmpty()) {
+                    Log::info('empty');
                     $student_fee['student_id'] = $id;
                     if ($studentFee == null) {
                         $student_fee['fee_id'] = 0;
@@ -1122,7 +1123,9 @@ class UsersController extends Controller
                     Log::info('Student Fee Insert');
                     Log::info($a);
                 } else {
+                    Log::info('else');
                     foreach ($dataStudent['student_fee'] as $value1) {
+                            Log::info('else foreach');
                         $student_fee['student_id'] = $id;
                         $student_fee['fee_id'] = $value1;
                         $student_fee['year'] = $query;
@@ -1144,8 +1147,11 @@ class UsersController extends Controller
         }
         $existCheck=StudentFeeConcessions::where('student_id',$id)->exists();
         foreach ($request->student_fee as $studentConcession){
+            Log::info('in student fee concession');
             if($studentConcession != null){
+                Log::info('student concession not null');
                 if($existCheck == true){
+                    Log::info('condition is true');
                     $concessions=array();
                     $concessions['fee_id'] = $studentConcession;
                     $concessions['student_id']=$id;
