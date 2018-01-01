@@ -69,7 +69,7 @@
                                                 <option value="">Select Batch</option>
                                                 @if(!empty($batches))
                                                 @foreach($batches as $batch)
-                                                <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
+                                                <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
                                                 @endforeach
                                                 @endif
                                             </select>
