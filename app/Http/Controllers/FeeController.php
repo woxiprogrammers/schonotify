@@ -137,21 +137,10 @@ class FeeController extends Controller
             }
           foreach($request->class as $class)
             {
-                $class_present=FeeClass::where('class_id',$class)->exists();
-                if($class_present)
-                {
-                    $class_details['fee_id']=$query;
-                    $class_details['class_id']=$class;
-                    $class_details['amount']=$request->total_fee;
-                    $query2=FeeClass::where('class_id',$class)->update($class_details);
-                }
-                else
-                {
-                    $class_details['fee_id']=$query;
-                    $class_details['class_id']=$class;
-                    $class_details['amount']=$request->total_fee;
-                    $query2=FeeClass::create($class_details);
-                }
+                $class_details['fee_id']=$query;
+                $class_details['class_id']=$class;
+                $class_details['amount']=$request->total_fee;
+                $query2=FeeClass::create($class_details);
             }
             foreach($request->concessions as $concession)
             {
