@@ -429,36 +429,26 @@
                                         <legend>
                                             FEE STRUCTURE
                                         </legend>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>
-                                                    Assign Fee Structure :
+                                                 Assign Fee Structure :
                                                 </label>
-                                                <div>
-                                                    <select name="student_fee" style="width:60%;-webkit-appearance: menulist;">
+                                                    <div>
                                                         @if(!empty($fees))
-                                                        @foreach($fees as $fee_details)
-                                                        <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}}&nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
-                                                        @endforeach
+                                                            @foreach($fees as $fee_details)
+                                                              <div class="row">
+                                                                <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox">
+                                                                    <input type="checkbox" class="checked_fee"  id="{{$fee_details['id']}}_fee_chk" name="student_fee[]" value="{{$fee_details['id']}}">
+                                                                    <label for="{{$fee_details['id']}}_fee_chk">{{$fee_details['fee_name']}}&nbsp &nbsp {{$fee_details['year']}}</label>
+                                                                </div>
+                                                              </div>
+                                                            @endforeach
+                                                            <input type="button" id="multiple-concession" value="submit">
+                                                            <div id="test"></div>
                                                         @endif
-                                                    </select>
-                                                    <h4 style="color: red">{{$division_status}}</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Select Concession Types :
-                                                </label>
-                                                <div>
-                                                    @foreach($concession_types as $concessions)
-                                                    <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
-                                                        <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions[]" value="{{ $concessions['id'] }}">
-                                                        <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                                                        <h4 style="color: red">{{$division_status}}</h4>
                                                     </div>
-                                                    @endforeach
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-12" style="display: none" id="CasteSelect">
@@ -1036,6 +1026,42 @@
         </div>
     </div>
 </div>
+<div class="row" id="concession" hidden>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">
+                Select Concession Types :
+            </label>
+            <div class="concession_check">
+                @foreach($concession_types as $concessions)
+                    <div class="checkbox-inline caste-checkbox">
+                        @if($concessions['id'] == 2)
+                            <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}" onclick="test()">
+                        @else
+                            <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}">
+                        @endif
+                        <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-md-6" id="caste"></div>
+    </div>
+</div>
+    <div class="col-md-12" id="CasteSelect" hidden>
+        <div class="form-group">
+            <label>
+                Assign Fee Concession :
+            </label>
+            <div>
+                <select name="caste1"  style="-webkit-appearance: menulist;">
+                    @foreach($queryn as $castes)
+                        <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
 @include('rightSidebar')
 </div>
 </div>
@@ -1074,6 +1100,9 @@
 <script src="/assets/js/table-data.js"></script>
 <script>
     jQuery(document).ready(function() {
+        $('.concession_class_2').on('click',function(){
+
+        });
         if({!!$divisionStudent!!} != null){
             $('#hide').hide();
         }else{
@@ -1096,13 +1125,28 @@
           }
         }
         }
-        $('#2_concession_chk').change(function(){
-           if($('#2_concession_chk').is(":checked")){
-               $('#CasteSelect').show();
-           }else{
-               $('#CasteSelect').hide();
-           }
+        $('#multiple-concession').click(function() {
+            $("#test").html('');
+            $('.checked_fee:checkbox:checked').each(function(){
+                var id = $(this).val();
+                var newClone = $('#concession').clone();
+                var feeName = $(this).next().text();
+                $(newClone).show();
+                $(newClone).find('input[type=checkbox]').each(function(){
+                    $(this).attr("name","concessions["+id+"][]");
+                    $(this).attr('id','concession_check'+id);
+                });
+                $("#test").append('<div class="row"><fieldset>' +
+                    '<legend>'+feeName+'</legend>'+
+                    '<div id="clonedDiv_'+id+'">'+
+                    '</div>'+
+                    '</fieldset></div>');
+                $("#clonedDiv_"+id).html(newClone);
+            });
         });
+
+
+
         Main.init();
         FormValidator.init();
         FormElements.init();
@@ -1144,6 +1188,18 @@
         })
     })
     });
+    function test(){
+        $('.concession_check:checkbox:checked')
+    }
+
+    /*function showCaste(element){
+        if($(element).is(":checked")){
+            $('#CasteSelect').show();
+        }else{
+            $('#CasteSelect').hide();
+        }
+    }*/
+
   $('#email').on('keyup',function(){
         var email = $(this).val();
         var route='/check-email';

@@ -1080,6 +1080,7 @@ class UsersController extends Controller
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
         $dataStudent=$request->all();
+        dd($dataStudent);
         $divisionStudent=User::where('id',$id)->pluck('division_id');
         if($divisionStudent == null){
             $div=array();
@@ -1095,20 +1096,23 @@ class UsersController extends Controller
                 if( $request->student_fee == null){
                     $student_fee['fee_id']=0;
                 }else{
-                    $student_fee['fee_id']=$request->student_fee;
+                    foreach($dataStudent['student_fee'] as $value){
+                        $student_fee['fee_id'] = $value;
+                    }
                 }
                 $student_fee['year']=$query;
                 $student_fee['fee_concession_type']=$request->concessions_2;
                 $student_fee['caste_concession']=$request->caste1;
                 $a=StudentFee::insert($student_fee);
-            }else
-            {
-                $student_fee['student_id']=$id;
-                $student_fee['fee_id']=$request->student_fee;
-                $student_fee['year']=$query;
-                $student_fee['fee_concession_type']=$request->concessions_2;
-                $student_fee['caste_concession']=$request->caste1;
-                $a=StudentFee::where('student_id',$id)->update($student_fee);
+            }else{
+                foreach ($dataStudent['student_fee'] as $value1){
+                    $student_fee['student_id']=$id;
+                    $student_fee['fee_id']=$value1;
+                    $student_fee['year']=$query;
+                    $student_fee['fee_concession_type']=$request->concessions_2;
+                    $student_fee['caste_concession']=$request->caste1;
+                    $a = StudentFee::where('student_id',$id)->update($student_fee);
+                }
             }
         }
         $existCheck=StudentFeeConcessions::where('student_id',$id)->exists();
