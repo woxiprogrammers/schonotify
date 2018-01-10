@@ -89,8 +89,8 @@ class RegistrationController extends Controller
             $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->where('body_id',$body_id)->first();
             $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
             $bodies = Body::all();
-            $documents = StudentDocumentMaster::all();
 
+            $documents = StudentDocumentMaster::all();
             if($userRegister!=null){
                 return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies','documents'));
             }else{

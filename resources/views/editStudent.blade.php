@@ -451,20 +451,22 @@
                                                     </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" style="display: none" id="CasteSelect">
-                                            <div class="form-group">
-                                                <label>
-                                                    Assign Fee Concession :
-                                                </label>
-                                                <div>
-                                                    <select name="caste1"  style="-webkit-appearance: menulist;">
-                                                        @foreach($queryn as $castes)
-                                                        <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div id="caste"></div>
+
+                                        {{-- <div class="col-md-12" style="display: none" id="CasteSelect">
+                                             <div class="form-group">
+                                                 <label>
+                                                     Assign Fee Concession :
+                                                 </label>
+                                                 <div>
+                                                     <select name="caste1"  style="-webkit-appearance: menulist;">
+                                                         @foreach($queryn as $castes)
+                                                         <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
+                                                         @endforeach
+                                                     </select>
+                                                 </div>
+                                             </div>
+                                         </div>--}}
                                     </fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -1027,25 +1029,43 @@
     </div>
 </div>
 <div class="row" id="concession" hidden>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">
-                Select Concession Types :
-            </label>
-            <div class="concession_check">
-                @foreach($concession_types as $concessions)
-                    <div class="checkbox-inline caste-checkbox">
-                        @if($concessions['id'] == 2)
-                            <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}" onclick="test()">
-                        @else
-                            <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}">
-                        @endif
-                        <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
-                    </div>
-                @endforeach
+    <div class="col-md-12">
+        <div class="col-md-6 concession-div">
+            <div class="form-group">
+                <label class="control-label">
+                    Select Concession Types :
+                </label>
+                <div class="concession_check">
+                    @foreach($concession_types as $concessions)
+                        <div class="checkbox-inline caste-checkbox">
+                            @if($concessions['id'] == 2)
+                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}" onclick="showCasteSelect(this)">
+                            @else
+                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}">
+                            @endif
+                            <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
-        <div id="caste"></div>
+        <div class="col-md-6">
+            <div class="caste-select" hidden>
+                <div class="form-group">
+                    <label>
+                        Assign Fee Concession :
+                    </label>
+                    <div>
+                        <select name="caste1"  style="-webkit-appearance: menulist;">
+                            @foreach($queryn as $castes)
+                                <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
     <div class="col-md-6" id="CasteSelect" hidden>
@@ -1188,24 +1208,6 @@
         })
     })
     });
-    function test(){
-
-        $('.concession_check').each(function(){
-            if($('.concession_class_2').is(":checked")){
-                alert(1);
-                var a =  $('#caste').append($('#CasteSelect').clone().show());
-            }
-        })
-    }
-
-    /*function showCaste(element){
-        if($(element).is(":checked")){
-            $('#CasteSelect').show();
-        }else{
-            $('#CasteSelect').hide();
-        }
-    }*/
-
   $('#email').on('keyup',function(){
         var email = $(this).val();
         var route='/check-email';
@@ -1300,6 +1302,16 @@
             }
         });
     });
+
+    function showCasteSelect(element){
+        if($(element).is(":checked") == true){
+            var id = element.id;
+            $(element).closest('.concession-div').next().find('.caste-select').show();
+            $(element).attr('name','castel[+id+]')
+        }else{
+            $(element).closest('.concession-div').next().find('.caste-select').hide();
+        }
+    }
 </script>
 <script>
     $( "select[name='installment_number']" )
