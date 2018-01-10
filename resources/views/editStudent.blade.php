@@ -1045,10 +1045,10 @@
                 @endforeach
             </div>
         </div>
-        <div class="col-md-6" id="caste"></div>
+        <div id="caste"></div>
     </div>
 </div>
-    <div class="col-md-12" id="CasteSelect" hidden>
+    <div class="col-md-6" id="CasteSelect" hidden>
         <div class="form-group">
             <label>
                 Assign Fee Concession :
@@ -1189,7 +1189,13 @@
     })
     });
     function test(){
-        $('.concession_check:checkbox:checked')
+
+        $('.concession_check').each(function(){
+            if($('.concession_class_2').is(":checked")){
+                alert(1);
+                var a =  $('#caste').append($('#CasteSelect').clone().show());
+            }
+        })
     }
 
     /*function showCaste(element){
