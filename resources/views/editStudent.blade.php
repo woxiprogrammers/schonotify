@@ -1068,20 +1068,7 @@
 
     </div>
 </div>
-    <div class="col-md-6" id="CasteSelect" hidden>
-        <div class="form-group">
-            <label>
-                Assign Fee Concession :
-            </label>
-            <div>
-                <select name="caste1"  style="-webkit-appearance: menulist;">
-                    @foreach($queryn as $castes)
-                        <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </div>
+
 @include('rightSidebar')
 </div>
 </div>
@@ -1120,9 +1107,7 @@
 <script src="/assets/js/table-data.js"></script>
 <script>
     jQuery(document).ready(function() {
-        $('.concession_class_2').on('click',function(){
 
-        });
         if({!!$divisionStudent!!} != null){
             $('#hide').hide();
         }else{
@@ -1305,9 +1290,10 @@
 
     function showCasteSelect(element){
         if($(element).is(":checked") == true){
-            var id = element.id;
+            var id = element.value;
+            var name =element.id;
             $(element).closest('.concession-div').next().find('.caste-select').show();
-            $(element).attr('name','castel[+id+]')
+            $(element).closest('.concession-div').next().find('.caste-select select').attr("name","caste1["+name+"][]");
         }else{
             $(element).closest('.concession-div').next().find('.caste-select').hide();
         }
