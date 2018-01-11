@@ -52,7 +52,7 @@
                 </button>
             </div>
          </form>
-        <div class="col-md-4">
+        <div class="col-md-4" hidden>
            <form method="get" action="/fees/billing-page/{{$bodyInfo['slug']}}">
                <button class="btn btn-primary btn-wide" type="submit">
                    Make Payment
