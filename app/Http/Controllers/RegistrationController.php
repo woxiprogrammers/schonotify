@@ -83,16 +83,25 @@ class RegistrationController extends Controller
         try{
             if($request->bodySlug == 'gis'){
                 $body_id = 1 ;
+                $bodyInfo = [
+                            'name' => 'Ganesh International School, Chikhali',
+                            'slug' => 'gis'
+                ];
             }elseif($request->bodySlug == 'gems'){
                 $body_id = 2 ;
+                $bodyInfo = [
+                    'name' => 'Ganesh English Medium School, Dapodi',
+                    'slug' => 'gems'
+                ];
             }
             $enquiryInfo = EnquiryForm::where('enquiry_number',$request->enquiry_number)->where('body_id',$body_id)->first();
             $userRegister = User::where('enquiry_id',$enquiryInfo['id'])->first();
             $bodies = Body::all();
+
             $documents = StudentDocumentMaster::all();
 
             if($userRegister!=null){
-                return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies','documents'));
+                return view('registration.download-admission-form')->with(compact('enquiryInfo','bodies','documents','bodyInfo'));
             }else{
                 return view('registration.student-registration')->with(compact('enquiryInfo','bodies','documents'));
             }
