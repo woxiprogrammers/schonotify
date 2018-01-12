@@ -439,7 +439,7 @@
                                                             @foreach($fees as $fee_details)
                                                               <div class="row">
                                                                 <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox">
-                                                                    <input type="checkbox" class="checked_fee"  id="{{$fee_details['id']}}_fee_chk" name="student_fee[]" value="{{$fee_details['id']}}">
+                                                                    <input type="checkbox" class="checked_fee"  id="{{$fee_details['id']}}_fee_chk" {{--name="student_fee[demo][]"--}} value="{{$fee_details['id']}}">
                                                                     <label for="{{$fee_details['id']}}_fee_chk">{{$fee_details['fee_name']}}&nbsp &nbsp {{$fee_details['year']}}</label>
                                                                 </div>
                                                               </div>
@@ -451,7 +451,6 @@
                                                     </div>
                                             </div>
                                         </div>
-                                        <div id="caste"></div>
 
                                         {{-- <div class="col-md-12" style="display: none" id="CasteSelect">
                                              <div class="form-group">
@@ -1056,7 +1055,7 @@
                         Assign Fee Concession :
                     </label>
                     <div>
-                        <select name="caste1"  style="-webkit-appearance: menulist;">
+                        <select  style="-webkit-appearance: menulist;">
                             @foreach($queryn as $castes)
                                 <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
                             @endforeach
@@ -1138,8 +1137,9 @@
                 var feeName = $(this).next().text();
                 $(newClone).show();
                 $(newClone).find('input[type=checkbox]').each(function(){
-                    $(this).attr("name","concessions["+id+"][]");
-                    $(this).attr('id','concession_check'+id);
+                    $(this).attr("name","student_fee["+id+"][concession][]");
+//                    $(this).attr('id',"student_fee["+id+"][concession_check]");
+                    $(this).attr('id',''+id);
                 });
                 $("#test").append('<div class="row"><fieldset>' +
                     '<legend>'+feeName+'</legend>'+
@@ -1293,7 +1293,7 @@
             var id = element.value;
             var name =element.id;
             $(element).closest('.concession-div').next().find('.caste-select').show();
-            $(element).closest('.concession-div').next().find('.caste-select select').attr("name","caste1["+name+"][]");
+            $(element).closest('.concession-div').next().find('.caste-select select').attr("name","student_fee["+name+"][caste1]");
         }else{
             $(element).closest('.concession-div').next().find('.caste-select').hide();
         }

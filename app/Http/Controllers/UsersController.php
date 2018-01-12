@@ -781,9 +781,11 @@ class UsersController extends Controller
                 $division=User::where('id',$id)->pluck('division_id');
                 $class=Division::where('id',$division)->pluck('class_id');
                 $assigned_fee_for_class = FeeClass::where('class_id',$class)->lists('fee_id')->toArray();
-                $feedata = StudentFee::where('student_id',$id)->pluck('fee_id');
-                $fees = Fees::whereIn('id',$assigned_fee_for_class)->select('id','fee_name','year')->get()->toArray();
-                $student_fee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+                $feedata = StudentFee::where('student_id',$id)->select('fee_id')->get()->toArray();
+
+//                dd($feedata);
+                    $fees = Fees::whereIn('id',$assigned_fee_for_class)->select('id','fee_name','year')->get()->toArray();
+                $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
                     foreach($student_fee as $key => $a)
                     {
                         $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
@@ -794,12 +796,13 @@ class UsersController extends Controller
                         $fee_deta=Fees::where('id',$a['fee_id'])->select('total_amount','year','fee_name')->get();
                         $concessionType_data=ConcessionTypes::where('id',$a['fee_concession_type'])->get()->toArray();
                     }
-                    $fee_id=StudentFee::where('student_id',$id)->pluck('fee_id');
-                    $fee_due_date=FeeDueDate::where('fee_id',$fee_id)->select('installment_id','due_date')->get()->toArray();
-                    $installment_amount=fee_installments::where('fee_id',$fee_id)->select('installment_id','amount')->get()->toArray();
+                    $fee_ids =StudentFee::where('student_id',$id)->select('fee_id')->get()->toArray();
+                    foreach ($fee_ids as $key => $feeId){
+                        $fee_due_date=FeeDueDate::where('fee_id',$feeId['fee_id'])->select('installment_id','due_date')->get()->toArray();
+                        $installment_amount=fee_installments::where('fee_id',$feeId['fee_id'])->select('installment_id','amount')->get()->toArray();
+                    }
                     $total_installment_amount = array();
-                   foreach($installment_amount as  $amount )
-                   {
+                   foreach($installment_amount as  $amount ){
                         if(array_key_exists($amount['installment_id'],$total_installment_amount))
                         {
                             $total_installment_amount[$amount['installment_id']] += $amount['amount'];
@@ -816,8 +819,12 @@ class UsersController extends Controller
                        $installment_amounts=($installment_amounts/$total_fee_amount)*100;
                        $installment_percent_amount[$key]=$installment_amounts;
                    }
-                $caste_concession_type=StudentFee::where('student_id',$id)->pluck('caste_concession');
-                $caste_concn_amnt= CASTECONCESSION::where('caste_id', $caste_concession_type)->where('fee_id',$feedata)->pluck('concession_amount');
+                $caste_concession_type = StudentFee::where('student_id',$id)->select('caste_concession')->get()->toArray();
+              foreach ($feedata as $fee){
+                  foreach ($caste_concession_type as $key => $casteConcession){
+                        $caste_concn_amnt= CASTECONCESSION::where('caste_id', $casteConcession['caste_concession'])->where('fee_id',$fee['fee_id'])->pluck('concession_amount');
+                    }
+                }
                 $collection=collect($installment_percent_amount);
                 $concession_amount_array=array();
                    foreach($collection as $key => $percent_discout_collection)
@@ -891,7 +898,7 @@ class UsersController extends Controller
                          {
                              $division_status="Division Not Assigned !";
                          }
-
+                ;
                 $query1=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');
                 $g=StudentFeeConcessions::where('fee_id',$feedata)->where('student_id',$id)->select('fee_concession_type')->first();
                 if(!empty($g)){
@@ -900,6 +907,7 @@ class UsersController extends Controller
                 if(!empty($assigned_fee_concessions))
                 {
                     $concn_amnts=FeeConcessionAmount::where('fee_id',$feedata)->whereIn('concession_type',$assigned_fee_concessions)->select('amount')->get()->toArray();
+                    dd($concn_amnts);
                     for($i=0;$i<count($concn_amnts);$i++)
                     {
                         for($j=0;$j<count($fee_due_date);$j++)
@@ -1080,100 +1088,77 @@ class UsersController extends Controller
     }
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
-        $dataStudent=$request->all();
-//        dd($dataStudent);
-        $divisionStudent=User::where('id',$id)->pluck('division_id');
-        Log::info('Division pluck');
-        Log::info($divisionStudent);
+        $dataStudent = $request->all();
+        $divisionStudent = User::where('id',$id)->pluck('division_id');
         if($divisionStudent == null){
             $div=array();
-            $div['division_id']=$request->division_id;
-            $divisionupdate=User::where('id',$id)->update($div);
+            $div['division_id']=$request->Divisiondropdown;
+            $divisionupdate = User::where('id',$id)->update($div);
         }
-        foreach ($request->student_fee as $studentFee) {
-            Log::info('in foreach');
-            Log::info($studentFee);
-            $query = Fees::where('id', $studentFee)->pluck('year');
-            Log::info($query);
-            $query2 = StudentFee::where('student_id', $id)->pluck('fee_id');
-            Log::info($query2);
-            if ($studentFee != null) {
-                Log::info('not null');
-                if ($query2->isEmpty()) {
-                    Log::info('empty');
+        foreach ($dataStudent['student_fee'] as $key => $value){
+            $query = Fees::where('id',$key)->pluck('year');
+            $query2 = StudentFee::where('student_id',$id)->select('fee_id')->get();
+            if($request->student_fee != null){
+                if($query2->isEmpty())
+                {
                     $student_fee['student_id'] = $id;
-                    if ($studentFee == null) {
+                    if( $request->student_fee == null){
                         $student_fee['fee_id'] = 0;
-                    } else {
-                        foreach ($dataStudent['student_fee'] as $value) {
-                            $student_fee['fee_id'] = $value;
+                    }else{
+                        $student_fee['fee_id'] = $key;
+                    }
+                    $student_fee['caste_concession'] = $value['caste1'];
+                    foreach($value['concession'] as $item){
+                        $student_fee['fee_concession_type'] = $item;
+                    }
+                }else{
+                    $entryCount= StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->count();
+                    foreach($value['concession'] as $item){
+                        $student_fee['fee_concession_type'] = $item;
+                        $student_fee['caste_concession'] = $value['caste1'];
+                        if($entryCount == 0){
+                            $student_fee['fee_id'] = $key;
+                            $student_fee['student_id'] = $id;
+                            $student_fee['year'] = $query;
+                            StudentFee::create($student_fee);
+                        }else{
+                            StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->update($student_fee);
+                            $entryCount = $entryCount-1;
                         }
-                    }
-                    $student_fee['year'] = $query;
-                    $itrator = 0;
-                    foreach($dataStudent['concessions'] as $key => $concession){
-                        $student_fee['fee_concession_type'] = $concession[$itrator];
-                        $itrator ++;
-                    }
-                    foreach ($dataStudent['caste1'] as $key => $casteID){
-                        $student_fee['caste_concession'] = $casteID[$itrator];
-                        $itrator ++;
-                    }
-                    $a = StudentFee::insert($student_fee);
-                    Log::info('Student Fee Insert');
-                    Log::info($a);
-                } else {
-                    Log::info('else');
-                    foreach ($dataStudent['student_fee'] as $value1) {
-                            Log::info('else foreach');
-                        $student_fee['student_id'] = $id;
-                        $student_fee['fee_id'] = $value1;
-                        $student_fee['year'] = $query;
-                        $itrator = 0;
-                        foreach($dataStudent['concessions'] as $key => $concession){
-                            $student_fee['fee_concession_type'] = $concession[$itrator];
-                            $itrator ++;
-                        }
-                         foreach ($dataStudent['caste1'] as $key => $casteID){
-                             $student_fee['caste_concession'] = $casteID[$itrator];
-                             $itrator ++;
-                         }
-                        $a = StudentFee::where('student_id', $id)->update($student_fee);
-                        Log::info('Student Fee Update');
-                        Log::info($a);
+
                     }
                 }
             }
         }
-        $existCheck=StudentFeeConcessions::where('student_id',$id)->exists();
-        foreach ($request->student_fee as $studentConcession){
-            Log::info('in student fee concession');
-            if($studentConcession != null){
-                Log::info('student concession not null');
-                if($existCheck == true){
-                    Log::info('condition is true');
-                    $concessions=array();
-                    $concessions['fee_id'] = $studentConcession;
-                    $concessions['student_id']=$id;
-                    $itrator1= 0;
-                    foreach ($request->concessions as $StudentConcession){
-                        $concessions['fee_concession_type']=json_encode($StudentConcession[$itrator1]);
-                        $itrator1 ++;
+        $existCheck = StudentFeeConcessions::where('student_id',$id)->exists();
+        if($request->student_fee != null){
+            if($existCheck == true){
+                foreach ($dataStudent['student_fee'] as $key => $value){
+                    $concessions = array();
+                    $studentFeeConcessionCount = StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->count();
+                    foreach ($value['concession'] as $item1){
+                        $concessions['fee_concession_type'] = $item1;
+                        if($studentFeeConcessionCount == 0){
+                            $concessions['student_id'] = $id;
+                            $concessions['fee_id'] = $key;
+                            Log::info('student fee concession new insert');
+                            StudentFeeConcessions::create($concessions);
+                        }else{
+                            StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->update($concessions);
+                            $studentFeeConcessionCount = $studentFeeConcessionCount-1;
+                        }
                     }
-                    $b=StudentFeeConcessions::where('student_id',$id)->update($concessions);
-                    Log::info('Student Fee concession Update');
-                    Log::info($b);
-                }else{
+                }
+            }else{
+                foreach ($dataStudent['student_fee'] as $key => $value){
                     $concessions=array();
-                    $concessions['fee_id'] = $studentConcession;
-                    $concessions['student_id']=$id;
-                    $itrator2= 0;
-                    foreach ($request->concessions as $StudentConcession){
-                        $concessions['fee_concession_type']=($StudentConcession[$itrator2]);
-                        $itrator2 ++;
+                    $concessions['fee_id'] = $key;
+                    $concessions['student_id'] = $id;
+                    foreach ($value['concession'] as $item) {
+                        $concessions['fee_concession_type'] = $item;
                     }
-                    $b=StudentFeeConcessions::create($concessions);
-                    Log::info('Student Fee concession create');
+                    $b = StudentFeeConcessions::create($concessions);
+                    Log::info('student fee concession created');
                     Log::info($b);
                 }
             }
@@ -1195,9 +1180,7 @@ class UsersController extends Controller
             $filename=$userImage->avatar;
         }
         $date = date('Y-m-d', strtotime(str_replace('-', '/', $request->DOB)));
-        $userData['username']= $request->username;
         $userData['first_name']= $request->firstname;
-        $userData['email']= $request->email;
         $userData['last_name']= $request->lastname;
         $userData['gender']= $request->gender;
         $userData['mobile']= $request->mobile;
@@ -1208,26 +1191,25 @@ class UsersController extends Controller
         $userData['birth_date']= $date;
         $userData['roll_number']=$request->roll_number;
         $homework['division_id'] = $request->division_id;
-        $homework['division_id'] = $request->division;
-        $checkRollNumber = User::where('division_id',$request->division)->where('roll_number',$request->roll_number)->whereNotIn('id',[$id])->first();
+        $checkRollNumber = User::where('division_id',$request->division_id)->where('roll_number',$request->roll_number)->whereNotIn('id',[$id])->first();
         if($checkRollNumber){
            User::where('id',$checkRollNumber->id)->update(['roll_number'=>'0']);
         }
-        HomeworkTeacher::where('student_id',$request->id)->update($homework);
-        Attendance::where('student_id',$request->id)->update($homework);
+        HomeworkTeacher::where('student_id',$id)->update($homework);
+        Attendance::where('student_id',$id)->update($homework);
         $leaves['division_id'] = $request->division_id;
         Leave::where('student_id',$request->id)->update($leaves);
-        $userUpdate=User::where('id',$id)->update($userData);
+        $userUpdate = User::where('id',$id)->update($userData);
         $grnNumber = $request->grn;
         $extraInfo = StudentExtraInfo::where('student_id',$id)->update(['grn' => $grnNumber]);
-        $student_previous_school=array();
-        $student_previous_school['school_name']=$request->school_name;
-        $student_previous_school['udise_no']=$request->udise_no;
-        $student_previous_school['city']=$request->city;
-        $student_previous_school['medium_of_instruction']=$request->medium_of_instruction;
-        $student_previous_school['board_examination']=$request->board_examination;
-        $student_previous_school['grades']=$request->grades;
-        $student_pre_school=StudentPreviousSchool::where('student_id',$id)->update($student_previous_school);
+        $student_previous_school = array();
+        $student_previous_school['school_name'] = $request->school_name;
+        $student_previous_school['udise_no'] = $request->udise_no;
+        $student_previous_school['city'] = $request->city;
+        $student_previous_school['medium_of_instruction'] = $request->medium_of_instruction;
+        $student_previous_school['board_examination'] = $request->board_examination;
+        $student_previous_school['grades'] = $request->grades;
+        $student_pre_school = StudentPreviousSchool::where('student_id',$id)->update($student_previous_school);
         if(isset($request['hobbies'])){
             $hobbyInfo = array();
             $hobbies = $request['hobbies'];
@@ -1260,7 +1242,7 @@ class UsersController extends Controller
             $communication_address_student = $dataStudent['communication_address_student'];
         }
         $extraInfo = $request->only('grn','birth_place','nationality','religion','caste','category','aadhar_number','blood_group','mother_tongue','other_language','highest_standard','academic_to','academic_from');
-        $extraInfo['communication_address']=$communication_address_student;
+        $extraInfo['communication_address'] = $communication_address_student;
         $extraInfo['student_id'] = $id;
         $extraInfo['created_at'] = Carbon::now();
         $extraInfo['updated_at'] = Carbon::now();
@@ -1271,25 +1253,24 @@ class UsersController extends Controller
         }else{
             $communication_address_parent = $request['communication_address_parent'];
         }
-       $student=SubmittedDocuments::exists($id);
+       $student = SubmittedDocuments::exists($id);
         if($student == false){
-            $document=$request->documents;
+            $document = $request->documents;
             if(!empty($document)){
-                $document=implode(",",$document);
+                $document = implode(",",$document);
             }
-            $documentData['student_id']=$id;
-            $documentData['submitted_documents']=$document;
-            $query=SubmittedDocuments::insert($documentData);
+            $documentData['student_id'] = $id;
+            $documentData['submitted_documents'] = $document;
+            $query = SubmittedDocuments::insert($documentData);
         }else{
-            $document=$request->documents;
+            $document = $request->documents;
             if(!empty($document)){
-                $document=implode(",",$document);
+                $document = implode(",",$document);
              }
-            $documentData['student_id']=$id;
-            $documentData['submitted_documents']=$document;
-            $query=SubmittedDocuments::where('student_id',$id)->update($documentData);
+            $documentData['student_id'] = $id;
+            $documentData['submitted_documents'] = $document;
+            $query = SubmittedDocuments::where('student_id',$id)->update($documentData);
         }
-
         if ($userUpdate == 1) {
             Session::flash('message-success','student updated successfully');
             return Redirect::back();
