@@ -101,11 +101,11 @@
             </div>
                 <br>
             <div class="special" style="display: none;border: 2px">
-                <input type="text" placeholder="Enter special concession amount" class="form-control" name="special">
+                <input type="text" placeholder="Enter Teaching Staff concession amount" class="form-control" name="special">
             </div>
                 <br>
             <div class="sport" style="display: none;border: 2px ">
-                <input type="text" placeholder="Enter SPORT concession amount" class="form-control" name="sport">
+                <input type="text" placeholder="Enter Non-Teaching Staff/Admin concession amount" class="form-control" name="sport">
             </div>
                 <br>
             <div class="castes" style="display: none">

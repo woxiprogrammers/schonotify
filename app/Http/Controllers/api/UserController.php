@@ -34,7 +34,7 @@ class UserController extends Controller
     {
         $this->middleware('db');
         $this->middleware('remember.user.token');
-        $this->middleware('authenticate.user',['except' => ['login']]);
+        $this->middleware('authenticate.user',['except' => ['login','publicGetSwitchingDetails']]);
     }
     protected function login(Requests\LoginRequest $request)
     {
@@ -450,6 +450,44 @@ class UserController extends Controller
             $status=200;
         }
         catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong" .  $e->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" =>$finalData
+        ];
+        return response($response, $status);
+    }
+    public function publicGetSwitchingDetails(Request $request){
+        try{
+            dd($request->all());
+            $data=$request->all();
+            dd($data);
+            $finalData=array();
+            $parent_student=User::where('parent_id',$data['teacher']['id'])->where('is_active',1)->get();
+            $finalData['Parent_student_relation']['parent_id']=$data['teacher']['id'];
+            $i=0;
+            foreach($parent_student as $val)
+            {
+                $finalData['Parent_student_relation']['Students'][$i]['student_id']=$val->id;
+                $finalData['Parent_student_relation']['Students'][$i]['student_name']=$val->first_name;
+                $division_name=Division::where('id',$val->division_id)->pluck('division_name');
+                $class=Division::where('id',$val->division_id)->pluck('class_id');
+                $class_name=Classes::where('id',$class)->pluck('class_name');
+                $grn=StudentExtraInfo::where('student_id',$val->id)->pluck('grn');
+                $finalData['Parent_student_relation']['Students'][$i]['grn']=$grn;
+                $finalData['Parent_student_relation']['Students'][$i]['class_name']=$class_name;
+                $finalData['Parent_student_relation']['Students'][$i]['student_div']=$division_name;
+                $finalData['Parent_student_relation']['Students'][$i]['last_name']=$val->last_name;
+                $finalData['Parent_student_relation']['Students'][$i]['roll_number']=$val->roll_number;
+                $finalData['Parent_student_relation']['Students'][$i]['body_id']=$val->body_id;
+                $i++;
+            }
+            $message="Successfully Listed";
+            $status=200;
+        }catch(\Exception $e){
             $status = 500;
             $message = "Something went wrong" .  $e->getMessage();
         }

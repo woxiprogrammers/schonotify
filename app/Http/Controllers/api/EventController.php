@@ -18,7 +18,7 @@ class EventController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user',['except' =>['newViewFiveEvent','getEventImagePath']]);
+        $this->middleware('authenticate.user',['except'=>['publicGetYearMonth','newViewFiveEvent','publicViewMonthsEvent']]);
     }
     /*
   * Function Name : viewFiveEvent
@@ -250,6 +250,65 @@ class EventController extends Controller
         ];
         return response($response, $status);
     }
+    public function publicGetYearMonth(Request $request)
+    {
+        $message = "Successfully Listed";
+        $status = 200;
+        $startMonth = 6;
+        $endMonth = 5;
+        $currentMonth = date('n');
+        $data = array();
+        $i = 1 ;
+        if($currentMonth < $startMonth) {
+            $previousYear = strval(date('Y')-1);
+            $currentYear = strval(date('Y'));
+            $j = 0;
+            $i = $startMonth;
+            $previousYearData["year"] = $previousYear;
+            for($month = $startMonth ; $month<=12 ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+            $i =1;
+            $j = 0;
+            $nextYearData["year"] = $currentYear;
+            for($month = 1 ; $month <= $endMonth ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+        } else {
+            $previousYear = strval(date('Y')+1);
+            $currentYear = strval(date('Y')) ;
+            $j = 0;
+            $nextYearData["year"] = $previousYear;
+            for($month = 1 ; $month <= $endMonth ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $nextYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+            $j = 0;
+            $previousYearData["year"] = $currentYear;
+            for($month = $startMonth ; $month<=12 ; $month++) {
+                $date = '2016-'.$month.'-05';
+                $monthName = date('F', strtotime($date));
+                $previousYearData["month"][$j][$i] = substr($monthName,0,3);;
+                $i++;
+            }
+        }
+        $data[0] = $previousYearData;
+        $data[1] = $nextYearData;
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $data
+        ];
+        return response($response, $status);
+    }
     /*
     * Function Name : viewMonthsEvent
     * Param : Request $requests , $month_id
@@ -340,6 +399,100 @@ class EventController extends Controller
                 $status = 404;
                 $message = 'Sorry! No events found for this instance.';
             }
+        } catch (\Exception $e) {
+            $status = 500;
+            $message = "Something went wrong";
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "data" => $finalMonthsEvents
+        ];
+        return response($response, $status);
+    }
+
+    public function publicViewMonthsEvent(Request $request,$year,$month_id){
+        $user = $request->all();
+        try {
+            $data = $request->all();
+            $monthsEvents = array();
+            $pendingEvents = array();
+            $publishedEvents = array();
+            $finalMonthsEvents = array();
+            $status = 200;
+            $message = 'Successfully Listed';
+            $eventTypesId = EventTypes::where('slug',['event'])->pluck('id');
+            $startDate = $year."-".$month_id ."-"."01"." 00".":"."00".":"."00";
+            $endDate = $year."-".$month_id ."-"."31"." 23".":"."59".":"."59";
+            $pendingEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
+                ->where('created_by',$data['teacher']['id'])
+                ->where('body_id',$user['teacher']['body_id'])
+                ->where('status','=',1) //1 is for pending events i.e. Not published and not in draft
+                ->where('start_date','>=',$startDate)
+                ->where('start_date','<=',$endDate);
+            $publishedEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
+                ->where('status','=',2) //1 is for pending events i.e. Not published.
+                ->where('body_id',$user['teacher']['body_id'])
+                ->where('start_date','>=',$startDate)
+                ->where('start_date','<=',$endDate);
+            $monthsEvents = DB::table('events')->where('event_type_id','=',$eventTypesId)
+                ->where('created_by',$data['teacher']['id'])
+                ->where('status','=',0) // 0 is for draft
+                ->where('body_id',$user['teacher']['body_id'])
+                ->union($pendingEvents)
+                ->union($publishedEvents)
+                ->where('start_date','>=',$startDate)
+                ->where('start_date','<=',$endDate)
+                ->orderBy('start_date','desc')
+                ->get();
+            $counter = 0;
+            if(!Empty($monthsEvents)){
+                foreach ($monthsEvents as $event) {
+                    $image = EventImages::where('event_id','=',$event->id)->pluck('image');
+                    $finalMonthsEvents[$counter]['id'] =  $event->id;
+                    $creatorUser = User::where ('id','=', $event->created_by)->select('first_name','last_name')->first();
+                    $finalMonthsEvents[$counter]['created_by'] = $creatorUser['first_name']." ".$creatorUser['last_name'];
+                    $publishedUser = User::where ('id','=', $event->published_by)->select('first_name','last_name')->first();
+                    $finalMonthsEvents[$counter]['published_by'] = $publishedUser['first_name']." ".$publishedUser['last_name'];
+                    if($event->status == "0"){ //0 for draft
+                        $finalMonthsEvents[$counter]['status'] = "Draft" ;
+                    } else  if($event->status == "1"){ //0 for draft
+                        $finalMonthsEvents[$counter]['status'] ="Pending";
+                    } else {
+                        $finalMonthsEvents[$counter]['status'] ="Published";
+                    }
+                    $finalMonthsEvents[$counter]['title'] = $event->title;
+                    $finalMonthsEvents[$counter]['detail'] = $event->detail;
+                    if($image!=null) {
+                        $file = $this->getEventImagePath($image);
+                        if($file['status']){
+                            $finalMonthsEvents[$counter]['image'] =$image;
+                            $finalMonthsEvents[$counter]['path'] = $file['path'];
+                        } else {
+                            $finalMonthsEvents[$counter]['image'] = $image;
+                            $imageName=$image;
+                            $finalMonthsEvents[$counter]['path'] = url()."/uploads/events/".$imageName;
+
+                        }
+                    } else {
+                        $finalMonthsEvents[$counter]['image'] = "picture.svg";
+                        $finalMonthsEvents[$counter]['path'] = url()."/uploads/events/picture.svg";
+                    }
+                    $finalMonthsEvents[$counter]['start_date'] =  date("j M y, g:i a",strtotime( $event->start_date));
+                    $finalMonthsEvents[$counter]['end_date'] = date("j M y, g:i a",strtotime( $event->end_date));
+                    $finalMonthsEvents[$counter]['created_at'] =  date("j M y, g:i a",strtotime( $event->created_at));
+                    if($event->status == 2) {
+                        $finalMonthsEvents[$counter]['published_at'] =  date("j M y, g:i a",strtotime( $event->updated_at));
+                    } else {
+                        $finalMonthsEvents[$counter]['published_at'] = ' ';
+                    }
+                    $counter++;
+                }
+            } else {
+                $status = 404;
+                $message = 'Sorry! No events found for this instance.';
+            }
+
         } catch (\Exception $e) {
             $status = 500;
             $message = "Something went wrong";

@@ -473,8 +473,10 @@
     Route::post('send-message',array('uses' => 'api\MessageController@sendMessage'));
     Route::get('get-teachers-list/{id}','api\UserController@getTeachersList');
     Route::get('get-message-count/{id}','api\MessageController@getMessageCount');
+    Route::get('public-get-message-count/{id}','api\MessageController@publicGetMessageCount');
     Route::get('get-acl-details','api\MessageController@getAclDetails');
     Route::get('get-switching-details','api\UserController@getSwitchingDetails');
+    Route::get('public-get-switching-details','api\UserController@publicGetSwitchingDetails');
     Route::get('check-login','api\UserController@checkLogin');
     Route::get('check-acl/{id}','api\UserController@checkAcl');
  //Homework related
@@ -520,12 +522,14 @@
         Route::get('view-top-five-event','api\EventController@viewFiveEvent');
         Route::post('view-top-five-event-new','api\EventController@newViewFiveEvent');
         Route::get('view-months-event/{year}/{month_id}','api\EventController@viewMonthsEvent');// BOTH FOR PARENT AND TEACHER
+        Route::get('public-view-months-event/{year}/{month_id}','api\EventController@publicViewMonthsEvent');// BOTH FOR PARENT AND TEACHER
         Route::post('create-event','api\EventController@createEvent');
         Route::put('send-for-publish-event','api\EventController@sendForPublishEventTeacher');
         Route::put('delete-event','api\EventController@deleteEventTeacher');
         Route::get('detail-view/{event_id}','api\EventController@detailView');
         Route::put('edit-event','api\EventController@editEvent');
         Route::get('get-year-month','api\EventController@getYearMonth');
+        Route::get('public-get-year-month','api\EventController@publicGetYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
         //Fees
