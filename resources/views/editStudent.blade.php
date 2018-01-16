@@ -451,21 +451,6 @@
                                                     </div>
                                             </div>
                                         </div>
-
-                                        {{-- <div class="col-md-12" style="display: none" id="CasteSelect">
-                                             <div class="form-group">
-                                                 <label>
-                                                     Assign Fee Concession :
-                                                 </label>
-                                                 <div>
-                                                     <select name="caste1"  style="-webkit-appearance: menulist;">
-                                                         @foreach($queryn as $castes)
-                                                         <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
-                                                         @endforeach
-                                                     </select>
-                                                 </div>
-                                             </div>
-                                         </div>--}}
                                     </fieldset>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -859,6 +844,7 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
+                                                    {{dd($fee_due_date)}}
                                                     @if(!empty($fee_due_date))
                                                     @foreach($fee_due_date as  $fee_due_dates)
                                                     <dl class="accordion">
@@ -1118,17 +1104,13 @@
         $("option[value='"+std+"']").prop('selected',true);
         $("option[value='"+category+"']").prop('selected',true);
         $("option[value='"+blood+"']").prop('selected',true);
-        $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
+        $('.caste-checkbox').each(function(){
+
+            $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
+        })
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
-        if({!!$chkstatus!!} != "null"){
-        var chkstatus = {!!$chkstatus!!};
-        if(chkstatus != null){
-          for(var i = 0; i< chkstatus.length; i++){
-             $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
-          }
-        }
-        }
+
         $('#multiple-concession').click(function() {
             $("#test").html('');
             $('.checked_fee:checkbox:checked').each(function(){
@@ -1138,7 +1120,6 @@
                 $(newClone).show();
                 $(newClone).find('input[type=checkbox]').each(function(){
                     $(this).attr("name","student_fee["+id+"][concession][]");
-//                    $(this).attr('id',"student_fee["+id+"][concession_check]");
                     $(this).attr('id',''+id);
                 });
                 $("#test").append('<div class="row"><fieldset>' +

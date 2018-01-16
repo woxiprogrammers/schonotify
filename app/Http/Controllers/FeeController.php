@@ -193,7 +193,7 @@ class FeeController extends Controller
        $user = Auth::user()->toarray();
        $batches = Batch::where('body_id',$user['body_id'])->lists('id');
        $classes = Classes::whereIn('batch_id',$batches)->lists('id');
-       $fee_classes = FeeClass::whereIn('class_id',$classes)->lists('fee_id');
+       $fee_classes = FeeClass::whereIn('class_id',$classes)->select('fee_id')->get()->toArray();
        if($request->str1 == 0)
        {
            $fees=Fees::whereIn('id',$fee_classes)->select()->get();
@@ -201,8 +201,8 @@ class FeeController extends Controller
        }
         else
         {
-            $query=FeeClass::where('class_id',$request->str1)->pluck('fee_id');
-            $fees=Fees::where('id',$query)->select()->get();
+            $query=FeeClass::where('class_id',$request->str1)->lists('fee_id');
+            $fees = Fees::whereIn('id',$query)->select('id','fee_name','total_amount','year')->get()->toArray();
             return view('fee.feetable')->with(compact('fees'));
         }
     }
