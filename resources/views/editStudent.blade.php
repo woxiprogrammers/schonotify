@@ -844,13 +844,18 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
-                                                    {{dd($fee_due_date)}}
                                                     @if(!empty($fee_due_date))
-                                                    @foreach($fee_due_date as  $fee_due_dates)
-                                                    <dl class="accordion">
-                                                        <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {{$fee_due_dates['installment_id']}} </a></dt>
-                                                        <dd>Due-date:{{$fee_due_dates['due_date']}} <br><br> Amount: {{round($fee_due_dates['discount'],2)}}</dd>
-                                                    </dl>
+                                                    @foreach($fee_due_date as $key => $fee_due_dates)
+                                                        <dl>
+                                                            <dt>Structuire Name</dt>
+                                                            <dd>{{$key}}</dd>
+                                                        </dl>
+                                                        @foreach($fee_due_dates as $due_date)
+                                                           <dl class="accordion">
+                                                                <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $due_date['installment_id'] !!}</a></dt>
+                                                                <dd>Due-date:{!! $due_date['due_date'] !!}   <br><br> Amount: {!! round($due_date['discount'],2) !!}</dd>
+                                                            </dl>
+                                                        @endforeach
                                                     @endforeach
                                                     @endif
                                                     <input type="hidden" id="user-id" value={{$user->id}}>
@@ -866,13 +871,16 @@
                                                <ul class="mini-stats pull-left">
                                                    <li>
                                                        <div class="values">
+                                                           @foreach($total_fee_for_current_year as $year)
                                                            <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
-                                                               Total fee for current year  :  {{$total_fee_for_current_year}}
+                                                               Total fee for current year  :  {{$year}}
                                                            </div>
+                                                               @endforeach
                                                        </div>
                                                    </li>
                                                </ul>
-                                               <ul class="mini-stats pull-right">
+                                        <br><br>
+                                               <ul class="mini-stats pull-left">
                                                <li>
                                                        <div class="values">
                                                            <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
@@ -982,6 +990,7 @@
                                                    <tr>
                                                        <th width="10%"> No </th>
                                                        <th width="20%"> Transaction Type </th>
+                                                       <th width="10%"> Structure Name </th>
                                                        <th width="10%"> Transaction Detail </th>
                                                        <th width="10%"> Transaction Amount </th>
                                                        <th width="10%"> Date </th>
