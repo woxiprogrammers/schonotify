@@ -971,7 +971,7 @@ class UsersController extends Controller
                 $caste=StudentExtraInfo::where('student_id',$id)->pluck('caste');
                 $grn=StudentExtraInfo::where('student_id',$id)->pluck('grn');
                 $religion=StudentExtraInfo::where('student_id',$id)->pluck('religion');
-                $batches=Batch::get();
+                $batches=Batch::where('body_id',$user->body_id)->select('id','name')->first();
                 $divisionStudent=User::where('id',$id)->pluck('division_id');
                 if($divisionStudent != null){
                     $divisionStudent=$divisionStudent;

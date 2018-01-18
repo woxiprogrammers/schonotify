@@ -21,7 +21,7 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-7">
-            <h1 class="mainTitle">Ganesh International School , Chikhali</h1>
+            <h1 class="mainTitle">{{$bodyInfo['name']}}</h1>
             <span class="mainDescription"></span>
         </div>
 
@@ -52,8 +52,8 @@
                 </button>
             </div>
          </form>
-        <div class="col-md-4">
-           <form method="get" action="/fees/billing-page">
+        <div class="col-md-4" hidden>
+           <form method="get" action="/fees/billing-page/{{$bodyInfo['slug']}}">
                <button class="btn btn-primary btn-wide" type="submit">
                    Make Payment
                </button>

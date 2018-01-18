@@ -788,10 +788,6 @@
                 <p class="text-large">
                     Congratulations..!! Registered successfully. Kindly contact school for further queries.
                 </p>
-                <a class="btn btn-primary btn-o">
-                    Make Payment
-                </a>
-
                 <a class="btn btn-primary btn-o" href="/print-admission-form/{{$enquiryInfo['id']}}">
                     Download Admission form
                 </a>
