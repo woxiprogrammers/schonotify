@@ -137,21 +137,10 @@ class FeeController extends Controller
             }
           foreach($request->class as $class)
             {
-                $class_present=FeeClass::where('class_id',$class)->exists();
-                if($class_present)
-                {
-                    $class_details['fee_id']=$query;
-                    $class_details['class_id']=$class;
-                    $class_details['amount']=$request->total_fee;
-                    $query2=FeeClass::where('class_id',$class)->update($class_details);
-                }
-                else
-                {
-                    $class_details['fee_id']=$query;
-                    $class_details['class_id']=$class;
-                    $class_details['amount']=$request->total_fee;
-                    $query2=FeeClass::create($class_details);
-                }
+                $class_details['fee_id']=$query;
+                $class_details['class_id']=$class;
+                $class_details['amount']=$request->total_fee;
+                $query2=FeeClass::create($class_details);
             }
             foreach($request->concessions as $concession)
             {
@@ -204,7 +193,7 @@ class FeeController extends Controller
        $user = Auth::user()->toarray();
        $batches = Batch::where('body_id',$user['body_id'])->lists('id');
        $classes = Classes::whereIn('batch_id',$batches)->lists('id');
-       $fee_classes = FeeClass::whereIn('class_id',$classes)->lists('fee_id');
+       $fee_classes = FeeClass::whereIn('class_id',$classes)->select('fee_id')->get()->toArray();
        if($request->str1 == 0)
        {
            $fees=Fees::whereIn('id',$fee_classes)->select()->get();
@@ -212,8 +201,8 @@ class FeeController extends Controller
        }
         else
         {
-            $query=FeeClass::where('class_id',$request->str1)->pluck('fee_id');
-            $fees=Fees::where('id',$query)->select()->get();
+            $query=FeeClass::where('class_id',$request->str1)->lists('fee_id');
+            $fees = Fees::whereIn('id',$query)->select('id','fee_name','total_amount','year')->get()->toArray();
             return view('fee.feetable')->with(compact('fees'));
         }
     }
