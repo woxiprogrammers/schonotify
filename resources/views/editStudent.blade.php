@@ -840,6 +840,7 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
+                                                    {{dd($fee_due_date)}}
                                                     @if(!empty($fee_due_date))
                                                     @foreach($fee_due_date as $key => $fee_due_dates)
                                                         <dl>
