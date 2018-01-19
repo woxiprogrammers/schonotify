@@ -840,12 +840,12 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
-                                                    {{dd($fee_due_date)}}
+
                                                     @if(!empty($fee_due_date))
                                                     @foreach($fee_due_date as $key => $fee_due_dates)
                                                         <dl>
                                                             <dt>Structuire Name</dt>
-                                                            <dd>{{$key}}</dd>
+                                                            <dd>{{$fee_due_dates[0]['fee_name']}}</dd>
                                                         </dl>
                                                         @foreach($fee_due_dates as $due_date)
                                                            <dl class="accordion">
@@ -868,19 +868,24 @@
                                                <ul class="mini-stats pull-left">
                                                    <li>
                                                        <div class="values">
-                                                           @foreach($total_fee_for_current_year as $year)
-                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
-                                                               Total fee for current year  :  {{$year}}
-                                                           </div>
+
+                                                           @foreach($total_fee_for_current_year as $key => $year)
+
+                                                               <div>
+                                                                   <h4>{{$key}}</h4>
+                                                                   <span>Total fee for current year :- {{$year['discount']}}</span>
+                                                                   <br><br>
+                                                               </div>
                                                                @endforeach
                                                        </div>
                                                    </li>
                                                </ul>
                                         <br><br>
-                                               <ul class="mini-stats pull-left">
+                                               <ul class="mini-stats pull-right">
                                                <li>
                                                        <div class="values">
-                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+
+                                                           <div type="button" class="btn btn-wide btn-md  btn-primary btn-squared">
                                                                Total due fee for current year : {{$total_due_fee_for_current_year}}
                                                            </div>
                                                        </div>
