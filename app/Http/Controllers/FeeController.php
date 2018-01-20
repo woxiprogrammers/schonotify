@@ -211,27 +211,26 @@ class FeeController extends Controller
      * Developed By Shubham Chaudhari
      */
     public function createTransactions(Request $request)
-    {    $user=$request->student_id;
-         $fee_id=StudentFee::where('student_id',$user)->pluck('fee_id');
+    {
          $transaction_details=array();
-         $transaction_details['fee_id']=$fee_id;
+         $transaction_details['fee_id']=$request->Structure_type;
          $transaction_details['student_id']=$request->student_id;
          $transaction_details['transaction_type']=$request->transaction_type;
          $transaction_details['transaction_detail']=$request->transaction_detail;
          $transaction_details['transaction_amount']=$request->transaction_amount;
          $transaction_details['date']=$request->date;
          $transaction_details['installment_id']=$request->installment_id;
-         $query=TransactionDetails::create($transaction_details);
+         $query=/*TransactionDetails::create($transaction_details)*/0;
          if($query){
              Session::flash('message-success','Fee transaction created successfully');
              $title="Fee payment";
              $message="Payment of Rs ".$request->transaction_amount." received by school.";
              $allUser=0;
-             $users_push=User::where('id',$request->student_id)->pluck('parent_id');
-             $push_users=PushToken::where('user_id',$users_push)->lists('push_token');
+             $users_push = User::where('id',$request->student_id)->pluck('parent_id');
+             $push_users = PushToken::where('user_id',$users_push)->lists('push_token');
              $this->CreatePushNotification($title,$message,$allUser,$push_users);
          }
-        return redirect('/edit-user/'.$user);
+        return redirect('/edit-user/'.$request->student_id);
     }
     /**
      * Function getStudentDetails()

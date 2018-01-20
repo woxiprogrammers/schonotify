@@ -900,9 +900,13 @@ class UsersController extends Controller
                     $user['parentAlternateNumber']=$userData->alternate_number;
                     $user['parentAvatar']=$userData->avatar;
                     $transaction_types=TransactionTypes::select('id','transaction_type')->get()->toArray();
-                    $transactions=TransactionDetails::where('student_id',$id)->get();
+                    $transactions=TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
+                                                      ->where('transaction_details.student_id',$id)
+                                                      ->select('fees.fee_name as fee_name','transaction_details.id as id','transaction_details.transaction_type as transaction_type','transaction_details.transaction_detail as transaction_detail','transaction_details.transaction_amount as transaction_amount','transaction_details.date as date')
+                                                      ->get();
                     $new_array=array();
                     $total_paid_fees=TransactionDetails::where('student_id',$id)->select('transaction_amount')->get()->toarray();
+//                    dd($total_paid_fees);
                     foreach($total_paid_fees as $key => $total_paid_fee )
                     {
                         foreach($total_paid_fee as $fee)
@@ -921,31 +925,6 @@ class UsersController extends Controller
                              $division_status="Division Not Assigned !";
                          }
                 ;
-        /*        $g=array();
-
-                $query1=StudentFee::where('student_id',$id)->select('caste_concession')->distinct('caste_concession')->get()->toArray();
-                foreach($feedata as $key => $fee){
-                    $g = StudentFeeConcessions::where('fee_id',$fee['fee_id'])->where('student_id',$id)->select('fee_concession_type')->get()->toArray();
-                }
-                dd($g);
-                foreach ($g as $key => $concessions){
-                    if(!empty($g)){
-                        $assigned_fee_concessions = json_decode($concessions['fee_concession_type']);
-                    }
-                }
-                if(!empty($assigned_fee_concessions))
-                {
-                    foreach ($feedata as $key => $fee){
-                        $concn_amnts = FeeConcessionAmount::where('fee_id',$fee['fee_id'])->where('concession_type',$assigned_fee_concessions)->select('amount')->get()->toArray();
-                        for($i=0;$i<count($concn_amnts);$i++){
-                            foreach($fee_due_date as $key => $date_due_fee){
-                                dd($fee_due_date[$key][$i]['discount']);
-                                $fee_due_date[$key][$i]['discount'] =  $date_due_fee[$i]['discount']-(($concn_amnts[$i]['amount'])/count($fee_due_date));
-                            }
-                        }
-                    }
-                }
-                dd($fee_due_date);*/
                 $total_fee_for_current_year = array();
                      foreach($fee_due_date as $fee_name => $val){
                          $total_fee_for_current_year[$val[0]['fee_name']]['discount'] = 0;

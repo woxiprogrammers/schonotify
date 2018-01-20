@@ -898,6 +898,23 @@
                                             <div class="col-md-12">
                                                 <form id="fee_transaction_form" method="post" action="/fees/transactions">
                                                 <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Select Fee Structure :<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <select name="Structure_type">
+                                                                    @foreach($fees as $fee)
+                                                                        <option value="{{$fee['id']}}">{{$fee['fee_name']}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">
@@ -1003,6 +1020,7 @@
                                                    <tr>
                                                        <td>{!! $transaction->id !!}</td>
                                                        <td>{!! $transaction->transaction_type !!}</td>
+                                                       <td>{!! $transaction->fee_name !!}</td>
                                                        <td>{!! $transaction->transaction_detail !!}</td>
                                                        <td>{!! $transaction->transaction_amount !!}</td>
                                                        <td>{!! $transaction->date !!}</td>
