@@ -786,8 +786,6 @@ class UsersController extends Controller
                 $division=User::where('id',$id)->pluck('division_id');
                 $class=Division::where('id',$division)->pluck('class_id');
                 $assigned_fee_for_class = FeeClass::where('class_id',$class)->lists('fee_id')->toArray();
-                $feedata = StudentFee::where('student_id',$id)->select('fee_id')->get()->toArray();
-
                 $fees = Fees::whereIn('id',$assigned_fee_for_class)->select('id','fee_name','year')->get()->toArray();
                 $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
                     foreach($student_fee as $key => $a)
@@ -795,11 +793,6 @@ class UsersController extends Controller
                         $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
                     }
                 $installment_data = array();
-                    foreach($student_fee as $key => $a)
-                    {
-                        $fee_deta=Fees::where('id',$a['fee_id'])->select('total_amount','year','fee_name')->get();
-                        $concessionType_data=ConcessionTypes::where('id',$a['fee_concession_type'])->get()->toArray();
-                    }
                     $fee_ids =StudentFee::where('student_id',$id)->select('fee_id')->distinct('fee_id')->get()->toArray();
                     $fee_due_date = FeeDueDate::join('fees','fees.id','=','fee_due_date.fee_id')
                                                 ->whereIn('fee_due_date.fee_id',$fee_ids)
@@ -875,7 +868,6 @@ class UsersController extends Controller
                         }
                     }
                 }
-                $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
                 if(!empty($installment_info))
                    {
                        $iterator = 0;
@@ -906,7 +898,6 @@ class UsersController extends Controller
                                                       ->get();
                     $new_array=array();
                     $total_paid_fees=TransactionDetails::where('student_id',$id)->select('transaction_amount')->get()->toarray();
-//                    dd($total_paid_fees);
                     foreach($total_paid_fees as $key => $total_paid_fee )
                     {
                         foreach($total_paid_fee as $fee)
@@ -971,7 +962,6 @@ class UsersController extends Controller
                 $doc=explode(',',$doc);
                 $family_info=ParentExtraInfo::where('parent_id',$user['parent_id'])->first();
                 $parent_email=User::where('id',$user['parent_id'])->pluck('email');
-                $student_data=StudentSibling::where('student_id',$id)->get();
                 $caste=StudentExtraInfo::where('student_id',$id)->pluck('caste');
                 $grn=StudentExtraInfo::where('student_id',$id)->pluck('grn');
                 $religion=StudentExtraInfo::where('student_id',$id)->pluck('religion');
