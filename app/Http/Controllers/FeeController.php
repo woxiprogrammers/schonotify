@@ -331,4 +331,12 @@ class FeeController extends Controller
             Log::info(json_encode($data));
         }
     }
+    public function getTransactionListing(Request $request){
+        $user = Auth::user()->toArray();
+        $batches=Batch::where('body_id',$user['body_id'])->select('id','name')->get()->toArray();
+        return view('fee.feeTransactionListing')->with(compact('batches'));
+    }
+    public function getTransactionListingTable(Request $request){
+        return view('fee.feeTransactionTable');
+    }
 }

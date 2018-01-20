@@ -78,6 +78,8 @@
         Route::post('transactions',array('uses' => 'FeeController@createTransactions'));
         Route::get('billing-page/{slug?}',array('uses' => 'FeeController@billiingPageView'));
         Route::post('get-student-details',array('uses' => 'FeeController@getStudentDetails'));
+        Route::get('transaction-listing',array('uses' => 'FeeController@getTransactionListing'));
+        Route::get('feeTransactionListingTable',array('uses' => 'FeeController@getTransactionListingTable'));
     });
 
     Route::group(['prefix' => 'payment'],function(){
