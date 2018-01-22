@@ -328,7 +328,6 @@ class FeeController extends Controller
                 'data' => $request->all(),
                 'message' => $e->getMessage()
             ];
-            Log::info(json_encode($data));
         }
     }
     public function getTransactionListing(Request $request){
@@ -338,5 +337,47 @@ class FeeController extends Controller
     }
     public function getTransactionListingTable(Request $request){
         return view('fee.feeTransactionTable');
+    }
+    public function getAllYears(Request $request){
+        $year = Fees::select('id','year')->get();
+        return $year;
+    }
+    public function showFeeTransactionListing(Request $request,$id,$classId,$divId){
+        $user = Auth::user();
+        $students = User::join('students_extra_info', 'users.id','=','students_extra_info.student_id')
+                        ->join('transaction_details','transaction_details.student_id','=','users.id')
+                        ->join('fees','fees.id','=','transaction_details.fee_id')
+                        ->where('fees.id',$id)
+                        ->where('users.body_id',$user->body_id)
+                        ->where('users.role_id',3)
+                        ->where('users.division_id',$divId)
+                        ->select('transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn')
+                        ->get()->toArray();
+        $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+        $str.="<thead><tr>";
+        $str.="<th>Date</th>";
+        $str.="<th>Fee Structure Name</th>";
+        $str.="<th>Student Name</th>";
+        $str.="<th>Amount</th>";
+        $str.="<th>Paid Amount</th>";
+        $str.="<th>GRN No.</th>";
+        $str.="<th>Action</th>";
+        $str.="</tr></thead><tbody>";
+        foreach ($students as $student){
+            $str.="<tr>";
+            $str.="<td>".$student['date']."</td>";
+            $str.="<td>".$student['name']."</td>";
+            $str.="<td>".$student['first_name']." ".$student['last_name']."</td>";
+            $str.="<td></td>";
+            $str.="<td>".$student['transaction_amount']."</td>";
+            $str.="<td>".$student['grn']."</td>";
+            $str.="<td>"."<a href='/fees/download-pdf/".$student['id']."'>download </a>"."</td>";
+            $str.="</tr>";
+        }
+        $str.="</tbody></table>";
+        return $str;
+    }
+    public function createPDF(Request $request,$id){
+        dd($id);
     }
 }

@@ -80,6 +80,9 @@
         Route::post('get-student-details',array('uses' => 'FeeController@getStudentDetails'));
         Route::get('transaction-listing',array('uses' => 'FeeController@getTransactionListing'));
         Route::get('feeTransactionListingTable',array('uses' => 'FeeController@getTransactionListingTable'));
+        Route::get('get-all-year',array('uses' => 'FeeController@getAllYears'));
+        Route::get('feeListingTable/{id}/{classId}/{divId}',array('uses' => 'FeeController@showFeeTransactionListing'));
+        Route::get('download-pdf/{id}',array('uses' => 'FeeController@createPDF'));
     });
 
     Route::group(['prefix' => 'payment'],function(){

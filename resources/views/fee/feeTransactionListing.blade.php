@@ -57,15 +57,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4" id="select-grn" >
-                            <div class="form-group">
-                                <label class="control-label">
-                                    Select GRN number <span class="symbol required"></span>
-                                </label>
-                                <select class="form-control" id="grn-select" name="year_select" style="-webkit-appearance: menulist;">
-                                </select>
-                            </div>
-                        </div>
                         <div class="col-md-12">
                             <div class="form-group" >
                                 <fieldset>
@@ -75,6 +66,7 @@
                             </div>
                         </div>
                     </fieldset>
+                    <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="/assets/images/loader1.gif"></center></div>
                 </div>
                 @include('rightSidebar')
             </div>
@@ -119,25 +111,34 @@
             FormElements.init();
             TableData.init();
             event.stopPropagation();
-            callAllFess();
         })
     </script>
     <script>
-        function callAllFess()
-        {
-            var strrr=0;
+        $( "#year-select" ).change(function(){
+            var classId=$('#class-select').val();
+            var divId=$('#div-select').val();
+            var id=this.value;
             $.ajax({
-                url: "/fees/feeTransactionListingTable",
-                data:{str1 : strrr},
-                success: function(response)
-                {
-                    $("#feetable").html(response);
-                }
-            });
-        }
+                method:"get",
+                url: "/fees/feeListingTable/"+id+'/'+classId+'/'+divId
+            }).done(function(res){
+                $("#feetable").html(res);
+                $('#loadmoreajaxloader').hide();
+                var switcheryHandler = function() {
+
+                    var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                    elements.forEach(function(html) {
+                        var switchery = new Switchery(html);
+                    });
+                };
+                switcheryHandler();
+                TableData.init();
+            })
+        })
     </script>
     <script>
-        $( "#batchDropdown" ).change(function () {
+        $( "#batchDropdown" ).change(function(){
             var id=this.value;
             var route='/exam/get-all-classes/'+id;
             $('#loadmoreajaxloaderClass').show();
@@ -156,7 +157,7 @@
                     $('#loadmoreajaxloaderClass').hide();
                 }
              });
-            })
+            });
         $('#class-select').change(function(){
             var id=this.value;
             var route='/exam/get-all-div/'+id;
@@ -173,6 +174,25 @@
                         str+='<option value="'+res[i]['id']+'">'+res[i]['division_name']+'</option>';
                     }
                     $('#div-select').html(str);
+                    $('#loadmoreajaxloaderClass').hide();
+                }
+            });
+        });
+        $('#div-select').change(function(){
+            var route='/fees/get-all-year/';
+            $('#loadmoreajaxloaderClass').show();
+            $.get(route,function(res){
+                if (res.length == 0)
+                {
+                    $('#year-select').html("no record found");
+                    $('#loadmoreajaxloaderClass').hide();
+                } else {
+                    var str='<option value="">Please select division</option>';
+                    for(var i=0; i<res.length; i++)
+                    {
+                        str+='<option value="'+res[i]['id']+'">'+res[i]['year']+'</option>';
+                    }
+                    $('#year-select').html(str);
                     $('#loadmoreajaxloaderClass').hide();
                 }
             });
