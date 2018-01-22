@@ -840,11 +840,12 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
+
                                                     @if(!empty($fee_due_date))
                                                     @foreach($fee_due_date as $key => $fee_due_dates)
                                                         <dl>
                                                             <dt>Structuire Name</dt>
-                                                            <dd>{{$key}}</dd>
+                                                            <dd>{{$fee_due_dates[0]['fee_name']}}</dd>
                                                         </dl>
                                                         @foreach($fee_due_dates as $due_date)
                                                            <dl class="accordion">
@@ -867,19 +868,24 @@
                                                <ul class="mini-stats pull-left">
                                                    <li>
                                                        <div class="values">
-                                                           @foreach($total_fee_for_current_year as $year)
-                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
-                                                               Total fee for current year  :  {{$year}}
-                                                           </div>
+
+                                                           @foreach($total_fee_for_current_year as $key => $year)
+
+                                                               <div>
+                                                                   <h4>{{$key}}</h4>
+                                                                   <span>Total fee for current year :- {{$year['discount']}}</span>
+                                                                   <br><br>
+                                                               </div>
                                                                @endforeach
                                                        </div>
                                                    </li>
                                                </ul>
                                         <br><br>
-                                               <ul class="mini-stats pull-left">
+                                               <ul class="mini-stats pull-right">
                                                <li>
                                                        <div class="values">
-                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+
+                                                           <div type="button" class="btn btn-wide btn-md  btn-primary btn-squared">
                                                                Total due fee for current year : {{$total_due_fee_for_current_year}}
                                                            </div>
                                                        </div>
@@ -892,6 +898,23 @@
                                             <div class="col-md-12">
                                                 <form id="fee_transaction_form" method="post" action="/fees/transactions">
                                                 <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Select Fee Structure :<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <select name="Structure_type">
+                                                                    @foreach($fees as $fee)
+                                                                        <option value="{{$fee['id']}}">{{$fee['fee_name']}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">
@@ -997,6 +1020,7 @@
                                                    <tr>
                                                        <td>{!! $transaction->id !!}</td>
                                                        <td>{!! $transaction->transaction_type !!}</td>
+                                                       <td>{!! $transaction->fee_name !!}</td>
                                                        <td>{!! $transaction->transaction_detail !!}</td>
                                                        <td>{!! $transaction->transaction_amount !!}</td>
                                                        <td>{!! $transaction->date !!}</td>
