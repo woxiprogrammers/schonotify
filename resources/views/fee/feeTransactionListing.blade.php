@@ -48,16 +48,24 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4" id="select-div" >
+                        <div class="col-md-4" id="select-year" >
                             <div class="form-group">
                                 <label class="control-label">
-                                    Select Div <span class="symbol required"></span>
+                                    Select Year <span class="symbol required"></span>
                                 </label>
-                                <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;">
+                                <select class="form-control" id="year-select" name="year_select" style="-webkit-appearance: menulist;">
                                 </select>
                             </div>
                         </div>
-
+                        <div class="col-md-4" id="select-grn" >
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Select GRN number <span class="symbol required"></span>
+                                </label>
+                                <select class="form-control" id="grn-select" name="year_select" style="-webkit-appearance: menulist;">
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group" >
                                 <fieldset>
