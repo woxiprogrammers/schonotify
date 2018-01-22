@@ -17,7 +17,7 @@
                         </div>
                     </section>
                     <fieldset>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">
                                     Batch <span class="symbol required"></span>
@@ -30,15 +30,34 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group" >
+                        <div class="col-md-4" id="class-select-div" >
+                            <div class="form-group">
                                 <label class="control-label">
-                                    Class <span class="symbol required"></span>
+                                    Select Class <span class="symbol required"></span>
                                 </label>
-                                <div id="classesDropdown">
-                                </div>
+                                <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                </select>
                             </div>
                         </div>
+                        <div class="col-md-4" id="select-div" >
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Select Div <span class="symbol required"></span>
+                                </label>
+                                <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="select-div" >
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Select Div <span class="symbol required"></span>
+                                </label>
+                                <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;">
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="col-md-12">
                             <div class="form-group" >
                                 <fieldset>
@@ -110,17 +129,45 @@
         }
     </script>
     <script>
-        $( "#batchDropdown" )
-            .change(function () {
-                var str = this.value;
-                $.ajax({
-                    url: "/fees/classes",
-                    data:{str1 : str},
-                    success: function(response)
+        $( "#batchDropdown" ).change(function () {
+            var id=this.value;
+            var route='/exam/get-all-classes/'+id;
+            $('#loadmoreajaxloaderClass').show();
+            $.get(route,function(res){
+                if (res.length == 0)
+                {
+                    $('#class-select').html("no record found");
+                    $('#loadmoreajaxloaderClass').hide();
+                } else {
+                    var str='<option value="">Please select class</option>';
+                    for(var i=0; i<res.length; i++)
                     {
-                        $("#classesDropdown").html(response);
+                        str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                     }
-                });
+                    $('#class-select').html(str);
+                    $('#loadmoreajaxloaderClass').hide();
+                }
+             });
             })
+        $('#class-select').change(function(){
+            var id=this.value;
+            var route='/exam/get-all-div/'+id;
+            $('#loadmoreajaxloaderClass').show();
+            $.get(route,function(res){
+                if (res.length == 0)
+                {
+                    $('#div-select').html("no record found");
+                    $('#loadmoreajaxloaderClass').hide();
+                } else {
+                    var str='<option value="">Please select division</option>';
+                    for(var i=0; i<res.length; i++)
+                    {
+                        str+='<option value="'+res[i]['id']+'">'+res[i]['division_name']+'</option>';
+                    }
+                    $('#div-select').html(str);
+                    $('#loadmoreajaxloaderClass').hide();
+                }
+            });
+        });
     </script>
 @stop
