@@ -220,7 +220,7 @@ class FeeController extends Controller
          $transaction_details['transaction_amount']=$request->transaction_amount;
          $transaction_details['date']=$request->date;
          $transaction_details['installment_id']=$request->installment_id;
-         $query=/*TransactionDetails::create($transaction_details)*/0;
+         $query=TransactionDetails::create($transaction_details);
          if($query){
              Session::flash('message-success','Fee transaction created successfully');
              $title="Fee payment";
