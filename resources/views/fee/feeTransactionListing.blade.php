@@ -48,7 +48,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4" id="select-year" >
+                        {{--<div class="col-md-4" id="select-year" >
                             <div class="form-group">
                                 <label class="control-label">
                                     Select Year <span class="symbol required"></span>
@@ -56,7 +56,7 @@
                                 <select class="form-control" id="year-select" name="year_select" style="-webkit-appearance: menulist;">
                                 </select>
                             </div>
-                        </div>
+                        </div>--}}
                         <div class="col-md-12">
                             <div class="form-group" >
                                 <fieldset>
@@ -114,28 +114,9 @@
         })
     </script>
     <script>
-        $( "#year-select" ).change(function(){
-            var classId=$('#class-select').val();
-            var divId=$('#div-select').val();
-            var id=this.value;
-            $.ajax({
-                method:"get",
-                url: "/fees/feeListingTable/"+id+'/'+classId+'/'+divId
-            }).done(function(res){
-                $("#feetable").html(res);
-                $('#loadmoreajaxloader').hide();
-                var switcheryHandler = function() {
+        /*$( "#year-select" ).change(function(){
 
-                    var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-
-                    elements.forEach(function(html) {
-                        var switchery = new Switchery(html);
-                    });
-                };
-                switcheryHandler();
-                TableData.init();
-            })
-        })
+        })*/
     </script>
     <script>
         $( "#batchDropdown" ).change(function(){
@@ -155,9 +136,10 @@
                     }
                     $('#class-select').html(str);
                     $('#loadmoreajaxloaderClass').hide();
+                    getListing();
                 }
              });
-            });
+         });
         $('#class-select').change(function(){
             var id=this.value;
             var route='/exam/get-all-div/'+id;
@@ -175,27 +157,41 @@
                     }
                     $('#div-select').html(str);
                     $('#loadmoreajaxloaderClass').hide();
+                    getListing();
                 }
             });
         });
         $('#div-select').change(function(){
-            var route='/fees/get-all-year/';
-            $('#loadmoreajaxloaderClass').show();
-            $.get(route,function(res){
-                if (res.length == 0)
-                {
-                    $('#year-select').html("no record found");
-                    $('#loadmoreajaxloaderClass').hide();
-                } else {
-                    var str='<option value="">Please select division</option>';
-                    for(var i=0; i<res.length; i++)
-                    {
-                        str+='<option value="'+res[i]['id']+'">'+res[i]['year']+'</option>';
-                    }
-                    $('#year-select').html(str);
-                    $('#loadmoreajaxloaderClass').hide();
-                }
-            });
+                getListing();
         });
+        function getListing(){
+            var divId=$('#div-select').val();
+            var classId=$('#class-select').val();
+            if(typeof classId == 'undefined' || classId == ''){
+                    classId = -1;
+            }
+            if(typeof divId == 'undefined' || divId == ''){
+                divId = -1;
+            }
+            $.ajax({
+                method:"post",
+                url: "/fees/transactionFeeListingTable",
+                data:{class_id: classId ,
+                    div_id: divId}
+            }).done(function(res){
+                $("#feetable").html(res);
+                $('#loadmoreajaxloader').hide();
+                var switcheryHandler = function() {
+
+                    var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                    elements.forEach(function(html) {
+                        var switchery = new Switchery(html);
+                    });
+                };
+                switcheryHandler();
+                TableData.init();
+            })
+        }
     </script>
 @stop
