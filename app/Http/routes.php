@@ -82,6 +82,7 @@
         Route::get('feeTransactionListingTable',array('uses' => 'FeeController@getTransactionListingTable'));
         Route::post('transactionFeeListingTable',array('uses' => 'FeeController@showFeeTransactionListing'));
         Route::get('download-pdf/{id}',array('uses' => 'FeeController@createPDF'));
+        Route::post('get-structure-installments/{fee_id}',array('uses' => 'FeeController@getFeeStructureInstallments'));
     });
 
     Route::group(['prefix' => 'payment'],function(){
