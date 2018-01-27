@@ -23,61 +23,62 @@
         <td>Nevale Vasti Gate No. 1157-1160,Chikhali Taluka - Haveli, Dist-Pune.</td>
     </tr>
 </table>
-<br><br>
-<table style="text-align:center; width:500px">
+<br>
+<hr>
+<table style="text-align:center; width:500px; padding-top: 10px">
     <tr>
-        <td><b>RECIEPT</b></td>
+        <td style="font-size: 20px"><b>RECEIPT</b></td>
     </tr>
 </table>
 <br><br>
 <table>
     <tr>
-      <td style="font-size:120%;" >No.5430</td>
-      <td style = "text-align:right ">Date: 25-01-2018</td>
+        <td style="font-size:120%;" >Receipt No.<span>{{$transaction_details['id']}}</span></td>
+        <td style = "text-align:right ">Date: <span>{{date('d-m-Y')}}</span></td>
     </tr>
 </table>
 <br><br>
-<table style="padding-bottom: 10px;padding-top: 2px;">
+<table style="padding-bottom: 10px;padding-top: 2px;" border="1px">
     <tr>
-        <td><span >Received with Thanks from Mr./Mrs./Miss</span></td>
-        <td>Harsha Chotaliya</td>
+        <td><span>Received with Thanks from Mr./Mrs./Miss</span></td>
+        <td>{{$parent_name['first_name']." ".$parent_name['last_name']}}</td>
     </tr>
     <tr>
         <td><span>STD</span></td>
-        <td>5</td>
-    </tr>
-    <tr>
-        <td><span>GRN.No</span></td>
         <td></td>
     </tr>
     <tr>
+        <td><span>GRN.No</span></td>
+        <td>{{$grn['grn']}}</td>
+    </tr>
+    <tr>
         <td><span>Sum of rupees</span></td>
-        <td>5000</td>
+        <td>{{$transaction_details['transaction_amount']}}.Rs</td>
     </tr>
     <tr>
         <td>Cash/cheque/D.D.No</td>
-        <td>Cash</td>
+        <td>{{$transaction_details['transaction_detail']}}</td>
     </tr><tr>
         <td>Dated</td>
-        <td>25-01-2018</td>
+        <td>{{$transaction_details['date']}}</td>
     </tr>
     <tr>
         <td>Bank</td>
-        <td>___________________________</td>
+        <td></td>
     </tr><tr>
         <td>Branch</td>
-        <td>___________________________</td>
+        <td></td>
     </tr>
     <tr>
         <td>On account of tuition & other activity fee</td>
-        <td>___________________________</td>
+        <td></td>
     </tr>
     <tr>
         <td>Rs</td>
-        <td>5000</td>
+        <td>{{$transaction_details['transaction_amount']}}.Rs</td>
     </tr><tr>
         <td>Balance</td>
-        <td>10000</td>
+        <td>{{$balance}}.Rs</td>
     </tr>
 </table>
 <br><br>

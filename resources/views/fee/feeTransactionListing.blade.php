@@ -124,6 +124,7 @@
                     $('#class-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
+                    getListing();
                     var str='<option value="">Please select class</option>';
                     for(var i=0; i<res.length; i++)
                     {
@@ -131,7 +132,6 @@
                     }
                     $('#class-select').html(str);
                     $('#loadmoreajaxloaderClass').hide();
-                    getListing();
                 }
             });
          });
@@ -145,6 +145,7 @@
                     $('#div-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
+                    getListing();
                     var str='<option value="">Please select division</option>';
                     for(var i=0; i<res.length; i++)
                     {
@@ -152,7 +153,6 @@
                     }
                     $('#div-select').html(str);
                     $('#loadmoreajaxloaderClass').hide();
-                    getListing();
                 }
             });
         });
