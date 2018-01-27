@@ -28,6 +28,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Batch;
+use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 class FeeController extends Controller
@@ -423,9 +424,49 @@ class FeeController extends Controller
     }
     public function createPDF(Request $request,$id){
         $user = Auth::user();
+        $grn= User::join('students_extra_info','users.id','=','students_extra_info.student_id')
+                    ->where('students_extra_info.student_id',$id)
+                    ->select('students_extra_info.grn as grn')->first();
+        $studentData=User::where('body_id',$user['body_id'])->where('id',$id)->select('parent_id')->first();
+        $parent_name=User::where('body_id',$user['body_id'])->where('id',$studentData['parent_id'])->select('first_name','last_name')->first();
+        $transaction_details=TransactionDetails::where('student_id',$id)->get()->first();
 
+        $studentFee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+        $iterator = 0;
+        $jIterator=0;
+        $students[$jIterator]['total'] = 0;
+        foreach ($studentFee as $key=>$fee_id){
+            $installment_info = FeeInstallments::where('fee_id',$fee_id['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
+            $installments = array();
+            if(!empty($installment_info)){
+                foreach($installment_info as $installment){
+                    if(!array_key_exists($installment['installment_id'],$installments)){
+                        $installments[$installment['installment_id']] = array();
+                        $installments[$installment['installment_id']]['subTotal'] = 0;
+                    }
+                    $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
+                }
+                $totalYearsFeeAmount = array_sum(array_column($installments,'subTotal'));
+                foreach($installments as $installmentId => $installmentArray){
+                    $percentage = ($installments[$installmentId]['subTotal'] / $totalYearsFeeAmount) * 100;
+                    $installments[$installmentId]['installment_percentage'] = ($installments[$installmentId]['subTotal'] / $totalYearsFeeAmount) * 100;
+                    $discount = 0;
+                    if($fee_id['caste_concession'] != null){
+                        $casteConcessionAmount = StudentFee::join('caste_concession','caste_concession.id','=','student_fee.caste_concession')->where('student_fee.fee_id',$fee_id['fee_id'])->pluck('caste_concession.concession_amount');
+                        $discount += ($casteConcessionAmount/100) * $percentage;
+                    }
+                    if($fee_id['fee_concession_type'] != null){
+                        $feeConcessionTypeAmount = FeeConcessionAmount::where('fee_id',$fee_id['fee_id'])->where('concession_type',$fee_id['fee_concession_type'])->pluck('amount');
+                        $discount += ($feeConcessionTypeAmount/100) * $percentage;
+                    }
+                    $students[$jIterator]['total'] += $installments[$installmentId]['subTotal'] - $discount;
+                }
+            }
+            $iterator++;
+        }
+        $jIterator++;
         TCPdf::AddPage();
-        TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('newEnquiry','enquiryId'))->render());
-        TCPdf::Output("Enquiry Form".date('Y-m-d_H_i_s').".pdf", 'D');
+        TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user'))->render());
+        TCPdf::Output("Receipt Form".date('Y-m-d_H-i-s').".pdf", 'D');
     }
 }

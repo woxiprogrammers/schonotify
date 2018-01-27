@@ -114,11 +114,6 @@
         })
     </script>
     <script>
-        /*$( "#year-select" ).change(function(){
-
-        })*/
-    </script>
-    <script>
         $( "#batchDropdown" ).change(function(){
             var id=this.value;
             var route='/exam/get-all-classes/'+id;
@@ -138,7 +133,7 @@
                     $('#loadmoreajaxloaderClass').hide();
                     getListing();
                 }
-             });
+            });
          });
         $('#class-select').change(function(){
             var id=this.value;
