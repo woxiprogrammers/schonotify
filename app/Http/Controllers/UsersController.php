@@ -904,7 +904,6 @@ class UsersController extends Controller
                         {
                             array_push($new_array,$fee);
                         }
-
                     }
                      $division_for_updation=User::where('id',$id)->pluck('division_id');
                      if($division_for_updation != null)
@@ -915,8 +914,6 @@ class UsersController extends Controller
                          {
                              $division_status="Division Not Assigned !";
                          }
-                ;
-                $total_fee_for_current_year = array();
                      foreach($fee_due_date as $fee_name => $val){
                          $total_fee_for_current_year[$val[0]['fee_name']]['discount'] = 0;
                            foreach($val as $discount){
@@ -928,7 +925,7 @@ class UsersController extends Controller
                 $assigned_fee = StudentFee::where('student_id',$id)->lists('fee_id');
                 $caste_concession_type_edit = StudentFee::where('student_id',$id)->lists('fee_concession_type');
                 $final_paid_fee_for_current_year=array_sum($new_array);
-                foreach ($total_fee_for_current_year as $total_fee){
+                foreach ($total_fee_for_current_year as $key=> $total_fee){
                     $total_due_fee_for_current_year = $total_fee['discount'] - $final_paid_fee_for_current_year;
                 }
                 $queryn=category_types::select('caste_category','id')->get()->toArray();
