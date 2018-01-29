@@ -300,6 +300,13 @@
                 </div>
             </a>
         </li>
+        <li>
+            <a href="/fees/transaction-listing">
+                <div class="item-inner">
+                    <span class="title"> Fee Transaction detail listing </span>
+                </div>
+            </a>
+        </li>
     </ul>
 </li>
     <li>
