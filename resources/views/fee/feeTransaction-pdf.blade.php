@@ -53,7 +53,7 @@
     </tr>
     <tr>
         <td><span>Sum of rupees</span></td>
-        <td>{{$transaction_details['transaction_amount']}}.Rs</td>
+        <td>Rs. {{$transaction_details['transaction_amount']}}</td>
     </tr>
     <tr>
         <td>Cash/cheque/D.D.No</td>
@@ -75,10 +75,10 @@
     </tr>
     <tr>
         <td>Rs</td>
-        <td>{{$transaction_details['transaction_amount']}}.Rs</td>
+        <td>Rs. {{$transaction_details['transaction_amount']}}</td>
     </tr><tr>
         <td>Balance</td>
-        <td>{{$balance}}.Rs</td>
+        <td>Rs. {{$balance}}</td>
     </tr>
 </table>
 <br><br>
