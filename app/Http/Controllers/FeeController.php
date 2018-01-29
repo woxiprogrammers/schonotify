@@ -401,6 +401,8 @@ class FeeController extends Controller
             $batches=Batch::where('body_id',$user['body_id'])->select('id','name')->get()->toArray();
             return view('fee.feeTransactionListing')->with(compact('batches'));
         }catch(\Exception $e){
+            $exception = $e->getMessage();
+            Log::critical(json_encode($exception));
             return response()->json([],500);
         }
     }
@@ -491,6 +493,8 @@ class FeeController extends Controller
             $str.="</tbody></table>";
             return $str;
         }catch(\Exception $e){
+            $exception = $e->getMessage();
+            Log::critical(json_encode($exception));
             return response()->json([],500);
         }
     }
@@ -551,6 +555,8 @@ class FeeController extends Controller
             TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user', 'balance', 'grn', 'transaction_details', 'parent_name'))->render());
             TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
         } catch (\Exception $e) {
+            $exception = $e->getMessage();
+            Log::critical(json_encode($exception));
             return response()->json([], 500);
         }
     }
