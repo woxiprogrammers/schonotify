@@ -474,7 +474,6 @@ class LeaveController extends Controller
                     }
                 }
             }
-            $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
             if(!empty($installment_info))
             {
                 $iterator = 0;
@@ -485,18 +484,15 @@ class LeaveController extends Controller
                 }
                 $installment_data[] = $installment_info;
             }
-            $concession_types=ConcessionTypes::select('id','name')->get()->toarray();
-            $transaction_types=TransactionTypes::select('id','transaction_type')->get()->toArray();
-            $transactions=TransactionDetails::where('student_id',$id)->get();
             $new_array=array();
-            $total_paid_fees=TransactionDetails::where('student_id',$id)->select('transaction_amount')->get()->toarray();
-            foreach($total_paid_fees as $key => $total_paid_fee )
-            {
-                foreach($total_paid_fee as $fee)
-                {
-                    array_push($new_array,$fee);
-                }
-
+            $total_paid_fees=TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
+                ->where('transaction_details.student_id',$id)
+                ->orderBy('transaction_details.created_at','desc')
+                ->select('transaction_details.fee_id as fee_id','transaction_details.transaction_amount as transaction_amount','fees.fee_name as fee_name')
+                ->get();
+                $total_paid_fees = ($total_paid_fees->groupBy('fee_name')->toArray());
+            foreach($total_paid_fees as $key => $total_paid_fee ){
+                $new_array[$key] = array_sum(array_column($total_paid_fee,'transaction_amount'));
             }
             $division_for_updation=User::where('id',$id)->pluck('division_id');
             if($division_for_updation != null)
@@ -514,33 +510,18 @@ class LeaveController extends Controller
                     $total_fee_for_current_year[$val[0]['fee_name']]['discount'] += $discount['discount'];
                 }
             }
-            $total_due_fee_for_current_year = 0;
-
-            $assigned_fee = StudentFee::where('student_id',$id)->lists('fee_id');
-            $caste_concession_type_edit = StudentFee::where('student_id',$id)->lists('fee_concession_type');
-            $final_paid_fee_for_current_year=array_sum($new_array);
-            foreach ($total_fee_for_current_year as $total_fee){
-                $total_due_fee_for_current_year = $total_fee['discount'] - $final_paid_fee_for_current_year;
+            $responseData=array();
+            $iterator=0;
+            foreach ($total_fee_for_current_year as $key => $total_fee){
+                $responseData[$iterator]['structure_name'] = $key;
+                $responseData[$iterator]['discount'] = $total_fee['discount'];
+                $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
+                $iterator++;
             }
-            $assigned_fee=StudentFee::where('student_id',$id)->pluck('fee_id');
-            $caste_concession_type_edit=StudentFee::where('student_id',$id)->pluck('fee_concession_type');
-            $final_paid_fee_for_current_year=array_sum($new_array);
-            foreach ($total_fee_for_current_year as $total_fee){
-                $total_due_fee_for_current_year = $total_fee['discount'] - $final_paid_fee_for_current_year;
-            }
-            $queryn=category_types::select('caste_category','id')->get()->toArray();
-            $querym=StudentFee::where('student_id',$id)->pluck('caste_concession');
-            $chkstatus=StudentFeeConcessions::where('student_id',$id)->select('fee_concession_type')->first();
-            $student_pending_fee=array();
-            $student_pending_fee['pending_fee']=$total_due_fee_for_current_year;
-            $total_student_fee_for_current_year=array();
-            $total_student_fee_for_current_year['fee']=$total_fee_for_current_year;
-            $responseData['transactions'] = $transactions->toArray();
-            $responseData['pending_fees']=$student_pending_fee;
-            $responseData['fees']=$total_student_fee_for_current_year;
         } catch (\Exception $e){
+            $responseData=array();
             $status = 500;
-            $message = "something went wrong";
+            $message = $e->getMessage();
         }
         $response = [
             "status" => $status,
