@@ -323,7 +323,6 @@ class LeaveController extends Controller
                 'data' => array()
             ];
             $iterator = 0;
-            dd($student_fee);
             foreach($student_fee as $key => $a)
             {
                 $response['data'][$iterator] = Fees::where('id',$a['fee_id'])->select('id as fee_id','fee_name as fee_name','year')->first()->toArray();
@@ -386,7 +385,6 @@ class LeaveController extends Controller
                         $response['data'][$iterator]['installments'][$installmentId]['total'] = $installments[$installmentId]['subTotal'] - $discount;
                     }
                 }
-                //dd($response['data'][$iterator]['installments']);
                 $response['data'][$iterator]['installments'] = array_values($response['data'][$iterator]['installments']);
                 $iterator++;
             }
