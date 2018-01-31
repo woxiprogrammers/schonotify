@@ -838,10 +838,12 @@ class UsersController extends Controller
                                       ->select('fees.id','student_fee.caste_concession')
                                       ->whereNotNull('student_fee.caste_concession')->get();
                 $caste_concession_type = ($caste_concession_type->groupBy('id')->toArray());
-                  foreach ($caste_concession_type as $key => $casteConcession){
-                     foreach ($casteConcession as $caste_amount){
-                         $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->first();
-                     }
+                if($caste_concession_type != "" && $caste_concession_type != null){
+                    foreach ($caste_concession_type as $key => $casteConcession){
+                        foreach ($casteConcession as $caste_amount){
+                            $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->first();
+                        }
+                    }
                 }
                     $concession_amount = array_replace($concession_For_structure,$caste_concn_amnt);
                     ksort($concession_amount);
@@ -852,6 +854,7 @@ class UsersController extends Controller
                             $concession_amount_array[$key][$key2] = $discounted_amount_for_installment;
                        }
                    }
+                   dd($concession_amount_array);
                 $final_discounted_amounts = array();
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
@@ -861,6 +864,7 @@ class UsersController extends Controller
                         }
                     }
                 }
+                dd($final_discounted_amounts);
                 if(!empty($fee_due_date) && !empty($final_discounted_amounts)){
                     foreach($fee_due_date as $key => $fee_id){
                         for($iterator = 0; $iterator < count($fee_id) ; $iterator++){

@@ -32,7 +32,6 @@ use App\User;
 use App\Leave;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use SebastianBergmann\Environment\Console;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -358,7 +357,6 @@ class LeaveController extends Controller
                     foreach($installment_info as $installment)
                     {
                         if(!array_key_exists($installment['installment_id'],$installments)){
-                            Log::info('inside if');
                             $installments[$installment['installment_id']] = array();
                             $installments[$installment['installment_id']]['subTotal'] = 0;
                             $response['data'][$iterator]['installments'][$installment['installment_id']]['installment_id'] = $installment['installment_id'];
@@ -369,7 +367,6 @@ class LeaveController extends Controller
                         $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
                     }
                     $totalYearsFeeAmount = array_sum(array_column($installments,'subTotal'));
-                    Log::info($installments);
                     foreach($installments as $installmentId => $installmentArray){
                         $percentage = ($installmentArray['subTotal'] / $totalYearsFeeAmount) * 100;
                         $installments[$installmentId]['installment_percentage'] = ($installments[$installmentId]['subTotal'] / $totalYearsFeeAmount) * 100;
