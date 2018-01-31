@@ -854,7 +854,6 @@ class UsersController extends Controller
                             $concession_amount_array[$key][$key2] = $discounted_amount_for_installment;
                        }
                    }
-                   dd($concession_amount_array);
                 $final_discounted_amounts = array();
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
@@ -864,7 +863,6 @@ class UsersController extends Controller
                         }
                     }
                 }
-                dd($final_discounted_amounts);
                 if(!empty($fee_due_date) && !empty($final_discounted_amounts)){
                     foreach($fee_due_date as $key => $fee_id){
                         for($iterator = 0; $iterator < count($fee_id) ; $iterator++){
