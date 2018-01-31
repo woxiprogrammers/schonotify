@@ -914,6 +914,7 @@ class UsersController extends Controller
                          {
                              $division_status="Division Not Assigned !";
                          }
+                $total_fee_for_current_year = array();
                      foreach($fee_due_date as $fee_name => $val){
                          $total_fee_for_current_year[$val[0]['fee_name']]['discount'] = 0;
                            foreach($val as $discount){
@@ -1097,41 +1098,49 @@ class UsersController extends Controller
             $div['division_id']=$request->Divisiondropdown;
             $divisionupdate = User::where('id',$id)->update($div);
         }
+        $query2 = StudentFee::where('student_id',$id)->select('fee_id')->get();
         foreach ($dataStudent['student_fee'] as $key => $value){
             $query = Fees::where('id',$key)->pluck('year');
-            $query2 = StudentFee::where('student_id',$id)->select('fee_id')->get();
             if($request->student_fee != null){
-                if($query2->isEmpty())
-                {
+                if($query2->isEmpty()){
                     $student_fee['student_id'] = $id;
                     if( $request->student_fee == null){
                         $student_fee['fee_id'] = 0;
                     }else{
                         $student_fee['fee_id'] = $key;
                     }
-                    $student_fee['caste_concession'] = $value['caste1'];
                     foreach($value['concession'] as $item){
-                        $student_fee['fee_concession_type'] = $item;
-                    }
-                }else{
-                    $entryCount= StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->count();
-                    foreach($value['concession'] as $item){
-                        $student_fee['fee_concession_type'] = $item;
-                        if(array_key_exists('caste1',$value)){
+                        if(array_key_exists('caste1',$value)&& $item==2){
                             $student_fee['caste_concession'] = $value['caste1'];
                         }else{
                             $student_fee['caste_concession'] = null;
                         }
-                        if($entryCount == 0){
+                        $student_fee['fee_concession_type'] = $item;
+                        $student_fee['year']=$query;
+                        StudentFee::create($student_fee);
+                    }
+                }else{
+                    $presentData = StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->lists('fee_concession_type')->toArray();
+                    $removeFeeType = array_diff($presentData,$value['concession']);
+                    foreach ($removeFeeType as $remove){
+                       StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->where('fee_concession_type',$remove)->delete();
+                    }
+                    foreach($value['concession'] as $item){
+                        $student_fee['fee_concession_type'] = $item;
+                        $studentFeeId = StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->where('fee_concession_type',$item)->first();
+                        if(array_key_exists('caste1',$value) && $item == 2){
+                            $student_fee['caste_concession'] = $value['caste1'];
+                        }else{
+                            $student_fee['caste_concession'] = null;
+                        }
+                        if($studentFeeId != null){
+                             StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->where('fee_concession_type',$item)->update($student_fee);
+                        }else{
                             $student_fee['fee_id'] = $key;
                             $student_fee['student_id'] = $id;
                             $student_fee['year'] = $query;
                             StudentFee::create($student_fee);
-                        }else{
-                            StudentFee::where('student_id',$id)->where('fee_id',$key)->where('year',$query)->update($student_fee);
-                            $entryCount = $entryCount-1;
                         }
-
                     }
                 }
             }
@@ -1141,16 +1150,15 @@ class UsersController extends Controller
             if($existCheck == true){
                 foreach ($dataStudent['student_fee'] as $key => $value){
                     $concessions = array();
-                    $studentFeeConcessionCount = StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->count();
                     foreach ($value['concession'] as $item1){
+                        $studentFeeConcessionCount = StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->where('fee_concession_type',$item)->first();
                         $concessions['fee_concession_type'] = $item1;
-                        if($studentFeeConcessionCount == 0){
+                        if($studentFeeConcessionCount == null){
                             $concessions['student_id'] = $id;
                             $concessions['fee_id'] = $key;
                             StudentFeeConcessions::create($concessions);
                         }else{
                             StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->update($concessions);
-                            $studentFeeConcessionCount = $studentFeeConcessionCount-1;
                         }
                     }
                 }

@@ -32,6 +32,7 @@ use App\User;
 use App\Leave;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use SebastianBergmann\Environment\Console;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -323,31 +324,54 @@ class LeaveController extends Controller
                 'data' => array()
             ];
             $iterator = 0;
+            dd($student_fee);
             foreach($student_fee as $key => $a)
             {
                 $response['data'][$iterator] = Fees::where('id',$a['fee_id'])->select('id as fee_id','fee_name as fee_name','year')->first()->toArray();
+                $previousFeeStructures = StudentFee::where('student_id',$id)
+                    ->where('fee_id','<',$a['fee_id'])
+                    ->get();
+                $isPreviousStructureCleared = true;
+                foreach($previousFeeStructures as $previousFeeStructure){
+                    if($isPreviousStructureCleared == true){
+                        $installmentIds = FeeInstallments::where('fee_id', $previousFeeStructure['fee_id'])
+                            ->distinct('installment_id')
+                            ->lists('installment_id');
+                        foreach ($installmentIds as $installmentId){
+                            $isPaid = TransactionDetails::where('student_id',$id)
+                                ->where('fee_id',$a['fee_id'])
+                                ->where('installment_id', $installmentId)
+                                ->first();
+                            if($isPaid == null){
+                                $isPreviousStructureCleared = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                $response['data'][$iterator]['show_payment']= $isPreviousStructureCleared;
                 $response['data'][$iterator]['installments'] = array();
                 $installment_info = FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
                 $installments = array();
-                $total_fee_amount = 0;
                 if(!empty($installment_info))
                 {
                     foreach($installment_info as $installment)
                     {
                         if(!array_key_exists($installment['installment_id'],$installments)){
+                            Log::info('inside if');
                             $installments[$installment['installment_id']] = array();
                             $installments[$installment['installment_id']]['subTotal'] = 0;
                             $response['data'][$iterator]['installments'][$installment['installment_id']]['installment_id'] = $installment['installment_id'];
                             $response['data'][$iterator]['installments'][$installment['installment_id']]['due_date'] = FeeDueDate::where('fee_id',$a['fee_id'])
                                                                         ->where('installment_id',$installment['installment_id'])
                                                                         ->pluck('due_date');
-
                         }
                         $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
                     }
                     $totalYearsFeeAmount = array_sum(array_column($installments,'subTotal'));
+                    Log::info($installments);
                     foreach($installments as $installmentId => $installmentArray){
-                        $percentage = ($installments[$installmentId]['subTotal'] / $totalYearsFeeAmount) * 100;
+                        $percentage = ($installmentArray['subTotal'] / $totalYearsFeeAmount) * 100;
                         $installments[$installmentId]['installment_percentage'] = ($installments[$installmentId]['subTotal'] / $totalYearsFeeAmount) * 100;
                         $discount = 0;
                         if($a['caste_concession'] != null){
@@ -365,12 +389,14 @@ class LeaveController extends Controller
                         $response['data'][$iterator]['installments'][$installmentId]['total'] = $installments[$installmentId]['subTotal'] - $discount;
                     }
                 }
+                //dd($response['data'][$iterator]['installments']);
                 $response['data'][$iterator]['installments'] = array_values($response['data'][$iterator]['installments']);
                 $iterator++;
             }
         } catch (\Exception $e) {
             $status = 500;
             $response = array();
+            Log::critical(json_encode($e->getMessage()));
         }
         return response ($response,$status);
     }
@@ -490,18 +516,11 @@ class LeaveController extends Controller
                 ->orderBy('transaction_details.created_at','desc')
                 ->select('transaction_details.fee_id as fee_id','transaction_details.transaction_amount as transaction_amount','fees.fee_name as fee_name')
                 ->get();
-                $total_paid_fees = ($total_paid_fees->groupBy('fee_name')->toArray());
-            foreach($total_paid_fees as $key => $total_paid_fee ){
-                $new_array[$key] = array_sum(array_column($total_paid_fee,'transaction_amount'));
-            }
-            $division_for_updation=User::where('id',$id)->pluck('division_id');
-            if($division_for_updation != null)
-            {
-                $division_status="";
-            }
-            else
-            {
-                $division_status="Division Not Assigned !";
+            $total_paid_fees = ($total_paid_fees->groupBy('fee_name')->toArray());
+            if( $total_paid_fees != " " && $total_paid_fees != null){
+                foreach($total_paid_fees as $key => $total_paid_fee ){
+                    $new_array[$key] = array_sum(array_column($total_paid_fee,'transaction_amount'));
+                }
             }
             $total_fee_for_current_year = array();
             foreach($fee_due_date as $fee_name => $val){
@@ -512,14 +531,15 @@ class LeaveController extends Controller
             }
             $responseData=array();
             $iterator=0;
-            foreach ($total_fee_for_current_year as $key => $total_fee){
-                $responseData[$iterator]['structure_name'] = $key;
-                $responseData[$iterator]['discount'] = $total_fee['discount'];
-                $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
-                $iterator++;
+                foreach ($total_fee_for_current_year as $key => $total_fee){
+                    $responseData[$iterator]['structure_name'] = $key;
+                    $responseData[$iterator]['discount'] = $total_fee['discount'];
+                    if($new_array != "" && $new_array != null){
+                    $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
+                    $iterator++;
+                }
             }
         } catch (\Exception $e){
-            $responseData=array();
             $status = 500;
             $message = $e->getMessage();
         }
@@ -528,7 +548,7 @@ class LeaveController extends Controller
             "message" => $message,
             "data" => $responseData
         ];
-return response ($response,$status);
+        Log::critical(json_encode($response));
+        return response ($response,$status);
     }
-
 }

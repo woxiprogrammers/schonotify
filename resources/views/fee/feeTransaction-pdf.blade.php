@@ -45,7 +45,11 @@
     </tr>
     <tr>
         <td><span>STD</span></td>
-        <td></td>
+        <td> {{$class['class_name']}}</td>
+    </tr>
+    <tr>
+        <td><span>Division</span></td>
+        <td> {{$division['division_name']}}</td>
     </tr>
     <tr>
         <td><span>GRN.No</span></td>
