@@ -517,6 +517,14 @@ class FeeController extends Controller
             $parent_name = User::where('body_id', $user['body_id'])->where('id', $studentData['parent_id'])->select('first_name', 'last_name')->first();
             $transaction_details = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->get()->first();
             $studentFee = StudentFee::where('student_id', $id)->where('fee_id', $fee_id)->select('fee_id', 'year', 'fee_concession_type', 'caste_concession')->get()->toarray();
+            $division = User::join('divisions','divisions.id','=','users.division_id')
+                            ->where('users.id',$id)
+                            ->select('divisions.id as id','divisions.division_name as division_name')
+                            ->get()->first();
+            $class = Classes::join('divisions','divisions.class_id','=','classes.id')
+                                ->where('divisions.id',$division['id'])
+                                ->select('classes.class_name as class_name')
+                                ->get()->first();
             $iterator = 0;
             foreach ($studentFee as $key => $a) {
                 $installment_info = FeeInstallments::where('fee_id', $fee_id)->select('installment_id', 'particulars_id', 'amount')->get()->toarray();
@@ -560,7 +568,7 @@ class FeeController extends Controller
             $final_paid_fee_for_current_year = array_sum($new_array);
             $balance = $sum - $final_paid_fee_for_current_year;
             TCPdf::AddPage();
-            TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user', 'balance', 'grn', 'transaction_details', 'parent_name'))->render());
+            TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user', 'balance', 'grn', 'transaction_details', 'parent_name','division','class'))->render());
             TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
         } catch (\Exception $e) {
             $data = [
