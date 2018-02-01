@@ -822,38 +822,46 @@ class UsersController extends Controller
                    }
                 }
                 $concession_For_structure = array();
-                $caste_concn_amnt = array();
                     $fee_assign_student = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
-                        ->where('student_fee.student_id',$id)
-                        ->select('student_fee.fee_concession_type','student_fee.fee_id as fee_id')
-                        ->whereNotNull('student_fee.fee_concession_type')->get();
+                                                    ->where('student_fee.student_id',$id)
+                                                    ->select('student_fee.fee_concession_type','student_fee.fee_id as fee_id')
+                                                    ->get();
                     $fee_assign_student = ($fee_assign_student->groupBy('fee_id')->toArray());
                     foreach ($fee_assign_student as $fees_name => $student_fees){
-                        foreach($student_fees as $fees_concession){
-                            $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->select('amount as concession_amount')->first();
+                        foreach($student_fees as $key=> $fees_concession){
+                           if($fees_concession['fee_concession_type'] != 2){
+                               $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->lists('amount')->toArray();
+                           }
                         }
                     }
+              $caste_concn_amnt = array();
               $caste_concession_type = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
-                                      ->where('student_fee.student_id',$id)
-                                      ->select('fees.id','student_fee.caste_concession')
-                                      ->whereNotNull('student_fee.caste_concession')->get();
+                                        ->where('student_fee.student_id',$id)
+                                        ->whereNotNull('student_fee.caste_concession')
+                                        ->select('fees.id','student_fee.caste_concession')
+                                        ->get();
                 $caste_concession_type = ($caste_concession_type->groupBy('id')->toArray());
+
                 if($caste_concession_type != "" && $caste_concession_type != null){
                     foreach ($caste_concession_type as $key => $casteConcession){
-                        foreach ($casteConcession as $caste_amount){
-                            $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->first();
+                        foreach ($casteConcession as $key_1=> $caste_amount){
+                            $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->lists('concession_amount')->toArray();
                         }
                     }
                 }
-                    $concession_amount = array_replace($concession_For_structure,$caste_concn_amnt);
-                    ksort($concession_amount);
-                    $concession_amount_array = array();
+                foreach ($concession_For_structure as $key_2 => $caste_Type_value){
+                    foreach($caste_concn_amnt as $k => $caste){
+                        $concession_amount[$k] = array_unique(array_merge($caste_Type_value,$caste));
+                    }
+                }
+                dd($concession_amount);
+                $concession_amount_array = array();
                    foreach($installment_percent_amount as $key => $percent_discout_collection){
                        foreach ($percent_discout_collection as $key2=> $discount){
-                            $discounted_amount_for_installment = ($discount / 100) * ($concession_amount[$key]['concession_amount']);
-                            $concession_amount_array[$key][$key2] = $discounted_amount_for_installment;
+                           $concession_amount_array[$key][$key2] = (($discount / 100) * ($concession_amount[$key]['concession_amount']));
                        }
                    }
+                   dd($concession_amount_array);
                 $final_discounted_amounts = array();
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
@@ -923,13 +931,12 @@ class UsersController extends Controller
                                $total_fee_for_current_year[$val[0]['fee_name']]['discount'] += $discount['discount'];
                            }
                      }
-                $total_due_fee_for_current_year = 0;
-
+                $total_due_fee_for_current_year = array();
                 $assigned_fee = StudentFee::where('student_id',$id)->lists('fee_id');
                 $caste_concession_type_edit = StudentFee::where('student_id',$id)->lists('fee_concession_type');
                 $final_paid_fee_for_current_year=array_sum($new_array);
                 foreach ($total_fee_for_current_year as $key=> $total_fee){
-                    $total_due_fee_for_current_year = $total_fee['discount'] - $final_paid_fee_for_current_year;
+                    $total_due_fee_for_current_year[$key] = $total_fee['discount'] - $final_paid_fee_for_current_year;
                 }
                 $queryn=category_types::select('caste_category','id')->get()->toArray();
                 $querym=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');

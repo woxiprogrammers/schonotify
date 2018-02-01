@@ -530,9 +530,12 @@ class LeaveController extends Controller
                     $responseData[$iterator]['structure_name'] = $key;
                     $responseData[$iterator]['discount'] = $total_fee['discount'];
                     if($new_array != "" && $new_array != null){
-                    $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
+                    $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array;
                     $iterator++;
-                }
+                }else{
+                        $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - 0;
+                        $iterator++;
+                    }
             }
         } catch (\Exception $e){
             $status = 500;
