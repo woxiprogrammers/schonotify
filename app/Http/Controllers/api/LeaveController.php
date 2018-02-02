@@ -316,7 +316,7 @@ class LeaveController extends Controller
     public function getFeesStudent ($id){
         try{
             $status = 200;
-            $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+            $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toArray();
             $response = [
                 'status' => 200,
                 'message' => 'Successfully listed !',
@@ -360,27 +360,28 @@ class LeaveController extends Controller
                             $installments[$installment['installment_id']]['subTotal'] = 0;
                             $response['data'][$iterator]['installments'][$installment['installment_id']]['installment_id'] = $installment['installment_id'];
                             $response['data'][$iterator]['installments'][$installment['installment_id']]['due_date'] = FeeDueDate::where('fee_id',$a['fee_id'])
-                                                                        ->where('installment_id',$installment['installment_id'])
-                                                                        ->pluck('due_date');
+                                ->where('installment_id',$installment['installment_id'])
+                                ->pluck('due_date');
                         }
                         $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
                     }
                     $totalYearsFeeAmount = array_sum(array_column($installments,'subTotal'));
-                    foreach($installments as $installmentId => $installmentArray){
+                    foreach($installments as $installmentId => $installmentArray) {
                         $percentage = ($installmentArray['subTotal'] / $totalYearsFeeAmount) * 100;
                         $installments[$installmentId]['installment_percentage'] = ($installments[$installmentId]['subTotal'] / $totalYearsFeeAmount) * 100;
                         $discount = 0;
                         if($a['caste_concession'] != null){
                             $casteConcessionAmount = StudentFee::join('caste_concession','caste_concession.id','=','student_fee.caste_concession')
                                 ->where('student_fee.fee_id',$a['fee_id'])
+                                ->where('caste_concession.id',$a['caste_concession'])
                                 ->pluck('caste_concession.concession_amount');
-                            $discount += ($casteConcessionAmount/100) * $percentage;
+                            $discount += (($percentage/100) * $casteConcessionAmount);
                         }
-                        if($a['fee_concession_type'] != null){
+                        if($a['fee_concession_type'] != null && $a['fee_concession_type'] != 2){
                             $feeConcessionTypeAmount = FeeConcessionAmount::where('fee_id',$a['fee_id'])
-                                                                ->where('concession_type',$a['fee_concession_type'])
-                                                                ->pluck('amount');
-                            $discount += ($feeConcessionTypeAmount/100) * $percentage;
+                                ->where('concession_type',$a['fee_concession_type'])
+                                ->pluck('amount');
+                            $discount += (($percentage/100) * $feeConcessionTypeAmount);
                         }
                         $response['data'][$iterator]['installments'][$installmentId]['total'] = $installments[$installmentId]['subTotal'] - $discount;
                     }

@@ -830,7 +830,7 @@ class UsersController extends Controller
                     foreach ($fee_assign_student as $fees_name => $student_fees){
                         foreach($student_fees as $key=> $fees_concession){
                            if($fees_concession['fee_concession_type'] != 2){
-                               $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->lists('amount')->toArray();
+                               $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->select('amount as concession_amount')->get()->toArray();
                            }
                         }
                     }
@@ -845,16 +845,17 @@ class UsersController extends Controller
                 if($caste_concession_type != "" && $caste_concession_type != null){
                     foreach ($caste_concession_type as $key => $casteConcession){
                         foreach ($casteConcession as $key_1=> $caste_amount){
-                            $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->lists('concession_amount')->toArray();
+                            $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->get()->toArray();
                         }
                     }
                 }
+                foreach($caste_concn_amnt as $k => $caste){
                 foreach ($concession_For_structure as $key_2 => $caste_Type_value){
-                    foreach($caste_concn_amnt as $k => $caste){
-                        $concession_amount[$k] = array_unique(array_merge($caste_Type_value,$caste));
+                        $concession_amount[$k] = array_merge_recursive($caste,$caste_Type_value);
                     }
                 }
                 dd($concession_amount);
+
                 $concession_amount_array = array();
                    foreach($installment_percent_amount as $key => $percent_discout_collection){
                        foreach ($percent_discout_collection as $key2=> $discount){
