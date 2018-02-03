@@ -849,20 +849,36 @@ class UsersController extends Controller
                         }
                     }
                 }
-                foreach($caste_concn_amnt as $k => $caste){
-                foreach ($concession_For_structure as $key_2 => $caste_Type_value){
-                        $concession_amount[$k] = array_merge_recursive($caste,$caste_Type_value);
+                $amountArray = array(); // key is fee id
+                if(count($caste_concn_amnt) > count($concession_For_structure)){
+                    foreach($caste_concn_amnt as $feeId => $casteConcnAmount){
+                        if(!array_key_exists($feeId, $amountArray)){
+                            $amountArray[$feeId]['amount'] = 0;
+                        }
+                        $amountArray[$feeId]['amount'] += array_sum(array_column($casteConcnAmount,'concession_amount'));
+                        if(array_key_exists($feeId,$concession_For_structure)){
+                            $amountArray[$feeId]['amount'] += array_sum(array_column($concession_For_structure[$feeId],'concession_amount'));
+                        }
+                    }
+                }else{
+                    foreach($concession_For_structure as $feeId => $concessionStructure){
+                        if(!array_key_exists($feeId, $amountArray)){
+                            $amountArray[$feeId]['amount'] = 0;
+                        }
+                        $amountArray[$feeId]['amount'] += array_sum(array_column($concessionStructure,'concession_amount'));
+                        if(array_key_exists($feeId,$caste_concn_amnt)){
+                            $amountArray[$feeId]['amount'] += array_sum(array_column($caste_concn_amnt[$feeId],'concession_amount'));
+                        }
                     }
                 }
-                dd($concession_amount);
 
                 $concession_amount_array = array();
                    foreach($installment_percent_amount as $key => $percent_discout_collection){
                        foreach ($percent_discout_collection as $key2=> $discount){
-                           $concession_amount_array[$key][$key2] = (($discount / 100) * ($concession_amount[$key]['concession_amount']));
+                           $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
                        }
                    }
-                   dd($concession_amount_array);
+
                 $final_discounted_amounts = array();
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
