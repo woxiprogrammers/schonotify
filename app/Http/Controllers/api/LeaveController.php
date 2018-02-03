@@ -418,8 +418,30 @@ class LeaveController extends Controller
 
             if(!empty($fee_due_date) && !empty($final_discounted_amounts)){
                     foreach($fee_due_date as $key => $fee_id) {
+                        $previousFeeStructures = StudentFee::where('student_id',$id)
+                            ->where('fee_id','<',$key)
+                            ->get();
+                        $isPreviousStructureCleared = true;
+                        foreach($previousFeeStructures as $previousFeeStructure){
+                            if($isPreviousStructureCleared == true){
+                                $installmentIds = FeeInstallments::where('fee_id', $previousFeeStructure['fee_id'])
+                                    ->distinct('installment_id')
+                                    ->lists('installment_id');
+                                foreach ($installmentIds as $installmentId){
+                                    $isPaid = TransactionDetails::where('student_id',$id)
+                                        ->where('fee_id',$key['fee_id'])
+                                        ->where('installment_id', $installmentId)
+                                        ->first();
+                                    if($isPaid == null){
+                                        $isPreviousStructureCleared = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         for ($iterator = 0; $iterator < count($fee_id); $iterator++) {
                             $fee_due_date[$key][$iterator]['discount'] = $final_discounted_amounts[$key][$fee_id[$iterator]['installment_id']];
+                            $fee_due_date[$key][$iterator]['show_payment'] = $isPreviousStructureCleared;
                         }
                     }
                 }
