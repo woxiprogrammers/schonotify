@@ -316,7 +316,6 @@ class LeaveController extends Controller
     public function getFeesStudent ($id){
         try{
             $status = 200;
-            $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toArray();
             $response = [
                 'status' => 200,
                 'message' => 'Successfully listed !',
@@ -327,6 +326,8 @@ class LeaveController extends Controller
                 ->whereIn('fee_due_date.fee_id',$fee_ids)
                 ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name')
                 ->get();
+
+            $fee_due_date=($fee_due_date->groupBy('fee_id')->toArray());
                 $total_installment_amount =array();
                 foreach ($fee_ids as $key => $feeId){
                     $installment_ids = fee_installments::join('fees','fees.id','=','fee_installments.fee_id')
@@ -338,10 +339,10 @@ class LeaveController extends Controller
                         $total_installment_amount[$installmentId['fee_id']][$installmentId['installment_id']] = fee_installments::where('fee_id',$feeId['fee_id'])->where('installment_id',$installmentId['installment_id'])->sum('amount');
                     }
                 }
-                foreach ($total_installment_amount as $key=> $amount){
-                    $total_fee_amount[$key]['total'] = array_sum($amount);
-                }
-                $installment_percent_amount=array();
+            foreach ($total_installment_amount as $key=> $amount){
+                $total_fee_amount[$key]['total'] = array_sum($amount);
+            }
+            $installment_percent_amount=array();
                 foreach($total_installment_amount as $key => $installment_amounts)
                 {
                     foreach ($installment_amounts as $installmentId => $amount1){
@@ -369,7 +370,6 @@ class LeaveController extends Controller
                     ->select('fees.id','student_fee.caste_concession')
                     ->get();
                 $caste_concession_type = ($caste_concession_type->groupBy('id')->toArray());
-
                 if($caste_concession_type != "" && $caste_concession_type != null){
                     foreach ($caste_concession_type as $key => $casteConcession){
                         foreach ($casteConcession as $key_1=> $caste_amount){
@@ -406,7 +406,6 @@ class LeaveController extends Controller
                         $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
                     }
                 }
-
                 $final_discounted_amounts = array();
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {
@@ -416,7 +415,8 @@ class LeaveController extends Controller
                         }
                     }
                 }
-                if(!empty($fee_due_date) && !empty($final_discounted_amounts)){
+
+            if(!empty($fee_due_date) && !empty($final_discounted_amounts)){
                     foreach($fee_due_date as $key => $fee_id) {
                         for ($iterator = 0; $iterator < count($fee_id); $iterator++) {
                             $fee_due_date[$key][$iterator]['discount'] = $final_discounted_amounts[$key][$fee_id[$iterator]['installment_id']];
@@ -428,7 +428,7 @@ class LeaveController extends Controller
             $fee_due_date = array();
             Log::critical(json_encode($e->getMessage()));
         }
-        return response ($fee_due_date,$status);
+        return response ($fee_due_date,$status,$response);
     }
     public function getFeesDetails($id){
         try{
