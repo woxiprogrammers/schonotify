@@ -822,13 +822,13 @@ class UsersController extends Controller
                    }
                 }
                 $concession_For_structure = array();
-                    $fee_assign_student = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
+                $fee_assign_student = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
                                                     ->where('student_fee.student_id',$id)
                                                     ->select('student_fee.fee_concession_type','student_fee.fee_id as fee_id')
                                                     ->get();
-                    $fee_assign_student = ($fee_assign_student->groupBy('fee_id')->toArray());
-                    foreach ($fee_assign_student as $fees_name => $student_fees){
-                        foreach($student_fees as $key=> $fees_concession){
+                $fee_assign_student = ($fee_assign_student->groupBy('fee_id')->toArray());
+                foreach ($fee_assign_student as $fees_name => $student_fees){
+                    foreach($student_fees as $key=> $fees_concession){
                            if($fees_concession['fee_concession_type'] != 2){
                                $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->select('amount as concession_amount')->get()->toArray();
                            }
@@ -871,14 +871,13 @@ class UsersController extends Controller
                         }
                     }
                 }
-
                 $concession_amount_array = array();
+
                    foreach($installment_percent_amount as $key => $percent_discout_collection){
                        foreach ($percent_discout_collection as $key2=> $discount){
                            $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
                        }
                    }
-
                 $final_discounted_amounts = array();
                 if(count($concession_amount_array) == count($total_installment_amount))
                 {

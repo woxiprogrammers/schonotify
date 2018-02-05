@@ -316,141 +316,134 @@ class LeaveController extends Controller
     public function getFeesStudent ($id){
         try{
             $status = 200;
+            $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->distinct('fee_id')->get();
+            $student_fee = ($student_fee->groupBy('fee_id')->toArray());
             $response = [
                 'status' => 200,
                 'message' => 'Successfully listed !',
                 'data' => array()
             ];
-            $fee_ids =StudentFee::where('student_id',$id)->select('fee_id')->distinct('fee_id')->get()->toArray();
-            $fee_due_date = FeeDueDate::join('fees','fees.id','=','fee_due_date.fee_id')
-                ->whereIn('fee_due_date.fee_id',$fee_ids)
-                ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name')
-                ->get();
-
-            $fee_due_date=($fee_due_date->groupBy('fee_id')->toArray());
-                $total_installment_amount =array();
-                foreach ($fee_ids as $key => $feeId){
-                    $installment_ids = fee_installments::join('fees','fees.id','=','fee_installments.fee_id')
-                        ->where('fee_installments.fee_id',$feeId['fee_id'])
-                        ->select('fee_installments.installment_id as installment_id','fees.id as fee_id')
-                        ->distinct('fee_installments.installment_id')
-                        ->get()->toArray();
-                    foreach ($installment_ids as $installmentId){
-                        $total_installment_amount[$installmentId['fee_id']][$installmentId['installment_id']] = fee_installments::where('fee_id',$feeId['fee_id'])->where('installment_id',$installmentId['installment_id'])->sum('amount');
-                    }
-                }
-            foreach ($total_installment_amount as $key=> $amount){
-                $total_fee_amount[$key]['total'] = array_sum($amount);
-            }
-            $installment_percent_amount=array();
-                foreach($total_installment_amount as $key => $installment_amounts)
-                {
-                    foreach ($installment_amounts as $installmentId => $amount1){
-                        $installment_amounts=($amount1/$total_fee_amount[$key]['total'])*100;
-                        $installment_percent_amount[$key][$installmentId]=$installment_amounts;
-                    }
-                }
-                $concession_For_structure = array();
-                $fee_assign_student = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
-                    ->where('student_fee.student_id',$id)
-                    ->select('student_fee.fee_concession_type','student_fee.fee_id as fee_id')
-                    ->get();
-                $fee_assign_student = ($fee_assign_student->groupBy('fee_id')->toArray());
-                foreach ($fee_assign_student as $fees_name => $student_fees){
-                    foreach($student_fees as $key=> $fees_concession){
-                        if($fees_concession['fee_concession_type'] != 2){
-                            $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->select('amount as concession_amount')->get()->toArray();
-                        }
-                    }
-                }
-                $caste_concn_amnt = array();
-                $caste_concession_type = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
-                    ->where('student_fee.student_id',$id)
-                    ->whereNotNull('student_fee.caste_concession')
-                    ->select('fees.id','student_fee.caste_concession')
-                    ->get();
-                $caste_concession_type = ($caste_concession_type->groupBy('id')->toArray());
-                if($caste_concession_type != "" && $caste_concession_type != null){
-                    foreach ($caste_concession_type as $key => $casteConcession){
-                        foreach ($casteConcession as $key_1=> $caste_amount){
-                            $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->get()->toArray();
-                        }
-                    }
-                }
-                $amountArray = array(); // key is fee id
-                if(count($caste_concn_amnt) > count($concession_For_structure)){
-                    foreach($caste_concn_amnt as $feeId => $casteConcnAmount){
-                        if(!array_key_exists($feeId, $amountArray)){
-                            $amountArray[$feeId]['amount'] = 0;
-                        }
-                        $amountArray[$feeId]['amount'] += array_sum(array_column($casteConcnAmount,'concession_amount'));
-                        if(array_key_exists($feeId,$concession_For_structure)){
-                            $amountArray[$feeId]['amount'] += array_sum(array_column($concession_For_structure[$feeId],'concession_amount'));
-                        }
-                    }
-                }else{
-                    foreach($concession_For_structure as $feeId => $concessionStructure){
-                        if(!array_key_exists($feeId, $amountArray)){
-                            $amountArray[$feeId]['amount'] = 0;
-                        }
-                        $amountArray[$feeId]['amount'] += array_sum(array_column($concessionStructure,'concession_amount'));
-                        if(array_key_exists($feeId,$caste_concn_amnt)){
-                            $amountArray[$feeId]['amount'] += array_sum(array_column($caste_concn_amnt[$feeId],'concession_amount'));
-                        }
-                    }
-                }
-
-                $concession_amount_array = array();
-                foreach($installment_percent_amount as $key => $percent_discout_collection){
-                    foreach ($percent_discout_collection as $key2=> $discount){
-                        $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
-                    }
-                }
-                $final_discounted_amounts = array();
-                if(count($concession_amount_array) == count($total_installment_amount))
-                {
-                    foreach($concession_amount_array as $key => $value){
-                        foreach ($value as $key3 => $discount_amount){
-                            $final_discounted_amounts[$key][$key3] = $total_installment_amount[$key][$key3] - $discount_amount;
-                        }
-                    }
-                }
-
-            if(!empty($fee_due_date) && !empty($final_discounted_amounts)){
-                    foreach($fee_due_date as $key => $fee_id) {
-                        $previousFeeStructures = StudentFee::where('student_id',$id)
-                            ->where('fee_id','<',$key)
-                            ->get();
-                        $isPreviousStructureCleared = true;
-                        foreach($previousFeeStructures as $previousFeeStructure){
-                            if($isPreviousStructureCleared == true){
-                                $installmentIds = FeeInstallments::where('fee_id', $previousFeeStructure['fee_id'])
-                                    ->distinct('installment_id')
-                                    ->lists('installment_id');
-                                foreach ($installmentIds as $installmentId){
-                                    $isPaid = TransactionDetails::where('student_id',$id)
-                                        ->where('fee_id',$key['fee_id'])
-                                        ->where('installment_id', $installmentId)
-                                        ->first();
-                                    if($isPaid == null){
-                                        $isPreviousStructureCleared = false;
-                                        break;
-                                    }
+            $iterator = 0;
+            foreach($student_fee as $key => $studentData)
+            {
+                foreach ($studentData as $a){
+                    $response['data'][$iterator] = Fees::where('id',$a['fee_id'])->select('id as fee_id','fee_name as fee_name','year')->first()->toArray();
+                    $previousFeeStructures = StudentFee::where('student_id',$id)
+                        ->where('fee_id','<',$a['fee_id'])
+                        ->get();
+                    $isPreviousStructureCleared = true;
+                    foreach($previousFeeStructures as $previousFeeStructure){
+                        if($isPreviousStructureCleared == true){
+                            $installmentIds = FeeInstallments::where('fee_id', $previousFeeStructure['fee_id'])
+                                ->distinct('installment_id')
+                                ->lists('installment_id');
+                            foreach ($installmentIds as $installmentId){
+                                $isPaid = TransactionDetails::where('student_id',$id)
+                                    ->where('fee_id',$a['fee_id'])
+                                    ->where('installment_id', $installmentId)
+                                    ->first();
+                                if($isPaid == null){
+                                    $isPreviousStructureCleared = false;
+                                    break;
                                 }
                             }
                         }
-                        for ($iterator = 0; $iterator < count($fee_id); $iterator++) {
-                            $fee_due_date[$key][$iterator]['discount'] = $final_discounted_amounts[$key][$fee_id[$iterator]['installment_id']];
-                            $fee_due_date[$key][$iterator]['show_payment'] = $isPreviousStructureCleared;
+                    }
+                    $response['data'][$iterator]['show_payment']= $isPreviousStructureCleared;
+                    $response['data'][$iterator]['installments'] = array();
+                    $installment_info = FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
+                    $installments = array();
+                    if(!empty($installment_info)) {
+                        foreach ($installment_info as $installment) {
+                            if (!array_key_exists($installment['installment_id'], $installments)) {
+                                $installments[$installment['installment_id']] = array();
+                                $installments[$installment['installment_id']]['subTotal'] = 0;
+                                $response['data'][$iterator]['installments'][$installment['installment_id']]['installment_id'] = $installment['installment_id'];
+                                $response['data'][$iterator]['installments'][$installment['installment_id']]['due_date'] = FeeDueDate::where('fee_id', $a['fee_id'])
+                                    ->where('installment_id', $installment['installment_id'])
+                                    ->pluck('due_date');
+                            }
+                            $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
+                        }
+                        $totalYearsFeeAmount = array_sum(array_column($installments, 'subTotal'));
+                        foreach ($installments as $key_1 => $amount) {
+                            $percentage[$key_1] = ($amount['subTotal'] / $totalYearsFeeAmount) * 100;
+                        }
+                        $concession_For_structure = array();
+                        $fee_assign_student = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
+                            ->where('student_fee.student_id',$id)
+                            ->select('student_fee.fee_concession_type','student_fee.fee_id as fee_id')
+                            ->get();
+                        $fee_assign_student = ($fee_assign_student->groupBy('fee_id')->toArray());
+                        foreach ($fee_assign_student as $fees_name => $student_fees){
+                            foreach($student_fees as $key=> $fees_concession){
+                                if($fees_concession['fee_concession_type'] != 2){
+                                    $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->select('amount as concession_amount')->get()->toArray();
+                                }
+                            }
+                        }
+                        $caste_concn_amnt = array();
+                        $caste_concession_type = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
+                            ->where('student_fee.student_id',$id)
+                            ->whereNotNull('student_fee.caste_concession')
+                            ->select('fees.id','student_fee.caste_concession')
+                            ->get();
+                        $caste_concession_type = ($caste_concession_type->groupBy('id')->toArray());
+
+                        if($caste_concession_type != "" && $caste_concession_type != null){
+                            foreach ($caste_concession_type as $key => $casteConcession){
+                                foreach ($casteConcession as $key_1=> $caste_amount){
+                                    $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->get()->toArray();
+                                }
+                            }
+                        }
+                        $amountArray = array(); // key is fee id
+                        if(count($caste_concn_amnt) > count($concession_For_structure)){
+                            foreach($caste_concn_amnt as $feeId => $casteConcnAmount){
+                                if(!array_key_exists($feeId, $amountArray)){
+                                    $amountArray[$feeId]['amount'] = 0;
+                                }
+                                $amountArray[$feeId]['amount'] += array_sum(array_column($casteConcnAmount,'concession_amount'));
+                                if(array_key_exists($feeId,$concession_For_structure)){
+                                    $amountArray[$feeId]['amount'] += array_sum(array_column($concession_For_structure[$feeId],'concession_amount'));
+                                }
+                            }
+                        }else{
+                            foreach($concession_For_structure as $feeId => $concessionStructure){
+                                if(!array_key_exists($feeId, $amountArray)){
+                                    $amountArray[$feeId]['amount'] = 0;
+                                }
+                                $amountArray[$feeId]['amount'] += array_sum(array_column($concessionStructure,'concession_amount'));
+                                if(array_key_exists($feeId,$caste_concn_amnt)){
+                                    $amountArray[$feeId]['amount'] += array_sum(array_column($caste_concn_amnt[$feeId],'concession_amount'));
+                                }
+                            }
+                        }
+                        foreach ($percentage as $key_id=> $final_percentage){
+                            foreach ($amountArray as $fee => $val){
+                                if($fee == $a['fee_id']){
+                                        $final_amount[$key_id] = ($final_percentage/100)*$val['amount'];
+                                }
+                            }
+                        }
+                        if(count($installments) == count($final_amount))
+                        {
+                           foreach ($installments as $key_2 => $discounted){
+                                $final_discounted_amount[$key_2] = $discounted['subTotal']-$final_amount[$key_2];
+                               $response['data'][$iterator]['installments'][$key_2]['total'] = $final_discounted_amount[$key_2];
+                           }
                         }
                     }
                 }
+                $response['data'][$iterator]['installments'] = array_values($response['data'][$iterator]['installments']);
+                $iterator++;
+            }
         } catch (\Exception $e) {
             $status = 500;
-            $fee_due_date = array();
+            $response = array();
             Log::critical(json_encode($e->getMessage()));
         }
-        return response ($fee_due_date,$status,$response);
+        return response()->json($response,$status);
     }
     public function getFeesDetails($id){
         try{
@@ -620,7 +613,6 @@ class LeaveController extends Controller
                         $iterator++;
                     }
             }
-            dd($responseData);
         } catch (\Exception $e){
             $status = 500;
             $message = $e->getMessage();
@@ -628,9 +620,9 @@ class LeaveController extends Controller
         $response = [
             "status" => $status,
             "message" => $message,
-            "data" => $responseData=array()
+            "data" => $responseData
         ];
         Log::critical(json_encode($response));
-        return response ($response,$status);
+        return response()->json($response,$status);
     }
 }
