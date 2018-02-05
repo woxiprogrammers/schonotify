@@ -884,10 +884,12 @@
                                                <ul class="mini-stats pull-right">
                                                <li>
                                                        <div class="values">
-
-                                                           <div type="button" class="btn btn-wide btn-md  btn-primary btn-squared">
-                                                               Total due fee for current year : {{$total_due_fee_for_current_year}}
+                                                         @foreach($total_due_fee_for_current_year as $name => $value)
+                                                           <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
+                                                               <h4>{{$name}}</h4>
+                                                               Total due fee for current year : {{$value}}
                                                            </div>
+                                                         @endforeach
                                                        </div>
                                                    </li>
                                                </ul>
