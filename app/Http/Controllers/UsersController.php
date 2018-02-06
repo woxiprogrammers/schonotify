@@ -949,14 +949,11 @@ class UsersController extends Controller
                 $assigned_fee = StudentFee::where('student_id',$id)->lists('fee_id');
                 $caste_concession_type_edit = StudentFee::where('student_id',$id)->lists('fee_concession_type');
                 foreach ($total_fee_for_current_year as $key=> $total_fee){
-                    foreach ($new_array as $feeIDS => $value){
-                        if($key == $feeIDS){
-                            $total_due_fee_for_current_year[$key] = $total_fee['discount'] - $new_array[$key];
-                        }else{
-                            $total_due_fee_for_current_year[$key] = $total_fee['discount'] ;
-                        }
+                    if($new_array != null && $new_array != ""){
+                        $total_due_fee_for_current_year[$key] = $total_fee['discount'] - $new_array[$key];
+                    }else{
+                        $total_due_fee_for_current_year[$key] = $total_fee['discount'] - 0;
                     }
-
                 }
                 $queryn=category_types::select('caste_category','id')->get()->toArray();
                 $querym=StudentFee::where('student_id',$request['user'])->pluck('caste_concession');

@@ -602,18 +602,16 @@ class LeaveController extends Controller
             }
             $responseData=array();
             $iterator=0;
-                foreach ($total_fee_for_current_year as $key => $total_fee){
+            foreach ($total_fee_for_current_year as $key => $total_fee){
                     $responseData[$iterator]['structure_name'] = $key;
                     $responseData[$iterator]['discount'] = $total_fee['discount'];
-                    foreach ($new_array as $fee => $data){
-                        if($new_array != "" && $new_array != null && $key == $fee){
+                        if($new_array != "" && $new_array != null){
                             $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
                             $iterator++;
                     }else{
                             $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - 0;
                             $iterator++;
                         }
-                }
             }
         } catch (\Exception $e){
             $status = 500;
