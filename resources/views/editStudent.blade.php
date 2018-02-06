@@ -840,10 +840,9 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
-
                                                     @if(!empty($fee_due_date))
                                                     @foreach($fee_due_date as $key => $fee_due_dates)
-                                                        <dl>
+                                                            <dl>
                                                             <dt>Structuire Name</dt>
                                                             <dd>{{$fee_due_dates[0]['fee_name']}}</dd>
                                                         </dl>
@@ -868,9 +867,7 @@
                                                <ul class="mini-stats pull-left">
                                                    <li>
                                                        <div class="values">
-
                                                            @foreach($total_fee_for_current_year as $key => $year)
-
                                                                <div>
                                                                    <h4>{{$key}}</h4>
                                                                    <span>Total fee for current year :- {{$year['discount']}}</span>
@@ -885,7 +882,7 @@
                                                <li>
                                                        <div class="values">
                                                          @foreach($total_due_fee_for_current_year as $name => $value)
-                                                           <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
+                                                               <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
                                                                <h4>{{$name}}</h4>
                                                                Total due fee for current year : {{$value}}
                                                            </div>

@@ -378,7 +378,7 @@ class LeaveController extends Controller
                         foreach ($fee_assign_student as $fees_name => $student_fees){
                             foreach($student_fees as $key=> $fees_concession){
                                 if($fees_concession['fee_concession_type'] != 2){
-                                    $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->select('amount as concession_amount')->get()->toArray();
+                                    $concession_For_structure[$fees_name][$key] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->pluck('amount');
                                 }
                             }
                         }
@@ -393,7 +393,7 @@ class LeaveController extends Controller
                         if($caste_concession_type != "" && $caste_concession_type != null){
                             foreach ($caste_concession_type as $key => $casteConcession){
                                 foreach ($casteConcession as $key_1=> $caste_amount){
-                                    $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->get()->toArray();
+                                    $caste_concn_amnt[$key][$key_1]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->pluck('concession_amount');
                                 }
                             }
                         }
@@ -403,9 +403,9 @@ class LeaveController extends Controller
                                 if(!array_key_exists($feeId, $amountArray)){
                                     $amountArray[$feeId]['amount'] = 0;
                                 }
-                                $amountArray[$feeId]['amount'] += array_sum(array_column($casteConcnAmount,'concession_amount'));
+                                $amountArray[$feeId]['amount'] += array_sum($casteConcnAmount);
                                 if(array_key_exists($feeId,$concession_For_structure)){
-                                    $amountArray[$feeId]['amount'] += array_sum(array_column($concession_For_structure[$feeId],'concession_amount'));
+                                    $amountArray[$feeId]['amount'] += array_sum($concession_For_structure[$feeId]);
                                 }
                             }
                         }else{
@@ -413,9 +413,9 @@ class LeaveController extends Controller
                                 if(!array_key_exists($feeId, $amountArray)){
                                     $amountArray[$feeId]['amount'] = 0;
                                 }
-                                $amountArray[$feeId]['amount'] += array_sum(array_column($concessionStructure,'concession_amount'));
+                                $amountArray[$feeId]['amount'] += array_sum($concessionStructure);
                                 if(array_key_exists($feeId,$caste_concn_amnt)){
-                                    $amountArray[$feeId]['amount'] += array_sum(array_column($caste_concn_amnt[$feeId],'concession_amount'));
+                                    $amountArray[$feeId]['amount'] += array_sum($caste_concn_amnt[$feeId]);
                                 }
                             }
                         }
@@ -504,10 +504,10 @@ class LeaveController extends Controller
                 ->select('student_fee.fee_concession_type','student_fee.fee_id as fee_id')
                 ->get();
             $fee_assign_student = ($fee_assign_student->groupBy('fee_id')->toArray());
-            foreach ($fee_assign_student as $fees_name => $student_fees){
-                foreach($student_fees as $key=> $fees_concession){
-                    if($fees_concession['fee_concession_type'] != 2){
-                        $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id',$fees_concession['fee_id'])->where('concession_type',$fees_concession['fee_concession_type'])->select('amount as concession_amount')->get()->toArray();
+            foreach ($fee_assign_student as $fees_name => $student_fees) {
+                foreach ($student_fees as $key => $fees_concession) {
+                    if ($fees_concession['fee_concession_type'] != 2) {
+                        $concession_For_structure[$fees_name][$key] = FeeConcessionAmount::where('fee_id', $fees_concession['fee_id'])->where('concession_type', $fees_concession['fee_concession_type'])->pluck('amount');
                     }
                 }
             }
@@ -522,7 +522,7 @@ class LeaveController extends Controller
             if($caste_concession_type != "" && $caste_concession_type != null){
                 foreach ($caste_concession_type as $key => $casteConcession){
                     foreach ($casteConcession as $key_1=> $caste_amount){
-                        $caste_concn_amnt[$key]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->select('concession_amount')->get()->toArray();
+                        $caste_concn_amnt[$key][$key_1]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->pluck('concession_amount');
                     }
                 }
             }
@@ -532,9 +532,9 @@ class LeaveController extends Controller
                     if(!array_key_exists($feeId, $amountArray)){
                         $amountArray[$feeId]['amount'] = 0;
                     }
-                    $amountArray[$feeId]['amount'] += array_sum(array_column($casteConcnAmount,'concession_amount'));
+                    $amountArray[$feeId]['amount'] += array_sum($casteConcnAmount);
                     if(array_key_exists($feeId,$concession_For_structure)){
-                        $amountArray[$feeId]['amount'] += array_sum(array_column($concession_For_structure[$feeId],'concession_amount'));
+                        $amountArray[$feeId]['amount'] += array_sum($concession_For_structure[$feeId]);
                     }
                 }
             }else{
@@ -542,9 +542,9 @@ class LeaveController extends Controller
                     if(!array_key_exists($feeId, $amountArray)){
                         $amountArray[$feeId]['amount'] = 0;
                     }
-                    $amountArray[$feeId]['amount'] += array_sum(array_column($concessionStructure,'concession_amount'));
+                    $amountArray[$feeId]['amount'] += array_sum($concessionStructure);
                     if(array_key_exists($feeId,$caste_concn_amnt)){
-                        $amountArray[$feeId]['amount'] += array_sum(array_column($caste_concn_amnt[$feeId],'concession_amount'));
+                        $amountArray[$feeId]['amount'] += array_sum($caste_concn_amnt[$feeId]);
                     }
                 }
             }
@@ -602,16 +602,16 @@ class LeaveController extends Controller
             }
             $responseData=array();
             $iterator=0;
-                foreach ($total_fee_for_current_year as $key => $total_fee){
+            foreach ($total_fee_for_current_year as $key => $total_fee){
                     $responseData[$iterator]['structure_name'] = $key;
                     $responseData[$iterator]['discount'] = $total_fee['discount'];
-                    if($new_array != "" && $new_array != null){
-                    $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array;
-                    $iterator++;
-                }else{
-                        $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - 0;
-                        $iterator++;
-                    }
+                        if($new_array != "" && $new_array != null){
+                            $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
+                            $iterator++;
+                    }else{
+                            $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - 0;
+                            $iterator++;
+                        }
             }
         } catch (\Exception $e){
             $status = 500;
