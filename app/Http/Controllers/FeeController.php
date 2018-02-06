@@ -135,7 +135,7 @@ class FeeController extends Controller
             {
                 $sportDetails['fee_id']=$query;
                 $sportDetails['concession_type']=4;
-                $sportDetails['amount']=$request->special;
+                $sportDetails['amount']=$request->sport;
                 $sport=FeeConcessionAmount::insert($sportDetails);
             }
           foreach($request->class as $class)
