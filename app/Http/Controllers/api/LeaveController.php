@@ -605,7 +605,7 @@ class LeaveController extends Controller
             foreach ($total_fee_for_current_year as $key => $total_fee){
                     $responseData[$iterator]['structure_name'] = $key;
                     $responseData[$iterator]['discount'] = $total_fee['discount'];
-                        if($new_array != "" && $new_array != null){
+                        if(array_key_exists($key,$new_array)){
                             $responseData[$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
                             $iterator++;
                     }else{
