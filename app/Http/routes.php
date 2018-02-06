@@ -536,7 +536,9 @@
         Route::get('get-year-month','api\EventController@getYearMonth');
         Route::get('public-get-year-month','api\EventController@publicGetYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
+        Route::get('get-fee/{id}','api\LeaveController@getFees');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
+        Route::get('get-fee_details/{id}','api\LeaveController@getStudentFeesDetails');
         //Fees
         Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
         //Push
