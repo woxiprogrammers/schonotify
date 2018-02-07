@@ -263,8 +263,8 @@ class FeeController extends Controller
                                 ->select('student_fee.id as student_fee_id','student_fee.fee_id as fee_id','fees.fee_name as fee_name')
                                 ->orderBy('fee_id','desc')
                                 ->get()
-                                ->toarray();
-
+                                ->groupBy('fee_id')
+                                ->toArray();
             return view('fee.installments_details_partial')->with(compact('student','parent'/*,'installments','payableAmount','slug'*/,'studentFeeStructures','slug'));
         }catch(\Exception $e){
             $data = [
@@ -301,7 +301,7 @@ class FeeController extends Controller
                                         ->lists('installment_id');
                     foreach ($installmentIds as $installmentId){
                        $isPaid = TransactionDetails::where('student_id',$student_fee['student_id'])
-                                        ->where('fee_id',$student_fee['fee_id'])
+                                        ->where('fee_id',$previousFeeStructure['fee_id'])
                                         ->where('installment_id', $installmentId)
                                         ->first();
                        if($isPaid == null){
