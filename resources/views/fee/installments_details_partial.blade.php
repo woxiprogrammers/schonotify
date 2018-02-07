@@ -55,8 +55,8 @@
                     Fee Structure: <span class="symbol required"></span>
                 </label>
                 <select id="fee_structure_select" class="form-control">
-                    @foreach($studentFeeStructures as $studentFeeStructure)
-                        <option value="{{$studentFeeStructure['student_fee_id']}}"> {{$studentFeeStructure['fee_name']}} </option>
+                @foreach($studentFeeStructures as $studentFeeStructure)
+                        <option value="{{$studentFeeStructure[0]['student_fee_id']}}"> {{$studentFeeStructure[0]['fee_name']}} </option>
                     @endforeach
                 </select>
             </div>
