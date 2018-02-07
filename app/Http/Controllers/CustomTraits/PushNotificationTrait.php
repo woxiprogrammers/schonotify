@@ -4,7 +4,6 @@ use App\PushToken;
 use Illuminate\Support\Facades\Log;
 trait PushNotificationTrait{
     public function CreatePushNotification($PushTitle,$PushMsg,$allUser,$push_users){
-      Log::info("Inside a push  ");
         $title = $PushTitle;
         $msg = $PushMsg;
         if($allUser == 1){

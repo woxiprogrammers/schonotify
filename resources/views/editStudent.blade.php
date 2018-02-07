@@ -425,50 +425,26 @@
                                         <legend>
                                             FEE STRUCTURE
                                         </legend>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>
-                                                    Assign Fee Structure :
+                                                 Assign Fee Structure :
                                                 </label>
-                                                <div>
-                                                    <select name="student_fee" style="width:60%;-webkit-appearance: menulist;">
+                                                    <div>
                                                         @if(!empty($fees))
-                                                        @foreach($fees as $fee_details)
-                                                        <option id="{{$fee_details['id']}}" class="form-control assign_fee_structure" value="{{$fee_details['id']}}" >{{$fee_details['fee_name']}}&nbsp &nbsp &nbsp {{$fee_details['year']}}</option>
-                                                        @endforeach
+                                                            @foreach($fees as $fee_details)
+                                                              <div class="row">
+                                                                <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox">
+                                                                    <input type="checkbox" class="checked_fee"  id="{{$fee_details['id']}}_fee_chk" {{--name="student_fee[demo][]"--}} value="{{$fee_details['id']}}">
+                                                                    <label for="{{$fee_details['id']}}_fee_chk">{{$fee_details['fee_name']}}&nbsp &nbsp {{$fee_details['year']}}</label>
+                                                                </div>
+                                                              </div>
+                                                            @endforeach
+                                                            <input type="button" id="multiple-concession" value="submit">
+                                                            <div id="test"></div>
                                                         @endif
-                                                    </select>
-                                                    <h4 style="color: red">{{$division_status}}</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Select Concession Types :
-                                                </label>
-                                                <div>
-                                                    @foreach($concession_types as $concessions)
-                                                    <div class="checkbox clip-check check-primary checkbox-inline caste-checkbox" id="check">
-                                                        <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" name="concessions[]" value="{{ $concessions['id'] }}">
-                                                        <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                                                        <h4 style="color: red">{{$division_status}}</h4>
                                                     </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12" style="display: none" id="CasteSelect">
-                                            <div class="form-group">
-                                                <label>
-                                                    Assign Fee Concession :
-                                                </label>
-                                                <div>
-                                                    <select name="caste1"  style="-webkit-appearance: menulist;">
-                                                        @foreach($queryn as $castes)
-                                                        <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -865,11 +841,17 @@
                                                 <hr>
                                                 <div>
                                                     @if(!empty($fee_due_date))
-                                                    @foreach($fee_due_date as  $fee_due_dates)
-                                                    <dl class="accordion">
-                                                        <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {{$fee_due_dates['installment_id']}} </a></dt>
-                                                        <dd>Due-date:{{$fee_due_dates['due_date']}} <br><br> Amount: {{round($fee_due_dates['discount'],2)}}</dd>
-                                                    </dl>
+                                                    @foreach($fee_due_date as $key => $fee_due_dates)
+                                                            <dl>
+                                                            <dt>Structuire Name</dt>
+                                                            <dd>{{$fee_due_dates[0]['fee_name']}}</dd>
+                                                        </dl>
+                                                        @foreach($fee_due_dates as $due_date)
+                                                           <dl class="accordion">
+                                                                <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $due_date['installment_id'] !!}</a></dt>
+                                                                <dd>Due-date:{!! $due_date['due_date'] !!}   <br><br> Amount: {!! round($due_date['discount'],2) !!}</dd>
+                                                            </dl>
+                                                        @endforeach
                                                     @endforeach
                                                     @endif
                                                     <input type="hidden" id="user-id" value={{$user->id}}>
@@ -885,18 +867,26 @@
                                                <ul class="mini-stats pull-left">
                                                    <li>
                                                        <div class="values">
-                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
-                                                               Total fee for current year  :  {{$total_fee_for_current_year}}
-                                                           </div>
+                                                           @foreach($total_fee_for_current_year as $key => $year)
+                                                               <div>
+                                                                   <h4>{{$key}}</h4>
+                                                                   <span>Total fee for current year :- {{$year['discount']}}</span>
+                                                                   <br><br>
+                                                               </div>
+                                                               @endforeach
                                                        </div>
                                                    </li>
                                                </ul>
+                                        <br><br>
                                                <ul class="mini-stats pull-right">
                                                <li>
                                                        <div class="values">
-                                                           <div type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
-                                                               Total due fee for current year : {{$total_due_fee_for_current_year}}
+                                                         @foreach($total_due_fee_for_current_year as $name => $value)
+                                                               <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
+                                                               <h4>{{$name}}</h4>
+                                                               Total due fee for current year : {{$value}}
                                                            </div>
+                                                         @endforeach
                                                        </div>
                                                    </li>
                                                </ul>
@@ -907,6 +897,23 @@
                                             <div class="col-md-12">
                                                 <form id="fee_transaction_form" method="post" action="/fees/transactions">
                                                 <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Select Fee Structure :<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <select name="Structure_type">
+                                                                    @foreach($fees as $fee)
+                                                                        <option value="{{$fee['id']}}">{{$fee['fee_name']}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">
@@ -1001,6 +1008,7 @@
                                                    <tr>
                                                        <th width="10%"> No </th>
                                                        <th width="20%"> Transaction Type </th>
+                                                       <th width="10%"> Structure Name </th>
                                                        <th width="10%"> Transaction Detail </th>
                                                        <th width="10%"> Transaction Amount </th>
                                                        <th width="10%"> Date </th>
@@ -1011,6 +1019,7 @@
                                                    <tr>
                                                        <td>{!! $transaction->id !!}</td>
                                                        <td>{!! $transaction->transaction_type !!}</td>
+                                                       <td>{!! $transaction->fee_name !!}</td>
                                                        <td>{!! $transaction->transaction_detail !!}</td>
                                                        <td>{!! $transaction->transaction_amount !!}</td>
                                                        <td>{!! $transaction->date !!}</td>
@@ -1032,6 +1041,47 @@
         </div>
     </div>
 </div>
+<div class="row" id="concession" hidden>
+    <div class="col-md-12">
+        <div class="col-md-6 concession-div">
+            <div class="form-group">
+                <label class="control-label">
+                    Select Concession Types :
+                </label>
+                <div class="concession_check">
+                    @foreach($concession_types as $concessions)
+                        <div class="checkbox-inline caste-checkbox">
+                            @if($concessions['id'] == 2)
+                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}" onclick="showCasteSelect(this)">
+                            @else
+                                <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['id'] }}">
+                            @endif
+                            <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="caste-select" hidden>
+                <div class="form-group">
+                    <label>
+                        Assign Fee Concession :
+                    </label>
+                    <div>
+                        <select  style="-webkit-appearance: menulist;">
+                            @foreach($queryn as $castes)
+                                <option id="{{$castes['id']}}" class="form-control castes_list" value="{{$castes['id']}}">{{$castes['caste_category']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 @include('rightSidebar')
 </div>
 </div>
@@ -1070,6 +1120,7 @@
 <script src="/assets/js/table-data.js"></script>
 <script>
     jQuery(document).ready(function() {
+
         if({!!$divisionStudent!!} != null){
             $('#hide').hide();
         }else{
@@ -1081,24 +1132,35 @@
         $("option[value='"+std+"']").prop('selected',true);
         $("option[value='"+category+"']").prop('selected',true);
         $("option[value='"+blood+"']").prop('selected',true);
-        $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
+        $('.caste-checkbox').each(function(){
+
+            $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
+        })
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
-        if({!!$chkstatus!!} != "null"){
-        var chkstatus = {!!$chkstatus!!};
-        if(chkstatus != null){
-          for(var i = 0; i< chkstatus.length; i++){
-             $('#'+chkstatus[i]+'_concession_chk').prop('checked', true);
-          }
-        }
-        }
-        $('#2_concession_chk').change(function(){
-           if($('#2_concession_chk').is(":checked")){
-               $('#CasteSelect').show();
-           }else{
-               $('#CasteSelect').hide();
-           }
+
+        $('#multiple-concession').click(function() {
+            $("#test").html('');
+            $('.checked_fee:checkbox:checked').each(function(){
+                var id = $(this).val();
+                var newClone = $('#concession').clone();
+                var feeName = $(this).next().text();
+                $(newClone).show();
+                $(newClone).find('input[type=checkbox]').each(function(){
+                    $(this).attr("name","student_fee["+id+"][concession][]");
+                    $(this).attr('id',''+id);
+                });
+                $("#test").append('<div class="row"><fieldset>' +
+                    '<legend>'+feeName+'</legend>'+
+                    '<div id="clonedDiv_'+id+'">'+
+                    '</div>'+
+                    '</fieldset></div>');
+                $("#clonedDiv_"+id).html(newClone);
+            });
         });
+
+
+
         Main.init();
         FormValidator.init();
         FormElements.init();
@@ -1234,6 +1296,17 @@
             }
         });
     });
+
+    function showCasteSelect(element){
+        if($(element).is(":checked") == true){
+            var id = element.value;
+            var name =element.id;
+            $(element).closest('.concession-div').next().find('.caste-select').show();
+            $(element).closest('.concession-div').next().find('.caste-select select').attr("name","student_fee["+name+"][caste1]");
+        }else{
+            $(element).closest('.concession-div').next().find('.caste-select').hide();
+        }
+    }
 </script>
 <script>
     $( "select[name='installment_number']" )
