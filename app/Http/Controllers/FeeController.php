@@ -426,7 +426,7 @@ class FeeController extends Controller
                 ->join('transaction_details','transaction_details.student_id','=','users.id')
                 ->join('fees','fees.id','=','transaction_details.fee_id')
                 ->whereIn('users.id', $userIds)
-                ->select('transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id')
+                ->select('transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id','transaction_details.installment_id as Installment')
                 ->get()->toArray();
             $jIterator = 0;
             foreach ($students as $studentId){
@@ -468,6 +468,7 @@ class FeeController extends Controller
             $str.="<thead><tr>";
             $str.="<th>Date</th>";
             $str.="<th>Fee Structure Name</th>";
+            $str.="<th>Installment ID</th>";
             $str.="<th>Student Name</th>";
             $str.="<th>Amount</th>";
             $str.="<th>Paid Amount</th>";
@@ -478,6 +479,7 @@ class FeeController extends Controller
                 $str.="<tr>";
                 $str.="<td>".$student['date']."</td>";
                 $str.="<td>".$student['name']."</td>";
+                $str.="<td>".$student['Installment']."</td>";
                 $str.="<td>".$student['first_name']." ".$student['last_name']."</td>";
                 $str.="<td>".$student['total']."</td>";
                 $str.="<td>".$student['transaction_amount']."</td>";
