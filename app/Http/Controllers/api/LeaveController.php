@@ -338,8 +338,8 @@ class LeaveController extends Controller
                                 ->distinct('installment_id')
                                 ->lists('installment_id');
                             foreach ($installmentIds as $installmentId){
-                                $isPaid = TransactionDetails::where('student_id',$id)
-                                    ->where('fee_id',$a['fee_id'])
+                                $isPaid = TransactionDetails::where('student_id',$previousFeeStructure['student_id'])
+                                    ->where('fee_id',$previousFeeStructure['fee_id'])
                                     ->where('installment_id', $installmentId)
                                     ->first();
                                 if($isPaid == null){
@@ -349,7 +349,7 @@ class LeaveController extends Controller
                             }
                         }
                     }
-                    $response['data'][$iterator]['show_payment']= $isPreviousStructureCleared;
+                    $response['data'][$iterator]['show_payment'] = $isPreviousStructureCleared;
                     $response['data'][$iterator]['installments'] = array();
                     $installment_info = FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
                     $installments = array();
@@ -362,6 +362,12 @@ class LeaveController extends Controller
                                 $response['data'][$iterator]['installments'][$installment['installment_id']]['due_date'] = FeeDueDate::where('fee_id', $a['fee_id'])
                                     ->where('installment_id', $installment['installment_id'])
                                     ->pluck('due_date');
+                            }
+                            $transactionCount = TransactionDetails::where('fee_id',$a['fee_id'])->where('student_id',$id)->where('installment_id',$installment['installment_id'])->count();
+                            if($transactionCount > 0 && $isPreviousStructureCleared == true){
+                                $response['data'][$iterator]['show_payment'] = false;
+                            }else{
+                                $response['data'][$iterator]['show_payment'] = true;
                             }
                             $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
                         }
