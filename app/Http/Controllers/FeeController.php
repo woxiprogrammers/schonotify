@@ -281,6 +281,7 @@ class FeeController extends Controller
         try{
             $slug = $request->slug;
             $student_fee = StudentFee::findOrFail($studentFeeId)->toArray();
+            $student_fee_detail = StudentFee::where('student_id',$student_fee['student_id'])->where('fee_id',$student_fee['fee_id'])->select('fee_concession_type','caste_concession')->get()->toArray();
             $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
                 ->where('users.id',$student_fee['student_id'])
                 ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
@@ -354,35 +355,25 @@ class FeeController extends Controller
                 $installment_amounts=($installment_amounts/$total_fee_amount)*100;
                 $installment_percent_amount[$key]=$installment_amounts;
             }
-            $caste_concn_amnt= CASTECONCESSION::where('caste_id', $student_fee['caste_concession'])->where('fee_id',$student_fee['fee_id'])->pluck('concession_amount');
-            if($caste_concn_amnt == null){
-                $caste_concn_amnt = 0;
+            foreach ($student_fee_detail as $key => $details){
+                $caste_concn_amnt = CASTECONCESSION::where('caste_id', $details['caste_concession'])->where('fee_id',$student_fee['fee_id'])->pluck('concession_amount');
             }
             $collection=collect($installment_percent_amount);
             $concession_amount_array=array();
             foreach($collection as $key => $percent_discout_collection)
             {
-
                 $discounted_amount_for_installment=($percent_discout_collection/100)*$caste_concn_amnt;
                 $concession_amount_array[$key] = $discounted_amount_for_installment;
                 $installments[$key]['caste_concession_amount'] = $discounted_amount_for_installment;
             }
-            $feeConcessions = StudentFeeConcessions::where('student_id',$student['id'])->where('fee_id',$student_fee['fee_id'])->pluck('fee_concession_type');
-            $feeConcessions = json_decode($feeConcessions);
-            if($feeConcessions != 'null' || $feeConcessions != null){
-                if(is_array($feeConcessions)){
-                    $feeConcessionAmounts = FeeConcessionAmount::where('fee_id',$student_fee['fee_id'])->whereIn('concession_type',$feeConcessions)->lists('amount')->toArray();
-                }else{
-                    $feeConcessionAmounts = FeeConcessionAmount::where('fee_id',$student_fee['fee_id'])->where('concession_type',$feeConcessions)->lists('amount')->toArray();
-                }
-                $totalFeeConcessionAmount = array_sum($feeConcessionAmounts);
-            }else{
-                $totalFeeConcessionAmount = 0;
+            $totalFeeConcessionAmount = 0;
+            foreach ($student_fee_detail as $key => $details) {
+                $feeConcessionAmounts = FeeConcessionAmount::where('fee_id',$student_fee['fee_id'])->where('concession_type',$details['fee_concession_type'])->pluck('amount');
+                $totalFeeConcessionAmount += $feeConcessionAmounts;
             }
             foreach($installments as $installmentId => $values ){
                 $installments[$installmentId]['fee_concession_amount'] = ($installment_percent_amount[$installmentId]/100) * $totalFeeConcessionAmount;
                 $installments[$installmentId]['final_total'] = $installments[$installmentId]['subTotal'] - $installments[$installmentId]['caste_concession_amount'] - $installments[$installmentId]['fee_concession_amount'];
-
             }
             return view('fee.new-installment-section')->with(compact('student','parent','installments','slug','isPreviousStructureCleared'));
         }catch(\Exception $e){
