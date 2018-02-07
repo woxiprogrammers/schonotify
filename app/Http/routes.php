@@ -78,6 +78,11 @@
         Route::post('transactions',array('uses' => 'FeeController@createTransactions'));
         Route::get('billing-page/{slug?}',array('uses' => 'FeeController@billiingPageView'));
         Route::post('get-student-details',array('uses' => 'FeeController@getStudentDetails'));
+        Route::get('transaction-listing',array('uses' => 'FeeController@getTransactionListing'));
+        Route::get('feeTransactionListingTable',array('uses' => 'FeeController@getTransactionListingTable'));
+        Route::post('transactionFeeListingTable',array('uses' => 'FeeController@showFeeTransactionListing'));
+        Route::get('download-pdf/{id}/{fee_id}',array('uses' => 'FeeController@createPDF'));
+        Route::post('get-structure-installments/{fee_id}',array('uses' => 'FeeController@getFeeStructureInstallments'));
     });
 
     Route::group(['prefix' => 'payment'],function(){
@@ -531,7 +536,9 @@
         Route::get('get-year-month','api\EventController@getYearMonth');
         Route::get('public-get-year-month','api\EventController@publicGetYearMonth');
         Route::get('get-student_fees/{id}','api\LeaveController@getFeesStudent');
+        Route::get('get-fee/{id}','api\LeaveController@getFees');
         Route::get('get-student_fees_details/{id}','api\LeaveController@getFeesDetails');
+        Route::get('get-fee_details/{id}','api\LeaveController@getStudentFeesDetails');
         //Fees
         Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
         //Push

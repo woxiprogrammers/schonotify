@@ -390,8 +390,7 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
-    public function studentInstallmentview(Request $request,$id,$student_id)
-    {
+    public function studentInstallmentview(Request $request,$id,$student_id){
       try{
            $installment_data = array();
            $student_fee=StudentFee::where('student_id',$student_id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toArray();

@@ -10,10 +10,10 @@
     <tbody>
     @foreach($fees as $fee)
         <tr>
-            <td>{!! $fee->id !!}</td>
-            <td>{!! $fee->fee_name !!}</td>
-            <td>{!! $fee->total_amount !!}</td>
-            <td>{!! $fee->year !!}</td>
+            <td>{!! $fee['id'] !!}</td>
+            <td>{!! $fee['fee_name'] !!}</td>
+            <td>{!! $fee['total_amount'] !!}</td>
+            <td>{!! $fee['year'] !!}</td>
         </tr>
     @endforeach
     </tbody>
