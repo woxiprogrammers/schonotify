@@ -74,7 +74,8 @@
                 url: '/fees/get-structure-installments/'+studentFeeId,
                 type: 'POST',
                 data:{
-                    slug: $("#slug").val()
+                    slug: $("#slug").val(),
+                    grn: $("#grn").val()
                 },
                 success: function(data, textStatus, xhr){
                     $("#installment_section").html(data);
