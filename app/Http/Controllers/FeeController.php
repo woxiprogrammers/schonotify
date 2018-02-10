@@ -11,6 +11,7 @@ use App\fee_particulars;
 use App\FeeClass;
 use App\FeeConcessionAmount;
 use App\FeeConcessionTypes;
+use App\FeeDevelopment;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
@@ -572,5 +573,64 @@ class FeeController extends Controller
             Log::critical(json_encode($data));
             return response()->json([], 500);
         }
+    }
+    public function feeDevelopmentView(Request $request){
+        return view('fee/feeDevelopment');
+    }
+    public function feeAdmissionView(Request $request){
+        dd("fee Admission");
+    }
+    public function createFeeDevelopment(Request $request){
+        $user = Auth::user();
+        $data['body_id'] = $user->body_id;
+        $data['student_name'] = $request->student_name;
+        $data['class'] = $request->class;
+        $data['parent_name'] = $request->parent_name;
+        $data['sum_of_rupee'] = $request->sum_rupee;
+        $data['transaction_number'] = $request->dd_number;
+        $data['date'] = $request->date;
+        $data['bank_name'] = $request->bank_name;
+        $data['account_holder_name'] = $request->account_holder_name;
+        $query = FeeDevelopment::create($data);
+        if($query){
+            Session::flash('message-success','created successfully .');
+            return Redirect::back();
+        }else{
+            Session::flash('message-error','Something went wrong !');
+            return Redirect::back();
+        }
+    }
+    public function feeDevelopmentListing(Request $request){
+        $dataValue = FeeDevelopment::get()->toArray();
+        $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+        $str.="<thead><tr>";
+        $str.="<th>Student Name</th>";
+        $str.="<th>Class</th>";
+        $str.="<th>Parent Name</th>";
+        $str.="<th>Sum of Rupees</th>";
+        $str.="<th>Transaction Number</th>";
+        $str.="<th>Date</th>";
+        $str.="<th>Bank Name</th>";
+        $str.="<th>Account Holder Name</th>";
+        $str.="<th>Action</th>";
+        $str.="</tr></thead><tbody>";
+        $str.="<tr>";
+        foreach ($dataValue as $data){
+            $str.="<td>".$data['student_name']."</td>";
+            $str.="<td>".$data['class']."</td>";
+            $str.="<td>".$data['parent_name']."</td>";
+            $str.="<td>".$data['sum_of_rupee']."</td>";
+            $str.="<td>".$data['transaction_number']."</td>";
+            $str.="<td>".$data['date']."</td>";
+            $str.="<td>".$data['bank_name']."</td>";
+            $str.="<td>".$data['account_holder_name']."</td>";
+            $str.="<td>"."<a href='/fees/downlod-fee-development/".$data['id']."'>download </a>"."</td>";
+            $str.="</tr>";
+        }
+        $str.="</tbody></table>";
+        return $str;
+    }
+    public function feeDevelopmentPDF(Request $request,$id){
+        dd($id);
     }
 }

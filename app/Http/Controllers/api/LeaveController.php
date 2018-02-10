@@ -904,5 +904,4 @@ class LeaveController extends Controller
         $responseData['fees']=$total_student_fee_for_current_year;
         return response ($responseData);
     }
-
 }
