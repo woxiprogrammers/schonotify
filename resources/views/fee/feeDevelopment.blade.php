@@ -21,8 +21,8 @@
                             <button class="btn btn-primary"> Create New </button>
                         </div>
                     </section>
-                     <div id="development" hidden>
                     <form action="/fees/create-fee-development" method="post" role="form" id="fee_development">
+                        <div id="development" hidden>
                         <div class="container-fluid container-fullw">
                             <div class="col-md-4">
                                 <label class="control-label">
@@ -84,9 +84,8 @@
                                 </button>
                             </div>
                         </fieldset>
+                        </div>
                     </form>
-
-                    </div>
                     <div class="col-md-12">
                         <div class="form-group" >
                             <fieldset>
@@ -125,6 +124,7 @@
     <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
     <!-- start: JavaScript Event Handlers for this page -->
+    <script src="/assets/js/fee-validation.js"></script>
     <script src="/assets/js/form-validation-edit.js"></script>
     <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/main.js"></script>

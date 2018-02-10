@@ -631,6 +631,9 @@ class FeeController extends Controller
         return $str;
     }
     public function feeDevelopmentPDF(Request $request,$id){
-        dd($id);
+        $userData=FeeDevelopment::where('id',$id)->first()->toArray();
+        TCPdf::AddPage();
+        TCPdf::writeHTML(view('/fee/feeDevelopment-pdf')->with(compact('userData'))->render());
+        TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
     }
 }
