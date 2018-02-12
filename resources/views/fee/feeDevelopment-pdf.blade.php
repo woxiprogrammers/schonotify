@@ -33,24 +33,52 @@
 <br><br>
 <table>
     <tr>
-        <td style="font-size:120%;" >Receipt No.<span>{{$userData['id']}}</span></td>
+        <td style="font-size:120%;" >Receipt No.: <span style="font-size: 120%">{{$userData['id']}}</span></td>
         <td style = "text-align:right ">Date: <span>{{date('d-m-Y')}}</span></td>
     </tr>
 </table>
 <br><br>
-<table >
+<table cellpadding="5" border="1px">
+    <tr>
+        <td>Student Name</td>
+        <td><u>{{$userData['student_name']}}</u></td>
+        <td>Class</td>
+        <td><u>{{$userData['class']}}</u></td>
+    </tr>
+     <tr>
+         <td>Recieved with thanks from Mr./Mrs./Miss</td>
+         <td><u>{{$userData['parent_name']}}</u></td>
+         <td>Sum Of Rupees</td>
+         <td><u>{{$userData['sum_of_rupee']}}</u></td>
+     </tr>
+    <tr>
+        <td>Cash/Cheque/D.D.No.</td>
+        <td><u>{{$userData['transaction_number']}}</u></td>
+        <td>Date</td>
+        <td><u>{{$userData['date']}}</u></td>
+    </tr>
+</table>
+<table border="1" cellpadding="5">
+    <tr>
+        <td>Bank</td>
+        <td><u>{{$userData['bank_name']}}</u></td>
 
+    </tr>
+    <tr>
+        <td>On Account of</td>
+        <td><u>{{$userData['account_holder_name']}}</u></td>
+    </tr>
 </table>
 <br><br>
 <table>
     <tr>
-        <td>Subject of realization of cheque</td>
+        <td>Subject to realization of cheque</td>
     </tr>
 </table>
 <br><br><br><br>
 <table style="text-align:right; width:500px;">
     <tr>
-        <td><b>For Ganesh International School,Chikhali</b></td>
+        <td><b>For S.S.P.SHISKSHAN SANSTHA'S</b></td>
     </tr>
 </table>
 </body>
