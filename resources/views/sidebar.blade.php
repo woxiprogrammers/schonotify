@@ -307,6 +307,20 @@
                 </div>
             </a>
         </li>
+        <li>
+            <a href="/fees/fee-development">
+                <div class="item-inner">
+                    <span class="title"> Fee Development </span>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="/fees/fee-admission">
+                <div class="item-inner">
+                    <span class="title"> Fee Admission </span>
+                </div>
+            </a>
+        </li>
     </ul>
 </li>
     <li>
