@@ -575,10 +575,30 @@ class FeeController extends Controller
         }
     }
     public function feeDevelopmentView(Request $request){
-        return view('fee/feeDevelopment');
+        try{
+            return view('fee/feeDevelopment');
+        }catch(\Exception $e){
+            $data=[
+                'action' => "Fee Development View",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
     }
     public function feeAdmissionView(Request $request){
-        return view('fee/feeAdmission');
+        try{
+            return view('fee/feeAdmission');
+        }catch(\Exception $e){
+            $data=[
+                'action' => "Fee Admission View",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
     }
     public function createFeeDevelopment(Request $request){
         try{
