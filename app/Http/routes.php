@@ -88,6 +88,10 @@
         Route::post('create-fee-development',array('uses' => 'FeeController@createFeeDevelopment'));
         Route::get('feeDevelopmentTable',array('uses' => 'FeeController@feeDevelopmentListing'));
         Route::get('downlod-fee-development/{id}',array('uses' => 'FeeController@feeDevelopmentPDF'));
+        Route::get('feeAdmissionTable',array('uses' => 'FeeController@feeAdmissionListing'));
+        Route::post('create-fee-admission',array('uses' => 'FeeController@createFeeAdmission'));
+        Route::get('downlod-fee-admission/{id}',array('uses' => 'FeeController@feeAdmissionPDF'));
+
     });
 
     Route::group(['prefix' => 'payment'],function(){
