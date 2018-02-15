@@ -39,7 +39,7 @@
 <br><br>
 <table>
     <tr>
-        <td style="font-size:120%;" >Receipt No.: <span style="font-size: 120%">{{$userData['id']}}</span></td>
+        <td style="font-size:120%;" >Receipt No.: <span style="font-size: 120%">{{$userData['fee_admission_id']}}</span></td>
         <td style = "text-align:right ">Date: <span>{{date('d-m-Y')}}</span></td>
     </tr>
 </table>

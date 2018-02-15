@@ -734,6 +734,12 @@ class FeeController extends Controller
             $data['account_holder_name'] = $request->account_holder_name;
             $data['rupees'] = $request->amount;
             $data['balance'] = $request->balance;
+            $dataInfo = FeeAdmission::where('body_id',$user->body_id)->orderBy('fee_admission_id','desc')->first();
+            if($dataInfo['body_id'] == $user->body_id  && $dataInfo['fee_admission_id'] == null && $dataInfo == ""){
+                $data['fee_admission_id'] = 1;
+            }else{
+                $data['fee_admission_id'] = $dataInfo['fee_admission_id'] + 1;
+            }
             $query = FeeAdmission::create($data);
             if($query){
                 Session::flash('message-success','created successfully .');
