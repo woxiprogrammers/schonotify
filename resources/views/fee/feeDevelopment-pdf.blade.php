@@ -8,26 +8,17 @@
 </table>
 <table style="text-align:center; width:500px">
     <tr>
-        <td style="text-align:center;"><b>S.S.P.Shikshan Sanstha</b></td>
+        <td style="text-align:center;"><b>S.S.P.SHIKSHAN SANSTHA'S</b></td>
     </tr>
-    @if($userData['body_id']==1)
     <tr>
-        <td style="font-size:200%"><b>Ganesh International School</b></td>
-    </tr>
-    @else
-    <tr>
-        <td style="font-size:200%"><b>Ganesh English Medium School</b></td>
-    </tr>
-    @endif
-    <tr>
-        <td>Nevale Vasti Gate No. 1157-1160,Chikhali Taluka - Haveli, Dist-Pune.</td>
+        <td>Sr.No. 15/1, Ganesh Nagar,Dapoli,Pune 411012.</td>
     </tr>
 </table>
 <br>
 <hr>
 <table style="text-align:center; width:500px; padding-top: 10px">
     <tr>
-        <td style="font-size: 20px"><b>FEE RECEIPT</b></td>
+        <td style="font-size: 20px"><b><u>FEE RECEIPT</u></b></td>
     </tr>
 </table>
 <br><br>
