@@ -46,26 +46,34 @@
 <br><br>
 <table cellpadding="5" border="1px">
     <tr>
+        <td style="text-align: center">Recieved with thanks from Mr./Mrs./Miss</td>
+        <td><u>{{$userData['parent_name']}}</u></td>
+    </tr>
+    <tr>
         <td style="text-align: center">Student Name</td>
         <td><u>{{$userData['student_name']}}</u></td>
+    </tr>
+    <tr>
         <td style="text-align: center">Class</td>
         <td><u>{{$userData['class']}}</u></td>
     </tr>
     <tr>
-        <td style="text-align: center">Recieved with thanks from Mr./Mrs./Miss</td>
-        <td><u>{{$userData['parent_name']}}</u></td>
         <td style="text-align: center">Sum Of Rupees</td>
         <td><u>{{$userData['sum_of_rupee']}}</u></td>
     </tr>
     <tr>
         <td>Cash/Cheque/D.D.No.</td>
         <td><u>{{$userData['transaction_number']}}</u></td>
+    </tr>
+    <tr>
         <td style="text-align: center">Date</td>
         <td><u>{{$userData['date']}}</u></td>
     </tr>
     <tr>
         <td style="text-align: center">Bank</td>
         <td><u>{{$userData['bank_name']}}</u></td>
+    </tr>
+    <tr>
         <td style="text-align: center">Branch</td>
         <td>{{$userData['branch']}}</td>
 
