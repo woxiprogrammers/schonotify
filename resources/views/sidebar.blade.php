@@ -321,6 +321,13 @@
                 </div>
             </a>
         </li>
+        <li>
+            <a href="/fees/form-fee">
+                <div class="item-inner">
+                    <span class="title"> Form Fee </span>
+                </div>
+            </a>
+        </li>
     </ul>
 </li>
     <li>
