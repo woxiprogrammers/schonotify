@@ -91,6 +91,10 @@
         Route::get('feeAdmissionTable',array('uses' => 'FeeController@feeAdmissionListing'));
         Route::post('create-fee-admission',array('uses' => 'FeeController@createFeeAdmission'));
         Route::get('downlod-fee-admission/{id}',array('uses' => 'FeeController@feeAdmissionPDF'));
+        Route::get('form-fee',array('uses' => 'FeeController@feeForm'));
+        Route::post('create-form-fee',array('uses' => 'FeeController@createFormFee'));
+        Route::get('formFeeTable',array('uses' => 'FeeController@formFeeListing'));
+        Route::get('downlod-form-fee/{id}',array('uses' => 'FeeController@formFeePDF'));
 
     });
 

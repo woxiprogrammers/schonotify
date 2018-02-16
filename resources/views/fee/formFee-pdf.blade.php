@@ -33,13 +33,13 @@
 <hr>
 <table style="text-align:center; width:500px; padding-top: 10px">
     <tr>
-        <td style="font-size: 20px"><b>ADMISSION FEE RECEIPT</b></td>
+        <td style="font-size: 20px"><b>FORM FEE RECEIPT</b></td>
     </tr>
 </table>
 <br><br>
 <table>
     <tr>
-        <td style="font-size:120%;" >Receipt No.: <span style="font-size: 120%">{{$userData['fee_admission_id']}}</span></td>
+        <td style="font-size:120%;" >Receipt No.: <span style="font-size: 120%">{{$userData['form_fee_id']}}</span></td>
         <td style = "text-align:right ">Date: <span>{{date('d-m-Y')}}</span></td>
     </tr>
 </table>
