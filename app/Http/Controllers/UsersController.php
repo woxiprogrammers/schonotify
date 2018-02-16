@@ -1173,7 +1173,6 @@ class UsersController extends Controller
                 }
             }
         }
-
         $existCheck = StudentFeeConcessions::where('student_id',$id)->exists();
         if($request->student_fee != null){
             if($existCheck == true){
