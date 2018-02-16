@@ -635,7 +635,8 @@ class FeeController extends Controller
     public function feeDevelopmentListing(Request $request)
     {
         try {
-            $dataValue = FeeDevelopment::get()->toArray();
+            $user = Auth::user();
+            $dataValue = FeeDevelopment::where('body_id',$user->body_id)->get()->toArray();
             $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str .= "<thead><tr>";
             $str .= "<th>Student Name</th>";
@@ -686,7 +687,8 @@ class FeeController extends Controller
     }
     public function feeAdmissionListing(Request $request){
         try {
-            $dataValue = FeeAdmission::get()->toArray();
+            $user = Auth::user();
+            $dataValue = FeeAdmission::where('body_id',$user->body_id)->get()->toArray();
             $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str .= "<thead><tr>";
             $str .= "<th>Student Name</th>";
