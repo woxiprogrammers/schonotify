@@ -11,7 +11,7 @@
         <td style="text-align:center;"><b>S.S.P.SHIKSHAN SANSTHA'S</b></td>
     </tr>
     <tr>
-        <td>Sr.No. 15/1, Ganesh Nagar,Dapoli,Pune 411012.</td>
+        <td>Sr.No. 15/1, Ganesh Nagar,Dapodi,Pune 411012.</td>
     </tr>
 </table>
 <br>
@@ -52,7 +52,7 @@
     </tr>
     <tr>
         <td style="text-align: center">Date</td>
-        <td><u>{{$userData['date']}}</u></td>
+        <td><u>{{date('d/m/Y',strtotime($userData['date']))}}</u></td>
     </tr>
 </table>
 <table border="1" cellpadding="5">

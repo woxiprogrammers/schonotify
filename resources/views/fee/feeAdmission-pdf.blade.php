@@ -67,7 +67,7 @@
     </tr>
     <tr>
         <td style="text-align: center">Date</td>
-        <td><u>{{$userData['date']}}</u></td>
+        <td><u>{{date('d/m/Y',strtotime($userData['date']))}}</u></td>
     </tr>
     <tr>
         <td style="text-align: center">Bank</td>
@@ -87,7 +87,7 @@
 </table>
 <table border="1" cellpadding="5">
     <tr>
-        <td style="text-align: center">Rs.</td>
+        <td style="text-align: center">Amount.</td>
         <td><u>{{$userData['rupees']}}</u></td>
     </tr>
     <tr>

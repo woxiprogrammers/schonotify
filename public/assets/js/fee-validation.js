@@ -9,7 +9,7 @@ var FormValidator = function () {
 
     // function to initiate Validation Sample 1
     var runValidator1 = function () {
-        var form1 = $('#fee_development');
+        var form1 = $('#fee_developments');
         var errorHandler1 = $('.errorHandler', form1);
         var successHandler1 = $('.successHandler', form1);
 
@@ -21,7 +21,7 @@ var FormValidator = function () {
                 return false;
             }
         }, 'Please select a day, month, and year');
-        $('#fee_development').validate({
+        $('#fee_developments').validate({
             errorElement: "span", // contain the error msg in a span tag
             errorClass: 'help-block',
             errorPlacement: function (error, element) { // render error placement for each input type
@@ -35,14 +35,17 @@ var FormValidator = function () {
                 }
             },
             ignore: "",
-
             rules: {
                 student_name: {
                     required: true
+                },
+                class:{
+                    required:true
                 }
             },
             messages: {
-                student_name: "Subject name is required"
+                student_name: "Subject name is required",
+                class : "class is required"
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
                 successHandler1.hide();
@@ -63,12 +66,11 @@ var FormValidator = function () {
                 // mark the current input as valid and display OK icon
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
             },
-            submitHandler: function (fee_development) {
+            submitHandler: function (fee_developments) {
                 successHandler1.show();
                 errorHandler1.hide();
-                fee_development.submit();
+                fee_developments.submit();
                 // submit form
-
             }
         });
     };
