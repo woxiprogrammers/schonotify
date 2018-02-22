@@ -33,7 +33,7 @@
 <hr>
 <table style="text-align:center; width:500px; padding-top: 10px">
     <tr>
-        <td style="font-size: 20px"><b>FORM FEE RECEIPT</b></td>
+        <td style="font-size: 20px"><b>RECEIPT</b></td>
     </tr>
 </table>
 <br><br>

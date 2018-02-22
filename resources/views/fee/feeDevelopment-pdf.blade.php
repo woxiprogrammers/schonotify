@@ -18,7 +18,7 @@
 <hr>
 <table style="text-align:center; width:500px; padding-top: 10px">
     <tr>
-        <td style="font-size: 20px"><b><u>DEVELOPMENT FEE RECEIPT</u></b></td>
+        <td style="font-size: 20px"><b><u>RECEIPT</u></b></td>
     </tr>
 </table>
 <br><br>
