@@ -33,13 +33,13 @@
 <hr>
 <table style="text-align:center; width:500px; padding-top: 10px">
     <tr>
-        <td style="font-size: 20px"><b>ADMISSION FEE RECEIPT</b></td>
+        <td style="font-size: 20px"><b>RECEIPT</b></td>
     </tr>
 </table>
 <br><br>
 <table>
     <tr>
-        <td style="font-size:120%;" >Receipt No.: <span style="font-size: 120%">{{$userData['fee_admission_id']}}</span></td>
+        <td style="font-size:120%;" >Receipt No.: <span style="font-size: 120%">{{$userData['id']}}</span></td>
         <td style = "text-align:right ">Date: <span>{{date('d-m-Y')}}</span></td>
     </tr>
 </table>
@@ -67,7 +67,7 @@
     </tr>
     <tr>
         <td style="text-align: center">Date</td>
-        <td><u>{{$userData['date']}}</u></td>
+        <td><u>{{date('d/m/Y',strtotime($userData['date']))}}</u></td>
     </tr>
     <tr>
         <td style="text-align: center">Bank</td>
@@ -87,7 +87,7 @@
 </table>
 <table border="1" cellpadding="5">
     <tr>
-        <td style="text-align: center">Rs.</td>
+        <td style="text-align: center">Amount.</td>
         <td><u>{{$userData['rupees']}}</u></td>
     </tr>
     <tr>

@@ -636,7 +636,7 @@ class FeeController extends Controller
     {
         try {
             $user = Auth::user();
-            $dataValue = FeeDevelopment::where('body_id',$user->body_id)->get()->toArray();
+            $dataValue = FeeDevelopment::where('body_id',$user->body_id)->orderBy('id','desc')->get()->toArray();
             $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str .= "<thead><tr>";
             $str .= "<th>Student Name</th>";
@@ -654,7 +654,7 @@ class FeeController extends Controller
                 $str .= "<td>" . $data['parent_name'] . "</td>";
                 $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
                 $str .= "<td>" . $data['id'] . "</td>";
-                $str .= "<td>" . $data['date'] . "</td>";
+                $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
                 $str .= "<td>" . "<a href='/fees/downlod-fee-development/" . $data['id'] . "'>download </a>" . "</td>";
                 $str .= "</tr>";
             }
@@ -688,7 +688,7 @@ class FeeController extends Controller
     public function feeAdmissionListing(Request $request){
         try {
             $user = Auth::user();
-            $dataValue = FeeAdmission::where('body_id',$user->body_id)->get()->toArray();
+            $dataValue = FeeAdmission::where('body_id',$user->body_id)->orderBy('fee_admission_id','desc')->get()->toArray();
             $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str .= "<thead><tr>";
             $str .= "<th>Student Name</th>";
@@ -706,7 +706,7 @@ class FeeController extends Controller
                 $str .= "<td>" . $data['parent_name'] . "</td>";
                 $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
                 $str .= "<td>" . $data['fee_admission_id'] . "</td>";
-                $str .= "<td>" . $data['date'] . "</td>";
+                $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
                 $str .= "<td>" . "<a href='/fees/downlod-fee-admission/" . $data['id'] . "'>download </a>" . "</td>";
                 $str .= "</tr>";
             }
@@ -850,7 +850,7 @@ class FeeController extends Controller
                 $str .= "<td>" . $data['parent_name'] . "</td>";
                 $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
                 $str .= "<td>" . $data['form_fee_id'] . "</td>";
-                $str .= "<td>" . $data['date'] . "</td>";
+                $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
                 $str .= "<td>" . "<a href='/fees/downlod-form-fee/" . $data['id'] . "'>download </a>" . "</td>";
                 $str .= "</tr>";
             }
