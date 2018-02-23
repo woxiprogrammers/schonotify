@@ -11,7 +11,7 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Fee Development</h1>
+                                <h1 class="mainTitle">Development Fee</h1>
                             </div>
                         </div>
                     </section>
@@ -21,71 +21,87 @@
                             <button class="btn btn-primary"> Create New </button>
                         </div>
                     </section>
-                    <form action="/fees/create-fee-development" method="post" role="form" id="fee_development">
+                    <div class="container-fluid container-fullw">
+                    <form method="post"  action="/fees/create-fee-development" role="form" id="fee_developments">
                         <div id="development" hidden>
-                        <div class="container-fluid container-fullw">
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                    Student Name<span class="symbol required"></span>
-                                </label>
-                                <input type="text" class="form-control" name="student_name" id="student-name" placeholder="Enter Student Name">
+                            <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Student Name<span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" class="form-control" name="student_name" id="student-name" placeholder="Enter Student Name" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Class<span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" class="form-control" name="class" id="class" placeholder="Enter Class" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Parent Name<span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" class="form-control" name="parent_name" id="parent-name" placeholder="Enter Parent's Name" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Sum Of Rupees<span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" class="form-control" name="sum_rupee" id="sum-rupee" placeholder="Enter Sum of Rupee" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Cash/Cheque/D.D.No. <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" class="form-control" name="dd_number" id="dd-number" placeholder="Enter Cash/Cheque/D.D.No" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Date<span class="symbol required"></span>
+                                            </label>
+                                            <input type="date" class="form-control" name="date" id="date" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Bank Name<span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" class="form-control" name="bank_name" id="bank-name" placeholder="Enter Bank name" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                On Account Of<span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" class="form-control" name="account_holder_name" id="account-holder-name" placeholder="Account holder name" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label">&nbsp;
+                                        </label>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary btn-wide" type="submit">
+                                                Create <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                    Class<span class="symbol required"></span>
-                                </label>
-                                <input type="text" class="form-control" name="class" id="class" placeholder="Enter Class">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                    Parent Name<span class="symbol required"></span>
-                                </label>
-                                <input type="text" class="form-control" name="parent_name" id="parent-name" placeholder="Enter Parent's Name">
-                            </div>
-                        </div>
-                        <div class="container-fluid container-fullw">
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                   Sum Of Rupees<span class="symbol required"></span>
-                                </label>
-                                <input type="text" class="form-control" name="sum_rupee" id="sum-rupee" placeholder="Enter Sum of Rupee">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                    Cash/Cheque/D.D.No. <span class="symbol required"></span>
-                                </label>
-                                <input type="text" class="form-control" name="dd_number" id="dd-number" placeholder="Enter Cash/Cheque/D.D.No">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                    Date<span class="symbol required"></span>
-                                </label>
-                                <input type="date" class="form-control" name="date" id="date">
-                            </div>
-                        </div>
-                        <div class="container-fluid container-fullw">
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                    Bank Name<span class="symbol required"></span>
-                                </label>
-                                <input type="text" class="form-control" name="bank_name" id="bank-name" placeholder="Enter Bank name">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="control-label">
-                                    On Account Of<span class="symbol required"></span>
-                                </label>
-                                <input type="text" class="form-control" name="account_holder_name" id="account-holder-name" placeholder="Account holder name">
-                            </div>
-                        </div>
-                        <fieldset>
-                            <div class="form-group">
-                                <button class="btn btn-primary btn-wide pull-right" type="submit">
-                                    Create <i class="fa fa-arrow-circle-right"></i>
-                                </button>
-                            </div>
-                        </fieldset>
                         </div>
                     </form>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group" >
                             <fieldset>
@@ -94,7 +110,7 @@
                             </fieldset>
                         </div>
                     </div>
-                </div>
+               </div>
                 @include('rightSidebar')
             </div>
         </div>
@@ -136,11 +152,10 @@
         jQuery(document).ready(function() {
             Main.init();
             FormValidator.init();
-            FormElements.init();
             TableData.init();
             event.stopPropagation();
             callAllFess()
-        })
+        });
         $("#create-form").click(function(){
             $("#development").show()
         })

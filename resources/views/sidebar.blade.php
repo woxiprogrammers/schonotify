@@ -310,14 +310,14 @@
         <li>
             <a href="/fees/fee-development">
                 <div class="item-inner">
-                    <span class="title"> Fee Development </span>
+                    <span class="title"> Development Fee </span>
                 </div>
             </a>
         </li>
         <li>
             <a href="/fees/fee-admission">
                 <div class="item-inner">
-                    <span class="title"> Fee Admission </span>
+                    <span class="title"> Admission Fee </span>
                 </div>
             </a>
         </li>
