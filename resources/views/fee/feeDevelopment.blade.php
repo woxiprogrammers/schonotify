@@ -140,8 +140,6 @@
     <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
     <!-- start: JavaScript Event Handlers for this page -->
-    <script src="/assets/js/fee-validation.js"></script>
-    <script src="/assets/js/form-validation-edit.js"></script>
     <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/form-elements.js"></script>

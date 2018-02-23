@@ -2275,6 +2275,351 @@ var FormValidator = function () {
         });
     };
 
+    var feeDevelopment = function () {
+        var form1 = $('#fee_developments');
+        var errorHandler1 = $('.errorHandler', form1);
+        var successHandler1 = $('.successHandler', form1);
+
+        $.validator.addMethod("FullDate", function () {
+            //if all values are selected
+            if ($("#dd").val() != "" && $("#mm").val() != "" && $("#yyyy").val() != "") {
+                return true;
+            } else {
+                return false;
+            }
+        }, 'Please select a day, month, and year');
+        $('#fee_developments').validate({
+            errorElement: "span", // contain the error msg in a span tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.attr("name") == "dd" || element.attr("name") == "mm" || element.attr("name") == "yyyy") {
+                    error.insertAfter($(element).closest('.form-group').children('div'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                student_name: {
+                    required: true
+                },
+                class:{
+                    required:true
+                },
+                parent_name:{
+                  required:true
+                },
+                sum_rupee : {
+                    required:true
+                },
+                dd_number:{
+                    required : true
+                },
+                date:{
+                    required:true
+                },
+                bank_name:{
+                    required:true
+                },
+                account_holder_name:{
+                    required:true
+                }
+            },
+            messages: {
+                student_name:{
+                    required: "Subject name is required"
+                } ,
+                class :{
+                    required:"class is required"
+                },
+                parent_name:{
+                  required :"parent name is required"
+                },
+                sum_rupee:{
+                    required:"please enter the sum of rupees"
+                },
+                dd_number : {
+                    required:"please enter the cash/cheque/DD.NO"
+                },
+                date:{
+                    required:" please choose the date"
+                },
+                bank_name:{
+                    required:"Bank name is required"
+                },
+                account_holder_name:{
+                    required:"Account Holder name is required"
+                }
+
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler1.hide();
+                errorHandler1.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (fee_developments) {
+                successHandler1.show();
+                errorHandler1.hide();
+                fee_developments.submit();
+                // submit form
+            }
+        });
+    };
+
+    var feeAdmission = function () {
+        var form1 = $('#fee_admission');
+        var errorHandler1 = $('.errorHandler', form1);
+        var successHandler1 = $('.successHandler', form1);
+
+        $.validator.addMethod("FullDate", function () {
+            //if all values are selected
+            if ($("#dd").val() != "" && $("#mm").val() != "" && $("#yyyy").val() != "") {
+                return true;
+            } else {
+                return false;
+            }
+        }, 'Please select a day, month, and year');
+        $('#fee_admission').validate({
+            errorElement: "span", // contain the error msg in a span tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.attr("name") == "dd" || element.attr("name") == "mm" || element.attr("name") == "yyyy") {
+                    error.insertAfter($(element).closest('.form-group').children('div'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                student_name: {
+                    required: true
+                },
+                class:{
+                    required:true
+                },
+                parent_name:{
+                    required:true
+                },
+                sum_rupee : {
+                    required:true
+                },
+                dd_number:{
+                    required : true
+                },
+                date:{
+                    required:true
+                },
+                bank_name:{
+                    required:true
+                },
+                account_holder_name:{
+                    required:true
+                },
+                amount:{
+                    required:true
+                },
+                balance:{
+                    required:true
+                }
+            },
+            messages: {
+                student_name:{
+                    required: "Subject name is required"
+                } ,
+                class :{
+                    required:"class is required"
+                },
+                parent_name:{
+                    required :"parent name is required"
+                },
+                sum_rupee:{
+                    required:"please enter the sum of rupees"
+                },
+                dd_number : {
+                    required:"please enter the cash/cheque/DD.NO"
+                },
+                date:{
+                    required:" please choose the date"
+                },
+                bank_name:{
+                    required:"Bank name is required"
+                },
+                account_holder_name:{
+                    required:"Account Holder name is required"
+                },
+                amount:{
+                    required:"amount is required"
+                },
+                balance:{
+                    required:"Balance amount is required"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler1.hide();
+                errorHandler1.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (fee_admission) {
+                successHandler1.show();
+                errorHandler1.hide();
+                fee_admission.submit();
+                // submit form
+            }
+        });
+    };
+
+    var feeForm = function () {
+        var form1 = $('#form_fee');
+        var errorHandler1 = $('.errorHandler', form1);
+        var successHandler1 = $('.successHandler', form1);
+
+        $.validator.addMethod("FullDate", function () {
+            //if all values are selected
+            if ($("#dd").val() != "" && $("#mm").val() != "" && $("#yyyy").val() != "") {
+                return true;
+            } else {
+                return false;
+            }
+        }, 'Please select a day, month, and year');
+        $('#form_fee').validate({
+            errorElement: "span", // contain the error msg in a span tag
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.attr("type") == "radio" || element.attr("type") == "checkbox") { // for chosen elements, need to insert the error after the chosen container
+                    error.insertAfter($(element).closest('.form-group').children('div').children().last());
+                } else if (element.attr("name") == "dd" || element.attr("name") == "mm" || element.attr("name") == "yyyy") {
+                    error.insertAfter($(element).closest('.form-group').children('div'));
+                } else {
+                    error.insertAfter(element);
+                    // for other inputs, just perform default behavior
+                }
+            },
+            ignore: "",
+            rules: {
+                student_name: {
+                    required: true
+                },
+                class:{
+                    required:true
+                },
+                parent_name:{
+                    required:true
+                },
+                sum_rupee : {
+                    required:true
+                },
+                dd_number:{
+                    required : true
+                },
+                date:{
+                    required:true
+                },
+                bank_name:{
+                    required:true
+                },
+                account_holder_name:{
+                    required:true
+                },
+                amount:{
+                    required:true
+                },
+                balance:{
+                    required:true
+                }
+            },
+            messages: {
+                student_name:{
+                    required: "Subject name is required"
+                } ,
+                class :{
+                    required:"class is required"
+                },
+                parent_name:{
+                    required :"parent name is required"
+                },
+                sum_rupee:{
+                    required:"please enter the sum of rupees"
+                },
+                dd_number : {
+                    required:"please enter the cash/cheque/DD.NO"
+                },
+                date:{
+                    required:" please choose the date"
+                },
+                bank_name:{
+                    required:"Bank name is required"
+                },
+                account_holder_name:{
+                    required:"Account Holder name is required"
+                },
+                amount:{
+                    required:"amount is required"
+                },
+                balance:{
+                    required:"Balance amount is required"
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                successHandler1.hide();
+                errorHandler1.show();
+            },
+            highlight: function (element) {
+                $(element).closest('.help-block').removeClass('valid');
+                // display OK icon
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
+                // add the Bootstrap error class to the control group
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element).closest('.form-group').removeClass('has-error');
+                // set error class to the control group
+            },
+            success: function (label, element) {
+                label.addClass('help-block valid');
+                // mark the current input as valid and display OK icon
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success').find('.symbol').removeClass('required').addClass('ok');
+            },
+            submitHandler: function (form_fee) {
+                successHandler1.show();
+                errorHandler1.hide();
+                form_fee.submit();
+                // submit form
+            }
+        });
+    };
     return {
         init: function () {
         	validateCheckRadio();
@@ -2299,6 +2644,9 @@ var FormValidator = function () {
             runValidatorUpdateAnnouncement();
             FeeSturctureCreate();
             FeeTransaction();
+            feeDevelopment();
+            feeAdmission();
+            feeForm();
         }
     };
 }();
