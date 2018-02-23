@@ -7,12 +7,15 @@
     </tr>
 </table>
 <table style="text-align:center; width:500px">
+    @if($userData['body_id'] == 1)
     <tr>
         <td style="text-align:center;"><b>S.S.P.SHIKSHAN SANSTHA'S</b></td>
     </tr>
+    @else
     <tr>
         <td>Sr.No. 15/1, Ganesh Nagar,Dapodi,Pune 411012.</td>
     </tr>
+    @endif
 </table>
 <br>
 <hr>
@@ -66,14 +69,27 @@
         <td><u>{{$userData['account_holder_name']}}</u></td>
     </tr>
 </table>
-<br><br>
+<br><br><br>
 <table>
     <tr>
-        <td>Subject to realization of cheque</td>
+        <td style="font-size: 110%">Subject to realization of cheque</td>
+    </tr>
+    <br>
+    <tr>
+        <td>*Tax deduction exemption under section</td>
+    </tr>
+    <tr>
+        <td>80 G(S)(vi) of the income Tax act,1961</td>
+    </tr>
+    <tr>
+        <td>Vide the commission of Income tax (v) pune's order no.</td>
+    </tr>
+    <tr>
+        <td>PN/CIT-Tech/80 G/ 02/84/ 12/45/2013-14/2177 dated 11.11.2013</td>
     </tr>
 </table>
 <br><br><br><br>
-<table style="text-align:right; width:500px;">
+<table style="text-align:right; width:105%">
     <tr>
         <td><b>For S.S.P.SHISKSHAN SANSTHA'S</b></td>
     </tr>
