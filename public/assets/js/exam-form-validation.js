@@ -12,7 +12,6 @@ var FormValidator = function () {
         var form1 = $('#examSubjectCreateForm');
         var errorHandler1 = $('.errorHandler', form1);
         var successHandler1 = $('.successHandler', form1);
-
         $.validator.addMethod("FullDate", function () {
             //if all values are selected
             if ($("#dd").val() != "" && $("#mm").val() != "" && $("#yyyy").val() != "") {
