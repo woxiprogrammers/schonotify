@@ -831,7 +831,7 @@ class FeeController extends Controller
     public function formFeeListing(Request $request){
         try {
             $user=Auth::user();
-            $dataValue = FormFee::where('body_id',$user->body_id)->get()->toArray();
+            $dataValue = FormFee::where('body_id',$user->body_id)->orderBy('form_fee_id','desc')->get()->toArray();
 
             $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str .= "<thead><tr>";

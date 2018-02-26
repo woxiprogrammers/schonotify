@@ -166,6 +166,16 @@
                 success: function(response)
                 {
                     $("#feetable").html(response);
+                    var switcheryHandler = function() {
+
+                        var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                        elements.forEach(function(html) {
+                            var switchery = new Switchery(html);
+                        });
+                    };
+                    switcheryHandler();
+                    TableData.init();
                 }
             });
         }
