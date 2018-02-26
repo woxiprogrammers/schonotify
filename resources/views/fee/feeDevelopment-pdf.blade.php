@@ -35,38 +35,38 @@
 <table cellpadding="5" border="1px">
     <tr>
         <td style="text-align: center">Recieved with thanks from Mr./Mrs./Miss</td>
-        <td><u>{{$userData['parent_name']}}</u></td>
+        <td>{{$userData['parent_name']}}</td>
     </tr>
     <tr>
         <td style="text-align: center">Student Name</td>
-        <td><u>{{$userData['student_name']}}</u></td>
+        <td>{{$userData['student_name']}}</td>
     </tr>
     <tr>
         <td style="text-align: center">Class</td>
-        <td><u>{{$userData['class']}}</u></td>
+        <td>{{$userData['class']}}</td>
     </tr>
     <tr>
          <td style="text-align: center">Sum Of Rupees</td>
-         <td><u>{{$userData['sum_of_rupee']}}</u></td>
+         <td>{{$userData['sum_of_rupee']}}</td>
      </tr>
     <tr>
         <td style="text-align: center">Cash/Cheque/D.D.No.</td>
-        <td><u>{{$userData['transaction_number']}}</u></td>
+        <td>{{$userData['transaction_number']}}</td>
     </tr>
     <tr>
         <td style="text-align: center">Date</td>
-        <td><u>{{date('d/m/Y',strtotime($userData['date']))}}</u></td>
+        <td>{{date('d/m/Y',strtotime($userData['date']))}}</td>
     </tr>
 </table>
 <table border="1" cellpadding="5">
     <tr>
         <td style="text-align: center">Bank</td>
-        <td><u>{{$userData['bank_name']}}</u></td>
+        <td>{{$userData['bank_name']}}</td>
 
     </tr>
     <tr>
         <td style="text-align: center">On Account of</td>
-        <td><u>{{$userData['account_holder_name']}}</u></td>
+        <td>{{$userData['account_holder_name']}}</td>
     </tr>
 </table>
 <br><br><br>

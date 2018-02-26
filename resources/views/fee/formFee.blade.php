@@ -136,6 +136,7 @@
                 @include('rightSidebar')
             </div>
         </div>
+    </div>
         @include('footer')
     </div>
     <script src="/vendor/jquery/jquery.min.js"></script>
@@ -178,6 +179,8 @@
             event.stopPropagation();
             callAllFess()
         })
+        </script>
+        <script>
         $("#create-form").click(function(){
             $("#development").show()
         })
@@ -190,6 +193,17 @@
                 success: function(response)
                 {
                     $("#feetable").html(response);
+                    $('#loadmoreajaxloader').hide();
+                    var switcheryHandler = function() {
+
+                        var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                        elements.forEach(function(html) {
+                            var switchery = new Switchery(html);
+                        });
+                    };
+                    switcheryHandler();
+                    TableData.init();
                 }
             });
         }
