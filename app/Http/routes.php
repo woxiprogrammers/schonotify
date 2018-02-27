@@ -83,6 +83,19 @@
         Route::post('transactionFeeListingTable',array('uses' => 'FeeController@showFeeTransactionListing'));
         Route::get('download-pdf/{id}/{fee_id}',array('uses' => 'FeeController@createPDF'));
         Route::post('get-structure-installments/{fee_id}',array('uses' => 'FeeController@getFeeStructureInstallments'));
+        Route::get('fee-development',array('uses' => 'FeeController@feeDevelopmentView'));
+        Route::get('fee-admission',array('uses' => 'FeeController@feeAdmissionView'));
+        Route::post('create-fee-development',array('uses' => 'FeeController@createFeeDevelopment'));
+        Route::get('feeDevelopmentTable',array('uses' => 'FeeController@feeDevelopmentListing'));
+        Route::get('downlod-fee-development/{id}',array('uses' => 'FeeController@feeDevelopmentPDF'));
+        Route::get('feeAdmissionTable',array('uses' => 'FeeController@feeAdmissionListing'));
+        Route::post('create-fee-admission',array('uses' => 'FeeController@createFeeAdmission'));
+        Route::get('downlod-fee-admission/{id}',array('uses' => 'FeeController@feeAdmissionPDF'));
+        Route::get('form-fee',array('uses' => 'FeeController@feeForm'));
+        Route::post('create-form-fee',array('uses' => 'FeeController@createFormFee'));
+        Route::get('formFeeTable',array('uses' => 'FeeController@formFeeListing'));
+        Route::get('downlod-form-fee/{id}',array('uses' => 'FeeController@formFeePDF'));
+
     });
 
     Route::group(['prefix' => 'payment'],function(){
