@@ -1125,7 +1125,7 @@ class UsersController extends Controller
             $divisionupdate = User::where('id',$id)->update($div);
         }
         $query2 = StudentFee::where('student_id',$id)->select('fee_id')->get();
-        if(array_key_exists('student_fee',$dataStudent)){
+        if(array_key_exists('student_fee', $dataStudent)){
             foreach ($dataStudent['student_fee'] as $key => $value){
                 $query = Fees::where('id',$key)->pluck('year');
                 if($request->student_fee != null){
