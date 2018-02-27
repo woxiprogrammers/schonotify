@@ -8,12 +8,15 @@ use App\ConcessionTypes;
 use App\Division;
 use App\fee_installments;
 use App\fee_particulars;
+use App\FeeAdmission;
 use App\FeeClass;
 use App\FeeConcessionAmount;
 use App\FeeConcessionTypes;
+use App\FeeDevelopment;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\FormFee;
 use App\StudentFee;
 use App\StudentFeeConcessions;
 use App\TransactionDetails;
@@ -571,6 +574,311 @@ class FeeController extends Controller
             ];
             Log::critical(json_encode($data));
             return response()->json([], 500);
+        }
+    }
+    public function feeDevelopmentView(Request $request){
+        try{
+            return view('fee/feeDevelopment');
+        }catch(\Exception $e){
+            $data=[
+                'action' => "Fee Development View",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
+    }
+    public function feeAdmissionView(Request $request){
+        try{
+            return view('fee/feeAdmission');
+        }catch(\Exception $e){
+            $data=[
+                'action' => "Fee Admission View",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
+    }
+    public function createFeeDevelopment(Request $request){
+        try{
+            $user = Auth::user();
+            $data['body_id'] = $user->body_id;
+            $data['student_name'] = $request->student_name;
+            $data['class'] = $request->class;
+            $data['parent_name'] = $request->parent_name;
+            $data['sum_of_rupee'] = $request->sum_rupee;
+            $data['transaction_number'] = $request->dd_number;
+            $data['date'] = $request->date;
+            $data['bank_name'] = $request->bank_name;
+            $data['account_holder_name'] = $request->account_holder_name;
+            $query = FeeDevelopment::create($data);
+            if($query){
+                Session::flash('message-success','created successfully .');
+                return Redirect::back();
+            }else{
+                Session::flash('message-error','Something went wrong !');
+                return Redirect::back();
+            }
+        }catch (\Exception $e) {
+            $data = [
+                'action' => "Created",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
+    }
+    public function feeDevelopmentListing(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $dataValue = FeeDevelopment::where('body_id',$user->body_id)->orderBy('id','desc')->get()->toArray();
+            $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+            $str .= "<thead><tr>";
+            $str .= "<th>Student Name</th>";
+            $str .= "<th>Class</th>";
+            $str .= "<th>Parent Name</th>";
+            $str .= "<th>Amount</th>";
+            $str .= "<th>Receipt Number</th>";
+            $str .= "<th>Date</th>";
+            $str .= "<th>Action</th>";
+            $str .= "</tr></thead><tbody>";
+            $str .= "<tr>";
+            foreach ($dataValue as $data) {
+                $str .= "<td>" . $data['student_name'] . "</td>";
+                $str .= "<td>" . $data['class'] . "</td>";
+                $str .= "<td>" . $data['parent_name'] . "</td>";
+                $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
+                $str .= "<td>" . $data['id'] . "</td>";
+                $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
+                $str .= "<td>" . "<a href='/fees/downlod-fee-development/" . $data['id'] . "'>download </a>" . "</td>";
+                $str .= "</tr>";
+            }
+            $str .= "</tbody></table>";
+            return $str;
+
+        } catch (\Exception $e) {
+            $data = [
+                'action' => "listed successfuly",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function feeDevelopmentPDF(Request $request,$id){
+        try{
+            $userData=FeeDevelopment::where('id',$id)->first()->toArray();
+            TCPdf::AddPage();
+            TCPdf::writeHTML(view('/fee/feeDevelopment-pdf')->with(compact('userData'))->render());
+            TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
+        }catch(\Exception $e){
+            $data = [
+                'action' => "PDF generated",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function feeAdmissionListing(Request $request){
+        try {
+            $user = Auth::user();
+            $dataValue = FeeAdmission::where('body_id',$user->body_id)->orderBy('fee_admission_id','desc')->get()->toArray();
+            $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+            $str .= "<thead><tr>";
+            $str .= "<th>Student Name</th>";
+            $str .= "<th>Class</th>";
+            $str .= "<th>Parent Name</th>";
+            $str .= "<th>Amount</th>";
+            $str .= "<th>Receipt Number</th>";
+            $str .= "<th>Date</th>";
+            $str .= "<th>Action</th>";
+            $str .= "</tr></thead><tbody>";
+            $str .= "<tr>";
+            foreach ($dataValue as $data) {
+                $str .= "<td>" . $data['student_name'] . "</td>";
+                $str .= "<td>" . $data['class'] . "</td>";
+                $str .= "<td>" . $data['parent_name'] . "</td>";
+                $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
+                $str .= "<td>" . $data['fee_admission_id'] . "</td>";
+                $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
+                $str .= "<td>" . "<a href='/fees/downlod-fee-admission/" . $data['id'] . "'>download </a>" . "</td>";
+                $str .= "</tr>";
+            }
+            $str .= "</tbody></table>";
+            return $str;
+
+        } catch (\Exception $e) {
+            $data = [
+                'action' => "listed successfuly",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function createFeeAdmission(Request $request){
+        try{
+            $user = Auth::user();
+            $data['body_id'] = $user->body_id;
+            $data['student_name'] = $request->student_name;
+            $data['class'] = $request->class;
+            $data['parent_name'] = $request->parent_name;
+            $data['sum_of_rupee'] = $request->sum_rupee;
+            $data['transaction_number'] = $request->dd_number;
+            $data['date'] = $request->date;
+            $data['bank_name'] = $request->bank_name;
+            $data['branch'] = $request->branch_name;
+            $data['account_holder_name'] = $request->account_holder_name;
+            $data['rupees'] = $request->amount;
+            $data['balance'] = $request->balance;
+            $dataInfo = FeeAdmission::where('body_id',$user->body_id)->orderBy('fee_admission_id','desc')->first();
+            if($dataInfo['body_id'] == $user->body_id  && $dataInfo['fee_admission_id'] == null && $dataInfo == ""){
+                $data['fee_admission_id'] = 1;
+            }else{
+                $data['fee_admission_id'] = $dataInfo['fee_admission_id'] + 1;
+            }
+            $query = FeeAdmission::create($data);
+            if($query){
+                Session::flash('message-success','created successfully .');
+                return Redirect::back();
+            }else{
+                Session::flash('message-error','Something went wrong !');
+                return Redirect::back();
+            }
+        }catch (\Exception $e){
+            $data = [
+                'action' => "Created",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
+    }
+    public function feeAdmissionPDF(Request $request,$id){
+        try{
+            $userData=FeeAdmission::where('id',$id)->first()->toArray();
+            TCPdf::AddPage();
+            TCPdf::writeHTML(view('/fee/feeAdmission-pdf')->with(compact('userData'))->render());
+            TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
+        }catch(\Exception $e){
+            $data = [
+                'action' => "PDF generated",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function feeForm(Request $request){
+        try{
+            return view('fee/formFee');
+        }catch(\Exception $e){
+            $data=[
+                'action' => "Form Fee View",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
+    }
+    public function createFormFee(Request $request){
+        try{
+            $user = Auth::user();
+            $data['body_id'] = $user->body_id;
+            $data['student_name'] = $request->student_name;
+            $data['class'] = $request->class;
+            $data['parent_name'] = $request->parent_name;
+            $data['sum_of_rupee'] = $request->sum_rupee;
+            $data['transaction_number'] = $request->dd_number;
+            $data['date'] = $request->date;
+            $data['bank_name'] = $request->bank_name;
+            $data['branch'] = $request->branch_name;
+            $data['account_holder_name'] = $request->account_holder_name;
+            $data['rupees'] = $request->amount;
+            $data['balance'] = $request->balance;
+            $dataInfo = FormFee::where('body_id',$user->body_id)->orderBy('form_fee_id','desc')->first();
+            if($dataInfo['body_id'] == $user->body_id  && $dataInfo['form_fee_id'] == null && $dataInfo == ""){
+                $data['form_fee_id'] = 1;
+            }else{
+                $data['form_fee_id'] = $dataInfo['form_fee_id'] + 1;
+            }
+            $query = FormFee::create($data);
+            if($query){
+                Session::flash('message-success','created successfully .');
+                return Redirect::back();
+            }else{
+                Session::flash('message-error','Something went wrong !');
+                return Redirect::back();
+            }
+        }catch (\Exception $e){
+            $data = [
+                'action' => "Created",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
+    }
+    public function formFeeListing(Request $request){
+        try {
+            $user=Auth::user();
+            $dataValue = FormFee::where('body_id',$user->body_id)->orderBy('form_fee_id','desc')->get()->toArray();
+
+            $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+            $str .= "<thead><tr>";
+            $str .= "<th>Student Name</th>";
+            $str .= "<th>Class</th>";
+            $str .= "<th>Parent Name</th>";
+            $str .= "<th>Amount</th>";
+            $str .= "<th>Receipt Number</th>";
+            $str .= "<th>Date</th>";
+            $str .= "<th>Action</th>";
+            $str .= "</tr></thead><tbody>";
+            $str .= "<tr>";
+            foreach ($dataValue as $data) {
+                $str .= "<td>" . $data['student_name'] . "</td>";
+                $str .= "<td>" . $data['class'] . "</td>";
+                $str .= "<td>" . $data['parent_name'] . "</td>";
+                $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
+                $str .= "<td>" . $data['form_fee_id'] . "</td>";
+                $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
+                $str .= "<td>" . "<a href='/fees/downlod-form-fee/" . $data['id'] . "'>download </a>" . "</td>";
+                $str .= "</tr>";
+            }
+            $str .= "</tbody></table>";
+            return $str;
+
+        } catch (\Exception $e) {
+            $data = [
+                'action' => "listed successfuly",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function formFeePDF(Request $request,$id){
+        try{
+            $userData = FormFee::where('id',$id)->first()->toArray();
+            TCPdf::AddPage();
+            TCPdf::writeHTML(view('/fee/formFee-pdf')->with(compact('userData'))->render());
+            TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
+        }catch(\Exception $e){
+            $data = [
+                'action' => "PDF generated",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
         }
     }
 }
