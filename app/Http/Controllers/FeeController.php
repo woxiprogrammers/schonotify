@@ -647,15 +647,15 @@ class FeeController extends Controller
             $str .= "<th>Date</th>";
             $str .= "<th>Action</th>";
             $str .= "</tr></thead><tbody>";
-            $str .= "<tr>";
             foreach ($dataValue as $data) {
+                $str .= "<tr>";
                 $str .= "<td>" . $data['student_name'] . "</td>";
                 $str .= "<td>" . $data['class'] . "</td>";
                 $str .= "<td>" . $data['parent_name'] . "</td>";
                 $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
                 $str .= "<td>" . $data['id'] . "</td>";
                 $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
-                $str .= "<td>" . "<a href='/fees/downlod-fee-development/" . $data['id'] . "'>download </a>" . "</td>";
+                $str .= "<td>" . "<a href='/fees/downlod-fee-development/" . $data['id'] . "'>Download </a>" . "</td>";
                 $str .= "</tr>";
             }
             $str .= "</tbody></table>";
@@ -707,7 +707,7 @@ class FeeController extends Controller
                 $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
                 $str .= "<td>" . $data['fee_admission_id'] . "</td>";
                 $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
-                $str .= "<td>" . "<a href='/fees/downlod-fee-admission/" . $data['id'] . "'>download </a>" . "</td>";
+                $str .= "<td>" . "<a href='/fees/downlod-fee-admission/" . $data['id'] . "'>Download </a>" . "</td>";
                 $str .= "</tr>";
             }
             $str .= "</tbody></table>";
@@ -851,7 +851,7 @@ class FeeController extends Controller
                 $str .= "<td>" . $data['sum_of_rupee'] . "</td>";
                 $str .= "<td>" . $data['form_fee_id'] . "</td>";
                 $str .= "<td>" . date('d/m/Y',strtotime($data['date'])) . "</td>";
-                $str .= "<td>" . "<a href='/fees/downlod-form-fee/" . $data['id'] . "'>download </a>" . "</td>";
+                $str .= "<td>" . "<a href='/fees/downlod-form-fee/" . $data['id'] . "'>Download </a>" . "</td>";
                 $str .= "</tr>";
             }
             $str .= "</tbody></table>";
