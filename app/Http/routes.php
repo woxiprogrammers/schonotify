@@ -590,5 +590,14 @@ Route::group(['prefix' => 'exam'], function () {
     Route::post('grade-create',array('uses' => 'ExamController@gradesEntry'));
     Route::get('gradeView',array('uses' => 'ExamController@viewGrades'));
     Route::get('get-grades/{id}',array('uses' => 'ExamController@gradeListing'));
-
+});
+Route::group(['prefix' => 'gallery'], function () {
+    Route::get('folder-management',array('uses' => 'GalleryController@folderView'));
+    Route::get('gallery-management',array('uses' => 'GalleryController@galleryView'));
+    Route::post('create-folder',array('uses' => 'GalleryController@createFolder'));
+    Route::get('folder-Name-Listing',array('uses'=>'GalleryController@folderListing'));
+    Route::get('deactive/{id}',array('uses'=>'GalleryController@deactivateFolder'));
+    Route::get('active/{id}',array('uses'=>'GalleryController@activateFolder'));
+    Route::get('edit-folder/{id}',array('uses' => 'GalleryController@editFolderView'));
+    Route::post('edit-folder-name/{id}',array('uses' => 'GalleryController@editFolder'));
 });

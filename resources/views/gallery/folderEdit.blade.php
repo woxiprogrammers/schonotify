@@ -14,20 +14,20 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Create</h1>
-                                <span class="mainDescription">Subject</span>
+                                <h1 class="mainTitle">Edit</h1>
+                                <span class="mainDescription">Folder</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam/create-subject" role="form" id="examSubjectCreateForm">
+                        <form method="post" action="/gallery/edit-folder-name/{{$id}}" role="form" id="galleryFolderEditForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Subject <span class="symbol required"></span>
+                                            Folder <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" placeholder="Enter Subject Name" name="subject_name">
+                                        <input type="text" class="form-control" name="folder_name_edit" required="required">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -35,7 +35,7 @@
                                     </label>
                                     <div class="form-group">
                                         <button class="btn btn-primary btn-wide" type="submit">
-                                            Create <i class="fa fa-arrow-circle-right"></i>
+                                            Update <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -65,13 +65,13 @@
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
+    <script src="/assets/js/form-validation-edit.js"></script>
+    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/exam-form-validation.js"></script>
-    <script src="/assets/js/custom-project.js"></script>
+    <script src="/assets/js/form-validation.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            FormValidator.init();
         });
     </script>
 @stop

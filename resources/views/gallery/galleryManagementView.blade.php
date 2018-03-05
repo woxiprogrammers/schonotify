@@ -15,23 +15,23 @@
                         <div class="row">
                             <div class="col-sm-7">
                                 <h1 class="mainTitle">Create</h1>
-                                <span class="mainDescription">Subject</span>
+                                <span class="mainDescription">Folder</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam/create-subject" role="form" id="examSubjectCreateForm">
+                        <form method="post" action="/gallery/create-gallery" role="form" id="galleryCreateForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Subject <span class="symbol required"></span>
+                                            Folder <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" placeholder="Enter Subject Name" name="subject_name">
+                                        <input type="text" class="form-control" name="folder_name">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="control-label">&nbsp;
+                                    <label class="control-label">&nbsp
                                     </label>
                                     <div class="form-group">
                                         <button class="btn btn-primary btn-wide" type="submit">
