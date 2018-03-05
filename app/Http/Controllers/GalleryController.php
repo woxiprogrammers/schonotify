@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Folder;
+use App\GalleryManagement;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -32,7 +34,8 @@ class GalleryController extends Controller
     }
     public function galleryView(Request $request){
         try{
-            return view('gallery.galleryManagementView');
+            $folderName = Folder::where('is_active','=','1')->get()->toArray();
+            return view('gallery.galleryManagementView')->with(compact('folderName'));
         }catch(\Exception $e){
             $data = [
                 'action' => 'Gallery management view',
@@ -155,6 +158,59 @@ class GalleryController extends Controller
             $data=[
                 'action'=>'Folder name edited successfully',
                 'message'=>$e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function uploadImages(Request $request){
+        try{
+            $imageData['folder_id'] = $request['folder_id'];
+            $imageData['name'] = $request['image'];
+            $folderEncName = sha1($request['folder_id']);
+            $folderPath = public_path()."/uploads/gallery/".$folderEncName;
+            if (! file_exists($folderPath)) {
+                File::makeDirectory($folderPath , 0777 ,true,true);
+            }
+            $folderPath .= DIRECTORY_SEPARATOR.$request['image'];
+            File::put($folderPath,$request['image']);
+            $fileNewname = pathinfo($request['image'], PATHINFO_FILENAME);
+            $extension = pathinfo($request['image'], PATHINFO_EXTENSION);
+            if($extension = 'png' || $extension = 'jpeg' || $extension ='jpg'){
+                $imageData['type'] = "Image";
+            }elseif($extension = 'mp4' || $extension = 'mov' || $extension = 'avi' || $extension='fly' || $extension='wmv'){
+                $imageData['type'] = "Video";
+            }
+            $create=GalleryManagement::create($imageData);
+            if($create){
+                Session::flash('message-success','image uploaded successfully');
+                return Redirect::back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+                return Redirect::back();
+            }
+        }catch(\Exception $e){
+            $data = [
+                'input_params' => $request->all(),
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function checkName(Request $request){
+        try{
+            $checkFolderName = Folder::where('name',$request->folder_name)->count();
+            Log::info('$checkFolderName');
+            Log::info($checkFolderName);
+            if($checkFolderName > 0){
+                return 'false';
+            }else{
+                return 'true';
+            }
+        }catch (\Exception $e){
+            $data = [
+                'input_params' => $request->all(),
+                'action' => 'Check Folder Name ',
+                'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));
         }

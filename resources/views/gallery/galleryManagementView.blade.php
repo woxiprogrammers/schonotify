@@ -20,26 +20,42 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/gallery/create-gallery" role="form" id="galleryCreateForm">
+                        <form method="post" action="/gallery/create-gallery-images" role="form" id="galleryCreateImageForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Folder <span class="symbol required"></span>
+                                           Select Folder <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" name="folder_name">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="control-label">&nbsp
-                                    </label>
-                                    <div class="form-group">
-                                        <button class="btn btn-primary btn-wide" type="submit">
-                                            Create <i class="fa fa-arrow-circle-right"></i>
-                                        </button>
+                                        <select name="folder_id" class="form-control" id="folderDropdown" style="-webkit-appearance: menulist;">
+                                            <option>Select Batch</option>
+                                            @foreach($folderName as $name)
+                                                <option value="{!! $name['id'] !!}">{!! $name['name'] !!}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+                            <div id="image-select" hidden>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label">
+                                            Select Images <span class="symbol required"></span>
+                                        </label>
+                                        <input type="file" class="form-control" id="imagesSelect" name="image" required="required">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label">&nbsp
+                                        </label>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary btn-wide" type="submit">
+                                                Create <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                     @include('rightSidebar')
@@ -67,12 +83,18 @@
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/exam-form-validation.js"></script>
+    <script src="/assets/js/gallery-form-validations.js"></script>
     <script src="/assets/js/custom-project.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
             FormValidator.init();
         });
+    </script>
+    <script>
+        $('#folderDropdown').change(function(){
+            $('#image-select').show();
+        })
     </script>
 @stop
 

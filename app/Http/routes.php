@@ -600,4 +600,6 @@ Route::group(['prefix' => 'gallery'], function () {
     Route::get('active/{id}',array('uses'=>'GalleryController@activateFolder'));
     Route::get('edit-folder/{id}',array('uses' => 'GalleryController@editFolderView'));
     Route::post('edit-folder-name/{id}',array('uses' => 'GalleryController@editFolder'));
+    Route::post('create-gallery-images',array('uses' => 'GalleryController@uploadImages'));
+    Route::post('check-name',array('uses' => 'GalleryController@checkName'));
 });

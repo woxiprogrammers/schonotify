@@ -27,7 +27,7 @@
                                         <label class="control-label">
                                             Folder <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" name="folder_name" required="required">
+                                        <input type="text" class="form-control" name="folder_name" id="name" required="required">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -89,9 +89,11 @@
     <script src="/assets/js/custom-project.js"></script>
     <script src="/assets/js/table-data.js"></script>
     <script src="/assets/js/form-validation.js"></script>
+    <script src="/assets/js/gallery-form-validations.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            FormValidator.init();
             TableData.init();
             FormElements.init();
             folderDetails();
