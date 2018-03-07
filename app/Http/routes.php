@@ -561,6 +561,8 @@
         Route::get('get-subject-details/{id}','api\ExamController@getSubjectDetails');
         Route::get('get-term-data/{id}/{user_id}','api\ExamController@getTermData');
         Route::get('check-fees/{id}','api\ExamController@checkFees');
+        //Gallery
+        Route::get('folder-first-image','api\GalleryController@folderDetails');
     });
         //Exam
 Route::group(['prefix' => 'exam'], function () {
@@ -602,4 +604,5 @@ Route::group(['prefix' => 'gallery'], function () {
     Route::post('edit-folder-name/{id}',array('uses' => 'GalleryController@editFolder'));
     Route::post('create-gallery-images',array('uses' => 'GalleryController@uploadImages'));
     Route::post('check-name',array('uses' => 'GalleryController@checkName'));
+    Route::post('check-image-count',array('uses' => 'GalleryController@imageValidation'));
 });

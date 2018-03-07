@@ -42,7 +42,7 @@ var FormValidator = function () {
             },
             messages: {
                 image:{
-                    required:"please select a file"
+                    required : "please select a file"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit

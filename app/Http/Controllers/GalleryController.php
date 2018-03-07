@@ -165,16 +165,24 @@ class GalleryController extends Controller
     public function uploadImages(Request $request){
         try{
             $imageData['folder_id'] = $request['folder_id'];
-            $imageData['name'] = $request['image'];
             $folderEncName = sha1($request['folder_id']);
             $folderPath = public_path()."/uploads/gallery/".$folderEncName;
             if (! file_exists($folderPath)) {
                 File::makeDirectory($folderPath , 0777 ,true,true);
             }
-            $folderPath .= DIRECTORY_SEPARATOR.$request['image'];
-            File::put($folderPath,$request['image']);
-            $fileNewname = pathinfo($request['image'], PATHINFO_FILENAME);
-            $extension = pathinfo($request['image'], PATHINFO_EXTENSION);
+            if($request->has('gallery_images')){
+               foreach($request->gallery_images as $billImage){
+                    $imageArray = explode(';',$billImage);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($billImage, ';');
+                    $type = explode(':', substr($billImage, 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = $folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $imageData['name'] = $filename;
+               }
+            }
             if($extension = 'png' || $extension = 'jpeg' || $extension ='jpg'){
                 $imageData['type'] = "Image";
             }elseif($extension = 'mp4' || $extension = 'mov' || $extension = 'avi' || $extension='fly' || $extension='wmv'){
@@ -199,8 +207,6 @@ class GalleryController extends Controller
     public function checkName(Request $request){
         try{
             $checkFolderName = Folder::where('name',$request->folder_name)->count();
-            Log::info('$checkFolderName');
-            Log::info($checkFolderName);
             if($checkFolderName > 0){
                 return 'false';
             }else{
@@ -210,6 +216,18 @@ class GalleryController extends Controller
             $data = [
                 'input_params' => $request->all(),
                 'action' => 'Check Folder Name ',
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function imageValidation(Request $request){
+        try{
+            $count = GalleryManagement::where('folder_id',$request['folder_id'])->count();
+            return $count;
+        }catch(\Exception $e){
+            $data=[
+                'params' => $request->all(),
                 'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));
