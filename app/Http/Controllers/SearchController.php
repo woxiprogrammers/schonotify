@@ -44,6 +44,7 @@ class SearchController extends Controller
                         ->where('users.role_id','!=',1)
                         ->where('users.role_id','=',$role_id)
                         ->where('users.id','!=',$user->id)
+                        ->where('users.is_displayed','=','1')
                         ->get();
                 }else{
                     $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -54,6 +55,7 @@ class SearchController extends Controller
                         ->where('users.role_id','!=',1)
                         ->where('users.role_id','=',$role_id)
                         ->where('users.id','!=',$user->id)
+                        ->where('users.is_displayed','=','1')
                         ->get();
                 }
             }else{
@@ -61,6 +63,7 @@ class SearchController extends Controller
                     ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
                     ->where('users.body_id','=',$user->body_id)
                     ->where('users.role_id','=',$role_id)
+                    ->where('users.is_displayed','=','1')
                     ->where('users.id','!=',$user->id)
                     ->get();
             }
@@ -75,6 +78,7 @@ class SearchController extends Controller
                         ->where('users.role_id','!=',1)
                         ->where('users.role_id','=',$role_id)
                         ->where('users.id','!=',$user->id)
+                        ->where('users.is_displayed','=','1')
                         ->get();
                 }else{
                     $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -85,6 +89,7 @@ class SearchController extends Controller
                         ->where('users.role_id','!=',1)
                         ->where('users.role_id','=',$role_id)
                         ->where('users.id','!=',$user->id)
+                        ->where('users.is_displayed','=','1')
                         ->get();
                 }
             }else{
@@ -94,6 +99,7 @@ class SearchController extends Controller
                     ->where('users.role_id','!=',1)
                     ->where('users.role_id','=',$role_id)
                     ->where('users.id','!=',$user->id)
+                    ->where('users.is_displayed','=','1')
                     ->get();
             }
         }
@@ -192,6 +198,7 @@ class SearchController extends Controller
                       ->where('users.role_id','!=',1)
                       ->where('users.role_id','=',$role_id)
                       ->where('users.id','!=',$user->id)
+                      ->where('users.is_displayed','=','1')
                       ->get()->toArray();
           }else{
           $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -199,6 +206,7 @@ class SearchController extends Controller
               ->where('users.body_id','=',$user->body_id)
               ->where('users.role_id','=',$role_id)
               ->where('users.id','!=',$user->id)
+              ->where('users.is_displayed','=','1')
               ->get();
               }
           }else{
@@ -210,6 +218,7 @@ class SearchController extends Controller
                       ->where('users.role_id','!=',1)
                       ->where('users.role_id','=',$role_id)
                       ->where('users.id','!=',$user->id)
+                      ->where('users.is_displayed','=','1')
                       ->get();
               }else{
                   $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -218,6 +227,7 @@ class SearchController extends Controller
                       ->where('users.role_id','!=',1)
                       ->where('users.role_id','=',$role_id)
                       ->where('users.id','!=',$user->id)
+                      ->where('users.is_displayed','=','1')
                       ->get();
               }
           }
