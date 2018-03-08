@@ -563,6 +563,7 @@
         Route::get('check-fees/{id}','api\ExamController@checkFees');
         //Gallery
         Route::get('folder-first-image','api\GalleryController@folderDetails');
+        Route::get('gallery-image','api\GalleryController@galleryImages');
     });
         //Exam
 Route::group(['prefix' => 'exam'], function () {

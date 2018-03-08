@@ -67,6 +67,13 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">&nbsp
+                                        <div class="form-group">
+                                            <button class="btn btn-primary btn-wide" id="view" type="button" onclick="viewImages()">
+                                                View <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         <input type="hidden" id="alreadyPresentCount">
@@ -136,18 +143,14 @@
                 }
             });
             $("#videoupload").on('change', function () {
-                var alreadyPresentVideoCount =  $('#alreadyPresentVideoCount').val();
-                var countFiles = $(this)[0].files.length;
-                alert(countFiles);
-                var allowedFiles = 10 - (alreadyPresentVideoCount);
+                var alreadyPresentCount =  $('#alreadyPresentVideoCount').val();
+                var allowedFiles = 1 - (alreadyPresentCount);
                 var imgPath = $(this)[0].value;
-                alert(imgPath);
                 var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-                alert(extn);
                 if (extn == "mp4" || extn == "mov" || extn == "avi" || extn == "flv") {
                     if (typeof (FileReader) != "undefined") {
-                        if(countFiles > allowedFiles){
-                            alert(allowedFiles + ' is only allowed not more than that ');
+                        if(allowedFiles == 0){
+                            alert(' You cannot add more videos ');
                             $('#submit').hide();
                         }
                     }else{
@@ -167,12 +170,36 @@
                     url: "check-image-count",
                     method : "post",
                     data:{folder_id : folder_id},
-                success: function(data){
-                $('#alreadyPresentCount').val(data);
+                success: function(data,textStatus,xhr){
+                $('#alreadyPresentCount').val(data.image);
+                $('#alreadyPresentVideoCount').val(data.video);
+                if(data.image == 0 && data.video == 0){
+                    $('#view').hide();
+                }
                 $('#image-select').show();
             }});
         })
+        function viewImages(){
+            var strrr=0;
+            $.ajax({
+                url: "/gallery/folder-Name-Listing",
+                data:{str1 : strrr},
+                success: function(response)
+                {
+                    $("#foldertable").html(response);
+                    var switcheryHandler = function() {
 
+                        var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                        elements.forEach(function(html) {
+                            var switchery = new Switchery(html);
+                        });
+                    };
+                    switcheryHandler();
+                    TableData.init();
+                }
+            });
+        }
     </script>
 @stop
 
