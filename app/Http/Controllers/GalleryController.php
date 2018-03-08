@@ -164,6 +164,7 @@ class GalleryController extends Controller
     }
     public function uploadImages(Request $request){
         try{
+            dd($request->all());
             $imageData['folder_id'] = $request['folder_id'];
             $folderEncName = sha1($request['folder_id']);
             $folderPath = public_path()."/uploads/gallery/".$folderEncName;
@@ -182,6 +183,9 @@ class GalleryController extends Controller
                     file_put_contents($fileFullPath,base64_decode($image));
                     $imageData['name'] = $filename;
                }
+            }
+            if($request->has('video')){
+                
             }
             if($extension = 'png' || $extension = 'jpeg' || $extension ='jpg'){
                 $imageData['type'] = "Image";
@@ -224,6 +228,7 @@ class GalleryController extends Controller
     public function imageValidation(Request $request){
         try{
             $count = GalleryManagement::where('folder_id',$request['folder_id'])->count();
+            
             return $count;
         }catch(\Exception $e){
             $data=[

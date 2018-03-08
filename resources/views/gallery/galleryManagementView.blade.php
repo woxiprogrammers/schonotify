@@ -27,7 +27,6 @@
                                         <label class="control-label">
                                            Select Folder <span class="symbol required"></span>
                                         </label>
-                                        <input type="hidden" id="hiddenUserId" value="{{ Auth::User()->role_id}}"/>
                                         <select name="folder_id" class="form-control" id="folderDropdown" style="-webkit-appearance: menulist;">
                                             <option>Select Batch</option>
                                             @foreach($folderName as $name)
@@ -50,6 +49,16 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Select Video :
+                                            </label>
+                                            <input id="videoupload" name="video" type="file">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
                                         <label class="control-label">&nbsp
                                         </label>
                                         <div class="form-group">
@@ -61,6 +70,7 @@
                                 </div>
                             </div>
                         <input type="hidden" id="alreadyPresentCount">
+                        <input type="hidden" id="alreadyPresentVideoCount">
                         </form>
                     </div>
                     @include('rightSidebar')
@@ -119,6 +129,28 @@
                         $('#submit').hide();
                         }
                     } else{
+                        alert("It doesn't supports");
+                    }
+                } else {
+                    alert("Select Only images");
+                }
+            });
+            $("#videoupload").on('change', function () {
+                var alreadyPresentVideoCount =  $('#alreadyPresentVideoCount').val();
+                var countFiles = $(this)[0].files.length;
+                alert(countFiles);
+                var allowedFiles = 10 - (alreadyPresentVideoCount);
+                var imgPath = $(this)[0].value;
+                alert(imgPath);
+                var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+                alert(extn);
+                if (extn == "mp4" || extn == "mov" || extn == "avi" || extn == "flv") {
+                    if (typeof (FileReader) != "undefined") {
+                        if(countFiles > allowedFiles){
+                            alert(allowedFiles + ' is only allowed not more than that ');
+                            $('#submit').hide();
+                        }
+                    }else{
                         alert("It doesn't supports");
                     }
                 } else {
