@@ -395,6 +395,36 @@
             @endif
         </ul>
     </li>
+    {{--@if(Auth::User()->role_id == 1)
+    <li>
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-image"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title">Gallery </span><i class="icon-arrow"></i>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            <li>
+                <a href="/gallery/folder-management">
+                    <div class="item-inner">
+                        <span class="title"> Folder Management </span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/gallery/gallery-management">
+                    <div class="item-inner">
+                        <span class="title"> Gallery Management </span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </li>
+    @endif--}}
 </ul>
 </nav>
 </div>
