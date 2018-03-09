@@ -562,8 +562,8 @@
         Route::get('get-term-data/{id}/{user_id}','api\ExamController@getTermData');
         Route::get('check-fees/{id}','api\ExamController@checkFees');
         //Gallery
-        Route::get('folder-first-image','api\GalleryController@folderDetails');
-        Route::get('gallery-image','api\GalleryController@galleryImages');
+        Route::get('folder-first-image/{body_id}','api\GalleryController@folderDetails');
+        Route::get('gallery-image/{folder_id}','api\GalleryController@galleryImages');
     });
         //Exam
 Route::group(['prefix' => 'exam'], function () {
