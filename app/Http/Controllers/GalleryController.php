@@ -164,7 +164,6 @@ class GalleryController extends Controller
     }
     public function uploadImages(Requests\WebRequests\galleryRequest $request){
         try{
-//            dd($request->all());
             $folderEncName = sha1($request['folder_id']);
             $folderPath = public_path()."/uploads/gallery/".$folderEncName;
             if (! file_exists($folderPath)) {
@@ -251,7 +250,6 @@ class GalleryController extends Controller
             $gallery = array();
             $gallery['image'] = GalleryManagement::where('folder_id',$request->id)->where('type','image')->select('name')->get()->toArray();
             $gallery['video'] = GalleryManagement::where('folder_id',$request->id)->where('type','video')->select('name')->get()->toArray();
-            dd($gallery);
             return $gallery;
 
         }catch(\Exception $e){
