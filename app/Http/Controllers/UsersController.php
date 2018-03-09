@@ -332,6 +332,7 @@ class UsersController extends Controller
             $userData->role_id = $data['role'];
             $userData->avatar = 'default-user.jpg';
             $userData->is_active = 0;
+            $userData->is_displayed = 1;
             $userData->remember_token = csrf_token().'_'.time();
             $userData->confirmation_code = str_random(30);
             $userData->body_id = $user->body_id;
@@ -1125,7 +1126,7 @@ class UsersController extends Controller
             $divisionupdate = User::where('id',$id)->update($div);
         }
         $query2 = StudentFee::where('student_id',$id)->select('fee_id')->get();
-        if(array_key_exists('student_fee',$dataStudent)){
+        if(array_key_exists('student_fee', $dataStudent)){
             foreach ($dataStudent['student_fee'] as $key => $value){
                 $query = Fees::where('id',$key)->pluck('year');
                 if($request->student_fee != null){
