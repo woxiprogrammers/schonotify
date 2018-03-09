@@ -246,5 +246,21 @@ class GalleryController extends Controller
             Log::critical(json_encode($data));
         }
     }
+    public function imagesView(Request $request){
+        try{
+            $gallery = array();
+            $gallery['image'] = GalleryManagement::where('folder_id',$request->id)->where('type','image')->select('name')->get()->toArray();
+            $gallery['video'] = GalleryManagement::where('folder_id',$request->id)->where('type','video')->select('name')->get()->toArray();
+            dd($gallery);
+            return $gallery;
+
+        }catch(\Exception $e){
+            $data=[
+                'params' => $request->all(),
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
 }
 

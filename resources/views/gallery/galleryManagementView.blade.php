@@ -69,9 +69,7 @@
                                     </div>
                                     <div class="col-md-6">&nbsp
                                         <div class="form-group">
-                                            <button class="btn btn-primary btn-wide" id="view" type="button" onclick="viewImages()">
-                                                View <i class="fa fa-arrow-circle-right"></i>
-                                            </button>
+                                            <a href="/gallery/images-view/" class="btn blue" id="viewButton">View</a>
                                         </div>
                                     </div>
                                 </div>
@@ -171,6 +169,7 @@
                     method : "post",
                     data:{folder_id : folder_id},
                 success: function(data,textStatus,xhr){
+                $('');
                 $('#alreadyPresentCount').val(data.image);
                 $('#alreadyPresentVideoCount').val(data.video);
                 if(data.image == 0 && data.video == 0){
@@ -179,27 +178,7 @@
                 $('#image-select').show();
             }});
         })
-        function viewImages(){
-            var strrr=0;
-            $.ajax({
-                url: "/gallery/folder-Name-Listing",
-                data:{str1 : strrr},
-                success: function(response)
-                {
-                    $("#foldertable").html(response);
-                    var switcheryHandler = function() {
 
-                        var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-
-                        elements.forEach(function(html) {
-                            var switchery = new Switchery(html);
-                        });
-                    };
-                    switcheryHandler();
-                    TableData.init();
-                }
-            });
-        }
     </script>
 @stop
 
