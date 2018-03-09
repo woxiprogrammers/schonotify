@@ -37,7 +37,7 @@
                         <div class="form-group">
                             <label class="control-label">Video</label>
                             <div class="row">
-                                <div id="preview-image" class="row">
+                                <div id="preview-video" class="row">
                                     @foreach($gallery['video'] as $key => $video)
                                             <iframe width="420" height="315"
                                                src="{{$video}}?autoplay=1">
@@ -46,6 +46,7 @@
                                 </div>
                             </div>
                         </div>
+                        <a href="" ></a>
                     </div>
                     @include('rightSidebar')
                 </div>
