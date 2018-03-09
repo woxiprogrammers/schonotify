@@ -179,7 +179,7 @@ class GalleryController extends Controller
                     $type = explode(':', substr($billImage, 0, $pos))[1];
                     $extension = explode('/',$type)[1];
                     $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
-                    $fileFullPath = $folderPath.DIRECTORY_SEPARATOR.$filename;
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
                     file_put_contents($fileFullPath,base64_decode($image));
                     $imageData[$iterator]['name'] = $filename;
                    if($extension = 'png' || $extension = 'jpeg' || $extension ='jpg'){
@@ -192,7 +192,7 @@ class GalleryController extends Controller
                 $videoFilename = $request->video;
                 $fileNewname = pathinfo($videoFilename, PATHINFO_FILENAME);
                 $videoExtension = pathinfo($videoFilename, PATHINFO_EXTENSION);
-                $fileFullPath = $folderPath.DIRECTORY_SEPARATOR.$fileNewname.".".$videoExtension;
+                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$fileNewname.".".$videoExtension;
                 file_put_contents($fileFullPath,urlencode($videoFilename));
                 $imageData[$iterator]['name'] = $videoFilename;
                 if($videoExtension = 'mp4' || $videoExtension = 'mov' || $videoExtension = 'avi' || $videoExtension='mkv' || $videoExtension='wmv'){
@@ -248,25 +248,51 @@ class GalleryController extends Controller
     public function imagesView(Request $request,$id){
         try{
             $gallery = array();
-            $images = GalleryManagement::where('folder_id',$id)->where('type','image')->select('name')->get()->toArray();
-            $videos = GalleryManagement::where('folder_id',$id)->where('type','video')->select('name')->get()->toArray();
+            $images = GalleryManagement::where('folder_id',$id)->where('type','image')->select('id','name')->get()->toArray();
+            $videos = GalleryManagement::where('folder_id',$id)->where('type','video')->select('id','name')->get()->toArray();
             $folderEncName = sha1($id);
             $folderPath = env('GALLERY_FOLDER_FILE_UPLOAD');
             $ds = DIRECTORY_SEPARATOR;
             $iterator=0;
             foreach ($images as $image){
-                $gallery['image'][$iterator] = $folderPath.$ds.$folderEncName.$ds.$image['name'];
+                $gallery['image'][$iterator]['id'] = $image['id'];
+                $gallery['image'][$iterator]['image'] = $ds.$folderPath.$ds.$folderEncName.$ds.$image['name'];
                 $iterator++;
             }
             $jterator = 0;
             foreach ($videos as $video){
-                $gallery['video'][$jterator] = $folderPath.$ds.$folderEncName.$ds.($video['name']);
+                $gallery['video'][$jterator]['id'] = $video['id'];
+                $gallery['video'][$jterator]['video'] = $ds.$folderPath.$ds.$folderEncName.$ds.($video['name']);
                 $jterator++;
             }
             return view('gallery.galleryView')->with(compact('gallery'));
 
         }catch(\Exception $e){
             $data=[
+                'params' => $request->all(),
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function removeImages(Request $request,$id)
+    {
+        try {
+            $folderId = GalleryManagement::where('id', $id)->select('folder_id', 'name')->first();
+            $ds = DIRECTORY_SEPARATOR;
+            $folderEncName = sha1($folderId['folder_id']);
+            $webUploadPath = env('GALLERY_FOLDER_FILE_UPLOAD');
+            $file_to_be_deleted = public_path().$ds . $webUploadPath . $ds . $folderEncName . $ds . $folderId['name'];
+            if (!file_exists($file_to_be_deleted)) {
+                $message = "File does not exists";
+            } else {
+                unlink($file_to_be_deleted);
+                GalleryManagement::where('id',$id)->delete();
+                $message = "image deleted Successfully";
+            }
+            return $message;
+        } catch (\Exception $e) {
+            $data = [
                 'params' => $request->all(),
                 'exception' => $e->getMessage()
             ];

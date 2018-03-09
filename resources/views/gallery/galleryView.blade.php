@@ -1,4 +1,5 @@
 @extends('master')
+
 @section('content')
     <div id="app">
         @include('sidebar')
@@ -24,12 +25,11 @@
                             <label class="control-label">Images</label>
                             <div class="row">
                                 <div id="preview-image" class="row">
-                                    @foreach($gallery as $key => $image)
-                                        @foreach($image as $img)
-                                            <div class="col-md-2">
-                                                <img src="{{$img}}" class="thumbimage" />
-                                            </div>
-                                        @endforeach
+                                    @foreach($gallery['image'] as  $image)
+                                        <div class="col-md-2">
+                                            <input type="checkbox" id="checkImage[]"  class="imageCheck" value="{{$image['id']}}">
+                                            <img class="fancybox" src="{{$image['image']}}"/>
+                                    </div>
                                     @endforeach
                                 </div>
                             </div>
@@ -38,15 +38,16 @@
                             <label class="control-label">Video</label>
                             <div class="row">
                                 <div id="preview-video" class="row">
-                                    @foreach($gallery['video'] as $key => $video)
+                                    @foreach($gallery['video'] as $video)
                                             <iframe width="420" height="315"
-                                               src="{{$video}}?autoplay=1">
+                                        src="{{$video['video']}}">
                                             </iframe>
+                                        <input type="checkbox" id="checkVideo[]" class="videoCheck" value="{{$video['id']}}">
                                     @endforeach
                                 </div>
                             </div>
                         </div>
-                        <a href="" ></a>
+                        <a href="javascript:void(0)" id="remove" class="btn btn-blue"> remove</a>
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -69,31 +70,27 @@
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
-    <script src="/vendor/maskedinput/jquery.maskedinput.min.js"></script>
-    <script src="/vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
-    <script src="/vendor/autosize/autosize.min.js"></script>
-    <script src="/vendor/selectFx/classie.js"></script>
-    <script src="/vendor/selectFx/selectFx.js"></script>
-    <script src="/vendor/select2/select2.min.js"></script>
-    <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <script src="/vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-    <script src="/vendor/sweetalert/sweet-alert.js"></script>
+
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
-    <script src="/assets/js/form-validation-edit.js"></script>
-    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/form-elements.js"></script>
-    <script src="/assets/js/custom-project.js"></script>
-    <script src="/assets/js/table-data.js"></script>
-    <script src="/assets/js/form-validation.js"></script>
-    <script src="/assets/js/gallery-form-validations.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            FormValidator.init();
         });
-        </script>
+        $('#remove').hide();
+    </script>
+    <script>
+        $(".imageCheck").on('click', function(){
+            if($(this).is(':checked') == true) {
+           var id = $(this).val();
+                $('#remove').show();
+                $('#remove').attr("href","/gallery/remove-images/"+id)
+            }else{
+                $('#remove').hide();
+            }
+            })
+    </script>
 @stop
 
 

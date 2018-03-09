@@ -53,7 +53,7 @@
                                             <label class="control-label">
                                                 Select Video :
                                             </label>
-                                            <input id="videoupload" name="video" type="file">
+                                            <input id="videoupload" name="video" type="file" >
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="col-md-6">&nbsp
                                         <div class="form-group">
-                                            <a href="javascript:void(0)" class="btn blue" id="viewButton">View</a>
+                                            <a href="javascript:void(0)" class="btn btn-blue" id="viewButton">View</a>
                                         </div>
                                     </div>
                                 </div>
