@@ -192,10 +192,10 @@ class GalleryController extends Controller
                 $videoFilename = $request->video;
                 $fileNewname = pathinfo($videoFilename, PATHINFO_FILENAME);
                 $videoExtension = pathinfo($videoFilename, PATHINFO_EXTENSION);
-                $fileFullPath = $folderPath.DIRECTORY_SEPARATOR.$fileNewname;
-                file_put_contents($fileFullPath,$fileNewname);
+                $fileFullPath = $folderPath.DIRECTORY_SEPARATOR.$fileNewname.".".$videoExtension;
+                file_put_contents($fileFullPath,urlencode($videoFilename));
                 $imageData[$iterator]['name'] = $videoFilename;
-                if($videoExtension = 'mp4' || $videoExtension = 'mov' || $videoExtension = 'avi' || $videoExtension='fly' || $videoExtension='wmv'){
+                if($videoExtension = 'mp4' || $videoExtension = 'mov' || $videoExtension = 'avi' || $videoExtension='mkv' || $videoExtension='wmv'){
                     $imageData[$iterator]['type'] = "video";
                 }
             }
@@ -245,12 +245,25 @@ class GalleryController extends Controller
             Log::critical(json_encode($data));
         }
     }
-    public function imagesView(Request $request){
+    public function imagesView(Request $request,$id){
         try{
             $gallery = array();
-            $gallery['image'] = GalleryManagement::where('folder_id',$request->id)->where('type','image')->select('name')->get()->toArray();
-            $gallery['video'] = GalleryManagement::where('folder_id',$request->id)->where('type','video')->select('name')->get()->toArray();
-            return $gallery;
+            $images = GalleryManagement::where('folder_id',$id)->where('type','image')->select('name')->get()->toArray();
+            $videos = GalleryManagement::where('folder_id',$id)->where('type','video')->select('name')->get()->toArray();
+            $folderEncName = sha1($id);
+            $folderPath = env('GALLERY_FOLDER_FILE_UPLOAD');
+            $ds = DIRECTORY_SEPARATOR;
+            $iterator=0;
+            foreach ($images as $image){
+                $gallery['image'][$iterator] = $folderPath.$ds.$folderEncName.$ds.$image['name'];
+                $iterator++;
+            }
+            $jterator = 0;
+            foreach ($videos as $video){
+                $gallery['video'][$jterator] = $folderPath.$ds.$folderEncName.$ds.($video['name']);
+                $jterator++;
+            }
+            return view('gallery.galleryView')->with(compact('gallery'));
 
         }catch(\Exception $e){
             $data=[
