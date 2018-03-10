@@ -234,7 +234,7 @@ class GalleryController extends Controller
     public function imageValidation(Request $request){
         try{
             $count=array();
-            $count['image'] = GalleryManagement::where('folder_id',$request['folder_id'])->count();
+            $count['image'] = GalleryManagement::where('folder_id',$request['folder_id'])->where('type','image')->count();
             $count['video']= GalleryManagement::where('folder_id',$request['folder_id'])->where('type','video')->count();
             return $count;
         }catch(\Exception $e){
@@ -254,16 +254,21 @@ class GalleryController extends Controller
             $folderPath = env('GALLERY_FOLDER_FILE_UPLOAD');
             $ds = DIRECTORY_SEPARATOR;
             $iterator=0;
-            foreach ($images as $image){
-                $gallery['image'][$iterator]['id'] = $image['id'];
-                $gallery['image'][$iterator]['image'] = $ds.$folderPath.$ds.$folderEncName.$ds.$image['name'];
-                $iterator++;
+            $gallery['folder_id']=$id;
+            if($images != null && $images != ""){
+                foreach ($images as $image){
+                    $gallery['image'][$iterator]['id'] = $image['id'];
+                    $gallery['image'][$iterator]['image'] = $ds.$folderPath.$ds.$folderEncName.$ds.$image['name'];
+                    $iterator++;
+                }
             }
             $jterator = 0;
-            foreach ($videos as $video){
-                $gallery['video'][$jterator]['id'] = $video['id'];
-                $gallery['video'][$jterator]['video'] = $ds.$folderPath.$ds.$folderEncName.$ds.($video['name']);
-                $jterator++;
+            if($videos != null || $videos !=""){
+                foreach ($videos as $video){
+                    $gallery['video'][$jterator]['id'] = $video['id'];
+                    $gallery['video'][$jterator]['video'] = $ds.$folderPath.$ds.$folderEncName.$ds.($video['name']);
+                    $jterator++;
+                }
             }
             return view('gallery.galleryView')->with(compact('gallery'));
 
@@ -284,16 +289,69 @@ class GalleryController extends Controller
             $webUploadPath = env('GALLERY_FOLDER_FILE_UPLOAD');
             $file_to_be_deleted = public_path().$ds . $webUploadPath . $ds . $folderEncName . $ds . $folderId['name'];
             if (!file_exists($file_to_be_deleted)) {
-                $message = "File does not exists";
+                Session::flash('message-error','file does not exists');
+                return Redirect::back();
             } else {
                 unlink($file_to_be_deleted);
                 GalleryManagement::where('id',$id)->delete();
-                $message = "image deleted Successfully";
+                Session::flash('message-success','File has been deleted');
+                return Redirect::back();
             }
-            return $message;
         } catch (\Exception $e) {
             $data = [
                 'params' => $request->all(),
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function editImages(Request $request,$id){
+        try{
+            $folderEncName = sha1($id);
+            $folderPath = public_path()."/uploads/gallery/".$folderEncName;
+            if (! file_exists($folderPath)) {
+                File::makeDirectory($folderPath , 0777 ,true,true);
+            }
+            $imageData = array();
+            $iterator = 0;
+            if($request->has('gallery_images')){
+                foreach($request->gallery_images as $billImage){
+                    $imageArray = explode(';',$billImage);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($billImage, ';');
+                    $type = explode(':', substr($billImage, 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $imageData[$iterator]['name'] = $filename;
+                    if($extension = 'png' || $extension = 'jpeg' || $extension ='jpg'){
+                        $imageData[$iterator]['type'] = "image";
+                    }
+                    $iterator++;
+                }
+            }
+            if($request->has('video')){
+                $videoFilename = $request->video;
+                $fileNewname = pathinfo($videoFilename, PATHINFO_FILENAME);
+                $videoExtension = pathinfo($videoFilename, PATHINFO_EXTENSION);
+                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$fileNewname.".".$videoExtension;
+                file_put_contents($fileFullPath,urlencode($videoFilename));
+                $imageData[$iterator]['name'] = $videoFilename;
+                if($videoExtension = 'mp4' || $videoExtension = 'mov' || $videoExtension = 'avi' || $videoExtension='mkv' || $videoExtension='wmv'){
+                    $imageData[$iterator]['type'] = "video";
+                }
+            }
+            $galleryManagement['folder_id'] = $id;
+            foreach ($imageData as $key => $data){
+                $galleryManagement['name'] = $data['name'];
+                $galleryManagement['type'] = $data['type'];
+                GalleryManagement::create($galleryManagement);
+            }
+            return Redirect::back();
+        }catch(\Exception $e){
+            $data = [
+                'input_params' => $request->all(),
                 'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));
