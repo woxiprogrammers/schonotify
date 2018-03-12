@@ -48,9 +48,8 @@
                                 <div id="preview-video" class="row">
                                     @if(array_key_exists('video',$gallery))
                                     @foreach($gallery['video'] as $video)
-                                            <iframe width="300" height="215"
-                                              src="{{$video['video']}}">
-                                            </iframe>
+                                            <iframe id="video1" width="520" height="360" src="{{$video['video']}}" frameborder="0" allowtransparency="true" allowfullscreen></iframe>
+                                            <a href="#" id="playvideo">Play video</a>
                                         <input type="checkbox" id="checkVideo" class="videoCheck" value="{{$video['id']}}">
                                     @endforeach
                                         @else
@@ -230,6 +229,11 @@
                         $('#galleryEditImageForm').show();
                     }});
         })
+    </script>
+    <script>
+        $("#playvideo").click(function(){
+            $("#video1")[0].src += "?autoplay=1";
+        });
     </script>
 @stop
 

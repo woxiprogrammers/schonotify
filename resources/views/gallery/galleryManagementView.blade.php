@@ -175,6 +175,8 @@
                 $('#alreadyPresentVideoCount').val(data.video);
                 if(data.image == 0 && data.video == 0){
                     $('#viewButton').hide();
+                }else{
+                    $('#viewButton').show();
                 }
                 $('#image-select').show();
                 $('#viewButton').attr("href","/gallery/images-view/"+folder_id)
