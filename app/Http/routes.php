@@ -607,4 +607,6 @@ Route::group(['prefix' => 'gallery'], function () {
     Route::post('check-name',array('uses' => 'GalleryController@checkName'));
     Route::post('check-image-count',array('uses' => 'GalleryController@imageValidation'));
     Route::get('images-view/{id}',array('uses' => 'GalleryController@imagesView'));
+    Route::get('remove-images/{id}',array('uses' => 'GalleryController@removeImages'));
+    Route::post('edit-gallery-images/{id}',array('uses' =>'GalleryController@editImages'));
 });

@@ -53,7 +53,7 @@
                                             <label class="control-label">
                                                 Select Video :
                                             </label>
-                                            <input id="videoupload" name="video" type="file">
+                                            <input id="videoupload" name="video" type="file" >
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="col-md-6">&nbsp
                                         <div class="form-group">
-                                            <a href="/gallery/images-view/" class="btn blue" id="viewButton">View</a>
+                                            <a href="javascript:void(0)" class="btn btn-blue" id="viewButton">View</a>
                                         </div>
                                     </div>
                                 </div>
@@ -138,6 +138,7 @@
                     }
                 } else {
                     alert("Select Only images");
+                    $('#submit').hide();
                 }
             });
             $("#videoupload").on('change', function () {
@@ -145,7 +146,7 @@
                 var allowedFiles = 1 - (alreadyPresentCount);
                 var imgPath = $(this)[0].value;
                 var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-                if (extn == "mp4" || extn == "mov" || extn == "avi" || extn == "flv") {
+                if (extn == "mp4" || extn == "mov" || extn == "avi" || extn == "mkv") {
                     if (typeof (FileReader) != "undefined") {
                         if(allowedFiles == 0){
                             alert(' You cannot add more videos ');
@@ -155,7 +156,8 @@
                         alert("It doesn't supports");
                     }
                 } else {
-                    alert("Select Only images");
+                    alert("Select Only video");
+                    $('#submit').hide();
                 }
             });
         });
@@ -169,16 +171,17 @@
                     method : "post",
                     data:{folder_id : folder_id},
                 success: function(data,textStatus,xhr){
-                $('');
                 $('#alreadyPresentCount').val(data.image);
                 $('#alreadyPresentVideoCount').val(data.video);
                 if(data.image == 0 && data.video == 0){
-                    $('#view').hide();
+                    $('#viewButton').hide();
+                }else{
+                    $('#viewButton').show();
                 }
                 $('#image-select').show();
+                $('#viewButton').attr("href","/gallery/images-view/"+folder_id)
             }});
         })
-
     </script>
 @stop
 
