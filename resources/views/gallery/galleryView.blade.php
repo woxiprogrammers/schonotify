@@ -19,6 +19,8 @@
                             <div class="col-sm-7">
                                 <h1 class="mainTitle">Gallery</h1>
                                 <span class="mainDescription">Images & Video</span>
+                                <br>
+                                <h4>Folder Name: {{$gallery['folder_name']}}</h4>
                             </div>
                         </div>
                     </section>
@@ -36,7 +38,7 @@
                                             </div>
                                         @endforeach
                                             @else
-                                            <h4>Photo's is not present</h4>
+                                            <h4>Photos are not present</h4>
                                         @endif
                                     </div>
                                 </div>
@@ -47,12 +49,13 @@
                             <div class="row">
                                 <div id="preview-video" class="row">
                                     @if(array_key_exists('video',$gallery))
-                                    @foreach($gallery['video'] as $video)
-                                            <iframe id="video1" width="520" height="360" src="{{$video['video']}}" frameborder="0" allowtransparency="true" allowfullscreen></iframe>
-                                            <a href="#" id="playvideo">Play video</a>
-                                        <input type="checkbox" id="checkVideo" class="videoCheck" value="{{$video['id']}}">
-                                    @endforeach
-                                        @else
+                                        @foreach($gallery['video'] as $video)
+                                            <iframe width="100%" id="iframeVideo" height="400px" src="{{$video['video']}}" class="play-icon" frameborder="0" allowfullscreen></iframe>
+                                            {{--<iframe id="iframeVideo" width="100%" height="400px" src="https://www.youtube.com/watch?v=copfN4w5ESM"  frameborder="0" allowfullscreen>--}}
+                                            </iframe>
+                                                <input type="checkbox" id="checkVideo" class="videoCheck" value="{{$video['id']}}">
+                                        @endforeach
+                                    @else
                                         <h4>Video is not present</h4>
                                     @endif
                                 </div>
@@ -146,7 +149,7 @@
                 image_holder.empty();
                 if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
                     if (typeof (FileReader) != "undefined") {
-                        if(countFiles < allowedFiles){
+                        if(countFiles <= allowedFiles){
                             for (var i = 0; i < countFiles; i++) {
                                 var reader = new FileReader()
                                 reader.onload = function (e) {

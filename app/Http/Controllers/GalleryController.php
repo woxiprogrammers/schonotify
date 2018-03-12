@@ -164,6 +164,9 @@ class GalleryController extends Controller
     }
     public function uploadImages(Requests\WebRequests\galleryRequest $request){
         try{
+            $this->validate($request, [
+                'video' => 'required|mimes:mp4,avi,asf,mov,qt,avchd,flv,swf,mpg,mpeg,mpeg-4,wmv,divx,3gp|max:1024',
+            ]);
             $folderEncName = sha1($request['folder_id']);
             $folderPath = public_path()."/uploads/gallery/".$folderEncName;
             if (! file_exists($folderPath)) {
@@ -248,13 +251,15 @@ class GalleryController extends Controller
     public function imagesView(Request $request,$id){
         try{
             $gallery = array();
+            $folderName = Folder::where('id',$id)->pluck('name');
             $images = GalleryManagement::where('folder_id',$id)->where('type','image')->select('id','name')->get()->toArray();
             $videos = GalleryManagement::where('folder_id',$id)->where('type','video')->select('id','name')->get()->toArray();
             $folderEncName = sha1($id);
             $folderPath = env('GALLERY_FOLDER_FILE_UPLOAD');
             $ds = DIRECTORY_SEPARATOR;
             $iterator=0;
-            $gallery['folder_id']=$id;
+            $gallery['folder_name'] = $folderName;
+            $gallery['folder_id']= $id;
             if($images != null && $images != ""){
                 foreach ($images as $image){
                     $gallery['image'][$iterator]['id'] = $image['id'];
