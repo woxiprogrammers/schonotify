@@ -39,13 +39,16 @@ var FormValidator = function () {
                 gallery_images :{
                     upload_max_filesize :'1MB'
                 },
-                vedio :{
-
+                video :{
+                    upload_max_filesize :'1MB'
                 }
             },
             messages: {
                 gallery_images:{
-                    upload_max_filesize : "please select a less than 1MB"
+                    upload_max_filesize : "please select less than 1MB"
+                },
+                video:{
+                    upload_max_filesize :"please select less than 1MB"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
