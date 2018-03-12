@@ -21,7 +21,7 @@ class GalleryController extends Controller
             $message = "Successfully Listed";
             $status = 200;
             $folderName=Folder::where('body_id',$id)->where('is_active','=','1')->select('id','name')->get()->toArray();
-            if($folderName != null && $folderName != ""){
+            if(!empty($folderName)){
                 $folderDetails['folder_list'] = $folderName;
                 $iterator=0;
                 foreach($folderName as $data){
@@ -63,8 +63,9 @@ class GalleryController extends Controller
                     ->where('gallery_management.folder_id', '=', $data['id'])
                     ->where('type','image')
                     ->select('gallery_management.id as id','gallery_management.name as name')->get()->toArray();
+                $folderDetails[$jIterator]['photos'] = array();
                 $iterator = 0;
-                if($imageName != null && $imageName !=""){
+                if(!empty($imageName)){
                     foreach ($imageName as $name){
                         $ds = DIRECTORY_SEPARATOR;
                         $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
@@ -79,7 +80,8 @@ class GalleryController extends Controller
                    ->where('gallery_management.folder_id', '=', $data['id'])
                    ->where('type','video')
                    ->select('gallery_management.name as name','gallery_management.id as id')->get()->toArray();
-                if($videoName != null || $videoName != ""){
+                $folderDetails[$jIterator]['videos'] = array();
+                if(!empty($videoName)){
                     foreach ($videoName as $value){
                         $ds = DIRECTORY_SEPARATOR;
                         $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
