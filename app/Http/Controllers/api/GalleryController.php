@@ -21,19 +21,21 @@ class GalleryController extends Controller
             $message = "Successfully Listed";
             $status = 200;
             $folderName=Folder::where('body_id',$id)->where('is_active','=','1')->select('id','name')->get()->toArray();
-            $folderDetails['folder_list'] = $folderName;
-            $iterator=0;
-            foreach($folderName as $data){
-                $imageName = Folder::join('gallery_management','gallery_management.folder_id','=','folders.id')
-                    ->where('gallery_management.folder_id','=',$data['id'])
-                    ->select('gallery_management.name as name')->first();
-                $ds = DIRECTORY_SEPARATOR;
-                $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
-                $folderEncName = sha1($data['id']);
-                $path = $eventUploadConfig.$ds.$folderEncName.$ds.$imageName['name'];
-                $folderDetails['folder_list'][$iterator]['first_photo_url'] = $path;
-                $iterator++;
-            };
+            if($folderName != null && $folderName != ""){
+                $folderDetails['folder_list'] = $folderName;
+                $iterator=0;
+                foreach($folderName as $data){
+                    $imageName = Folder::join('gallery_management','gallery_management.folder_id','=','folders.id')
+                        ->where('gallery_management.folder_id','=',$data['id'])
+                        ->select('gallery_management.name as name')->first();
+                    $ds = DIRECTORY_SEPARATOR;
+                    $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
+                    $folderEncName = sha1($data['id']);
+                    $path = $eventUploadConfig.$ds.$folderEncName.$ds.$imageName['name'];
+                    $folderDetails['folder_list'][$iterator]['first_photo_url'] = $path;
+                    $iterator++;
+                }
+            }
         }catch(\Exception $exception){
             $status = 500;
             $message = $exception->getMessage();
@@ -62,26 +64,30 @@ class GalleryController extends Controller
                     ->where('type','image')
                     ->select('gallery_management.id as id','gallery_management.name as name')->get()->toArray();
                 $iterator = 0;
-               foreach ($imageName as $name){
-                   $ds = DIRECTORY_SEPARATOR;
-                   $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
-                   $folderEncName = sha1($data['id']);
-                   $path = $eventUploadConfig . $ds . $folderEncName . $ds . $name['name'];
-                   $folderDetails[$jIterator]['photos'][$iterator]['id'] = $name['id'];
-                   $folderDetails[$jIterator]['photos'][$iterator]['url'] = $path;
-                   $iterator++;
-               }
+                if($imageName != null && $imageName !=""){
+                    foreach ($imageName as $name){
+                        $ds = DIRECTORY_SEPARATOR;
+                        $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
+                        $folderEncName = sha1($data['id']);
+                        $path = $eventUploadConfig . $ds . $folderEncName . $ds . $name['name'];
+                        $folderDetails[$jIterator]['photos'][$iterator]['id'] = $name['id'];
+                        $folderDetails[$jIterator]['photos'][$iterator]['url'] = $path;
+                        $iterator++;
+                    }
+                }
                $videoName = Folder::join('gallery_management', 'gallery_management.folder_id', '=', 'folders.id')
                    ->where('gallery_management.folder_id', '=', $data['id'])
                    ->where('type','video')
                    ->select('gallery_management.name as name','gallery_management.id as id')->get()->toArray();
-                foreach ($videoName as $value){
-                    $ds = DIRECTORY_SEPARATOR;
-                    $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
-                    $folderEncName = sha1($data['id']);
-                    $path = $eventUploadConfig . $ds . $folderEncName . $ds . $value['name'];
-                    $folderDetails[$jIterator]['videos'][$iterator]['thumbnail']="";
-                    $folderDetails[$jIterator]['videos'][$iterator]['url'] = $path;
+                if($videoName != null || $videoName != ""){
+                    foreach ($videoName as $value){
+                        $ds = DIRECTORY_SEPARATOR;
+                        $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
+                        $folderEncName = sha1($data['id']);
+                        $path = $eventUploadConfig . $ds . $folderEncName . $ds . $value['name'];
+                        $folderDetails[$jIterator]['videos'][$iterator]['thumbnail']="";
+                        $folderDetails[$jIterator]['videos'][$iterator]['url'] = $path;
+                    }
                 }
                 $folderDetails[$jIterator]['videos'] =array_values($folderDetails[$jIterator]['videos']);
                 $jIterator++;

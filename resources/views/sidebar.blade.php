@@ -395,7 +395,7 @@
             @endif
         </ul>
     </li>
-    {{--@if(Auth::User()->role_id == 1)
+    @if(Auth::User()->role_id == 1)
     <li>
         <a href="javascript:void(0)">
             <div class="item-content">
@@ -424,7 +424,7 @@
             </li>
         </ul>
     </li>
-    @endif--}}
+    @endif
 </ul>
 </nav>
 </div>
