@@ -39,14 +39,18 @@
                             <div id="image-select" hidden>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label class="control-label">Select Images :</label>
-                                        <input id="imageupload" type="file" class="btn blue" multiple />
-                                        <br />
-                                        <div class="row">
-                                            <div id="preview-image" class="row">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Images :</label>
+                                            <input id="imageupload" type="file" class="btn blue" multiple />
+                                            <br />
+                                            <div class="row">
+                                                <div id="preview-image" class="row">
 
+                                                </div>
                                             </div>
                                         </div>
+                                        <span id="alreadyPresentImages">
+                                        </span>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -55,6 +59,8 @@
                                             </label>
                                             <input id="videoupload" name="video" type="file" >
                                         </div>
+                                        <span id="alreadyPresentVideo">
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -69,7 +75,7 @@
                                     </div>
                                     <div class="col-md-6">&nbsp
                                         <div class="form-group">
-                                            <a href="javascript:void(0)" class="btn btn-blue" id="viewButton">View</a>
+                                            <a href="javascript:void(0)" class="btn btn-blue" id="viewButton">View / Edit</a>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +125,7 @@
                 image_holder.empty();
                 if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
                     if (typeof (FileReader) != "undefined") {
-                        if(countFiles < allowedFiles){
+                        if(countFiles <= allowedFiles){
                             for (var i = 0; i < countFiles; i++) {
                                 var reader = new FileReader()
                                 reader.onload = function (e) {
@@ -179,8 +185,10 @@
                     $('#viewButton').show();
                 }
                 $('#image-select').show();
-                $('#viewButton').attr("href","/gallery/images-view/"+folder_id)
-            }});
+                $('#viewButton').attr("href","/gallery/images-view/"+folder_id);
+                $('#alreadyPresentImages').html(data.image+" Images are already present");
+                $('#alreadyPresentVideo').html(data.video+" Video is already present");
+                }});
         })
     </script>
 @stop
