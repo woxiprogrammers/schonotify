@@ -15,14 +15,12 @@ class GalleryController extends Controller
     public function __construct()
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user');
     }
-    public function folderDetails(Request $request){
+    public function folderDetails(Request $request,$id){
         try{
-            $user = Auth::user();
             $message = "Successfully Listed";
             $status = 200;
-            $folderName=Folder::where('body_id',$user->body_id)->where('is_active','=','1')->select('id','name')->get()->toArray();
+            $folderName=Folder::where('body_id',$id)->where('is_active','=','1')->select('id','name')->get()->toArray();
             if($folderName != null && $folderName != ""){
                 $folderDetails['folder_list'] = $folderName;
                 $iterator=0;
@@ -38,7 +36,6 @@ class GalleryController extends Controller
                     $iterator++;
                 }
             }
-
         }catch(\Exception $exception){
             $status = 500;
             $message = $exception->getMessage();
@@ -52,13 +49,12 @@ class GalleryController extends Controller
         Log::critical(json_encode($response));
         return response()->json($response,$status);
     }
-    public function galleryImages(Request $request)
+    public function galleryImages(Request $request,$id)
     {
         try {
-            $user = Auth::user();
             $message = "Successfully Listed";
             $status = 200;
-            $folderName = Folder::where('body_id', $user->body_id)->where('is_active', '=', '1')->select('id', 'name')->get()->toArray();
+            $folderName = Folder::where('id', $id)->where('is_active', '=', '1')->select('id', 'name')->get()->toArray();
             $jIterator = 0;
             foreach ($folderName as $data) {
                 $folderDetails[$jIterator]['id'] = $data['id'];
