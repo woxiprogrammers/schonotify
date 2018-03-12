@@ -87,10 +87,10 @@ class GalleryController extends Controller
                         $path = $eventUploadConfig . $ds . $folderEncName . $ds . $value['name'];
                         $folderDetails[$jIterator]['videos'][$iterator]['thumbnail']="";
                         $folderDetails[$jIterator]['videos'][$iterator]['url'] = $path;
+                        $folderDetails[$jIterator]['videos'] =array_values($folderDetails[$jIterator]['videos']);
+                        $jIterator++;
                     }
                 }
-                $folderDetails[$jIterator]['videos'] =array_values($folderDetails[$jIterator]['videos']);
-                $jIterator++;
             }
         } catch (\Exception $exception) {
             $status = 500;
