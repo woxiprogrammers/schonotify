@@ -52,16 +52,22 @@
                                         <span id="alreadyPresentImages">
                                         </span>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label">
-                                                Select Video :
-                                            </label>
-                                            <input id="videoupload" name="video" type="file" >
-                                        </div>
+                                            <label for="name" class="control-label">Select Video :</label>
+                                            <span>*</span>
+                                            <input id="videoupload" type="file" class="btn blue" multiple />
+                                            <br />
+                                            <div class="row">
+                                                <div id="preview-video" class="row">
+
+                                                </div>
+                                            </div>
                                         <span id="alreadyPresentVideo">
                                         </span>
                                     </div>
+                                </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -120,49 +126,74 @@
                 var countFiles = $(this)[0].files.length;
                 var allowedFiles = 10 - (alreadyPresentCount);
                 var imgPath = $(this)[0].value;
+                var size = this.files[0].size/1024/1024;
                 var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
                 var image_holder = $("#preview-image");
                 image_holder.empty();
-                if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-                    if (typeof (FileReader) != "undefined") {
-                        if(countFiles <= allowedFiles){
-                            for (var i = 0; i < countFiles; i++) {
-                                var reader = new FileReader()
-                                reader.onload = function (e) {
-                                    var imagePreview = '<div class="col-md-2"><input type="hidden" name="gallery_images[]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
-                                    image_holder.append(imagePreview);
-                                };
-                                image_holder.show();
-                                reader.readAsDataURL($(this)[0].files[i]);
+                if(size <= 1){
+                    if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+                        if (typeof (FileReader) != "undefined") {
+                            if(countFiles <= allowedFiles){
+                                for (var i = 0; i < countFiles; i++) {
+                                    var reader = new FileReader()
+                                    reader.onload = function (e) {
+                                        var imagePreview = '<div class="col-md-2"><input type="hidden" name="gallery_images[]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                                        image_holder.append(imagePreview);
+                                    };
+                                    image_holder.show();
+                                    reader.readAsDataURL($(this)[0].files[i]);
+                                }
+                            }else{
+                                alert(allowedFiles + ' is only allowed not more than that ');
+                                $('#submit').hide();
                             }
-                        }else{
-                            alert(allowedFiles + ' is only allowed not more than that ');
-                        $('#submit').hide();
+                        } else{
+                            alert("It doesn't supports");
                         }
-                    } else{
-                        alert("It doesn't supports");
+                    } else {
+                        alert("Select Only images");
+                        $('#submit').hide();
                     }
-                } else {
-                    alert("Select Only images");
+                }else{
+                    alert("please select image less than 1 mb");
                     $('#submit').hide();
                 }
             });
             $("#videoupload").on('change', function () {
                 var alreadyPresentCount =  $('#alreadyPresentVideoCount').val();
                 var allowedFiles = 1 - (alreadyPresentCount);
+                var countFiles = $(this)[0].files.length;
                 var imgPath = $(this)[0].value;
                 var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-                if (extn == "mp4" || extn == "mov" || extn == "avi" || extn == "mkv") {
-                    if (typeof (FileReader) != "undefined") {
-                        if(allowedFiles == 0){
-                            alert(' You cannot add more videos ');
-                            $('#submit').hide();
+                var size = this.files[0].size/1024/1024;
+                var video_holder = $("#preview-video");
+                video_holder.empty();
+                if(size <= 5){
+                    if (extn == "mp4") {
+                        if (typeof (FileReader) != "undefined") {
+                            if(allowedFiles == 0){
+                                alert(' You cannot add more videos ');
+                                $('#submit').hide();
+                            }else{
+                                for (var i = 0; i < countFiles; i++) {
+                                    var reader = new FileReader()
+                                    reader.onload = function (e) {
+                                        var videoPreview = '<div class="col-md-4"><input type="hidden" name="videos" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                                        video_holder.html(videoPreview);
+                                    };
+                                    video_holder.show();
+                                    reader.readAsDataURL($(this)[0].files[i]);
+                                }
+                            }
+                        } else {
+                            alert("It doesn't supports");
                         }
-                    }else{
-                        alert("It doesn't supports");
+                    } else {
+                        alert("Select Only video");
+                        $('#submit').hide();
                     }
-                } else {
-                    alert("Select Only video");
+                }else{
+                    alert("please select video less than 5 mb");
                     $('#submit').hide();
                 }
             });

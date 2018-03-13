@@ -28,12 +28,17 @@ class GalleryController extends Controller
                 foreach($folderName as $data){
                     $imageName = Folder::join('gallery_management','gallery_management.folder_id','=','folders.id')
                         ->where('gallery_management.folder_id','=',$data['id'])
+                        ->where('gallery_management.type','image')
                         ->select('gallery_management.name as name')->first();
-                    $ds = DIRECTORY_SEPARATOR;
-                    $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
-                    $folderEncName = sha1($data['id']);
-                    $path = $eventUploadConfig.$ds.$folderEncName.$ds.$imageName['name'];
-                    $folderDetails['folder_list'][$iterator]['first_photo_url'] = $path;
+                    if($imageName != null){
+                        $ds = DIRECTORY_SEPARATOR;
+                        $eventUploadConfig = env('GALLERY_FOLDER_FILE_UPLOAD');
+                        $folderEncName = sha1($data['id']);
+                        $path = $eventUploadConfig.$ds.$folderEncName.$ds.$imageName['name'];
+                        $folderDetails['folder_list'][$iterator]['first_photo_url'] = $path;
+                    }else{
+                        $folderDetails['folder_list'][$iterator]['first_photo_url'] = "";
+                    };
                     $iterator++;
                 }
             }
