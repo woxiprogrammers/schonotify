@@ -21,7 +21,7 @@ class GalleryController extends Controller
             $message = "Successfully Listed";
             $status = 200;
             $folderName=Folder::where('body_id',$id)->where('is_active','=','1')->select('id','name')->get()->toArray();
-            $folderDetails = array();
+            $folderDetails['folder_list'] = array();
             if(!empty($folderName)){
                 $folderDetails['folder_list'] = $folderName;
                 $iterator=0;

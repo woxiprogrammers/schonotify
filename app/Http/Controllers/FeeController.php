@@ -557,9 +557,9 @@ class FeeController extends Controller
             }
             $sum = array_sum($response);
             $new_array = array();
-            $total_paid_fees = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->select('transaction_amount')->first();
+            $total_paid_fees = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->select('transaction_amount')->get()->toArray();
             foreach ($total_paid_fees as $key => $total_paid_fee) {
-                array_push($new_array, $total_paid_fee);
+                array_push($new_array, $total_paid_fee['transaction_amount']);
             }
             $final_paid_fee_for_current_year = array_sum($new_array);
             $balance = $sum - $final_paid_fee_for_current_year;
