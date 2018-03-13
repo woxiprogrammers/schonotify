@@ -561,6 +561,9 @@
         Route::get('get-subject-details/{id}','api\ExamController@getSubjectDetails');
         Route::get('get-term-data/{id}/{user_id}','api\ExamController@getTermData');
         Route::get('check-fees/{id}','api\ExamController@checkFees');
+        //Gallery
+        Route::get('folder-first-image/{body_id}','api\GalleryController@folderDetails');
+        Route::get('gallery-image/{folder_id}','api\GalleryController@galleryImages');
     });
         //Exam
 Route::group(['prefix' => 'exam'], function () {
@@ -600,4 +603,10 @@ Route::group(['prefix' => 'gallery'], function () {
     Route::get('active/{id}',array('uses'=>'GalleryController@activateFolder'));
     Route::get('edit-folder/{id}',array('uses' => 'GalleryController@editFolderView'));
     Route::post('edit-folder-name/{id}',array('uses' => 'GalleryController@editFolder'));
+    Route::post('create-gallery-images',array('uses' => 'GalleryController@uploadImages'));
+    Route::post('check-name',array('uses' => 'GalleryController@checkName'));
+    Route::post('check-image-count',array('uses' => 'GalleryController@imageValidation'));
+    Route::get('images-view/{id}',array('uses' => 'GalleryController@imagesView'));
+    Route::get('remove-images/{id}',array('uses' => 'GalleryController@removeImages'));
+    Route::post('edit-gallery-images/{id}',array('uses' =>'GalleryController@editImages'));
 });
