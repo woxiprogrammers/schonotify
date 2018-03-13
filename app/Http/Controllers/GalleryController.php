@@ -164,9 +164,6 @@ class GalleryController extends Controller
     }
     public function uploadImages(Requests\WebRequests\galleryRequest $request){
         try{
-            $this->validate($request, [
-                'video' => 'required|mimes:mp4,avi,asf,mov,qt,avchd,flv,swf,mpg,mpeg,mpeg-4,wmv,divx,3gp|max:1024',
-            ]);
             $folderEncName = sha1($request['folder_id']);
             $folderPath = public_path()."/uploads/gallery/".$folderEncName;
             if (! file_exists($folderPath)) {
@@ -176,13 +173,13 @@ class GalleryController extends Controller
             $iterator = 0;
             if($request->has('gallery_images')){
                foreach($request->gallery_images as $billImage){
-                    $imageArray = explode(';',$billImage);
-                    $image = explode(',',$imageArray[1])[1];
-                    $pos  = strpos($billImage, ';');
-                    $type = explode(':', substr($billImage, 0, $pos))[1];
-                    $extension = explode('/',$type)[1];
-                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
-                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                   $imageArray = explode(';',$billImage);
+                   $image = explode(',',$imageArray[1])[1];
+                   $pos  = strpos($billImage, ';');
+                   $type = explode(':', substr($billImage, 0, $pos))[1];
+                   $extension = explode('/',$type)[1];
+                   $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                   $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
                     file_put_contents($fileFullPath,base64_decode($image));
                     $imageData[$iterator]['name'] = $filename;
                    if($extension = 'png' || $extension = 'jpeg' || $extension ='jpg'){
@@ -191,17 +188,21 @@ class GalleryController extends Controller
                    $iterator++;
                }
             }
-            if($request->has('video')){
-                $videoFilename = $request->video;
-                $fileNewname = pathinfo($videoFilename, PATHINFO_FILENAME);
-                $videoExtension = pathinfo($videoFilename, PATHINFO_EXTENSION);
-                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$fileNewname.".".$videoExtension;
-                file_put_contents($fileFullPath,urlencode($videoFilename));
-                $imageData[$iterator]['name'] = $videoFilename;
-                if($videoExtension = 'mp4' || $videoExtension = 'mov' || $videoExtension = 'avi' || $videoExtension='mkv' || $videoExtension='wmv'){
+            if($request->has('videos')){
+                $videoArray = explode(';',$request->videos);
+                $video = explode(',',$videoArray[1])[1];
+                $pos  = strpos($request->videos, ';');
+                $type = explode(':', substr($request->videos, 0, $pos))[1];
+                $extension = explode('/',$type)[1];
+                $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                file_put_contents($fileFullPath,base64_decode($video));
+                $imageData[$iterator]['name'] = $filename;
+                if($extension = 'mp4'){
                     $imageData[$iterator]['type'] = "video";
                 }
             }
+
             $galleryManagement['folder_id'] = $request['folder_id'];
             foreach ($imageData as $key => $data){
                 $galleryManagement['name'] = $data['name'];
@@ -336,14 +337,17 @@ class GalleryController extends Controller
                     $iterator++;
                 }
             }
-            if($request->has('video')){
-                $videoFilename = $request->video;
-                $fileNewname = pathinfo($videoFilename, PATHINFO_FILENAME);
-                $videoExtension = pathinfo($videoFilename, PATHINFO_EXTENSION);
-                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$fileNewname.".".$videoExtension;
-                file_put_contents($fileFullPath,urlencode($videoFilename));
-                $imageData[$iterator]['name'] = $videoFilename;
-                if($videoExtension = 'mp4' || $videoExtension = 'mov' || $videoExtension = 'avi' || $videoExtension='mkv' || $videoExtension='wmv'){
+            if($request->has('videos')){
+                $videoArray = explode(';',$request->videos);
+                $video = explode(',',$videoArray[1])[1];
+                $pos  = strpos($request->videos, ';');
+                $type = explode(':', substr($request->videos, 0, $pos))[1];
+                $extension = explode('/',$type)[1];
+                $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                file_put_contents($fileFullPath,base64_decode($video));
+                $imageData[$iterator]['name'] = $filename;
+                if($extension = 'mp4'){
                     $imageData[$iterator]['type'] = "video";
                 }
             }
