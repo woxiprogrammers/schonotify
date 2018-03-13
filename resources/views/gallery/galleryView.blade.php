@@ -50,7 +50,7 @@
                                 <div id="preview-video" class="row">
                                     @if(array_key_exists('video',$gallery))
                                         @foreach($gallery['video'] as $video)
-                                            <iframe width="50%" id="iframeVideo" height="400px" src="{{$video['video']}}" class="play-icon" frameborder="0" allowfullscreen></iframe>
+                                            <iframe width="40%" id="iframeVideo" height="400px" src="{{$video['video']}}" class="play-icon" style="border: 2px black solid" frameborder="0" allowfullscreen></iframe>
                                                 <input type="checkbox" id="checkVideo" class="videoCheck" value="{{$video['id']}}">
                                         @endforeach
                                     @else
@@ -74,7 +74,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{--<div class="col-md-6">
+                             {{--   <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name" class="control-label">Select Video :</label>
                                         <input id="videoupload" type="file" class="btn blue" multiple />
