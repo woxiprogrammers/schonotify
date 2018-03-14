@@ -429,7 +429,7 @@ class FeeController extends Controller
                 ->join('transaction_details','transaction_details.student_id','=','users.id')
                 ->join('fees','fees.id','=','transaction_details.fee_id')
                 ->whereIn('users.id', $userIds)
-                ->select('transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id','transaction_details.installment_id as Installment')
+                ->select('transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id','transaction_details.installment_id as Installment','transaction_details.id as amount_id')
                 ->get()->toArray();
             $jIterator = 0;
             foreach ($students as $studentId){
@@ -487,7 +487,7 @@ class FeeController extends Controller
                 $str.="<td>".$student['total']."</td>";
                 $str.="<td>".$student['transaction_amount']."</td>";
                 $str.="<td>".$student['grn']."</td>";
-                $str.="<td>"."<a href='/fees/download-pdf/".$student['id']."/".$student['fee_id']."'>download </a>"."</td>";
+                $str.="<td>"."<a href='/fees/download-pdf/".$student['id']."/".$student['fee_id']."/".$student['amount_id']."'>download </a>"."</td>";
                 $str.="</tr>";
             }
             $str.="</tbody></table>";
@@ -502,7 +502,7 @@ class FeeController extends Controller
             return response()->json([],500);
         }
     }
-    public function createPDF(Request $request,$id,$fee_id)
+    public function createPDF(Request $request,$id,$fee_id,$amount_id)
     {
         try {
             $user = Auth::user();
@@ -511,7 +511,7 @@ class FeeController extends Controller
                 ->select('students_extra_info.grn as grn')->first();
             $studentData = User::where('body_id', $user['body_id'])->where('id', $id)->select('parent_id')->first();
             $parent_name = User::where('body_id', $user['body_id'])->where('id', $studentData['parent_id'])->select('first_name', 'last_name')->first();
-            $transaction_details = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->get()->first();
+            $transaction_details = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->where('id',$amount_id)->get()->first();
             $studentFee = StudentFee::where('student_id', $id)->where('fee_id', $fee_id)->select('fee_id', 'year', 'fee_concession_type', 'caste_concession')->get()->toarray();
             $division = User::join('divisions','divisions.id','=','users.division_id')
                             ->where('users.id',$id)
