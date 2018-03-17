@@ -150,6 +150,14 @@
                         <div id="installments">
                         </div>
                     </div>
+                    <div class="container-fluid container-fullw">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Late Fee : <span class="symbol required"></span>
+                            </label>
+                            <input type="text" name="late_fee" id="late-fee">
+                        </div>
+                    </div>
                     <div class="container-fluid container-fullw bg-green" style="color:white">
                      <h3> Total fee :</h3>
                         <input type="text" id="total_fee" class="total_fee" value="" name="total_fee">

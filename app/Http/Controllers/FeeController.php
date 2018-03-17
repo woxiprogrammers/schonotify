@@ -117,6 +117,7 @@ class FeeController extends Controller
         $fee_details['fee_name']=$request->fee_name;
         $fee_details['total_amount']=$request->total_fee;
         $fee_details['year']=$request->myselect;
+        $fee_details['late_fee_per_day']=$request->late_fee;
         $query=Fees::insertGetId($fee_details);
         if($query)
         {
@@ -208,7 +209,7 @@ class FeeController extends Controller
         else
         {
             $query=FeeClass::where('class_id',$request->str1)->lists('fee_id');
-            $fees = Fees::whereIn('id',$query)->select('id','fee_name','total_amount','year')->get()->toArray();
+            $fees = Fees::whereIn('id',$query)->select('id','fee_name','total_amount','year','late_fee_per_day')->get()->toArray();
             return view('fee.feetable')->with(compact('fees'));
         }
     }
