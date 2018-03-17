@@ -117,6 +117,7 @@ class FeeController extends Controller
         $fee_details['fee_name']=$request->fee_name;
         $fee_details['total_amount']=$request->total_fee;
         $fee_details['year']=$request->myselect;
+        $fee_details['late_fee_per_day']=$request->late_fee;
         $query=Fees::insertGetId($fee_details);
         if($query)
         {
