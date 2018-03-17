@@ -5,6 +5,7 @@
         <th width="20%"> Fee Name </th>
         <th width="10%"> Total Amount </th>
         <th width="10%">  Year </th>
+        <th width="10%"> Late Fee</th>
     </tr>
     </thead>
     <tbody>
@@ -14,6 +15,7 @@
             <td>{!! $fee['fee_name'] !!}</td>
             <td>{!! $fee['total_amount'] !!}</td>
             <td>{!! $fee['year'] !!}</td>
+            <td>{!! $fee['late_fee_per_day'] !!}</td>
         </tr>
     @endforeach
     </tbody>

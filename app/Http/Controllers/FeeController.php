@@ -209,7 +209,7 @@ class FeeController extends Controller
         else
         {
             $query=FeeClass::where('class_id',$request->str1)->lists('fee_id');
-            $fees = Fees::whereIn('id',$query)->select('id','fee_name','total_amount','year')->get()->toArray();
+            $fees = Fees::whereIn('id',$query)->select('id','fee_name','total_amount','year','late_fee_per_day')->get()->toArray();
             return view('fee.feetable')->with(compact('fees'));
         }
     }
