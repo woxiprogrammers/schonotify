@@ -940,7 +940,6 @@ class UsersController extends Controller
                              $division_status="Division Not Assigned !";
                          }
                 $lateFee= Fees::get()->toArray();
-//                     dd($lateFee);
                 $total_fee_for_current_year = array();
                      foreach($fee_due_date as $fee_name => $val){
                          $total_fee_for_current_year[$val[0]['fee_name']]['discount'] = 0;
