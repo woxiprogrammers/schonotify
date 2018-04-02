@@ -797,7 +797,7 @@ class UsersController extends Controller
                     $fee_ids =StudentFee::where('student_id',$id)->select('fee_id')->distinct('fee_id')->get()->toArray();
                     $fee_due_date = FeeDueDate::join('fees','fees.id','=','fee_due_date.fee_id')
                                                 ->whereIn('fee_due_date.fee_id',$fee_ids)
-                                                ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name')
+                                                ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name','fee_due_date.late_fee_amount')
                                                 ->get();
                    $fee_due_date=($fee_due_date->groupBy('fee_id')->toArray());
                     $total_installment_amount =array();
@@ -939,6 +939,7 @@ class UsersController extends Controller
                          {
                              $division_status="Division Not Assigned !";
                          }
+                $lateFee= Fees::get()->toArray();
                 $total_fee_for_current_year = array();
                      foreach($fee_due_date as $fee_name => $val){
                          $total_fee_for_current_year[$val[0]['fee_name']]['discount'] = 0;
@@ -997,6 +998,7 @@ class UsersController extends Controller
                 }else{
                     $divisionStudent="null";
                 }
+
                 $installmentIds = FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id')->distinct()->get()->toArray();
                 return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fee_for_current_year','total_due_fee_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink'));
             }elseif($userRole->slug == 'parent')

@@ -22,7 +22,19 @@
                     <tr>
                         <td>Due date</td>
                         @foreach($installment_details as $installment_inputs)
-                        <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_due_date" name="fee_due_date[{{ $installment_inputs['id'] }}]" placeholder="DD-MM-YYYY" required> </td>
+                        <td>  <input type="date" style="width: 165px" class="a" id="{{ $installment_inputs['id'] }}_due_date" name="fee_due_date[{{ $installment_inputs['id'] }}][due_date]" required> </td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td>Late Fee Amount</td>
+                        @foreach($installment_details as $installment_inputs)
+                            <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_late_fee_amount" name="fee_due_date[{{ $installment_inputs['id'] }}][late_fee_amount]" required> </td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td>Number Of Days</td>
+                        @foreach($installment_details as $installment_inputs)
+                            <td>  <input type="text" class="a" id="{{ $installment_inputs['id'] }}_number_of_days" name="fee_due_date[{{ $installment_inputs['id'] }}][number_of_days]" required> </td>
                         @endforeach
                     </tr>
                 </table>
