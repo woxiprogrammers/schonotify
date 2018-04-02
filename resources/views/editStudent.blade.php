@@ -421,6 +421,22 @@
                                             </fieldset>
                                         </div>
                                     </div>
+                                    {{--<fieldset>
+                                        <legend>
+                                            Late Fee For Student
+                                        </legend>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>
+                                                    Late Fee :
+                                                </label>
+                                                <div class="form-group">
+                                                    <input type="text"  name="late_fee">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>--}}
                                     <fieldset>
                                         <legend>
                                             FEE STRUCTURE
@@ -849,7 +865,7 @@
                                                         @foreach($fee_due_dates as $due_date)
                                                            <dl class="accordion">
                                                                 <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $due_date['installment_id'] !!}</a></dt>
-                                                                <dd>Due-date:{!! $due_date['due_date'] !!}   <br><br> Amount: {!! round($due_date['discount'],2) !!}</dd>
+                                                                <dd>Due-date:{!! $due_date['due_date'] !!}   <br><br> Amount: {!! round($due_date['discount'],2) !!} <br><br> Late Fee Amount : {!! $due_date['late_fee_amount'] !!}</dd>
                                                             </dl>
                                                         @endforeach
                                                     @endforeach

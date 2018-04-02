@@ -117,7 +117,7 @@ class FeeController extends Controller
         $fee_details['fee_name']=$request->fee_name;
         $fee_details['total_amount']=$request->total_fee;
         $fee_details['year']=$request->myselect;
-        $fee_details['late_fee_per_day']=$request->late_fee;
+        $fee_details['late_fee_per_day'] = 0;
         $query=Fees::insertGetId($fee_details);
         if($query)
         {
@@ -173,11 +173,12 @@ class FeeController extends Controller
                 $query5=FeeInstallments::create($installment_details);
             }
             }
-            foreach($request->fee_due_date as $key=>$due_date)
-            {
+            foreach($request->fee_due_date as $key=>$due_date){
+                $caste_types['late_fee_amount']=$due_date['late_fee_amount'];
+                $caste_types['number_of_days']=$due_date['number_of_days'];
                 $caste_types['fee_id']=$query;
                 $caste_types['installment_id']=$key;
-                $caste_types['due_date']=$due_date;
+                $caste_types['due_date']=$due_date['due_date'];
                 $query7=FeeDueDate::create($caste_types);
             }
              Session::flash('message-success','Fee structure created successfully');
