@@ -36,7 +36,7 @@ class UserController extends Controller
     {
         $this->middleware('db');
         $this->middleware('remember.user.token');
-        $this->middleware('authenticate.user',['except' => ['login','publicGetSwitchingDetails','sendPushPoc']]);
+        $this->middleware('authenticate.user',['except' => ['login','publicGetSwitchingDetails']]);
     }
     protected function login(Requests\LoginRequest $request)
     {

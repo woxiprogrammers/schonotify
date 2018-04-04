@@ -556,7 +556,6 @@
         Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
         //Push
         Route::post('save-push','api\UserController@savePushToken');
-        Route::post('send-push-poc','api\UserController@sendPushPoc');
         //Result
         Route::get('get-exam-terms/{user_id}','api\ExamController@getExamTerms');
         Route::get('get-subject-details/{id}','api\ExamController@getSubjectDetails');
