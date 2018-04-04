@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "laravelcollective/html": "5.1.*",
         "barryvdh/laravel-debugbar": "^2.0",
-        "elibyy/tcpdf-laravel": "5.1.*"
+        "elibyy/tcpdf-laravel": "5.1.*",
+        "brozot/laravel-fcm": "^1.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
