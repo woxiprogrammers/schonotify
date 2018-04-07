@@ -148,6 +148,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -202,6 +203,7 @@ return [
         'PDF' => Elibyy\TCPDF\Facades\TCPDF::class,
         'FCM' => LaravelFCM\Facades\FCM::class,
 	    'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
+        'DOMPDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

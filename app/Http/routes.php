@@ -103,6 +103,15 @@
         Route::get('payment-return/{slug?}',array('uses'=>'PaymentController@billReturnUrl'));
     });
 
+    Route::group(['prefix' => 'certificates'], function(){
+        Route::group(['prefix' => 'bonafide'], function(){
+            Route::get('manage', array('uses' => 'Certificate\BonafideCertificateController@getManageView'));
+            Route::get('create', array('uses' => 'Certificate\BonafideCertificateController@getCreateView'));
+            Route::post('get-bonafide-view', array('uses' => 'Certificate\BonafideCertificateController@getBonafideView'));
+            Route::get('download', array('uses' => 'Certificate\BonafideCertificateController@downloadBonafide'));
+        });
+    });
+
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
 
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
