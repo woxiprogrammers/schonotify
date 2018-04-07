@@ -404,6 +404,7 @@ class UserController extends Controller
                    $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
                    $iterator++;
                }
+
                $sum=array_sum(array_column($installment_info,'amount'));
                $installment_data= $installment_info;
                $installment_data['total']=$sum;

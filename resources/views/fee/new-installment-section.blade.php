@@ -54,6 +54,14 @@
                         {{round($installment['final_total'],2)}}
                     </td>
                 </tr>
+                <tr style="width: 95%;">
+                    <td style="width: 95%;font-weight: bold">
+                        Late fee Amount
+                    </td>
+                    <td>
+                        {{($installment['late_fee'])}}
+                    </td>
+                </tr>
             </table>
             @if($installment['is_paid'] == false && $isPreviousStructureCleared == true)
                 <form id="billGeneratorForm_{{$id}}">
