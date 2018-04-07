@@ -19,6 +19,7 @@ use App\Fees;
 use App\FormFee;
 use App\StudentFee;
 use App\StudentFeeConcessions;
+use App\StudentLateFee;
 use App\TransactionDetails;
 use App\User;
 use App\PushToken;
@@ -345,6 +346,7 @@ class FeeController extends Controller
                         $total_fee_amount += $installment['amount'];
                     }
                     $installments[$installment['installment_id']]['subTotal'] = $total_installment_amount[$installment['installment_id']];
+                    $installments[$installment['installment_id']]['late_fee'] = FeeDueDate::where('installment_id',$installment['installment_id'])->pluck('late_fee_amount');
                     $transactionCount = TransactionDetails::where('fee_id',$student_fee['fee_id'])->where('student_id',$student['id'])->where('installment_id',$installment['installment_id'])->count();
                     if($transactionCount > 0){
                         $installments[$installment['installment_id']]['is_paid'] = true;
@@ -882,5 +884,64 @@ class FeeController extends Controller
             ];
             Log::critical(json_encode($data));
         }
+    }
+    public function lateFeeForm(Request $request){
+        try{
+            $alreadyPresentDataCount = StudentLateFee::where('student_id',$request->student_id)->where('fee_id',$request->fee_id)->count();
+            if($alreadyPresentDataCount == 0){
+                $data['student_id'] = $request->student_id;
+                $data['fee_id'] = $request->fee_id;
+                foreach ($request->late_fee as $key => $lateFee){
+                    $data['installment_id'] = $key;
+                    $data['late_fee_amount'] = $lateFee;
+                    $query = StudentLateFee::create($data);
+                }
+            }else{
+                foreach ($request->late_fee as $key => $lateFee){
+                    $data['late_fee_amount'] = $lateFee;
+                    $query = StudentLateFee::where('student_id',$request->student_id)->where('fee_id',$request->fee_id)->where('installment_id',$key)->update($data);
+                }
+            }
+            if($query){
+                Session::flash('message-success','Student late fee updated successfully .');
+                return Redirect::back();
+            }else{
+                Session::flash('message-error','Something went wrong !');
+                return Redirect::back();
+            }
+        }catch(\Exception $e){
+            $data = [
+                'action' => "Student late fee updated successfully",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+
+    }
+    public function getInstallmentsForStudents(Request $request,$id,$student_id){
+        try{
+            $count = StudentLateFee::where('student_id',$student_id)->where('fee_id',$id)->count();
+            if($count == 0){
+                $installments = StudentFee::join('fee_installments','fee_installments.fee_id','=','student_fee.fee_id')
+                    ->join('fee_due_date','fee_due_date.fee_id','=','fee_installments.fee_id')
+                    ->where('student_fee.student_id',$student_id)
+                    ->where('student_fee.fee_id',$id)
+                    ->where('fee_installments.fee_id',$id)
+                    ->select('fee_installments.installment_id','fee_due_date.late_fee_amount')
+                    ->distinct('fee_installments.installment_id')->get();
+            }else{
+                $installments = StudentLateFee::where('student_id',$student_id)->where('fee_id',$id)->select('installment_id','late_fee_amount')->get();
+            }
+            return $installments;
+        }catch(\Exception $e){
+            $data = [
+                'action' => "installment list",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+
     }
 }

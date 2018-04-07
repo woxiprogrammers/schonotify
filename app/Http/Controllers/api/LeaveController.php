@@ -21,6 +21,7 @@ use App\LeaveRequest;
 use App\LeaveType;
 use App\StudentFee;
 use App\StudentFeeConcessions;
+use App\StudentLateFee;
 use App\SubjectClassDivision;
 use App\TransactionDetails;
 use App\TransactionTypes;
@@ -362,6 +363,16 @@ class LeaveController extends Controller
                                 $response['data'][$iterator]['installments'][$installment['installment_id']]['due_date'] = FeeDueDate::where('fee_id', $a['fee_id'])
                                     ->where('installment_id', $installment['installment_id'])
                                     ->pluck('due_date');
+                                $assignment_late_fee= StudentLateFee::where('student_id',$id)->first();
+                                if($assignment_late_fee == null && $assignment_late_fee = " "){
+                                    $response['data'][$iterator]['installments'][$installment['installment_id']]['late_fee'] = FeeDueDate::where('fee_id', $a['fee_id'])
+                                        ->where('installment_id', $installment['installment_id'])
+                                        ->pluck('late_fee_amount');
+                                }else{
+                                    $response['data'][$iterator]['installments'][$installment['installment_id']]['late_fee'] = StudentLateFee::where('fee_id', $a['fee_id'])
+                                        ->where('installment_id', $installment['installment_id'])
+                                        ->pluck('late_fee_amount');
+                                }
                             }
                             $transactionCount = TransactionDetails::where('fee_id',$a['fee_id'])->where('student_id',$id)->where('installment_id',$installment['installment_id'])->count();
                             if($transactionCount > 0 && $isPreviousStructureCleared == true){
