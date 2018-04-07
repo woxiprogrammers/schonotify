@@ -7,6 +7,7 @@ use App\Batch;
 use App\ClassData;
 use App\Classes;
 use App\Division;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\Message;
 use App\Module;
 use App\ModuleAcl;
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    use PushNotificationTrait;
     public function __construct()
     {
         $this->middleware('db');

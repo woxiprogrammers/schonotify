@@ -147,7 +147,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
-
+        LaravelFCM\FCMServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -199,8 +200,10 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
-
+        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class,
+        'FCM' => LaravelFCM\Facades\FCM::class,
+	    'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
+        'DOMPDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
