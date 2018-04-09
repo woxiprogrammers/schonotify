@@ -52,13 +52,11 @@
                                 Fee Transactions
                             </a>
                         </li>
-                        @if( !empty($assigned_fee))
                             <li>
                                 <a data-toggle="tab" href="#late_fee_for_student">
                                     Late Fee For student
                                 </a>
                             </li>
-                        @endif
                     </ul>
                     <div class="tab-content">
                         <div id="panel_edit_account" class="tab-pane fade in active ">
