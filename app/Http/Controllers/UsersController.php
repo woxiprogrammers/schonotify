@@ -799,6 +799,7 @@ class UsersController extends Controller
                     $fee_ids =StudentFee::where('student_id',$id)->select('fee_id')->distinct('fee_id')->get()->toArray();
 
                     $total_installment_amount =array();
+                    $fee_due_date = array();
                     foreach ($fee_ids as $key => $feeId){
                         $installment_ids = fee_installments::join('fees','fees.id','=','fee_installments.fee_id')
                                                             ->where('fee_installments.fee_id',$feeId['fee_id'])
@@ -809,8 +810,7 @@ class UsersController extends Controller
                             $assigned_late_fee = StudentLateFee::where('student_id',$id)->first();
                             if($assigned_late_fee == null && $assigned_late_fee == ""){
                                 $fee_due_date[$installmentId['fee_id']] = FeeDueDate::join('fees','fees.id','=','fee_due_date.fee_id')
-                                    ->where('fee_due_date.fee_id',$installmentId['fee_id'])
-                                    ->where('fee_due_date.installment_id',$installmentId['installment_id'])
+                                    ->where('fees.id',$installmentId['fee_id'])
                                     ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name','fee_due_date.late_fee_amount','fee_due_date.number_of_days')
                                     ->get();
                             }else{
@@ -940,6 +940,7 @@ class UsersController extends Controller
                                                       ->select('fees.fee_name as fee_name','transaction_details.id as id','transaction_details.transaction_type as transaction_type','transaction_details.transaction_detail as transaction_detail','transaction_details.transaction_amount as transaction_amount','transaction_details.date as date')
                                                       ->get()->groupBy('fee_name')->toarray();
                     $new_array=array();
+                   $total_paid_fees=array();
                     foreach ($transaction as $feeName => $trans){
                         $total_paid_fees[$feeName] = TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
                             ->where('transaction_details.student_id',$id)
@@ -961,7 +962,8 @@ class UsersController extends Controller
                          {
                              $division_status="Division Not Assigned !";
                          }
-                $total_fee_for_current_year = array();
+                    $total_fee_for_current_year = array();
+
                      foreach($fee_due_date as $fee_name => $val){
                          $val=$val->groupBy('installment_id')->toArray();
                         foreach($val as $key=> $data){
