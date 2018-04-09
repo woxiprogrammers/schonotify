@@ -891,7 +891,7 @@
                                                            @foreach($total_fees_for_current_year as $key => $year)
                                                                <div>
                                                                    <h4>{{$key}}</h4>
-                                                                   <span>Total fee for current year :- {{$year['discount']}}</span>
+                                                                   <span>Total fee for current year :- {{$year}}</span>
                                                                    <br><br>
                                                                </div>
                                                                @endforeach
