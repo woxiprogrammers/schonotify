@@ -928,7 +928,7 @@ class FeeController extends Controller
                     ->where('student_fee.student_id',$student_id)
                     ->where('student_fee.fee_id',$id)
                     ->where('fee_installments.fee_id',$id)
-                    ->select('fee_installments.installment_id','fee_due_date.late_fee_amount')
+                    ->select('fee_due_date.installment_id','fee_due_date.late_fee_amount')
                     ->distinct('fee_installments.installment_id')->get();
             }else{
                 $installments = StudentLateFee::where('student_id',$student_id)->where('fee_id',$id)->select('installment_id','late_fee_amount')->get();
