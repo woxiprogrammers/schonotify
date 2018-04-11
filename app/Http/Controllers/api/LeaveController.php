@@ -350,7 +350,6 @@ class LeaveController extends Controller
                             }
                         }
                     }
-                    $response['data'][$iterator]['show_payment'] = $isPreviousStructureCleared;
                     $response['data'][$iterator]['installments'] = array();
                     $installment_info = FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
                     $installments = array();
@@ -375,10 +374,10 @@ class LeaveController extends Controller
                                 }
                             }
                             $transactionCount = TransactionDetails::where('fee_id',$a['fee_id'])->where('student_id',$id)->where('installment_id',$installment['installment_id'])->count();
-                            if($transactionCount > 0 && $isPreviousStructureCleared == true){
-                                $response['data'][$iterator]['show_payment'] = false;
-                            }else{
+                            if($transactionCount > 0){
                                 $response['data'][$iterator]['show_payment'] = true;
+                            }else{
+                                $response['data'][$iterator]['show_payment'] = false;
                             }
                             $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
                         }
@@ -659,6 +658,8 @@ class LeaveController extends Controller
                             }else{
                                 $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = $total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']];
                             }
+                        }else{
+                            $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = 0;
                         }
                     }
                 }
@@ -698,9 +699,6 @@ class LeaveController extends Controller
         Log::critical(json_encode($response));
         return response()->json($response,$status);
     }
-
-
-
 
     public function getFeesStudent ($id){
         $concessions=StudentFeeConcessions::where('student_id',$id)->select('fee_id')->first();
