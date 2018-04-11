@@ -1010,6 +1010,8 @@ class UsersController extends Controller
                                 }else{
                                     $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = $total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']];
                                 }
+                            }else{
+                                $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = 0;
                             }
                         }
                     }
