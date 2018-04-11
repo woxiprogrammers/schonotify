@@ -862,12 +862,12 @@
                                                 <hr>
                                                 <div>
                                                 @if(!empty($fee_due_date))
-                                                    @foreach($fee_due_date as $key => $fee_due_dates)
+                                                    @foreach(array_values($fee_due_date) as $key => $fee_due_dates)
+                                                            <dl>
+                                                                <dt>Structure Name</dt>
+                                                                <dd>{{$fee_due_dates[0][0]['fee_name']}}</dd>
+                                                            </dl>
                                                         @foreach($fee_due_dates as $due_date)
-                                                                <dl>
-                                                                    <dt>Structuire Name</dt>
-                                                                    <dd>{{$due_date[0]['fee_name']}}</dd>
-                                                                </dl>
                                                             @foreach($due_date as $data)
                                                                 <dl class="accordion">
                                                                 <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $data['installment_id'] !!}</a></dt>

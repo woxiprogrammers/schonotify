@@ -350,6 +350,7 @@ class LeaveController extends Controller
                             }
                         }
                     }
+                    $response['data'][$iterator]['show_payment'] = $isPreviousStructureCleared;
                     $response['data'][$iterator]['installments'] = array();
                     $installment_info = FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
                     $installments = array();
@@ -374,10 +375,10 @@ class LeaveController extends Controller
                                 }
                             }
                             $transactionCount = TransactionDetails::where('fee_id',$a['fee_id'])->where('student_id',$id)->where('installment_id',$installment['installment_id'])->count();
-                            if($transactionCount > 0){
-                                $response['data'][$iterator]['show_payment'] = true;
-                            }else{
+                            if($transactionCount > 0 && $isPreviousStructureCleared == true){
                                 $response['data'][$iterator]['show_payment'] = false;
+                            }else{
+                                $response['data'][$iterator]['show_payment'] = true;
                             }
                             $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
                         }
