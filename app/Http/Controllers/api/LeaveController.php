@@ -21,6 +21,7 @@ use App\LeaveRequest;
 use App\LeaveType;
 use App\StudentFee;
 use App\StudentFeeConcessions;
+use App\StudentLateFee;
 use App\SubjectClassDivision;
 use App\TransactionDetails;
 use App\TransactionTypes;
@@ -362,6 +363,16 @@ class LeaveController extends Controller
                                 $response['data'][$iterator]['installments'][$installment['installment_id']]['due_date'] = FeeDueDate::where('fee_id', $a['fee_id'])
                                     ->where('installment_id', $installment['installment_id'])
                                     ->pluck('due_date');
+                                $assignment_late_fee= StudentLateFee::where('student_id',$id)->first();
+                                if($assignment_late_fee == null && $assignment_late_fee = " "){
+                                    $response['data'][$iterator]['installments'][$installment['installment_id']]['late_fee'] = FeeDueDate::where('fee_id', $a['fee_id'])
+                                        ->where('installment_id', $installment['installment_id'])
+                                        ->pluck('late_fee_amount');
+                                }else{
+                                    $response['data'][$iterator]['installments'][$installment['installment_id']]['late_fee'] = StudentLateFee::where('fee_id', $a['fee_id'])
+                                        ->where('installment_id', $installment['installment_id'])
+                                        ->pluck('late_fee_amount');
+                                }
                             }
                             $transactionCount = TransactionDetails::where('fee_id',$a['fee_id'])->where('student_id',$id)->where('installment_id',$installment['installment_id'])->count();
                             if($transactionCount > 0 && $isPreviousStructureCleared == true){
@@ -462,19 +473,38 @@ class LeaveController extends Controller
             }
             $installment_data = array();
             $fee_ids =StudentFee::where('student_id',$id)->select('fee_id')->distinct('fee_id')->get()->toArray();
-            $fee_due_date = FeeDueDate::join('fees','fees.id','=','fee_due_date.fee_id')
-                ->whereIn('fee_due_date.fee_id',$fee_ids)
-                ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name')
-                ->get();
-            $fee_due_date=($fee_due_date->groupBy('fee_id')->toArray());
             $total_installment_amount =array();
             foreach ($fee_ids as $key => $feeId){
                 $installment_ids = fee_installments::join('fees','fees.id','=','fee_installments.fee_id')
                     ->where('fee_installments.fee_id',$feeId['fee_id'])
                     ->select('fee_installments.installment_id as installment_id','fees.id as fee_id')
                     ->distinct('fee_installments.installment_id')
+                    ->orderBy('installment_id')
                     ->get()->toArray();
+                $iterator=0;
                 foreach ($installment_ids as $installmentId){
+                    $assigned_late_fee = StudentLateFee::where('student_id',$id)->where('fee_id',$feeId['fee_id'])->where('installment_id',$installmentId['installment_id'])->first();
+                    if($assigned_late_fee == null && $assigned_late_fee == ""){
+                        $fee_due_date[$installmentId['fee_id']][$iterator] = FeeDueDate::join('fees','fees.id','=','fee_due_date.fee_id')
+                            ->where('fees.id',$installmentId['fee_id'])
+                            ->where('fee_due_date.fee_id',$installmentId['fee_id'])
+                            ->where('fee_due_date.installment_id',$installmentId['installment_id'])
+                            ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name','fee_due_date.late_fee_amount','fee_due_date.number_of_days')
+                            ->get();
+                        $iterator++;
+                    }else{
+                        $fee_due_date[$installmentId['fee_id']][$iterator] = StudentLateFee::join('fees','fees.id','=','student_late_fee.fee_id')
+                            ->join('fee_due_date','fee_due_date.fee_id','=','fees.id')
+                            ->where('fees.id',$installmentId['fee_id'])
+                            ->where('student_late_fee.student_id',$id)
+                            ->where('student_late_fee.installment_id',$installmentId['installment_id'])
+                            ->where('student_late_fee.fee_id',$installmentId['fee_id'])
+                            ->where('fee_due_date.installment_id',$installmentId['installment_id'])
+                            ->where('fee_due_date.fee_id',$installmentId['fee_id'])
+                            ->select('fee_due_date.fee_id','fee_due_date.installment_id as installment_id','fee_due_date.due_date as due_date','fees.fee_name as fee_name','student_late_fee.late_fee_amount','fee_due_date.number_of_days')
+                            ->get();
+                        $iterator++;
+                    }
                     $total_installment_amount[$installmentId['fee_id']][$installmentId['installment_id']] = fee_installments::where('fee_id',$feeId['fee_id'])->where('installment_id',$installmentId['installment_id'])->sum('amount');
                 }
             }
@@ -558,7 +588,7 @@ class LeaveController extends Controller
             if(!empty($fee_due_date) && !empty($final_discounted_amounts)){
                 foreach($fee_due_date as $key => $fee_id){
                     for($iterator = 0; $iterator < count($fee_id) ; $iterator++){
-                        $fee_due_date[$key][$iterator]['discount'] = $final_discounted_amounts[$key][$fee_id[$iterator]['installment_id']];
+                        $fee_due_date[$key][$iterator][0]['discount'] = $final_discounted_amounts[$key][$fee_id[$iterator][0]['installment_id']];
                     }
                 }
             }
@@ -572,24 +602,80 @@ class LeaveController extends Controller
                 }
                 $installment_data[] = $installment_info;
             }
-            $new_array=array();
-            $total_paid_fees=TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
+            $transaction=TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
                 ->where('transaction_details.student_id',$id)
-                ->orderBy('transaction_details.created_at','desc')
-                ->select('transaction_details.fee_id as fee_id','transaction_details.transaction_amount as transaction_amount','fees.fee_name as fee_name')
-                ->get();
-            $total_paid_fees = ($total_paid_fees->groupBy('fee_name')->toArray());
-            if( $total_paid_fees != " " && $total_paid_fees != null){
-                foreach($total_paid_fees as $key => $total_paid_fee ){
-                    $new_array[$key] = array_sum(array_column($total_paid_fee,'transaction_amount'));
+                ->select('fees.fee_name as fee_name','transaction_details.id as id','transaction_details.transaction_type as transaction_type','transaction_details.transaction_detail as transaction_detail','transaction_details.transaction_amount as transaction_amount','transaction_details.date as date')
+                ->get()->groupBy('fee_name')->toarray();
+            $new_array=array();
+            $total_paid_fees=array();
+            foreach ($transaction as $feeName => $trans){
+                $total_paid_fees[$feeName] = TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
+                    ->where('transaction_details.student_id',$id)
+                    ->where('fees.fee_name',$feeName)
+                    ->select('transaction_details.transaction_amount','transaction_details.installment_id')
+                    ->get()->groupBy('installment_id')->toarray();
+            }
+            foreach ($total_paid_fees as $key => $paid_fees){
+                foreach ($paid_fees as $installmentIds=>$data){
+                    $new_array[$key][$installmentIds] = array_sum(array_column($data,'transaction_amount'));
                 }
             }
+            $date=date('Y-m-d');
+            $currentDate= date_create($date);
             $total_fee_for_current_year = array();
             foreach($fee_due_date as $fee_name => $val){
-                $total_fee_for_current_year[$val[0]['fee_name']]['discount'] = 0;
-                foreach($val as $discount){
-                    $total_fee_for_current_year[$val[0]['fee_name']]['discount'] += $discount['discount'];
+                foreach($val as $key=> $data){
+                    $data = $data->groupBy('installment_id')->toArray();
+                    foreach ($data as $key3=>$new){
+                        $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] = 0;
+                        foreach($new as $discount){
+                            $storedDate = date_create($discount['due_date']);
+                            if($currentDate > $storedDate){
+                                $difference = date_diff( $storedDate,$currentDate);
+                                $dateDifference = $difference->format("%a");
+                                $calculate = floor($dateDifference/($discount['number_of_days'] + 1)) * $discount['late_fee_amount'];
+                                $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ( $discount['discount']+ $calculate );
+                            }else{
+                                $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                            }
+                        }
+                    }
                 }
+            }
+            $total_due_fee_for_current_year = array();
+            foreach ($total_fee_for_current_year as $key=> $total_fee){
+                foreach ($total_fee as $instalId => $data){
+                    if(array_key_exists($key,$new_array) && array_key_exists($instalId, $new_array[$key])){
+                        $total_due_fee_for_current_year[$key][$instalId] = $data['discount'] - $new_array[$key][$instalId];
+                    }else{
+                        $total_due_fee_for_current_year[$key][$instalId] = $data['discount'] - 0;
+                    }
+                }
+            }
+            $student_new_pending_fees = array();
+            foreach($fee_due_date as $key1 => $val){
+                foreach ($val as $key4 => $new){
+                    $new = $new->groupBy('installment_id')->toArray();
+                    foreach($new as $insall_id=> $data){
+                        if($total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']] > 0){
+                            $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = $total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']];
+                        }else{
+                            $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = 0;
+                        }
+                    }
+                }
+            }
+            $total_fees_for_current_year = array();
+            foreach ($fee_due_date as $key => $due_date){
+                $total_fees_for_current_year[$due_date[0][0]['fee_name']]['discount'] = 0;
+                foreach ($due_date as $item => $value){
+                    foreach ($value as $key3=>$val){
+                        $total_fees_for_current_year[$due_date[0][0]['fee_name']]['discount'] +=  $val['discount'];
+                    }
+                }
+            }
+            foreach ($student_new_pending_fees as $key => $data){
+                $total_fees_for_current_year[$key]['pending'] =array_sum(array_values($data));
             }
             $transactions = TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
                             ->where('transaction_details.student_id',$id)
@@ -598,16 +684,11 @@ class LeaveController extends Controller
             $responseData=array();
             $iterator=0;
             $responseData['transaction'] = $transactions->toArray();
-            foreach ($total_fee_for_current_year as $key => $total_fee){
+            foreach ($total_fees_for_current_year as $key => $total_fee){
                     $responseData['structures'][$iterator]['structure_name'] = $key;
                     $responseData['structures'][$iterator]['discount'] = $total_fee['discount'];
-                        if(array_key_exists($key,$new_array)){
-                            $responseData['structures'][$iterator]['pending_fee'] = $total_fee['discount'] - $new_array[$key];
-                            $iterator++;
-                    }else{
-                            $responseData['structures'][$iterator]['pending_fee'] = $total_fee['discount'] - 0;
-                            $iterator++;
-                        }
+                    $responseData['structures'][$iterator]['pending_fee'] = $total_fee['pending'];
+                    $iterator++;
             }
         } catch (\Exception $e){
             $status = 500;
@@ -621,9 +702,6 @@ class LeaveController extends Controller
         Log::critical(json_encode($response));
         return response()->json($response,$status);
     }
-
-
-
 
     public function getFeesStudent ($id){
         $concessions=StudentFeeConcessions::where('student_id',$id)->select('fee_id')->first();

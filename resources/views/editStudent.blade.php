@@ -52,6 +52,11 @@
                                 Fee Transactions
                             </a>
                         </li>
+                            <li>
+                                <a data-toggle="tab" href="#late_fee_for_student">
+                                    Late Fee For student
+                                </a>
+                            </li>
                     </ul>
                     <div class="tab-content">
                         <div id="panel_edit_account" class="tab-pane fade in active ">
@@ -824,7 +829,7 @@
                                 </div>
                             </div>
                         </div>
-                            <div id="panel_module_fee" class="tab-pane fade-out">
+                        <div id="panel_module_fee" class="tab-pane fade-out">
                                 <div class="panel-body">
                                      <div class="container">
                                          <div class="row">
@@ -856,20 +861,22 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
-                                                    @if(!empty($fee_due_date))
-                                                    @foreach($fee_due_date as $key => $fee_due_dates)
+                                                @if(!empty($fee_due_date))
+                                                    @foreach(array_values($fee_due_date) as $key => $fee_due_dates)
                                                             <dl>
-                                                            <dt>Structuire Name</dt>
-                                                            <dd>{{$fee_due_dates[0]['fee_name']}}</dd>
-                                                        </dl>
-                                                        @foreach($fee_due_dates as $due_date)
-                                                           <dl class="accordion">
-                                                                <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $due_date['installment_id'] !!}</a></dt>
-                                                                <dd>Due-date:{!! $due_date['due_date'] !!}   <br><br> Amount: {!! round($due_date['discount'],2) !!} <br><br> Late Fee Amount : {!! $due_date['late_fee_amount'] !!}</dd>
+                                                                <dt>Structure Name</dt>
+                                                                <dd>{{$fee_due_dates[0][0]['fee_name']}}</dd>
                                                             </dl>
+                                                        @foreach($fee_due_dates as $due_date)
+                                                            @foreach($due_date as $data)
+                                                                <dl class="accordion">
+                                                                <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $data['installment_id'] !!}</a></dt>
+                                                                <dd>Due-date:{!! $data['due_date'] !!}   <br><br> Amount: {!! round($data['discount'],2) !!} <br><br> Late Fee Amount : {!! $data['late_fee_amount'] !!}</dd>
+                                                            </dl>
+                                                            @endforeach
                                                         @endforeach
                                                     @endforeach
-                                                    @endif
+                                                 @endif
                                                     <input type="hidden" id="user-id" value={{$user->id}}>
                                                 </div>
                                             </div>
@@ -883,10 +890,10 @@
                                                <ul class="mini-stats pull-left">
                                                    <li>
                                                        <div class="values">
-                                                           @foreach($total_fee_for_current_year as $key => $year)
+                                                           @foreach($total_fees_for_current_year as $key => $year)
                                                                <div>
                                                                    <h4>{{$key}}</h4>
-                                                                   <span>Total fee for current year :- {{$year['discount']}}</span>
+                                                                   <span>Total fee for current year :- {{$year}}</span>
                                                                    <br><br>
                                                                </div>
                                                                @endforeach
@@ -897,7 +904,7 @@
                                                <ul class="mini-stats pull-right">
                                                <li>
                                                        <div class="values">
-                                                         @foreach($total_due_fee_for_current_year as $name => $value)
+                                                         @foreach($total_due_fees_for_current_year as $name => $value)
                                                                <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
                                                                <h4>{{$name}}</h4>
                                                                Total due fee for current year : {{$value}}
@@ -909,7 +916,8 @@
                                     </fieldset>
                                     <fieldset>
                                         <span class="mainDescription"><h3>Add Fee Transaction </h3></span>
-                                        <hr>                                        <div class="row">
+                                        <hr>
+                                        <div class="row">
                                             <div class="col-md-12">
                                                 <form id="fee_transaction_form" method="post" action="/fees/transactions">
                                                 <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
@@ -921,15 +929,13 @@
                                                             </label>
                                                             <div>
                                                                 <select name="Structure_type">
-                                                                    @foreach($fees as $fee)
+                                                                    @foreach($assigned_fee_student as $fee)
                                                                         <option value="{{$fee['id']}}">{{$fee['fee_name']}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
                                                     </div>
-
-
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">
@@ -970,7 +976,7 @@
                                                             Transaction Date:<span class="symbol required"></span>
                                                         </label>
                                                         <div>
-                                                            <input type="text" name="date" placeholder="DD-MM-YYYY">
+                                                            <input type="date" name="date">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -996,6 +1002,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
+                                        </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-3 col-md-offset-5">
@@ -1048,8 +1055,52 @@
                                    </fieldset>
                               </div>
                               </div>
+                        <div class="tab-pane fade" id="late_fee_for_student">
+                            <div class="panel-body">
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <form id="fee_transaction_form" method="post" action="/fees/late-fee">
+                                                <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                            Select Fee Structure :<span class="symbol required"></span>
+                                                        </label>
+                                                        <div>
+                                                            <select name="fee_id" id="select-fee">
+                                                                <option value="">please select fee structure</option>
+                                                            @foreach($assigned_fee_student as $fee)
+                                                                    <option value="{{$fee['id']}}">{{$fee['fee_name']}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group late-fee">
+                                                        <label class="control-label">
+                                                            Enter late Fee :<span class="symbol required"></span>
+                                                        </label>
+                                                        <div id="late_fee_enter">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    <div class="row" id="lateFeeSubmit">
+                                                        <div class="col-md-4 col-md-offset-7">
+                                                            <button class="btn btn-primary pull-right" type="submit" >
+                                                                Update <i class="fa fa-arrow-circle-right"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
                         </div>
+                       </div>
+                      </div>
                      </div>
                    </div>
                 </div>
@@ -1338,6 +1389,25 @@
                 }
             });
         })
+</script>
+<script>
+    $('.late-fee').hide();
+    $('#lateFeeSubmit').hide();
+    var student_id = $('#userId').val();
+    $('#select-fee').change(function(){
+        var id=this.value;
+        var route='/fees/get-installments/'+id+'/'+student_id;
+        $.get(route,function(res) {
+            $('.late-fee').show();
+            $('#lateFeeSubmit').show();
+            $('#late_fee_enter').empty();
+            var i=0;
+               $.each(res,function(){
+                   $("#late_fee_enter").append("<input placeholder='"+res[i]['late_fee_amount']+"' type=text id=late_fee name=late_fee["+res[i]['installment_id']+"] /><br>");
+                   i++;
+               })
+        })
+    });
 </script>
 <script src="/assets/js/student-edit.js" ></script>
 @stop

@@ -95,12 +95,23 @@
         Route::post('create-form-fee',array('uses' => 'FeeController@createFormFee'));
         Route::get('formFeeTable',array('uses' => 'FeeController@formFeeListing'));
         Route::get('downlod-form-fee/{id}',array('uses' => 'FeeController@formFeePDF'));
+        Route::post('late-fee',array('uses' => 'FeeController@lateFeeForm'));
+        Route::get('get-installments/{id}/{student_id}',array('uses' => 'FeeController@getInstallmentsForStudents'));
 
     });
 
     Route::group(['prefix' => 'payment'],function(){
         Route::post('make-payment',array('uses'=>'PaymentController@billPayment'));
         Route::get('payment-return/{slug?}',array('uses'=>'PaymentController@billReturnUrl'));
+    });
+
+    Route::group(['prefix' => 'certificates'], function(){
+        Route::group(['prefix' => 'bonafide'], function(){
+            Route::get('manage', array('uses' => 'Certificate\BonafideCertificateController@getManageView'));
+            Route::get('create', array('uses' => 'Certificate\BonafideCertificateController@getCreateView'));
+            Route::post('get-bonafide-view', array('uses' => 'Certificate\BonafideCertificateController@getBonafideView'));
+            Route::get('download', array('uses' => 'Certificate\BonafideCertificateController@downloadBonafide'));
+        });
     });
 
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));

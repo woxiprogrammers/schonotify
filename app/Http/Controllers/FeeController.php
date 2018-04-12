@@ -19,6 +19,7 @@ use App\Fees;
 use App\FormFee;
 use App\StudentFee;
 use App\StudentFeeConcessions;
+use App\StudentLateFee;
 use App\TransactionDetails;
 use App\User;
 use App\PushToken;
@@ -199,9 +200,9 @@ class FeeController extends Controller
     public function feeListingTableView(Request $request)
     {
        $user = Auth::user()->toarray();
-       $batches = Batch::where('body_id',$user['body_id'])->lists('id');
-       $classes = Classes::whereIn('batch_id',$batches)->lists('id');
-       $fee_classes = FeeClass::whereIn('class_id',$classes)->select('fee_id')->get()->toArray();
+        $batches = Batch::where('body_id',$user['body_id'])->lists('id');
+        $classes = Classes::whereIn('batch_id',$batches)->lists('id');
+        $fee_classes = FeeClass::whereIn('class_id',$classes)->select('fee_id')->get()->toArray();
        if($request->str1 == 0)
        {
            $fees=Fees::whereIn('id',$fee_classes)->select()->get();
@@ -345,6 +346,7 @@ class FeeController extends Controller
                         $total_fee_amount += $installment['amount'];
                     }
                     $installments[$installment['installment_id']]['subTotal'] = $total_installment_amount[$installment['installment_id']];
+                    $installments[$installment['installment_id']]['late_fee'] = FeeDueDate::where('installment_id',$installment['installment_id'])->pluck('late_fee_amount');
                     $transactionCount = TransactionDetails::where('fee_id',$student_fee['fee_id'])->where('student_id',$student['id'])->where('installment_id',$installment['installment_id'])->count();
                     if($transactionCount > 0){
                         $installments[$installment['installment_id']]['is_paid'] = true;
@@ -523,12 +525,12 @@ class FeeController extends Controller
                                 ->where('divisions.id',$division['id'])
                                 ->select('classes.class_name as class_name')
                                 ->get()->first();
-            $iterator = 0;
             foreach ($studentFee as $key => $a) {
                 $installment_info = FeeInstallments::where('fee_id', $fee_id)->select('installment_id', 'particulars_id', 'amount')->get()->toarray();
                 $installments = array();
                 if (!empty($installment_info)) {
                     foreach ($installment_info as $installment) {
+
                         if (!array_key_exists($installment['installment_id'], $installments)) {
                             $installments[$installment['installment_id']] = array();
                             $installments[$installment['installment_id']]['subTotal'] = 0;
@@ -555,16 +557,46 @@ class FeeController extends Controller
                         $response[$installmentId] = $installments[$installmentId]['subTotal'] - $discount;
                     }
                 }
-                $iterator++;
             }
-            $sum = array_sum($response);
+            $installmentIDS = FeeInstallments::where('fee_id',$fee_id)->distinct()->lists('installment_id')->toArray();
             $new_array = array();
-            $total_paid_fees = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->select('transaction_amount')->get()->toArray();
-            foreach ($total_paid_fees as $key => $total_paid_fee) {
-                array_push($new_array, $total_paid_fee['transaction_amount']);
+            foreach ($installmentIDS as $instaId){
+                $lateFee = StudentLateFee::where('student_id',$id)->where('fee_id',$fee_id)->where('installment_id',$instaId)->first();
+                if($lateFee == null && $lateFee==""){
+                    $studentLateFee[$instaId] = FeeDueDate::where('fee_id',$fee_id)->where('installment_id',$instaId)->select('due_date','late_fee_amount','number_of_days')->get();
+                }else{
+                    $studentLateFee[$instaId] = StudentLateFee::join('fee_due_date','fee_due_date.fee_id','=','student_late_fee.fee_id')
+                                                    ->where('student_late_fee.fee_id',$fee_id)
+                                                    ->where('fee_due_date.fee_id',$fee_id)
+                                                    ->where('student_late_fee.installment_id',$instaId)
+                                                    ->where('fee_due_date.installment_id',$instaId)
+                                                    ->select('fee_due_date.due_date','fee_due_date.number_of_days','student_late_fee.late_fee_amount')
+                                                    ->get();
+                }
+                $total_paid_fees = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->where('installment_id',$instaId)->select('transaction_amount')->get()->toArray();
+                $new_array[$instaId] = array_sum(array_column($total_paid_fees,'transaction_amount'));
             }
-            $final_paid_fee_for_current_year = array_sum($new_array);
-            $balance = $sum - $final_paid_fee_for_current_year;
+            foreach ($response as $key => $data){
+                $total_fees[$key] = $data - $new_array[$key];
+            }
+            $date=date('Y-m-d');
+            $currentDate= date_create($date);
+            foreach ($studentLateFee as $instaids => $values){
+               if($total_fees[$instaids] > 0){
+                   $storedDate = date_create($values[0]['due_date']);
+                   if($currentDate > $storedDate){
+                       $difference = date_diff( $storedDate,$currentDate);
+                       $dateDifference = $difference->format("%a");
+                       $calculate = floor($dateDifference/($values[0]['number_of_days'] + 1)) * $values[0]['late_fee_amount'];
+                       $finalamount[$instaids] = $total_fees[$instaids] + $calculate;
+                   }else{
+                     $finalamount[$instaids] = $total_fees[$instaids];
+                   }
+               }else{
+                   $finalamount[$instaids] =0;
+               }
+            }
+            $balance =array_sum($finalamount);
             TCPdf::AddPage();
             TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user', 'balance', 'grn', 'transaction_details', 'parent_name','division','class'))->render());
             TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
@@ -882,5 +914,64 @@ class FeeController extends Controller
             ];
             Log::critical(json_encode($data));
         }
+    }
+    public function lateFeeForm(Request $request){
+        try{
+            $alreadyPresentDataCount = StudentLateFee::where('student_id',$request->student_id)->where('fee_id',$request->fee_id)->count();
+            if($alreadyPresentDataCount == 0){
+                $data['student_id'] = $request->student_id;
+                $data['fee_id'] = $request->fee_id;
+                foreach ($request->late_fee as $key => $lateFee){
+                    $data['installment_id'] = $key;
+                    $data['late_fee_amount'] = $lateFee;
+                    $query = StudentLateFee::create($data);
+                }
+            }else{
+                foreach ($request->late_fee as $key => $lateFee){
+                    $data['late_fee_amount'] = $lateFee;
+                    $query = StudentLateFee::where('student_id',$request->student_id)->where('fee_id',$request->fee_id)->where('installment_id',$key)->update($data);
+                }
+            }
+            if($query){
+                Session::flash('message-success','Student late fee updated successfully .');
+                return Redirect::back();
+            }else{
+                Session::flash('message-error','Something went wrong !');
+                return Redirect::back();
+            }
+        }catch(\Exception $e){
+            $data = [
+                'action' => "Student late fee updated successfully",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+
+    }
+    public function getInstallmentsForStudents(Request $request,$id,$student_id){
+        try{
+            $count = StudentLateFee::where('student_id',$student_id)->where('fee_id',$id)->count();
+            if($count == 0){
+                $installments = StudentFee::join('fee_installments','fee_installments.fee_id','=','student_fee.fee_id')
+                    ->join('fee_due_date','fee_due_date.fee_id','=','fee_installments.fee_id')
+                    ->where('student_fee.student_id',$student_id)
+                    ->where('student_fee.fee_id',$id)
+                    ->where('fee_installments.fee_id',$id)
+                    ->select('fee_due_date.installment_id','fee_due_date.late_fee_amount')
+                    ->distinct('fee_installments.installment_id')->get();
+            }else{
+                $installments = StudentLateFee::where('student_id',$student_id)->where('fee_id',$id)->select('installment_id','late_fee_amount')->get();
+            }
+            return $installments;
+        }catch(\Exception $e){
+            $data = [
+                'action' => "installment list",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+        }
+
     }
 }
