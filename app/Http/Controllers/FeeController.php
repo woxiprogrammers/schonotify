@@ -576,6 +576,7 @@ class FeeController extends Controller
                 $total_paid_fees = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->where('installment_id',$instaId)->select('transaction_amount')->get()->toArray();
                 $new_array[$instaId] = array_sum(array_column($total_paid_fees,'transaction_amount'));
             }
+            dd($response);
             foreach ($response as $key => $data){
                 $total_fees[$key] = $data - $new_array[$key];
             }
