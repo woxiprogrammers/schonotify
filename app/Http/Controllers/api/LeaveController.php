@@ -350,6 +350,7 @@ class LeaveController extends Controller
                             }
                         }
                     }
+                    $response['data'][$iterator]['show_payment'] = $isPreviousStructureCleared;
                     $response['data'][$iterator]['installments'] = array();
                     $installment_info = FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
                     $installments = array();
@@ -374,10 +375,10 @@ class LeaveController extends Controller
                                 }
                             }
                             $transactionCount = TransactionDetails::where('fee_id',$a['fee_id'])->where('student_id',$id)->where('installment_id',$installment['installment_id'])->count();
-                            if($transactionCount > 0){
-                                $response['data'][$iterator]['show_payment'] = true;
-                            }else{
+                            if($transactionCount > 0 && $isPreviousStructureCleared == true){
                                 $response['data'][$iterator]['show_payment'] = false;
+                            }else{
+                                $response['data'][$iterator]['show_payment'] = true;
                             }
                             $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
                         }
@@ -619,6 +620,8 @@ class LeaveController extends Controller
                     $new_array[$key][$installmentIds] = array_sum(array_column($data,'transaction_amount'));
                 }
             }
+            $date=date('Y-m-d');
+            $currentDate= date_create($date);
             $total_fee_for_current_year = array();
             foreach($fee_due_date as $fee_name => $val){
                 foreach($val as $key=> $data){
@@ -626,7 +629,15 @@ class LeaveController extends Controller
                     foreach ($data as $key3=>$new){
                         $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] = 0;
                         foreach($new as $discount){
-                            $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                            $storedDate = date_create($discount['due_date']);
+                            if($currentDate > $storedDate){
+                                $difference = date_diff( $storedDate,$currentDate);
+                                $dateDifference = $difference->format("%a");
+                                $calculate = floor($dateDifference/($discount['number_of_days'] + 1)) * $discount['late_fee_amount'];
+                                $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ( $discount['discount']+ $calculate );
+                            }else{
+                                $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                            }
                         }
                     }
                 }
@@ -642,22 +653,12 @@ class LeaveController extends Controller
                 }
             }
             $student_new_pending_fees = array();
-            $date=date('Y-m-d');
-            $currentDate= date_create($date);
             foreach($fee_due_date as $key1 => $val){
                 foreach ($val as $key4 => $new){
                     $new = $new->groupBy('installment_id')->toArray();
                     foreach($new as $insall_id=> $data){
                         if($total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']] > 0){
-                            $storedDate = date_create($data[0]['due_date']);
-                            if($currentDate > $storedDate){
-                                $difference = date_diff( $storedDate,$currentDate);
-                                $dateDifference = $difference->format("%a");
-                                $calculate = floor($dateDifference/($data[0]['number_of_days'] + 1)) * $data[0]['late_fee_amount'];
-                                $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = $total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']] + $calculate;
-                            }else{
-                                $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = $total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']];
-                            }
+                            $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = $total_due_fee_for_current_year[$data[0]['fee_name']][$data[0]['installment_id']];
                         }else{
                             $student_new_pending_fees[$data[0]['fee_name']][$data[0]['installment_id']] = 0;
                         }
@@ -665,10 +666,12 @@ class LeaveController extends Controller
                 }
             }
             $total_fees_for_current_year = array();
-            foreach ($total_fee_for_current_year as $key => $data){
-                $total_fees_for_current_year[$key]['discount'] = 0;
-                foreach ($data as $key_value => $final){
-                    $total_fees_for_current_year[$key]['discount'] += $final['discount'];
+            foreach ($fee_due_date as $key => $due_date){
+                $total_fees_for_current_year[$due_date[0][0]['fee_name']]['discount'] = 0;
+                foreach ($due_date as $item => $value){
+                    foreach ($value as $key3=>$val){
+                        $total_fees_for_current_year[$due_date[0][0]['fee_name']]['discount'] +=  $val['discount'];
+                    }
                 }
             }
             foreach ($student_new_pending_fees as $key => $data){
