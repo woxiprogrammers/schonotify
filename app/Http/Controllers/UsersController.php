@@ -993,6 +993,7 @@ class UsersController extends Controller
                               }
                             }
                          }
+                         dd($total_fee_for_current_year);
                 $total_due_fee_for_current_year = array();
                 foreach ($total_fee_for_current_year as $key=> $total_fee){
                     foreach ($total_fee as $instalId => $data){
