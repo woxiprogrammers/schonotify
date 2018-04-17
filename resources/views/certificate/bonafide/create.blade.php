@@ -89,6 +89,10 @@
                         <div id="bonafideDiv">
 
                         </div>
+                        <hr>
+                        <div id="studentForm">
+
+                        </div>
                     </div>
                 </div>
             </div>

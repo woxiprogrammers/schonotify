@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\certificate;
 
+use App\BonafideCertificateTable;
+use App\StudentExtraInfo;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
 
@@ -45,6 +47,14 @@ class BonafideCertificateController extends Controller
 
     public function getBonafideView(Request $request){
         try{
+            dd($request->all());
+            $data['grn'] = $request->grn;
+            $data['taluka'] = $request->taluka;
+            $data['district'] = $request->district;
+            $data['from_date'] = $request->from_date;
+            $data['to_date'] = $request->to_date;
+            $query = BonafideCertificateTable::create($data);
+
             /*Retrieve data*/
             return view('certificate.bonafide.bonafide_partial');
         }catch (\Exception $e){
@@ -67,6 +77,21 @@ class BonafideCertificateController extends Controller
         }catch (\Exception $e){
             $data = [
                 'action' => 'Download Bonafide Certificate',
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500);
+        }
+    }
+    public function studentForm(Request $request){
+        try{
+            $studentData = StudentExtraInfo::join('users','users.id','=','students_extra_info.student_id')
+                                            ->where('students_extra_info.grn',$request->grn)
+                                            ->select('users.first_name','users.last_name','students_extra_info.grn')->first();
+            return view('certificate.bonafide.bonafide_student_form')->with(compact('studentData'));
+        }catch (\Exception $e){
+            $data = [
+                'action' => 'student bonafide form',
                 'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));

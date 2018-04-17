@@ -111,6 +111,7 @@
             Route::get('create', array('uses' => 'Certificate\BonafideCertificateController@getCreateView'));
             Route::post('get-bonafide-view', array('uses' => 'Certificate\BonafideCertificateController@getBonafideView'));
             Route::get('download', array('uses' => 'Certificate\BonafideCertificateController@downloadBonafide'));
+            Route::post('bonafide-student-form',array('uses' => 'Certificate\BonafideCertificateController@studentForm'));
         });
     });
 

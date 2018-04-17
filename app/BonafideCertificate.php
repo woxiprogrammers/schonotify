@@ -8,5 +8,5 @@ class BonafideCertificateTable extends Model
 {
     protected $table = "bonafide_certificate_table";
 
-    protected $fillable = ['grn','created_date','taluka','district','from_date','to_date'];
+    protected $fillable = ['grn','taluka','district','from_date','to_date'];
 }

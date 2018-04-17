@@ -15,7 +15,6 @@ class CreateBonafideCertificateTable extends Migration
         Schema::create('bonafide_certificate_table', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('grn');
-            $table->date('created_date');
             $table->text('taluka');
             $table->text('district');
             $table->date('from_date');
