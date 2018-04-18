@@ -92,9 +92,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
         @include('footer')
 
         @include('rightSidebar')
