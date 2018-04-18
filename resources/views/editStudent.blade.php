@@ -829,7 +829,7 @@
                                 </div>
                             </div>
                         </div>
-                            <div id="panel_module_fee" class="tab-pane fade-out">
+                        <div id="panel_module_fee" class="tab-pane fade-out">
                                 <div class="panel-body">
                                      <div class="container">
                                          <div class="row">
@@ -861,20 +861,22 @@
                                                 <span class="mainDescription"><h3>Installment details :</h3></span>
                                                 <hr>
                                                 <div>
-                                                    @if(!empty($fee_due_date))
-                                                    @foreach($fee_due_date as $key => $fee_due_dates)
+                                                @if(!empty($fee_due_date))
+                                                    @foreach(array_values($fee_due_date) as $key => $fee_due_dates)
                                                             <dl>
-                                                            <dt>Structuire Name</dt>
-                                                            <dd>{{$fee_due_dates[0]['fee_name']}}</dd>
-                                                        </dl>
-                                                        @foreach($fee_due_dates as $due_date)
-                                                           <dl class="accordion">
-                                                                <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $due_date['installment_id'] !!}</a></dt>
-                                                                <dd>Due-date:{!! $due_date['due_date'] !!}   <br><br> Amount: {!! round($due_date['discount'],2) !!} <br><br> Late Fee Amount : {!! $due_date['late_fee_amount'] !!}</dd>
+                                                                <dt>Structure Name</dt>
+                                                                <dd>{{$fee_due_dates[0][0]['fee_name']}}</dd>
                                                             </dl>
+                                                        @foreach($fee_due_dates as $due_date)
+                                                            @foreach($due_date as $data)
+                                                                <dl class="accordion">
+                                                                <dt style="font-size: 20px;-webkit-appearance: menulist;"><a href="">Installment: {!! $data['installment_id'] !!}</a></dt>
+                                                                <dd>Due-date:{!! $data['due_date'] !!}   <br><br> Amount: {!! round($data['discount'],2) !!} <br><br> Late Fee Amount : {!! $data['late_fee_amount'] !!}</dd>
+                                                            </dl>
+                                                            @endforeach
                                                         @endforeach
                                                     @endforeach
-                                                    @endif
+                                                 @endif
                                                     <input type="hidden" id="user-id" value={{$user->id}}>
                                                 </div>
                                             </div>
@@ -891,7 +893,7 @@
                                                            @foreach($total_fees_for_current_year as $key => $year)
                                                                <div>
                                                                    <h4>{{$key}}</h4>
-                                                                   <span>Total fee for current year :- {{$year['discount']}}</span>
+                                                                   <span>Total fee for current year :- {{$year}}</span>
                                                                    <br><br>
                                                                </div>
                                                                @endforeach
@@ -1398,6 +1400,7 @@
         $.get(route,function(res) {
             $('.late-fee').show();
             $('#lateFeeSubmit').show();
+            $('#late_fee_enter').empty();
             var i=0;
                $.each(res,function(){
                    $("#late_fee_enter").append("<input placeholder='"+res[i]['late_fee_amount']+"' type=text id=late_fee name=late_fee["+res[i]['installment_id']+"] /><br>");
