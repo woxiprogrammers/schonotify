@@ -89,16 +89,10 @@
                         <div id="bonafideDiv">
 
                         </div>
-                        <hr>
-                        <div id="studentForm">
-
-                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
         @include('footer')
 
         @include('rightSidebar')
