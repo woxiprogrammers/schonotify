@@ -81,7 +81,7 @@
         Route::get('transaction-listing',array('uses' => 'FeeController@getTransactionListing'));
         Route::get('feeTransactionListingTable',array('uses' => 'FeeController@getTransactionListingTable'));
         Route::post('transactionFeeListingTable',array('uses' => 'FeeController@showFeeTransactionListing'));
-        Route::get('download-pdf/{id}/{fee_id}/{amount_id}',array('uses' => 'FeeController@createPDF'));
+        Route::get('download-pdf/{id}/{fee_id}/{amount_id}/{Installment}',array('uses' => 'FeeController@createPDF'));
         Route::post('get-structure-installments/{fee_id}',array('uses' => 'FeeController@getFeeStructureInstallments'));
         Route::get('fee-development',array('uses' => 'FeeController@feeDevelopmentView'));
         Route::get('fee-admission',array('uses' => 'FeeController@feeAdmissionView'));
