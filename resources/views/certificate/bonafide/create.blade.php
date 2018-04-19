@@ -62,7 +62,7 @@
                     <div class="container-fluid container-fullw bg-white">
                         <div class="row">
                             <div class="col-md-12">
-                                <form method="post" action="javascript:void(0);" role="form" id="bonafideCreateForm">
+                                <form method="post" action="" role="form" id="bonafideCreateForm">
                                     {!! csrf_field() !!}
                                     <div class="row">
                                         <div class="col-md-6">

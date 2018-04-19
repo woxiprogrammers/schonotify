@@ -114,7 +114,7 @@ var FormValidator2 = function(){
             submitHandler: function (form) {
                 successHandler.show();
                 errorHandler.hide();
-                $("#studentForm").html();
+                $("#bonafideStudentForm").html();
                 var formData = $("#bonafideStudentForm").serialize();
                 $.ajax({
                     url: '/certificates/bonafide/get-bonafide-view',
@@ -122,7 +122,7 @@ var FormValidator2 = function(){
                     type: "POST",
                     async: true,
                     success:function(data,textStatus,xhr){
-                        $("#bonafideDiv").html(data);
+                        location.href="/certificates/bonafide/manage"
                     },
                     error: function(xhr,errorStatus){
                         if(xhr.status == 400){
