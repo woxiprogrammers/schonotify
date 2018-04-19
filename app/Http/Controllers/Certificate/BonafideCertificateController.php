@@ -63,10 +63,8 @@ class BonafideCertificateController extends Controller
             $query = BonafideCertificateTable::create($data);
             if($query){
                 Session::flash('message-success','data created successfully');
-            return Redirect::back();
             }else{
                 Session::flash('message-error','something went wrong');
-                return Redirect::back();
             }
         }catch (\Exception $e){
             $data = [

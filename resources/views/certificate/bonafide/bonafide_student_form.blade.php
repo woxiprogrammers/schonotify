@@ -12,7 +12,7 @@
 <div class="container-fluid container-fullw bg-white">
     <div class="row">
         <div class="col-md-12">
-            <form method="post" action="javascript:void(0);" role="form" id="bonafideStudentForm">
+            <form method="post" action="" role="form" id="bonafideStudentForm">
                 <input type="hidden" id="grn" value="{{$studentData['grn']}}" name="grn">
                 <div class="row">
                     <div class="col-md-4">
@@ -51,7 +51,7 @@
                         <label class="control-label">&nbsp;
                         </label>
                         <div class="form-group">
-                            <button class="btn btn-primary btn-wide" type="submit">
+                            <button class="btn btn-primary btn-wide" id="submit" type="submit">
                                 Create <i class="fa fa-arrow-circle-right"></i>
                             </button>
                         </div>
@@ -76,3 +76,8 @@
     <script src="/assets/js/certificates/bonafide.js"></script>
 
 
+<script>
+    $('#submit').click(function(){
+        $('#submit').hide();
+    })
+</script>
