@@ -81,7 +81,7 @@
         Route::get('transaction-listing',array('uses' => 'FeeController@getTransactionListing'));
         Route::get('feeTransactionListingTable',array('uses' => 'FeeController@getTransactionListingTable'));
         Route::post('transactionFeeListingTable',array('uses' => 'FeeController@showFeeTransactionListing'));
-        Route::get('download-pdf/{id}/{fee_id}/{amount_id}',array('uses' => 'FeeController@createPDF'));
+        Route::get('download-pdf/{id}/{fee_id}/{amount_id}/{Installment}',array('uses' => 'FeeController@createPDF'));
         Route::post('get-structure-installments/{fee_id}',array('uses' => 'FeeController@getFeeStructureInstallments'));
         Route::get('fee-development',array('uses' => 'FeeController@feeDevelopmentView'));
         Route::get('fee-admission',array('uses' => 'FeeController@feeAdmissionView'));
@@ -110,7 +110,9 @@
             Route::get('manage', array('uses' => 'Certificate\BonafideCertificateController@getManageView'));
             Route::get('create', array('uses' => 'Certificate\BonafideCertificateController@getCreateView'));
             Route::post('get-bonafide-view', array('uses' => 'Certificate\BonafideCertificateController@getBonafideView'));
-            Route::get('download', array('uses' => 'Certificate\BonafideCertificateController@downloadBonafide'));
+            Route::get('download/{grn}', array('uses' => 'Certificate\BonafideCertificateController@downloadBonafide'));
+            Route::get('view/{grn}',array('uses' => 'Certificate\BonafideCertificateController@bonafideView'));
+            Route::post('bonafide-student-form',array('uses' => 'Certificate\BonafideCertificateController@studentForm'));
         });
     });
 
