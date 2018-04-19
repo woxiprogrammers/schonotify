@@ -114,6 +114,11 @@
             Route::get('view/{grn}',array('uses' => 'Certificate\BonafideCertificateController@bonafideView'));
             Route::post('bonafide-student-form',array('uses' => 'Certificate\BonafideCertificateController@studentForm'));
         });
+        Route::group(['prefix' =>'livingCertificate'],function(){
+            Route::get('manage',array('uses' => 'Certificate\LivingCertificateController@getManageView'));
+            Route::get('create', array('uses' => 'Certificate\LivingCertificateController@getCreateView'));
+            Route::post('livingCertificate-student-form',array('uses' => 'Certificate\LivingCertificateController@studentForm'));
+        });
     });
 
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));

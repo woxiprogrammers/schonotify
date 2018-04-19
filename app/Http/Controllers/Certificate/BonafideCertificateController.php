@@ -63,20 +63,22 @@ class BonafideCertificateController extends Controller
             $query = BonafideCertificateTable::create($data);
             if($query){
                 Session::flash('message-success','data created successfully');
-            return Redirect::back();
             }else{
                 Session::flash('message-error','something went wrong');
-                return Redirect::back();
             }
+            $message = 'Success .';
+            $status = 200;
         }catch (\Exception $e){
             $data = [
                 'action' => 'Get Bonafide view',
                 'GRN' => $request->grn,
                 'exception' => $e->getMessage()
             ];
+            $message = 'Something went wrong .';
+            $status = 500;
             Log::critical(json_encode($data));
-            return response()->json(['message' => 'Something went wrong .'], 500);
         }
+        return response()->json(['message' => $message], $status);
     }
 
     public function downloadBonafide(Request $request,$grn){
