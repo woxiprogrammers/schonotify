@@ -53,7 +53,7 @@ class BonafideCertificateController extends Controller
         }
     }
 
-    public function getBonafideView(Request $request){
+    public function createBonafideForm(Request $request){
         try{
             $data['grn'] = $request->grn;
             $data['taluka'] = $request->taluka;
