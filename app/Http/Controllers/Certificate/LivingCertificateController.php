@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Certificate;
 
+use App\StudentExtraInfo;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -41,11 +42,10 @@ class LivingCertificateController extends Controller
     }
     public function studentForm(Request $request){
         try{
-            dd($request->all());
             $studentData = StudentExtraInfo::join('users','users.id','=','students_extra_info.student_id')
                 ->where('students_extra_info.grn',$request->grn)
-                ->select('users.first_name','users.last_name','students_extra_info.grn')->first();
-            return view('certificate.bonafide.bonafide_student_form')->with(compact('studentData'));
+                ->select('users.first_name','users.last_name','students_extra_info.grn','students_extra_info.aadhar_number')->first();
+            return view('certificate.livingCertificate.livingCertificateForm')->with(compact('studentData'));
         }catch (\Exception $e){
             $data = [
                 'action' => 'student bonafide form',
