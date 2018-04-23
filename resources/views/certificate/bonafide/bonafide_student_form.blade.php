@@ -5,6 +5,7 @@
  * Time: 10:34 AM
  */
 ?>
+@if($studentData != null)
 <hr>
 <legend>
     Please fill the Information for {{$studentData['first_name']}} {{$studentData['last_name']}}
@@ -61,6 +62,9 @@
         </div>
     </div>
 </div>
+@else
+    <legend style="color: darkred"> No Student Available for entered GRN </legend>
+@endif
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/modernizr/modernizr.js"></script>
@@ -80,4 +84,5 @@
     $('#submit').click(function(){
         $('#submit').hide();
     })
+
 </script>

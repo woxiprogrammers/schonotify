@@ -77,7 +77,7 @@
                                             <label class="control-label">&nbsp;
                                             </label>
                                             <div class="form-group">
-                                                <button class="btn btn-primary btn-wide" type="submit">
+                                                <button class="btn btn-primary btn-wide" id="create" type="submit">
                                                     Create <i class="fa fa-arrow-circle-right"></i>
                                                 </button>
                                             </div>
@@ -112,6 +112,8 @@
     <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
     <script src="/assets/js/certificates/bonafide.js"></script>
+
+
 @stop
 
 

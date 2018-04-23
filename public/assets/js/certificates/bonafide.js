@@ -117,7 +117,7 @@ var FormValidator2 = function(){
                 $("#bonafideStudentForm").html();
                 var formData = $("#bonafideStudentForm").serialize();
                 $.ajax({
-                    url: '/certificates/bonafide/get-bonafide-view',
+                    url: '/certificates/bonafide/create-bonafide-form',
                     data: formData,
                     type: "POST",
                     async: true,
