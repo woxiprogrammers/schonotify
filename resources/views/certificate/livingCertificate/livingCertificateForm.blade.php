@@ -13,18 +13,18 @@
 <div class="container-fluid container-fullw bg-white">
     <div class="row">
         <div class="col-md-12">
-            <form method="post" action="javascript:void(0);" role="form" id="livingCertificateStudentForm">
+            <form method="post" action="" role="form" id="livingCertificateStudentForm">
                 <input type="hidden" id="grn" value="{{$studentData['grn']}}" name="grn">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
-                                Pan Card No. <span class="symbol required"></span>
+                                Aadhar Card No. <span class="symbol required"></span>
                             </label>
                             @if($studentData['aadhar_number'] != "" && $studentData['aadhar_number'] != null)
-                                <input type="text" class="form-control" name="panCard" id="panCard" required="required">
+                                <input type="text" class="form-control" name="aadharCard" id="aadharCard" required="required">
                               @else
-                                <input type="text" class="form-control" name="panCard" id="panCard" value="{{$studentData['aadhar_number']}}" required="required">
+                                <input type="text" class="form-control" name="aadharCard" id="aadharCard" value="{{$studentData['aadhar_number']}}" required="required">
                             @endif
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                         <label class="control-label">&nbsp;
                         </label>
                         <div class="form-group">
-                            <button class="btn btn-primary btn-wide" type="submit">
+                            <button class="btn btn-primary btn-wide" id="create" type="submit">
                                 Create <i class="fa fa-arrow-circle-right"></i>
                             </button>
                         </div>
@@ -122,6 +122,10 @@
 <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="/assets/js/certificates/livingcertificate.js"></script>
-
+<script>
+    $('#create').click(function(){
+        $('#create').hide();
+    })
+</script>
 
 

@@ -41,23 +41,23 @@
                         <table class="table  table-striped table-bordered table-hover table-full-width" id="sample_1">
                             <thead>
                             <tr>
-                                <th width="10%"> Sr. No </th>
-                                <th width="10%"> Grn Number </th>
-                                <th width="10%"> Student Name </th>
-                                <th width="10%">  Date </th>
+                                <th width="7%"> LC No </th>
+                                <th width="10%"> Name </th>
+                                <th width="10%"> Date of living School </th>
+                                <th width="10%">  Reason for living School </th>
                                 <th width="10%"> Action </th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{--@foreach($StudentData as $data)
+                            @foreach($StudentData as $data)
                                 <tr>
                                     <td>{{$data['id']}}</td>
-                                    <td>{{$data['grn']}}</td>
                                     <td>{{$data['first_name']}} {{$data['last_name']}}</td>
-                                    <td>{{$data['created_at']}}</td>
-                                    <td><a href="/certificates/bonafide/view/{{$data['grn']}}">view</a> / <a href="/certificates/bonafide/download/{{$data['grn']}}">download</a></td>
+                                    <td>{{$data['date_of_leaving']}}</td>
+                                    <td>{{$data['reason']}}</td>
+                                    <td><a href="/certificates/livingCertificate/view/{{$data['id']}}">view</a> / <a href="/certificates/livingCertificate/download/{{$data['id']}}">download</a> / <a href="/certificates/livingCertificate/edit/{{$data['id']}}">Edit</a></td>
                                 </tr>
-                            @endforeach--}}
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
