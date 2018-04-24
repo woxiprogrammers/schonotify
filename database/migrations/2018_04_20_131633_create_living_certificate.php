@@ -24,7 +24,6 @@ class CreateLivingCertificate extends Migration
             $table->text('standard_in_which_studying');
             $table->text('reason');
             $table->text('remark');
-            $table->boolean('is_generated');
             $table->timestamps();
         });
     }

@@ -123,9 +123,7 @@
 <script src="/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="/assets/js/certificates/livingcertificate.js"></script>
 <script>
-    $('#create').click(function(){
-        $('#create').hide();
-    })
+
 </script>
 
 

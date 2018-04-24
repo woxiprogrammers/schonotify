@@ -482,6 +482,7 @@
                                                         <img src="/uploads/profile-picture/{!! $user->avatar !!}" alt="">
                                                     </div>
                                                     <div class="fileinput-preview fileinput-exists thumbnail  col-sm-6 pull-right"></div>
+
                                                     <div class="user-edit-image-buttons pull-right col-sm-6">
                                                                 <span class="btn btn-azure btn-file"><span class="fileinput-new"><i class="fa fa-picture"></i>Browse Image</span><span class="fileinput-exists"><i class="fa fa-picture"></i></span>
                                                                         <input type="file" name="avatar" >
@@ -496,6 +497,7 @@
                                     </div>
                                 </fieldset>
                                 @endforeach
+                                @if($user->is_lc_generated == 0)
                                 <div class="row">
                                     <div class="col-md-4">
                                         <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
@@ -503,6 +505,7 @@
                                         </button>
                                     </div>
                                 </div>
+                                 @endif
                             </form>
                         </div>
                         <div id="panel_edit_Parent" class="tab-pane fade in">
@@ -802,6 +805,7 @@
                                         </div>
                                     </div>
                                 </fieldset>
+                                @if($user->is_lc_generated == 0)
                                 <div class="row">
                                     <div class="col-md-4">
                                         <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
@@ -809,6 +813,7 @@
                                         </button>
                                     </div>
                                 </div>
+                               @endif
                             </form>
                             </div>
                         </div>
@@ -816,6 +821,7 @@
                             <div class="panel-body">
                                 <div class="col-sm-10">
                                     <form id="editAcl" method="post" action="/acl-update/{!! $user->parent_id !!}">
+                                        @if($user->is_lc_generated == 0)
                                         <table class="table table-responsive" id="aclMod">
                                         </table>
                                         <div class="row">
@@ -825,6 +831,7 @@
                                                 </button>
                                             </div>
                                         </div>
+                                       @endif
                                     </form>
                                 </div>
                             </div>
@@ -994,6 +1001,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    @if($user->is_lc_generated == 0)
                                                     <div class="row">
                                                         <div class="col-md-4 col-md-offset-7">
                                                             <button class="btn btn-primary pull-right" type="submit" >
@@ -1001,6 +1009,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
+                                                    @endif
                                                 </form>
                                         </div>
                                         </div>
@@ -1008,6 +1017,7 @@
                                             <div class="col-md-3 col-md-offset-5">
                                                 &nbsp;&nbsp;&nbsp;<h4>OR</h4>
                                             </div>
+                                            @if($user->is_lc_generated == 0)
                                             <div class="row">
                                                 <div class="col-md-3 col-md-offset-4">
                                                     <a class="btn btn-primary btn-wide" style="margin-left: 20%" href="{{$paymentLink}}">
@@ -1015,6 +1025,7 @@
                                                     </a>
                                                 </div>
                                             </div>
+                                            @endif
                                         </div>
                                    </fieldset>
                                    <fieldset>
@@ -1088,9 +1099,11 @@
                                                 </div>
                                                     <div class="row" id="lateFeeSubmit">
                                                         <div class="col-md-4 col-md-offset-7">
+                                                            @if($user->is_lc_generated == 0)
                                                             <button class="btn btn-primary pull-right" type="submit" >
                                                                 Update <i class="fa fa-arrow-circle-right"></i>
                                                             </button>
+                                                            @endif
                                                         </div>
                                                     </div>
                                             </form>
