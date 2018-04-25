@@ -61,6 +61,8 @@ class BonafideCertificateController extends Controller
             $data['from_date'] = $request->from_date;
             $data['to_date'] = $request->to_date;
             $query = BonafideCertificateTable::create($data);
+            $message = 'Success .';
+            $status = 200;
             if($query){
                 Session::flash('message-success','data created successfully');
             }else{
@@ -72,9 +74,11 @@ class BonafideCertificateController extends Controller
                 'GRN' => $request->grn,
                 'exception' => $e->getMessage()
             ];
+            $message = 'Something went wrong .';
+            $status = 500;
             Log::critical(json_encode($data));
-            return response()->json(['message' => 'Something went wrong .'], 500);
         }
+        return response()->json(['message' => $message], $status);
     }
 
     public function downloadBonafide(Request $request,$grn){

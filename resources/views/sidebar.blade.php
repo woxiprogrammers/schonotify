@@ -445,7 +445,7 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0);">
+                <a href="/certificates/livingCertificate/manage">
                     <div class="item-inner">
                         <span class="title"> Leaving Certificate </span>
                     </div>
