@@ -249,7 +249,7 @@ class AttendanceController extends Controller
         try{
             $data = $request->all();
             $attendanceStatus=array();
-            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->where('is_lc_generated',0)->pluck('id');
             $attendanceData = array();
             $role = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
             if (!Empty($role)) {
