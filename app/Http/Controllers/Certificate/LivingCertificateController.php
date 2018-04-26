@@ -117,7 +117,8 @@ public function getManageView(Request $request){
     }
     public function livingCretificateEdit(Request $request,$id){
         try{
-            return view('certificate.livingCertificate.livingCertificateEdit');
+            $livingCertificateData = LivingCertificate::where('id',$id)->first();
+            return view('certificate.livingCertificate.livingCertificateEdit')->with(compact('livingCertificateData'));
         }catch(\Exception $e){
             $data = [
                 'action' => 'student data Edit',
@@ -144,5 +145,32 @@ public function getManageView(Request $request){
             ];
           Log::critical(json_encode($data));
         }
+    }
+    public function livingCretificateEditForm(Request $request,$id,$grn){
+        try{
+
+        }catch(\Exception $exception){
+            $data=[
+                'action' => 'living Certificate Edit',
+                'exception' => $exception->getMessage()
+            ];
+        }
+        $data['aadhar_number'] = $request->aadharCard;
+        $data['last_school_attented'] = $request->lastSchool;
+        $data['date_of_admission'] = $request->admissionDate;
+        $data['progress'] = $request->progress;
+        $data['conduct'] = $request->conduct;
+        $data['date_of_leaving'] = $request->livingSchoolDate;
+        $data['standard_in_which_studying'] = $request->standard_studying_from_when;
+        $data['reason'] = $request->reason;
+        $data['remark'] = $request->remark;
+        $query = LivingCertificate::where('id',$id)->where('grn',$grn)->update($data);
+        if($query){
+            Session::flash('message-success','data Update successfully');
+            return redirect('/certificates/livingCertificate/manage');
+        }else{
+            Session::flash('message-error','Something went wrong');
+        }
+
     }
 }

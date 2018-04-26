@@ -121,6 +121,7 @@
             Route::post('livingCertificate-student-form-create',array('uses' => 'Certificate\LivingCertificateController@studentFormCreate'));
             Route::get('view/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateView'));
             Route::get('edit/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateEdit'));
+            Route::post('editForm/{id}/{grn}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateEditForm'));
             Route::get('download/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateDownload'));
         });
     });
