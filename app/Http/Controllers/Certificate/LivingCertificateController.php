@@ -171,6 +171,5 @@ public function getManageView(Request $request){
         }else{
             Session::flash('message-error','Something went wrong');
         }
-
     }
 }
