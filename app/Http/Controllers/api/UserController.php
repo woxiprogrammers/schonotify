@@ -464,9 +464,7 @@ class UserController extends Controller
     }
     public function publicGetSwitchingDetails(Request $request){
         try{
-            dd($request->all());
             $data=$request->all();
-            dd($data);
             $finalData=array();
             $parent_student=User::where('parent_id',$data['teacher']['id'])->where('is_active',1)->get();
             $finalData['Parent_student_relation']['parent_id']=$data['teacher']['id'];
