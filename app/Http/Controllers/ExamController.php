@@ -310,6 +310,7 @@ class ExamController extends Controller
             }
             foreach ($student['marks_details'] as $index => $mark) {
                 if(array_key_exists('marks_obtain',$mark)){
+                    dd($mark['exam_type_id']);
                     $studentExamMarks = StudentExamMarks::where('student_exam_details_id',$query)->where('term_id',$request->term_select)->where('exam_structure_id',$request->sub_subject_select)
                         ->where('exam_term_details_id',$mark['exam_type_id'])->first();
                     $StudentsMarks['student_exam_details_id'] = $query;

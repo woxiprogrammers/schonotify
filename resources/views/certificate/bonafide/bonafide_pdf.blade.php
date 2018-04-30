@@ -36,16 +36,24 @@
     <body>
         <div style="width: 100%; border: 1px solid black; padding: 20px; border-radius: 20px;">
             <table style="font-size: 15px">
+                <tr>
+                    <td style="padding-left: 35%"><img src="<?php echo url()?>/assets/images/bodyLogo/sspss.jpg" style="width:100px;"></td>
+                </tr>
             <tr style="height: 80px;">
-                <td colspan="2" style="font-size: 18px;">
+                <td colspan="2" style="font-size: 18px; padding-left: 15%">
                     @if($data['body_id'] == 1)
-                        <b>Name of School : GANESH INTERNATIONAL SCHOOL,CHIKHALI</b>
+                        <b> GANESH INTERNATIONAL SCHOOL, CHIKHALI</b>
                     @else
-                        <b>Name of School : GANESH ENGLISH MEDIUM SCHOOL,DAPODI</b>
+                        <b> GANESH ENGLISH MEDIUM SCHOOL, DAPODI</b>
                     @endif
                 </td>
             </tr>
-            <tr style="height: 80px;">
+            <tr>
+                <td style=" width: 600px; padding-left: 250px"><br>
+                    <span><h3><b> BONAFIDE CERTIFICATE</b></h3></span>
+                </td>
+            </tr>
+            <tr style="height: 80px;" >
                 <td style="width: 150px"><br>
                     <table id="bonafideTable">
                         <tr>
@@ -60,11 +68,8 @@
                         </tr>
                     </table>
                 </td>
-                <td style=" width: 600px; padding-left: 110px"><br>
-                    <span><h3><b> BONAFIDE CERTIFICATE</b></h3></span>
-                </td>
             </tr>
-            <tr>
+                <tr>
                 <td colspan="2" ><br><br>
                     <div style="font-size: 15px; width: 680px !important;line-height: 30px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -82,8 +87,8 @@
             <tr style="font-size: 15px">
                 <td colspan="2">
                     <br><br><br><br><br>
-                    <span style="margin-left: 50px">Date : {{date("d/m/Y")}}</span>
-                    <span style="margin-left: 300px">H.M. / Principal</span>
+                    <span style="margin-left: 40px">Date : {{date("d/m/Y")}}</span>
+                    <span style="margin-left: 400px">H.M. / Principal</span>
                 </td>
             </tr>
         </table>

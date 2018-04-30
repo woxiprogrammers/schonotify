@@ -37,28 +37,28 @@
                         </div>
                     </div>
                     <div class="container-fluid container-fullw">
-                            <table class="table  table-striped table-bordered table-hover table-full-width" id="sample_1">
-                                <thead>
+                        <table class="table  table-striped table-bordered table-hover table-full-width" id="sample_1">
+                            <thead>
+                            <tr>
+                                <th width="10%"> Sr. No </th>
+                                <th width="20%"> Grn Number </th>
+                                <th width="10%"> Student Name </th>
+                                <th width="10%">  Date </th>
+                                <th width="10%"> Action </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($StudentData as $data)
                                 <tr>
-                                    <th width="10%"> Sr. No </th>
-                                    <th width="20%"> Grn Number </th>
-                                    <th width="10%"> Student Name </th>
-                                    <th width="10%">  Date </th>
-                                    <th width="10%"> Action </th>
+                                    <td>{{$data['id']}}</td>
+                                    <td>{{$data['grn']}}</td>
+                                    <td>{{$data['first_name']}} {{$data['last_name']}}</td>
+                                    <td>{{$data['created_at']}}</td>
+                                    <td><a href="/certificates/bonafide/view/{{$data['grn']}}">view</a> / <a href="/certificates/bonafide/download/{{$data['grn']}}">download</a> / <a href="/certificates/bonafide/delete/{{$data['id']}}">Delete</a></td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($StudentData as $data)
-                                    <tr>
-                                        <td>{{$data['id']}}</td>
-                                        <td>{{$data['grn']}}</td>
-                                        <td>{{$data['first_name']}} {{$data['last_name']}}</td>
-                                        <td>{{$data['created_at']}}</td>
-                                        <td><a href="/certificates/bonafide/view/{{$data['grn']}}">view</a> / <a href="/certificates/bonafide/download/{{$data['grn']}}">download</a></td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                     @include('rightSidebar')
                 </div>
