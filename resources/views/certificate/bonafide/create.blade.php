@@ -62,7 +62,7 @@
                     <div class="container-fluid container-fullw bg-white">
                         <div class="row">
                             <div class="col-md-12">
-                                <form method="post" action="javascript:void(0);" role="form" id="bonafideCreateForm">
+                                <form method="post" action="" role="form" id="bonafideCreateForm">
                                     {!! csrf_field() !!}
                                     <div class="row">
                                         <div class="col-md-6">
@@ -77,7 +77,7 @@
                                             <label class="control-label">&nbsp;
                                             </label>
                                             <div class="form-group">
-                                                <button class="btn btn-primary btn-wide" type="submit">
+                                                <button class="btn btn-primary btn-wide" id="create" type="submit">
                                                     Create <i class="fa fa-arrow-circle-right"></i>
                                                 </button>
                                             </div>
@@ -92,9 +92,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
         @include('footer')
 
         @include('rightSidebar')
@@ -114,6 +112,8 @@
     <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
     <script src="/assets/js/certificates/bonafide.js"></script>
+
+
 @stop
 
 

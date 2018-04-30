@@ -38,7 +38,11 @@
             <table style="font-size: 15px">
             <tr style="height: 80px;">
                 <td colspan="2" style="font-size: 18px;">
-                    <b>Name of School :  Megha International Hindi Medium School</b>
+                    @if($data['body_id'] == 1)
+                        <b>Name of School : GANESH INTERNATIONAL SCHOOL,CHIKHALI</b>
+                    @else
+                        <b>Name of School : GANESH ENGLISH MEDIUM SCHOOL,DAPODI</b>
+                    @endif
                 </td>
             </tr>
             <tr style="height: 80px;">
@@ -51,7 +55,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <span>123465</span>
+                                <span>{{$data['grn']}}</span>
                             </td>
                         </tr>
                     </table>
@@ -65,12 +69,12 @@
                     <div style="font-size: 15px; width: 680px !important;line-height: 30px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        This is to certify that Master / Miss &nbsp;&nbsp;<b><i> Student's name </i></b>&nbsp;&nbsp; is / was a bonafide student of this School studying in Std. <b><i> 10th </i></b> Div. <b><i> A </i></b>
-                        during the year <b><i>2017 - 2018</i></b>. Mother's name is <b><i> Mother's name</i></b>.
-                        He / She is <b><i> Caste Name </i></b> by caste.
-                        His / Her date of Birth according to our Register is <b><i>dd / mm / yyyy</i></b>
-                        (In words <b><i>Birth date in words</i></b>)
-                        His / Her place of Birth is <b><i>Some name</i></b> Tal. <b><i> Taluka name </i></b> Dist. <b><i> District Name</i></b>
+                        This is to certify that Master / Miss &nbsp;<b><i> {{$data['first_name']}} {{$data['last_name']}} </i></b>&nbsp; is / was a bonafide student of this School studying in Std. &nbsp;<b><i> {{$data['class']['class_name']}} </i></b>&nbsp; Div. &nbsp;<b><i> {{$data['class']['division_name']}} </i></b>
+                        &nbsp;during the year &nbsp;<b><i>{{date('Y',strtotime($data['from_date']))}} - {{date('Y',strtotime($data['to_date']))}}</i></b>&nbsp;. Mother's name is &nbsp;<b><i> {{$data['parent']['mother_first_name']}} {{$data['parent']['mother_middle_name']}} {{$data['parent']['mother_last_name']}}</i></b>.
+                        &nbsp;He / She is <b><i> {{$data['caste']}} </i></b>&nbsp; by caste.
+                        &nbsp;His / Her date of Birth according to our Register is &nbsp;<b><i>{{date('d/m/Y',strtotime($data['birth_date'])) }}</i></b>&nbsp;
+                        (In words &nbsp;<b><i>{{$data['words']}}</i></b>)&nbsp;
+                        His / Her place of Birth is &nbsp;<b><i>{{$data['birth_place']}}</i></b>&nbsp; Tal. <b><i>&nbsp; {{$data['taluka']}} </i></b>&nbsp; Dist. &nbsp;<b><i> {{$data['district']}}</i></b>
                         He / She bears a good moral character.
                     </div>
                 </td>
@@ -78,7 +82,7 @@
             <tr style="font-size: 15px">
                 <td colspan="2">
                     <br><br><br><br><br>
-                    <span style="margin-left: 50px">Date : 4 / 4 / 2018</span>
+                    <span style="margin-left: 50px">Date : {{date("d/m/Y")}}</span>
                     <span style="margin-left: 300px">H.M. / Principal</span>
                 </td>
             </tr>
