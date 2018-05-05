@@ -478,6 +478,9 @@
     Route::post('auth','api\UserController@login');
     Route::get('logout/{user_id}',array('uses' => 'api\UserController@logout'));
 
+    //LC related
+    Route::get('lc_generated/{id}',array('uses' => 'api\UserController@lcGenerated'));
+
         //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
     Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
