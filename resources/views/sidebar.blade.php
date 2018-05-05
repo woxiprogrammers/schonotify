@@ -425,7 +425,7 @@
         </ul>
     </li>
     @endif
-    <li>
+   {{-- <li>
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
@@ -452,7 +452,7 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li>--}}
 </ul>
 </nav>
 </div>
