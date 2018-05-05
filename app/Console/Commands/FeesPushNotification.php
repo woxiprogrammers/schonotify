@@ -67,7 +67,7 @@ class FeesPushNotification extends Command
     public function setNotification($days,$dateOfPushNotification){
         $fee_id=FeeDueDate::where('due_date',$dateOfPushNotification)->lists('fee_id');
         $students=StudentFee::whereIn('fee_id',$fee_id)->lists('student_id');
-        $parents=User::whereIn('id',$students)->lists('parent_id');
+        $parents=User::whereIn('id',$students)->where('is_lc_generated',0)->lists('parent_id');
         $push_users=PushToken::whereIn('user_id',$parents)->lists('push_token');
         $title="Fees Reminder";
         $message="Your due date for next installment is after". $days ."days";

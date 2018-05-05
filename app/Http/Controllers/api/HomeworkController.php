@@ -533,7 +533,7 @@ class HomeworkController extends Controller
             $title="Homework generated";
             $message="Please check the homework !";
             $allUser=0;
-            $push_users_parents=User::whereIn('id',$students->toArray())->lists('parent_id');
+            $push_users_parents=User::whereIn('id',$students->toArray())->where('is_lc_generated',0)->lists('parent_id');
             $push_users=PushToken::whereIn('user_id',$push_users_parents)->lists('push_token');
             $this -> CreatePushNotification($title,$message,$allUser,$push_users);
         }

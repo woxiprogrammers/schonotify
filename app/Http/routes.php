@@ -114,6 +114,16 @@
             Route::get('view/{grn}',array('uses' => 'Certificate\BonafideCertificateController@bonafideView'));
             Route::post('bonafide-student-form',array('uses' => 'Certificate\BonafideCertificateController@studentForm'));
         });
+        Route::group(['prefix' =>'livingCertificate'],function(){
+            Route::get('manage',array('uses' => 'Certificate\LivingCertificateController@getManageView'));
+            Route::get('create', array('uses' => 'Certificate\LivingCertificateController@getCreateView'));
+            Route::post('livingCertificate-student-form',array('uses' => 'Certificate\LivingCertificateController@studentForm'));
+            Route::post('livingCertificate-student-form-create',array('uses' => 'Certificate\LivingCertificateController@studentFormCreate'));
+            Route::get('view/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateView'));
+            Route::get('edit/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateEdit'));
+            Route::post('editForm/{id}/{grn}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateEditForm'));
+            Route::get('download/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateDownload'));
+        });
     });
 
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
@@ -467,6 +477,9 @@
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
     Route::get('logout/{user_id}',array('uses' => 'api\UserController@logout'));
+
+    //LC related
+    Route::get('lc_generated/{id}',array('uses' => 'api\UserController@lcGenerated'));
 
         //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
