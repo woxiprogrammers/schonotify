@@ -260,7 +260,8 @@ class UserController extends Controller
            $response = [
                "message" => $message,
                "status" => $status,
-               "data" => $responseData
+               "data" => $responseData,
+
            ];
            return response($response, $status);
      }
@@ -464,9 +465,7 @@ class UserController extends Controller
     }
     public function publicGetSwitchingDetails(Request $request){
         try{
-            dd($request->all());
             $data=$request->all();
-            dd($data);
             $finalData=array();
             $parent_student=User::where('parent_id',$data['teacher']['id'])->where('is_active',1)->get();
             $finalData['Parent_student_relation']['parent_id']=$data['teacher']['id'];
@@ -497,6 +496,29 @@ class UserController extends Controller
             "message" => $message,
             "status" => $status,
             "data" =>$finalData
+        ];
+        return response($response, $status);
+    }
+    public function lcGenerated(Request $request,$id){
+        try{
+            $data = array();
+            $status = 200;
+            $message = "LC created for this student";
+            $lc_data = User::where('id',$id)->lists('is_lc_generated');
+            if($lc_data[0] == 1){
+                $data = "true";
+            }else{
+                $data = "false";
+            }
+
+        }catch(\Exception $exception){
+            $status = 500;
+            $message = "Something went wrong" .  $exception->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "is_lc_generated" =>$data
         ];
         return response($response, $status);
     }

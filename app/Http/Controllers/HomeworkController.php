@@ -300,7 +300,7 @@ class HomeworkController extends Controller
                 $title="New Homework Created";
                 $message=$homeworkData['title'];
                 $homeWork_push_users = HomeworkTeacher::where('homework_id',$homeworkId)->lists('student_id');
-                $push_user = User::whereIn('id',$homeWork_push_users)->lists('parent_id');
+                $push_user = User::whereIn('id',$homeWork_push_users)->where('is_lc_generated',0)->lists('parent_id');
                 $allUser=0;
                 $push_users=PushToken::whereIn('user_id',$push_user)->lists('push_token');
                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);

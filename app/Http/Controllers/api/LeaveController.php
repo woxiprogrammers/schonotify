@@ -266,7 +266,7 @@ class LeaveController extends Controller
                 $status = 200;
                 $message = 'Leave Applied Successfully.';
                 $createData['student_id'] = $data['student_id'];
-                $createData['division_id'] = User::where('id','=',$data['student_id'])->pluck('division_id');
+                $createData['division_id'] = User::where('id','=',$data['student_id'])->where('is_lc_generated')->pluck('division_id');
                 $createData['status'] = 1;
                 $createData['title'] = $data['title'];
                 $createData['leave_type'] = $data['leave_type_id'];

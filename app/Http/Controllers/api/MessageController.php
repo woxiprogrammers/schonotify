@@ -115,6 +115,7 @@ class MessageController extends Controller
             $finalMessageData=array();
             $data = $request->all();
             $sender = $student_id;
+
             $messages= Message::where('is_delete','=',0)
                 ->Where(function($query) use ($sender)
                 {
@@ -485,4 +486,5 @@ class MessageController extends Controller
         ];
         return response($response, $status);
     }
+
 }

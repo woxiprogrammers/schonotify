@@ -49,7 +49,7 @@ class SearchController extends Controller
                 }else{
                     $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
                         ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result','users.is_lc_generated')
                         ->where('division_id',$request->Division)
                         ->where('users.body_id','=',$user->body_id)
                         ->where('users.role_id','!=',1)
@@ -128,11 +128,14 @@ class SearchController extends Controller
             {
                 if($row->user_role=='student')
                 {
-                    if($row->hide_result == 1){
-                        $str.="<tr><td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'checked>"."</td>";
+                    if($row->is_lc_generated==0){
+                        if($row->hide_result == 1){
+                            $str.="<tr><td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'checked>"."</td>";
+                        }else{
+                            $str.="<tr><td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'>"."</td>";
+                        }
                     }else{
-                        $str.="<tr><td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'>"."</td>";
-
+                        $str.="<tr><td></td>";
                     }
                     $str.="<td>".$row->rollno."</td>";
                 }else{
