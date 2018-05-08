@@ -25,7 +25,7 @@
                     <div><span style="margin-left: 40%;">E- Mail :hr.gispune@gmail.com</span></div>
                     <div><span style="margin-left: 40%;">www.ganeshinternationalschool.com</span></div>
                     <div style="margin-left: 30%"><span>UDISE No - 27252001510<span style="padding-left: 7%">CBSE Affiliation No. 1130632</span></span></div>
-                    <div style="margin-left: 40%;font-size: 150%"><span><b>Living Certificate</b></span></div>
+                    <div style="margin-left: 40%;font-size: 150%"><span><b>LEAVING CERTIFICATE</b></span></div>
                     <div style="margin-left: 5%">Certificate No. <span>{{$studentData['id']}}</span><span style="padding-left: 60%">Register No. of the pupil : <span>{{$studentData['grn']}}</span></span></div>
                     <br>
                     <table border="1" style="width: 85%; text-align: left; margin-left: 05%">
@@ -154,7 +154,7 @@
                                 16.  Remark
                             </td>
                             <td style="padding: 1%">
-                                <span>{{$studentData['date_of_admission']}}</span>
+                                <span>{{$studentData['remark']}}</span>
                             </td>
                         </tr>
                     </table>

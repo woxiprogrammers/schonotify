@@ -22,7 +22,7 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Edit Living Certificate</h1>
+                                <h1 class="mainTitle">Edit Leaving Certificate</h1>
                             </div>
                         </div>
                     </section>

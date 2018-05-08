@@ -95,7 +95,7 @@ class HomeworkController extends Controller
             foreach($homeworkData->toArray() as $row)
             {
                 $userName=User::where('id',$row['teacher_id'])->select('first_name','last_name')->first()->toArray();
-                $student_name=User::where('id',$row['student_id'])->first();
+                $student_name=User::where('id',$row['student_id'])->where('is_lc_generated',0)->first();
                 $division=Division::where('id',$student_name['division_id'])->first();
                 $class=Classes::where('id',$division['class_id'])->first();
                 $batch=Batch::where('id',$class['batch_id'])->first();

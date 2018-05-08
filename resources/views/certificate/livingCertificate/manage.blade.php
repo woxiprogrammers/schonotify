@@ -22,7 +22,7 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Living Certificates</h1>
+                                <h1 class="mainTitle">Leaving Certificates</h1>
                             </div>
                         </div>
                     </section>
@@ -31,7 +31,7 @@
                             <div class="col-md-3 col-md-offset-9">
                                 <a class="btn btn-primary btn-o add-event padding-10" href="/certificates/livingCertificate/create">
                                     <i class="fa fa-plus"></i>
-                                    Create Living Certificate
+                                    Create Leaving Certificate
                                 </a>
                             </div>
                         </div>
