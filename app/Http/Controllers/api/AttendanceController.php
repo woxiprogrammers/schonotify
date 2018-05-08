@@ -425,6 +425,7 @@ class AttendanceController extends Controller
             $attendanceDate = strtotime($data['date']);
             $date = date("Y-m-d");
             $currentDate = strtotime($date);
+            dd(1);
             if ($attendanceDate > $currentDate) {
                 $status = 406;
                 $message = 'Sorry ! You can not mark attendance of future date ';
