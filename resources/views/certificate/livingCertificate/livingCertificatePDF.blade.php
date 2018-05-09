@@ -164,6 +164,6 @@
     <div style="padding-left: 18%">Certified that the above information is in accordance with the school Register.</div>
     <br>
     <div style="margin-left: 5%">Date: {{date('d/m/Y')}}</div>
-    <div style="margin-left: 5%; margin-top: 2%"><span><b>CLASS TEACHER<span style="margin-left: 25%">CLERK</span><span style="padding-left: 25%">H.M.PRINCIPAL</span></b></span></div>
+    <div style="margin-left: 5%; margin-top: 2%"><span><b>CLASS TEACHER<span style="margin-left: 25%">CLERK</span><span style="padding-left: 25%">H.M./PRINCIPAL</span></b></span></div>
 </body>
 </html>
