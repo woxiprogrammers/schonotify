@@ -151,4 +151,22 @@ class BonafideCertificateController extends Controller
          $data['words'] = "$birthDay / $birthMonth / $birthYear";
         return view('certificate.bonafide.bonafide_partial')->with(compact('data'));
     }
+    public function delete(Request $request,$id){
+          try{
+            $query = BonafideCertificateTable::where('id',$id)->delete();
+            if($query){
+                Session::flash('message-success','data deleted successfully');
+                return back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+                return back();
+            }
+          }catch(\Exception $e){
+              $data =[
+                  'action' => 'deleted',
+                  'exception' => $e->getMessage()
+              ];
+              Log::critical(json_encode($data));
+          }
+    }
 }

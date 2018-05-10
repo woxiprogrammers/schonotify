@@ -54,7 +54,7 @@
                                         <td>{{$data['grn']}}</td>
                                         <td>{{$data['first_name']}} {{$data['last_name']}}</td>
                                         <td>{{$data['created_at']}}</td>
-                                        <td><a href="/certificates/bonafide/view/{{$data['grn']}}">view</a> / <a href="/certificates/bonafide/download/{{$data['grn']}}">download</a></td>
+                                        <td><a href="/certificates/bonafide/view/{{$data['grn']}}">view</a> / <a href="/certificates/bonafide/download/{{$data['grn']}}">download</a> / <a href="/certificates/bonafide/delete/{{$data['id']}}">delete</a></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
