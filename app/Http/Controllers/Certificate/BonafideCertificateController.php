@@ -4,6 +4,7 @@ namespace App\Http\Controllers\certificate;
 
 use App\BonafideCertificateTable;
 use App\Helper\NumberHelper;
+use App\LivingCertificate;
 use App\ParentExtraInfo;
 use App\StudentExtraInfo;
 use App\StudentFamily;
@@ -113,9 +114,14 @@ class BonafideCertificateController extends Controller
     }
     public function studentForm(Request $request){
         try{
-            $studentData = StudentExtraInfo::join('users','users.id','=','students_extra_info.student_id')
-                                            ->where('students_extra_info.grn',$request->grn)
-                                            ->select('users.first_name','users.last_name','students_extra_info.grn')->first();
+            $bonafide = LivingCertificate::where('grn','=',$request->grn)->count();
+            if($bonafide == 1){
+                $studentData = "lcCreated";
+            }else{
+                $studentData = StudentExtraInfo::join('users','users.id','=','students_extra_info.student_id')
+                    ->where('students_extra_info.grn',$request->grn)
+                    ->select('users.first_name','users.last_name','students_extra_info.grn')->first();
+            }
             return view('certificate.bonafide.bonafide_student_form')->with(compact('studentData'));
         }catch (\Exception $e){
             $data = [
@@ -144,5 +150,23 @@ class BonafideCertificateController extends Controller
          $birthMonth = date('M',strtotime($data['birth_date']));
          $data['words'] = "$birthDay / $birthMonth / $birthYear";
         return view('certificate.bonafide.bonafide_partial')->with(compact('data'));
+    }
+    public function delete(Request $request,$id){
+          try{
+            $query = BonafideCertificateTable::where('id',$id)->delete();
+            if($query){
+                Session::flash('message-success','data deleted successfully');
+                return back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+                return back();
+            }
+          }catch(\Exception $e){
+              $data =[
+                  'action' => 'deleted',
+                  'exception' => $e->getMessage()
+              ];
+              Log::critical(json_encode($data));
+          }
     }
 }
