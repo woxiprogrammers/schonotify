@@ -425,7 +425,6 @@ class AttendanceController extends Controller
             $attendanceDate = strtotime($data['date']);
             $date = date("Y-m-d");
             $currentDate = strtotime($date);
-            dd(1);
             if ($attendanceDate > $currentDate) {
                 $status = 406;
                 $message = 'Sorry ! You can not mark attendance of future date ';
@@ -437,6 +436,7 @@ class AttendanceController extends Controller
                     $studentList = User::where('role_id','=',$studentRole)
                         ->where('division_id','=', $divisionId['id'])
                         ->where('is_active','=',1)
+                        ->where('is_lc_generated',0)
                         ->select('id','first_name','last_name','roll_number')
                         ->orderBy('roll_number','asc')
                         ->get();
