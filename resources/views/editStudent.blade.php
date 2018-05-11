@@ -820,9 +820,9 @@
                             <div class="panel-body">
                                 <div class="col-sm-10">
                                     <form id="editAcl" method="post" action="/acl-update/{!! $user->parent_id !!}">
-                                        @if($user->is_lc_generated == 0)
                                         <table class="table table-responsive" id="aclMod">
                                         </table>
+                                        @if($user->is_lc_generated == 0)
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <button class="btn btn-primary pull-right" type="submit" >

@@ -506,9 +506,9 @@ class UserController extends Controller
             $message = "LC created for this student";
             $lc_data = User::where('id',$id)->lists('is_lc_generated');
             if($lc_data[0] == 1){
-                $data = "true";
+                $data = true;
             }else{
-                $data = "false";
+                $data = false;
             }
 
         }catch(\Exception $exception){

@@ -113,6 +113,7 @@
             Route::get('download/{grn}', array('uses' => 'Certificate\BonafideCertificateController@downloadBonafide'));
             Route::get('view/{grn}',array('uses' => 'Certificate\BonafideCertificateController@bonafideView'));
             Route::post('bonafide-student-form',array('uses' => 'Certificate\BonafideCertificateController@studentForm'));
+            Route::get('delete/{id}',array('uses' => 'Certificate\BonafideCertificateController@delete'));
         });
         Route::group(['prefix' =>'livingCertificate'],function(){
             Route::get('manage',array('uses' => 'Certificate\LivingCertificateController@getManageView'));
