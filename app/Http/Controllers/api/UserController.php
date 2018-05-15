@@ -150,19 +150,27 @@ class UserController extends Controller
     }
 
     public function savePushToken(Request $request){
-        $data=$request->all();
-        $is_present = PushToken::where('user_id',$data['teacher']['id'])->count();
-        if($is_present == 0){
-            $pushData['user_id'] = $data['teacher']['id'];
-            $pushData['push_token'] = $data['pushToken'];
-            PushToken::create($pushData);
-        }
-        else{
-            $pushData['user_id']=$data['teacher']['id'];
-            $pushData['push_token']=$data['pushToken'];
-            PushToken::where('user_id',$data['teacher']['id'])->update($pushData);
-        }
+        try{
+            $data=$request->all();
+            $is_present = PushToken::where('user_id',$data['user_id'])->count();
+            if($is_present == 0){
+                $pushData['user_id'] = $data['user_id'];
+                $pushData['push_token'] = $data['pushToken'];
+                PushToken::create($pushData);
+            }
+            else{
+                $pushData['user_id']=$data['user_id'];
+                $pushData['push_token']=$data['pushToken'];
+                PushToken::where('user_id',$data['user_id'])->update($pushData);
+            }
+        }catch(\Exception $e){
+            $data= [
+                'action' => "token created" ,
+                'exception' => $e->getMessage()
 
+            ];
+            return response($data);
+        }
     }
     public function getBatchesTeacher(Request $request){
         try{
