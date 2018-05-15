@@ -300,7 +300,7 @@ class EventController extends Controller
      +   */
     public function getUserEvent($id)
     {
-        $user=User::where('id','=',$id)->select('first_name','last_name')->get();
+        $user=User::where('id','=',$id)->select('first_name','last_name')->where('is_lc_generated',0)->get();
         return $user;
     }
     /*
