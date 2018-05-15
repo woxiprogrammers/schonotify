@@ -151,6 +151,7 @@ class UserController extends Controller
 
     public function savePushToken(Request $request){
         try{
+            $status = 200;
             $data=$request->all();
             $is_present = PushToken::where('user_id',$data['user_id'])->count();
             if($is_present == 0){
@@ -164,13 +165,13 @@ class UserController extends Controller
                 PushToken::where('user_id',$data['user_id'])->update($pushData);
             }
         }catch(\Exception $e){
+            $status = 500;
             $data= [
                 'action' => "token created" ,
                 'exception' => $e->getMessage()
-
             ];
-            return response($data);
         }
+        return response($data,$status);
     }
     public function getBatchesTeacher(Request $request){
         try{
