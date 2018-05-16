@@ -280,7 +280,7 @@ class AttendanceController extends Controller
                                 $message="Attendance Marked for the day.";
                                 $allUser=0;
                                 $user_push = User::where('division_id',$role['id'])->lists('parent_id');
-                                $push_users=PushToken::whereIn('user_id',$user_push)->lists('push_token');
+                                $push_users = PushToken::whereIn('user_id',$user_push)->lists('push_token');
                                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                         }else{
                             $deleteOldAttendance = Attendance::where('date',$data['date'])->delete();

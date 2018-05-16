@@ -215,7 +215,7 @@ class LeaveController extends Controller
                     $title="Leave Approved";
                     $message="Please Check Leave !";
                     $allUser=0;
-                    $students = LeaveRequest::where('id',$data['leave_id']) -> lists($student_id);
+                    $students = LeaveRequest::where('id',$data['leave_id']) -> lists('student_id');
                     $parents = User::where('id',$students)->lists('parent_id');
                     $push_users = PushToken::whereIn('user_id',$parents)->lists('push_token');
                     $this -> CreatePushNotification($title,$message,$allUser,$push_users);
