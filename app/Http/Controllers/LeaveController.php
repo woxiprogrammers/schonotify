@@ -259,7 +259,7 @@ class LeaveController extends Controller
                 $title = "Leave Approved";
                 $message = "Your Leave Is Approved By Faculty";
                 $allUser=0;
-                $push_users=PushToken::whereIn('user_id',$parent)->lists('push_token');
+                $push_users=PushToken::whereIn('user_id',$parent)->lists('push_token')->toArray();
                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 Session::flash('message-success','Leave published successfully');
                 return Redirect::back();

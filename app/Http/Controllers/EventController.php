@@ -5,6 +5,7 @@ use App\Division;
 use App\Event;
 use App\EventImages;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\PushToken;
 use App\User;
 use App\UserRoles;
 use Carbon\Carbon;
@@ -104,10 +105,12 @@ class EventController extends Controller
                         return 1;
                     } else {
                         Session::flash('message-success','Event created and published successfully !');
+                        $parentList = User::where('role_id',3)->where('is_lc_generated',0)->lists('parent_id');
+                        $push_user = PushToken::whereIn('user_id',$parentList)->lists('push_token')->toArray();
                         $title="Event";
                         $message="New Event Created";
-                        $allUser=1;
-                        $push_users=null;
+                        $allUser = 0;
+                        $push_users = $push_user;
                         $this->CreatePushNotification($title,$message,$allUser,$push_users);
                         return 1;
                     }
@@ -148,9 +151,11 @@ class EventController extends Controller
              } else {
                  Session::flash('message-success','Event published successfully !');
                  $title="Event";
+                 $parentList = User::where('role_id',3)->where('is_lc_generated',0)->lists('parent_id');
+                 $push_user = PushToken::whereIn('user_id',$parentList)->lists('push_token')->toArray();
                  $message="New Event Created";
-                 $allUser=1;
-                 $push_users=null;
+                 $allUser=0;
+                 $push_users = $push_user;
                  $this->CreatePushNotification($title,$message,$allUser,$push_users);
                  return 1;
              }
@@ -170,10 +175,12 @@ class EventController extends Controller
                      Session::flash('message-success','Event sent for publish successfully !');
                      return 1;
                  } else {
+                     $parentList = User::where('role_id',3)->where('is_lc_generated',0)->lists('parent_id');
+                     $push_user = PushToken::whereIn('user_id',$parentList)->lists('push_token')->toArray();
                      $title="Event";
                      $message="New Event Created";
                      $allUser=1;
-                     $push_users=null;
+                     $push_users = $push_user;
                      $this->CreatePushNotification($title,$message,$allUser,$push_users);
                      Session::flash('message-success','Event published successfully !');
                      return 1;
