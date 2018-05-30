@@ -30,7 +30,7 @@
         <p class="text-large"> Congratulations..!! Your form has been submitted. Kindly contact college for further queries. </p>
     </div>
 <div class="col-md-12">
-    <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true">
+    <form method="post" action="/store-student-enquiry-without-login" role="form" id="studentEnquiry" onsubmit="parent.scrollTo(0, 0); return true" enctype="multipart/form-data">
       <fieldset>
           <div class="row">
               <div class="col-md-6">
@@ -118,19 +118,12 @@
                      <input class="form-control" id="email" name="email" placeholder="Enter email" type="email" />
                  </div>
              </div>
-             <div class="col-md-6">
-                 <div class="form-group"> <!-- Date input -->
-                     <div class="form-group"> <!-- Date input -->
-                         <label class="control-label">Special Category <span class="symbol required"></span></label>
-                         <select class="form-control" id="diff_categories" name="diff_categories" style="-webkit-appearance: menulist;">
-                                 <option value="" selected>Please select category</option>
-                                 @foreach($extra_categories as $category)
-                                  <option value="{!! $category['slug'] !!}">{!! $category['categories'] !!}</option>
-                                 @endforeach
-                         </select>
-                     </div>
-                 </div>
-             </div>
+               <div class="col-md-6">
+                   <div class="form-group"> <!-- Date input -->
+                       <label class="control-label">Mobile Number <span class="symbol required"></span></label>
+                       <input class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number" type="text" />
+                   </div>
+               </div>
 
          </div>
          <div class="row">
@@ -144,17 +137,19 @@
                    </select>
                </div>
           </div>
-           <div class="col-md-6" id="Cat">
-               <div class="form-group"> <!-- Date input -->
-                   <label class="control-label">Caste Category<span class="symbol required"></span></label>
-                   <select class="form-control" name="category" id="category" style="-webkit-appearance: menulist;">
-                                 <option value="" selected>Please select caste category</option>
-                                 @foreach($categories as $category)
-                                 <option value="{!!$category['slug']!!}" id="{!!$category['slug']!!}">{!!$category['caste_category']!!}</option>
-                                  @endforeach
-                  </select>
-               </div>
-          </div>
+             <div class="col-md-6">
+                 <div class="form-group"> <!-- Date input -->
+                     <div class="form-group"> <!-- Date input -->
+                         <label class="control-label">Caste / Special Category <span class="symbol required"></span></label>
+                         <select class="form-control" name="category" id="category" style="-webkit-appearance: menulist;">
+                             <option value="" selected>Please Select Category</option>
+                             @foreach($categories as $category)
+                                 <option value="{!!$category['slug']!!}" id="{!!$category['slug']!!}">{!!$category['name']!!}</option>
+                             @endforeach
+                         </select>
+                     </div>
+                 </div>
+             </div>
       </div>
       <div class="row">
        <div class="col-md-6">
@@ -167,19 +162,69 @@
           <div class="row">
               <div class="col-md-6">
                   <div class="form-group"> <!-- Date input -->
-                      <label class="control-label">Mobile Number <span class="symbol required"></span></label>
-                      <input class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number" type="text" />
+                      <label class="control-label">
+                          Address <span class="symbol required"></span>
+                      </label>
+                      <div class="form-group">
+                          <div class="note-editor">
+                              <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;"></textarea>
+                          </div>
+                      </div>
                   </div>
               </div>
               <div class="col-md-6">
-                  <label class="control-label">
-                      Address <span class="symbol required"></span>
-                  </label>
-                  <div class="form-group">
-                      <div class="note-editor">
-                          <textarea class="form-control autosize area-animated" name="address" data-autosize-on="true" style="overflow: hidden; resize: horizontal; word-wrap: break-word; height: 100px; cursor: url('/assets/images/pen.png') 0 32, auto;"></textarea>
+
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-6">
+                  <fieldset style="border: 1px solid #c2c2c2; !important;">
+                      <legend>Document Uploads</legend>
+                      <label class="control-label">
+                          <i>
+                              Please use files less than <b>200KB</b>.<br>
+                              Supported file Formats : <b>JPEG,JPG,PNG,BMP</b>
+                          </i>
+                      </label>
+                      <hr style="border-top: 1px solid #ccc; margin: 10px !important;">
+                      <div class="row">
+                          <div class="col-md-12">
+                              <div class="form-group"> <!-- Date input -->
+                                  <label class="control-label">
+                                      10th Marksheet <span class="symbol required"></span>
+                                  </label>
+                                  <div class="form-group">
+                                      <input type="file" name="ssc_certificate" accept=".jpg,.jpeg,.png,.bmp">
+                                  </div>
+                              </div>
+                          </div>
                       </div>
-                  </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                              <div class="form-group"> <!-- Date input -->
+                                  <label class="control-label">
+                                      12th Marksheet <span class="symbol required"></span>
+                                  </label>
+                                  <div class="form-group">
+                                      <input type="file" name="hsc_certificate" accept=".jpg,.jpeg,.png,.bmp">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row" id="caste_doc" hidden>
+                          <div class="col-md-12">
+                              <div class="form-group"> <!-- Date input -->
+                                  <label class="control-label">
+                                      <span id="caste_doc_label"></span> <span class="symbol required"></span>
+                                  </label>
+                                  <div class="form-group">
+                                      <input type="file" id="caste_doc_file" accept=".jpg,.jpeg,.png,.bmp">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </fieldset>
+
               </div>
           </div>
       </fieldset>
@@ -230,6 +275,28 @@
         $("#app").addClass("removePadding");
         //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        $("#category").on('change', function(){
+            var selectedCategory = $(this).val();
+            if((selectedCategory == 'open' || selectedCategory == 'other_state' || selectedCategory == '')){
+                $("#caste_doc").hide();
+                $("#caste_doc_file").removeAttr('name');
+                $("#caste_doc_file").rules('remove');
+                $("#caste_doc_label").text('');
+            }else{
+                $("#caste_doc").show();
+                $("#caste_doc_file").attr('name','caste_certificate');
+                $("#caste_doc_file").rules('add',{
+                    required: true,
+                    custom_file_size: true
+                });
+                if(selectedCategory == 'defence' || selectedCategory == 'differently_abled'){
+                    var title = $("#category option:selected").text();
+                    $("#caste_doc_label").text(title + ' Certificate');
+                }else{
+                    $("#caste_doc_label").text('Caste Certificate');
+                }
+            }
+        });
     });
     $("#state").change(function(){
               if($('#state').val() == "Maharashtra"){

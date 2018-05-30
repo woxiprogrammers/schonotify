@@ -24,7 +24,9 @@ var FormValidator = function () {
         $.validator.addMethod("alpha_num_space", function(value, element) {
             return this.optional(element) || /^[a-zA-Z0-9]+([ A-Za-z0-9])*$/.test(value);
         }, "only alpha num space characters are allowed , starting with space not allowed");
-
+        $.validator.addMethod("custom_file_size", function(value, element) {
+            return this.optional(element) || ($(element)[0].files[0].size <= 200000);
+        }, "Please use file less than 200KB");
         $.validator.addMethod("greaterThan", function (value, element, param) {
             var $otherElement = $(param);
             if ($otherElement != '') { // <- the other field not empty?
@@ -77,9 +79,6 @@ var FormValidator = function () {
                     required: true,
                     number:true
                 },
-                diff_categories: {
-                    required: true,
-                },
                 category: {
                     required: true,
                 },
@@ -111,6 +110,14 @@ var FormValidator = function () {
                     minlength:15,
                     required:true,
                     removespace:true
+                },
+                ssc_certificate: {
+                    required: true,
+                    custom_file_size: true
+                },
+                hsc_certificate: {
+                    required: true,
+                    custom_file_size: true
                 }
             },
             messages: {
@@ -132,9 +139,6 @@ var FormValidator = function () {
                 marks_obtained:{
                     required: "Marks are required",
                     number:"Only numbers are allowed"
-                },
-                diff_categories:{
-                      required: "Category is required"
                 },
                 category: {
                     required: "Category is required"

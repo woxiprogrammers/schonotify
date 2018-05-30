@@ -12,6 +12,7 @@ use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -106,9 +107,8 @@ class EnquiryController extends Controller
     }
     public function viewEnquiryFormWithoutLogin(){
         try{
-          $categories=category_types::get()->toArray();
-          $extra_categories=ExtraCategories::get()->toarray();
-          return view('admin.enquiryCreateWithoutLogin')->with(compact('categories','extra_categories'));
+            $categories=category_types::select('caste_category as name','slug')->get()->toArray();
+            return view('admin.enquiryCreateWithoutLogin')->with(compact('categories'));
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage()
@@ -119,7 +119,7 @@ class EnquiryController extends Controller
     }
     public function storeEnquiryFormWithoutLogin(Request $request){
       try{
-            $data = $request->all();
+            $data = $request->except('ssc_certificate','hsc_certificate','caste_certificate');
             $now = Carbon::now();
             $bodyEnquiryCount = (EnquiryFormClg:: select('id')->count())+1;
             $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
@@ -136,15 +136,45 @@ class EnquiryController extends Controller
             $data['state'] = $data['state'];
             $data['caste'] = $data['caste'];
             $data['email'] = $data['email'];
-            $data['diff_category'] = $data['diff_categories'];
             $data['category'] = $data['category'];
             $data['date'] = date('d/m/Y');
             $data['mobile'] = $data['mobile_number'];
             $data['address'] = $data['address'];
             $data['class_applied'] = $data['class_applied'];
             $newEnquiry = EnquiryFormClg::create($data);
+            $enquiryFormFolderPath = public_path().env('ENQUIRY_FORM_UPLOAD');
+            $formFolderName = sha1($newEnquiry->id);
+            if($request->has('ssc_certificate')){
+                $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
+                if(!file_exists($formUploadPath)){
+                    File::makeDirectory($formUploadPath, $mode = 0777, true, true);
+                }
+                $extension = $request->file('ssc_certificate')->getClientOriginalExtension();
+                $filename = sha1('SSC_CERTIFICATE_'.$newEnquiry->id).$extension;
+                $request->file('image')->move($formUploadPath,$filename);
+                EnquiryFormClg::where('id', $newEnquiry->id)->update(['ssc_certificate' => $filename]);
+            }
+            if($request->has('hsc_certificate')){
+                $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
+                if(!file_exists($formUploadPath)){
+                    File::makeDirectory($formUploadPath, $mode = 0777, true, true);
+                }
+                $extension = $request->file('hsc_certificate')->getClientOriginalExtension();
+                $filename = sha1('HSC_CERTIFICATE_'.$newEnquiry->id).$extension;
+                $request->file('image')->move($formUploadPath,$filename);
+                EnquiryFormClg::where('id', $newEnquiry->id)->update(['hsc_certificate' => $filename]);
+            }
+            if($request->has('caste_certificate')){
+                $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
+                if(!file_exists($formUploadPath)){
+                    File::makeDirectory($formUploadPath, $mode = 0777, true, true);
+                }
+                $extension = $request->file('caste_certificate')->getClientOriginalExtension();
+                $filename = sha1('CASTE_CERTIFICATE_'.$newEnquiry->id).$extension;
+                $request->file('image')->move($formUploadPath,$filename);
+                EnquiryFormClg::where('id', $newEnquiry->id)->update(['caste_certificate' => $filename]);
+            }
             $newEnquiry['category'] = CasteCategories::where('slug',$newEnquiry['category'])->pluck('caste_category');
-            $newEnquiry['diff_category'] = ExtraCategories::where('slug',$newEnquiry['diff_category'])->pluck('categories');
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
             TCPDF::Output("First Year Waiting List Form ".date('Y-m-d_H_i_s').".pdf", 'D');
