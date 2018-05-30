@@ -144,34 +144,34 @@ class EnquiryController extends Controller
             $newEnquiry = EnquiryFormClg::create($data);
             $enquiryFormFolderPath = public_path().env('ENQUIRY_FORM_UPLOAD');
             $formFolderName = sha1($newEnquiry->id);
-            if($request->has('ssc_certificate')){
+            if($request->hasFile('ssc_certificate')){
                 $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
                 if(!file_exists($formUploadPath)){
                     File::makeDirectory($formUploadPath, $mode = 0777, true, true);
                 }
                 $extension = $request->file('ssc_certificate')->getClientOriginalExtension();
-                $filename = sha1('SSC_CERTIFICATE_'.$newEnquiry->id).$extension;
-                $request->file('image')->move($formUploadPath,$filename);
+                $filename = sha1('SSC_CERTIFICATE_'.$newEnquiry->id).'.'.$extension;
+                $request->file('ssc_certificate')->move($formUploadPath,$filename);
                 EnquiryFormClg::where('id', $newEnquiry->id)->update(['ssc_certificate' => $filename]);
             }
-            if($request->has('hsc_certificate')){
+            if($request->hasFile('hsc_certificate')){
                 $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
                 if(!file_exists($formUploadPath)){
                     File::makeDirectory($formUploadPath, $mode = 0777, true, true);
                 }
                 $extension = $request->file('hsc_certificate')->getClientOriginalExtension();
-                $filename = sha1('HSC_CERTIFICATE_'.$newEnquiry->id).$extension;
-                $request->file('image')->move($formUploadPath,$filename);
+                $filename = sha1('HSC_CERTIFICATE_'.$newEnquiry->id).'.'.$extension;
+                $request->file('hsc_certificate')->move($formUploadPath,$filename);
                 EnquiryFormClg::where('id', $newEnquiry->id)->update(['hsc_certificate' => $filename]);
             }
-            if($request->has('caste_certificate')){
+            if($request->hasFile('caste_certificate')){
                 $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
                 if(!file_exists($formUploadPath)){
                     File::makeDirectory($formUploadPath, $mode = 0777, true, true);
                 }
                 $extension = $request->file('caste_certificate')->getClientOriginalExtension();
-                $filename = sha1('CASTE_CERTIFICATE_'.$newEnquiry->id).$extension;
-                $request->file('image')->move($formUploadPath,$filename);
+                $filename = sha1('CASTE_CERTIFICATE_'.$newEnquiry->id).'.'.$extension;
+                $request->file('caste_certificate')->move($formUploadPath,$filename);
                 EnquiryFormClg::where('id', $newEnquiry->id)->update(['caste_certificate' => $filename]);
             }
             $newEnquiry['category'] = CasteCategories::where('slug',$newEnquiry['category'])->pluck('caste_category');
