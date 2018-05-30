@@ -7,7 +7,7 @@
         </td>
         <td width="90%" style="text-align:center;padding:0px;font-size:16px;font-weight:bold">
             <span> Ness Wadia College of Commerce, Pune</span><br>
-            <span>Waiting / Merit List Form - 2017-2018</span>
+            <span>Waiting / Merit List Form - 2018-2019</span>
         </td>
     </tr>
 </table>
@@ -96,7 +96,7 @@ admission if I do not fulfill the terms and conditions.
 <br>3. Student has to mention all subject marks and not Best Four/Five marks.
 <br><span style="font-weight:bolder;">4. Kindly note that the Reserved Category students from other than Maharashtra State will not be considered for
    admission under Reserved Category students. Such student will be considered as OPEN CATEGORY STUDENT.</span>
-<br/>5. You have to pay Rs.100/- as processing fee at the time of Submission of form.
+<br/><!--5. You have to pay Rs.100/- as processing fee at the time of Submission of form.-->
 </span>
 <h5>Thanking You ,</h5>
 <h5>Your's faithfully</h5>
@@ -107,7 +107,7 @@ admission if I do not fulfill the terms and conditions.
 <h2 style="text-align:center">Receipt</h2>
 <div style="text-align:right">Form No : <b>{{ucwords($newEnquiry->form_no)}}</b></div>
 <p>Received from Mr. /Miss <u><b>  {{ucwords($newEnquiry->last_name)}}  {{ucwords($newEnquiry->first_name)}}  {{ucwords($newEnquiry->middle_name)}} </b></u>
-   the<u> Waiting/Merit List </u> form for  <u><b>{{ucwords($newEnquiry->class_applied)}}</b></u>  Class for 2017-2018.</p>
+   the<u> Waiting/Merit List </u> form for  <u><b>{{ucwords($newEnquiry->class_applied)}}</b></u>  Class for 2018-2019.</p>
 Date : <b>{{ucwords($newEnquiry->date)}}</b><div style="text-align:right">Signature Of Clerk</div>
 
 

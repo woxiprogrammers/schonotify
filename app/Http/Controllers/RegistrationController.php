@@ -76,6 +76,7 @@ class RegistrationController extends Controller
     public function redirectToRegistration(Request $request){
         try{
             $enquiryInfo = EnquiryFormClg::where('form_no',$request->enquiry_number)->first();
+		
             return view('registration.download-admission-form')->with(compact('enquiryInfo'));
            }catch(\Exception $e){
             $data = [

@@ -17,7 +17,7 @@
             <h1 class="mainTitle"> Ness Wadia College of Commerce</h1>
             <span class="mainDescription">Waiting / Merit List Form</span>
             <br>
-            <h5 style="color:red">If you are already registered ,then <a href="http://nesswadia.woxi.co.in/check-enquiry">Click Here</a></h5>
+            <h5 style="color:red">If you are already registered ,then <a href="http://nesswadia.veza.co.in/check-enquiry">Click Here</a></h5>
         </div>
     </div>
 </section>
@@ -50,8 +50,11 @@
                           Class <span class="symbol required"></span>
                       </label>
                           <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
-                              <option value='FYBCOM'>FYBCOM</option>
-                          </select>
+	                        <option value='FYBCOM'>FY BCOM</option>
+                                <option value='FYBBAIB'>FY BBA (IB)</option>
+                                <option value='FYBBACA'>FY BBA (CA)</option>
+                                <option value='FYBBA'>FY BBA</option>  
+			</select>
                   </div>
               </div>
           </div>
@@ -103,7 +106,8 @@
               <div class="col-md-6">
                     <label class="control-label">Year of Passing <span class="symbol required"></span></label>
                     <select class="form-control" id="exam_year" name="examination_year" style="-webkit-appearance: menulist;">
-                        <option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option>
+		<option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option>
+		<option value="2018">2018</option>
                     </select>
               </div>
               </div>

@@ -54,6 +54,9 @@
                             <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
                                 <option value="{!!$enquiryInfo['class_applied']!!}" disabled>{!!$enquiryInfo['class_applied']!!}</option>
                                 <option value='FYBCOM'>FYBCOM</option>
+				<option value='FYBBAIB'>FYBBAIB</option>
+				<option value='FYBBACA'>FYBBACA</option>
+				<option value='FYBBA'>FYBBA</option>
                             </select>
                     </div>
                 </div>
