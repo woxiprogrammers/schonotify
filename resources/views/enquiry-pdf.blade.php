@@ -61,15 +61,17 @@
 <table style="text-align:center;font-size:13px">
   <tr style="font-weight:bolder">
     <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->state)}}</td><td  style="width:6%"></td>
-    <td style="border-bottom:1px solid black;width:20%">{{$newEnquiry->diff_category}}</td><td  style="width:6%"></td>
+    {{--<td style="border-bottom:1px solid black;width:20%">{{$newEnquiry->diff_category}}</td><td  style="width:6%"></td>--}}
     <td style="border-bottom:1px solid black;width:20%">{{$newEnquiry->category}}</td><td  style="width:6%"></td>
     <td style="border-bottom:1px solid black;width:20%">{{ucwords($newEnquiry->caste)}}</td>
+    <td></td>
   </tr>
   <tr style="font-size:10px">
     <td style="width:20%">State From Which XII Std Passed</td><td  style="width:6%"></td>
-    <td style="width:20%">Defence / Differently Abled Category</td><td  style="width:6%"></td>
-    <td style="width:20%">Caste Category</td><td  style="width:6%"></td>
+    {{--<td style="width:20%">Defence / Differently Abled Category</td><td  style="width:6%"></td>--}}
+    <td style="width:20%">Caste / Special Category</td><td  style="width:6%"></td>
     <td style="width:20%">Name Of The Caste / Sub Caste</td>
+    <td></td>
   </tr>
 </table>
 <br><br>
