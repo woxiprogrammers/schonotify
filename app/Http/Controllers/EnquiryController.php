@@ -26,9 +26,10 @@ class EnquiryController extends Controller
     }
     public function viewEnquiryForm(){
         try{
-            $categories=category_types::get()->toArray();
-            $extra_categories=ExtraCategories::get()->toarray();
-            return view('admin.enquiryCreate')->with(compact('categories','extra_categories'));
+            //$categories=category_types::get()->toArray();
+            //$extra_categories=ExtraCategories::get()->toarray();
+	    $categories=category_types::select('caste_category as name','slug')->get()->toArray();
+            return view('admin.enquiryCreate')->with(compact('categories'));
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage()
@@ -67,35 +68,68 @@ class EnquiryController extends Controller
     }
     public function storeEnquiryForm(Request $request){
         try{
-          $data = $request->all();
-          $now = Carbon::now();
-          $bodyEnquiryCount = (EnquiryFormClg:: select('id')->count())+1;
-          $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
-          $data['form_no'] = $enquiryId;
-          $data['medium'] = $data['medium'];
-          $data['first_name'] = $data['first_name'];
-          $data['middle_name'] = $data['middle_name'];
-          $data['last_name'] = $data['last_name'];
-          $data['marks_obtained'] = $data['marks_obtained'];
-          $data['outOf_marks'] = $data['outOf_marks'];
-          $data['percentage'] = ($data['marks_obtained'] / $data['outOf_marks'])*100;
-          $data['examination_year'] = $data['examination_year'];
-          $data['board'] = $data['board'];
-          $data['state'] = $data['state'];
-          $data['email'] = $data['email'];
-          $data['diff_category'] = $data['diff_categories'];
-          $data['caste'] = $data['caste'];
-          $data['category'] = $data['category'];
-          $data['date'] = date('d/m/Y');
-          $data['mobile'] = $data['mobile_number'];
-          $data['address'] = $data['address'];
-          $data['class_applied'] = $data['class_applied'];
-          $newEnquiry = EnquiryFormClg::create($data);
-          $newEnquiry['category'] = CasteCategories::where('slug',$newEnquiry['category'])->pluck('caste_category');
-          $newEnquiry['diff_category'] = ExtraCategories::where('slug',$newEnquiry['diff_category'])->pluck('categories');
-          TCPDF::AddPage();
-          TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
-          TCPDF::Output("First Year Waiting List Form ".date('Y-m-d_H_i_s').".pdf", 'D');
+          $data = $request->except('ssc_certificate','hsc_certificate','caste_certificate');
+            $now = Carbon::now();
+            $bodyEnquiryCount = (EnquiryFormClg:: select('id')->count())+1;
+            $enquiryId = $now->year."-".str_pad($bodyEnquiryCount,4,"0",STR_PAD_LEFT);
+            $data['form_no'] = $enquiryId;
+            $data['medium'] = $data['medium'];
+            $data['first_name'] = $data['first_name'];
+            $data['middle_name'] = $data['middle_name'];
+            $data['last_name'] = $data['last_name'];
+            $data['marks_obtained'] = $data['marks_obtained'];
+            $data['outOf_marks'] = $data['outOf_marks'];
+            $data['percentage'] = ($data['marks_obtained'] / $data['outOf_marks'])*100;
+            $data['examination_year'] = $data['examination_year'];
+            $data['board'] = $data['board'];
+            $data['state'] = $data['state'];
+            $data['caste'] = $data['caste'];
+            $data['email'] = $data['email'];
+            $data['category'] = $data['category'];
+            $data['date'] = date('d/m/Y');
+            $data['mobile'] = $data['mobile_number'];
+            $data['address'] = $data['address'];
+            $data['class_applied'] = $data['class_applied'];
+            $newEnquiry = EnquiryFormClg::create($data);
+            $enquiryFormFolderPath = public_path().env('ENQUIRY_FORM_UPLOAD');
+            $formFolderName = sha1($newEnquiry->id);
+            if($request->hasFile('ssc_certificate')){
+                $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
+                if(!file_exists($formUploadPath)){
+                    File::makeDirectory($formUploadPath, $mode = 0777, true, true);
+                }
+                $extension = $request->file('ssc_certificate')->getClientOriginalExtension();
+                $filename = sha1('SSC_CERTIFICATE_'.$newEnquiry->id).'.'.$extension;
+                $request->file('ssc_certificate')->move($formUploadPath,$filename);
+                EnquiryFormClg::where('id', $newEnquiry->id)->update(['ssc_certificate' => $filename]);
+            }
+            if($request->hasFile('hsc_certificate')){
+                $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
+                if(!file_exists($formUploadPath)){
+                    File::makeDirectory($formUploadPath, $mode = 0777, true, true);
+                }
+                $extension = $request->file('hsc_certificate')->getClientOriginalExtension();
+                $filename = sha1('HSC_CERTIFICATE_'.$newEnquiry->id).'.'.$extension;
+                $request->file('hsc_certificate')->move($formUploadPath,$filename);
+                EnquiryFormClg::where('id', $newEnquiry->id)->update(['hsc_certificate' => $filename]);
+            }
+            if($request->hasFile('caste_certificate')){
+                $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName;
+                if(!file_exists($formUploadPath)){
+                    File::makeDirectory($formUploadPath, $mode = 0777, true, true);
+                }
+                $extension = $request->file('caste_certificate')->getClientOriginalExtension();
+                $filename = sha1('CASTE_CERTIFICATE_'.$newEnquiry->id).'.'.$extension;
+                $request->file('caste_certificate')->move($formUploadPath,$filename);
+                EnquiryFormClg::where('id', $newEnquiry->id)->update(['caste_certificate' => $filename]);
+            } else {
+                EnquiryFormClg::where('id', $newEnquiry->id)->update(['caste_certificate' => NULL]);
+            }
+
+            $newEnquiry['category'] = CasteCategories::where('slug',$newEnquiry['category'])->pluck('caste_category');
+            TCPDF::AddPage();
+            TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
+            TCPDF::Output("First Year Waiting List Form ".date('Y-m-d_H_i_s').".pdf", 'D');
           return redirect('/student-enquiry');
         }catch(\Exception $e){
             $data = [
@@ -173,7 +207,9 @@ class EnquiryController extends Controller
                 $filename = sha1('CASTE_CERTIFICATE_'.$newEnquiry->id).'.'.$extension;
                 $request->file('caste_certificate')->move($formUploadPath,$filename);
                 EnquiryFormClg::where('id', $newEnquiry->id)->update(['caste_certificate' => $filename]);
-            }
+            } else {
+		EnquiryFormClg::where('id', $newEnquiry->id)->update(['caste_certificate' => NULL]);
+     	    }
             $newEnquiry['category'] = CasteCategories::where('slug',$newEnquiry['category'])->pluck('caste_category');
             TCPDF::AddPage();
             TCPDF::writeHTML(view('enquiry-pdf')->with(compact('newEnquiry'))->render());
