@@ -301,12 +301,28 @@
     $("#state").change(function(){
               if($('#state').val() == "Maharashtra"){
                   $("#other_state").css("display","none");
-                  $('#category').val('');
+               	$("#category option").each(function(){
+                        if(!($(this).attr('value') == 'other_state')){
+                                $(this).show();
+                        }else{
+				$(this).hide();
+			} 
+                });
+
+		   $('#category').val('');
+               
                   $('#category').css('pointer-events','true');
               }else{
                 $("#other_state").css("display","true");
+		$("#category option").each(function(){
+			if(!($(this).attr('value') == 'defence' || $(this).attr('value') == 'differently_abled' || $(this).attr('value') == 'other_state')){
+				$(this).hide();
+			}else{
+				$(this).show();
+			} 
+		});
                 $('#category').val('other_state');
-                $('#category').css('pointer-events','none');
+                //$('#category').css('pointer-events','none');
               }
     })
     </script>
