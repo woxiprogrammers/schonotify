@@ -324,6 +324,27 @@
                 $('#category').val('other_state');
                 //$('#category').css('pointer-events','none');
               }
-    })
+    });
+
+
+	$("#medium").change(function(){
+              if($('#medium').val() == "English"){
+                $("#class_applied option").each(function(){
+                                $(this).show();
+                });
+
+              }else{
+                $("#class_applied option").each(function(){
+                        if(!($(this).attr('value') == 'FYBCOM' )){
+                                $(this).hide();
+                        }else{
+                                $(this).show();
+                        } 
+    	            });
+	      }
+    });
+
+
+
     </script>
 @stop

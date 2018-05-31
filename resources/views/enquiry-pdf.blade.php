@@ -87,10 +87,10 @@
 </table>
 <br>
 <br>
-<span  style="font-weight:bolder;font-size:10px">Attachments:</span><br>
+<!--<span  style="font-weight:bolder;font-size:10px">Attachments:</span><br>
 <span style="font-size:9px;padding:5px">Photocopy of 1) XII MarkList 2) XII Leaving Certificate 3) Caste Certificate(if applicable)
                                        4) Differently abled certificate(if applicable) 5) Defence Certificate issued by Zilla Sainik Board ,Pune(if applicable)
-</span><br>
+</span>--><br/><br/><br/>
 <span  style="font-weight:bolder;font-size:10px">Important Notes:</span><br>
 <span style="font-size:9px;padding:5px">1. Once offered Category / Medium can not be changed.&nbsp;&nbsp;&nbsp;&nbsp;Student can offer one category at a time.
 <br>2. I know that this is a waitinglist form and not admission form.I will not have claim over
@@ -98,10 +98,11 @@ admission if I do not fulfill the terms and conditions.
 <br>3. Student has to mention all subject marks and not Best Four/Five marks.
 <br><span style="font-weight:bolder;">4. Kindly note that the Reserved Category students from other than Maharashtra State will not be considered for
    admission under Reserved Category students. Such student will be considered as OPEN CATEGORY STUDENT.</span>
-<br/><!--5. You have to pay Rs.100/- as processing fee at the time of Submission of form.-->
-</span>
-<h5>Thanking You ,</h5>
-<h5>Your's faithfully</h5>
+<br/><span style="font-weight:bold;font-size:13px;">5. Hard Copy of Waiting/Merit List form NEED NOT be submitted at the college office.</span>
+<br/><br/>
+<br/><br/>
+<h5>Thanking You</h5>
+<!--<h5>Your's faithfully</h5>
 <p></p>
 <h5>SIGNATURE OF THE STUDENT</h5>
 <hr>
@@ -112,6 +113,6 @@ admission if I do not fulfill the terms and conditions.
    the<u> Waiting/Merit List </u> form for  <u><b>{{ucwords($newEnquiry->class_applied)}}</b></u>  Class for 2018-2019.</p>
 Date : <b>{{ucwords($newEnquiry->date)}}</b><div style="text-align:right">Signature Of Clerk</div>
 
-
+-->
 </body>
 </html>
