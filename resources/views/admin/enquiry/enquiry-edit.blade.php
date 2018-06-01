@@ -5,6 +5,12 @@
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
 @include('header')
+<style>
+    .myImg {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+</style>
 <div id="app">
 <div class="app-content">
 <!-- start: TOP NAVBAR -->
@@ -132,7 +138,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group"> <!-- Date input -->
-                <label class="control-label">State from which XII Std. passed <span class="symbol required"></span></label>
+                <label class="control-label">State from which X Std. passed <span class="symbol required"></span></label>
                 <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
                     <!--<option value="">Please select state</option>-->
                     <option value="Maharashtra">Maharashtra</option>
@@ -173,7 +179,7 @@
     </div>
 </fieldset>
 
-<div class="row">
+<div class="row" style="background-color: #fefefe; padding: 10px;">
 
     <?php
     $enquiryFormFolderPath = url().env('ENQUIRY_FORM_UPLOAD');
@@ -201,17 +207,18 @@
         <lable>{!!$enquiryInfo['caste_certificate']!!}</lable>
     </div>
 </div>
-<fieldset>
+<fieldset style="border: 2px solid #c2c2c2">
     <legend>
         Status
     </legend>
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
+                <label>Please Select the Status below :</label><br>
                 <input type="radio" class="final" id="final" name="final_status" value='pass'/>
-                <label for="final"><span></span>Approve</label>
+                <label for="final" style="color: green;font-size: 14px;font-weight: bolder"><span></span>Approve</label>
                 <input type="radio" class="status" id="status" name="final_status" value='fail'/>
-                <label for="status"><span></span>Disapprove</label>
+                <label for="status" style="color: red;font-size: 14px;font-weight: bolder"><span></span>Disapprove</label>
             </div>
         </div>
     </div>

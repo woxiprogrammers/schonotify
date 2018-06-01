@@ -67,7 +67,7 @@
     <td></td>
   </tr>
   <tr style="font-size:10px">
-    <td style="width:20%">State From Which XII Std Passed</td><td  style="width:6%"></td>
+    <td style="width:20%">State From Which X Std Passed</td><td  style="width:6%"></td>
     {{--<td style="width:20%">Defence / Differently Abled Category</td><td  style="width:6%"></td>--}}
     <td style="width:20%">Caste / Special Category</td><td  style="width:6%"></td>
     <td style="width:20%">Name Of The Caste / Sub Caste</td>
