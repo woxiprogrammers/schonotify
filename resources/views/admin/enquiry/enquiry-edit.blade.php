@@ -120,19 +120,26 @@
                 <input class="form-control" id="email" name="email" placeholder="Enter email" type="email"  value="{!!$enquiryInfo['email']!!}"/>
             </div>
         </div>
-	
-	<!-- <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label">SpecialCategory <span class="symbol required"></span></label>
-                <select class="form-control" id="diff_category" name="diff_category" style="-webkit-appearance: menulist;">
-                    @foreach($extra_categories as $category)
-                    <option value="{!! $category['slug'] !!}">{!! $category['categories'] !!}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>-->
+
+        <div class="col-md-6">
+            <label class="control-label">Year of Passing <span class="symbol required"></span></label>
+            <select class="form-control" id="exam_year" name="examination_year" style="-webkit-appearance: menulist;">
+                <option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option>
+            </select>
+        </div>
+
     </div>
     <div class="row">
+        <div class="col-md-6">
+            <div class="form-group"> <!-- Date input -->
+                <label class="control-label">State from which XII Std. passed <span class="symbol required"></span></label>
+                <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
+                    <!--<option value="">Please select state</option>-->
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option id="xyz" value="Other State">Other State</option>
+                </select>
+            </div>
+        </div>
         <div class="col-md-6">
             <div class="form-group"> <!-- Date input -->
                 <label class="control-label">Caste Category <span class="symbol required"></span></label>
@@ -143,24 +150,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-6">
-            <label class="control-label">Year of Passing <span class="symbol required"></span></label>
-            <select class="form-control" id="exam_year" name="examination_year" style="-webkit-appearance: menulist;">
-                <option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group"> <!-- Date input -->
-                <label class="control-label">State from which XII Std. passed <span class="symbol required"></span></label>
-                <select class="form-control" id="state" name="state" style="-webkit-appearance: menulist;" required>
-                    <option value="">Please select state</option>
-                    <option value="Maharashtra">Maharashtra</option>
-                    <option id="xyz" value="Other State">Other State</option>
-                </select>
-            </div>
-        </div>
+
 
     </div>
     <div class="row">
@@ -186,29 +176,29 @@
 <div class="row">
 
     <?php
-			$enquiryFormFolderPath = url().env('ENQUIRY_FORM_UPLOAD');
-			$formFolderName = sha1($enquiryInfo['id']);
-			$formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIRECTORY_SEPARATOR;
-		?>
+    $enquiryFormFolderPath = url().env('ENQUIRY_FORM_UPLOAD');
+    $formFolderName = sha1($enquiryInfo['id']);
+    $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIRECTORY_SEPARATOR;
+    ?>
     <div class="col-md-4">
         <lable style="font-size :14px; font-weight:bolder;"> 10th Marksheet : </lable>
         <!-- Trigger the Modal -->
         <img class="myImg" src="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" alt="10th Marksheet" width="300" height="300" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
-	<lable>{!!$enquiryInfo['ssc_certificate']!!}</lable>
+        <lable>{!!$enquiryInfo['ssc_certificate']!!}</lable>
     </div>
 
     <div class="col-md-4">
         <lable style="font-size :14px; font-weight:bolder;"> 12th Marksheet : </lable>
         <!-- Trigger the Modal -->
         <img class="myImg" src="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" alt="12th Marksheet" width="300" height="300" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
-	<lable>{!!$enquiryInfo['hsc_certificate']!!}</lable>
+        <lable>{!!$enquiryInfo['hsc_certificate']!!}</lable>
     </div>
 
     <div class="col-md-4">
         <lable style="font-size :14px; font-weight:bolder;"> Caste/Special Certificate: </lable>
         <!-- Trigger the Modal -->
         <img id="myImg" class="myImg" src="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" alt="Caste/Special Certificate" width="300" height="300" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
-	<lable>{!!$enquiryInfo['caste_certificate']!!}</lable>
+        <lable>{!!$enquiryInfo['caste_certificate']!!}</lable>
     </div>
 </div>
 <fieldset>
@@ -286,19 +276,51 @@
         }else if($('#check').val() == "pass"){
             $('#final').prop("checked",true);
         }
-        //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
     })
 
     $("#state").change(function(){
         if($('#state').val() == "Maharashtra"){
             $("#other_state").css("display","none");
+            $("#category option").each(function(){
+                if(!($(this).attr('value') == 'other_state')){
+                    $(this).show();
+                }else{
+                    $(this).hide();
+                }
+            });
+
             $('#category').val('');
+
             $('#category').css('pointer-events','true');
         }else{
             $("#other_state").css("display","true");
+            $("#category option").each(function(){
+                if(!($(this).attr('value') == 'defence' || $(this).attr('value') == 'differently_abled' || $(this).attr('value') == 'other_state')){
+                    $(this).hide();
+                }else{
+                    $(this).show();
+                }
+            });
             $('#category').val('other_state');
-            $('#category').css('pointer-events','none');
         }
-    })
+    });
+
+
+    $("#medium").change(function(){
+        if($('#medium').val() == "English"){
+            $("#class_applied option").each(function(){
+                $(this).show();
+            });
+
+        }else{
+            $("#class_applied option").each(function(){
+                if(!($(this).attr('value') == 'FYBCOM' )){
+                    $(this).hide();
+                }else{
+                    $(this).show();
+                }
+            });
+        }
+    });
 </script>
 @stop
