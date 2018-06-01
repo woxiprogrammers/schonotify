@@ -65,16 +65,17 @@
 <tr>
     <th width="10%"> Form No </th>
     <th width="30%"> Name </th>
+    <th width="20%"> Class </th>
     <th width="10%"> Actions </th>
     <th width="10%"> Result </th>
-
 </tr>
 </thead>
 <tbody>
     @foreach($masterEnquiry as $enquiry)
     <tr>
         <td>{!! $enquiry['form_no'] !!}</td>
-        <td>{!! $enquiry['first_name'] !!} &nbsp;&nbsp;{!! $enquiry['last_name'] !!}</td>
+        <td>{!! $enquiry['first_name'] !!} &nbsp; {!! $enquiry['last_name'] !!}</td>
+        <td>{!! $enquiry['class_applied'] !!}</td>
         <td>{!! $enquiry['action'] !!}</td>
         @if($enquiry['final_status'] != null)
           @if($enquiry['final_status'] == 'fail')
