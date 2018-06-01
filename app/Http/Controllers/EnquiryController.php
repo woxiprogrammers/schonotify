@@ -278,7 +278,7 @@ class EnquiryController extends Controller
             $enquiryData['state'] = $enquiryData['state'];
             $enquiryData['caste'] = $enquiryData['caste'];
             $enquiryData['email'] = $enquiryData['email'];
-            $enquiryData['diff_category'] = $enquiryData['diff_category'];
+            $enquiryData['diff_category'] = NULL;
             $enquiryData['category'] = $enquiryData['category'];
             $enquiryData['caste'] = $enquiryData['caste'];
             $enquiryData['examination_year'] = $enquiryData['examination_year'];
