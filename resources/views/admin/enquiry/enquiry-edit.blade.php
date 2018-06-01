@@ -39,7 +39,7 @@
                     Medium <span class="symbol required"></span>
                 </label>
                 <select class="form-control" id="medium" name="medium" style="-webkit-appearance: menulist;">
-                    <option value="{!!$enquiryInfo['medium']!!}" disabled>{!!$enquiryInfo['medium']!!}</option>
+                    <!--<option value="{!!$enquiryInfo['medium']!!}" disabled>{!!$enquiryInfo['medium']!!}</option>-->
                     <!--<option value='Hindi'>Hindi</option>-->
                     <option value='English'>English</option>
                     <option value='Marathi'>Marathi</option>
