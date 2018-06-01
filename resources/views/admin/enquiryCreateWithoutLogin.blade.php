@@ -287,6 +287,7 @@
                 $("#caste_doc_file").attr('name','caste_certificate');
                 $("#caste_doc_file").rules('add',{
                     required: true,
+                    extension: "png|jpeg|jpg|bmp",
                     custom_file_size: true
                 });
                 if(selectedCategory == 'defence' || selectedCategory == 'differently_abled'){

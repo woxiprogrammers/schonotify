@@ -27,6 +27,12 @@ var FormValidator = function () {
         $.validator.addMethod("custom_file_size", function(value, element) {
             return this.optional(element) || ($(element)[0].files[0].size <= 200000);
         }, "Please use file less than 200KB");
+        //validate file extension custom  method.
+        $.validator.addMethod("extension", function (value, element, param) {
+            param = typeof param === "string" ? param.replace(/,/g, '|') : "png|jpe?g|gif";
+            return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i"));
+        }, $.validator.format("Please enter a value with a valid extension."));
+
         $.validator.addMethod("greaterThan", function (value, element, param) {
             var $otherElement = $(param);
             if ($otherElement != '') { // <- the other field not empty?
@@ -113,11 +119,15 @@ var FormValidator = function () {
                 },
                 ssc_certificate: {
                     required: true,
+                    extension: "png|jpeg|jpg|bmp",
                     custom_file_size: true
+
                 },
                 hsc_certificate: {
                     required: true,
+                    extension: "png|jpeg|jpg|bmp",
                     custom_file_size: true
+
                 }
             },
             messages: {
@@ -169,6 +179,15 @@ var FormValidator = function () {
                 address:{
                     required:"Address is required",
                     address:"Address must contain at-least 15 characters"
+                },
+                ssc_certificate: {
+                    extension:"Please upload only JPEG,JPG,PNG,BMP files"
+                },
+                hsc_certificate: {
+                    extension:"Please upload only JPEG,JPG,PNG,BMP files"
+                },
+                caste_certificate: {
+                    extension:"Please upload only JPEG,JPG,PNG,BMP files"
                 }
             },
             invalidHandler: function (event, validator) { //display error alert on form submit
