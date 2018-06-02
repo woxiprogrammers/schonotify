@@ -178,7 +178,82 @@
         </div>
     </div>
 </fieldset>
-
+<style>
+    * {box-sizing: border-box;}
+    .img-zoom-container {
+        position: relative;
+    }
+    .img-zoom-lens {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        /*set the size of the lens:*/
+        width: 40px;
+        height: 40px;
+    }
+    .img-zoom-result {
+        border: 1px solid #d4d4d4;
+        /*set the size of the result div:*/
+        width: 300px;
+        height: 300px;
+    }
+</style>
+<script>
+    function imageZoom(imgID, resultID) {
+        var img, lens, result, cx, cy;
+        img = document.getElementById(imgID);
+        result = document.getElementById(resultID);
+        /*create lens:*/
+        lens = document.createElement("DIV");
+        lens.setAttribute("class", "img-zoom-lens");
+        /*insert lens:*/
+        img.parentElement.insertBefore(lens, img);
+        /*calculate the ratio between result DIV and lens:*/
+        cx = result.offsetWidth / lens.offsetWidth;
+        cy = result.offsetHeight / lens.offsetHeight;
+        /*set background properties for the result DIV:*/
+        result.style.backgroundImage = "url('" + img.src + "')";
+        result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+        /*execute a function when someone moves the cursor over the image, or the lens:*/
+        lens.addEventListener("mousemove", moveLens);
+        img.addEventListener("mousemove", moveLens);
+        /*and also for touch screens:*/
+        lens.addEventListener("touchmove", moveLens);
+        img.addEventListener("touchmove", moveLens);
+        function moveLens(e) {
+            var pos, x, y;
+            /*prevent any other actions that may occur when moving over the image:*/
+            e.preventDefault();
+            /*get the cursor's x and y positions:*/
+            pos = getCursorPos(e);
+            /*calculate the position of the lens:*/
+            x = pos.x - (lens.offsetWidth / 2);
+            y = pos.y - (lens.offsetHeight / 2);
+            /*prevent the lens from being positioned outside the image:*/
+            if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
+            if (x < 0) {x = 0;}
+            if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
+            if (y < 0) {y = 0;}
+            /*set the position of the lens:*/
+            lens.style.left = x + "px";
+            lens.style.top = y + "px";
+            /*display what the lens "sees":*/
+            result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+        }
+        function getCursorPos(e) {
+            var a, x = 0, y = 0;
+            e = e || window.event;
+            /*get the x and y positions of the image:*/
+            a = img.getBoundingClientRect();
+            /*calculate the cursor's x and y coordinates, relative to the image:*/
+            x = e.pageX - a.left;
+            y = e.pageY - a.top;
+            /*consider any page scrolling:*/
+            x = x - window.pageXOffset;
+            y = y - window.pageYOffset;
+            return {x : x, y : y};
+        }
+    }
+</script>
 <div class="row" style="background-color: #fefefe; padding: 10px;">
 
     <?php
@@ -188,25 +263,39 @@
     ?>
     <div class="col-md-4">
         <lable style="font-size :14px; font-weight:bolder;"> 10th Marksheet : </lable>
+        <div class="img-zoom-container">
+            <img id="myimage1" class="myImg" src="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" alt="10th Marksheet" width="200" height="200" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
+            <div id="myresult1" class="img-zoom-result"></div>
+        </div>
         <!-- Trigger the Modal -->
-        <img class="myImg" src="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" alt="10th Marksheet" width="300" height="300" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
+
         <lable>{!!$enquiryInfo['ssc_certificate']!!}</lable>
     </div>
 
     <div class="col-md-4">
         <lable style="font-size :14px; font-weight:bolder;"> 12th Marksheet : </lable>
         <!-- Trigger the Modal -->
-        <img class="myImg" src="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" alt="12th Marksheet" width="300" height="300" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
+        <img id="myimage2" class="myImg" src="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" alt="12th Marksheet" width="200" height="200" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
+        <div id="myresult2" class="img-zoom-result"></div>
         <lable>{!!$enquiryInfo['hsc_certificate']!!}</lable>
     </div>
 
     <div class="col-md-4">
         <lable style="font-size :14px; font-weight:bolder;"> Caste/Special Certificate: </lable>
         <!-- Trigger the Modal -->
-        <img id="myImg" class="myImg" src="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" alt="Caste/Special Certificate" width="300" height="300" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
+        <img id="myimage3" class="myImg" src="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" alt="Caste/Special Certificate" width="200" height="200" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
+        <div id="myresult3" class="img-zoom-result"></div>
         <lable>{!!$enquiryInfo['caste_certificate']!!}</lable>
     </div>
 </div>
+
+<script>
+    // Initiate zoom effect:
+    imageZoom("myimage1", "myresult1");
+    imageZoom("myimage2", "myresult2");
+    imageZoom("myimage3", "myresult3");
+</script>
+
 <fieldset style="border: 2px solid #c2c2c2">
     <legend>
         Status
