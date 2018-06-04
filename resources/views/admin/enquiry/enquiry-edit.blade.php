@@ -185,7 +185,6 @@ $formFolderName = sha1($enquiryInfo['id']);
 $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIRECTORY_SEPARATOR;
 ?>
 
-
 <div class="row" style="background-color: #fefefe; padding: 20px;">
     <div class="col-md-12">
     <div class="w3-row-padding">
@@ -194,21 +193,21 @@ $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIR
             <a href="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" style="padding: 2px;border: 1px solid #337ab7; background-color: #337ab7;color: white" download> Download </a>
             <div style="height: 20px;"></div>
             <img src="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" style="width:100%;cursor:pointer"
-                 onclick="onClick(this)" class="w3-hover-opacity">
+                 onclick="onClick(this)" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'" class="w3-hover-opacity">
         </div>
         <div class="w3-container w3-third">
             <lable style="font-size :14px; font-weight:bolder;"> 12th Marksheet : </lable>
             <a href="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" style="padding: 2px;border: 1px solid #337ab7; background-color: #337ab7;color: white" download> Download </a>
             <div style="height: 20px;"></div>
             <img src="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" style="width:100%;cursor:pointer"
-                 onclick="onClick(this)" class="w3-hover-opacity">
+                 onclick="onClick(this)" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'" class="w3-hover-opacity">
         </div>
         <div class="w3-container w3-third">
             <lable style="font-size :14px; font-weight:bolder;"> Caste/Special Certificate: </lable>
             <a href="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" style="padding: 2px;border: 1px solid #337ab7; background-color: #337ab7;color: white" download> Download </a>
             <div style="height: 20px;"></div>
             <img src="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" style="width:100%;cursor:pointer"
-                 onclick="onClick(this)" class="w3-hover-opacity">
+                 onclick="onClick(this)" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'" class="w3-hover-opacity">
         </div>
     </div>
     </div>
