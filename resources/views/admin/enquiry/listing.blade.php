@@ -75,7 +75,7 @@
     <tr>
         <td>{!! $enquiry['form_no'] !!}</td>
         <td>{!! $enquiry['first_name'] !!}&nbsp;{!! $enquiry['last_name'] !!}</td>
-        @if($enquiry['class_applied'] != 'FYBBA')
+        @if($enquiry['class_applied'] == 'FYBBA')
             <td>FYBBAMAIN</td>
         @else
         <td>{!! $enquiry['class_applied'] !!}</td>
