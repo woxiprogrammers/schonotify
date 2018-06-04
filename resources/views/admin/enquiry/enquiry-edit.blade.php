@@ -178,122 +178,55 @@
         </div>
     </div>
 </fieldset>
-<style>
-    * {box-sizing: border-box;}
-    .img-zoom-container {
-        position: relative;
-    }
-    .img-zoom-lens {
-        position: absolute;
-        border: 1px solid #d4d4d4;
-        /*set the size of the lens:*/
-        width: 40px;
-        height: 40px;
-    }
-    .img-zoom-result {
-        border: 1px solid #d4d4d4;
-        /*set the size of the result div:*/
-        width: 300px;
-        height: 300px;
-    }
-</style>
-<script>
-    function imageZoom(imgID, resultID) {
-        var img, lens, result, cx, cy;
-        img = document.getElementById(imgID);
-        result = document.getElementById(resultID);
-        /*create lens:*/
-        lens = document.createElement("DIV");
-        lens.setAttribute("class", "img-zoom-lens");
-        /*insert lens:*/
-        img.parentElement.insertBefore(lens, img);
-        /*calculate the ratio between result DIV and lens:*/
-        cx = result.offsetWidth / lens.offsetWidth;
-        cy = result.offsetHeight / lens.offsetHeight;
-        /*set background properties for the result DIV:*/
-        result.style.backgroundImage = "url('" + img.src + "')";
-        result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
-        /*execute a function when someone moves the cursor over the image, or the lens:*/
-        lens.addEventListener("mousemove", moveLens);
-        img.addEventListener("mousemove", moveLens);
-        /*and also for touch screens:*/
-        lens.addEventListener("touchmove", moveLens);
-        img.addEventListener("touchmove", moveLens);
-        function moveLens(e) {
-            var pos, x, y;
-            /*prevent any other actions that may occur when moving over the image:*/
-            e.preventDefault();
-            /*get the cursor's x and y positions:*/
-            pos = getCursorPos(e);
-            /*calculate the position of the lens:*/
-            x = pos.x - (lens.offsetWidth / 2);
-            y = pos.y - (lens.offsetHeight / 2);
-            /*prevent the lens from being positioned outside the image:*/
-            if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
-            if (x < 0) {x = 0;}
-            if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
-            if (y < 0) {y = 0;}
-            /*set the position of the lens:*/
-            lens.style.left = x + "px";
-            lens.style.top = y + "px";
-            /*display what the lens "sees":*/
-            result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
-        }
-        function getCursorPos(e) {
-            var a, x = 0, y = 0;
-            e = e || window.event;
-            /*get the x and y positions of the image:*/
-            a = img.getBoundingClientRect();
-            /*calculate the cursor's x and y coordinates, relative to the image:*/
-            x = e.pageX - a.left;
-            y = e.pageY - a.top;
-            /*consider any page scrolling:*/
-            x = x - window.pageXOffset;
-            y = y - window.pageYOffset;
-            return {x : x, y : y};
-        }
-    }
-</script>
-<div class="row" style="background-color: #fefefe; padding: 10px;">
 
-    <?php
-    $enquiryFormFolderPath = url().env('ENQUIRY_FORM_UPLOAD');
-    $formFolderName = sha1($enquiryInfo['id']);
-    $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIRECTORY_SEPARATOR;
-    ?>
-    <div class="col-md-4">
-        <lable style="font-size :14px; font-weight:bolder;"> 10th Marksheet : </lable>
-        <div class="img-zoom-container">
-            <img id="myimage1" class="myImg" src="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" alt="10th Marksheet" width="200" height="200" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
-            <div id="myresult1" class="img-zoom-result"></div>
+<?php
+$enquiryFormFolderPath = url().env('ENQUIRY_FORM_UPLOAD');
+$formFolderName = sha1($enquiryInfo['id']);
+$formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIRECTORY_SEPARATOR;
+?>
+
+
+<div class="row" style="background-color: #fefefe; padding: 20px;">
+    <div class="col-md-12">
+    <div class="w3-row-padding">
+        <div class="w3-container w3-third">
+            <lable style="font-size :14px; font-weight:bolder;"> 10th Marksheet : </lable>
+            <a href="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" style="padding: 2px;border: 1px solid #337ab7; background-color: #337ab7;color: white" download> Download </a>
+            <div style="height: 20px;"></div>
+            <img src="{!!$formUploadPath.$enquiryInfo['ssc_certificate']!!}" style="width:100%;cursor:pointer"
+                 onclick="onClick(this)" class="w3-hover-opacity">
         </div>
-        <!-- Trigger the Modal -->
-
-        <lable>{!!$enquiryInfo['ssc_certificate']!!}</lable>
+        <div class="w3-container w3-third">
+            <lable style="font-size :14px; font-weight:bolder;"> 12th Marksheet : </lable>
+            <a href="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" style="padding: 2px;border: 1px solid #337ab7; background-color: #337ab7;color: white" download> Download </a>
+            <div style="height: 20px;"></div>
+            <img src="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" style="width:100%;cursor:pointer"
+                 onclick="onClick(this)" class="w3-hover-opacity">
+        </div>
+        <div class="w3-container w3-third">
+            <lable style="font-size :14px; font-weight:bolder;"> Caste/Special Certificate: </lable>
+            <a href="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" style="padding: 2px;border: 1px solid #337ab7; background-color: #337ab7;color: white" download> Download </a>
+            <div style="height: 20px;"></div>
+            <img src="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" style="width:100%;cursor:pointer"
+                 onclick="onClick(this)" class="w3-hover-opacity">
+        </div>
     </div>
-
-    <div class="col-md-4">
-        <lable style="font-size :14px; font-weight:bolder;"> 12th Marksheet : </lable>
-        <!-- Trigger the Modal -->
-        <img id="myimage2" class="myImg" src="{!!$formUploadPath.$enquiryInfo['hsc_certificate']!!}" alt="12th Marksheet" width="200" height="200" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
-        <div id="myresult2" class="img-zoom-result"></div>
-        <lable>{!!$enquiryInfo['hsc_certificate']!!}</lable>
     </div>
+</div>
 
-    <div class="col-md-4">
-        <lable style="font-size :14px; font-weight:bolder;"> Caste/Special Certificate: </lable>
-        <!-- Trigger the Modal -->
-        <img id="myimage3" class="myImg" src="{!!$formUploadPath.$enquiryInfo['caste_certificate']!!}" alt="Caste/Special Certificate" width="200" height="200" onerror="this.src='{!!$enquiryFormFolderPath!!}/ImageNotFound.png'">
-        <div id="myresult3" class="img-zoom-result"></div>
-        <lable>{!!$enquiryInfo['caste_certificate']!!}</lable>
+
+<div id="modal01" class="w3-modal" onclick="this.style.display='none'">
+    <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+    <div class="w3-modal-content w3-animate-zoom">
+        <img id="img01" style="width:100%">
     </div>
 </div>
 
 <script>
-    // Initiate zoom effect:
-    imageZoom("myimage1", "myresult1");
-    imageZoom("myimage2", "myresult2");
-    imageZoom("myimage3", "myresult3");
+    function onClick(element) {
+        document.getElementById("img01").src = element.src;
+        document.getElementById("modal01").style.display = "block";
+    }
 </script>
 
 <fieldset style="border: 2px solid #c2c2c2">
@@ -332,6 +265,7 @@
 </div>
 @include('footer')
 </div>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <!-- start: MAIN JAVASCRIPTS -->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
