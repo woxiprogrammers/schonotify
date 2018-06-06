@@ -9,10 +9,10 @@
       <a href="javascript:void(0)">
           <div class="item-content">
               <div class="item-media">
-                  <i class="fa fa-phone" aria-hidden="true"></i>
+
               </div>
               <div class="item-inner">
-                  <span class="title">Manage Waiting/Merit List  </span><i class="icon-arrow"></i>
+                  <span class="title">Manage Waiting/Merit List  </span>&nbsp;<i class="icon-arrow"></i>
               </div>
           </div>
       </a>
@@ -38,23 +38,23 @@
             <a href="javascript:void(0)">
                 <div class="item-content">
                     <div class="item-media">
-                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        <!--<i class="fa fa-phone" aria-hidden="true"></i>-->
                     </div>
                     <div class="item-inner">
-                        <span class="title">Manage SY Waiting/Merit List  </span><i class="icon-arrow"></i>
+                        <span class="title">Manage SY Waiting/Merit List</span> &nbsp;<i class="icon-arrow"></i>
                     </div>
                 </div>
             </a>
             <ul class="sub-menu">
                 <li>
-                    <a href="syEnquiry/student-enquiry">
+                    <a href="/syEnquiry/student-enquiry">
                         <div class="item-inner">
                             <span class="title"> SY Waiting/Merit List Form </span>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="syEnquiry/manage">
+                    <a href="/syEnquiry/manage">
                         <div class="item-inner">
                             <span class="title">SY Waiting/Merit Listing </span>
                         </div>

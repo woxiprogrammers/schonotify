@@ -74,7 +74,7 @@
     @foreach($masterEnquiry as $enquiry)
     <tr>
         <td>{!! $enquiry['form_no'] !!}</td>
-        <td>{!! $enquiry['first_name'] !!}&nbsp;{!! $enquiry['last_name'] !!}</td>
+        <td>{!! ucfirst(strtolower($enquiry['first_name'])) !!}&nbsp;{!! ucfirst(strtolower($enquiry['middle_name'])) !!}&nbsp;{!! ucfirst(strtolower($enquiry['last_name'])) !!}</td>
         @if($enquiry['class_applied'] == 'FYBBA')
             <td>FYBBAMAIN</td>
         @else

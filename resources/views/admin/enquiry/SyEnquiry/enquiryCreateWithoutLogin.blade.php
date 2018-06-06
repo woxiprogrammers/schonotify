@@ -349,15 +349,15 @@
 
         $('#class_applied').on('change',function(){
             if(this.value == 'SYBCOM'){
-                $('#marksheet').text("FY BCOM");
+                $('#marksheet').text("FY BCOM Marksheet");
             }else if(this.value == 'SYBBA'){
-                $('#marksheet').text("FY BBA");
+                $('#marksheet').text("FY BBA Marksheet");
             }else if(this.value == 'SYBBAIB'){
-                $('#marksheet').text("FY BBA (IB)");
+                $('#marksheet').text("FY BBA (IB) Marksheet");
             }else if(this.value == 'SYBBACA'){
-                $('#marksheet').text("FY BBA (CA)");
+                $('#marksheet').text("FY BBA (CA) Marksheet");
             }else if(this.value == 'MCOM'){
-                $('#marksheet').text("TY BCOM");
+                $('#marksheet').text("TY BCOM Marksheet");
             }
         })
 
