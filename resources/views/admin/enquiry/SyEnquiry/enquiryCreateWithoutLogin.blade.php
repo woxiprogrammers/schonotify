@@ -50,7 +50,6 @@
                                                 Class <span class="symbol required"></span>
                                             </label>
                                             <select class="form-control" id="class_applied" name="class_applied" style="-webkit-appearance: menulist;">
-                                                <option value=''></option>
                                                 <option value='SYBCOM'>SY BCOM</option>
                                                 <option value='SYBBAIB'>SY BBA (IB)</option>
                                                 <option value='SYBBACA'>SY BBA (CA)</option>
@@ -204,8 +203,8 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group"> <!-- Date input -->
-                                                        <label class="control-label">
-                                                            12th Marksheet <span class="symbol required"></span>
+                                                        <label class="control-label" id="marksheet">
+                                                            FY BCOM Marksheet <span class="symbol required"></span>
                                                         </label>
                                                         <div class="form-group">
                                                             <input type="file" name="hsc_certificate" accept=".jpg,.jpeg,.png,.bmp">
@@ -277,9 +276,10 @@
             $("#app").addClass("removePadding");
             //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
             var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-            $("#category").on('change', function(){
-                var selectedCategory = $(this).val();
-                if((selectedCategory == 'open' || selectedCategory == 'other_state' || selectedCategory == '')){
+            $('#category, #state').on('change', function(){
+                var selectedCategory = $("#category").val();
+                var spcategory = $("#state").val();
+                if((selectedCategory == 'open' || selectedCategory == 'other_state' || selectedCategory == '' || spcategory == 'other_state')){
                     $("#caste_doc").hide();
                     $("#caste_doc_file").removeAttr('name');
                     $("#caste_doc_file").rules('remove');

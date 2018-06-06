@@ -277,9 +277,10 @@
         $("#app").addClass("removePadding");
         //$(".app-sidebar-fixed #sidebar").addClass("removePadding");
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-        $("#category").on('change', function(){
-            var selectedCategory = $(this).val();
-            if((selectedCategory == 'open' || selectedCategory == 'other_state' || selectedCategory == '')){
+        $('#category, #state').on('change', function(){
+            var selectedCategory = $("#category").val();
+            var spcategory = $("#state").val();
+            if((selectedCategory == 'open' || selectedCategory == 'other_state' || selectedCategory == '' || spcategory == 'other_state')){
                 $("#caste_doc").hide();
                 $("#caste_doc_file").removeAttr('name');
                 $("#caste_doc_file").rules('remove');
