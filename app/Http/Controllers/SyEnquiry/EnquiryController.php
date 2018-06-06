@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Elibyy\TCPDF\Facades\TCPDF;
-
+use Illuminate\Support\Facades\Input;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +27,24 @@ class EnquiryController extends Controller
     }
     public function viewEnquiryList(){
         try{
+            $classname = Input::get('classname');
+            $status = Input::get('status');
             $user = Auth::User();
-            $enquiryData = SyEnquiryFormClg::orderBy('id','DESC')->get()->toArray();
+
+            if ($status != "null") {
+                $enquiryData = SyEnquiryFormClg::where('class_applied',$classname)
+                    ->where('final_status',$status)->orderBy('id','DESC')->get()->toArray();
+                if ($status == 'pass') {
+                    $status = 'Approve';
+                } else {
+                    $status = 'Disapprove';
+                }
+            } else {
+                $enquiryData = SyEnquiryFormClg::where('class_applied',$classname)
+                    ->where('final_status', NULL)->orderBy('id','DESC')->get()->toArray();
+                $status = 'Unapprove';
+            }
+
             $masterEnquiry = array();
             foreach($enquiryData as $enquiry){
                 $now = Carbon::now();
@@ -40,7 +56,7 @@ class EnquiryController extends Controller
                 $enquiry['last_name'] = $enquiry['last_name'];
                 array_push($masterEnquiry,$enquiry);
             }
-            return view('admin.enquiry.SyEnquiry.listing')->with(compact('masterEnquiry'));
+            return view('admin.enquiry.SyEnquiry.listing')->with(compact('masterEnquiry','classname', 'status'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -325,7 +341,7 @@ class EnquiryController extends Controller
             $enquiryInfo = SyEnquiryFormClg::where('id',$enquiryData['id'])->update($enquiryData);
             $message = 'Enquiry Updated successfully';
             $request->session()->flash('message-success', $message);
-            return redirect('/syEnquiry/manage');
+            return redirect('/syEnquiry/manage/?classname=SYBCOM&status=pass');
         }catch (\Exception $e){
             Log::critical('exception:'.$e->getMessage());
             abort(500,$e->getMessage());

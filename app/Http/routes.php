@@ -50,7 +50,7 @@
     Route::get('manage',array('uses' => 'EnquiryController@viewEnquiryList'));
     Route::post('enquiry-list',array('uses' => 'EnquiryController@enquiryListing'));
     Route::get('edit-enquiry/{id}',array('uses' => 'EnquiryController@editEnquiryView'));
-    Route::post('edit-enquiry/{id}',array('uses' => 'EnquiryController@editEnquiry'));//
+    Route::post('edit-enquiry/{id}',array('uses' => 'EnquiryController@editEnquiry'));
     Route::get('print-enquiry-form/{id}',array('uses' => 'EnquiryController@printEnquiryForm'));
     //public student registration
     Route::get('registration/{id}',array('uses' => 'RegistrationController@getStudentRegistrationView'));

@@ -58,16 +58,17 @@
 <div class="container-fluid container-fullw bg-white">
 <div class="row">
 <div class="col-md-12">
-<h5 class="over-title margin-bottom-15"><h2>Waiting/Merit Listing</h2></h5>
+<h5 class="over-title margin-bottom-15"><h2><span style="font-weight: bolder;">{!! $classname; !!} : {!! $status !!} </span>- Waiting/Merit Listing</h2></h5>
     @include('alerts.errors')
 <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
 <thead>
 <tr>
     <th width="10%"> Form No </th>
     <th width="30%"> Name </th>
-    <th width="20%"> Class </th>
+    <th width="10%"> State </th>
+    <th width="20%"> Caste </th>
+    <th width="10%"> Mobile No </th>
     <th width="10%"> Actions </th>
-    <th width="10%"> Result </th>
 </tr>
 </thead>
 <tbody>
@@ -75,20 +76,10 @@
     <tr>
         <td>{!! $enquiry['form_no'] !!}</td>
         <td>{!! ucfirst(strtolower($enquiry['first_name'])) !!}&nbsp;{!! ucfirst(strtolower($enquiry['middle_name'])) !!}&nbsp;{!! ucfirst(strtolower($enquiry['last_name'])) !!}</td>
-        @if($enquiry['class_applied'] == 'FYBBA')
-            <td>FYBBAMAIN</td>
-        @else
-        <td>{!! $enquiry['class_applied'] !!}</td>
-        @endif
+        <td>{!! ucfirst($enquiry['state']) !!}</td>
+        <td>{!! strtoupper($enquiry['category']) !!}</td>
+        <td>{!! $enquiry['mobile'] !!}</td>
         <td>{!! $enquiry['action'] !!}</td>
-        @if($enquiry['final_status'] != null)
-          @if($enquiry['final_status'] == 'fail')
-            <td>Disapprove</td>
-          @else
-            <td>Approve</td>
-          @endif
-          @else <td></td>
-        @endif
     </tr>
     @endforeach
 </tbody>

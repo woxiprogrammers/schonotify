@@ -9,26 +9,103 @@
       <a href="javascript:void(0)">
           <div class="item-content">
               <div class="item-media">
-
+                  <i class="fa fa-list" aria-hidden="true"></i>
               </div>
               <div class="item-inner">
-                  <span class="title">Manage Waiting/Merit List  </span>&nbsp;<i class="icon-arrow"></i>
+                  <span class="title">FY Waiting/Merit List</span>&nbsp;<i class="icon-arrow"></i>
               </div>
           </div>
       </a>
       <ul class="sub-menu">
-          <li>
+          <li style="border-bottom: 1px solid #e2e2e2">
               <a href="/student-enquiry">
                   <div class="item-inner">
-                      <span class="title"> Waiting/Merit List Form </span>
+                      <i class="fa fa-x fa-asterisk" aria-hidden="true"></i>&nbsp<span class="title">FY Waiting/Merit List Form </span>
                   </div>
               </a>
           </li>
           <li>
-              <a href="/manage">
+              <a href="/manage/?classname=FYBCOM&status=pass">
                   <div class="item-inner">
-                      <span class="title"> Waiting/Merit Listing </span>
+                      <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">FYBCOM <span style="color: green">Approve List</span> </span>
                   </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage/?classname=FYBCOM&status=fail"">
+                  <div class="item-inner">
+                      <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">FYBCOM <span style="color: red">Disapprove List</span> </span>
+                  </div>
+              </a>
+          </li>
+          <li style="border-bottom: 1px solid #e2e2e2">
+              <a href="/manage/?classname=FYBCOM&status=null"">
+                  <div class="item-inner">
+                      <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">FYBCOM <span style="color: blue">Unapprove List</span> </span>
+                  </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage/?classname=FYBBA&status=pass">
+                  <div class="item-inner">
+                      <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA <span style="color: green">Approve List</span> </span>
+                  </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage/?classname=FYBBA&status=fail"">
+              <div class="item-inner">
+                  <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA <span style="color: red">Disapprove List</span> </span>
+              </div>
+              </a>
+          </li>
+          <li style="border-bottom: 1px solid #e2e2e2">
+              <a href="/manage/?classname=FYBBA&status=null"">
+              <div class="item-inner">
+                  <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA <span style="color: blue">Unapprove List</span> </span>
+              </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage/?classname=FYBBAIB&status=pass">
+                  <div class="item-inner">
+                      <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA(IB) <span style="color: green">Approve List</span> </span>
+                  </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage/?classname=FYBBAIB&status=fail"">
+              <div class="item-inner">
+                  <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA(IB) <span style="color: red">Disapprove List</span> </span>
+              </div>
+              </a>
+          </li>
+          <li style="border-bottom: 1px solid #e2e2e2">
+              <a href="/manage/?classname=FYBBAIB&status=null"">
+              <div class="item-inner">
+                  <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA(IB) <span style="color: blue">Unapprove List</span> </span>
+              </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage/?classname=FYBBACA&status=pass">
+                  <div class="item-inner">
+                      <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA(CA) <span style="color: green">Approve List</span> </span>
+                  </div>
+              </a>
+          </li>
+          <li>
+              <a href="/manage/?classname=FYBBACA&status=fail"">
+              <div class="item-inner">
+                  <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA(CA) <span style="color: red">Disapprove List</span> </span>
+              </div>
+              </a>
+          </li>
+          <li style="border-bottom: 1px solid #e2e2e2">
+              <a href="/manage/?classname=FYBBACA&status=null"">
+              <div class="item-inner">
+                  <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">FYBBA(CA) <span style="color: blue">Unapprove List</span> </span>
+              </div>
               </a>
           </li>
       </ul>
@@ -38,14 +115,14 @@
             <a href="javascript:void(0)">
                 <div class="item-content">
                     <div class="item-media">
-                        <!--<i class="fa fa-phone" aria-hidden="true"></i>-->
+                        <i class="fa fa-list" aria-hidden="true"></i>
                     </div>
                     <div class="item-inner">
-                        <span class="title">Manage SY Waiting/Merit List</span> &nbsp;<i class="icon-arrow"></i>
+                        <span class="title">SY Waiting/Merit List</span><i class="icon-arrow"></i>
                     </div>
                 </div>
             </a>
-            <ul class="sub-menu">
+<!--            <ul class="sub-menu">
                 <li>
                     <a href="/syEnquiry/student-enquiry">
                         <div class="item-inner">
@@ -58,6 +135,120 @@
                         <div class="item-inner">
                             <span class="title">SY Waiting/Merit Listing </span>
                         </div>
+                    </a>
+                </li>
+            </ul>-->
+            <ul class="sub-menu">
+                <li style="border-bottom: 1px solid #e2e2e2">
+                    <a href="/syEnquiry/student-enquiry">
+                        <div class="item-inner">
+                            <i class="fa fa-x fa-asterisk" aria-hidden="true"></i>&nbsp<span class="title">SY Waiting/Merit List Form </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=SYBCOM&status=pass">
+                        <div class="item-inner">
+                            <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">SYBCOM <span style="color: green">Approve List</span> </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=SYBCOM&status=fail"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">SYBCOM <span style="color: red">Disapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li style="border-bottom: 1px solid #e2e2e2">
+                    <a href="/syEnquiry/manage/?classname=SYBCOM&status=null"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">SYBCOM <span style="color: blue">Unapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=SYBBA&status=pass">
+                        <div class="item-inner">
+                            <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA <span style="color: green">Approve List</span> </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/manage/?classname=SYBBA&status=fail"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA <span style="color: red">Disapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li style="border-bottom: 1px solid #e2e2e2">
+                    <a href="/syEnquiry/manage/?classname=SYBBA&status=null"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA <span style="color: blue">Unapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=SYBBAIB&status=pass">
+                        <div class="item-inner">
+                            <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA(IB) <span style="color: green">Approve List</span> </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=SYBBAIB&status=fail"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA(IB) <span style="color: red">Disapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li style="border-bottom: 1px solid #e2e2e2">
+                    <a href="/syEnquiry/manage/?classname=SYBBAIB&status=null"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA(IB) <span style="color: blue">Unapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=SYBBACA&status=pass">
+                        <div class="item-inner">
+                            <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA(CA) <span style="color: green">Approve List</span> </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=SYBBACA&status=fail"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA(CA) <span style="color: red">Disapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li style="border-bottom: 1px solid #e2e2e2">
+                    <a href="/syEnquiry/manage/?classname=SYBBACA&status=null"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-circle-o" aria-hidden="true"></i>&nbsp<span class="title">SYBBA(CA) <span style="color: blue">Unapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=MCOM&status=pass">
+                        <div class="item-inner">
+                            <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">MCOM <span style="color: green">Approve List</span> </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/syEnquiry/manage/?classname=MCOM&status=fail"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">MCOM <span style="color: red">Disapprove List</span> </span>
+                    </div>
+                    </a>
+                </li>
+                <li style="border-bottom: 1px solid #e2e2e2">
+                    <a href="/syEnquiry/manage/?classname=MCOM&status=null"">
+                    <div class="item-inner">
+                        <i class="fa fa-x fa-square-o" aria-hidden="true"></i>&nbsp<span class="title">MCOM <span style="color: blue">Unapprove List</span> </span>
+                    </div>
                     </a>
                 </li>
             </ul>
