@@ -366,5 +366,18 @@
                         $('#marksheet').text("TY BCOM");
                     }
                 })
+
+                 var classVal = $('#class_applied').val();
+                if(classVal == 'SYBCOM'){
+                    $('#marksheet').text("FY BCOM");
+                }else if(classVal == 'SYBBA'){
+                    $('#marksheet').text("FY BBA");
+                }else if(classVal == 'SYBBAIB'){
+                    $('#marksheet').text("FY BBA (IB)");
+                }else if(classVal == 'SYBBACA'){
+                    $('#marksheet').text("FY BBA (CA)");
+                }else if(classVal == 'MCOM'){
+                    $('#marksheet').text("TY BCOM");
+                }
             </script>
 @stop
