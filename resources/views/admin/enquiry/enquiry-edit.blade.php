@@ -228,7 +228,7 @@ $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIR
     }
 </script>
 
-<fieldset style="border: 2px solid #c2c2c2">
+<fieldset style="border: 2px solid #c2c2c2; padding: 30px; margin-bottom: 30px;">
     <legend>
         Status
     </legend>
@@ -237,9 +237,10 @@ $formUploadPath = $enquiryFormFolderPath.DIRECTORY_SEPARATOR.$formFolderName.DIR
             <div class="form-group">
                 <label>Please Select the Status below :</label><br>
                 <input type="radio" class="final" id="final" name="final_status" value='pass'/>
-                <label for="final" style="color: green;font-size: 14px;font-weight: bolder"><span></span>Approve</label>
+                <label for="final" style="color: green;font-size: 16px;font-weight: bolder"><span></span>Approve</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" class="status" id="status" name="final_status" value='fail'/>
-                <label for="status" style="color: red;font-size: 14px;font-weight: bolder"><span></span>Disapprove</label>
+                <label for="status" style="color: red;font-size: 16px;font-weight: bolder"><span></span>Disapprove</label>
             </div>
         </div>
     </div>

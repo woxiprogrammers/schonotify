@@ -17,7 +17,7 @@
             <h1 class="mainTitle"> Ness Wadia College of Commerce</h1>
             <span class="mainDescription">Waiting / Merit List Form</span>
             <br>
-            <h5 style="color:red">If you are already registered ,then <a href="http://nesswadia.veza.co.in/check-enquiry">Click Here</a></h5>
+            <h5 style="color:red">If you are already registered ,then <a href="check-enquiry">Click Here</a></h5>
         </div>
     </div>
 </section>

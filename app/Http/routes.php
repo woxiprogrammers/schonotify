@@ -60,6 +60,22 @@
     Route::get('get-enquiry-parents',array('uses' => 'RegistrationController@getStudentParents'));
     Route::post('register-student', array('uses' => 'RegistrationController@registerStudent'));
     Route::get('print-admission-form/{enquiryId}', array('uses' => 'RegistrationController@printAdmissionForm'));
+//Sy Enquiry Form
+  Route::group(['prefix' => 'syEnquiry'],function (){
+    Route::get('manage',array('uses' => 'SyEnquiry\EnquiryController@viewEnquiryList'));
+    Route::post('enquiry-list',array('uses' => 'SyEnquiry\EnquiryController@enquiryListing'));
+    Route::get('/student-enquiry','SyEnquiry\EnquiryController@viewEnquiryForm');
+    Route::post('store-sy-student-enquiry',array('uses' =>'SyEnquiry\EnquiryController@storeEnquiryForm'));
+    Route::get('/new-student-enquiry','SyEnquiry\EnquiryController@viewEnquiryFormWithoutLogin');
+    Route::post('store-sy-student-enquiry-without-login',array('uses' => 'SyEnquiry\EnquiryController@storeEnquiryFormWithoutLogin'));
+    Route::get('check-enquiry',array('uses' => 'SyEnquiry\EnquiryController@getCheckEnquiryView'));
+    Route::post('check-enquiry',array('uses' => 'SyEnquiry\EnquiryController@checkEnquiry'));
+    Route::post('redirect',array('uses' => 'SyEnquiry\EnquiryController@redirectToRegistration'));
+    Route::get('print-admission-form/{enquiryId}', array('uses' => 'SyEnquiry\EnquiryController@printAdmissionForm'));
+    Route::get('edit-enquiry/{id}',array('uses' => 'SyEnquiry\EnquiryController@editEnquiryView'));
+    Route::post('edit-enquiry/{id}',array('uses' => 'SyEnquiry\EnquiryController@editEnquiry'));//
+  });
+
 
     //check GRN number
     Route::post('check-grn',array('uses' => 'UsersController@checkGrnNumber'));
@@ -429,7 +445,7 @@
 //enquiry form
     Route::get('/student-enquiry','EnquiryController@viewEnquiryForm');
     Route::get('/enquiry-listing','EnquiryController@viewEnquiryListing');
-     Route::get('/enquiry-form-details','EnquiryController@viewEnquiryListingDetails');
+    Route::get('/enquiry-form-details','EnquiryController@viewEnquiryListingDetails');
     Route::get('/enquiry-form-data','EnquiryController@viewEnquiryListingData');
     Route::post('/store-student-enquiry','EnquiryController@storeEnquiryForm');
     /* API Routes */
