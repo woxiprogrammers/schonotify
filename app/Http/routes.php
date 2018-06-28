@@ -637,3 +637,8 @@ Route::group(['prefix' => 'gallery'], function () {
     Route::get('remove-images/{id}',array('uses' => 'GalleryController@removeImages'));
     Route::post('edit-gallery-images/{id}',array('uses' =>'GalleryController@editImages'));
 });
+Route::group(['prefix' => 'reports'],function (){
+    Route::get('daily-attendance-view',array('uses' => 'Report\ReportController@dailyReport'));
+    Route::post('attendance-date-select',array('uses' => 'Report\ReportController@dailyReportDateData'));
+
+});

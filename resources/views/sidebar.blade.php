@@ -453,6 +453,29 @@
             </li>
         </ul>
     </li>
+    @if(Auth::User()->role_id == 1)
+        <li>
+            <a href="javascript:void(0)">
+                <div class="item-content">
+                    <div class="item-media">
+                        <i class="fa fa-file-excel-o"></i>
+                    </div>
+                    <div class="item-inner">
+                        <span class="title">Reports </span><i class="icon-arrow"></i>
+                    </div>
+                </div>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a href="/reports/daily-attendance-view">
+                        <div class="item-inner">
+                            <span class="title"> Daily Attendance Report </span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endif
 </ul>
 </nav>
 </div>
