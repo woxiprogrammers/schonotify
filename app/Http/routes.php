@@ -639,6 +639,8 @@ Route::group(['prefix' => 'gallery'], function () {
 });
 Route::group(['prefix' => 'reports'],function (){
     Route::get('daily-attendance-view',array('uses' => 'Report\ReportController@dailyReport'));
+    Route::get('monthly-attendance-view',array('uses' => 'Report\ReportController@monthlyReport'));
     Route::post('attendance-date-select',array('uses' => 'Report\ReportController@dailyReportDateData'));
+    Route::post('monthly-attendance-report',array('uses' => 'Report\ReportController@generateMonthlyReport'));
 
 });

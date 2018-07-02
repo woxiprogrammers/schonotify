@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Report;
 
 use App\Attendance;
+use App\Batch;
 use App\Classes;
 use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Phpoffice\phpspreadsheet\Writer\Xlsx;
@@ -25,7 +27,7 @@ class ReportController extends Controller
              return view('report.dailyAttendanceReport');
         }catch (\Exception $e){
             $data=[
-                'action' => 'Gallery folder view',
+                'action' => 'Daily Attendance Report',
                 'message' => $e->getMessage()
             ];
             Log::critical(json_encode($data));
@@ -208,6 +210,18 @@ class ReportController extends Controller
         }catch (\Exception $e){
             $data=[
                 'action' => 'Excel Sheet Generated',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function monthlyReport(Request $request){
+        try{
+            $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+            return view('report.monthlyAttendanceReport')->with(compact('batches'));
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Monthly Attendance Report',
                 'message' => $e->getMessage()
             ];
             Log::critical(json_encode($data));

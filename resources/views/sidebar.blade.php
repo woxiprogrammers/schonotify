@@ -473,6 +473,13 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="/reports/monthly-attendance-view">
+                        <div class="item-inner">
+                            <span class="title"> Monthly Attendance Report </span>
+                        </div>
+                    </a>
+                </li>
             </ul>
         </li>
     @endif
