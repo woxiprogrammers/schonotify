@@ -461,7 +461,7 @@
                         <i class="fa fa-file-excel-o"></i>
                     </div>
                     <div class="item-inner">
-                        <span class="title">Reports </span><i class="icon-arrow"></i>
+                        <span class="title">Attendance Reports </span><i class="icon-arrow"></i>
                     </div>
                 </div>
             </a>

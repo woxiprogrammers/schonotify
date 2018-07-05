@@ -62,12 +62,25 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" id="select-student">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Student List <span class="symbol required"></span>
+                                        </label>
+                                        <div class="form-control" >
+                                            <ul id="student-select" class="list-group" style="height: 200px;overflow: scroll;">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Select Month <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="month-select" name="div_select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="month-select" name="month_select" style="-webkit-appearance: menulist;">
                                             <option value="">please select the Month</option>
                                             <option value="01">January</option>
                                             <option value="02">February</option>
@@ -84,13 +97,12 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="/assets/images/loader1.gif"></center></div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Select Year <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="year-select" name="div_select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="year-select" name="year_select" style="-webkit-appearance: menulist;">
                                             <option value="">Please select the year</option>
                                             <option value="2017">2017</option>
                                             <option value="2018">2018</option>
@@ -98,7 +110,10 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                            </div>
+                            <div id="loadmoreajaxloaderClass" style="display:none;"><center><img src="/assets/images/loader1.gif"></center></div>
+                            <div class="row">
+                                <div class="col-md-6 pull-right" >
                                     <div class="form-group">
                                         <button class="btn btn-primary btn-wide" type="submit" id="submitButton" >
                                             Submit <i class="fa fa-arrow-circle-right"></i>
@@ -132,7 +147,7 @@
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/exam-form-validation.js"></script>
+    <script src="/assets/js/report/report-validation.js"></script>
     <script src="/assets/js/custom-project.js"></script>
     <script>
         jQuery(document).ready(function() {
@@ -171,16 +186,34 @@
                         var str='<option value="">Please select division</option>';
                         for(var i=0; i<res.length; i++)
                         {
-                            str+='<option value="'+res[i]['id']+'">'+res[i]['division_name']+'</option>';
+                            str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
                         }
                         $('#div-select').html(str);
                         $('#loadmoreajaxloaderClass').hide();
                     }
                 });
             });
+            $('#div-select').change(function(){
+                var division_id = this.value;
+                var class_id = $('#class-select').val();
+                var batch_id = $('#batchDrpdn').val();
+                var route='get-all-students/'+division_id+'/'+class_id+'/'+batch_id;
+                $.get(route,function(res){
+                    $('#student-select').html(res);
+                });
+            });
+
+            $('#student-select').on('change',function(){
+               var length =  $("#student-select input:checkbox:checked").length;
+                if(length > 15){
+                    alert("only 15 students are allowed");
+                    $('#submitButton').hide();
+                }else{
+                    $('#submitButton').show();
+                }
+            });
+
         });
     </script>
 @stop
-
-
 
