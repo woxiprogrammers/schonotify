@@ -461,7 +461,7 @@
                         <i class="fa fa-file-excel-o"></i>
                     </div>
                     <div class="item-inner">
-                        <span class="title">Reports </span><i class="icon-arrow"></i>
+                        <span class="title">Attendance Reports </span><i class="icon-arrow"></i>
                     </div>
                 </div>
             </a>
@@ -470,6 +470,13 @@
                     <a href="/reports/daily-attendance-view">
                         <div class="item-inner">
                             <span class="title"> Daily Attendance Report </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reports/monthly-attendance-view">
+                        <div class="item-inner">
+                            <span class="title"> Monthly Attendance Report </span>
                         </div>
                     </a>
                 </li>
