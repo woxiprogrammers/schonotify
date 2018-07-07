@@ -212,7 +212,6 @@
                     $('#submitButton').show();
                 }
             });
-
         });
     </script>
 @stop

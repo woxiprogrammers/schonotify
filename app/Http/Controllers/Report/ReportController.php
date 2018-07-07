@@ -236,7 +236,6 @@ class ReportController extends Controller
             $reportTitle = "Classwise Monthly Report ";
             $name = "classwise_monthly_attendance $reportDate.xlsx";
             $month = date('F',strtotime($request->month_select));
-            dd($month);
             $className = Classes::where('id',$request->class_select)->pluck('class_name');
             $divisionName = Division::where('id',$request->div_select)->pluck('division_name');
             $students = User::WhereIn('users.id',$request->student_name)->select('id','first_name','last_name','roll_number')->get()->toArray();
