@@ -32,6 +32,10 @@ var FormValidation = function(){
             },
             ignore: "",
             rules: {
+                date_of_admission:{
+                  required:true,
+                    date:true
+                },
                 firstname: {
                     minlength: 2,
                     required: true,
@@ -91,6 +95,9 @@ var FormValidation = function(){
 
             },
             messages: {
+                date_of_admission:{
+                  required:"please select the date of admission "
+                },
                 firstname: {
                     required: "First Name is required" ,
                     alpha: "First name must contain only letters",

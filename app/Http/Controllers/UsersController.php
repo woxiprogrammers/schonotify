@@ -1072,12 +1072,13 @@ class UsersController extends Controller
                 }else{
                     $divisionStudent="null";
                 }
+                $student_date_of_admission = User::where('id',$id)->pluck('date_of_admission');
                 $installmentIds =FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id')->distinct()->get()->toarray();
                 $assigned_fee_student = Fees::join('student_fee','student_fee.fee_id','=','fees.id')
                                               ->where('student_id',$id)
                                               ->select('fees.id as id','fee_name as fee_name')->distinct('id')->get()->toArray();
                 $studentinstallmentIds = FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id','fee_id')->distinct('installment_id')->get()->groupBy('fee_id')->toArray();
-                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student'));
+                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student','student_date_of_admission'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -1198,6 +1199,14 @@ class UsersController extends Controller
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
         $dataStudent = $request->all();
+        $presentAdmissionDate = User::where('id',$id)->select('date_of_admission')->first();
+        if($presentAdmissionDate == null){
+            $dateOfAdmission['date_of_admission'] = $request->date_of_admission;
+            $date_of_admission= User::where('id',$id)->update($dateOfAdmission);
+        }else{
+            $dateOfAdmission['date_of_admission'] = date('Y/m/d',strtotime($request->date_of_admission));
+            $date_of_admission= User::where('id',$id)->update($dateOfAdmission);
+        }
         $divisionStudent = User::where('id',$id)->pluck('division_id');
         if($divisionStudent == null){
             $div=array();

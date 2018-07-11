@@ -54,7 +54,7 @@
                                                 <label class="control-label">
                                                     Date of Admission <span class="symbol required"></span>
                                                 </label>
-                                                <input type="date" class="form-control" name="admissionDate" id="admissionDate" value="{{$livingCertificateData['date_of_admission']}}"  required="required">
+                                                <input type="text" class="form-control" name="admissionDate" id="admissionDate" value="{{date('d/m/Y',strtotime($livingCertificateData['date_of_admission']))}}"  readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -78,7 +78,7 @@
                                                 <label class="control-label">
                                                     Date of living School <span class="symbol required"></span>
                                                 </label>
-                                                <input type="date" class="form-control" name="livingSchoolDate" id="livingSchoolDate" value="{{$livingCertificateData['date_of_leaving']}}"  required="required">
+                                                <input type="text" class="form-control" name="livingSchoolDate" id="livingSchoolDate" value="{{date('d/m/Y',strtotime($livingCertificateData['date_of_leaving']))}}" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-4">

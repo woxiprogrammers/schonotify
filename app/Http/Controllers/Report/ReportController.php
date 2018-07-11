@@ -36,7 +36,7 @@ class ReportController extends Controller
     }
     public function dailyReportDateData(Request $request){
         try{
-            $date = date("F j, Y,  g:i a");
+            $date = date("F j, Y,");
             $reportTitle = "Daily Attendance Report ";
             $name = "daily_attendance $date.xlsx";
             $attendanceData = array();
@@ -45,7 +45,7 @@ class ReportController extends Controller
             $data[] = array();
             $attendanceData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
                 ->where('classes.body_id',$request->body_id)
-                ->select('classes.class_name','divisions.division_name','divisions.id')
+                ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
                 ->get()->toArray();
             $iterator = $final['grand_total_present_boys'] = $final['grand_total_present_girls'] = $final['grand_total_present_total'] = 0;
             $final['grand_total_absent_boys'] = $final['grand_total_absent_girls'] = $final['grand_total_absent_total'] = 0;
@@ -99,7 +99,7 @@ class ReportController extends Controller
             $objPHPExcel->getActiveSheet()
                 ->setCellValue('A1', 'Daily Attendance of Pupils')
                 ->setCellValue('A2', "Day: ".$attendanceData['day'])
-                ->setCellValue('H2', "Date: ".$attendanceData['date'])
+                ->setCellValue('H2', "Date: ".date('d/m/Y',strtotime($attendanceData['date'])))
                 ->setCellValue('A3','Sr. No')
                 ->setCellValue('B3','Class')
                 ->setCellValue('C3','Div')
@@ -232,13 +232,13 @@ class ReportController extends Controller
     }
     public function generateMonthlyReport(Request $request){
         try{
-            $reportDate = date("F j, Y,  g:i a");
+            $reportDate = date("F j, Y,");
             $reportTitle = "Classwise Monthly Report ";
             $name = "classwise_monthly_attendance $reportDate.xlsx";
             $month = date('F',strtotime($request->month_select));
             $className = Classes::where('id',$request->class_select)->pluck('class_name');
             $divisionName = Division::where('id',$request->div_select)->pluck('division_name');
-            $students = User::WhereIn('users.id',$request->student_name)->select('id','first_name','last_name','roll_number')->get()->toArray();
+            $students = User::WhereIn('users.id',$request->student_name)->orderBy('roll_number')->select('id','first_name','last_name','roll_number')->get()->toArray();
             $first_day = date('Y-m-d',mktime(0,0,0,$request->month_select,1,$request->year_select));
             $last_day = date('Y-m-t',mktime(0,0,0,$request->month_select,1,$request->year_select));
             $start_time = strtotime($first_day);
@@ -272,7 +272,7 @@ class ReportController extends Controller
                 $sunday = date('D',strtotime($currentdate));
                 $present[$jIterator]['present'] = Attendance::where('student_id',$value['id'])->where('date',$currentdate)->where('status',1)->count();
                 if($present[$jIterator]['present'] == 0 && $sunday == "Sun"){
-                    $monthlyData[$iterator][$currentdate] = "X";
+                    $monthlyData[$iterator][$currentdate] = ".";
                     $sunDays ++;
                 }elseif($holiday == 0 && $sunday != "Sun"){
                     $monthlyData[$iterator][$currentdate] = "XX";
@@ -289,7 +289,7 @@ class ReportController extends Controller
             $monthlyData[$iterator]['total_days'] = $totalDays - $sunDays;
             $monthlyData[$iterator]['total_present'] = $presentDays;
             $monthlyData[$iterator]['total_absent'] = $absentDays;
-            $monthlyData[$iterator]['holidays'] = $holiDays;
+            $monthlyData[$iterator]['holidays'] = $holiDays + $sunDays;
             $iterator ++;
            }
             $rows = array(

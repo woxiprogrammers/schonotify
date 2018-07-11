@@ -21,10 +21,10 @@
                                 <label class="control-label">
                                     Aadhar Card No. <span class="symbol required"></span>
                                 </label>
-                                @if($studentData['aadhar_number'] != "" && $studentData['aadhar_number'] != null)
+                                @if($studentData['aadhar_number'] == "" && $studentData['aadhar_number'] == null)
                                     <input type="text" class="form-control" name="aadharCard" id="aadharCard" required="required">
                                 @else
-                                    <input type="text" class="form-control" name="aadharCard" id="aadharCard" value="{{$studentData['aadhar_number']}}" required="required">
+                                    <input type="text" class="form-control" name="aadharCard" id="aadharCard" value="{{$studentData['aadhar_number']}}" required="required" readonly="readonly">
                                 @endif
                             </div>
                         </div>
@@ -33,7 +33,11 @@
                                 <label class="control-label">
                                     Last School Attended  <span class="symbol required"></span>
                                 </label>
-                                <input type="text" class="form-control" name="lastSchool" id="lastSchool" required="required">
+                                @if($studentPreviousSchoolData['school_name'] == "" && $studentPreviousSchoolData['city'] == "")
+                                    <input type="text" class="form-control" name="lastSchool" id="lastSchool" required="required">
+                                @else
+                                    <input type="text" class="form-control" name="lastSchool" id="lastSchool" value="{{$studentPreviousSchoolData['school_name'].", ".$studentPreviousSchoolData['city']}}" required="required">
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -41,7 +45,12 @@
                                 <label class="control-label">
                                     Date of Admission <span class="symbol required"></span>
                                 </label>
-                                <input type="date" class="form-control" name="admissionDate" id="admissionDate" required="required">
+                                @if($studentData['date_of_admission'] == null)
+                                    <input type="date" class="form-control" name="admissionDate" id="admissionDate" readonly>
+                                    <span style="color: red"><p>Please enter the date of admission in student edit account</p></span>
+                                 @else
+                                    <input type="text" class="form-control" name="admissionDate" id="admissionDate" value="{{date('d/m/Y',strtotime($studentData['date_of_admission']))}}" readonly>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -65,7 +74,7 @@
                                 <label class="control-label">
                                     Date of living School <span class="symbol required"></span>
                                 </label>
-                                <input type="date" class="form-control" name="livingSchoolDate" id="livingSchoolDate" required="required">
+                                <input type="text" class="form-control" name="livingSchoolDate" value="{{date('d/m/Y')}}" id="livingSchoolDate" required="required" readonly="">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -92,6 +101,7 @@
                                 <input type="text" class="form-control" name="remark" id="remark" required="required">
                             </div>
                         </div>
+                        @if($studentData['date_of_admission'] != null)
                         <div class="col-md-3">
                             <label class="control-label">&nbsp;
                             </label>
@@ -101,6 +111,7 @@
                                 </button>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </form>
             </div>
