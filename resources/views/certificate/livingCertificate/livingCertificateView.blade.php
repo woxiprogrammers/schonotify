@@ -34,7 +34,7 @@
                                 1. Name of the pupil in full
                             </td>
                             <td width="70%;" style="padding: 1%">
-                                <span>{{strtoupper($studentData['first_name'])}}&nbsp;&nbsp;{{strtoupper($studentData['father_first_name'])}}&nbsp; {{strtoupper($studentData['last_name'])}}</span>
+                                <span><b>{{strtoupper($studentData['first_name'])}}&nbsp;&nbsp;{{strtoupper($studentData['father_first_name'])}}&nbsp; {{strtoupper($studentData['last_name'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -42,7 +42,7 @@
                                 2. Name of the mother in full
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['mother_first_name'])}}</span>
+                                <span><b>{{strtoupper($studentData['mother_first_name'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -50,7 +50,7 @@
                                 3. Religion Caste Sub-caste
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['religion'])}}&nbsp;&nbsp; {{strtoupper($studentData['caste'])}}&nbsp;&nbsp; {{strtoupper($studentData['category'])}}</span>
+                                <span><b>{{strtoupper($studentData['religion'])}}&nbsp;&nbsp; {{strtoupper($studentData['caste'])}}&nbsp;&nbsp; {{strtoupper($studentData['category'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -58,7 +58,7 @@
                                 4. Nationality
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['nationality'])}}</span>
+                                <span><b>{{strtoupper($studentData['nationality'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -66,7 +66,7 @@
                                 5. Birth of place
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['birth_place'])}}</span>
+                                <span><b>{{strtoupper($studentData['birth_place'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -74,7 +74,7 @@
                                 6.  Mother Tongue
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['mother_tongue'])}}</span>
+                                <span><b>{{strtoupper($studentData['mother_tongue'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -82,7 +82,7 @@
                                 7.  Adhar Card Number
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['aadhar_number'])}}</span>
+                                <span><b>{{strtoupper($studentData['aadhar_number'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -90,7 +90,7 @@
                                 8.  Date of birth
                             </td>
                             <td style="padding: 1%">
-                                <span>{{date('d/m/Y',strtotime($studentData['birth_date']))}}</span>
+                                <span><b>{{date('d/m/Y',strtotime($studentData['birth_date']))}}&nbsp;&nbsp;<i>( {{ucwords($birthDayInWords)}})</i></b></span>
                             </td>
                         </tr>
                         <tr>
@@ -98,7 +98,7 @@
                                 9. Last school attended
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['last_school_attented'])}}</span>
+                                <span><b>{{strtoupper($studentData['last_school_attented'])}}</b>></span>
                             </td>
                         </tr>
                         <tr>
@@ -106,7 +106,7 @@
                                 10.  Date of Admission
                             </td>
                             <td style="padding: 1%">
-                                <span>{{date('d/m/Y',strtotime($studentData['date_of_admission']))}}</span>
+                                <span><b>{{date('d/m/Y',strtotime($studentData['date_of_admission']))}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -114,7 +114,7 @@
                                 11. Progress
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['progress'])}}</span>
+                                <span><b>{{strtoupper($studentData['progress'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -122,7 +122,7 @@
                                 12.  Conduct
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['conduct'])}}</span>
+                                <span><b>{{strtoupper($studentData['conduct'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -130,7 +130,7 @@
                                 13.  Date of Living School
                             </td>
                             <td style="padding: 1%">
-                                <span>{{date('d/m/Y',strtotime($studentData['date_of_leaving']))}}</span>
+                                <span><b>{{date('d/m/Y',strtotime($studentData['date_of_leaving']))}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -138,7 +138,7 @@
                                 14.  Standard in which studing and since when
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['standard_in_which_studying'])}}</span>
+                                <span><b>{{strtoupper($studentData['standard_in_which_studying'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -146,7 +146,7 @@
                                 15. Reason of living School
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['reason'])}}</span>
+                                <span><b>{{strtoupper($studentData['reason'])}}</b></span>
                             </td>
                         </tr>
                         <tr>
@@ -154,7 +154,7 @@
                                 16.  Remark
                             </td>
                             <td style="padding: 1%">
-                                <span>{{strtoupper($studentData['remark'])}}</span>
+                                <span><b>{{strtoupper($studentData['remark'])}}</b></span>
                             </td>
                         </tr>
                     </table>

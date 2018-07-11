@@ -44,7 +44,7 @@
                                 <th width="5%">GRN</th>
                                 <th width="10%"> Name </th>
                                 <th width="10%"> Date of living School </th>
-                                <th width="10%">CLass</th>
+                                <th width="10%">Standard</th>
                                 <th width="10%">Reason for living School </th>
                                 <th width="10%"> Action </th>
                             </tr>

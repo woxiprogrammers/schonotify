@@ -29,144 +29,148 @@
 <div><span style="margin-left: 35%;">www.ganeshinternationalschool.com</span></div>
 <div style="margin-left: 20%"><span>UDISE No - 27252001510<span style="padding-left: 7%">CBSE Affiliation No. 1130632</span></span></div>
 <div style="margin-left: 35%;font-size: 120%"><span><b>LEAVING CERTIFICATE</b></span></div>
-<div style="border: 1px black solid;margin-left: 10px ; padding: 1%">
-    <div style="padding-left: 5%">(No Changes in any entry in this certificate shall be made except by the authority issuing it and any infringement this requirement is liable to involve the imposition of penalty such as that of rustication)</div>
-    <div style="padding-left: 20%">(Prescribed by rule 17 chapter II of Grant - in - aid code)</div>
+<br>
+<div style="border: 1px black solid;margin-left: 10px ; padding: 0.5% ;font-size: 12px">
+    <div style="text-align: center">(No Changes in any entry in this certificate shall be made except by the authority issuing it and any infringement this requirement is liable to involve the imposition of penalty such as that of rustication)</div>
+    <div style="text-align: center">(Prescribed by rule 17 chapter II of Grant - in - aid code)</div>
 </div>
-<div style="margin-left: 5%">Certificate No. <span>{{$studentData['id']}}</span><span style="padding-left: 50%">Register No. of the pupil : <span>{{$studentData['grn']}}</span></span></div>
-    <table border="1" style="border-collapse: collapse; width: 100%; text-align: left; padding-left: 1%;padding-top: 1%">
+<br>
+<div style="margin-left: 1%">Certificate No. <span>{{$studentData['id']}}</span><span style="padding-left: 56%">Register No. of the pupil : <span>{{$studentData['grn']}}</span></span></div>
+<br>
+    <table border="1" style="border-collapse: collapse; width: 100%; text-align: left;font-size: 13px;" cellpadding="4">
         <tr>
-        <td style="padding: 1%">
+        <td>
         1. Name of the pupil in full
         </td>
-        <td width="70%;" style="padding: 0.5%">
-        <span>{{strtoupper($studentData['first_name'])}} &nbsp;&nbsp;{{strtoupper($studentData['father_first_name'])}}&nbsp;&nbsp; {{strtoupper($studentData['last_name'])}}</span>
+        <td width="70%;">
+            <span><b>{{strtoupper($studentData['first_name'])}} &nbsp;&nbsp;{{strtoupper($studentData['father_first_name'])}}&nbsp;&nbsp; {{strtoupper($studentData['last_name'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         2. Name of the mother in full
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['mother_first_name'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['mother_first_name'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         3. Religion Caste Sub-caste
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['religion'])}}&nbsp;&nbsp; {{strtoupper($studentData['caste'])}}&nbsp;&nbsp; {{strtoupper($studentData['category'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['religion'])}}&nbsp;&nbsp; {{strtoupper($studentData['caste'])}}&nbsp;&nbsp; {{strtoupper($studentData['category'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         4. Nationality
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['nationality'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['nationality'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         5. Birth of place
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['birth_place'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['birth_place'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         6.  Mother Tongue
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['mother_tongue'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['mother_tongue'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         7.  Adhar Card Number
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['aadhar_number'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['aadhar_number'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         8.  Date of birth
         </td>
-        <td style="padding: 0.5%">
-        <span>{{date('d/m/Y',strtotime($studentData['birth_date']))}}</span>
+        <td>
+            <span><b>{{date('d/m/Y',strtotime($studentData['birth_date']))}}&nbsp;&nbsp;<i>( {{ucwords($birthDayInWords)}})</i></b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         9. Last school attended
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['last_school_attented'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['last_school_attented'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         10.  Date of Admission
         </td>
-        <td style="padding: 0.5%">
-        <span>{{date('d/m/Y',strtotime($studentData['date_of_admission']))}}</span>
+        <td>
+            <span><b>{{date('d/m/Y',strtotime($studentData['date_of_admission']))}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         11. Progress
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['progress'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['progress'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         12.  Conduct
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['conduct'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['conduct'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         13.  Date of Living School
         </td>
-        <td style="padding: 0.5%">
-        <span>{{date('d/m/Y',strtotime($studentData['date_of_leaving']))}}</span>
+        <td>
+            <span><b>{{date('d/m/Y',strtotime($studentData['date_of_leaving']))}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         14.  Standard in which studing and since when
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['standard_in_which_studying'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['standard_in_which_studying'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         15. Reason of living School
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['reason'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['reason'])}}</b></span>
         </td>
         </tr>
                 <tr>
-        <td style="padding: 0.5%">
+        <td>
         16.  Remark
         </td>
-        <td style="padding: 0.5%">
-        <span>{{strtoupper($studentData['remark'])}}</span>
+        <td>
+            <span><b>{{strtoupper($studentData['remark'])}}</b></span>
         </td>
         </tr>
     </table>
     <div style="padding-left: 18%">Certified that the above information is in accordance with the school Register.</div>
     <br>
     <div style="margin-left: 5%">Date: {{date('d/m/Y')}}</div>
+<br><br>
     <div style="margin-left: 5%; margin-top: 2%"><span><b>CLASS TEACHER<span style="margin-left: 25%">CLERK</span><span style="padding-left: 25%">H.M./PRINCIPAL</span></b></span></div>
 </body>
 </html>
