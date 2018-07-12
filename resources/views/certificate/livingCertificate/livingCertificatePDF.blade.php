@@ -30,12 +30,12 @@
 <div style="margin-left: 20%"><span>UDISE No - 27252001510<span style="padding-left: 7%">CBSE Affiliation No. 1130632</span></span></div>
 <div style="margin-left: 35%;font-size: 120%"><span><b>LEAVING CERTIFICATE</b></span></div>
 <br>
-<div style="border: 1px black solid;margin-left: 10px ; padding: 0.5% ;font-size: 12px">
+<div style="border: 1px black solid; padding: 0.5% ;font-size: 12px">
     <div style="text-align: center">(No Changes in any entry in this certificate shall be made except by the authority issuing it and any infringement this requirement is liable to involve the imposition of penalty such as that of rustication)</div>
     <div style="text-align: center">(Prescribed by rule 17 chapter II of Grant - in - aid code)</div>
 </div>
 <br>
-<div style="margin-left: 1%">Certificate No. <span>{{$studentData['id']}}</span><span style="padding-left: 56%">Register No. of the pupil : <span>{{$studentData['grn']}}</span></span></div>
+<div style="margin-left: 0.6%">Certificate No. <span>{{$studentData['id']}}</span><span style="padding-left: 56%">Register No. of the pupil : <span>{{$studentData['grn']}}</span></span></div>
 <br>
     <table border="1" style="border-collapse: collapse; width: 100%; text-align: left;font-size: 13px;" cellpadding="4">
         <tr>
