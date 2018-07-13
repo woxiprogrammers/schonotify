@@ -238,7 +238,7 @@ class ExamController extends Controller
     public function subjectStructure(Request $request,$term_id,$div_id,$class_id,$sub_subject_id){
         $termName = ExamTerms::where('id',$term_id)->pluck('term_name');
         $termDetails = ExamTermDetails::where('term_id',$term_id)->select('id','exam_type','out_of_marks')->orderBy('term_id','asc')->get()->toArray();
-        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->where('is_active','=',1)->select('id','first_name','last_name','roll_number')->orderBy('roll_number','asc')->get()->toArray();
+        $StudentsDetails= User::where('division_id',$div_id)->where('role_id','=',3)->where('is_active','=',1)->where('is_lc_generated',0)->select('id','first_name','last_name','roll_number')->orderBy('roll_number','asc')->get()->toArray();
         $studentMarks=array();
         $iterator = 0;
         foreach($StudentsDetails as $key => $student){

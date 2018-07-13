@@ -113,6 +113,17 @@
             Route::get('download/{grn}', array('uses' => 'Certificate\BonafideCertificateController@downloadBonafide'));
             Route::get('view/{grn}',array('uses' => 'Certificate\BonafideCertificateController@bonafideView'));
             Route::post('bonafide-student-form',array('uses' => 'Certificate\BonafideCertificateController@studentForm'));
+            Route::get('delete/{id}',array('uses' => 'Certificate\BonafideCertificateController@delete'));
+        });
+        Route::group(['prefix' =>'livingCertificate'],function(){
+            Route::get('manage',array('uses' => 'Certificate\LivingCertificateController@getManageView'));
+            Route::get('create', array('uses' => 'Certificate\LivingCertificateController@getCreateView'));
+            Route::post('livingCertificate-student-form',array('uses' => 'Certificate\LivingCertificateController@studentForm'));
+            Route::post('livingCertificate-student-form-create',array('uses' => 'Certificate\LivingCertificateController@studentFormCreate'));
+            Route::get('view/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateView'));
+            Route::get('edit/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateEdit'));
+            Route::post('editForm/{id}/{grn}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateEditForm'));
+            Route::get('download/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateDownload'));
         });
     });
 
@@ -468,6 +479,9 @@
     Route::post('auth','api\UserController@login');
     Route::get('logout/{user_id}',array('uses' => 'api\UserController@logout'));
 
+    //LC related
+    Route::get('lc_generated/{id}',array('uses' => 'api\UserController@lcGenerated'));
+
         //leave Related
     Route::post('create-leave',array('uses' => 'api\LeaveController@createLeave'));
     Route::get('leaves-teacher/{flag}',array('uses' => 'api\LeaveController@getLeaveListTeacher'));
@@ -622,4 +636,12 @@ Route::group(['prefix' => 'gallery'], function () {
     Route::get('images-view/{id}',array('uses' => 'GalleryController@imagesView'));
     Route::get('remove-images/{id}',array('uses' => 'GalleryController@removeImages'));
     Route::post('edit-gallery-images/{id}',array('uses' =>'GalleryController@editImages'));
+});
+Route::group(['prefix' => 'reports'],function (){
+    Route::get('daily-attendance-view',array('uses' => 'Report\ReportController@dailyReport'));
+    Route::get('monthly-attendance-view',array('uses' => 'Report\ReportController@monthlyReport'));
+    Route::get('get-all-students/{division_id}/{class_id}/{batch_id}',array('uses' => 'Report\ReportController@getAllStudents'));
+    Route::post('attendance-date-select',array('uses' => 'Report\ReportController@dailyReportDateData'));
+    Route::post('monthly-attendance-report',array('uses' => 'Report\ReportController@generateMonthlyReport'));
+
 });

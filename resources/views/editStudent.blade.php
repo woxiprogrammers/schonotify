@@ -83,14 +83,33 @@
                                 </fieldset>
                              @foreach($student_info as $student_info)
                                 <fieldset>
-                                <div class="col-md-12">
-                                    <div >
-                                        <label >
+                                <div class="col-md-6">
+                                    <div>
+                                        <label>
                                             GRN <span class="symbol required"></span>
                                         </label>
                                         <input type="text" placeholder="Enter a GRN" class="form-control" name="grn" id="grn" value="{!! $grn !!}"/>
                                     </div>
                                 </div>
+                                    <div class="col-md-6">
+                                        <div>
+                                            <label>
+                                                Date Of Admission <span class="symbol required"></span>
+                                            </label>
+                                            @if($student_date_of_admission == null)
+                                            <input type="date" class="form-control" name="date_of_admission" id="date_of_admission" required="required"/>
+                                                @else
+                                                <div class="input-group input-append datepicker date col-sm-6">
+                                                    <input type="text" class="form-control" name="date_of_admission" id="date_of_admission" value="{{date('d/m/Y',strtotime($student_date_of_admission))}}" required="required"/>
+                                                    <span class="input-group-btn">
+                                                         <button type="button" class="btn btn-default">
+                                                              <i class="glyphicon glyphicon-calendar"></i>
+                                                         </button>
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -115,7 +134,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label">Date of Birth: <span class="symbol required"> </label>
+                                                <label class="control-label">Date of Birth: <span class="symbol required"> </span></label>
                                                 <div class="input-group input-append datepicker date col-sm-6">
                                                     <input type="text" class="form-control" name="DOB" value="{!! $user->birth_date !!}"/>
                                                         <span class="input-group-btn">
@@ -496,6 +515,7 @@
                                     </div>
                                 </fieldset>
                                 @endforeach
+                                @if($user->is_lc_generated == 0)
                                 <div class="row">
                                     <div class="col-md-4">
                                         <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
@@ -503,6 +523,7 @@
                                         </button>
                                     </div>
                                 </div>
+                                @endif
                             </form>
                         </div>
                         <div id="panel_edit_Parent" class="tab-pane fade in">
@@ -802,6 +823,7 @@
                                         </div>
                                     </div>
                                 </fieldset>
+                                @if($user->is_lc_generated == 0)
                                 <div class="row">
                                     <div class="col-md-4">
                                         <button class="btn btn-primary pull-right" type="submit" id="updateUserInfo" >
@@ -809,6 +831,7 @@
                                         </button>
                                     </div>
                                 </div>
+                                @endif
                             </form>
                             </div>
                         </div>
@@ -818,6 +841,7 @@
                                     <form id="editAcl" method="post" action="/acl-update/{!! $user->parent_id !!}">
                                         <table class="table table-responsive" id="aclMod">
                                         </table>
+                                        @if($user->is_lc_generated == 0)
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <button class="btn btn-primary pull-right" type="submit" >
@@ -825,6 +849,7 @@
                                                 </button>
                                             </div>
                                         </div>
+                                        @endif
                                     </form>
                                 </div>
                             </div>
@@ -994,6 +1019,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    @if($user->is_lc_generated == 0)
                                                     <div class="row">
                                                         <div class="col-md-4 col-md-offset-7">
                                                             <button class="btn btn-primary pull-right" type="submit" >
@@ -1001,6 +1027,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
+                                                    @endif
                                                 </form>
                                         </div>
                                         </div>
@@ -1008,6 +1035,7 @@
                                             <div class="col-md-3 col-md-offset-5">
                                                 &nbsp;&nbsp;&nbsp;<h4>OR</h4>
                                             </div>
+                                            @if($user->is_lc_generated == 0)
                                             <div class="row">
                                                 <div class="col-md-3 col-md-offset-4">
                                                     <a class="btn btn-primary btn-wide" style="margin-left: 20%" href="{{$paymentLink}}">
@@ -1015,6 +1043,7 @@
                                                     </a>
                                                 </div>
                                             </div>
+                                            @endif
                                         </div>
                                    </fieldset>
                                    <fieldset>
@@ -1086,6 +1115,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @if($user->is_lc_generated == 0)
                                                     <div class="row" id="lateFeeSubmit">
                                                         <div class="col-md-4 col-md-offset-7">
                                                             <button class="btn btn-primary pull-right" type="submit" >
@@ -1093,6 +1123,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
+                                               @endif
                                             </form>
                                         </div>
                                     </div>

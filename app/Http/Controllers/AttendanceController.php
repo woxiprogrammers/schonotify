@@ -57,7 +57,7 @@
                             ->select('classes.class_name','classes.id as class_id','batches.id as batch_id','batches.name as batch_name')
                             ->first();
                         if ($batchClassData != null) {
-                            $studentData=User::where('division_id',$userCheck->id)->where('is_active',1)->select('id','first_name','last_name','roll_number')->get();
+                            $studentData=User::where('division_id',$userCheck->id)->where('is_active',1)->where('is_lc_generated',0)->select('id','first_name','last_name','roll_number')->get();
                             $dropDownData['division_id'] = $userCheck->id;
                             $dropDownData['division_name'] = $userCheck->division_name;
                             $dropDownData['class_id'] = $batchClassData->class_id;
@@ -112,7 +112,7 @@
                             ->first();
                     }
                     if ($batchClassDivisionData != null) {
-                                $studentData=User::where('division_id',$batchClassDivisionData->division_id)->where('is_active',1)->select('id','first_name','last_name','roll_number')->get();
+                                $studentData=User::where('division_id',$batchClassDivisionData->division_id)->where('is_active',1)->where('is_lc_generated',0)->select('id','first_name','last_name','roll_number')->get();
                                 $dropDownData['division_id'] =  $batchClassDivisionData->division_id;
                                 $dropDownData['division_name'] = $batchClassDivisionData->division_name;
                                 $dropDownData['class_id'] = $batchClassDivisionData->class_id;
@@ -179,9 +179,9 @@
             $date=date("Y-m-d",strtotime($request->datePiker));
             if($request->student) {
                 $userIds = $request->student;
-                $userData = User::whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->where('is_active',1)->select('id','division_id')->get();
+                $userData = User::whereIn('id',$userIds)->where('division_id',$request['division-select'])->where('is_active',1)->where('is_lc_generated',0)->select('id','division_id')->get();
             } else {
-                $userData = User::where('division_id',$request['division-select'])->where('is_active',1)->select('id','division_id')->get();
+                $userData = User::where('division_id',$request['division-select'])->where('is_active',1)->where('is_lc_generated',0)->select('id','division_id')->get();
             }
             $i=0;
             foreach ($userData as $data) {
@@ -211,14 +211,13 @@
                 $attendanceStatus['status'] = 1;
                 $attendanceStatus['created_at'] = Carbon::now();
                 $attendanceStatus['updated_at'] = Carbon::now();
-                $result=AttendanceStatus::insertGetId($attendanceStatus);
-
-                $div_id=AttendanceStatus::where('id',$result)->pluck('division_id');
-                $users_push=User::where('division_id',$div_id)->lists('parent_id');
+                $result = AttendanceStatus::insertGetId($attendanceStatus);
+                $div_id = AttendanceStatus::where('id',$result)->pluck('division_id');
+                $users_push = User::where('division_id',$div_id)->lists('parent_id');
                 $title="Attendance marked";
                 $message="Please check attendance";
                 $allUser=0;
-                $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
+                $push_users = PushToken::whereIn('user_id',$users_push)->lists('push_token')->toArray();
                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 if($result != "null")
                 {

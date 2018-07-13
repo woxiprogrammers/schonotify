@@ -302,12 +302,12 @@ class HomeworkController extends Controller
                 $homeWork_push_users = HomeworkTeacher::where('homework_id',$homeworkId)->lists('student_id');
                 $push_user = User::whereIn('id',$homeWork_push_users)->lists('parent_id');
                 $allUser=0;
-                $push_users=PushToken::whereIn('user_id',$push_user)->lists('push_token');
+                $push_users = PushToken::whereIn('user_id',$push_user)->lists('push_token')->toArray();
                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
-            Session::flash('message-success','homework created successfully');
+                Session::flash('message-success','homework created successfully');
             return Redirect::to('/homework-listing');
         }else{
-            Session::flash('message-success','homework created successfully');
+                Session::flash('message-success','homework created successfully');
             return Redirect::to('/homework-listing');
         }
     }
@@ -465,6 +465,7 @@ class HomeworkController extends Controller
     {
         $students = User::wherein('division_id',$request->id)->where('is_active',1)
                           ->join('divisions','users.division_id','=','divisions.id')
+                          ->where('users.is_lc_generated',0)
                           ->select('users.roll_number','users.id as user_id','users.first_name','users.last_name','divisions.division_name')
                           ->get();
         $studentList = $students->toArray();

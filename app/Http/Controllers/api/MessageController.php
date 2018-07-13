@@ -115,6 +115,7 @@ class MessageController extends Controller
             $finalMessageData=array();
             $data = $request->all();
             $sender = $student_id;
+
             $messages= Message::where('is_delete','=',0)
                 ->Where(function($query) use ($sender)
                 {
@@ -438,6 +439,7 @@ class MessageController extends Controller
             $student_id = UserRoles::whereIn('slug', ['student'])->pluck('id');
             $student = User::where('role_id',$student_id)->where('division_id',$request->division_id)
                                 ->where('is_active',1)
+                                ->where('is_lc_generated',0)
                                 ->select('id','first_name', 'last_name')
                                 ->get()->toArray();
             $i=0;
@@ -485,4 +487,5 @@ class MessageController extends Controller
         ];
         return response($response, $status);
     }
+
 }

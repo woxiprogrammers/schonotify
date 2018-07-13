@@ -249,7 +249,7 @@ class AttendanceController extends Controller
         try{
             $data = $request->all();
             $attendanceStatus=array();
-            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->pluck('id');
+            $data['teacher']['id'] = User::where('remember_token','=',$data['token'])->where('is_lc_generated',0)->pluck('id');
             $attendanceData = array();
             $role = Division::where('class_teacher_id','=',$data['teacher']['id'])->first();
             if (!Empty($role)) {
@@ -280,7 +280,7 @@ class AttendanceController extends Controller
                                 $message="Attendance Marked for the day.";
                                 $allUser=0;
                                 $user_push = User::where('division_id',$role['id'])->lists('parent_id');
-                                $push_users=PushToken::whereIn('user_id',$user_push)->lists('push_token');
+                                $push_users = PushToken::whereIn('user_id',$user_push)->lists('push_token');
                                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                         }else{
                             $deleteOldAttendance = Attendance::where('date',$data['date'])->delete();
@@ -436,6 +436,7 @@ class AttendanceController extends Controller
                     $studentList = User::where('role_id','=',$studentRole)
                         ->where('division_id','=', $divisionId['id'])
                         ->where('is_active','=',1)
+                        ->where('is_lc_generated',0)
                         ->select('id','first_name','last_name','roll_number')
                         ->orderBy('roll_number','asc')
                         ->get();

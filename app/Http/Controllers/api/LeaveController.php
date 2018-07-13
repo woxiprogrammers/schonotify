@@ -215,7 +215,7 @@ class LeaveController extends Controller
                     $title="Leave Approved";
                     $message="Please Check Leave !";
                     $allUser=0;
-                    $students = LeaveRequest::where('id',$data['leave_id']) -> lists($student_id);
+                    $students = LeaveRequest::where('id',$data['leave_id']) -> lists('student_id');
                     $parents = User::where('id',$students)->lists('parent_id');
                     $push_users = PushToken::whereIn('user_id',$parents)->lists('push_token');
                     $this -> CreatePushNotification($title,$message,$allUser,$push_users);
@@ -266,7 +266,7 @@ class LeaveController extends Controller
                 $status = 200;
                 $message = 'Leave Applied Successfully.';
                 $createData['student_id'] = $data['student_id'];
-                $createData['division_id'] = User::where('id','=',$data['student_id'])->pluck('division_id');
+                $createData['division_id'] = User::where('id','=',$data['student_id'])->where('is_lc_generated')->pluck('division_id');
                 $createData['status'] = 1;
                 $createData['title'] = $data['title'];
                 $createData['leave_type'] = $data['leave_type_id'];

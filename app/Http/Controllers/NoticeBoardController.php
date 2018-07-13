@@ -736,7 +736,7 @@
                     }
                 }
                 $eventId = Event::insertGetId($annoucement);
-                $is_published = Event::where('status',$eventId)->pluck('status');
+                $is_published = Event::where('id',$eventId)->pluck('status');
                 if($is_published == 2){
                     $title="New Announcement Created";
                     $message=$request->title;

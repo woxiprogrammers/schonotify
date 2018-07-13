@@ -255,11 +255,11 @@ class LeaveController extends Controller
             if ($leaveStatus == 1)
             {
                 $student = Leave::where('id',$id)->pluck('student_id');
-                $parent = User::where('id',$student)->lists('parent_id');
+                $parent = User::where('id',$student)->where('is_lc_generated',0)->lists('parent_id');
                 $title = "Leave Approved";
                 $message = "Your Leave Is Approved By Faculty";
                 $allUser=0;
-                $push_users=PushToken::whereIn('user_id',$parent)->lists('push_token');
+                $push_users=PushToken::whereIn('user_id',$parent)->lists('push_token')->toArray();
                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                 Session::flash('message-success','Leave published successfully');
                 return Redirect::back();

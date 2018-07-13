@@ -236,7 +236,7 @@ class FeeController extends Controller
              $message="Payment of Rs ".$request->transaction_amount." received by school.";
              $allUser=0;
              $users_push = User::where('id',$request->student_id)->pluck('parent_id');
-             $push_users = PushToken::where('user_id',$users_push)->lists('push_token');
+             $push_users = PushToken::where('user_id',$users_push)->lists('push_token')->toArray();
              $this->CreatePushNotification($title,$message,$allUser,$push_users);
          }
         return redirect('/edit-user/'.$request->student_id);

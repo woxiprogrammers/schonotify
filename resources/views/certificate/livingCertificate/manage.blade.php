@@ -1,11 +1,11 @@
 <?php
 /**
- * Created by Ameya Joshi.
- * Date: 4/4/18
- * Time: 1:35 PM
+ * Created by PhpStorm.
+ * User: Nishank Rathod
+ * Date: 4/19/18
+ * Time: 4:59 PM
  */
 ?>
-
 @extends('master')
 @section('content')
     <div id="app">
@@ -22,43 +22,47 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Bonafide Certificates</h1>
+                                <h1 class="mainTitle">Leaving Certificates</h1>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
                         <div class="row">
                             <div class="col-md-3 col-md-offset-9">
-                                <a class="btn btn-primary btn-o add-event padding-10" href="/certificates/bonafide/create">
+                                <a class="btn btn-primary btn-o add-event padding-10" href="/certificates/livingCertificate/create">
                                     <i class="fa fa-plus"></i>
-                                    Create Bonafide
+                                    Create Leaving Certificate
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="container-fluid container-fullw">
-                            <table class="table  table-striped table-bordered table-hover table-full-width" id="sample_1">
-                                <thead>
+                        <table class="table  table-striped table-bordered table-hover table-full-width" id="sample_1">
+                            <thead>
+                            <tr>
+                                <th width="5%"> LC No </th>
+                                <th width="5%">GRN</th>
+                                <th width="10%"> Name </th>
+                                <th width="10%"> Date of living School </th>
+                                <th width="10%">Standard</th>
+                                <th width="10%">Reason for living School </th>
+                                <th width="10%"> Action </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($StudentData as $data)
                                 <tr>
-                                    <th width="10%"> Sr. No </th>
-                                    <th width="20%"> Grn Number </th>
-                                    <th width="10%"> Student Name </th>
-                                    <th width="10%">  Date </th>
-                                    <th width="10%"> Action </th>
+                                    <td>{{$data['id']}}</td>
+                                    <td>{{$data['grn']}}</td>
+                                    <td>{{$data['first_name']}} {{$data['last_name']}}</td>
+                                    <td>{{date('d/m/Y',strtotime($data['date_of_leaving']))}}</td>
+                                    <td>{{$data['class_name']}}</td>
+                                    <td>{{$data['reason']}}</td>
+                                    <td><a href="/certificates/livingCertificate/view/{{$data['id']}}">view</a> / <a href="/certificates/livingCertificate/download/{{$data['id']}}">download</a> / <a href="/certificates/livingCertificate/edit/{{$data['id']}}">Edit</a></td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($StudentData as $data)
-                                    <tr>
-                                        <td>{{$data['id']}}</td>
-                                        <td>{{$data['grn']}}</td>
-                                        <td>{{$data['first_name']}} {{$data['last_name']}}</td>
-                                        <td>{{$data['created_at']}}</td>
-                                        <td><a href="/certificates/bonafide/view/{{$data['grn']}}">view</a> / <a href="/certificates/bonafide/download/{{$data['grn']}}">download</a> / <a href="/certificates/bonafide/delete/{{$data['id']}}">delete</a></td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -98,12 +102,12 @@
     <script src="/assets/js/custom-project.js"></script>
     <script src="/assets/js/table-data.js"></script>
     <script src="/assets/js/form-validation.js"></script>
-<script>
-    jQuery(document).ready(function(){
-        Main.init();
-        FormValidator.init();
-        FormElements.init();
-        TableData.init();
-    })
-</script>
+    <script>
+        jQuery(document).ready(function(){
+            Main.init();
+            FormValidator.init();
+            FormElements.init();
+            TableData.init();
+        })
+    </script>
 @stop

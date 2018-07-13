@@ -150,19 +150,28 @@ class UserController extends Controller
     }
 
     public function savePushToken(Request $request){
-        $data=$request->all();
-        $is_present=PushToken::where('user_id',$data['user_id'])->count();
-        if($is_present == 0){
-            $pushData['user_id']=$data['teacher']['id'];
-            $pushData['push_token']=$data['pushToken'];
-            PushToken::create($pushData);
+        try{
+            $status = 200;
+            $data=$request->all();
+            $is_present = PushToken::where('user_id',$data['user_id'])->count();
+            if($is_present == 0){
+                $pushData['user_id'] = $data['user_id'];
+                $pushData['push_token'] = $data['pushToken'];
+                PushToken::create($pushData);
+            }
+            else{
+                $pushData['user_id']=$data['user_id'];
+                $pushData['push_token']=$data['pushToken'];
+                PushToken::where('user_id',$data['user_id'])->update($pushData);
+            }
+        }catch(\Exception $e){
+            $status = 500;
+            $data= [
+                'action' => "token created" ,
+                'exception' => $e->getMessage()
+            ];
         }
-        else{
-            $pushData['user_id']=$data['teacher']['id'];
-            $pushData['push_token']=$data['pushToken'];
-            PushToken::where('user_id',$data['teacher']['id'])->update($pushData);
-        }
-
+        return response($data,$status);
     }
     public function getBatchesTeacher(Request $request){
         try{
@@ -260,7 +269,8 @@ class UserController extends Controller
            $response = [
                "message" => $message,
                "status" => $status,
-               "data" => $responseData
+               "data" => $responseData,
+
            ];
            return response($response, $status);
      }
@@ -464,9 +474,7 @@ class UserController extends Controller
     }
     public function publicGetSwitchingDetails(Request $request){
         try{
-            dd($request->all());
             $data=$request->all();
-            dd($data);
             $finalData=array();
             $parent_student=User::where('parent_id',$data['teacher']['id'])->where('is_active',1)->get();
             $finalData['Parent_student_relation']['parent_id']=$data['teacher']['id'];
@@ -497,6 +505,29 @@ class UserController extends Controller
             "message" => $message,
             "status" => $status,
             "data" =>$finalData
+        ];
+        return response($response, $status);
+    }
+    public function lcGenerated(Request $request,$id){
+        try{
+            $data = array();
+            $status = 200;
+            $message = "LC created for this student";
+            $lc_data = User::where('id',$id)->lists('is_lc_generated');
+            if($lc_data[0] == 1){
+                $data = true;
+            }else{
+                $data = false;
+            }
+
+        }catch(\Exception $exception){
+            $status = 500;
+            $message = "Something went wrong" .  $exception->getMessage();
+        }
+        $response = [
+            "message" => $message,
+            "status" => $status,
+            "is_lc_generated" =>$data
         ];
         return response($response, $status);
     }

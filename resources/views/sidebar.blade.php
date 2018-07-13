@@ -425,7 +425,7 @@
         </ul>
     </li>
     @endif
-   {{-- <li>
+    <li>
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
@@ -445,14 +445,44 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0);">
+                <a href="/certificates/livingCertificate/manage">
                     <div class="item-inner">
                         <span class="title"> Leaving Certificate </span>
                     </div>
                 </a>
             </li>
         </ul>
-    </li>--}}
+    </li>
+    @if(Auth::User()->role_id == 1)
+        <li>
+            <a href="javascript:void(0)">
+                <div class="item-content">
+                    <div class="item-media">
+                        <i class="fa fa-file-excel-o"></i>
+                    </div>
+                    <div class="item-inner">
+                        <span class="title">Attendance Reports </span><i class="icon-arrow"></i>
+                    </div>
+                </div>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a href="/reports/daily-attendance-view">
+                        <div class="item-inner">
+                            <span class="title"> Daily Attendance Report </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reports/monthly-attendance-view">
+                        <div class="item-inner">
+                            <span class="title"> Monthly Attendance Report </span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endif
 </ul>
 </nav>
 </div>

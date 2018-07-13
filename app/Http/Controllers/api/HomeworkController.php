@@ -533,7 +533,7 @@ class HomeworkController extends Controller
             $title="Homework generated";
             $message="Please check the homework !";
             $allUser=0;
-            $push_users_parents=User::whereIn('id',$students->toArray())->lists('parent_id');
+            $push_users_parents=User::whereIn('id',$students->toArray())->where('is_lc_generated',0)->lists('parent_id');
             $push_users=PushToken::whereIn('user_id',$push_users_parents)->lists('push_token');
             $this -> CreatePushNotification($title,$message,$allUser,$push_users);
         }
@@ -575,6 +575,7 @@ class HomeworkController extends Controller
                     ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
                     ->Join('users as teacher' ,'homework_teacher.teacher_id', '=', 'teacher.id')
                     ->where('homework_teacher.division_id','=',$division['id'])
+                    ->where('users.is_lc_generated',0)//students lc created
 //                    ->where('homeworks.status','=',2)//2 is for published homework
                     ->where('homeworks.is_active','=',1)//0 is for deleted homework
                     ->groupBy('homework_teacher.homework_id')
@@ -859,6 +860,7 @@ class HomeworkController extends Controller
                 ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
                 ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
                 ->where('homework_teacher.student_id','=',$student_id)
+                ->where('users.is_lc_generated',0)//students lc created
                 ->where('homeworks.status','=',2)//parent ca n see published homework ony
                 ->where('homeworks.is_active','=',1)//0 is for deleted homework
                 ->select('homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','first_name','last_name','users.id as userId','subjects.slug as subjectName','homeworks.status','divisions.division_name','classes.class_name','batches.name','homeworks.created_at')
