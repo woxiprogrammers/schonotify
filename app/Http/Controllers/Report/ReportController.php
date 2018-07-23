@@ -36,7 +36,7 @@ class ReportController extends Controller
     }
     public function dailyReportDateData(Request $request){
         try{
-            $date = date("F j, Y,");
+            $date = date("F j, Y");
             $reportTitle = "Daily Attendance Report ";
             $name = "daily_attendance $date.xlsx";
             $attendanceData = array();
@@ -232,7 +232,7 @@ class ReportController extends Controller
     }
     public function generateMonthlyReport(Request $request){
         try{
-            $reportDate = date("F j, Y,");
+            $reportDate = date("F j, Y");
             $reportTitle = "Classwise Monthly Report ";
             $name = "classwise_monthly_attendance $reportDate.xlsx";
             $month = date('F',strtotime($request->month_select));
