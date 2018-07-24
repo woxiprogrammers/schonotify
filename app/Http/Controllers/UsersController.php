@@ -1704,6 +1704,9 @@ class UsersController extends Controller
         $divisionList = $divisionData->toArray();
         return $divisionList;
     }
+    public function getEnableDisableStudents(Request $request){
+        return view('studentsEnableDisable');
+    }
     public function getParents(){
         $user=Auth::user();
         $userInformation =array();
@@ -1905,6 +1908,48 @@ class UsersController extends Controller
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+    public function enableStudents(Request $request,$id){
+        try{
+            $data = array();
+            $data['is_displayed'] = 0;
+            $data['is_active'] = 0;
+            $query = User::where('id',$id)->update($data);
+            if($query){
+                $status = 200;
+            }else{
+                $status = 400;
+            }
+            return $status;
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+    public function disableStudents(Request $request,$id){
+        try{
+            $data = array();
+            $data['is_displayed'] = 1;
+            $data['is_active'] = 1;
+            $query = User::where('id',$id)->update($data);
+            if($query){
+                $status = 200;
+            }else{
+                $status = 400;
+            }
+            return $status;
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
             ];
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());

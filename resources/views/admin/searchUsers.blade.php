@@ -34,17 +34,19 @@
 						</section>
 						<!-- end: DASHBOARD TITLE -->
                        @include('admin.userRoleDropdown')
-                        <div class="container-fluid container-fullw bg-white col-md-3" id="Student_without_division" style="display: none">
+                        <div class="container-fluid container-fullw bg-white col-md-2" id="Student_without_division" style="display: none">
                             <label for="checkbox">Show students without division.</label>
                             <input type="checkbox" class="checkbox" id="checkbox">
                             <br>
                             <br><br>
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-3" id="UserSearch">
+                        <div class="container-fluid container-fullw bg-white col-md-2" id="UserSearch">
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-3" id="ClassSearch">
+                        <div class="container-fluid container-fullw bg-white col-md-2" id="ClassSearch">
                         </div>
                         <div class="container-fluid container-fullw bg-white col-md-3" id="DivSearch">
+                        </div>
+                        <div class="container-fluid container-fullw bg-white col-md-3" id="EnableDisableSearch">
                         </div>
                         <!-- start: DYNAMIC TABLE -->
                         <div class="container-fluid container-fullw bg-white">
@@ -103,7 +105,45 @@
              });
         }
     }
+    function statusUserIsDisplayed(status,id){
+        if(status==false){
+            var route='/enableDisableFunctionality/enable/'+id;
+            $.get(route,function(res){
+                if(res['status']==403)
+                {
+                    var route= "/searchUsers";
+                    window.location.replace(route);
+                }else{
+                    swal({
+                        title: "Disabled!",
+                        text: "User has been disabled!",
+                        type: "error",
+                        confirmButtonColor: "#DD6B55",
+                        closeOnCancel: false
+                    },function(){
+                        location.reload();
+                    });
+                }
+            });
+        }else{
+            var route='/enableDisableFunctionality/disable/'+id;
+            $.get(route,function(res){
+                if(res['status']==403)
+                {
+                    var route= "/searchUsers";
+                    window.location.replace(route);
+                } else if(res['status'] == 401) {
+                    var route= "/searchUsers";
 
+                    window.location.replace(route);
+                }else{
+                    swal({title:"Enabled!", text:"User has been enabled."},function(){
+                        location.reload();
+                    });
+                }
+            });
+        }
+    }
 </script>
     <script>
         function result(element){

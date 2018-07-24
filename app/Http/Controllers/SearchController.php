@@ -11,6 +11,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class SearchController extends Controller
@@ -32,75 +33,149 @@ class SearchController extends Controller
     {
         $role_id=3;
         $user=Auth::user();
-        if($user->role_id == 1)
-        {
-            if($role_id == 3){
-                if($request->Division == "-1"){
-                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
-                        ->whereNull('division_id')
-                        ->where('users.body_id','=',$user->body_id)
-                        ->where('users.role_id','!=',1)
-                        ->where('users.role_id','=',$role_id)
-                        ->where('users.id','!=',$user->id)
-                        ->where('users.is_displayed','=','1')
-                        ->get();
+        if($request->EnableDisable == "enable"){
+            if($user->role_id == 1)
+            {
+                if($role_id == 3){
+                    if($request->Division == "-1"){
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->whereNull('division_id')
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','1')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                            ->get();
+                    }else{
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->where('division_id',$request->Division)
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','1')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result','users.is_lc_generated','users.is_displayed')
+                            ->get();
+                    }
                 }else{
                     $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result','users.is_lc_generated')
-                        ->where('division_id',$request->Division)
                         ->where('users.body_id','=',$user->body_id)
-                        ->where('users.role_id','!=',1)
                         ->where('users.role_id','=',$role_id)
-                        ->where('users.id','!=',$user->id)
                         ->where('users.is_displayed','=','1')
+                        ->where('users.id','!=',$user->id)
+                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
                         ->get();
                 }
             }else{
-                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                    ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
-                    ->where('users.body_id','=',$user->body_id)
-                    ->where('users.role_id','=',$role_id)
-                    ->where('users.is_displayed','=','1')
-                    ->where('users.id','!=',$user->id)
-                    ->get();
+                if($role_id == 3){
+                    if($request->Division == "-1"){
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->whereNull('division_id')
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','1')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                            ->get();
+                    }else{
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->where('division_id',$request->Division)
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','1')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                            ->get();
+                    }
+                }else{
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->where('users.is_displayed','=','1')
+                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                        ->get();
+                }
             }
-        }else{
-            if($role_id == 3){
-                if($request->Division == "-1"){
-                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
-                        ->whereNull('division_id')
-                        ->where('users.body_id','=',$user->body_id)
-                        ->where('users.role_id','!=',1)
-                        ->where('users.role_id','=',$role_id)
-                        ->where('users.id','!=',$user->id)
-                        ->where('users.is_displayed','=','1')
-                        ->get();
+        }elseif($request->EnableDisable == "disable"){
+            if($user->role_id == 1)
+            {
+                if($role_id == 3){
+                    if($request->Division == "-1"){
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->whereNull('division_id')
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','0')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                            ->get();
+                    }else{
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->where('division_id',$request->Division)
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','0')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result','users.is_lc_generated','users.is_displayed')
+                            ->get();
+                    }
                 }else{
                     $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                        ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
-                        ->where('division_id',$request->Division)
                         ->where('users.body_id','=',$user->body_id)
-                        ->where('users.role_id','!=',1)
                         ->where('users.role_id','=',$role_id)
+                        ->where('users.is_displayed','=','0')
                         ->where('users.id','!=',$user->id)
-                        ->where('users.is_displayed','=','1')
+                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
                         ->get();
                 }
             }else{
-                $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                    ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
-                    ->where('users.body_id','=',$user->body_id)
-                    ->where('users.role_id','!=',1)
-                    ->where('users.role_id','=',$role_id)
-                    ->where('users.id','!=',$user->id)
-                    ->where('users.is_displayed','=','1')
-                    ->get();
+                if($role_id == 3){
+                    if($request->Division == "-1"){
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->whereNull('division_id')
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','0')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                            ->get();
+                    }else{
+                        $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                            ->where('division_id',$request->Division)
+                            ->where('users.body_id','=',$user->body_id)
+                            ->where('users.role_id','!=',1)
+                            ->where('users.role_id','=',$role_id)
+                            ->where('users.id','!=',$user->id)
+                            ->where('users.is_displayed','=','0')
+                            ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','students_extra_info.category as category','user_roles.slug as user_role','students_extra_info.grn as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                            ->get();
+                    }
+                }else{
+                    $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                        ->where('users.body_id','=',$user->body_id)
+                        ->where('users.role_id','!=',1)
+                        ->where('users.role_id','=',$role_id)
+                        ->where('users.id','!=',$user->id)
+                        ->where('users.is_displayed','=','0')
+                        ->select('users.id','users.roll_number as roll_number','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.hide_result')
+                        ->get();
+                }
             }
         }
         $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
@@ -121,6 +196,7 @@ class SearchController extends Controller
             if($user->role_id == 1)
             {
                 $str.="<th>Status</th>";
+                $str.="<th>User Status</th>";
             }
             $str.="<th>Action</th>";
             $str.="</tr></thead><tbody>";
@@ -165,6 +241,14 @@ class SearchController extends Controller
                         $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
                     }else{
                         $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
+                    }
+                    $str.="</td>";
+                    $str.="<td>";
+                    if($row->is_displayed == 1)
+                    {
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUserIsDisplayed(this.checked,$row->id)' id='status$row->id' value='$row->id' checked/>";
+                    }else{
+                        $str.="<input type='checkbox' class='js-switch' onchange='return statusUserIsDisplayed(this.checked,$row->id)' id='status$row->id' value='$row->id'/>";
                     }
                     $str.="</td>";
                 }

@@ -15,26 +15,14 @@
     $(document).ready(function(){
          $('#Divisiondropdown').change(function(){
             $('div#loadmoreajaxloader').show();
-            var Division= $('#Divisiondropdown').val();
-            var route='studentSearch';
+            var route='/get-enable-disable-students';
             $.ajax({
                 method: "get",
-                url: route,
-                data: { Division }
+                url: route
             })
                 .done(function(res){
-                    $("#tableContent").html(res);
+                    $("#EnableDisableSearch").html(res);
                     $('div#loadmoreajaxloader').hide();
-                    var switcheryHandler = function() {
-
-                        var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-
-                        elements.forEach(function(html) {
-                            var switchery = new Switchery(html);
-                        });
-                    };
-                    switcheryHandler();
-                    TableData.init();
                 })
         })
 
