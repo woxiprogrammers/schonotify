@@ -388,7 +388,7 @@ class MessageController extends Controller
         try{
             $data=$requests->all();
             $teacher_id = UserRoles::whereIn('slug', ['teacher'])->pluck('id');
-            $teacher = User::where('role_id',$teacher_id)->where('body_id',$data['teacher']['body_id'])->get()->toArray();
+            $teacher = User::where('role_id',$teacher_id)->where('body_id',$data['teacher']['body_id'])->where('is_active',1)->get()->toArray();
             $i=0;
             foreach($teacher as $value){
                 if($value['id']!=$data['teacher']['id'])
