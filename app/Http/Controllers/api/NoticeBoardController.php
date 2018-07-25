@@ -365,7 +365,7 @@ class NoticeBoardController extends Controller
     }
     public function getTeacher(Request $request){
           $user = $request->all();
-          $response=User::where('role_id',2)->where('body_id',$user['teacher']['body_id'])->select()->get();
+          $response=User::where('role_id',2)->where('body_id',$user['teacher']['body_id'])->where('is_active',1)->select()->get();
         return response($response);
     }
     public function createAchieve(Request $request){

@@ -88,6 +88,7 @@
                 }
             });
         }else
+
         {
             var route='active/'+id;
             $.get(route,function(res){

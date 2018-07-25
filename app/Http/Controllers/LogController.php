@@ -68,9 +68,7 @@ class LogController extends Controller
      */
     public function store(LoginRequest $request)
     {
-
         $user=User::where('email','=',$request['email'])->first();
-
         if($user == NULL || !(\Hash::check($request['password'],$user->password)))
         {
             Session::flash('message-error','Wrong email or password');
@@ -83,7 +81,6 @@ class LogController extends Controller
                     $userSlug=UserRoles::where('id',$user->role_id)->first();
                     if($userSlug->slug == "student" || $userSlug->slug == "parent")
                     {
-
                         Session::flash('message-error','Sorry...You don`t have web access.');
                         return Redirect::to('/');
 
@@ -91,7 +88,6 @@ class LogController extends Controller
                     {
                         $view= TeacherView::where('user_id','=',$user->id)
                             ->get();
-
                         foreach($view as $val)
                         {
                             $web_view=$val['web_view'];
