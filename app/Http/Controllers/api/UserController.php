@@ -100,7 +100,7 @@ class UserController extends Controller
                             if($data['users']['role_id']==4)
                             {
                                 $i=0;
-                                $userData=User::where('parent_id','=',$data['users']['user_id'])->first();
+                                $userData=User::where('parent_id','=',$data['users']['user_id'])->where('is_active',1)->first();
                                 $messageCount=Message::where('to_id',$userData['id'])
                                     ->where('read_status','=',0)
                                     ->where('is_delete','=',0)
