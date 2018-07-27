@@ -49,10 +49,11 @@ class UserController extends Controller
             } elseif ($user->is_active == 0) {
                 $status = 401;
                 $message = "Sorry ... Your account is not activated";
-            } else{
+            }else{
                 $parentId = User::where('email','=',$request['email'])->lists('id')->toArray();
                 $checkStudent = User::whereIn('parent_id',$parentId)->where('is_active',1)->count();
-                if($checkStudent > 0){
+                $userView=TeacherView::where('user_id','=',$user['id'])->first();
+                if($checkStudent > 0 || $userView['mobile_view']==1){
                     if (Auth::attempt(['email' => $request->email,'password' => $request->password])) {
                         $user=Auth::User();
                         $userView=TeacherView::where('user_id','=',$user['id'])->first();
