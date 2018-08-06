@@ -650,3 +650,6 @@ Route::group(['prefix' => 'enableDisableFunctionality'],function(){
     Route::get('enable/{id}',array('uses' =>'UsersController@enableStudents'));
     Route::get('disable/{id}',array('uses' =>'UsersController@disableStudents'));
 });
+Route::group(['prefix' => 'student'],function (){
+    Route::post('student-shuffle',array('uses' => 'UsersController@shuffleStudents'));
+});

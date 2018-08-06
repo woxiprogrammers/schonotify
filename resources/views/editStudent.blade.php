@@ -57,6 +57,11 @@
                                     Late Fee For student
                                 </a>
                             </li>
+                        <li>
+                            <a data-toggle="tab" href="#student_shuffle">
+                                Shuffle
+                            </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div id="panel_edit_account" class="tab-pane fade in active ">
@@ -72,7 +77,9 @@
                                             </label>
                                             <select class="form-control" id="Batchdropdown" name="Batchdropdown" style="-webkit-appearance: menulist;">
                                                 <option value="">Select Batch</option>
-                                                <option value="{!! $batches->id !!}">{!! $batches->name !!}</option>
+                                                @foreach($batches as $batch)
+                                                    <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-4" id="ClassSearchStudent">
@@ -1130,6 +1137,89 @@
                                 </fieldset>
                             </div>
                         </div>
+                        <div class="tab-pane fade" id="student_shuffle">
+                            <div class="panel-body">
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <form id="shuffle_student" method="post" action="/student/student-shuffle">
+                                                <input type="hidden" name="student_id" id="userId" value="{!! $user->id !!}">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <div class="control-label center">
+                                                                <p>Shuffle Class and Division for <b>{{$user->first_name}} {{$user->middle_name}} {{$user->last_name}}</b></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Batch <span class="symbol required"></span>
+                                                            </label>
+                                                            <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                                                <option>Select Batch</option>
+                                                                @foreach($batches as $batch)
+                                                                    <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4" id="class-select-div" >
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Select Class <span class="symbol required"></span>
+                                                            </label>
+                                                            <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4" id="select-div" >
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Select Div <span class="symbol required"></span>
+                                                            </label>
+                                                            <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <div class="col-md-12" id="shuffle" hidden>
+                                                    <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal">Shuffle Student</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {{--model for shuffle students--}}
+                                    <div id="myModal" class="modal fade" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Modal Header</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are You sure you want to shuffle the student <b>{{$user->first_name}} {{$user->middle_name}} {{$user->last_name}}</b></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="button" id="final_shuffle" class="btn btn-default" value="submit">Shuffle</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    {{--end--}}
+                                </fieldset>
+                            </div>
+
+                        </div>
                        </div>
                       </div>
                      </div>
@@ -1176,14 +1266,12 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
+</div>
+</div>
+</div>
 @include('rightSidebar')
-</div>
-</div>
-</div>
 @include('footer')
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -1218,7 +1306,6 @@
 <script src="/assets/js/table-data.js"></script>
 <script>
     jQuery(document).ready(function() {
-
         if({!!$divisionStudent!!} != null){
             $('#hide').hide();
         }else{
@@ -1231,12 +1318,10 @@
         $("option[value='"+category+"']").prop('selected',true);
         $("option[value='"+blood+"']").prop('selected',true);
         $('.caste-checkbox').each(function(){
-
             $(".caste-checkbox input[value='{{$caste_concession_type_edit}}']").attr('checked', true);
         })
         $(".assign_fee_structure input[value='{{$assigned_fee}}']").attr('selected', true);
         getMsgCount();
-
         $('#multiple-concession').click(function() {
             $("#test").html('');
             $('.checked_fee:checkbox:checked').each(function(){
@@ -1256,9 +1341,6 @@
                 $("#clonedDiv_"+id).html(newClone);
             });
         });
-
-
-
         Main.init();
         FormValidator.init();
         FormElements.init();
@@ -1394,7 +1476,6 @@
             }
         });
     });
-
     function showCasteSelect(element){
         if($(element).is(":checked") == true){
             var id = element.value;
@@ -1439,6 +1520,54 @@
                })
         })
     });
+</script>
+<script>
+    $('#batchDrpdn').change(function(){
+        var id=this.value;
+        var route='/get-all-classes/'+id;
+        $('#loadmoreajaxloaderClass').show();
+        $.get(route,function(res){
+            if (res.length == 0)
+            {
+                $('#class-select').html("no record found");
+                $('#loadmoreajaxloaderClass').hide();
+            } else {
+                var str='<option value="">Please select class</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                }
+                $('#class-select').html(str);
+                $('#loadmoreajaxloaderClass').hide();
+            }
+        });
+    });
+    $('#class-select').change(function(){
+        var id=this.value;
+        var route='/get-all-division/'+id;
+        $('#loadmoreajaxloaderClass').show();
+        $.get(route,function(res){
+            if (res.length == 0)
+            {
+                $('#div-select').html("no record found");
+                $('#loadmoreajaxloaderClass').hide();
+            } else {
+                var str='<option value="">Please select division</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
+                }
+                $('#div-select').html(str);
+                $('#loadmoreajaxloaderClass').hide();
+            }
+        });
+    });
+    $('#div-select').change(function(){
+            $('#shuffle').show();
+    });
+    $('#final_shuffle').on('click',function(){
+        $('#shuffle_student').submit();
+    })
 </script>
 <script src="/assets/js/student-edit.js" ></script>
 @stop
