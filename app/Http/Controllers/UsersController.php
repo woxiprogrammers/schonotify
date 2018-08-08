@@ -1065,7 +1065,7 @@ class UsersController extends Controller
                 $caste=StudentExtraInfo::where('student_id',$id)->pluck('caste');
                 $grn=StudentExtraInfo::where('student_id',$id)->pluck('grn');
                 $religion=StudentExtraInfo::where('student_id',$id)->pluck('religion');
-                $batches=Batch::where('body_id',$user->body_id)->select('id','name')->first();
+                $batches=Batch::where('body_id',$user->body_id)->select('id','name')->get();
                 $divisionStudent=User::where('id',$id)->pluck('division_id');
                 if($divisionStudent != null){
                     $divisionStudent=$divisionStudent;
@@ -1704,6 +1704,9 @@ class UsersController extends Controller
         $divisionList = $divisionData->toArray();
         return $divisionList;
     }
+    public function getEnableDisableStudents(Request $request){
+        return view('studentsEnableDisable');
+    }
     public function getParents(){
         $user=Auth::user();
         $userInformation =array();
@@ -1909,5 +1912,68 @@ class UsersController extends Controller
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());
         }
+    }
+    public function enableStudents(Request $request,$id){
+        try{
+            $data = array();
+            $data['is_displayed'] = 0;
+            $data['is_active'] = 0;
+            $query = User::where('id',$id)->update($data);
+            if($query){
+                $status = 200;
+            }else{
+                $status = 400;
+            }
+            return $status;
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+    public function disableStudents(Request $request,$id){
+        try{
+            $data = array();
+            $data['is_displayed'] = 1;
+            $data['is_active'] = 1;
+            $query = User::where('id',$id)->update($data);
+            if($query){
+                $status = 200;
+            }else{
+                $status = 400;
+            }
+            return $status;
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+    public function shuffleStudents(Request $request){
+        try{
+            $data['division_id'] = $request->div_select;
+            $shuffle = User::where('id',$request->student_id)->update($data);
+            if($shuffle){
+                Session::flash('message-success','You have successfully shuffle Students.');
+                return Redirect::to('/searchUsers');
+            }else{
+                Session::flash('message-error, Something went wrong');
+                return Redirect::back();
+            }
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+        dd($request->all());
     }
 }

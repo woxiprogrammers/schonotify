@@ -434,6 +434,7 @@
     Route::get('get-classes-search',array('uses' => 'UsersController@getClassesForSearch'));
     Route::get('get-divisions/{id}',array('uses' => 'UsersController@getDivisions'));
     Route::get('get-divisions-search',array('uses' => 'UsersController@getDivisionsForsearch'));
+    Route::get('get-enable-disable-students',array('uses' => 'UsersController@getEnableDisableStudents'));
     Route::get('get-parents',array('uses' => 'UsersController@getParents'));
     Route::post('check-user',array('uses' => 'UsersController@checkUser'));
     Route::post('check-email',array('uses' => 'UsersController@checkEmail'));
@@ -644,4 +645,11 @@ Route::group(['prefix' => 'reports'],function (){
     Route::post('attendance-date-select',array('uses' => 'Report\ReportController@dailyReportDateData'));
     Route::post('monthly-attendance-report',array('uses' => 'Report\ReportController@generateMonthlyReport'));
 
+});
+Route::group(['prefix' => 'enableDisableFunctionality'],function(){
+    Route::get('enable/{id}',array('uses' =>'UsersController@enableStudents'));
+    Route::get('disable/{id}',array('uses' =>'UsersController@disableStudents'));
+});
+Route::group(['prefix' => 'student'],function (){
+    Route::post('student-shuffle',array('uses' => 'UsersController@shuffleStudents'));
 });

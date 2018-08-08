@@ -695,7 +695,7 @@
         public function getAllTeachers()
         {
             $user = Auth::user();
-            $teacherList = User::where('role_id',2)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->select('id','first_name','last_name','username')->get();
+            $teacherList = User::where('role_id',2)->where('body_id',$user->body_id)->whereNotIn('id',[$user->id])->where('is_active',1)->select('id','first_name','last_name','username')->get();
             return $teacherList;
         }
         /*
