@@ -34,27 +34,95 @@
 						</section>
 						<!-- end: DASHBOARD TITLE -->
                        @include('admin.userRoleDropdown')
-                        <div class="container-fluid container-fullw bg-white col-md-2" id="Student_without_division" style="display: none">
+                        <div class=" col-md-2" id="Student_without_division" style="display: none">
                             <label for="checkbox">Show students without division.</label>
                             <input type="checkbox" class="checkbox" id="checkbox">
                             <br>
                             <br><br>
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-2" id="UserSearch">
+                        <div class="col-md-2" id="UserSearch">
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-2" id="ClassSearch">
+                        <div class="col-md-2" id="ClassSearch">
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-3" id="DivSearch">
+                        <div class="col-md-3" id="DivSearch">
                         </div>
-                        <div class="container-fluid container-fullw bg-white col-md-3" id="EnableDisableSearch">
+                        <div class="col-md-3" id="EnableDisableSearch">
                         </div>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <hr>
+                        <div class="row" id="shuffle_row" hidden>
+                            <h3 style="margin-left: 45%">Shuffle Students</h3>
+                            <form id="shuffle_student" method="post" action="/student/student-multiple-shuffle">
+                                    <div class="col-md-2">
+                                        <label class="control-label">
+                                            Select All Students <span class="symbol required"></span>
+                                        </label>
+                                        <input type="checkbox" class="select-all">
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <label class="control-label">
+                                            Batch <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                            <option>Select Batch</option>
+                                            @foreach($batches as $batch)
+                                                <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2" id="class-select-div" >
+                                        <label class="control-label">
+                                            Select Class <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2" id="select-div" >
+                                        <label class="control-label">
+                                            Select Div <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                    <div hidden>
+                                        <input type="text" name="students_id" id="students_ids" value="">
+                                    </div>
+                                    <div style="margin-top: 20px" class="col-md-2" id="shuffle" hidden>
+                                        <button type="button" class="btn btn-info btn-md" id="modal-call">Shuffle Student</button>
+                                    </div>
+                                </form>
+                            </div>
+                        {{--model for shuffle students--}}
+                        <div id="myModal" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Shuffle Student</h4>
+                                    </div>
+                                    <div class="modal-body" id="modal-body">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" id="final_shuffle" class="btn btn-default" value="submit">Shuffle</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    {{--end--}}
                         <!-- start: DYNAMIC TABLE -->
                         <div class="container-fluid container-fullw bg-white">
-                        <div class="row">
-                            <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
-                        <div class="col-md-12" id="tableContent">
-                        </div>
-                        </div>
+                            <div class="row">
+                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
+                                <div class="col-md-12" id="tableContent">
+                                </div>
+                            </div>
                         </div>
                         <!-- end: DYNAMIC TABLE -->
 						<!-- start: FOURTH SECTION -->
@@ -174,4 +242,80 @@
             })
         }
     </script>
+        <script>
+            $('#batchDrpdn').change(function(){
+                var id=this.value;
+                var route='/get-all-classes/'+id;
+                $('#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
+                    {
+                        $('#class-select').html("no record found");
+                        $('#loadmoreajaxloaderClass').hide();
+                    } else {
+                        var str='<option value="">Please select class</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
+                        }
+                        $('#class-select').html(str);
+                        $('#loadmoreajaxloaderClass').hide();
+                    }
+                });
+            });
+            $('#class-select').change(function(){
+                var id=this.value;
+                var route='/get-all-division/'+id;
+                $('#loadmoreajaxloaderClass').show();
+                $.get(route,function(res){
+                    if (res.length == 0)
+                    {
+                        $('#div-select').html("no record found");
+                        $('#loadmoreajaxloaderClass').hide();
+                    } else {
+                        var str='<option value="">Please select division</option>';
+                        for(var i=0; i<res.length; i++)
+                        {
+                            str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
+                        }
+                        $('#div-select').html(str);
+                        $('#loadmoreajaxloaderClass').hide();
+                    }
+                });
+            });
+            $('#div-select').change(function(){
+                $('#shuffle').show();
+            });
+            var students_id = [];
+            $('#shuffle').click(function(){
+                if($('#tableContent .multiple_shuffle:checkbox:checked').length > 0){
+                    $('#myModal').modal('show');
+                    var division_name =  $("#div-select :selected").text();
+                    var class_name =  $("#class-select :selected").text();
+                  $('#tableContent .multiple_shuffle').each(function(){
+                     if($(this).prop("checked")){
+                         var ids = this.value;
+                         students_id.push(ids);
+                     }
+                  });
+                    $('#modal-body').find('p').remove();
+                  $('<p>Are you sure you want to shift the students to Class: <b>'+class_name+' </b> And  Division: <b>'+division_name+'</b></p>').appendTo('#modal-body');
+                 $('#students_ids').val(students_id);
+                }else{
+                    alert("Please select the student for shuffle");
+                }
+
+            })
+            $('.select-all').on('change',function(){
+                if($(this).prop("checked")) {
+                    $('.multiple_shuffle').prop('checked',true)
+                }else{
+                    $('.multiple_shuffle').prop('checked',false)
+                }
+            })
+            $('#final_shuffle').on('click',function(){
+                $('#shuffle_student').submit();
+            })
+        </script>
+
 @stop

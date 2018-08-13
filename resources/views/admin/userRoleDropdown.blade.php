@@ -8,7 +8,6 @@
                         Select User Roles
                     </label>
                     <select class="form-control" id="role-select" style="-webkit-appearance: menulist;">
-
                         @if(Auth::user()->role_id == 1)
                         @foreach($userRoles as $roles)
 

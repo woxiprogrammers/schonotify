@@ -22,6 +22,7 @@
             })
                 .done(function(res){
                     $("#tableContent").html(res);
+                    $("#shuffle_row").show();
                     $('div#loadmoreajaxloader').hide();
                     var switcheryHandler = function() {
 

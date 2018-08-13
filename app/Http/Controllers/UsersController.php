@@ -1974,6 +1974,27 @@ class UsersController extends Controller
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());
         }
+    }
+    public function multipleShuffleStudents(Request $request){
+        try{
+            $division['division_id'] = $request->div_select;
+            $test = explode(",", $request->students_id);
+            $query = User::whereIn('id',$test)->update($division);
+            if($query){
+                Session::flash('message-success','You have successfully shuffle Students.');
+                return Redirect::to('/searchUsers');
+            }else{
+                Session::flash('message-error, Something went wrong');
+                return Redirect::back();
+            }
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
         dd($request->all());
     }
 }
