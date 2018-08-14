@@ -652,4 +652,5 @@ Route::group(['prefix' => 'enableDisableFunctionality'],function(){
 });
 Route::group(['prefix' => 'student'],function (){
     Route::post('student-shuffle',array('uses' => 'UsersController@shuffleStudents'));
+    Route::post('student-multiple-shuffle',array('uses' => 'UsersController@multipleShuffleStudents'));
 });
