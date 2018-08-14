@@ -1995,6 +1995,5 @@ class UsersController extends Controller
             Log::critical(json_encode($data));
             abort(500,$e->getMessage());
         }
-        dd($request->all());
     }
 }
