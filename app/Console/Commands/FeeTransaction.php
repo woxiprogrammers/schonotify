@@ -40,26 +40,74 @@ class FeeTransaction extends Command
      */
     public function handle()
     {
-        $users = User::where('body_id',1)->whereNotIn('id',[692,1093,1085,3,609,329,94,1099,887,983,141,173,1118,586,133,919])->lists('id');
-        foreach ($users as $key => $value){
-            $data = array();
-            $data['fee_id'] = 1;
-            $data['student_id'] = $value;
-            $data['transaction_type'] = "Cash";
-            $data['transaction_detail'] = "";
-            $data['transaction_amount'] = 14000;
-            $data['date'] = Carbon::now();
-            $data['installment_id'] = 1;
-            TransactionDetails::create($data);
-            $data1 = array();
-            $data1['fee_id'] = 1;
-            $data1['student_id'] = $value;
-            $data1['transaction_type'] = "Cash";
-            $data1['transaction_detail'] = "";
-            $data1['transaction_amount'] = 7000;
-            $data1['date'] = Carbon::now();
-            $data1['installment_id'] = 2;
-            TransactionDetails::create($data1);
+        $users = User::where('body_id',1)->where('role_id',3)->whereNotIn('id',[1099,887,983,141,173,1118,586,133,919])->get()->toArray();
+        foreach ($users as  $value){
+            $transactionDetails = TransactionDetails::where('student_id',$value['id'])->get()->toArray();
+            if(!in_array($value['id'], [692,1093,1085,3,609,329,94])){
+                if(empty($transactionDetails)){
+                    $data = array();
+                    $data['fee_id'] = 1;
+                    $data['student_id'] = $value['id'];
+                    $data['transaction_type'] = "Cash";
+                    $data['transaction_detail'] = "";
+                    $data['transaction_amount'] = 14000;
+                    $data['date'] = Carbon::now();
+                    $data['installment_id'] = 1;
+                    TransactionDetails::create($data);
+                    $data1 = array();
+                    $data1['fee_id'] = 1;
+                    $data1['student_id'] = $value['id'];
+                    $data1['transaction_type'] = "Cash";
+                    $data1['transaction_detail'] = "";
+                    $data1['transaction_amount'] = 7000;
+                    $data1['date'] = Carbon::now();
+                    $data1['installment_id'] = 2;
+                    TransactionDetails::create($data1);
+                }else{
+                    foreach($transactionDetails as $txnDetail){
+                        if(!($txnDetail['fee_id'] == 1 && $txnDetail['installment_id'] == 1)){
+                            $data = array();
+                            $data['fee_id'] = 1;
+                            $data['student_id'] = $value['id'];
+                            $data['transaction_type'] = "Cash";
+                            $data['transaction_detail'] = "";
+                            $data['transaction_amount'] = 14000;
+                            $data['date'] = Carbon::now();
+                            $data['installment_id'] = 1;
+                            TransactionDetails::create($data);
+                        }else if(!($txnDetail['fee_id'] == 1 && $txnDetail['installment_id'] == 2)){
+                            $data1 = array();
+                            $data1['fee_id'] = 1;
+                            $data1['student_id'] = $value['id'];
+                            $data1['transaction_type'] = "Cash";
+                            $data1['transaction_detail'] = "";
+                            $data1['transaction_amount'] = 7000;
+                            $data1['date'] = Carbon::now();
+                            $data1['installment_id'] = 2;
+                            TransactionDetails::create($data1);
+                        }
+                    }
+                }
+            }else{
+                $data = array();
+                $data['fee_id'] = 1;
+                $data['student_id'] = $value['id'];
+                $data['transaction_type'] = "Cash";
+                $data['transaction_detail'] = "";
+                $data['transaction_amount'] = 0;
+                $data['date'] = Carbon::now();
+                $data['installment_id'] = 1;
+                TransactionDetails::create($data);
+                $data1 = array();
+                $data1['fee_id'] = 1;
+                $data1['student_id'] = $value['id'];
+                $data1['transaction_type'] = "Cash";
+                $data1['transaction_detail'] = "";
+                $data1['transaction_amount'] = 0;
+                $data1['date'] = Carbon::now();
+                $data1['installment_id'] = 2;
+                TransactionDetails::create($data1);
+            }
         }
     }
 }
