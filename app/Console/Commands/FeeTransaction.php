@@ -89,24 +89,30 @@ class FeeTransaction extends Command
                     }
                 }
             }else{
-                $data = array();
-                $data['fee_id'] = 1;
-                $data['student_id'] = $value;
-                $data['transaction_type'] = "Cash";
-                $data['transaction_detail'] = "";
-                $data['transaction_amount'] = 0;
-                $data['date'] = Carbon::now();
-                $data['installment_id'] = 1;
-                TransactionDetails::create($data);
-                $data1 = array();
-                $data1['fee_id'] = 1;
-                $data1['student_id'] = $value;
-                $data1['transaction_type'] = "Cash";
-                $data1['transaction_detail'] = "";
-                $data1['transaction_amount'] = 0;
-                $data1['date'] = Carbon::now();
-                $data1['installment_id'] = 2;
-                TransactionDetails::create($data1);
+                $installment1 = TransactionDetails::where('student_id',$value)->where('fee_id',1)->where('installment_id',1)->count();
+                $installment2 = TransactionDetails::where('student_id',$value)->where('fee_id',1)->where('installment_id',2)->count();
+                if($installment1 == 0){
+                    $data = array();
+                    $data['fee_id'] = 1;
+                    $data['student_id'] = $value;
+                    $data['transaction_type'] = "Cash";
+                    $data['transaction_detail'] = "";
+                    $data['transaction_amount'] = 0;
+                    $data['date'] = Carbon::now();
+                    $data['installment_id'] = 1;
+                    TransactionDetails::create($data);
+                }
+                if($installment2 == 0){
+                    $data1 = array();
+                    $data1['fee_id'] = 1;
+                    $data1['student_id'] = $value;
+                    $data1['transaction_type'] = "Cash";
+                    $data1['transaction_detail'] = "";
+                    $data1['transaction_amount'] = 0;
+                    $data1['date'] = Carbon::now();
+                    $data1['installment_id'] = 2;
+                    TransactionDetails::create($data1);
+                }
             }
         }
     }
