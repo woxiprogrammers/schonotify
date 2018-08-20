@@ -207,8 +207,8 @@ class SearchController extends Controller
             {
                 if($row->user_role=='student')
                 {
-                    $str.="<tr><td>"."<input type='checkbox' id='multiple_shuffle' name = 'shuffle_student[$row->id]' class='multiple_shuffle' value='".$row->id."'>"."</td>";
                     if($row->is_lc_generated==0){
+                        $str.="<tr><td>"."<input type='checkbox' id='multiple_shuffle' name = 'shuffle_student[$row->id]' class='multiple_shuffle' value='".$row->id."'>"."</td>";
                         if($row->hide_result == 1){
                             $str.="<td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'checked>"."</td>";
                         }else{
@@ -216,6 +216,7 @@ class SearchController extends Controller
                         }
                     }else{
                         $str.="<tr><td></td>";
+                        $str.="<td></td>";
                     }
                     $str.="<td>".$row->rollno."</td>";
                 }else{
