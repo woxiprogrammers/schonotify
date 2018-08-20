@@ -54,11 +54,11 @@ public function getManageView(Request $request){
     public function studentForm(Request $request){
        try{
             $studentID = StudentExtraInfo::where('grn',$request->grn)->pluck('student_id');
-            $studentData = StudentExtraInfo::join('users','users.id','=','students_extra_info.student_id')
+           $studentData = StudentExtraInfo::join('users','users.id','=','students_extra_info.student_id')
                 ->where('students_extra_info.grn',$request->grn)
                 ->select('users.first_name','users.last_name','students_extra_info.grn','students_extra_info.aadhar_number','users.date_of_admission')->first();
-            $studentPreviousSchoolData = StudentPreviousSchool::where('student_id',$studentID)->select('school_name','city')->first();
-            return view('certificate.livingCertificate.livingCertificateForm')->with(compact('studentData','studentPreviousSchoolData'));
+           $studentPreviousSchoolData = StudentPreviousSchool::where('student_id',$studentID)->select('school_name','city')->first();
+           return view('certificate.livingCertificate.livingCertificateForm')->with(compact('studentData','studentPreviousSchoolData'));
         }catch (\Exception $e){
             $data = [
                 'action' => 'student Living Certificate form',
