@@ -81,7 +81,7 @@
                 ->select('users.id as id')
                 ->where('division_subjects.division_id','=',$id)
                 ->where('division_subjects.subject_id','=',$subject)
-                ->where('users.id_displayed',1)
+                ->where('users.is_displayed',1)
                 ->distinct()
                 ->get();
             $dummy=array();

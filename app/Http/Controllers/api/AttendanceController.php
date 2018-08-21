@@ -297,6 +297,14 @@ class AttendanceController extends Controller
                                 $status=200;
                                 $messag="Attendance edited successfully !";
                             }
+                            $attendanceStatus['division_id'] = $role['id'];
+                            $attendanceStatus['date'] = $data['date'];
+                            $attendanceStatus['status'] = 1;
+                            $attendanceStatus['created_at'] = Carbon::now();
+                            $attendanceStatus['updated_at'] = Carbon::now();
+                            $a=AttendanceStatus::insert($attendanceStatus);
+                            $title="Attendance";
+                            $message="Attendance edited successfully !";
                         }
                 }else{
                   $attendanceStatus['division_id'] = $role['id'];

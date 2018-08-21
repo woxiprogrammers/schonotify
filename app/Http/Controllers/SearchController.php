@@ -26,8 +26,10 @@ class SearchController extends Controller
     }
     public function searchUsers()
     {
-        $roles=UserRoles::all();
-        return view('admin.searchUsers')->with('userRoles',$roles);
+        $userRoles = UserRoles::all();
+        $user = Auth::user();
+        $batches = Batch::where('body_id',$user->body_id)->get();
+        return view('admin.searchUsers')->with(compact('userRoles','batches'));
     }
     public function Studentfilter(Request $request)
     {
@@ -182,6 +184,7 @@ class SearchController extends Controller
         $str.="<thead><tr>";
         if($role_id == 3)
         {
+            $str.="<th>Shuffle</th>";
             $str.="<th>Result</th>";
             $str.="<th>GRN No.</th>";
         }
@@ -205,13 +208,15 @@ class SearchController extends Controller
                 if($row->user_role=='student')
                 {
                     if($row->is_lc_generated==0){
+                        $str.="<tr><td>"."<input type='checkbox' id='multiple_shuffle' name = 'shuffle_student[$row->id]' class='multiple_shuffle' value='".$row->id."'>"."</td>";
                         if($row->hide_result == 1){
-                            $str.="<tr><td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'checked>"."</td>";
+                            $str.="<td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'checked>"."</td>";
                         }else{
-                            $str.="<tr><td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'>"."</td>";
+                            $str.="<td>"."<input type='checkbox' class='result_status' onchange='return result(this)' value='".$row->id."'>"."</td>";
                         }
                     }else{
                         $str.="<tr><td></td>";
+                        $str.="<td></td>";
                     }
                     $str.="<td>".$row->rollno."</td>";
                 }else{

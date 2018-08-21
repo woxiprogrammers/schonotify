@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\Inspire::class,
         \App\Console\Commands\FeesPushNotification::class,
+        \App\Console\Commands\FeeTransaction::class,
     ];
     /**
      * Define the application's command schedule.
