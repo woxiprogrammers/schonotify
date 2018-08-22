@@ -145,7 +145,6 @@
                     $('#div-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
-                    getListing();
                     var str='<option value="">Please select division</option>';
                     for(var i=0; i<res.length; i++)
                     {
