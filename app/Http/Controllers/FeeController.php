@@ -428,7 +428,7 @@ class FeeController extends Controller
                 $iterator = 0;
                 $students[$jIterator]['total'] = 0;
                 foreach ($studentFee as $key => $fee_id){
-                    $installment_info = FeeInstallments::where('fee_id',$fee_id['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
+                    $installment_info = FeeInstallments::where('fee_id',$fee_id['fee_id'])->select('fee_id','installment_id','particulars_id','amount')->get()->toarray();
                     $installments = array();
                     if(!empty($installment_info)){
                         foreach($installment_info as $installment){
