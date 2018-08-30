@@ -413,35 +413,22 @@ class FeeController extends Controller
     }
     public function showFeeTransactionListing(Request $request){
         try{
-            $user = Auth::user();
-            $userIds = User::join('user_roles','user_roles.id','=','users.role_id')
-                ->where('users.body_id',$user['body_id'])
-                ->where('user_roles.slug','student')
-                ->lists('users.id');
-            if($request->has('class_id') && $request->class_id != -1 && $request->class_id != '' && $request->class_id != null){
-                $userIds = User::join('divisions','users.division_id','=','divisions.id')
-                    ->join('classes','classes.id','=','divisions.class_id')
-                    ->whereIn('users.id',$userIds)
-                    ->where('classes.id',$request->class_id)
-                    ->lists('users.id');
-            }
-
-            if($request->has('div_id') && $request->div_id != -1 && $request->div_id != '' && $request->div_id != null){
-                $userIds = User::whereIn('id',$userIds)->where('division_id', $request->div_id)->lists('id');
-            }
+            $userIds = User::where('division_id',$request->div_id)->lists('id');
+            $studentsAssignFeeStructure = StudentFee::whereIn('student_id',$userIds)->lists('student_id');
             $students = User::join('students_extra_info', 'users.id','=','students_extra_info.student_id')
                 ->join('transaction_details','transaction_details.student_id','=','users.id')
                 ->join('fees','fees.id','=','transaction_details.fee_id')
-                ->whereIn('users.id', $userIds)
+                ->whereIn('users.id', $studentsAssignFeeStructure)
+                ->where('users.is_active',1)
                 ->select('transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id','transaction_details.installment_id as Installment','transaction_details.id as amount_id')
                 ->get()->toArray();
             $jIterator = 0;
             foreach ($students as $studentId){
-                $studentFee=StudentFee::where('student_id',$studentId['id'])->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+                $studentFee = StudentFee::where('student_id',$studentId['id'])->where('fee_id',$studentId['fee_id'])->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
                 $iterator = 0;
                 $students[$jIterator]['total'] = 0;
-                foreach ($studentFee as $key=>$fee_id){
-                    $installment_info = FeeInstallments::where('fee_id',$fee_id['fee_id'])->select('installment_id','particulars_id','amount')->get()->toarray();
+                foreach ($studentFee as $key => $fee_id){
+                    $installment_info = FeeInstallments::where('fee_id',$fee_id['fee_id'])->select('fee_id','installment_id','particulars_id','amount')->get()->toarray();
                     $installments = array();
                     if(!empty($installment_info)){
                         foreach($installment_info as $installment){
