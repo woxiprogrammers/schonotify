@@ -40,6 +40,8 @@
                             <br>
                             <br><br>
                         </div>
+                        <div class="col-md-3" id="EnableDisableTeacher">
+                        </div>
                         <div class="col-md-2" id="UserSearch">
                         </div>
                         <div class="col-md-2" id="ClassSearch">

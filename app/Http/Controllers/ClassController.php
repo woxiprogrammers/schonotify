@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use \Illuminate\Support\Facades\Session;
 class ClassController extends Controller
@@ -133,6 +134,17 @@ class ClassController extends Controller
             return 'false';
         }else{
             return 'true';
+        }
+    }
+    public function enableDisableTeacher(){
+        try{
+            return view('enableDisableTeacher');
+        }catch(\Exception $e){
+            $data = [
+                'action' => 'successfully listed',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
         }
     }
 }

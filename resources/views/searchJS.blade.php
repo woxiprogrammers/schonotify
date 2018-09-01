@@ -65,6 +65,7 @@
             $('#Student_without_division').show(1000);
             $('#ClassSearch').show(1000);
             $('#DivisionBlock').show(1000);
+            $('#EnableDisableTeacher').hide(1000);
             var route1='/search-batch';
             $.get(route1,function(res){
                 $('#UserSearch').html(res);
@@ -72,11 +73,19 @@
             });
         }
         else
-        {   $('div#loadmoreajaxloader').hide();
+        {
+            $('div#loadmoreajaxloader').hide();
             $('#UserSearch').hide(1000);
             $('#Student_without_division').hide(1000);
             $('#ClassSearch').hide(1000);
             $('#DivisionBlock').hide(1000);
+            $('#EnableDisableSearch').hide(1000);
+            $('#shuffle_row').hide(1000);
+            var route2='/enable-disable-teacher';
+            $.get(route2,function(res){
+                $('#EnableDisableTeacher').html(res);
+                $('div#loadmoreajaxloader').hide();
+            });
         }
         tabUserSelect(par);
     });
