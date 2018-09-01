@@ -294,7 +294,7 @@ class SearchController extends Controller
                       ->get()->toArray();
           }else{
           $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-              ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
+              ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.is_displayed')
               ->where('users.body_id','=',$user->body_id)
               ->where('users.role_id','=',$role_id)
               ->where('users.id','!=',$user->id)
@@ -314,7 +314,7 @@ class SearchController extends Controller
                       ->get();
               }else{
                   $result= User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                      ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active')
+                      ->select('users.id','users.username as user_name','users.first_name as firstname','users.last_name as lastname','users.gender as gender','users.email','user_roles.slug as user_role','users.roll_number as rollno','users.parent_id as parent_id','users.is_active','users.is_displayed')
                       ->where('users.body_id','=',$user->body_id)
                       ->where('users.role_id','!=',1)
                       ->where('users.role_id','=',$role_id)
@@ -344,6 +344,7 @@ class SearchController extends Controller
               if($user->role_id == 1)
               {
                   $str.="<th>Status</th>";
+                  $str.="<th>Delete Teacher</th>";
               }
               $str.="<th>Action</th>";
               $str.="</tr></thead><tbody>";
@@ -390,6 +391,15 @@ class SearchController extends Controller
                       }else{
                           $a_id=$row['id'];
                           $str.="<input type='checkbox' class='js-switch' onchange='return statusUser(this.checked,$a_id)' id='status$a_id' value='$a_id'/>";
+                      }
+                      $str.="</td>";
+                      $str.="<td>";
+                      if($row['is_displayed'] == 1)
+                      {   $a_id=$row['id'];
+                          $str.="<input type='checkbox' class='js-switch' onchange='return statusUserIsDisplayed(this.checked,$a_id)' id='status$a_id' value='$a_id' checked/>";
+                      }else{
+                          $a_id=$row['id'];
+                          $str.="<input type='checkbox' class='js-switch' onchange='return statusUserIsDisplayed(this.checked,$a_id)' id='status$a_id' value='$a_id'/>";
                       }
                       $str.="</td>";
                   }

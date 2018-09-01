@@ -45,7 +45,6 @@
 
                 <div class="container-fluid container-fullw bg-white">
                     <div class="row">
-
                         <div class="col-md-12" id="tableContent2">
 
                             <table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>
