@@ -21,6 +21,7 @@
                 data: { Division,EnableDisable }
             })
                 .done(function(res){
+                    $("#tableContent").show();
                     $("#tableContent").html(res);
                     $("#shuffle_row").show();
                     $('div#loadmoreajaxloader').hide();

@@ -10,7 +10,7 @@
     <label class="control-label">
         User Status select
     </label>
-    <select class="form-control" id="enabledisable" name="enabledisable" style="-webkit-appearance: menulist;">
+    <select class="form-control" id="enabledisableTeacher" name="enabledisableTeacher" style="-webkit-appearance: menulist;">
         <option value="">Please select</option>
         <option value="enable">Enable</option>
         <option value="disable">Disable</option>
@@ -18,16 +18,18 @@
 </div>
 <script>
     $(document).ready(function(){
-        $('#enabledisable').change(function(){
+        var id = $('#role-select').val();
+        $('#enabledisableTeacher').change(function(){
             $('div#loadmoreajaxloader').show();
-            var EnableDisable = $('#enabledisable').val();
-            var route='studentSearch';
+            var EnableDisable = $('#enabledisableTeacher').val();
+            var route='/selectUser'+'/'+id;
             $.ajax({
                 method: "get",
                 url: route,
-                data: { EnableDisable }
+                data: { EnableDisable,id}
             })
                 .done(function(res){
+                    $('#tableContent').show();
                     $("#tableContent").html(res);
                     $('div#loadmoreajaxloader').hide();
                     var switcheryHandler = function() {
