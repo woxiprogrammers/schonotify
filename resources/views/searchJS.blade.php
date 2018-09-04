@@ -28,7 +28,12 @@
         var id=$('#role-select').val();
         if(id!="")
         {
-            tabUserSelect(id);
+            $('#EnableDisableTeacher').show();
+            var route2='/enable-disable-teacher';
+            $.get(route2,function(res){
+                $('#EnableDisableTeacher').html(res);
+                $('div#loadmoreajaxloader').hide();
+            });
         }
         $('option#4').hide();
         Main.init();
@@ -61,10 +66,13 @@
         var par=this.value;
         if(par == 3)
         {
+            $('#tableContent').hide();
             $('#UserSearch').show(1000);
             $('#Student_without_division').show(1000);
             $('#ClassSearch').show(1000);
+            $('#EnableDisableSearch').show(1000);
             $('#DivisionBlock').show(1000);
+            $('#EnableDisableTeacher').hide(1000);
             var route1='/search-batch';
             $.get(route1,function(res){
                 $('#UserSearch').html(res);
@@ -72,29 +80,21 @@
             });
         }
         else
-        {   $('div#loadmoreajaxloader').hide();
+        {
+            $('#tableContent').hide();
+            $('div#loadmoreajaxloader').hide();
             $('#UserSearch').hide(1000);
             $('#Student_without_division').hide(1000);
             $('#ClassSearch').hide(1000);
             $('#DivisionBlock').hide(1000);
+            $('#EnableDisableSearch').hide(1000);
+            $('#shuffle_row').hide(1000);
+            $('#EnableDisableTeacher').show(1000);
+            var route2='/enable-disable-teacher';
+            $.get(route2,function(res){
+                $('#EnableDisableTeacher').html(res);
+                $('div#loadmoreajaxloader').hide();
+            });
         }
-        tabUserSelect(par);
     });
-   function tabUserSelect(par)
-    {
-        $('div#loadmoreajaxloader').show();
-        var route='/selectUser'+'/'+par;
-         $.get(route,function(res){
-            $("#tableContent").html(res);
-             $('div#loadmoreajaxloader').hide();
-            var switcheryHandler = function() {
-            var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-                elements.forEach(function(html) {
-                    var switchery = new Switchery(html);
-                });
-            };
-            switcheryHandler();
-            TableData.init();
-        });
-    }
 </script>

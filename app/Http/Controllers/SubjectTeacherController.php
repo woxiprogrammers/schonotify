@@ -38,6 +38,7 @@
                     ->join('users','users.id','=','division_subjects.teacher_id')
                     ->join('subjects','subjects.id','=','division_subjects.subject_id')
                     ->where('users.body_id','=',$user->body_id)
+                    ->where('users.is_active',1)
                     ->select('subjects.subject_name as subject','batches.name as batch','classes.class_name as class','divisions.division_name as division','users.first_name as teacherFirstName','users.last_name as teacherLastName','users.username as teacherUsername','division_subjects.id as id')
                     ->get();
                 return view('subjectTeacher')->with(compact('subjects','associations'));

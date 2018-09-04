@@ -123,9 +123,7 @@
                                         <td>{!! $association->division !!}</td>
                                         <td>{!! $association->subject !!}</td>
                                         <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
-
                                     </tr>
-
                                 @endforeach
                                 </tbody>
 

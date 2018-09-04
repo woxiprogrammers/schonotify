@@ -373,6 +373,8 @@
 
     Route::get('search-batch','ClassController@SearchBatch');
 
+    Route::get('enable-disable-teacher',array('uses' => 'ClassController@enableDisableTeacher'));
+
     Route::post('division-create','ClassController@saveDivision');
 
     Route::get('check-div/{clsDiv}','ClassController@checkDivision');
