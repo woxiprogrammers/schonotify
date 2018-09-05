@@ -1918,6 +1918,12 @@ class UsersController extends Controller
             $data = array();
             $data['is_displayed'] = 0;
             $data['is_active'] = 0;
+            $teacherDelete = User::where('id',$id)->first();
+            $data1 = array();
+            if($teacherDelete['role_id'] == 2){
+                $data1['class_teacher_id'] = 0;
+                Division::where('class_teacher_id',$id)->update($data1);
+            }
             $query = User::where('id',$id)->update($data);
             if($query){
                 $status = 200;
