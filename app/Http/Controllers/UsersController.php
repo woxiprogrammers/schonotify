@@ -1877,7 +1877,7 @@ class UsersController extends Controller
         }
     }
     public function checkRollNumber(Request $request){
-        $users = User::where('roll_number',$request->roll_number)->where('division_id',$request->division)->select('first_name','last_name','id')->get();
+        $users = User::where('roll_number',$request->roll_number)->where('division_id',$request->division)->where('body_id',3)->whereNotNull('division_id')->where('is_active',1)->select('roll_number','first_name','last_name','id','division_id')->get();
         $userinfo = $users->toArray();
         if($users){
             return $userinfo;
