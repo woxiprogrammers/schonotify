@@ -19,7 +19,6 @@
 							<div class="row">
 								<div class="col-sm-7">
 									<h1 class="mainTitle">Dashboard</h1>
-									<span class="mainDescription">overview &amp; stats </span>
 								</div>
 
 							</div>
@@ -27,6 +26,143 @@
                         <div id="message-error-div"></div>
 						<!-- end: DASHBOARD TITLE -->
 						<!-- start: FEATURED BOX LINKS -->
+						<?php $user = \Illuminate\Support\Facades\Auth::user() ?>
+						@if($user->role_id == 1)
+						<div class="container-fluid container-fullw bg-white">
+							<div class="row">
+								<div class="col-md-6">
+									<p style="text-align: right">
+										<i>Last 15 days Records</i>
+									</p>
+									<div class="tabbable">
+										<ul id="myTab4" class="nav nav-tabs tab-padding tab-space-3 tab-blue">
+											<li class="active">
+												<a href="#panel_tab3_example1" data-toggle="tab">
+													Achievements
+												</a>
+											</li>
+											<li class="">
+												<a href="#panel_tab3_example2" data-toggle="tab">
+													Announcement
+												</a>
+											</li>
+											<li class="">
+												<a href="#panel_tab3_example3" data-toggle="tab">
+													Events
+												</a>
+											</li>
+										</ul>
+										<div class="tab-content">
+											<div class="tab-pane active" id="panel_tab3_example1">
+												<div class="card">
+													<div class="card-body" style="height: 300px;overflow-y: scroll;" >
+													@if($achievementsData != "" && $achievementsData != null)
+													@foreach($achievementsData as $key => $achievement)
+                                                        <?php $createdBy = \App\User::where('id',$achievement['created_by'])->select('first_name','last_name')->first();
+                                                        $publishedBy = \App\User::where('id',$achievement['published_by'])->select('first_name','last_name')->first();?>
+															<div class="row" style="border-bottom: 1px solid #b2b2b2; padding: 10px;background-color: #fefefe;">
+																<div class="col-md-12" style="text-align: right; color: lightcoral"><i>{!! date('dS M Y',strtotime($achievement['created_at'])) !!}</i></div>
+																<div class="col-md-12"><i>Title : </i> <span style="color: #000000">{{$achievement['title']}}</span></div>
+																<div class="col-md-12"><i>Details : </i> {{$achievement['detail']}}</div>
+																<div class="col-md-12"><i>Created By : </i><span style="color: #007AFF">{{$createdBy['first_name'] ." ".$createdBy['last_name']}}</span> </div>
+																<div class="col-md-12"><i>Published By : </i><span style="color: #007AFF">{{$publishedBy['first_name'] ." ".$publishedBy['last_name']}}</span></div>
+															</div>
+													@endforeach
+													@else
+														<p style="text-align: center">No! data found</p>
+													@endif
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane" id="panel_tab3_example2">
+												<div class="card">
+													<div class="card-body" style="height: 300px;overflow-y: scroll">
+														@if($announcementData != "" && $announcementData != null)
+														@foreach($announcementData as $key => $announcement)
+                                                            <?php $createdBy = \App\User::where('id',$announcement['created_by'])->select('first_name','last_name')->first();
+                                                            $publishedBy = \App\User::where('id',$announcement['published_by'])->select('first_name','last_name')->first();?>
+																<div class="row" style="border-bottom: 1px solid #b2b2b2; padding: 10px;background-color: #fefefe;">
+																	<div class="col-md-12" style="text-align: right; color: lightcoral"><i>{!! date('dS M Y',strtotime($announcement['created_at'])) !!}</i></div>
+																	<div class="col-md-12"><i>Title : </i> <span style="color: #000000">{{$announcement['title']}}</span></div>
+																	<div class="col-md-12"><i>Details : </i> {{$announcement['detail']}}</div>
+																	<div class="col-md-12"><i>Created By : </i><span style="color: #007AFF">{{$createdBy['first_name'] ." ".$createdBy['last_name']}}</span> </div>
+																	<div class="col-md-12"><i>Published By : </i><span style="color: #007AFF">{{$publishedBy['first_name'] ." ".$publishedBy['last_name']}}</span></div>
+																</div>
+														@endforeach
+														@else
+															<p style="text-align: center">No! data found</p>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane" id="panel_tab3_example3">
+												<div class="card">
+													<div class="card-body" style="height: 300px;overflow-y: scroll;" >
+														@if($eventData != "" && $eventData != null)
+														@foreach($eventData as $key => $event)
+															<?php $createdBy = \App\User::where('id',$event['created_by'])->select('first_name','last_name')->first();
+                                                                  $publishedBy = \App\User::where('id',$event['published_by'])->select('first_name','last_name')->first();?>
+														<div class="row" style="border-bottom: 1px solid #b2b2b2; padding: 10px;background-color: #fefefe;">
+															<div class="col-md-12" style="text-align: right; color: lightcoral"><i>{!! date('dS M Y',strtotime($event['created_at'])) !!}</i></div>
+															<div class="col-md-12"><i>Title : </i> <span style="color: #000000">{{$event['title']}}</span></div>
+															<div class="col-md-12"><i>Details : </i> {{$event['detail']}}</div>
+															<div class="col-md-12"><i>Created By : </i><span style="color: #007AFF">{{$createdBy['first_name'] ." ".$createdBy['last_name']}}</span> </div>
+															<div class="col-md-12"><i>Published By : </i><span style="color: #007AFF">{{$publishedBy['first_name'] ." ".$publishedBy['last_name']}}</span></div>
+														</div>
+														@endforeach
+														@else
+															<p style="text-align: center">No! data found</p>
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 bg-white" >
+									<div class="row">
+										<div class="col-md-6">
+											<p style="color: #333333;font-size: 26px;">
+												Recent Homework
+											</p>
+										</div>
+										<div class="col-md-6">
+											<p style="text-align: right">
+												<i>Last 2 days Records</i>
+											</p>
+										</div>
+									</div>
+									<div style="overflow-y: scroll; height: 350px">
+										<div class="card" style="background-color: #fffead">
+											@if($homeworkData != "" && $homeworkData != null)
+											@foreach($homeworkData as $data)
+											<div class="card-body" style="border-bottom: 1px solid #a2a2a2; padding: 10px">
+												<div class="row">
+													<div class="col-md-4"><i>Class : </i><span style="color: #007AFF">{{$data['class_name']}} </span> </div>
+													<div class="col-md-4"><i>Div : </i><span style="color: #007AFF">{{$data['division_name']}}</span></div>
+													<div class="col-md-4"><i style="color: lightcoral">{!! date('dS M Y',strtotime($data['created_at'])) !!}</i></div>
+												</div>
+												<div class="row" >
+													<div class="col-md-12"><i>Title : </i><span style="color: #000000">{{$data['title']}}</span></div>
+												</div>
+												<div class="row" >
+													<div class="col-md-12"><i>Details : </i><span style="color: #555555">{{$data['description']}}</span></div>
+												</div>
+												<div class="row" >
+													<div class="col-md-12"><i>Created By : </i><span style="color: #007AFF">{{$data['first_name'] . " ".$data['last_name'] }}</span></div>
+												</div>
+											</div>
+											@endforeach
+											@else
+												<p style="text-align: center">No! data found</p>
+											@endif
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						@endif
 						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
 								<div class="col-sm-4">
