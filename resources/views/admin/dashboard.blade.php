@@ -19,7 +19,6 @@
 							<div class="row">
 								<div class="col-sm-7">
 									<h1 class="mainTitle">Dashboard</h1>
-									{{--<span class="mainDescription">overview &amp; stats </span>--}}
 								</div>
 
 							</div>
