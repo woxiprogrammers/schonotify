@@ -56,14 +56,12 @@ class FrontController extends Controller
                                     ->select('homeworks.title','homeworks.description','homework_types.title as homework_type','divisions.division_name','classes.class_name','homeworks.created_at','users.first_name','users.last_name')
                                     ->orderBy('homeworks.created_at','desc')->get()->toArray();
             //Events
-            $EventDate = new Carbon();
-            $EventDate->subDays(15);
             $achievementsId = EventTypes::where('slug','achievement')->pluck('id');
             $announcementId = EventTypes::where('slug','announcement')->pluck('id');
             $eventId = EventTypes::where('slug','event')->pluck('id');
-            $achievementsData = Event::where('event_type_id',$achievementsId)->where('created_at', '>=', $EventDate->toDateTimeString())->orderBy('created_at','desc')->get()->toArray();
-            $announcementData = Event::where('event_type_id',$announcementId)->where('created_at', '>=', $EventDate->toDateTimeString())->orderBy('created_at','desc')->get()->toArray();
-            $eventData = Event::where('event_type_id',$eventId)->where('created_at', '>=', $EventDate->toDateTimeString())->orderBy('created_at','desc')->get()->toArray();
+            $achievementsData = Event::where('event_type_id',$achievementsId)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
+            $announcementData = Event::where('event_type_id',$announcementId)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
+            $eventData = Event::where('event_type_id',$eventId)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
             $unreadMsgCount = Message::where('to_id',$userId)->where('read_status',0)->count();
             Session::put('functionArr',$resultArr);
             return view('admin.dashboard', compact('unreadMsgCount','homeworkData','achievementsData','announcementData','eventData'));

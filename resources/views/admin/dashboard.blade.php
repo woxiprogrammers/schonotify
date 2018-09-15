@@ -32,7 +32,7 @@
 							<div class="row">
 								<div class="col-md-6">
 									<p style="text-align: right">
-										<i>Last 15 days Records</i>
+										<i>Last 15 Records</i>
 									</p>
 									<div class="tabbable">
 										<ul id="myTab4" class="nav nav-tabs tab-padding tab-space-3 tab-blue">
@@ -69,7 +69,7 @@
 															</div>
 													@endforeach
 													@else
-														<p style="text-align: center">No! data found</p>
+														<p style="text-align: center">No data found</p>
 													@endif
 													</div>
 												</div>
@@ -90,7 +90,7 @@
 																</div>
 														@endforeach
 														@else
-															<p style="text-align: center">No! data found</p>
+															<p style="text-align: center">No data found</p>
 														@endif
 													</div>
 												</div>
@@ -111,7 +111,7 @@
 														</div>
 														@endforeach
 														@else
-															<p style="text-align: center">No! data found</p>
+															<p style="text-align: center">No data found</p>
 														@endif
 													</div>
 												</div>
@@ -154,7 +154,7 @@
 											</div>
 											@endforeach
 											@else
-												<p style="text-align: center">No! data found</p>
+												<p style="text-align: center">No data found</p>
 											@endif
 										</div>
 									</div>
