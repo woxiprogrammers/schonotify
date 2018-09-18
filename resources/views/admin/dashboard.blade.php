@@ -26,8 +26,34 @@
                         <div id="message-error-div"></div>
 						<!-- end: DASHBOARD TITLE -->
 						<!-- start: FEATURED BOX LINKS -->
-						<?php $user = \Illuminate\Support\Facades\Auth::user() ?>
+
+						<?php $user = \Illuminate\Support\Facades\Auth::user();
+						$graphDataPresent = array();
+						$graphDataAbsent = array();
+                        for($count = 0; $count < 8 ;$count++){
+                            $date = \Carbon\Carbon::now();
+                            $presentDate = $date->subDays($count);
+                            $studentSlugID= \App\UserRoles::where('slug','student')->pluck('id');
+							$presentStudent = \App\Attendance::where('date', '=',date('y/m/d',strtotime($presentDate)))->lists('student_id');
+							$absentStudents = \App\User::whereNotIn('id',$presentStudent)->where('is_active',1)->where('role_id',$studentSlugID)->where('body_id',$user->body_id)->count();
+                            $graphDataPresent[$count] = array(
+							    "label" => date('d M Y',strtotime($presentDate)),
+								"y" => count($presentStudent),
+							);
+                            $graphDataAbsent[$count] = array(
+                             "label" => date('d M y',strtotime($presentDate)),
+							 "y" => $absentStudents
+							);
+                        }
+                       ?>
 						@if($user->role_id == 1)
+                            <div class="container-fluid container-fullw bg-white">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
 						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
 								<div class="col-md-6">
@@ -223,6 +249,56 @@
 					</div>
 				</div>
 			</div>
+            <script>
+                window.onload = function () {
+
+                    var chart = new CanvasJS.Chart("chartContainer", {
+                        title: {
+                            text: "Attendance Reports"
+                        },
+                        theme: "light2",
+                        animationEnabled: true,
+                        toolTip:{
+                            shared: true,
+                            reversed: true
+                        },
+                        legend: {
+                            cursor: "pointer",
+                            itemclick: toggleDataSeries
+                        },
+                        data: [
+                            {
+                                type: "stackedColumn",
+                                name: "Present",
+								color :"#18c272",
+                                showInLegend: true,
+                                yValueFormatString: "#,##0",
+                                dataPoints: <?php echo json_encode($graphDataPresent, JSON_NUMERIC_CHECK); ?>
+                            },{
+                                type: "stackedColumn",
+                                name: "Absent",
+                                color :"#ff9c99",
+                                showInLegend: true,
+                                yValueFormatString: "#,##0",
+                                dataPoints: <?php echo json_encode($graphDataAbsent, JSON_NUMERIC_CHECK); ?>
+                            },
+                        ]
+                    });
+
+                    chart.render();
+
+                    function toggleDataSeries(e) {
+                        if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                            e.dataSeries.visible = false;
+                        } else {
+                            e.dataSeries.visible = true;
+                        }
+                        e.chart.render();
+                    }
+
+                }
+            </script>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 			<!-- start: FOOTER -->
 			@include('footer')
 			<!-- end: FOOTER -->

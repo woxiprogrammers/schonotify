@@ -492,8 +492,9 @@ class HomeworkController extends Controller
                         $title="Homework";
                         $message="New Homework Created";
                         $allUser=0;
-                        $users_push=EventUserRoles::where('event_id',$eventId)->lists('user_id');
-                        $push_users=PushToken::whereIn('user_id',$users_push)->lists('push_token');
+                        $homeWork_push_users = HomeworkTeacher::where('homework_id',$id)->lists('student_id');
+                        $push_user = User::whereIn('id',$homeWork_push_users)->lists('parent_id');
+                        $push_users=PushToken::whereIn('user_id',$push_user)->lists('push_token');
                         $this->CreatePushNotification($title,$message,$allUser,$push_users);
                         return Redirect::to('/homework-listing');
                     }
