@@ -281,13 +281,7 @@
                                 showInLegend: true,
                                 yValueFormatString: "#,##0",
                                 dataPoints: <?php echo json_encode($graphDataAbsent, JSON_NUMERIC_CHECK); ?>
-                            },{
-                                type: "stackedColumn",
-                                name: "Total",
-                                color :"#ff9c99",
-                                showInLegend: true,
-                                yValueFormatString: "#,##0",
-							}
+                            },
                         ]
                     });
 
