@@ -34,15 +34,15 @@
                             $date = \Carbon\Carbon::now();
                             $presentDate = $date->subDays($count);
                             $studentSlugID= \App\UserRoles::where('slug','student')->pluck('id');
-							$presentStudent = \App\Attendance::where('date', '=',date('y/m/d',strtotime($presentDate)))->lists('student_id');
-							$absentStudents = \App\User::whereNotIn('id',$presentStudent)->where('is_active',1)->where('role_id',$studentSlugID)->where('body_id',$user->body_id)->count();
+                            $totalStudents = \App\User::where('is_active',1)->where('role_id',$studentSlugID)->where('is_lc_generated',0)->where('body_id',$user->body_id)->lists('id');
+                            $presentStudent = \App\Attendance::whereIn('student_id',$totalStudents)->where('date', '=',date('y/m/d',strtotime($presentDate)))->count();
                             $graphDataPresent[$count] = array(
-							    "label" => date('d M Y',strtotime($presentDate)),
-								"y" => count($presentStudent),
+							    "label" => date('d M Y, D',strtotime($presentDate)),
+								"y" => $presentStudent,
 							);
                             $graphDataAbsent[$count] = array(
-                             "label" => date('d M y',strtotime($presentDate)),
-							 "y" => $absentStudents
+                             "label" => date('d M y, D',strtotime($presentDate)),
+							 "y" => (count($totalStudents) - $presentStudent)
 							);
                         }
                        ?>
