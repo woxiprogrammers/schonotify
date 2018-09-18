@@ -51,7 +51,7 @@ class FrontController extends Controller
                                     ->join('classes','classes.id','=','divisions.class_id')
                                     ->join('users','users.id','=','homework_teacher.teacher_id')
                                     ->where('homeworks.is_active',1)
-                                    ->where('users.body_id',$userId)
+                                    ->where('users.body_id',$userId->body_id)
                                     ->where('homeworks.created_at', '>=', $date->toDateTimeString())
                                     ->distinct('homeworks.id')
                                     ->select('homeworks.title','homeworks.description','homework_types.title as homework_type','divisions.division_name','classes.class_name','homeworks.created_at','users.first_name','users.last_name')
