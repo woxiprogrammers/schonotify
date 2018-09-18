@@ -41,7 +41,7 @@ class FrontController extends Controller
             foreach($userInfo as $user) {
                 array_push($resultArr,$user->acl.'_'.$user->module_slug);
             }
-            $userId = Auth::user()->id;
+            $userId = Auth::user();
             $date = new Carbon();
             $date->subDays(2);
             //homework
@@ -51,6 +51,7 @@ class FrontController extends Controller
                                     ->join('classes','classes.id','=','divisions.class_id')
                                     ->join('users','users.id','=','homework_teacher.teacher_id')
                                     ->where('homeworks.is_active',1)
+                                    ->where('users.body_id',$userId)
                                     ->where('homeworks.created_at', '>=', $date->toDateTimeString())
                                     ->distinct('homeworks.id')
                                     ->select('homeworks.title','homeworks.description','homework_types.title as homework_type','divisions.division_name','classes.class_name','homeworks.created_at','users.first_name','users.last_name')
@@ -59,10 +60,10 @@ class FrontController extends Controller
             $achievementsId = EventTypes::where('slug','achievement')->pluck('id');
             $announcementId = EventTypes::where('slug','announcement')->pluck('id');
             $eventId = EventTypes::where('slug','event')->pluck('id');
-            $achievementsData = Event::where('event_type_id',$achievementsId)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
-            $announcementData = Event::where('event_type_id',$announcementId)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
-            $eventData = Event::where('event_type_id',$eventId)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
-            $unreadMsgCount = Message::where('to_id',$userId)->where('read_status',0)->count();
+            $achievementsData = Event::where('event_type_id',$achievementsId)->where('body_id',$userId->body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
+            $announcementData = Event::where('event_type_id',$announcementId)->where('body_id',$userId->body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
+            $eventData = Event::where('event_type_id',$eventId)->where('body_id',$userId->body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
+            $unreadMsgCount = Message::where('to_id',$userId->id)->where('read_status',0)->count();
             Session::put('functionArr',$resultArr);
             return view('admin.dashboard', compact('unreadMsgCount','homeworkData','achievementsData','announcementData','eventData'));
 
