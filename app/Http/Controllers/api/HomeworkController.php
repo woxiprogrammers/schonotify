@@ -412,8 +412,8 @@ class HomeworkController extends Controller
                 \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
             }
             $extension = ($request->image->getClientOriginalExtension());
-            $tempImageName = (strtotime($mytime));
-            $tempImagePath = "uploads/homeworks/".$extension;
+            $tempImageName = (strtotime($mytime)).".$extension";
+            $tempImagePath = "uploads/homeworks/";
             file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image));
             $data['status'] = 0;//by default homework will be 0 for draft
             $data['is_active'] = 1;//0 is for delete  so by default Homework is not deleted
