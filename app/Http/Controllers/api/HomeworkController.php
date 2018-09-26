@@ -393,8 +393,7 @@ class HomeworkController extends Controller
     * Developed By: Amol Rokade
     *Date: 1/2/2016
      */
-    public function createHomework(Requests\HomeworkRequest $request)
-    {
+    public function createHomework(Requests\HomeworkRequest $request){
         try{
             $data=array();
             $HomeworkTeacher=array();
@@ -412,9 +411,10 @@ class HomeworkController extends Controller
             if (!file_exists('uploads/homeworks/')) {
                 \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
             }
-            $tempImageName = (strtotime($mytime)).".jpg";
-            $tempImagePath = "uploads/homeworks/";
-            file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image) );
+            $extension = ($request->image->getClientOriginalExtension());
+            $tempImageName = (strtotime($mytime));
+            $tempImagePath = "uploads/homeworks/".$extension;
+            file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image));
             $data['status'] = 0;//by default homework will be 0 for draft
             $data['is_active'] = 1;//0 is for delete  so by default Homework is not deleted
             $data['created_at'] = Carbon::now();
@@ -438,7 +438,7 @@ class HomeworkController extends Controller
             }
         }catch (\Exception $e) {
           $status = 500;
-          $message = "Something went wrong";
+          $message = "Something went wrong" . $e->getMessage();
         }
         $response = [
             "status" =>$status,
