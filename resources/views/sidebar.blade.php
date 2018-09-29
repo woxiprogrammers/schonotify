@@ -482,6 +482,18 @@
                 </li>
             </ul>
         </li>
+        <li>
+            <a href="/cms/manage">
+                <div class="item-content">
+                    <div class="item-media">
+                        <i class="fa fa-file-excel-o"></i>
+                    </div>
+                    <div class="item-inner">
+                        <span class="title">Web CMS Admin</span><i class="fa-portrait"></i>
+                    </div>
+                </div>
+            </a>
+        </li>
     @endif
 </ul>
 </nav>
