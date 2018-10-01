@@ -952,6 +952,7 @@
                         $classDivision[$count]['class_name'] = $row['class_name'];
                         $divisionData = Division::where('class_id',$row['id'])->select('id','division_name')->get();
                         $countDivision = 0;
+                        $classDivision[$count]['division'] = array();
                         foreach($divisionData as $division) {
                             $classDivision[$count]['division'][$countDivision]['division_id'] = $division['id'];
                             $classDivision[$count]['division'][$countDivision]['division_name'] = $division['division_name'];
@@ -1009,6 +1010,7 @@
                         }
                         $divisionData = array_unique($divisionData, SORT_REGULAR);
                         $countDivision = 0;
+                        $classDivision[$countClass]['division'] = array();
                         foreach($divisionData as $division) {
                             $classDivision[$countClass]['division'][$countDivision]['division_id'] = $division['id'];
                             $classDivision[$countClass]['division'][$countDivision]['division_name'] = $division['division_name'];
@@ -1048,6 +1050,7 @@
                         $divisionData = array_unique($divisionData2, SORT_REGULAR);
                         $countDivision = 0;
                         $i = 0;
+                        $classDivision[$countClass]['division'] = array();
                         foreach($divisionData as $division) {
                             foreach($division as $row) {
                                 $classDivision[$countClass]['division'][$countDivision]['division_id'] = $row['id'];

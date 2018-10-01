@@ -665,4 +665,6 @@ Route::group(['prefix' => 'cms'],function (){
     Route::post('social-links',array('uses' => 'Cms\CmsController@socialMediaLinks'));
     Route::post('contact-us-userForm',array('uses' => 'Cms\CmsController@contactUsForm'));
     Route::get('tabs-Listing',array('uses' => 'Cms\CmsController@tabsSubTabsListing'));
+    Route::get('pages',array('uses' => 'Cms\CmsController@createPages'));
+    Route::post('sub-pages',array('uses' => 'Cms\CmsController@createSubPages'));
 });

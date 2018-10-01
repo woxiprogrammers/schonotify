@@ -114,7 +114,7 @@ class CmsController extends Controller
                 $str.="<td>".'gallery'."</td>";
                 $str.="<td>"."ds"."</td>";
                 $str.="<td>"."ghfghfghf"."</td>";
-                $str.="<td>"."gfd"."</td>";
+                $str.="<td>"."<a href='' >add</a>" ." / ". "<a href=''>remove</a>"."</td>";
                 $str.="</tr>";
             $str.="</tbody></table>";
 
@@ -123,6 +123,29 @@ class CmsController extends Controller
             $data = [
                 'action'=>'folders listed successfully',
                 'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function createPages(){
+        try{
+            return view('cms.pagesCreate');
+        }catch(\Exception $e){
+            $data = [
+                'action'=>'Pages creation',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function createSubPages(Request $request){
+        try{
+            dd($request->all());
+        }catch (\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "Sub pages create form",
+                'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));
         }

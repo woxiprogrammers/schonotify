@@ -431,6 +431,11 @@
                                             <div class="tab-pane" id="tab_6">
                                                 <div class="row">
                                                     <div class="col-md-12">
+                                                        <a href="/cms/pages" class="btn btn-red btn-wide pull-right"> Add </a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
                                                         <div class="form-group" >
                                                             <fieldset>
                                                                 <div id="tabsListing">
@@ -446,7 +451,7 @@
                                                         <div class="row">
                                                             <h4>User Form</h4>
                                                         </div>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="full_name_checked" value="">
                                                             </div>
@@ -455,12 +460,12 @@
                                                                     Full name :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="text" name="full_name" placeholder="please enter full name">
+                                                            <div class="col-md-5">
+                                                                <input type="text" name="full_name" class="form-control" placeholder="please enter full name">
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="contact_no_checked" value="">
                                                             </div>
@@ -469,12 +474,12 @@
                                                                     Contact no :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="number" name="contact_no" placeholder="please enter mobile number">
+                                                            <div class="col-md-5">
+                                                                <input type="number" name="contact_no" class="form-control" placeholder="please enter mobile number">
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="full_email_checked" value="">
                                                             </div>
@@ -483,12 +488,12 @@
                                                                     Contact no :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="email" name="email" placeholder="please enter email address">
+                                                            <div class="col-md-5">
+                                                                <input type="email" name="email" class="form-control" placeholder="please enter email address">
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="subject_checked" value="">
                                                             </div>
@@ -497,12 +502,12 @@
                                                                     Subject :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="text" name="subject" placeholder="please enter subject">
+                                                            <div class="col-md-5">
+                                                                <input type="text" name="subject" class="form-control" placeholder="please enter subject">
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="message_checked" value="">
                                                             </div>
@@ -511,15 +516,15 @@
                                                                     Message :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="text" name="message" placeholder="please enter message">
+                                                            <div class="col-md-5">
+                                                                <input type="text" name="message" class="form-control" placeholder="please enter message">
                                                             </div>
                                                         </div>
                                                         <br>
                                                         <div class="row">
                                                             <h4>Map</h4>
                                                         </div>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="map_checked" value="">
                                                             </div>
@@ -528,15 +533,15 @@
                                                                     Upload embed code :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="text" name="message" placeholder="enter embed code">
+                                                            <div class="col-md-5">
+                                                                <input type="text" name="message" class="form-control" placeholder="enter embed code">
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div class="row">
+                                                        <div class="row ">
                                                             <h4>Contact Us Details</h4>
                                                         </div>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="address_checked" value="">
                                                             </div>
@@ -545,12 +550,12 @@
                                                                     Address :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="text" name="address" value="" placeholder="please enter address">
+                                                            <div class="col-md-5">
+                                                                <input type="text" name="address" class="form-control" value="" placeholder="please enter address">
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="col-md-1">
                                                                 <input type="checkbox" name="contact_display_checked" value="">
                                                             </div>
@@ -559,12 +564,12 @@
                                                                     Contact No :
                                                                 </label>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <input type="number" name="contact_display" value="" placeholder="please enter contact number">
+                                                            <div class="col-md-5">
+                                                                <input type="number" name="contact_display" class="form-control" value="" placeholder="please enter contact number">
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <div class="row">
+                                                        <div class="row form-group">
                                                             <div class="form-group col-md-1">
                                                                 <input type="checkbox" name="email_display_checked" value="">
                                                             </div>
@@ -573,8 +578,8 @@
                                                                     Email Id :
                                                                 </label>
                                                             </div>
-                                                            <div class="form-group col-md-4">
-                                                                <input type="email" class="form-control" name="email_display" value="" placeholder="please enter email">
+                                                            <div class="form-group col-md-5">
+                                                                <input type="email" class="form-control"  name="email_display" value="" placeholder="please enter email">
                                                             </div>
                                                         </div>
                                                     </div>
