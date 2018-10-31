@@ -17,7 +17,7 @@ use Carbon\Carbon;
 use App\PushToken;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use Faker\Provider\DateTime;
-use Faker\Provider\File;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -409,7 +409,7 @@ class HomeworkController extends Controller
             $data['homework_timestamp'] = Carbon::now();
             $mytime = Carbon::now();
             if (!file_exists('uploads/homeworks/')) {
-                \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
+               File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
             }
             $extension = ($request->image->getClientOriginalExtension());
             $tempImageName = (strtotime($mytime)).".$extension";
