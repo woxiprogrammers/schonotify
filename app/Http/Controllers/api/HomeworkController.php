@@ -411,7 +411,8 @@ class HomeworkController extends Controller
             if (!file_exists('uploads/homeworks/')) {
                File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
             }
-            $extension = ($request->image->getClientOriginalExtension());
+            $file_type = explode("/",$request->file_type);
+            $extension = $file_type[1];
             $tempImageName = (strtotime($mytime)).".$extension";
             $tempImagePath = "uploads/homeworks/";
             file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image));
