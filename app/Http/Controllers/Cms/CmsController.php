@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Cms;
 
 use App\BodyDetails;
+use App\BodySocialDetails;
 use App\BodyTabNames;
+use App\SocialPlatform;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests;
@@ -23,9 +25,10 @@ class CmsController extends Controller
     public function manageCms()
     {
        try{
+           $socialPlatformNames = SocialPlatform::get()->toArray();
            $tabNames = BodyTabNames::get()->toArray();
            $bodyDetails = BodyDetails::get()->toArray();
-           return view('cms.manage')->with(compact('tabNames','bodyDetails'));
+           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames'));
        }catch(\Exception $e){
            $data=[
                'action' => 'Get Manage Admin cms view',
@@ -166,7 +169,25 @@ class CmsController extends Controller
     }
     public function socialMediaLinks(Request $request){
         try{
-            dd($request->all());
+            $user = Auth::User();
+            $socialMediaData =array();
+            foreach ($request->all() as $data){
+                $socialMediaData['body_id'] = $user['body_id'];
+                $socialMediaData['social_platform_id'] = $request['social_platform_id'];
+                $socialMediaData['name'] = $request[''];
+                if (array_key_exists('is_check',$data)){
+                    $socialMediaData['is_active'] = true;
+                }else{
+                    $socialMediaData['is_active'] = false;
+                }
+                $query = BodySocialDetails::create($socialMediaData);
+                if($query){
+                    Session::flash('message-success','Successfully created');
+                    return redirect()->back();
+                }else{
+                    Session::flash('message-error','Something went wrong');
+                }
+            }
         }catch (\Exception $e){
             $data = [
                 'status' => 500,

@@ -278,7 +278,7 @@
                                                     <div class="row">
                                                         <div class="col-md-2">
                                                             <label class="control-label">
-                                                                Upload Logo :
+                                                                Upload Logo
                                                             </label>
                                                         </div>
                                                     </div>
@@ -357,11 +357,12 @@
                                                                 Slider 1
                                                             </label>
                                                         </div>
-                                                        <div class="col-md-1">
+                                                        <div class="col-md-2">
                                                             <input type="checkbox" name="is_checked_slider1">
                                                         </div>
+                                                    </div>
                                                         <div class="form-group">
-                                                            <label class="control-label">Select Images :</label>
+                                                            <label class="control-label">Select Images  :</label>
                                                             <input id="imageUpload1" type="file" class="btn blue"/>
                                                             <br />
                                                             <div class="row">
@@ -370,7 +371,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
                                                     <br><br>
                                                     <div class="row">
                                                         <div class="col-md-2">
@@ -381,6 +381,7 @@
                                                         <div class="col-md-1">
                                                             <input type="checkbox" name="is_checked_slider2">
                                                         </div>
+                                                    </div>
                                                         <div class="form-group">
                                                             <label class="control-label">Select Images :</label>
                                                             <input id="imageUpload2" type="file" class="btn blue"/>
@@ -391,7 +392,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
                                                     <br><br>
                                                     <div class="row">
                                                         <div class="col-md-2">
@@ -402,6 +402,7 @@
                                                         <div class="col-md-1">
                                                             <input type="checkbox" name="is_checked_slider3">
                                                         </div>
+                                                    </div>
                                                         <div class="form-group">
                                                             <label class="control-label">Select Images :</label>
                                                             <input id="imageUpload3" type="file" class="btn blue"/>
@@ -412,7 +413,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
                                                     <br><br>
                                                     <div class="row">
                                                         <div class="form-group col-md-7">
@@ -425,90 +425,23 @@
                                             </div>
                                             <div class="tab-pane" id="tab_5">
                                                 <form method="post" action="/cms/social-links">
+                                                    @foreach($socialPlatformNames as $socialLink)
                                                     <div class="row form-group">
                                                         <div class="col-md-1">
-                                                            <input type="checkbox" name="facebook_link_checked">
+                                                            <input type="checkbox" name="{{$socialLink['slug']}}_[is_check]">
                                                         </div>
                                                         <div class="col-md-3">
                                                             <label>
-                                                                Your Facebook Account :
+                                                                Your {{$socialLink['name']}} Account :
                                                             </label>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <input type="text" class="form-control" name="facebook_link" placeholder="Enter url">
+                                                            <input type="hidden" value="{{$socialLink['id']}}" name="{{$socialLink['slug']}}_[social_platform_id]">
+                                                            <input type="text" class="form-control" name="{{$socialLink['slug']}}_[link]" placeholder="Enter url">
                                                         </div>
                                                     </div>
-                                                    <hr>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="twitter_link_checked">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label>
-                                                                Your Twitter Account :
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" name="twitter_link" placeholder="Enter url">
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="google_link_checked">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label>
-                                                                Your Google+ Account :
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" name="google_link" placeholder="Enter url">
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="linkedIn_link_checked">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label>
-                                                                Your LinkedIn Account :
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" name="linkedIn_link" placeholder="Enter url">
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="instagram_link_checked">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label>
-                                                                Your Instagram Account :
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" name="instagram_link" placeholder="Enter url">
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="youtube_link_checked">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label>
-                                                                Your Youtube Account :
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control" name="youtube_link" placeholder="Enter url">
-                                                        </div>
-                                                    </div>
-                                                    <hr>
+                                                        <hr>
+                                                    @endforeach
                                                     <div class="row">
                                                         <div class="form-group col-md-7">
                                                             <button class="btn btn-primary btn-wide pull-right" type="submit">
@@ -780,6 +713,79 @@
                                 reader.readAsDataURL($(this)[0].files[i]);
                             }
                         }else{
+                        alert("It doesn't supports");
+                    }
+                } else {
+                    alert("Select Only images");
+                    $('#submit').hide();
+                }
+            });
+            $("#imageUpload1").on('change', function () {
+                alert(21);
+                var imgPath = $(this)[0].value;
+                var countFiles = $(this)[0].files.length;
+                var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+                var image_holder = $("#preview-image1");
+                if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+                    if (typeof (FileReader) != "undefined") {
+                            for (var i = 0; i < countFiles; i++) {
+                                var reader = new FileReader()
+                                reader.onload = function (e) {
+                                    var imagePreview = '<div class="col-md-2"><input type="hidden" name="slider_images_1" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                                    image_holder.append(imagePreview);
+                                };
+                                image_holder.show();
+                                reader.readAsDataURL($(this)[0].files[i]);
+                            }
+                        }else{
+                        alert("It doesn't supports");
+                    }
+                } else {
+                    alert("Select Only images");
+                    $('#submit').hide();
+                }
+            });
+            $("#imageUpload2").on('change', function () {
+                var imgPath = $(this)[0].value;
+                var countFiles = $(this)[0].files.length;
+                var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+                var image_holder = $("#preview-image2");
+                if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+                    if (typeof (FileReader) != "undefined") {
+                        for (var i = 0; i < countFiles; i++) {
+                            var reader = new FileReader()
+                            reader.onload = function (e) {
+                                var imagePreview = '<div class="col-md-2"><input type="hidden" name="slider_images_2" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                                image_holder.append(imagePreview);
+                            };
+                            image_holder.show();
+                            reader.readAsDataURL($(this)[0].files[i]);
+                        }
+                    }else{
+                        alert("It doesn't supports");
+                    }
+                } else {
+                    alert("Select Only images");
+                    $('#submit').hide();
+                }
+            });
+            $("#imageUpload3").on('change', function () {
+                var imgPath = $(this)[0].value;
+                var countFiles = $(this)[0].files.length;
+                var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+                var image_holder = $("#preview-image3");
+                if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+                    if (typeof (FileReader) != "undefined") {
+                        for (var i = 0; i < countFiles; i++) {
+                            var reader = new FileReader()
+                            reader.onload = function (e) {
+                                var imagePreview = '<div class="col-md-2"><input type="hidden" name="slider_images_3" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                                image_holder.append(imagePreview);
+                            };
+                            image_holder.show();
+                            reader.readAsDataURL($(this)[0].files[i]);
+                        }
+                    }else{
                         alert("It doesn't supports");
                     }
                 } else {
