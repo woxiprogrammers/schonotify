@@ -321,13 +321,13 @@
                         $division = $data['division'];
                         $date = date('Y-m-d',strtotime($data['date']));
                         $attendanceCount = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->count();
-
-                        $attendance = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->get();
+                        $presentStudents = Attendance::where('date',$date)->where('division_id',$division)->lists('student_id');
+                        $attendance = User::where('division_id',$division)->whereNotIn('id',$presentStudents)->where('is_active',1)->select('id')->get();
                         $attendanceStatus = AttendanceStatus::where('date',$date)->where('division_id',$division)->count();
                            if($attendanceCount > 0) {
                                $i = 0;
                                foreach($attendance as $row) {
-                                        $userData = User::where('id',$row['student_id'])->where('is_active',1)->first();
+                                        $userData = User::where('id',$row['id'])->where('is_active',1)->first();
                                         $leaveStatus = Leave::where('student_id',$row['student_id'])->where('from_date',$date)->first();
                                         if($leaveStatus != null) {
                                             $dataArray[$i]['student_name'] = $userData['first_name'] ." ". $userData['last_name'] ;
