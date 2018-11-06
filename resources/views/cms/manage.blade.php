@@ -305,9 +305,9 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             @if($bodyDetails == null)
-                                                                 <textarea id="" name="description" cols="50" rows="4"> </textarea>
-                                                              @else
-                                                                 <textarea id="" name="description" cols="50" rows="4"> {{$bodyDetails[0]['header_message']}}</textarea>
+                                                                <textarea id="" name="description" cols="50" rows="4"> </textarea>
+                                                            @else
+                                                                <textarea id="" name="description" cols="50" rows="4"> {{$bodyDetails[0]['header_message']}}</textarea>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -361,16 +361,16 @@
                                                             <input type="checkbox" name="is_checked_slider1">
                                                         </div>
                                                     </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label">Select Images  :</label>
-                                                            <input id="imageUpload1" type="file" class="btn blue"/>
-                                                            <br />
-                                                            <div class="row">
-                                                                <div id="preview-image1" class="row">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Select Images  :</label>
+                                                        <input id="imageUpload1" type="file" class="btn blue"/>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div id="preview-image1" class="row">
 
-                                                                </div>
                                                             </div>
                                                         </div>
+                                                    </div>
                                                     <br><br>
                                                     <div class="row">
                                                         <div class="col-md-2">
@@ -382,16 +382,16 @@
                                                             <input type="checkbox" name="is_checked_slider2">
                                                         </div>
                                                     </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label">Select Images :</label>
-                                                            <input id="imageUpload2" type="file" class="btn blue"/>
-                                                            <br />
-                                                            <div class="row">
-                                                                <div id="preview-image2" class="row">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Select Images :</label>
+                                                        <input id="imageUpload2" type="file" class="btn blue"/>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div id="preview-image2" class="row">
 
-                                                                </div>
                                                             </div>
                                                         </div>
+                                                    </div>
                                                     <br><br>
                                                     <div class="row">
                                                         <div class="col-md-2">
@@ -403,16 +403,16 @@
                                                             <input type="checkbox" name="is_checked_slider3">
                                                         </div>
                                                     </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label">Select Images :</label>
-                                                            <input id="imageUpload3" type="file" class="btn blue"/>
-                                                            <br />
-                                                            <div class="row">
-                                                                <div id="preview-image3" class="row">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Select Images :</label>
+                                                        <input id="imageUpload3" type="file" class="btn blue"/>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div id="preview-image3" class="row">
 
-                                                                </div>
                                                             </div>
                                                         </div>
+                                                    </div>
                                                     <br><br>
                                                     <div class="row">
                                                         <div class="form-group col-md-7">
@@ -425,23 +425,47 @@
                                             </div>
                                             <div class="tab-pane" id="tab_5">
                                                 <form method="post" action="/cms/social-links">
-                                                    @foreach($socialPlatformNames as $socialLink)
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="{{$socialLink['slug']}}_[is_check]">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label>
-                                                                Your {{$socialLink['name']}} Account :
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="hidden" value="{{$socialLink['id']}}" name="{{$socialLink['slug']}}_[social_platform_id]">
-                                                            <input type="text" class="form-control" name="{{$socialLink['slug']}}_[link]" placeholder="Enter url">
-                                                        </div>
-                                                    </div>
-                                                        <hr>
-                                                    @endforeach
+                                                    @if($socialMediaDetails != null)
+                                                        @foreach($socialMediaDetails as $social)
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    @if($social['is_active'] == 1)
+                                                                    <input type="checkbox" name="{{$social['slug']}}_[is_check]" checked>
+                                                                        @else
+                                                                        <input type="checkbox" name="{{$social['slug']}}_[is_check]">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label>
+                                                                        Your {{$social['name']}} Account :
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <input type="hidden" value="{{$social['id']}}" name="{{$social['slug']}}_[social_platform_id]">
+                                                                    <input type="text" class="form-control" name="{{$social['slug']}}_[link]" placeholder="Enter url">
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                        @endforeach
+                                                    @else
+                                                        @foreach($socialPlatformNames as $socialLink)
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="{{$socialLink['slug']}}_[is_check]">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label>
+                                                                        Your {{$socialLink['name']}} Account :
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <input type="hidden" value="{{$socialLink['id']}}" name="{{$socialLink['slug']}}_[social_platform_id]">
+                                                                    <input type="text" class="form-control" name="{{$socialLink['slug']}}_[link]" placeholder="Enter url">
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                        @endforeach
+                                                    @endif
                                                     <div class="row">
                                                         <div class="form-group col-md-7">
                                                             <button class="btn btn-primary btn-wide pull-right" type="submit">
@@ -703,16 +727,16 @@
                 var image_holder = $("#preview-image");
                 if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
                     if (typeof (FileReader) != "undefined") {
-                            for (var i = 0; i < countFiles; i++) {
-                                var reader = new FileReader()
-                                reader.onload = function (e) {
-                                    var imagePreview = '<div class="col-md-2"><input type="hidden" name="gallery_images" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
-                                    image_holder.append(imagePreview);
-                                };
-                                image_holder.show();
-                                reader.readAsDataURL($(this)[0].files[i]);
-                            }
-                        }else{
+                        for (var i = 0; i < countFiles; i++) {
+                            var reader = new FileReader()
+                            reader.onload = function (e) {
+                                var imagePreview = '<div class="col-md-2"><input type="hidden" name="gallery_images" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                                image_holder.append(imagePreview);
+                            };
+                            image_holder.show();
+                            reader.readAsDataURL($(this)[0].files[i]);
+                        }
+                    }else{
                         alert("It doesn't supports");
                     }
                 } else {
@@ -728,16 +752,16 @@
                 var image_holder = $("#preview-image1");
                 if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
                     if (typeof (FileReader) != "undefined") {
-                            for (var i = 0; i < countFiles; i++) {
-                                var reader = new FileReader()
-                                reader.onload = function (e) {
-                                    var imagePreview = '<div class="col-md-2"><input type="hidden" name="slider_images_1" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
-                                    image_holder.append(imagePreview);
-                                };
-                                image_holder.show();
-                                reader.readAsDataURL($(this)[0].files[i]);
-                            }
-                        }else{
+                        for (var i = 0; i < countFiles; i++) {
+                            var reader = new FileReader()
+                            reader.onload = function (e) {
+                                var imagePreview = '<div class="col-md-2"><input type="hidden" name="slider_images_1" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                                image_holder.append(imagePreview);
+                            };
+                            image_holder.show();
+                            reader.readAsDataURL($(this)[0].files[i]);
+                        }
+                    }else{
                         alert("It doesn't supports");
                     }
                 } else {

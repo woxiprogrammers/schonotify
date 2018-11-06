@@ -26,9 +26,10 @@ class CmsController extends Controller
     {
        try{
            $socialPlatformNames = SocialPlatform::get()->toArray();
+           $socialMediaDetails = BodySocialDetails::get()->toArray();
            $tabNames = BodyTabNames::get()->toArray();
            $bodyDetails = BodyDetails::get()->toArray();
-           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames'));
+           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails'));
        }catch(\Exception $e){
            $data=[
                'action' => 'Get Manage Admin cms view',
@@ -173,20 +174,20 @@ class CmsController extends Controller
             $socialMediaData =array();
             foreach ($request->all() as $data){
                 $socialMediaData['body_id'] = $user['body_id'];
-                $socialMediaData['social_platform_id'] = $request['social_platform_id'];
-                $socialMediaData['name'] = $request[''];
+                $socialMediaData['social_platform_id'] = $data['social_platform_id'];
+                $socialMediaData['name'] = $data['link'];
                 if (array_key_exists('is_check',$data)){
                     $socialMediaData['is_active'] = true;
                 }else{
                     $socialMediaData['is_active'] = false;
                 }
                 $query = BodySocialDetails::create($socialMediaData);
-                if($query){
-                    Session::flash('message-success','Successfully created');
-                    return redirect()->back();
-                }else{
-                    Session::flash('message-error','Something went wrong');
-                }
+            }
+            if($query){
+                Session::flash('message-success','Successfully created');
+                return redirect()->back();
+            }else{
+                Session::flash('message-error','Something went wrong');
             }
         }catch (\Exception $e){
             $data = [
