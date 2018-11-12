@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cms;
 
 use App\BodyDetails;
 use App\BodySocialDetails;
+use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\SocialPlatform;
 use Illuminate\Http\Request;
@@ -172,16 +173,21 @@ class CmsController extends Controller
         try{
             $user = Auth::User();
             $socialMediaData =array();
+            $ifDataPresent = BodySocialDetails::get()->first();
             foreach ($request->all() as $data){
-                $socialMediaData['body_id'] = $user['body_id'];
-                $socialMediaData['social_platform_id'] = $data['social_platform_id'];
                 $socialMediaData['name'] = $data['link'];
+                $socialMediaData['social_platform_id'] = $data['social_platform_id'];
                 if (array_key_exists('is_check',$data)){
                     $socialMediaData['is_active'] = true;
                 }else{
                     $socialMediaData['is_active'] = false;
                 }
-                $query = BodySocialDetails::create($socialMediaData);
+                if($ifDataPresent == null){
+                    $socialMediaData['body_id'] = $user['body_id'];
+                    $query = BodySocialDetails::create($socialMediaData);
+                }else{
+                    $query = BodySocialDetails::where('social_platform_id',$data['social_platform_id'])->update($socialMediaData);
+                }
             }
             if($query){
                 Session::flash('message-success','Successfully created');
@@ -223,7 +229,7 @@ class CmsController extends Controller
                 $str.="<td>".'gallery'."</td>";
                 $str.="<td>"."ds"."</td>";
                 $str.="<td>"."ghfghfghf"."</td>";
-                $str.="<td>"."<a href='' >add</a>" ." / ". "<a href=''>remove</a>"."</td>";
+                $str.="<td>"."<a href='/cms/pages' >add</a>" ." / ". "<a href=''>remove</a>"."</td>";
                 $str.="</tr>";
             $str.="</tbody></table>";
 
@@ -249,7 +255,21 @@ class CmsController extends Controller
     }
     public function createSubPages(Request $request){
         try{
-            dd($request->all());
+            $bodyTabName = BodyTabNames::where('slug',$request->main_pages)->first();
+            $subPageData['display_name'] = $request->sub_tab_name;
+            $subPageData['slug']  = preg_replace('/\s+/', '-',  strtolower($request->sub_tab_name));
+            $subPageData['body_tab_name_id'] = $bodyTabName['id'];
+            $subPageData['body_id'] = $bodyTabName['body_id'];
+            $query = BodyTabNames::create($subPageData);
+            $subPageDescription['body_tab_name_id'] = $query->id;
+            $subPageDescription['description'] = $request->page_description;
+            BodyTabDetails::create($subPageDescription);
+            if($query){
+                Session::flash('message-success','Successfully created');
+                return redirect()->back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
         }catch (\Exception $e){
             $data = [
                 'status' => 500,

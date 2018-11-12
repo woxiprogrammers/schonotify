@@ -429,20 +429,21 @@
                                                         @foreach($socialMediaDetails as $social)
                                                             <div class="row form-group">
                                                                 <div class="col-md-1">
-                                                                    @if($social['is_active'] == 1)
-                                                                    <input type="checkbox" name="{{$social['slug']}}_[is_check]" checked>
+                                                                    <?php $slug = \App\SocialPlatform::where('id',$social['social_platform_id'])->pluck('slug'); ?>
+                                                                @if($social['is_active'] == 1)
+                                                                    <input type="checkbox" name="{{$slug}}_[is_check]" checked>
                                                                         @else
-                                                                        <input type="checkbox" name="{{$social['slug']}}_[is_check]">
+                                                                        <input type="checkbox" name="{{$slug}}_[is_check]">
                                                                     @endif
                                                                 </div>
                                                                 <div class="col-md-3">
                                                                     <label>
-                                                                        Your {{$social['name']}} Account :
+                                                                        Your {{$slug}} Account :
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <input type="hidden" value="{{$social['id']}}" name="{{$social['slug']}}_[social_platform_id]">
-                                                                    <input type="text" class="form-control" name="{{$social['slug']}}_[link]" placeholder="Enter url">
+                                                                    <input type="hidden" value="{{$social['social_platform_id']}}" name="{{$slug}}_[social_platform_id]">
+                                                                    <input type="text" class="form-control" name="{{$slug}}_[link]" value="{{$social['name']}}" placeholder="Enter url">
                                                                 </div>
                                                             </div>
                                                             <hr>
