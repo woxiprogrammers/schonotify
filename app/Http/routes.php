@@ -670,4 +670,6 @@ Route::group(['prefix' => 'cms'],function (){
     Route::get('pageRemove/{id}',array('uses' => 'Cms\CmsController@removePages'));
     Route::post('sub-pages',array('uses' => 'Cms\CmsController@createSubPages'));
     Route::post('sub-pages-edit/{id}',array('uses' => 'Cms\CmsController@editSubPages'));
+    Route::post('aboutUs',array('uses' => 'Cms\CmsController@aboutUsForm'));
+    Route::post('testimonial',array('uses' => 'Cms\CmsController@testimonialForm'));
 });

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\BodyAboutUs;
 use App\BodyDetails;
+use App\BodySliderImages;
 use App\BodySocialDetails;
 use App\BodyTabDetails;
 use App\BodyTabNames;
@@ -30,7 +32,8 @@ class CmsController extends Controller
            $socialMediaDetails = BodySocialDetails::get()->toArray();
            $tabNames = BodyTabNames::get()->toArray();
            $bodyDetails = BodyDetails::get()->toArray();
-           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails'));
+           $aboutUsDetails = BodyAboutUs::first();
+           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails'));
        }catch(\Exception $e){
            $data=[
                'action' => 'Get Manage Admin cms view',
@@ -91,8 +94,8 @@ class CmsController extends Controller
             $user = Auth::User();
             $data = array();
 
-            $folderEncName = time();
-            $folderPath = public_path().env('LOGO_FILE_UPLOAD').$folderEncName;
+            $folderEncName = sha1($user->body_id);
+            $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
             if (! file_exists($folderPath)) {
                 File::makeDirectory($folderPath , 0777 ,true,true);
             }
@@ -159,7 +162,67 @@ class CmsController extends Controller
     }
     public function sliderImages(Request $request){
         try{
-            dd($request->all());
+//            dd($request->all());
+            $user =Auth::user();
+            $folderEncName = sha1($user->body_id);
+            $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+            if (! file_exists($folderPath)) {
+                File::makeDirectory($folderPath , 0777 ,true,true);
+            }
+            foreach ($request->all() as $key=>$images){
+                if(array_key_exists('is_checked_slider1',$images)){
+                    $imageArray = explode(';',$images['slider_images_1']);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($images['slider_images_1'], ';');
+                    $type = explode(':', substr($images['slider_images_1'], 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $imageData[$key]['name'] = $filename;
+                    $imageData[$key]['body_id'] = $user->body_id;
+                    $imageData[$key]['is_active'] = true;
+
+                }if (array_key_exists('is_checked_slider2',$images)){
+                    $imageArray = explode(';',$images['slider_images_2']);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($images['slider_images_2'], ';');
+                    $type = explode(':', substr($images['slider_images_2'], 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $imageData[$key]['name'] = $filename;
+                    $imageData[$key]['body_id'] = $user->body_id;
+                    $imageData[$key]['is_active'] = true;
+
+                }if (array_key_exists('is_checked_slider3',$images)){
+                    $imageArray = explode(';',$images['slider_images_3']);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($images['slider_images_3'], ';');
+                    $type = explode(':', substr($images['slider_images_3'], 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $imageData[$key]['name'] = $filename;
+                    $imageData[$key]['body_id'] = $user->body_id;
+                    $imageData[$key]['is_active'] = true;
+                }
+            }
+            $imagesData = array();
+            foreach($imageData as $data){
+                $imagesData['name'] = $data['name'];
+                $imagesData['body_id'] = $data['body_id'];
+                $imagesData['is_active'] = $data['is_active'];
+                $query = BodySliderImages::create($imagesData);
+            }
+            if($query){
+                Session::flash('message-success','Successfully created');
+                return redirect()->back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
         }catch (\Exception $e){
             $data = [
                 'status' => 500,
@@ -206,7 +269,18 @@ class CmsController extends Controller
     }
     public function contactUsForm(Request $request){
         try{
-            dd($request->all());
+            $bodyDetails = BodyDetails::first();
+            $contactDetails['address'] = $request->address;
+            $contactDetails['contact_number'] = $request->contact_display;
+            $contactDetails['email'] = $request->email_display;
+            $contactDetails['map_embed'] = $request->map_embed;
+            $query = BodyDetails::where('id',$bodyDetails['id'])->update($contactDetails);
+            if($query){
+                Session::flash('message-success','Successfully created');
+                return redirect()->back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
         }catch (\Exception $e){
             $data = [
                 'status' => 500,
@@ -271,7 +345,7 @@ class CmsController extends Controller
             BodyTabDetails::create($subPageDescription);
             if($query){
                 Session::flash('message-success','Successfully created');
-                return view('cms.manage');
+                return redirect()->back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -334,6 +408,61 @@ class CmsController extends Controller
             }else{
                 Session::flash('message-error','Something went wrong');
             }
+        }catch(\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "edit sub-pages",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function aboutUsForm(Request $request){
+        try{
+            $presentData = BodyAboutUs::first();
+            $user = Auth::User();
+            $aboutUsData ['body_id'] = $user->body_id;
+            $aboutUsData ['description'] = $request->about_us;
+
+            if($request->has('about_us_image')){
+                $folderEncName = sha1($user->body_id);
+                $folderPath = public_path().env('ABOUT_US_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                if (! file_exists($folderPath)) {
+                    File::makeDirectory($folderPath , 0777 ,true,true);
+                }
+                $imageArray = explode(';',$request->about_us_image);
+                $image = explode(',',$imageArray[1])[1];
+                $pos  = strpos($request->about_us_image, ';');
+                $type = explode(':', substr($request->about_us_image, 0, $pos))[1];
+                $extension = explode('/',$type)[1];
+                $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                file_put_contents($fileFullPath,base64_decode($image));
+                $aboutUsData ['image_name'] = $filename;
+            }
+            if($presentData != null){
+                $query = BodyAboutUs::where('id',$presentData['id'])->update($aboutUsData);
+            }else{
+                $query = BodyAboutUs::create($aboutUsData);
+            }
+            if($query){
+                Session::flash('message-success','Successfully Created');
+                return redirect()->back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
+        }catch(\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "edit sub-pages",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function testimonialForm(Request $request){
+        try{
+            dd($request->all());
         }catch(\Exception $e){
             $data = [
                 'status' => 500,
