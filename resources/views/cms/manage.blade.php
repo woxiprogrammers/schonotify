@@ -533,7 +533,7 @@
                                                             </div>
                                                             <div class="col-md-2 ">
                                                                 <label class="control-label">
-                                                                    Contact no :
+                                                                   Email :
                                                                 </label>
                                                             </div>
                                                             <div class="col-md-5">

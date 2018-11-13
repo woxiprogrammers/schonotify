@@ -666,5 +666,8 @@ Route::group(['prefix' => 'cms'],function (){
     Route::post('contact-us-userForm',array('uses' => 'Cms\CmsController@contactUsForm'));
     Route::get('tabs-Listing',array('uses' => 'Cms\CmsController@tabsSubTabsListing'));
     Route::get('pages',array('uses' => 'Cms\CmsController@createPages'));
+    Route::get('pagesEdit/{id}',array('uses' => 'Cms\CmsController@editPages'));
+    Route::get('pageRemove/{id}',array('uses' => 'Cms\CmsController@removePages'));
     Route::post('sub-pages',array('uses' => 'Cms\CmsController@createSubPages'));
+    Route::post('sub-pages-edit/{id}',array('uses' => 'Cms\CmsController@editSubPages'));
 });

@@ -218,6 +218,7 @@ class CmsController extends Controller
     }
     public function tabsSubTabsListing(){
         try{
+            $subPagesNameDetail = BodyTabNames::whereNotNull('body_tab_name_id')->where('is_active',1)->get()->toArray();
             $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str.="<thead><tr>";
             $str.="<th>Parent Page</th>";
@@ -225,14 +226,16 @@ class CmsController extends Controller
             $str.="<th>Created Date</th>";
             $str.="<th>Action</th>";
             $str.="</tr></thead><tbody>";
+            foreach($subPagesNameDetail as $details){
+                $menuName = BodyTabNames::where('id',$details['body_tab_name_id'])->pluck('display_name');
                 $str.="<tr>";
-                $str.="<td>".'gallery'."</td>";
-                $str.="<td>"."ds"."</td>";
-                $str.="<td>"."ghfghfghf"."</td>";
-                $str.="<td>"."<a href='/cms/pages' >add</a>" ." / ". "<a href=''>remove</a>"."</td>";
+                $str.="<td>"."$menuName"."</td>";
+                $str.="<td>".$details['display_name']."</td>";
+                $str.="<td>".$details['created_at']."</td>";
+                $str.="<td>"."<a href='/cms/pagesEdit/".$details['id']."' >edit</a>" ." / ". "<a href='/cms/pageRemove/".$details['id']."'>remove</a>"."</td>";
                 $str.="</tr>";
+            }
             $str.="</tbody></table>";
-
             return $str;
         }catch(\Exception $e){
             $data = [
@@ -244,7 +247,8 @@ class CmsController extends Controller
     }
     public function createPages(){
         try{
-            return view('cms.pagesCreate');
+            $tabNames = BodyTabNames::where('body_tab_name_id','=',null)->where('is_active',1)->get()->toArray();
+            return view('cms.pagesCreate')->with(compact('tabNames'));
         }catch(\Exception $e){
             $data = [
                 'action'=>'Pages creation',
@@ -260,13 +264,14 @@ class CmsController extends Controller
             $subPageData['slug']  = preg_replace('/\s+/', '-',  strtolower($request->sub_tab_name));
             $subPageData['body_tab_name_id'] = $bodyTabName['id'];
             $subPageData['body_id'] = $bodyTabName['body_id'];
+            $subPageData['is_active'] = true;
             $query = BodyTabNames::create($subPageData);
             $subPageDescription['body_tab_name_id'] = $query->id;
             $subPageDescription['description'] = $request->page_description;
             BodyTabDetails::create($subPageDescription);
             if($query){
                 Session::flash('message-success','Successfully created');
-                return redirect()->back();
+                return view('cms.manage');
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -274,6 +279,65 @@ class CmsController extends Controller
             $data = [
                 'status' => 500,
                 'message' => "Sub pages create form",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function editPages(Request $request,$id){
+        try{
+            $tabNames = BodyTabNames::where('body_tab_name_id','=',null)->where('is_active',1)->get()->toArray();
+            $pagesDetail = BodyTabNames::join('body_tab_details','body_tab_details.body_tab_name_id','=','body_tab_names.id')
+                                        ->where('body_tab_names.id',$id)->select('body_tab_names.id','body_tab_names.display_name','body_tab_names.slug','body_tab_details.description')
+                                        ->first();
+            return view('cms.pagesEdit')->with(compact('pagesDetail','tabNames'));
+        }catch(\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "Sub pages edit",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function removePages(Request $request,$id){
+        try{
+           $query = BodyTabNames::where('id',$id)->delete();
+            BodyTabDetails::where('body_tab_name_id',$id)->delete();
+            if($query){
+                Session::flash('message-success','Successfully removed');
+                return redirect()->back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
+        }catch(\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "remove pages",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function editSubPages(Request $request,$id){
+        try{
+            $bodyTabName = BodyTabNames::where('slug',$request->main_pages)->first();
+            $subPageData['display_name'] = $request->sub_tab_name;
+            $subPageData['slug']  = preg_replace('/\s+/', '-',  strtolower($request->sub_tab_name));
+            $subPageData['body_tab_name_id'] = $bodyTabName['id'];
+            $query = BodyTabNames::where('id',$id)->update($subPageData);
+            $subPageDescription['description'] = $request->page_description;
+            BodyTabDetails::where('body_tab_name_id',$id)->update($subPageDescription);
+            if($query){
+                Session::flash('message-success','Successfully Edited');
+                return redirect()->back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
+        }catch(\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "edit sub-pages",
                 'exception' => $e->getMessage()
             ];
             Log::critical(json_encode($data));

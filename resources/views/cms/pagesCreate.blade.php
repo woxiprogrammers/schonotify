@@ -6,14 +6,7 @@
  * Time: 12:01 PM
  */
 ?>
-<?php
-/**
- * Created by PhpStorm.
- * User: Nishank Rathod
- * Date: 9/27/18
- * Time: 12:33 PM
- */
-?>
+
 @extends('master')
 @section('content')
     <div id="app">
@@ -46,10 +39,9 @@
                                         </label>
                                         <select class="form-control" name="main_pages" style="-webkit-appearance: menulist;">
                                             <option value="">Select Main Pages</option>
-                                            <option value="home">Home</option>
-                                            <option value="home">Gallery</option>
-                                            <option value="home">Events</option>
-                                            <option value="home">ContactUs</option>
+                                            @foreach($tabNames as $tabname)
+                                            <option value="{{$tabname['slug']}}">{{$tabname['display_name']}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
