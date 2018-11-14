@@ -31,9 +31,10 @@ class CmsController extends Controller
            $socialPlatformNames = SocialPlatform::get()->toArray();
            $socialMediaDetails = BodySocialDetails::get()->toArray();
            $tabNames = BodyTabNames::get()->toArray();
-           $bodyDetails = BodyDetails::get()->toArray();
+           $bodyDetails = BodyDetails::first();
            $aboutUsDetails = BodyAboutUs::first();
-           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails'));
+           $sliderImages = BodySliderImages::get()->toArray();
+           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages'));
        }catch(\Exception $e){
            $data=[
                'action' => 'Get Manage Admin cms view',
@@ -93,7 +94,6 @@ class CmsController extends Controller
             $headerData = $request->all();
             $user = Auth::User();
             $data = array();
-
             $folderEncName = sha1($user->body_id);
             $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
             if (! file_exists($folderPath)) {
@@ -162,7 +162,6 @@ class CmsController extends Controller
     }
     public function sliderImages(Request $request){
         try{
-//            dd($request->all());
             $user =Auth::user();
             $folderEncName = sha1($user->body_id);
             $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;

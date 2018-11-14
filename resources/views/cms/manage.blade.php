@@ -295,6 +295,14 @@
 
                                                                 </div>
                                                             </div>
+                                                            <div>
+                                                                @if($bodyDetails['logo_name'] != null)
+                                                                    <?$ds=DIRECTORY_SEPARATOR;
+                                                                    $folderEncName = sha1($bodyDetails['body_id']);
+                                                                    $folderPath = env('LOGO_FILE_UPLOAD').$ds.$folderEncName;?>
+                                                                    <img src="{{$folderPath.$ds.$bodyDetails['logo_name']}}" style="height: 150px; width: 150px">
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <br><br>
@@ -310,7 +318,7 @@
                                                             @if($bodyDetails == null)
                                                                 <textarea id="" name="description" cols="50" rows="4"> </textarea>
                                                             @else
-                                                                <textarea id="" name="description" cols="50" rows="4"> {{$bodyDetails[0]['header_message']}}</textarea>
+                                                                <textarea id="" name="description" cols="50" rows="4"> {{$bodyDetails['header_message']}}</textarea>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -338,7 +346,7 @@
                                                             @if($bodyDetails == null)
                                                                 <textarea id="" name="description" cols="50" rows="4"> </textarea>
                                                             @else
-                                                                <textarea id="" name="description" cols="50" rows="4"> {{$bodyDetails[0]['footer_message']}}</textarea>
+                                                                <textarea id="" name="description" cols="50" rows="4"> {{$bodyDetails['footer_message']}}</textarea>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -414,6 +422,19 @@
                                                             <div id="preview-image3" class="row">
 
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            @if($sliderImages != null)
+                                                                @foreach($sliderImages as $images)
+                                                                    <? $ds=DIRECTORY_SEPARATOR;
+                                                                    $folderEncName = sha1($images['body_id']);
+                                                                    $folderPath = env('SLIDER_IMAGES_UPLOAD').$ds.$folderEncName;?>
+                                                                    <img src="{{$folderPath.$ds.$images['name']}}" style="height: 150px; width: 150px">
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                @endforeach
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <br><br>
@@ -570,7 +591,7 @@
                                                                 @if($bodyDetails == null)
                                                                     <input type="text" name="map_embed" class="form-control" placeholder="enter embed code" >
                                                                 @else
-                                                                    <input type="text" name="map_embed" value="{{$bodyDetails[0]['map_embed']}}" class="form-control" placeholder="enter embed code" >
+                                                                    <input type="text" name="map_embed" value="{{$bodyDetails['map_embed']}}" class="form-control" placeholder="enter embed code" >
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -588,7 +609,7 @@
                                                                 @if($bodyDetails == null)
                                                                     <input type="text" name="address" class="form-control" value="" placeholder="please enter address" required>
                                                                 @else
-                                                                    <input type="text" name="address" class="form-control" value="{{$bodyDetails[0]['address']}}" placeholder="please enter address" required>
+                                                                    <input type="text" name="address" class="form-control" value="{{$bodyDetails['address']}}" placeholder="please enter address" required>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -603,7 +624,7 @@
                                                                 @if($bodyDetails == null)
                                                                     <input type="text" name="contact_display" class="form-control" value="" placeholder="please enter contact number" required>
                                                                 @else
-                                                                    <input type="text" name="contact_display" class="form-control" value="{{$bodyDetails[0]['contact_number']}}" placeholder="please enter contact number" required>
+                                                                    <input type="text" name="contact_display" class="form-control" value="{{$bodyDetails['contact_number']}}" placeholder="please enter contact number" required>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -618,7 +639,7 @@
                                                                 @if($bodyDetails == null)
                                                                     <input type="email" class="form-control"  name="email_display" value="" maxlength="10" placeholder="please enter email" required>
                                                                 @else
-                                                                    <input type="email" class="form-control"  name="email_display" value="{{$bodyDetails[0]['email']}}" maxlength="10" placeholder="please enter email" required>
+                                                                    <input type="email" class="form-control"  name="email_display" value="{{$bodyDetails['email']}}" maxlength="10" placeholder="please enter email" required>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -683,7 +704,7 @@
                                                         <br>
                                                         <div class="row">
                                                             <div class="col-md-7">
-                                                                    <textarea id="" name="description[testimonial_1]" cols="50" rows="4"> </textarea>
+                                                                <textarea id="" name="description[testimonial_1]" cols="50" rows="4"> </textarea>
                                                             </div>
                                                             <input id="descriptionImageUpload_1" type="file" class="btn blue"/>
                                                             <br />
