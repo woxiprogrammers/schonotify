@@ -28,12 +28,13 @@ class CmsController extends Controller
     public function manageCms()
     {
        try{
+           $user = Auth::User();
            $socialPlatformNames = SocialPlatform::get()->toArray();
-           $socialMediaDetails = BodySocialDetails::get()->toArray();
-           $tabNames = BodyTabNames::get()->toArray();
-           $bodyDetails = BodyDetails::first();
-           $aboutUsDetails = BodyAboutUs::first();
-           $sliderImages = BodySliderImages::get()->toArray();
+           $socialMediaDetails = BodySocialDetails::where('body_id',$user['body_id'])->get()->toArray();
+           $tabNames = BodyTabNames::where('body_id',$user['body_id'])->get()->toArray();
+           $bodyDetails = BodyDetails::where('body_id',$user['body_id'])->first();
+           $aboutUsDetails = BodyAboutUs::where('body_id',$user['body_id'])->first();
+           $sliderImages = BodySliderImages::where('body_id',$user['body_id'])->get()->toArray();
            return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages'));
        }catch(\Exception $e){
            $data=[
@@ -60,6 +61,9 @@ class CmsController extends Controller
                     }else{
                         $menuTabs['is_active'] = false;
                     }
+                    if(array_key_exists('link',$value)){
+                        $menuTabs['link'] = $value['link'];
+                    }
                     $query = BodyTabNames::create($menuTabs);
                 }else{
                     $menuTabs['body_id'] = $user['body_id'];
@@ -70,6 +74,9 @@ class CmsController extends Controller
                         $menuTabs['is_active'] = true;
                     }else{
                         $menuTabs['is_active'] = false;
+                    }
+                    if(array_key_exists('link',$value)){
+                        $menuTabs['link'] = $value['link'];
                     }
                     $query = BodyTabNames::where('id',$tabNamePresent['id'])->where('slug',$tabNamePresent['slug'])->update($menuTabs);
                 }
@@ -99,7 +106,6 @@ class CmsController extends Controller
             if (! file_exists($folderPath)) {
                 File::makeDirectory($folderPath , 0777 ,true,true);
             }
-            $imageData = array();
             if($request->has('gallery_images')){
                 $imageArray = explode(';',$request->gallery_images);
                 $image = explode(',',$imageArray[1])[1];
@@ -109,13 +115,12 @@ class CmsController extends Controller
                 $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
                 $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
                 file_put_contents($fileFullPath,base64_decode($image));
-                $imageData['name'] = $filename;
+                $data['logo_name'] = $filename;
             }
             $headerDataPresent = BodyDetails::where('body_id',$user['body_id'])->first();
             if($headerDataPresent == null){
                 $data['body_id'] = $user['body_id'];
                 $data['header_message'] = $headerData['description'];
-                $data['logo_name'] = $imageData['name'];
                 $query = BodyDetails::create($data);
             }else{
                 $data['header_message'] = $headerData['description'];
@@ -123,7 +128,7 @@ class CmsController extends Controller
             }
             if($query){
                 Session::flash('message-success','Successfully created');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -147,7 +152,7 @@ class CmsController extends Controller
             }
             if($query){
                 Session::flash('message-success','Successfully created');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -218,7 +223,7 @@ class CmsController extends Controller
             }
             if($query){
                 Session::flash('message-success','Successfully created');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -253,7 +258,7 @@ class CmsController extends Controller
             }
             if($query){
                 Session::flash('message-success','Successfully created');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -276,7 +281,7 @@ class CmsController extends Controller
             $query = BodyDetails::where('id',$bodyDetails['id'])->update($contactDetails);
             if($query){
                 Session::flash('message-success','Successfully created');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -320,7 +325,7 @@ class CmsController extends Controller
     }
     public function createPages(){
         try{
-            $tabNames = BodyTabNames::where('body_tab_name_id','=',null)->where('is_active',1)->get()->toArray();
+            $tabNames = BodyTabNames::whereIn('slug',['custom-1','custom-2','custom-3'])->where('is_active',1)->get()->toArray();
             return view('cms.pagesCreate')->with(compact('tabNames'));
         }catch(\Exception $e){
             $data = [
@@ -344,7 +349,7 @@ class CmsController extends Controller
             BodyTabDetails::create($subPageDescription);
             if($query){
                 Session::flash('message-success','Successfully created');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -379,7 +384,7 @@ class CmsController extends Controller
             BodyTabDetails::where('body_tab_name_id',$id)->delete();
             if($query){
                 Session::flash('message-success','Successfully removed');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -403,7 +408,7 @@ class CmsController extends Controller
             BodyTabDetails::where('body_tab_name_id',$id)->update($subPageDescription);
             if($query){
                 Session::flash('message-success','Successfully Edited');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }
@@ -446,7 +451,7 @@ class CmsController extends Controller
             }
             if($query){
                 Session::flash('message-success','Successfully Created');
-                return redirect()->back();
+                return back();
             }else{
                 Session::flash('message-error','Something went wrong');
             }

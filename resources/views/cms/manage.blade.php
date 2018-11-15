@@ -18,7 +18,8 @@
                 }
                 input[type=file]{
                     padding:10px;
-                    background:#c2c2c5;}
+                    background:#c2c2c5;
+                }
             </style>
             <div class="main-content" >
                 <div class="wrap-content container" id="container">
@@ -74,207 +75,257 @@
                                     <div class="col-md-9">
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="tab_1">
-                                                <form action="/cms/general-setting" method="Post" id="tabs_name">
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <lable class="control-label">
+                                                <div class="container-fluid container-fullw">
+                                                    <form action="/cms/general-setting" method="Post" id="tabs_name">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-1">
+                                                                <lable class="control-label">
 
-                                                            </lable>
+                                                                </lable>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <lable class="control-label">
+                                                                    <h4>Menus</h4>
+                                                                </lable>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <lable class="control-label">
+                                                                    <h4>Priority</h4>
+                                                                </lable>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <lable class="control-label">
+                                                                    <h4>Hyper links</h4>
+                                                                </lable>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <lable class="control-label">
-                                                                <h4>Menus</h4>
-                                                            </lable>
+                                                        @if($tabNames == null && $tabNames == "")
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" checked="checked" name="is_check_home[status]">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <input type="text" value="Home" class="form-control" name="is_check_home[menu_tab]" id="home_tab" readonly>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="home" name="is_check_home[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_home[priority_menu_tab]" id="priority_home_tab" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" checked="checked" name="is_check_gallery[status]">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <input type="text" value="Gallery" class="form-control" name="is_check_gallery[menu_tab]" id="gallery_tab" readonly>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="gallery" name="is_check_gallery[slug]">
+                                                                    <input type="text" value="" size="5" class="form-control" name="is_check_gallery[priority_menu_tab]" id="priority_gallery_tab" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" checked="checked" name="is_check_events[status]">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <input type="text" value="Events" class="form-control" name="is_check_events[menu_tab]" id="events_tab" readonly>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="events" name="is_check_events[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_events[priority_menu_tab]" id="priority_events_tab" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" checked="checked" name="is_check_about_us[status]">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <input type="text" value="About Us" class="form-control" name="is_check_about_us[menu_tab]" id="about_us_tab" readonly>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="about-us" name="is_check_about_us[slug]">
+                                                                    <input type="text" value="" size="5" class="form-control" name="is_check_about_us[priority_menu_tab]" id="priority_about_us_tab" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" checked="checked" name="is_check_contact_us[status]">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <input type="text" value="Contact Us" class="form-control" name="is_check_contact_us[menu_tab]" id="contact_us_tab" readonly>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="contact-us" name="is_check_contact_us[slug]">
+                                                                    <input type="text" value="" size="5" class="form-control" name="is_check_contact_us[priority_menu_tab]" id="priority_contact_us_tab" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="is_check_custom_1[status]">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <label class="control-label">
+                                                                        Custom tab 1:
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_1[menu_tab]" id="custom_1"  placeholder="enter custom tab name">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="custom-1" name="is_check_custom_1[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_custom_1[priority_menu_tab]" id="priority_custom_1" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="is_check_custom_2[status]">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <label class="control-label">
+                                                                        Custom tab 2:
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_2[menu_tab]" id="custom_2"  placeholder="enter custom tab name">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="custom-2" name="is_check_custom_2[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_custom_2[priority_menu_tab]" id="priority_custom_2" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="is_check_custom_3[status]">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <label class="control-label">
+                                                                        Custom tab 3:
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_3[menu_tab]" id="custom_3" placeholder="enter custom tab name">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="custom-3" name="is_check_custom_3[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_custom_3[priority_menu_tab]" id="priority_custom_3" placeholder="enter priority">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="is_check_custom_link_1[status]">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <label class="control-label">
+                                                                        Custom tab link-1:
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_link_1[menu_tab]" id="custom_link_1" placeholder="enter custom link name">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="custom-link-1" name="is_check_custom_link_1[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_custom_link_1[priority_menu_tab]" id="priority_custom_link_1" placeholder="enter priority">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_link_1[link]" id="custom_link_1_link" placeholder="enter link">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="is_check_custom_link_2[status]">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <label class="control-label">
+                                                                        Custom tab link-2:
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_link_2[menu_tab]" id="custom_link_2" placeholder="enter custom link name">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="custom-link-2" name="is_check_custom_link_2[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_custom_link_2[priority_menu_tab]" id="priority_custom_link_2" placeholder="enter priority">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_link_2[link]" id="custom_link_2_link" placeholder="enter link">
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="is_check_custom_link_3[status]">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <label class="control-label">
+                                                                        Custom tab link-3:
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_link_3[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input type="hidden" value="custom-link-3" name="is_check_custom_link_3[slug]">
+                                                                    <input type="text" value="" class="form-control" size="5" name="is_check_custom_link_3[priority_menu_tab]" id="priority_custom_link_3" placeholder="enter priority">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" value="" class="form-control" name="is_check_custom_link_3[link]" id="custom_link_3_link" placeholder="enter link">
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            @foreach( $tabNames as $tabName)
+                                                                <div class="row form-group">
+                                                                    <div class="col-md-1">
+                                                                        @if($tabName['is_active'] == 1)
+                                                                            <input type="checkbox" checked="checked" name="is_check_{{$tabName['slug']}}[status]">
+                                                                        @else
+                                                                            <input type="checkbox" name="is_check_{{$tabName['slug']}}[status]">
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        @if($tabName['display_name'] != null)
+                                                                        <input type="text" value="{{$tabName['display_name']}}" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
+                                                                            @else
+                                                                            <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
+                                                                           @endif
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input type="hidden" value="{{$tabName['slug']}}" name="is_check_{{$tabName['slug']}}[slug]">
+                                                                        @if($tabName['priority'] != null)
+                                                                            <input type="text" value="{{$tabName['priority']}}" class="form-control" size="5" name="is_check_{{$tabName['slug']}}[priority_menu_tab]" id="priority_custom_link_3" placeholder="enter priority">
+                                                                        @else
+                                                                            <input type="text" value="" class="form-control" size="5" name="is_check_{{$tabName['slug']}}[priority_menu_tab]" id="priority_custom_link_3" placeholder="enter priority">
+                                                                        @endif
+                                                                    </div>
+                                                                        <div class="col-md-3">
+                                                                            @if($tabName['link'] != null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
+                                                                            <input type="text" value="{{$tabName['link']}}" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
+                                                                                @elseif($tabName['link'] == null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
+                                                                                <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
+                                                                            @endif
+                                                                        </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                        <br><br>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-10">
+                                                                <button class="btn btn-primary btn-wide pull-right" id="submit" type="submit">
+                                                                    Save <i class="fa fa-arrow-circle-right"></i>
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <lable class="control-label">
-                                                                <h4>Priority</h4>
-                                                            </lable>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" checked="checked" name="is_check_home[status]">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" value="Home" class="form-control" name="is_check_home[menu_tab]" id="home_tab" readonly>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" size="5" name="is_check_home[priority_menu_tab]" id="priority_home_tab">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[0]['priority']}}" class="form-control" size="5" name="is_check_home[priority_menu_tab]" id="priority_home_tab">
-                                                            @endif
-                                                            <input type="hidden" value="home" name="is_check_home[slug]">
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" checked="checked" name="is_check_gallery[status]">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" value="Gallery" class="form-control" name="is_check_gallery[menu_tab]" id="gallery_tab" readonly>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="hidden" value="gallery" name="is_check_gallery[slug]">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" size="5" class="form-control" name="is_check_gallery[priority_menu_tab]" id="priority_gallery_tab">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[1]['priority']}}" size="5" class="form-control" name="is_check_gallery[priority_menu_tab]" id="priority_gallery_tab">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" checked="checked" name="is_check_events[status]">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" value="Events" class="form-control" name="is_check_events[menu_tab]" id="events_tab" readonly>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="hidden" value="events" name="is_check_events[slug]">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" size="5" name="is_check_events[priority_menu_tab]" id="priority_events_tab">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[2]['priority']}}" class="form-control" size="5" name="is_check_events[priority_menu_tab]" id="priority_events_tab">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" checked="checked" name="is_check_about_us[status]">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" value="About Us" class="form-control" name="is_check_about_us[menu_tab]" id="about_us_tab" readonly>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="hidden" value="about-us" name="is_check_about_us[slug]">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" size="5" class="form-control" name="is_check_about_us[priority_menu_tab]" id="priority_about_us_tab">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[3]['priority']}}" size="5" class="form-control" name="is_check_about_us[priority_menu_tab]" id="priority_about_us_tab">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" checked="checked" name="is_check_contact_us[status]">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" value="Contact Us" class="form-control" name="is_check_contact_us[menu_tab]" id="contact_us_tab" readonly>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="hidden" value="contact-us" name="is_check_contact_us[slug]">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" size="5" class="form-control" name="is_check_contact_us[priority_menu_tab]" id="priority_contact_us_tab">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[4]['priority']}}" size="5" class="form-control" name="is_check_contact_us[priority_menu_tab]" id="priority_contact_us_tab">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="checkbox" name="is_check_custom_1[status]">
-                                                            @else
-                                                                <input type="checkbox" checked="checked" name="is_check_custom_1[status]">
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="control-label">
-                                                                Custom tab 1:
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" name="is_check_custom_1[menu_tab]" id="custom_1">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[5]['display_name']}}" class="form-control" name="is_check_custom_1[menu_tab]" id="custom_1">
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="hidden" value="custom-1" name="is_check_custom_1[slug]">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" size="5" name="is_check_custom_1[priority_menu_tab]" id="priority_custom_1">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[5]['priority']}}" class="form-control" size="5" name="is_check_custom_1[priority_menu_tab]" id="priority_custom_1">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="checkbox" name="is_check_custom_2[status]">
-                                                            @else
-                                                                <input type="checkbox" checked="checked" name="is_check_custom_2[status]">
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="control-label">
-                                                                Custom tab 2:
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" name="is_check_custom_2[menu_tab]" id="custom_2">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[6]['display_name']}}" class="form-control" name="is_check_custom_2[menu_tab]" id="custom_2">
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="hidden" value="custom-2" name="is_check_custom_2[slug]">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" size="5" name="is_check_custom_2[priority_menu_tab]" id="priority_custom_2">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[6]['priority']}}" class="form-control" size="5" name="is_check_custom_2[priority_menu_tab]" id="priority_custom_2">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="row form-group">
-                                                        <div class="col-md-1">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="checkbox" name="is_check_custom_3[status]">
-                                                            @else
-                                                                <input type="checkbox" checked="checked" name="is_check_custom_3[status]">
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="control-label">
-                                                                Custom tab 3:
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" name="is_check_custom_3[menu_tab]" id="custom_3">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[7]['display_name']}}" class="form-control" name="is_check_custom_3[menu_tab]" id="custom_3">
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="hidden" value="custom-3" name="is_check_custom_3[slug]">
-                                                            @if($tabNames == null || $tabNames == " ")
-                                                                <input type="text" value="" class="form-control" size="5" name="is_check_custom_3[priority_menu_tab]" id="priority_custom_3">
-                                                            @else
-                                                                <input type="text" value="{{$tabNames[7]['priority']}}" class="form-control" size="5" name="is_check_custom_3[priority_menu_tab]" id="priority_custom_3">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <br><br>
-                                                    <div class="row">
-                                                        <div class="form-group col-md-7">
-                                                            <button class="btn btn-primary btn-wide pull-right" id="submit" type="submit">
-                                                                Save <i class="fa fa-arrow-circle-right"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                </div>
                                             </div>
                                             <div class="tab-pane" id="tab_2">
                                                 <form method="post" action="/cms/header-setting">
@@ -344,9 +395,9 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             @if($bodyDetails == null)
-                                                                <textarea id="" name="description" cols="50" rows="4"> </textarea>
+                                                                <textarea id="" name="footer" cols="50" rows="4"> </textarea>
                                                             @else
-                                                                <textarea id="" name="description" cols="50" rows="4"> {{$bodyDetails['footer_message']}}</textarea>
+                                                                <textarea id="" name="footer" cols="50" rows="4"> {{$bodyDetails['footer_message']}}</textarea>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -380,6 +431,13 @@
                                                             <div id="preview-image1" class="row">
 
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="col-md-2">
+                                                            <label class="control-label">
+                                                                Slider 1
+                                                            </label>
                                                         </div>
                                                     </div>
                                                     <br><br>
