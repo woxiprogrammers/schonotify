@@ -101,8 +101,12 @@ class CmsController extends Controller
             $headerData = $request->all();
             $user = Auth::User();
             $data = array();
+            $headerDataPresent = BodyDetails::where('body_id',$user['body_id'])->first();
             $folderEncName = sha1($user->body_id);
             $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+            if($headerDataPresent['logo_name'] != null){
+                unlink($folderPath.DIRECTORY_SEPARATOR.$headerDataPresent['logo_name']);
+            }
             if (! file_exists($folderPath)) {
                 File::makeDirectory($folderPath , 0777 ,true,true);
             }
@@ -117,7 +121,6 @@ class CmsController extends Controller
                 file_put_contents($fileFullPath,base64_decode($image));
                 $data['logo_name'] = $filename;
             }
-            $headerDataPresent = BodyDetails::where('body_id',$user['body_id'])->first();
             if($headerDataPresent == null){
                 $data['body_id'] = $user['body_id'];
                 $data['header_message'] = $headerData['description'];
@@ -168,59 +171,110 @@ class CmsController extends Controller
     public function sliderImages(Request $request){
         try{
             $user =Auth::user();
-            $folderEncName = sha1($user->body_id);
-            $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-            if (! file_exists($folderPath)) {
-                File::makeDirectory($folderPath , 0777 ,true,true);
-            }
-            foreach ($request->all() as $key=>$images){
+            $imageData = array();
+            $imagesData = array();
+            foreach ($request->all() as $key => $images){
                 if(array_key_exists('is_checked_slider1',$images)){
-                    $imageArray = explode(';',$images['slider_images_1']);
-                    $image = explode(',',$imageArray[1])[1];
-                    $pos  = strpos($images['slider_images_1'], ';');
-                    $type = explode(':', substr($images['slider_images_1'], 0, $pos))[1];
-                    $extension = explode('/',$type)[1];
-                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
-                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
-                    file_put_contents($fileFullPath,base64_decode($image));
-                    $imageData[$key]['name'] = $filename;
-                    $imageData[$key]['body_id'] = $user->body_id;
-                    $imageData[$key]['is_active'] = true;
+                    $imageData['body_id'] =  $user->body_id;
+                    $imageData['is_active'] = true;
+                    $imageData['message_1'] = $images['message_1'];
+                    $imageData['message_2'] = $images['message_2'];
+                    $imageData['hyper_name'] = $images['link_title'];
+                    $imageData['hyper_link'] = $images['link'];
+                    if(array_key_exists('id',$images)){
+                        $imageData['name'] = $images['image'];
+                        $sliderImage1 = BodySliderImages::where('id',$images['id'])->update($imageData);
+                    }else{
+                        $sliderImage1 = BodySliderImages::create($imageData);
+                    }
+                    //image 1
+                    if(array_key_exists('slider_images_1',$images)){
+                        $folderEncName = sha1($sliderImage1['id']);
+                        $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                        if (! file_exists($folderPath)) {
+                            File::makeDirectory($folderPath , 0777 ,true,true);
+                        }
+                        $imageArray = explode(';',$images['slider_images_1']);
+                        $image = explode(',',$imageArray[1])[1];
+                        $pos  = strpos($images['slider_images_1'], ';');
+                        $type = explode(':', substr($images['slider_images_1'], 0, $pos))[1];
+                        $extension = explode('/',$type)[1];
+                        $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                        $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                        file_put_contents($fileFullPath,base64_decode($image));
+                        $imagesData['name'] = $filename;
+                        $query = BodySliderImages::where('id',$sliderImage1['id'])->update($imagesData);
+                    }
+
 
                 }if (array_key_exists('is_checked_slider2',$images)){
-                    $imageArray = explode(';',$images['slider_images_2']);
-                    $image = explode(',',$imageArray[1])[1];
-                    $pos  = strpos($images['slider_images_2'], ';');
-                    $type = explode(':', substr($images['slider_images_2'], 0, $pos))[1];
-                    $extension = explode('/',$type)[1];
-                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
-                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
-                    file_put_contents($fileFullPath,base64_decode($image));
-                    $imageData[$key]['name'] = $filename;
-                    $imageData[$key]['body_id'] = $user->body_id;
-                    $imageData[$key]['is_active'] = true;
+                    $imageData['body_id'] =  $user->body_id;
+                    $imageData['is_active'] = true;
+                    $imageData['message_1'] = $images['message_1'];
+                    $imageData['message_2'] = $images['message_2'];
+                    $imageData['hyper_name'] = $images['link_title'];
+                    $imageData['hyper_link'] = $images['link'];
+                    if(array_key_exists('id',$images)){
+                        $imageData['name'] = $images['image'];
+                        $sliderImage2 = BodySliderImages::where('id',$images['id'])->update($imageData);
+                    }else{
+                        $sliderImage2 = BodySliderImages::create($imageData);
+                    }
+                    //image 2
+                    if(array_key_exists('slider_images_2',$images)){
+                        $folderEncName = sha1($sliderImage2['id']);
+                        $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                        if (! file_exists($folderPath)) {
+                            File::makeDirectory($folderPath , 0777 ,true,true);
+                        }
+                        $imageArray = explode(';',$images['slider_images_2']);
+                        $image = explode(',',$imageArray[1])[1];
+                        $pos  = strpos($images['slider_images_2'], ';');
+                        $type = explode(':', substr($images['slider_images_2'], 0, $pos))[1];
+                        $extension = explode('/',$type)[1];
+                        $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                        $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                        file_put_contents($fileFullPath,base64_decode($image));
+                        $imagesData['name'] = $filename;
+                        $query = BodySliderImages::where('id',$sliderImage2['id'])->update($imagesData);
+                    }
+
 
                 }if (array_key_exists('is_checked_slider3',$images)){
-                    $imageArray = explode(';',$images['slider_images_3']);
-                    $image = explode(',',$imageArray[1])[1];
-                    $pos  = strpos($images['slider_images_3'], ';');
-                    $type = explode(':', substr($images['slider_images_3'], 0, $pos))[1];
-                    $extension = explode('/',$type)[1];
-                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
-                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
-                    file_put_contents($fileFullPath,base64_decode($image));
-                    $imageData[$key]['name'] = $filename;
-                    $imageData[$key]['body_id'] = $user->body_id;
-                    $imageData[$key]['is_active'] = true;
+                    $imageData['body_id'] =  $user->body_id;
+                    $imageData['is_active'] = true;
+                    $imageData['message_1'] = $images['message_1'];
+                    $imageData['message_2'] = $images['message_2'];
+                    $imageData['hyper_name'] = $images['link_title'];
+                    $imageData['hyper_link'] = $images['link'];
+                    if(array_key_exists('id',$images)){
+                        $imageData['name'] = $images['image'];
+                        $sliderImage3 = BodySliderImages::where('id',$images['id'])->update($imageData);
+                    }else{
+                        $sliderImage3 = BodySliderImages::create($imageData);
+                    }
+                    //image 3
+                    if(array_key_exists('slider_images_3',$images)){
+                        $folderEncName = sha1($sliderImage3['id']);
+                        $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                        if (! file_exists($folderPath)) {
+                            File::makeDirectory($folderPath , 0777 ,true,true);
+                        }
+                        $imageArray = explode(';',$images['slider_images_3']);
+                        $image = explode(',',$imageArray[1])[1];
+                        $pos  = strpos($images['slider_images_3'], ';');
+                        $type = explode(':', substr($images['slider_images_3'], 0, $pos))[1];
+                        $extension = explode('/',$type)[1];
+                        $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                        $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                        file_put_contents($fileFullPath,base64_decode($image));
+                        $imageData['name'] = $filename;
+                        $query = BodySliderImages::where('id',$sliderImage3['id'])->update($imagesData);
+                    }
+
                 }
             }
-            $imagesData = array();
-            foreach($imageData as $data){
-                $imagesData['name'] = $data['name'];
-                $imagesData['body_id'] = $data['body_id'];
-                $imagesData['is_active'] = $data['is_active'];
-                $query = BodySliderImages::create($imagesData);
-            }
+
             if($query){
                 Session::flash('message-success','Successfully created');
                 return back();
@@ -271,7 +325,7 @@ class CmsController extends Controller
             Log::critical(json_encode($data));
         }
     }
-    public function contactUsForm(Request $request){
+    public function contactUsDetail(Request $request){
         try{
             $bodyDetails = BodyDetails::first();
             $contactDetails['address'] = $request->address;
@@ -286,6 +340,21 @@ class CmsController extends Controller
                 Session::flash('message-error','Something went wrong');
             }
         }catch (\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "Contact us Details",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function contactUsForm(Request $request){
+        try{
+            dd($request->all());
+//            foreach (){
+//
+//            }
+        }catch(\Exception $e){
             $data = [
                 'status' => 500,
                 'message' => "Contact us form",
@@ -431,6 +500,9 @@ class CmsController extends Controller
             if($request->has('about_us_image')){
                 $folderEncName = sha1($user->body_id);
                 $folderPath = public_path().env('ABOUT_US_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                if($presentData['image_name'] != null){
+                    unlink($folderPath.DIRECTORY_SEPARATOR.$presentData['image_name']);
+                }
                 if (! file_exists($folderPath)) {
                     File::makeDirectory($folderPath , 0777 ,true,true);
                 }

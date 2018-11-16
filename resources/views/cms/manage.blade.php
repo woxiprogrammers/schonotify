@@ -83,7 +83,7 @@
 
                                                                 </lable>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-6">
                                                                 <lable class="control-label">
                                                                     <h4>Menus</h4>
                                                                 </lable>
@@ -93,13 +93,14 @@
                                                                     <h4>Priority</h4>
                                                                 </lable>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-2">
                                                                 <lable class="control-label">
                                                                     <h4>Hyper links</h4>
                                                                 </lable>
                                                             </div>
                                                         </div>
-                                                        @if($tabNames == null && $tabNames == "")
+                                                        {{--{{dd($tabNames)}}--}}
+                                                        @if($tabNames == null &&  empty($tabNames))
                                                             <div class="row form-group">
                                                                 <div class="col-md-1">
                                                                     <input type="checkbox" checked="checked" name="is_check_home[status]">
@@ -291,12 +292,12 @@
                                                                             <input type="checkbox" name="is_check_{{$tabName['slug']}}[status]">
                                                                         @endif
                                                                     </div>
-                                                                    <div class="col-md-4">
+                                                                    <div class="col-md-6">
                                                                         @if($tabName['display_name'] != null)
-                                                                        <input type="text" value="{{$tabName['display_name']}}" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
-                                                                            @else
+                                                                            <input type="text" value="{{$tabName['display_name']}}" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
+                                                                        @else
                                                                             <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
-                                                                           @endif
+                                                                        @endif
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                         <input type="hidden" value="{{$tabName['slug']}}" name="is_check_{{$tabName['slug']}}[slug]">
@@ -306,13 +307,13 @@
                                                                             <input type="text" value="" class="form-control" size="5" name="is_check_{{$tabName['slug']}}[priority_menu_tab]" id="priority_custom_link_3" placeholder="enter priority">
                                                                         @endif
                                                                     </div>
-                                                                        <div class="col-md-3">
-                                                                            @if($tabName['link'] != null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
+                                                                    <div class="col-md-3">
+                                                                        @if($tabName['link'] != null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
                                                                             <input type="text" value="{{$tabName['link']}}" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
-                                                                                @elseif($tabName['link'] == null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
-                                                                                <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
-                                                                            @endif
-                                                                        </div>
+                                                                        @elseif($tabName['link'] == null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
+                                                                            <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             @endforeach
                                                         @endif
@@ -413,88 +414,288 @@
                                             </div>
                                             <div class="tab-pane" id="tab_4">
                                                 <form method="post" action="/cms/slider-images">
-                                                    <div class="row">
-                                                        <div class="col-md-2">
-                                                            <label class="control-label">
-                                                                Slider 1
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="checkbox" name="sliderImages1[is_checked_slider1]">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Select Images  :</label>
-                                                        <input id="imageUpload1" type="file" class="btn blue"/>
-                                                        <br />
-                                                        <div class="row">
-                                                            <div id="preview-image1" class="row">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="col-md-2">
-                                                            <label class="control-label">
-                                                                Slider 1
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <br><br>
-                                                    <div class="row">
-                                                        <div class="col-md-2">
-                                                            <label class="control-label">
-                                                                Slider 2
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="sliderImages2[is_checked_slider2]">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Select Images :</label>
-                                                        <input id="imageUpload2" type="file" class="btn blue"/>
-                                                        <br />
-                                                        <div class="row">
-                                                            <div id="preview-image2" class="row">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <br><br>
-                                                    <div class="row">
-                                                        <div class="col-md-2">
-                                                            <label class="control-label">
-                                                                Slider 3
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <input type="checkbox" name="sliderImages3[is_checked_slider3]">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Select Images :</label>
-                                                        <input id="imageUpload3" type="file" class="btn blue"/>
-                                                        <br />
-                                                        <div class="row">
-                                                            <div id="preview-image3" class="row">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group">
-                                                            @if($sliderImages != null)
-                                                                @foreach($sliderImages as $images)
+                                                    <?php
+                                                    $count = 1;
+                                                    $sliderTotalCount = 3;
+                                                    $sliderCount = (count($sliderImages));
+                                                    ?>
+                                                    @if($sliderImages != null && !empty($sliderImages))
+                                                        @foreach($sliderImages  as $key => $value)
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="control-label" style="font-size: 100%">
+                                                                        <b><i>Please tick to select the Slider {{$count}}</i></b>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    @if($value['is_active'] == 1)
+                                                                        <input type="checkbox" checked="checked" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider{{$count}}]">
+                                                                    @else
+                                                                        <input type="checkbox" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider{{$count}}]">
+                                                                    @endif
+                                                                </div>
+                                                                <input type="hidden" name="sliderImages{{$count}}[id]" value="{{$value['id']}}">
+                                                                <input type="hidden" name="sliderImages{{$count}}[image]" value="{{$value['name']}}">
+                                                                <div class="col-md-4">
                                                                     <? $ds=DIRECTORY_SEPARATOR;
-                                                                    $folderEncName = sha1($images['body_id']);
+                                                                    $folderEncName = sha1($value['id']);
                                                                     $folderPath = env('SLIDER_IMAGES_UPLOAD').$ds.$folderEncName;?>
-                                                                    <img src="{{$folderPath.$ds.$images['name']}}" style="height: 150px; width: 150px">
-                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                                @endforeach
-                                                            @endif
+                                                                    <img src="{{$folderPath.$ds.$value['name']}}" style="height: 100px; width: 150px">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label">Select Images  :</label>
+                                                                <input id="imageUpload1{{$count}}" type="file" class="btn blue"/>
+                                                                <br />
+                                                                <div class="row">
+                                                                    <div id="preview-image{{$count}}" class="row">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label class="control-label">
+                                                                        Message 1
+                                                                    </label>
+                                                                    @if($value['message_1'] != null)
+                                                                        <input type="text" name="sliderImages{{$count}}[message_1]" id="message_1" value="{{$value['message_1']}}" placeholder="enter the message">
+                                                                    @else
+                                                                        <input type="text" name="sliderImages{{$count}}[message_1]" id="message_1" value="" placeholder="enter the message">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label class="control-label">
+                                                                        Message 2
+                                                                    </label>
+                                                                    @if($value['message_2'] != null)
+                                                                        <input type="text" name="sliderImages{{$count}}[message_2]" id="message_2" value="{{$value['message_2']}}" placeholder="enter the message">
+                                                                    @else
+                                                                        <input type="text" name="sliderImages{{$count}}[message_2]" id="message_2" value="" placeholder="enter the message">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label class="control-label">
+                                                                        Hyper Link title
+                                                                    </label>
+                                                                    @if($value['hyper_name'] != null)
+                                                                        <input type="text" name="sliderImages{{$count}}[link_title]" id="link_title" value="{{$value['hyper_name']}}" placeholder="enter link title">
+                                                                    @else
+                                                                        <input type="text" name="sliderImages{{$count}}[link_title]" id="link_title" value="" placeholder="enter link title">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label class="control-label">
+                                                                        Hyper Link
+                                                                    </label>
+                                                                    @if($value['hyper_link'] != null)
+                                                                        <input type="text" name="sliderImages{{$count}}[link]" id="link_title" value="{{$value['hyper_link']}}" placeholder="enter hyper Link">
+                                                                    @else
+                                                                        <input type="text" name="sliderImages{{$count}}[link]" id="link_title" value="" placeholder="enter hyper Link">
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <hr>
+                                                            <?php $count++?>
+                                                        @endforeach
+                                                        @if($count <= $sliderTotalCount)
+                                                            @for($i=$count ; $i <= $sliderTotalCount ; $i++,$count++)
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="control-label" style="font-size: 100%">
+                                                                            <b><i>Please tick to select the Slider {{$count}}</i></b>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input type="checkbox" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider{{$count}}]">
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Select Images  :</label>
+                                                                    <input id="imageUpload{{$count}}" type="file" class="btn blue"/>
+                                                                    <br />
+                                                                    <div class="row">
+                                                                        <div id="preview-image{{$count}}" class="row">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <label class="control-label">
+                                                                            Message 1
+                                                                        </label>
+                                                                        <input type="text" name="sliderImages{{$count}}[message_1]" id="message_1" value="" placeholder="enter the message">
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <label class="control-label">
+                                                                            Message 2
+                                                                        </label>
+                                                                        <input type="text" name="sliderImages{{$count}}[message_2]" id="message_2" value="" placeholder="enter the message">
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <label class="control-label">
+                                                                            Hyper Link title
+                                                                        </label>
+                                                                        <input type="text" name="sliderImages{{$count}}[link_title]" id="link_title" value="" placeholder="enter link title">
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <label class="control-label">
+                                                                            Hyper Link
+                                                                        </label>
+                                                                        <input type="text" name="sliderImages{{$count}}[link]" id="link_title" value="" placeholder="enter hyper Link">
+                                                                    </div>
+                                                                </div>
+                                                                <br>
+                                                                <hr>
+                                                            @endfor
+                                                        @endif
+                                                    @else
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <label class="control-label" style="font-size: 100%">
+                                                                    <b><i>Please tick to select the Slider 1</i></b>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <input type="checkbox" id="slider1_checked" name="sliderImages1[is_checked_slider1]">
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">Select Images  :</label>
+                                                            <input id="imageUpload1" type="file" class="btn blue"/>
+                                                            <br />
+                                                            <div class="row">
+                                                                <div id="preview-image1" class="row">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Message 1
+                                                                </label>
+                                                                <input type="text" name="sliderImages1[message_1]" id="message_1" value="" placeholder="enter the message">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Message 2
+                                                                </label>
+                                                                <input type="text" name="sliderImages1[message_2]" id="message_2" value="" placeholder="enter the message">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Hyper Link title
+                                                                </label>
+                                                                <input type="text" name="sliderImages1[link_title]" id="link_title" value="" placeholder="enter link title">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Hyper Link
+                                                                </label>
+                                                                <input type="text" name="sliderImages1[link]" id="link_title" value="" placeholder="enter hyper Link">
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <label class="control-label" style="font-size: 100%">
+                                                                    <b><i>Please tick to select the Slider 2</i></b>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <input type="checkbox" name="sliderImages2[is_checked_slider2]">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">Select Images :</label>
+                                                            <input id="imageUpload2" type="file" class="btn blue"/>
+                                                            <br />
+                                                            <div class="row">
+                                                                <div id="preview-image2" class="row">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Message 1
+                                                                </label>
+                                                                <input type="text" name="sliderImages2[message_1]" id="message_1" value="" placeholder="enter the message">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Message 2
+                                                                </label>
+                                                                <input type="text" name="sliderImages2[message_2]" id="message_2" value="" placeholder="enter the message">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Hyper Link title
+                                                                </label>
+                                                                <input type="text" name="sliderImages2[link_title]" id="link_title" value="" placeholder="enter link title">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Hyper Link
+                                                                </label>
+                                                                <input type="text" name="sliderImages2[link]" id="link_title" value="" placeholder="enter hyper Link">
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <label class="control-label" style="font-size: 100%">
+                                                                    <b><i>Please tick to select the Slider 3</i></b>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <input type="checkbox" name="sliderImages3[is_checked_slider3]">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">Select Images :</label>
+                                                            <input id="imageUpload3" type="file" class="btn blue"/>
+                                                            <br />
+                                                            <div class="row">
+                                                                <div id="preview-image3" class="row">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Message 1
+                                                                </label>
+                                                                <input type="text" name="sliderImages3[message_1]" id="message_1" value="" placeholder="enter the message">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Message 2
+                                                                </label>
+                                                                <input type="text" name="sliderImages3[message_2]" id="message_2" value="" placeholder="enter the message">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Hyper Link title
+                                                                </label>
+                                                                <input type="text" name="sliderImages3[link_title]" id="link_title" value="" placeholder="enter link title">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label">
+                                                                    Hyper Link
+                                                                </label>
+                                                                <input type="text" name="sliderImages3[link]" id="link_title" value="" placeholder="enter hyper Link">
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                     <br><br>
                                                     <div class="row">
                                                         <div class="form-group col-md-7">
@@ -583,59 +784,75 @@
                                                         </div>
                                                         <div class="row form-group">
                                                             <div class="col-md-1">
-                                                                <input type="checkbox" name="full_name_checked" >
+                                                                <input type="checkbox" name="full_name_checked[checked]" >
                                                             </div>
                                                             <div class="col-md-2 ">
                                                                 <label class="control-label">
                                                                     Full name :
                                                                 </label>
+                                                                <input type="hidden" name="full_name_checked[full_name]" value="Full name">
                                                             </div>
                                                         </div>
                                                         <br>
                                                         <div class="row form-group">
                                                             <div class="col-md-1">
-                                                                <input type="checkbox" name="contact_no_checked" >
+                                                                <input type="checkbox" name="contact_no_checked[checked]">
                                                             </div>
                                                             <div class="col-md-2 ">
                                                                 <label class="control-label">
                                                                     Contact no :
                                                                 </label>
+                                                                <input type="hidden" name="contact_no_checked[contact_number]" value="Contact No">
                                                             </div>
                                                         </div>
                                                         <br>
                                                         <div class="row form-group">
                                                             <div class="col-md-1">
-                                                                <input type="checkbox" name="full_email_checked">
+                                                                <input type="checkbox" name="full_email_checked[checked]">
                                                             </div>
                                                             <div class="col-md-2 ">
                                                                 <label class="control-label">
                                                                     Email :
                                                                 </label>
+                                                                <input type="hidden" name="full_email_checked[email]" value="Email">
                                                             </div>
                                                         </div>
                                                         <br>
                                                         <div class="row form-group">
                                                             <div class="col-md-1">
-                                                                <input type="checkbox" name="subject_checked">
+                                                                <input type="checkbox" name="subject_checked[checked]">
                                                             </div>
                                                             <div class="col-md-2 ">
                                                                 <label class="control-label">
                                                                     Subject :
                                                                 </label>
+                                                                <input type="hidden" name="subject_checked[subject]" value="Subject">
                                                             </div>
                                                         </div>
                                                         <br>
                                                         <div class="row form-group">
                                                             <div class="col-md-1">
-                                                                <input type="checkbox" name="message_checked">
+                                                                <input type="checkbox" name="message_checked[checked]">
                                                             </div>
                                                             <div class="col-md-2 ">
                                                                 <label class="control-label">
                                                                     Message :
                                                                 </label>
+                                                                <input type="hidden" name="message_checked[message]" value="Message">
                                                             </div>
                                                         </div>
-                                                        <br>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-7">
+                                                                <button class="btn btn-primary btn-wide pull-right" type="submit">
+                                                                    Save <i class="fa fa-arrow-circle-right"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <hr>
+                                                <form action="/cms/contact-us-detail" method="post">
+                                                    <div class="row">
                                                         <div class="row">
                                                             <h4>Map</h4>
                                                         </div>

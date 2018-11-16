@@ -663,6 +663,7 @@ Route::group(['prefix' => 'cms'],function (){
     Route::post('footer-setting',array('uses' => 'Cms\CmsController@footerSettings'));
     Route::post('slider-images',array('uses' => 'Cms\CmsController@sliderImages'));
     Route::post('social-links',array('uses' => 'Cms\CmsController@socialMediaLinks'));
+    Route::post('contact-us-detail',array('uses' => 'Cms\CmsController@contactUsDetail'));
     Route::post('contact-us-userForm',array('uses' => 'Cms\CmsController@contactUsForm'));
     Route::get('tabs-Listing',array('uses' => 'Cms\CmsController@tabsSubTabsListing'));
     Route::get('pages',array('uses' => 'Cms\CmsController@createPages'));
