@@ -445,7 +445,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="control-label">Select Images  :</label>
-                                                                <input id="imageUpload1{{$count}}" type="file" class="btn blue"/>
+                                                                <input id="imageUpload{{$count}}" type="file" class="btn blue"/>
                                                                 <br />
                                                                 <div class="row">
                                                                     <div id="preview-image{{$count}}" class="row">
@@ -782,65 +782,92 @@
                                                         <div class="row">
                                                             <h4>User Form</h4>
                                                         </div>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-1">
-                                                                <input type="checkbox" name="full_name_checked[checked]" >
+                                                        @if($contactUsForm != null && !empty($contactUsForm))
+                                                            @foreach($contactUsForm as $contactForm)
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    @if($contactForm['is_active'] == 1)
+                                                                        <input type="checkbox" checked="checked" name="{{$contactForm['slug']}}_checked[checked]">
+                                                                    @else
+                                                                        <input type="checkbox" name="{{$contactForm['slug']}}_checked[checked]">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-md-2 ">
+                                                                    <label class="control-label">
+                                                                        {{$contactForm['name']}} :
+                                                                    </label>
+                                                                    <input type="hidden" name="{{$contactForm['slug']}}_checked[name]" value="{{$contactForm['name']}}">
+                                                                    <input type="hidden" name="{{$contactForm['slug']}}_checked[slug]" value="{{$contactForm['slug']}}">
+                                                                    <input type="hidden" name="{{$contactForm['slug']}}_checked[id]" value="{{$contactForm['id']}}">
+                                                                </div>
                                                             </div>
-                                                            <div class="col-md-2 ">
-                                                                <label class="control-label">
-                                                                    Full name :
-                                                                </label>
-                                                                <input type="hidden" name="full_name_checked[full_name]" value="Full name">
+                                                            @endforeach
+                                                        @else
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="full_name_checked[checked]" >
+                                                                </div>
+                                                                <div class="col-md-2 ">
+                                                                    <label class="control-label">
+                                                                        Full name :
+                                                                    </label>
+                                                                    <input type="hidden" name="full_name_checked[name]" value="Full name">
+                                                                    <input type="hidden" name="full_name_checked[slug]" value="full_name">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <br>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-1">
-                                                                <input type="checkbox" name="contact_no_checked[checked]">
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="contact_no_checked[checked]">
+                                                                </div>
+                                                                <div class="col-md-2 ">
+                                                                    <label class="control-label">
+                                                                        Contact no :
+                                                                    </label>
+                                                                    <input type="hidden" name="contact_no_checked[name]" value="Contact No">
+                                                                    <input type="hidden" name="contact_no_checked[slug]" value="contact_no">
+                                                                </div>
                                                             </div>
-                                                            <div class="col-md-2 ">
-                                                                <label class="control-label">
-                                                                    Contact no :
-                                                                </label>
-                                                                <input type="hidden" name="contact_no_checked[contact_number]" value="Contact No">
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="full_email_checked[checked]">
+                                                                </div>
+                                                                <div class="col-md-2 ">
+                                                                    <label class="control-label">
+                                                                        Email :
+                                                                    </label>
+                                                                    <input type="hidden" name="full_email_checked[name]" value="Email">
+                                                                    <input type="hidden" name="full_email_checked[slug]" value="email">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <br>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-1">
-                                                                <input type="checkbox" name="full_email_checked[checked]">
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="subject_checked[checked]">
+                                                                </div>
+                                                                <div class="col-md-2 ">
+                                                                    <label class="control-label">
+                                                                        Subject :
+                                                                    </label>
+                                                                    <input type="hidden" name="subject_checked[name]" value="Subject">
+                                                                    <input type="hidden" name="subject_checked[slug]" value="subject">
+                                                                </div>
                                                             </div>
-                                                            <div class="col-md-2 ">
-                                                                <label class="control-label">
-                                                                    Email :
-                                                                </label>
-                                                                <input type="hidden" name="full_email_checked[email]" value="Email">
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-1">
+                                                                    <input type="checkbox" name="message_checked[checked]">
+                                                                </div>
+                                                                <div class="col-md-2 ">
+                                                                    <label class="control-label">
+                                                                        Message :
+                                                                    </label>
+                                                                    <input type="hidden" name="message_checked[name]" value="Message">
+                                                                    <input type="hidden" name="message_checked[slug]" value="message">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <br>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-1">
-                                                                <input type="checkbox" name="subject_checked[checked]">
-                                                            </div>
-                                                            <div class="col-md-2 ">
-                                                                <label class="control-label">
-                                                                    Subject :
-                                                                </label>
-                                                                <input type="hidden" name="subject_checked[subject]" value="Subject">
-                                                            </div>
-                                                        </div>
-                                                        <br>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-1">
-                                                                <input type="checkbox" name="message_checked[checked]">
-                                                            </div>
-                                                            <div class="col-md-2 ">
-                                                                <label class="control-label">
-                                                                    Message :
-                                                                </label>
-                                                                <input type="hidden" name="message_checked[message]" value="Message">
-                                                            </div>
-                                                        </div>
+                                                        @endif
                                                         <div class="row">
                                                             <div class="form-group col-md-7">
                                                                 <button class="btn btn-primary btn-wide pull-right" type="submit">
