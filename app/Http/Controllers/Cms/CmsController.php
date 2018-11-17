@@ -172,7 +172,6 @@ class CmsController extends Controller
     }
     public function sliderImages(Request $request){
         try{
-            dd($request->all());
             $user = Auth::user();
             $imageData = array();
             $imagesData = array();
@@ -207,10 +206,10 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage1['id'])->update($imagesData);
 
-                    }elseif((array_key_exists('slider_images_1',$images) && (array_key_exists('id',$images)))){
+                    }if((array_key_exists('slider_images_1',$images) && (array_key_exists('id',$images)))){
                         $folderEncName = sha1($images['id']);
                         $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['name']);
+                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['image']);
                         if (! file_exists($folderPath)) {
                             File::makeDirectory($folderPath , 0777 ,true,true);
                         }
@@ -235,7 +234,6 @@ class CmsController extends Controller
                     $imageData['hyper_name'] = $images['link_title'];
                     $imageData['hyper_link'] = $images['link'];
                     if(array_key_exists('id',$images)){
-                        $imageData['name'] = $images['image'];
                         $sliderImage2 = BodySliderImages::where('id',$images['id'])->update($imageData);
                     }else{
                         $sliderImage2 = BodySliderImages::create($imageData);
@@ -258,10 +256,10 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage2['id'])->update($imagesData);
 
-                    }elseif ((array_key_exists('slider_images_2',$images) && (array_key_exists('id',$images)))){
+                    }if ((array_key_exists('slider_images_2',$images) && (array_key_exists('id',$images)))){
                         $folderEncName = sha1($images['id']);
                         $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['name']);
+                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['image']);
                         if (! file_exists($folderPath)) {
                             File::makeDirectory($folderPath , 0777 ,true,true);
                         }
@@ -286,7 +284,6 @@ class CmsController extends Controller
                     $imageData['hyper_name'] = $images['link_title'];
                     $imageData['hyper_link'] = $images['link'];
                     if(array_key_exists('id',$images)){
-                        $imageData['name'] = $images['image'];
                         $sliderImage3 = BodySliderImages::where('id',$images['id'])->update($imageData);
                     }else{
                         $sliderImage3 = BodySliderImages::create($imageData);
@@ -309,10 +306,10 @@ class CmsController extends Controller
                         $imageData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage3['id'])->update($imagesData);
 
-                    }elseif ((array_key_exists('slider_images_3',$images)) && (array_key_exists('id',$images))){
+                    }if ((array_key_exists('slider_images_3',$images)) && (array_key_exists('id',$images))){
                         $folderEncName = sha1($images['id']);
                         $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['name']);
+                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['image']);
                         if (! file_exists($folderPath)) {
                             File::makeDirectory($folderPath , 0777 ,true,true);
                         }
@@ -327,7 +324,6 @@ class CmsController extends Controller
                         $imageData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage3['id'])->update($imagesData);
                     }
-
                 }
             }
 
