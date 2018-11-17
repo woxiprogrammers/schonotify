@@ -107,7 +107,9 @@ class CmsController extends Controller
             $folderEncName = sha1($user->body_id);
             $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
             if($headerDataPresent['logo_name'] != null){
-                unlink($folderPath.DIRECTORY_SEPARATOR.$headerDataPresent['logo_name']);
+                if (file_exists($folderPath.DIRECTORY_SEPARATOR.$headerDataPresent['logo_name'])) {
+                    unlink($folderPath.DIRECTORY_SEPARATOR.$headerDataPresent['logo_name']);
+                }
             }
             if (! file_exists($folderPath)) {
                 File::makeDirectory($folderPath , 0777 ,true,true);

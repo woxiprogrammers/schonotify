@@ -595,6 +595,12 @@
         Route::get('folder-first-image/{body_id}','api\GalleryController@folderDetails');
         Route::get('gallery-image/{folder_id}','api\GalleryController@galleryImages');
     });
+    /* API CMS Route */
+    Route::group(['prefix' => 'api/temp1/user/'], function () {
+        Route::get('master-details/{body_id}',array('uses' => 'api\CmsController@masterDetails'));
+        Route::get('gallery-details/{body_id}',array('uses' => 'api\CmsController@galleryDetails'));
+        Route::get('events-details/{body_id}',array('uses' => 'api\CmsController@eventDetails'));
+    });
         //Exam
 Route::group(['prefix' => 'exam'], function () {
     Route::get('create',array('uses' => 'ExamController@createExamStructureView'));
