@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
+use App\BodyAboutUs;
 use App\BodyDetails;
 use App\BodySliderImages;
 use App\BodyTabNames;
+use App\Folder;
+use App\GalleryManagement;
 use App\SocialPlatform;
 use Illuminate\Http\Request;
 
@@ -35,8 +38,32 @@ class CmsController extends Controller
                                             ->where('body_social_details.body_id',$body_id)
                                             ->where('body_social_details.is_active',1)
                                             ->select('body_social_details.name as social_link','social_platform.slug')->get()->toarray();
-            $data['headerData']['socialMedia'] = $socialDetails;
-            $data['sliderImages'] = BodySliderImages::where('body_id',$body_id)->where('is_active',1)->get()->toArray();
+            $data['socialMedia']['links'] = $socialDetails;
+            $sliderImages =  BodySliderImages::where('body_id',$body_id)->where('is_active',1)->get()->toArray();
+            $itrator = 0;
+            foreach ($sliderImages as $slider){
+                $data['sliderImages']['slider']['image'][$itrator] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$slider['name'];
+                $data['sliderImages']['slider']['message1'][$itrator] = $slider['message_1'];
+                $data['sliderImages']['slider']['message_2'][$itrator] = $slider['message_2'];
+                $data['sliderImages']['slider']['hyper_name'][$itrator] = $slider['hyper_name'];
+                $data['sliderImages']['slider']['hyper_link'][$itrator] = $slider['hyper_link'];
+                $itrator++;
+            }
+            $data['footerData']['message'] = $bodyDetails['footer_message'];
+            $data['contactUs']['address'] = $bodyDetails['address'];
+            $data['contactUs']['contact_number'] = $bodyDetails['contact_number'];
+            $data['contactUs']['email'] =  $bodyDetails['email'];
+            $data['contactUs']['map'] =  $bodyDetails['map_embed'];
+            $aboutUs =  BodyAboutUs::where('body_id',$body_id)->first();
+            $data['aboutUs']['details'] = $aboutUs['description'];
+            $data['aboutUs']['image'] = env('BASE_URL').env('ABOUT_US_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$aboutUs['image_name'];
+            $gallery = Folder::join('gallery_management','gallery_management.folder_id','=','folders.id')
+                                ->where('folders.is_active',1)
+                                ->where('folders.body_id',$body_id)
+                                ->where('gallery_management.type','=','image')
+                                ->select('folders.id','folders.name','gallery_management.name as images')->get()->groupBy('id')->toArray();
+            $data['gallery'] = 1;
+
         }catch(\Exception $e){
             $message = "Something went wrong.";
             $status = 500;

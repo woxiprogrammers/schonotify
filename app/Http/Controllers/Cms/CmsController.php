@@ -174,7 +174,6 @@ class CmsController extends Controller
     }
     public function sliderImages(Request $request){
         try{
-            dd($request->all());
             $user = Auth::user();
             $imageData = array();
             $imagesData = array();
