@@ -294,9 +294,9 @@
     </div>
     <div class="col-md-6">
         @if($tabName['display_name'] != null)
-        <input type="text" value="{{$tabName['display_name']}}" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
+        <input type="text" value="{{$tabName['display_name']}}" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="{{$tabName['slug']}} tab">
         @else
-        <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="enter custom link name">
+        <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="{{$tabName['slug']}} tab">
         @endif
     </div>
     <div class="col-md-2">
@@ -608,7 +608,7 @@ $sliderCount = (count($sliderImages));
         </label>
     </div>
     <div class="col-md-1">
-        <input type="checkbox" name="sliderImages2[is_checked_slider2]">
+        <input type="checkbox"  name="sliderImages2[is_checked_slider2]">
     </div>
 </div>
 <div class="form-group">
@@ -1543,7 +1543,6 @@ $("#TestimonialImageUpload_5").on('change', function () {
     }else{
         alert("please select image less than 2 mb");
     }
-
 });
 
 function tabListing() {

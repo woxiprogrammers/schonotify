@@ -33,7 +33,7 @@ class CmsController extends Controller
            $user = Auth::User();
            $socialPlatformNames = SocialPlatform::get()->toArray();
            $socialMediaDetails = BodySocialDetails::where('body_id',$user['body_id'])->get()->toArray();
-           $tabNames = BodyTabNames::where('body_id',$user['body_id'])->get()->toArray();
+           $tabNames = BodyTabNames::where('body_id',$user['body_id'])->where('body_tab_name_id','=',null)->get()->toArray();
            $bodyDetails = BodyDetails::where('body_id',$user['body_id'])->first();
            $aboutUsDetails = BodyAboutUs::where('body_id',$user['body_id'])->first();
            $sliderImages = BodySliderImages::where('body_id',$user['body_id'])->get()->toArray();
@@ -175,9 +175,20 @@ class CmsController extends Controller
     public function sliderImages(Request $request){
         try{
             $user = Auth::user();
+            $dataAll = $request->all();
             $imageData = array();
             $imagesData = array();
-            foreach ($request->all() as $key => $images){
+            foreach ($dataAll as $images){
+                if((array_key_exists('id',$images))){
+                    $isActiveFalse['is_active'] = false;
+                    $isActive = BodySliderImages::where('id',$images['id'])->where('body_id',$user->body_id)->update($isActiveFalse);
+                    if($isActive){
+                        Session::flash('message-success','Successfully created');
+                        return back();
+                    }else{
+                        Session::flash('message-error','Something went wrong');
+                    }
+                }
                 if(array_key_exists('is_checked_slider1',$images)){
                     $imageData['body_id'] =  $user->body_id;
                     $imageData['is_active'] = true;
@@ -226,8 +237,6 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage1['id'])->update($imagesData);
                     }
-
-
                 }if (array_key_exists('is_checked_slider2',$images)){
                     $imageData['body_id'] =  $user->body_id;
                     $imageData['is_active'] = true;
@@ -276,8 +285,6 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage2['id'])->update($imagesData);
                     }
-
-
                 }if (array_key_exists('is_checked_slider3',$images)){
                     $imageData['body_id'] =  $user->body_id;
                     $imageData['is_active'] = true;
@@ -328,8 +335,7 @@ class CmsController extends Controller
                     }
                 }
             }
-
-            if($sliderImage1 || $query){
+            if($sliderImage1 || $query ){
                 Session::flash('message-success','Successfully created');
                 return back();
             }else{
