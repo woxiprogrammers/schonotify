@@ -28,7 +28,7 @@
                                            Select Folder <span class="symbol required"></span>
                                         </label>
                                         <select name="folder_id" class="form-control" id="folderDropdown" style="-webkit-appearance: menulist;">
-                                            <option>Select Batch</option>
+                                            <option>Select Folder</option>
                                             @foreach($folderName as $name)
                                                 <option value="{!! $name['id'] !!}">{!! $name['name'] !!}</option>
                                             @endforeach

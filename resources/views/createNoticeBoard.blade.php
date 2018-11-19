@@ -524,9 +524,9 @@
         });
     });
     $('#batch-select').change(function(){
-        $('#batch-class-div-data').html('');
-        var id=this.value;
+        var id = this.value;
         batchChange(id);
+        $('#batch-class-div-data').html('');
     });
     function batchChange(batch_id) {
         var route = '/get-announcement-batch-class/'+batch_id;
@@ -538,19 +538,18 @@
                         $('#save').prop('disabled',true);
                         $('#btnSubmit').prop('disabled',true);
                     } else {
-                    var str = "";
+                        var str = "";
                              for(var i=0; i<res.length; i++)
                              {
                                str +='<div class="checkbox clip-check check-primary">' +
-                                   '<input type="checkbox" value="'+res[i]['class_id']+'" name="classFirst[]" class="classFirst" id="class_'+res[i]['class_id']+'">'+
+                                         '<input type="checkbox" value="'+res[i]['class_id']+'" name="classFirst[]" class="classFirst" id="class_'+res[i]['class_id']+'">'+
                                          '<label for="class_'+res[i]['class_id']+'">'
                                             + res[i]['class_name'] +
                                          '</label>'+
-                             '</div>';
+                                    '</div>';
                               var res1= $.map(res[i]['division'],function(value){
                                    return value;
                               });
-                              console.log(res1.length);
                               for(var j=0; j<res1.length; j++){
                                    str += '<div class="checkbox clip-check check-primary checkbox-inline">'+
                                        '<input type="checkbox" value="'+res1[j]['division_id']+'" name="FirstDiv[]" class="FirstDiv" id="class_'+res[i]['class_id']+'_'+res1[j]['division_id']+'" >'+

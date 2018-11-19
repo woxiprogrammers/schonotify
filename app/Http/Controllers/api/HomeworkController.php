@@ -17,7 +17,7 @@ use Carbon\Carbon;
 use App\PushToken;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use Faker\Provider\DateTime;
-use Faker\Provider\File;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -393,8 +393,7 @@ class HomeworkController extends Controller
     * Developed By: Amol Rokade
     *Date: 1/2/2016
      */
-    public function createHomework(Requests\HomeworkRequest $request)
-    {
+    public function createHomework(Requests\HomeworkRequest $request){
         try{
             $data=array();
             $HomeworkTeacher=array();
@@ -410,11 +409,22 @@ class HomeworkController extends Controller
             $data['homework_timestamp'] = Carbon::now();
             $mytime = Carbon::now();
             if (!file_exists('uploads/homeworks/')) {
-                \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
+                \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true, true);
             }
             $tempImageName = (strtotime($mytime)).".jpg";
             $tempImagePath = "uploads/homeworks/";
             file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image) );
+            /*if(array_key_exists('image',$request->all())){
+                if (!file_exists('uploads/homeworks/')) {
+                    \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
+                }
+                $file_type = explode("/",$request->file_type);
+                $extension = $file_type[1];
+                $tempImageName = (strtotime($mytime)).".$extension";
+                $tempImagePath = "uploads/homeworks/";
+                file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image));
+                $data['attachment_file']=$tempImageName;
+            }*/
             $data['status'] = 0;//by default homework will be 0 for draft
             $data['is_active'] = 1;//0 is for delete  so by default Homework is not deleted
             $data['created_at'] = Carbon::now();
@@ -438,7 +448,7 @@ class HomeworkController extends Controller
             }
         }catch (\Exception $e) {
           $status = 500;
-          $message = "Something went wrong";
+          $message = "Something went wrong" . $e->getMessage();
         }
         $response = [
             "status" =>$status,

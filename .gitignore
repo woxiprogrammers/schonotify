@@ -3,6 +3,7 @@
 .env.*.php
 .env.php
 .env
+.env~
 
 /vendor
 /node_modules

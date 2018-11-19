@@ -656,3 +656,21 @@ Route::group(['prefix' => 'student'],function (){
     Route::post('student-shuffle',array('uses' => 'UsersController@shuffleStudents'));
     Route::post('student-multiple-shuffle',array('uses' => 'UsersController@multipleShuffleStudents'));
 });
+Route::group(['prefix' => 'cms'],function (){
+    Route::get('manage',array('uses' => 'Cms\CmsController@manageCms'));
+    Route::post('general-setting',array('uses' => 'Cms\CmsController@generalSettings'));
+    Route::post('header-setting',array('uses' => 'Cms\CmsController@headerSettings'));
+    Route::post('footer-setting',array('uses' => 'Cms\CmsController@footerSettings'));
+    Route::post('slider-images',array('uses' => 'Cms\CmsController@sliderImages'));
+    Route::post('social-links',array('uses' => 'Cms\CmsController@socialMediaLinks'));
+    Route::post('contact-us-detail',array('uses' => 'Cms\CmsController@contactUsDetail'));
+    Route::post('contact-us-userForm',array('uses' => 'Cms\CmsController@contactUsForm'));
+    Route::get('tabs-Listing',array('uses' => 'Cms\CmsController@tabsSubTabsListing'));
+    Route::get('pages',array('uses' => 'Cms\CmsController@createPages'));
+    Route::get('pagesEdit/{id}',array('uses' => 'Cms\CmsController@editPages'));
+    Route::get('pageRemove/{id}',array('uses' => 'Cms\CmsController@removePages'));
+    Route::post('sub-pages',array('uses' => 'Cms\CmsController@createSubPages'));
+    Route::post('sub-pages-edit/{id}',array('uses' => 'Cms\CmsController@editSubPages'));
+    Route::post('aboutUs',array('uses' => 'Cms\CmsController@aboutUsForm'));
+    Route::post('testimonial',array('uses' => 'Cms\CmsController@testimonialForm'));
+});

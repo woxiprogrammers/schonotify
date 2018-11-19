@@ -321,7 +321,8 @@
                         $division = $data['division'];
                         $date = date('Y-m-d',strtotime($data['date']));
                         $attendanceCount = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->count();
-
+                        /*$presentStudents = Attendance::where('date',$date)->where('division_id',$division)->lists('student_id');
+                        $attendance = User::where('division_id',$division)->whereNotIn('id',$presentStudents)->where('is_active',1)->select('id')->get();*/
                         $attendance = Attendance::where('date',$date)->where('division_id',$division)->select('student_id')->get();
                         $attendanceStatus = AttendanceStatus::where('date',$date)->where('division_id',$division)->count();
                            if($attendanceCount > 0) {
