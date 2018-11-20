@@ -617,6 +617,7 @@ $sliderCount = (count($sliderImages));
     <br />
     <div class="row">
         <div id="preview-image2" class="row">
+
         </div>
     </div>
 </div>
@@ -1026,6 +1027,7 @@ $sliderCount = (count($sliderImages));
                     <br />
                     <div class="row">
                         <div id="description-preview-image-{{$count}}" class="row">
+
                         </div>
                     </div>
                     <?php $ds=DIRECTORY_SEPARATOR;
@@ -1057,6 +1059,7 @@ $sliderCount = (count($sliderImages));
                     <br />
                     <div class="row">
                         <div id="description-preview-image-{{$count}}" class="row">
+
                         </div>
                     </div>
                 </div>
