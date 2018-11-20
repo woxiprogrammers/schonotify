@@ -40,13 +40,14 @@ class CmsController extends Controller
                                             ->select('body_social_details.name as social_link','social_platform.slug')->get()->toarray();
             $data['socialMedia']['links'] = $socialDetails;
             $sliderImages =  BodySliderImages::where('body_id',$body_id)->where('is_active',1)->get()->toArray();
-            $itrator = 0;
+            $itrator = 1;
             foreach ($sliderImages as $slider){
-                $data['sliderImages']['slider'][$itrator]['image'] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$slider['name'];
+                $data['sliderImages']['slider']["$itrator"]['image'] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($slider['id']).DIRECTORY_SEPARATOR.$slider['name'];
                 $data['sliderImages']['slider'][$itrator]['message1'] = $slider['message_1'];
                 $data['sliderImages']['slider'][$itrator]['message_2'] = $slider['message_2'];
                 $data['sliderImages']['slider'][$itrator]['hyper_name'] = $slider['hyper_name'];
                 $data['sliderImages']['slider'][$itrator]['hyper_link'] = $slider['hyper_link'];
+                $data['sliderImages']['slider'][$itrator]['slider_number'] = "slider".$itrator;
                 $itrator++;
             }
             $data['footerData']['message'] = $bodyDetails['footer_message'];
