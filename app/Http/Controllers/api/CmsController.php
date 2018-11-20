@@ -42,11 +42,11 @@ class CmsController extends Controller
             $sliderImages =  BodySliderImages::where('body_id',$body_id)->where('is_active',1)->get()->toArray();
             $itrator = 0;
             foreach ($sliderImages as $slider){
-                $data['sliderImages']['slider']['image'][$itrator] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$slider['name'];
-                $data['sliderImages']['slider']['message1'][$itrator] = $slider['message_1'];
-                $data['sliderImages']['slider']['message_2'][$itrator] = $slider['message_2'];
-                $data['sliderImages']['slider']['hyper_name'][$itrator] = $slider['hyper_name'];
-                $data['sliderImages']['slider']['hyper_link'][$itrator] = $slider['hyper_link'];
+                $data['sliderImages']['slider'][$itrator]['image'] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$slider['name'];
+                $data['sliderImages']['slider'][$itrator]['message1'] = $slider['message_1'];
+                $data['sliderImages']['slider'][$itrator]['message_2'] = $slider['message_2'];
+                $data['sliderImages']['slider'][$itrator]['hyper_name'] = $slider['hyper_name'];
+                $data['sliderImages']['slider'][$itrator]['hyper_link'] = $slider['hyper_link'];
                 $itrator++;
             }
             $data['footerData']['message'] = $bodyDetails['footer_message'];
