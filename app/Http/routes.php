@@ -481,6 +481,7 @@
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
     Route::get('logout/{user_id}',array('uses' => 'api\UserController@logout'));
+    Route::get('minimum-supported-version',array('uses' => 'api\UserController@minimum_supported_version'));
 
     //LC related
     Route::get('lc_generated/{id}',array('uses' => 'api\UserController@lcGenerated'));
@@ -595,6 +596,8 @@
         Route::get('folder-first-image/{body_id}','api\GalleryController@folderDetails');
         Route::get('gallery-image/{folder_id}','api\GalleryController@galleryImages');
     });
+    //end api
+
         //Exam
 Route::group(['prefix' => 'exam'], function () {
     Route::get('create',array('uses' => 'ExamController@createExamStructureView'));
@@ -663,6 +666,7 @@ Route::group(['prefix' => 'cms'],function (){
     Route::post('footer-setting',array('uses' => 'Cms\CmsController@footerSettings'));
     Route::post('slider-images',array('uses' => 'Cms\CmsController@sliderImages'));
     Route::post('social-links',array('uses' => 'Cms\CmsController@socialMediaLinks'));
+    Route::post('contact-us-detail',array('uses' => 'Cms\CmsController@contactUsDetail'));
     Route::post('contact-us-userForm',array('uses' => 'Cms\CmsController@contactUsForm'));
     Route::get('tabs-Listing',array('uses' => 'Cms\CmsController@tabsSubTabsListing'));
     Route::get('pages',array('uses' => 'Cms\CmsController@createPages'));

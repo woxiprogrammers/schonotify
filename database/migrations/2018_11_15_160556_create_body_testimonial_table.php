@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBodySliderImages extends Migration
+class CreateBodyTestimonialTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class CreateBodySliderImages extends Migration
      */
     public function up()
     {
-        Schema::create('body_slider_images', function (Blueprint $table) {
+        Schema::create('body_testimonial', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('body_id');
             $table->foreign('body_id')->references('id')->on('bodies')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('name',255)->nullable();
-            $table->unsignedInteger('priority')->nullable();
+            $table->string('image_name')->nullable();
+            $table->text('description')->nullable();
             $table->boolean('is_active');
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateBodySliderImages extends Migration
      */
     public function down()
     {
-        Schema::drop('body_slider_images');
+        Schema::drop('body_testimonial');
     }
 }

@@ -541,4 +541,26 @@ class UserController extends Controller
         ];
         return response($response, $status);
     }
+    public function minimum_supported_version(Request $request){
+        try{
+            $status = 200;
+            $message = "Successfully Listed";
+            $data['minimum_app_version'] = env('MINIMUM_APP_VERSION');
+            $data['current_app_version'] = env('CURRENT_APP_VERSION');
+            $data['maximum_app_version'] = env('MAXIMUM_APP_VERSION');
+        }catch(\Exception $e){
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => 'Minimum supported Version',
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+        $response = [
+            "message" => $message,
+            "data" => $data
+        ];
+        return response()->json($response,$status);
+    }
 }

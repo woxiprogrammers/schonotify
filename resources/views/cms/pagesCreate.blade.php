@@ -28,6 +28,9 @@
                                 <!-- end: MINI STATS WITH SPARKLINE -->
                             </div>
                         </div>
+                        <div class="row pull-right">
+                            <a href="/cms/manage">Back</a>
+                        </div>
                     </section>
                     <div class="container-fluid container-fullw bg-white">
                         <form action="/cms/sub-pages" method="post">
