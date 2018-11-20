@@ -57,12 +57,14 @@ class CmsController extends Controller
             $aboutUs =  BodyAboutUs::where('body_id',$body_id)->first();
             $data['aboutUs']['details'] = $aboutUs['description'];
             $data['aboutUs']['image'] = env('BASE_URL').env('ABOUT_US_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$aboutUs['image_name'];
-            $gallery = Folder::join('gallery_management','gallery_management.folder_id','=','folders.id')
+            $galleryImages = Folder::join('gallery_management','gallery_management.folder_id','=','folders.id')
                                 ->where('folders.is_active',1)
                                 ->where('folders.body_id',$body_id)
                                 ->where('gallery_management.type','=','image')
                                 ->select('folders.id','folders.name','gallery_management.name as images')->get()->groupBy('id')->toArray();
-            $data['gallery'] = 1;
+           /* foreach ($galleryImages as $galleryImage){
+                $data['gallery']['folderName'] = $galleryImage;
+            }*/
 
         }catch(\Exception $e){
             $message = "Something went wrong.";
