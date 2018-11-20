@@ -297,7 +297,7 @@
                                                             </div>
                                                             <div>
                                                                 @if($bodyDetails['logo_name'] != null)
-                                                                    <?$ds=DIRECTORY_SEPARATOR;
+                                                                    <?php $ds=DIRECTORY_SEPARATOR;
                                                                     $folderEncName = sha1($bodyDetails['body_id']);
                                                                     $folderPath = env('LOGO_FILE_UPLOAD').$ds.$folderEncName;?>
                                                                     <img src="{{$folderPath.$ds.$bodyDetails['logo_name']}}" style="height: 150px; width: 150px">
@@ -428,7 +428,7 @@
                                                         <div class="form-group">
                                                             @if($sliderImages != null)
                                                                 @foreach($sliderImages as $images)
-                                                                    <? $ds=DIRECTORY_SEPARATOR;
+                                                                    <?php $ds=DIRECTORY_SEPARATOR;
                                                                     $folderEncName = sha1($images['body_id']);
                                                                     $folderPath = env('SLIDER_IMAGES_UPLOAD').$ds.$folderEncName;?>
                                                                     <img src="{{$folderPath.$ds.$images['name']}}" style="height: 150px; width: 150px">
@@ -670,7 +670,7 @@
                                                                 @endif
                                                             </div>
                                                             @if($aboutUsDetails['image_name'] != null)
-                                                                <? $ds=DIRECTORY_SEPARATOR;
+                                                                <?php $ds=DIRECTORY_SEPARATOR;
                                                                 $folderPath = env('ABOUT_US_IMAGE_UPLOAD');
                                                                 $folderEncName = sha1($aboutUsDetails['body_id'])?>
                                                                 <img src="{{$folderPath.$ds.$folderEncName.$ds.$aboutUsDetails['image_name']}}" style="border: 1px black solid" width="200" height="120"/>
