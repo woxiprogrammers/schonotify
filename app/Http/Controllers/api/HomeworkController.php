@@ -408,7 +408,13 @@ class HomeworkController extends Controller
             $data['subject_id'] = $subject['id'];
             $data['homework_timestamp'] = Carbon::now();
             $mytime = Carbon::now();
-            if(array_key_exists('image',$request->all())){
+            if (!file_exists('uploads/homeworks/')) {
+                \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true, true);
+            }
+            $tempImageName = (strtotime($mytime)).".jpg";
+            $tempImagePath = "uploads/homeworks/";
+            file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image) );
+            /*if(array_key_exists('image',$request->all())){
                 if (!file_exists('uploads/homeworks/')) {
                     \Illuminate\Support\Facades\File::makeDirectory('uploads/homeworks/', $mode = 0777, true,true);
                 }
@@ -418,11 +424,12 @@ class HomeworkController extends Controller
                 $tempImagePath = "uploads/homeworks/";
                 file_put_contents($tempImagePath.$tempImageName,base64_decode($request->image));
                 $data['attachment_file']=$tempImageName;
-            }
+            }*/
             $data['status'] = 0;//by default homework will be 0 for draft
             $data['is_active'] = 1;//0 is for delete  so by default Homework is not deleted
             $data['created_at'] = Carbon::now();
             $data['updated_at'] = Carbon::now();
+            $data['attachment_file']=$tempImageName;
             $homework_id=Homework::insertGetId($data);
             if($homework_id != null)
             {

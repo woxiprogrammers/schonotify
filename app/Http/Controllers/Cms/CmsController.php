@@ -9,6 +9,7 @@ use App\BodySliderImages;
 use App\BodySocialDetails;
 use App\BodyTabDetails;
 use App\BodyTabNames;
+use App\BodyTestimonial;
 use App\SocialPlatform;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -32,12 +33,13 @@ class CmsController extends Controller
            $user = Auth::User();
            $socialPlatformNames = SocialPlatform::get()->toArray();
            $socialMediaDetails = BodySocialDetails::where('body_id',$user['body_id'])->get()->toArray();
-           $tabNames = BodyTabNames::where('body_id',$user['body_id'])->get()->toArray();
+           $tabNames = BodyTabNames::where('body_id',$user['body_id'])->where('body_tab_name_id','=',null)->get()->toArray();
            $bodyDetails = BodyDetails::where('body_id',$user['body_id'])->first();
            $aboutUsDetails = BodyAboutUs::where('body_id',$user['body_id'])->first();
            $sliderImages = BodySliderImages::where('body_id',$user['body_id'])->get()->toArray();
            $contactUsForm = BodyContactUsUserForm::get()->toArray();
-           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages','contactUsForm'));
+           $testimonialData = BodyTestimonial::where('body_id',$user['body_id'])->get()->toArray();
+           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages','contactUsForm','testimonialData'));
        }catch(\Exception $e){
            $data=[
                'action' => 'Get Manage Admin cms view',
@@ -115,6 +117,14 @@ class CmsController extends Controller
                 File::makeDirectory($folderPath , 0777 ,true,true);
             }
             if($request->has('gallery_images')){
+                $folderEncName = sha1($user->body_id);
+                $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                if($headerDataPresent['logo_name'] != null){
+                    unlink($folderPath.DIRECTORY_SEPARATOR.$headerDataPresent['logo_name']);
+                }
+                if (! file_exists($folderPath)) {
+                    File::makeDirectory($folderPath , 0777 ,true,true);
+                }
                 $imageArray = explode(';',$request->gallery_images);
                 $image = explode(',',$imageArray[1])[1];
                 $pos  = strpos($request->gallery_images, ';');
@@ -175,9 +185,20 @@ class CmsController extends Controller
     public function sliderImages(Request $request){
         try{
             $user = Auth::user();
+            $dataAll = $request->all();
             $imageData = array();
             $imagesData = array();
-            foreach ($request->all() as $key => $images){
+            foreach ($dataAll as $images){
+                if((array_key_exists('id',$images))){
+                    $isActiveFalse['is_active'] = false;
+                    $isActive = BodySliderImages::where('id',$images['id'])->where('body_id',$user->body_id)->update($isActiveFalse);
+                    if($isActive){
+                        Session::flash('message-success','Successfully created');
+                        return back();
+                    }else{
+                        Session::flash('message-error','Something went wrong');
+                    }
+                }
                 if(array_key_exists('is_checked_slider1',$images)){
                     $imageData['body_id'] =  $user->body_id;
                     $imageData['is_active'] = true;
@@ -208,10 +229,10 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage1['id'])->update($imagesData);
 
-                    }elseif((array_key_exists('slider_images_1',$images) && (array_key_exists('id',$images)))){
+                    }if((array_key_exists('slider_images_1',$images) && (array_key_exists('id',$images)))){
                         $folderEncName = sha1($images['id']);
                         $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['name']);
+                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['image']);
                         if (! file_exists($folderPath)) {
                             File::makeDirectory($folderPath , 0777 ,true,true);
                         }
@@ -226,8 +247,6 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage1['id'])->update($imagesData);
                     }
-
-
                 }if (array_key_exists('is_checked_slider2',$images)){
                     $imageData['body_id'] =  $user->body_id;
                     $imageData['is_active'] = true;
@@ -236,7 +255,6 @@ class CmsController extends Controller
                     $imageData['hyper_name'] = $images['link_title'];
                     $imageData['hyper_link'] = $images['link'];
                     if(array_key_exists('id',$images)){
-                        $imageData['name'] = $images['image'];
                         $sliderImage2 = BodySliderImages::where('id',$images['id'])->update($imageData);
                     }else{
                         $sliderImage2 = BodySliderImages::create($imageData);
@@ -259,10 +277,10 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage2['id'])->update($imagesData);
 
-                    }elseif ((array_key_exists('slider_images_2',$images) && (array_key_exists('id',$images)))){
+                    }if ((array_key_exists('slider_images_2',$images) && (array_key_exists('id',$images)))){
                         $folderEncName = sha1($images['id']);
                         $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['name']);
+                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['image']);
                         if (! file_exists($folderPath)) {
                             File::makeDirectory($folderPath , 0777 ,true,true);
                         }
@@ -277,8 +295,6 @@ class CmsController extends Controller
                         $imagesData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage2['id'])->update($imagesData);
                     }
-
-
                 }if (array_key_exists('is_checked_slider3',$images)){
                     $imageData['body_id'] =  $user->body_id;
                     $imageData['is_active'] = true;
@@ -287,7 +303,6 @@ class CmsController extends Controller
                     $imageData['hyper_name'] = $images['link_title'];
                     $imageData['hyper_link'] = $images['link'];
                     if(array_key_exists('id',$images)){
-                        $imageData['name'] = $images['image'];
                         $sliderImage3 = BodySliderImages::where('id',$images['id'])->update($imageData);
                     }else{
                         $sliderImage3 = BodySliderImages::create($imageData);
@@ -310,10 +325,10 @@ class CmsController extends Controller
                         $imageData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage3['id'])->update($imagesData);
 
-                    }elseif ((array_key_exists('slider_images_3',$images)) && (array_key_exists('id',$images))){
+                    }if ((array_key_exists('slider_images_3',$images)) && (array_key_exists('id',$images))){
                         $folderEncName = sha1($images['id']);
                         $folderPath = public_path().env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['name']);
+                        unlink($folderPath.DIRECTORY_SEPARATOR.$images['image']);
                         if (! file_exists($folderPath)) {
                             File::makeDirectory($folderPath , 0777 ,true,true);
                         }
@@ -328,11 +343,9 @@ class CmsController extends Controller
                         $imageData['name'] = $filename;
                         $query = BodySliderImages::where('id',$sliderImage3['id'])->update($imagesData);
                     }
-
                 }
             }
-
-            if($query){
+            if($sliderImage1 || $query ){
                 Session::flash('message-success','Successfully created');
                 return back();
             }else{
@@ -573,7 +586,6 @@ class CmsController extends Controller
             $user = Auth::User();
             $aboutUsData ['body_id'] = $user->body_id;
             $aboutUsData ['description'] = $request->about_us;
-
             if($request->has('about_us_image')){
                 $folderEncName = sha1($user->body_id);
                 $folderPath = public_path().env('ABOUT_US_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
@@ -615,7 +627,61 @@ class CmsController extends Controller
     }
     public function testimonialForm(Request $request){
         try{
-            dd($request->all());
+            $user = Auth::user();
+            foreach($request->all() as $data){
+                if(array_key_exists('is_check',$data)){
+                    $testimonialData['body_id'] = $user->body_id;
+                    $testimonialData['description'] = $data['testimonial'];
+                    $testimonialData['is_active'] = true;
+                    if(array_key_exists('id',$data)){
+                        $testimonial = BodyTestimonial::where('id',$data['id'])->update($testimonialData);
+                    }else{
+                        $testimonial = BodyTestimonial::create($testimonialData);
+                    }
+                }
+                if(array_key_exists('testimonialImage',$data)){
+                    $folderEncName = sha1($testimonial['id']);
+                    $folderPath = public_path().env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                    if (! file_exists($folderPath)) {
+                        File::makeDirectory($folderPath , 0777 ,true,true);
+                    }
+                    $imageArray = explode(';',$data['testimonialImage']);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($data['testimonialImage'], ';');
+                    $type = explode(':', substr($data['testimonialImage'], 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $testimonialImageData ['image_name'] = $filename;
+                    $query = BodyTestimonial::where('id',$testimonial['id'])->update($testimonialImageData);
+                }if((array_key_exists('testimonialImage',$data) && (array_key_exists('id',$data)))){
+                    $folderEncName = sha1($data['id']);
+                    $folderPath = public_path().env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                    if ( file_exists($folderPath)) {
+                        unlink($folderPath.DIRECTORY_SEPARATOR.$data['image_name']);
+                    }
+                    if (! file_exists($folderPath)) {
+                        File::makeDirectory($folderPath , 0777 ,true,true);
+                    }
+                    $imageArray = explode(';',$data['testimonialImage']);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($data['testimonialImage'], ';');
+                    $type = explode(':', substr($data['testimonialImage'], 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $testimonialImageData ['image_name'] = $filename;
+                    $query = BodyTestimonial::where('id',$data['id'])->update($testimonialImageData);
+                }
+            }
+            if($testimonialData || $query){
+                Session::flash('message-success','Successfully Created');
+                return back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
         }catch(\Exception $e){
             $data = [
                 'status' => 500,
