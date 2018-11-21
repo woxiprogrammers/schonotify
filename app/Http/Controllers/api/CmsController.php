@@ -6,6 +6,7 @@ use App\BodyAboutUs;
 use App\BodyDetails;
 use App\BodySliderImages;
 use App\BodyTabNames;
+use App\BodyTestimonial;
 use App\Event;
 use App\EventTypes;
 use App\Folder;
@@ -25,7 +26,7 @@ class CmsController extends Controller
         $this->middleware('db');
         $this->middleware('authenticate.user',['except'=>['masterDetails']]);
     }
-    public function masterDetails(Request $request,$body_id = 1){
+    public function masterDetails(Request $request,$body_id){
         try{
             $status = 200;
             $message = "Successfully Listed";
@@ -79,7 +80,14 @@ class CmsController extends Controller
             $data['achievements'] = Event::where('event_type_id',$achievementsId)->where('body_id',$body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
             $data['announcement'] = Event::where('event_type_id',$announcementId)->where('body_id',$body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
             $data['events'] = Event::where('event_type_id',$eventId)->where('body_id',$body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
-
+            $testimonials = BodyTestimonial::where('body_id',$body_id)->where('is_active',1)->get()->toarray();
+            $testimonialCOunt = 1;
+            foreach ($testimonials as $testimonial){
+                $data['testimonial'][$testimonialCOunt]['image'] = $testimonial['image_name'];
+                $data['testimonial'][$testimonialCOunt]['details'] = $testimonial['description'];
+                $data['testimonial'][$testimonialCOunt]['slug'] = "testimonial".$testimonialCOunt;
+                $testimonialCOunt++;
+            }
         }catch(\Exception $e){
             $message = "Something went wrong.";
             $status = 500;
