@@ -638,42 +638,52 @@ class CmsController extends Controller
                     }else{
                         $testimonial = BodyTestimonial::create($testimonialData);
                     }
+                    if(array_key_exists('testimonialImage',$data)){
+                        $folderEncName = sha1($testimonial['id']);
+                        $folderPath = public_path().env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                        if (! file_exists($folderPath)) {
+                            File::makeDirectory($folderPath , 0777 ,true,true);
+                        }
+                        $imageArray = explode(';',$data['testimonialImage']);
+                        $image = explode(',',$imageArray[1])[1];
+                        $pos  = strpos($data['testimonialImage'], ';');
+                        $type = explode(':', substr($data['testimonialImage'], 0, $pos))[1];
+                        $extension = explode('/',$type)[1];
+                        $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                        $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                        file_put_contents($fileFullPath,base64_decode($image));
+                        $testimonialImageData ['image_name'] = $filename;
+                        $query = BodyTestimonial::where('id',$testimonial['id'])->update($testimonialImageData);
+                    }if((array_key_exists('testimonialImage',$data) && (array_key_exists('id',$data)))){
+                        $folderEncName = sha1($data['id']);
+                        $folderPath = public_path().env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                        if ( file_exists($folderPath)) {
+                            unlink($folderPath.DIRECTORY_SEPARATOR.$data['image_name']);
+                        }
+                        if (! file_exists($folderPath)) {
+                            File::makeDirectory($folderPath , 0777 ,true,true);
+                        }
+                        $imageArray = explode(';',$data['testimonialImage']);
+                        $image = explode(',',$imageArray[1])[1];
+                        $pos  = strpos($data['testimonialImage'], ';');
+                        $type = explode(':', substr($data['testimonialImage'], 0, $pos))[1];
+                        $extension = explode('/',$type)[1];
+                        $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                        $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                        file_put_contents($fileFullPath,base64_decode($image));
+                        $testimonialImageData ['image_name'] = $filename;
+                        $query = BodyTestimonial::where('id',$data['id'])->update($testimonialImageData);
+                    }
                 }
-                if(array_key_exists('testimonialImage',$data)){
-                    $folderEncName = sha1($testimonial['id']);
-                    $folderPath = public_path().env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                    if (! file_exists($folderPath)) {
-                        File::makeDirectory($folderPath , 0777 ,true,true);
+                if((array_key_exists('id',$data)) && !array_key_exists('is_check',$data)){
+                    $isActiveFalse['is_active'] = false;
+                    $isActive = BodyTestimonial::where('id',$data['id'])->where('body_id',$user->body_id)->update($isActiveFalse);
+                    if($isActive){
+                        Session::flash('message-success','Successfully created');
+                        return back();
+                    }else{
+                        Session::flash('message-error','Something went wrong');
                     }
-                    $imageArray = explode(';',$data['testimonialImage']);
-                    $image = explode(',',$imageArray[1])[1];
-                    $pos  = strpos($data['testimonialImage'], ';');
-                    $type = explode(':', substr($data['testimonialImage'], 0, $pos))[1];
-                    $extension = explode('/',$type)[1];
-                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
-                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
-                    file_put_contents($fileFullPath,base64_decode($image));
-                    $testimonialImageData ['image_name'] = $filename;
-                    $query = BodyTestimonial::where('id',$testimonial['id'])->update($testimonialImageData);
-                }if((array_key_exists('testimonialImage',$data) && (array_key_exists('id',$data)))){
-                    $folderEncName = sha1($data['id']);
-                    $folderPath = public_path().env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
-                    if ( file_exists($folderPath)) {
-                        unlink($folderPath.DIRECTORY_SEPARATOR.$data['image_name']);
-                    }
-                    if (! file_exists($folderPath)) {
-                        File::makeDirectory($folderPath , 0777 ,true,true);
-                    }
-                    $imageArray = explode(';',$data['testimonialImage']);
-                    $image = explode(',',$imageArray[1])[1];
-                    $pos  = strpos($data['testimonialImage'], ';');
-                    $type = explode(':', substr($data['testimonialImage'], 0, $pos))[1];
-                    $extension = explode('/',$type)[1];
-                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
-                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
-                    file_put_contents($fileFullPath,base64_decode($image));
-                    $testimonialImageData ['image_name'] = $filename;
-                    $query = BodyTestimonial::where('id',$data['id'])->update($testimonialImageData);
                 }
             }
             if($testimonialData || $query){
