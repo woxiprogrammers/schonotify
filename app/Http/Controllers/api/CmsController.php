@@ -6,6 +6,8 @@ use App\BodyAboutUs;
 use App\BodyDetails;
 use App\BodySliderImages;
 use App\BodyTabNames;
+use App\Event;
+use App\EventTypes;
 use App\Folder;
 use App\GalleryManagement;
 use App\SocialPlatform;
@@ -42,7 +44,7 @@ class CmsController extends Controller
             $sliderImages =  BodySliderImages::where('body_id',$body_id)->where('is_active',1)->get()->toArray();
             $itrator = 1;
             foreach ($sliderImages as $slider){
-                $data['sliderImages']['slider']["$itrator"]['image'] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($slider['id']).DIRECTORY_SEPARATOR.$slider['name'];
+                $data['sliderImages']['slider'][$itrator]['image'] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($slider['id']).DIRECTORY_SEPARATOR.$slider['name'];
                 $data['sliderImages']['slider'][$itrator]['message1'] = $slider['message_1'];
                 $data['sliderImages']['slider'][$itrator]['message_2'] = $slider['message_2'];
                 $data['sliderImages']['slider'][$itrator]['hyper_name'] = $slider['hyper_name'];
@@ -63,9 +65,20 @@ class CmsController extends Controller
                                 ->where('folders.body_id',$body_id)
                                 ->where('gallery_management.type','=','image')
                                 ->select('folders.id','folders.name','gallery_management.name as images')->get()->groupBy('id')->toArray();
-           /* foreach ($galleryImages as $galleryImage){
-                $data['gallery']['folderName'] = $galleryImage;
+            /*jitrator = 1;
+            foreach ($galleryImages as $key => $galleryImage){
+                $data['gallery']['data']['folderName'] = $galleryImage['name'];
+                foreach ($galleryImage as $keys => $value){
+                     $data['gallery']['data'][$jitrator]['images'] = env('BASE_URL').env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($value['id']).DIRECTORY_SEPARATOR.$value['images'];
+                     $jitrator++;
+                 }
             }*/
+            $achievementsId = EventTypes::where('slug','achievement')->pluck('id');
+            $announcementId = EventTypes::where('slug','announcement')->pluck('id');
+            $eventId = EventTypes::where('slug','event')->pluck('id');
+            $data['achievements'] = Event::where('event_type_id',$achievementsId)->where('body_id',$body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
+            $data['announcement'] = Event::where('event_type_id',$announcementId)->where('body_id',$body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
+            $data['events'] = Event::where('event_type_id',$eventId)->where('body_id',$body_id)->orderBy('created_at','desc')->take(15)->skip(0)->get()->toArray();
 
         }catch(\Exception $e){
             $message = "Something went wrong.";
