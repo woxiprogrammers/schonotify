@@ -34,7 +34,8 @@ class GalleryController extends Controller
     }
     public function galleryView(Request $request){
         try{
-            $folderName = Folder::where('is_active','=','1')->get()->toArray();
+            $user = Auth::user();
+            $folderName = Folder::where('is_active','=','1')->where('body_id',$user->body_id)->get()->toArray();
             return view('gallery.galleryManagementView')->with(compact('folderName'));
         }catch(\Exception $e){
             $data = [
@@ -67,7 +68,8 @@ class GalleryController extends Controller
     }
     public function folderListing(Request $request){
         try{
-            $folderData = Folder::get()->toArray();
+            $user = Auth::user();
+            $folderData = Folder::where('body_id',$user->body_id)->get()->toArray();
             $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str.="<thead><tr>";
             $str.="<th>Folder Name</th>";
@@ -237,9 +239,10 @@ class GalleryController extends Controller
     }
     public function imageValidation(Request $request){
         try{
+            $user = Auth::user();
             $count=array();
-            $count['image'] = GalleryManagement::where('folder_id',$request['folder_id'])->where('type','image')->count();
-            $count['video']= GalleryManagement::where('folder_id',$request['folder_id'])->where('type','video')->count();
+            $count['image'] = GalleryManagement::where('folder_id',$request['folder_id'])->where('body_id',$user->body_id)->where('type','image')->count();
+            $count['video']= GalleryManagement::where('folder_id',$request['folder_id'])->where('body_id',$user->body_id)->where('type','video')->count();
             return $count;
         }catch(\Exception $e){
             $data=[
@@ -251,8 +254,9 @@ class GalleryController extends Controller
     }
     public function imagesView(Request $request,$id){
         try{
+            $user = Auth::user();
             $gallery = array();
-            $folderName = Folder::where('id',$id)->pluck('name');
+            $folderName = Folder::where('id',$id)->where('body_id',$user->body_id)->pluck('name');
             $images = GalleryManagement::where('folder_id',$id)->where('type','image')->select('id','name')->get()->toArray();
             $videos = GalleryManagement::where('folder_id',$id)->where('type','video')->select('id','name')->get()->toArray();
             $folderEncName = sha1($id);
