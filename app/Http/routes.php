@@ -481,6 +481,7 @@
     Route::group(['prefix' => 'api/v1/user/'], function () {
     Route::post('auth','api\UserController@login');
     Route::get('logout/{user_id}',array('uses' => 'api\UserController@logout'));
+    Route::get('minimum-supported-version',array('uses' => 'api\UserController@minimum_supported_version'));
 
     //LC related
     Route::get('lc_generated/{id}',array('uses' => 'api\UserController@lcGenerated'));
@@ -601,6 +602,8 @@
         Route::get('gallery-details/{body_id}',array('uses' => 'api\CmsController@galleryDetails'));
         Route::get('events-details/{body_id}',array('uses' => 'api\CmsController@eventDetails'));
     });
+    //end api
+
         //Exam
 Route::group(['prefix' => 'exam'], function () {
     Route::get('create',array('uses' => 'ExamController@createExamStructureView'));
