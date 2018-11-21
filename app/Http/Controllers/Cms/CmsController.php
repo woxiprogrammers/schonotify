@@ -106,6 +106,16 @@ class CmsController extends Controller
             $user = Auth::User();
             $data = array();
             $headerDataPresent = BodyDetails::where('body_id',$user['body_id'])->first();
+            $folderEncName = sha1($user->body_id);
+            $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+            if($headerDataPresent['logo_name'] != null){
+                if (file_exists($folderPath.DIRECTORY_SEPARATOR.$headerDataPresent['logo_name'])) {
+                    unlink($folderPath.DIRECTORY_SEPARATOR.$headerDataPresent['logo_name']);
+                }
+            }
+            if (! file_exists($folderPath)) {
+                File::makeDirectory($folderPath , 0777 ,true,true);
+            }
             if($request->has('gallery_images')){
                 $folderEncName = sha1($user->body_id);
                 $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
