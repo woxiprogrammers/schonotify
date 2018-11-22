@@ -47,7 +47,7 @@ class CmsController extends Controller
             foreach ($sliderImages as $slider){
                 $data['sliderImages']['slider'][$itrator]['image'] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($slider['id']).DIRECTORY_SEPARATOR.$slider['name'];
                 $data['sliderImages']['slider'][$itrator]['message1'] = $slider['message_1'];
-                $data['sliderImages']['slider'][$itrator]['message_2'] = $slider['message_2'];
+                $data['sliderImages']['slider'][$itrator]['message2'] = $slider['message_2'];
                 $data['sliderImages']['slider'][$itrator]['hyper_name'] = $slider['hyper_name'];
                 $data['sliderImages']['slider'][$itrator]['hyper_link'] = $slider['hyper_link'];
                 $data['sliderImages']['slider'][$itrator]['slider_number'] = "slider".$itrator;
@@ -83,7 +83,7 @@ class CmsController extends Controller
             $testimonials = BodyTestimonial::where('body_id',$body_id)->where('is_active',1)->get()->toarray();
             $testimonialCOunt = 1;
             foreach ($testimonials as $testimonial){
-                $data['testimonial'][$testimonialCOunt]['image'] = $testimonial['image_name'];
+                $data['testimonial'][$testimonialCOunt]['image'] = env('BASE_URL').env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.sha1($testimonial['id']).DIRECTORY_SEPARATOR.$testimonial['image_name'];
                 $data['testimonial'][$testimonialCOunt]['details'] = $testimonial['description'];
                 $data['testimonial'][$testimonialCOunt]['slug'] = "testimonial".$testimonialCOunt;
                 $testimonialCOunt++;
