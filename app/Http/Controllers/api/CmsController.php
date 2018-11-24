@@ -6,6 +6,7 @@ use App\BodyAboutUs;
 use App\BodyContactUsUserForm;
 use App\BodyDetails;
 use App\BodySliderImages;
+use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\BodyTestimonial;
 use App\Event;
@@ -28,7 +29,7 @@ class CmsController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user',['except'=>['masterDetails','eventDetails','aboutUsDetails','subPagesView','contactUsView','galleryDetails','contactUsForm','contactUsFormCreate']]);
+        $this->middleware('authenticate.user',['except'=>['masterDetails','eventDetails','aboutUsDetails','subPagesView','contactUsView','galleryDetails','contactUsForm','contactUsFormCreate','subPagesDetails']]);
     }
     public function masterDetails(Request $request,$body_id){
         try{
@@ -96,7 +97,7 @@ class CmsController extends Controller
                 $data['gallery'][$key]['folder_name'] =$folder['name'];
                 $galleryImages = GalleryManagement::where('folder_id',$folder['id'])->where('type','=','image')->select('name')->get();
                 foreach ($galleryImages as $key1 => $galleryImage){
-                    $data['gallery'][$key]['images'][$key1] = env('BASE_URL').env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($folder['id']).DIRECTORY_SEPARATOR.$galleryImage['name'];
+                    $data['gallery'][$key]['images'][$key1]['image'] = env('BASE_URL').DIRECTORY_SEPARATOR.env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($folder['id']).DIRECTORY_SEPARATOR.$galleryImage['name'];
                 }
             }
             $achievementsId = EventTypes::where('slug','achievement')->pluck('id');
@@ -139,7 +140,7 @@ class CmsController extends Controller
             return Redirect::to($url);
 
     }
-    public function subPagesView($id){
+    public function subPagesView(Request $request,$id){
             $url = "http://www.veza_cms.com/subPage";
             return Redirect::to($url)->with(compact('id'));
 
@@ -175,7 +176,52 @@ class CmsController extends Controller
         return response()->json($response,$status);
     }
     public function contactUsFormCreate(Request $request,$body_id){
-            dd($request->all());
-//            Mail::
+        try{
+            $data = $request->all();
+            Mail::send('emails.contactUs', $data, function($message) use ($data)
+                {
+                    $message->from($data['email']);
+                    if(array_key_exists('subject',$data)){
+                     $message->subject($data['subject']);
+                    }
+                    if(array_key_exists('message',$data)){
+                    $message->body($data['message']);
+                    }
+                    $message->to('nishank.rathod2010@gmail.com');
+                });
+          return true;
+        }catch(\Exception $e){
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => 'mail',
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+
+    }
+    public function subPagesDetails($id){
+        try{
+            $message = "success";
+            $status = 200;
+            $data = array();
+            $data['sub_page_detail'] = BodyTabDetails::join('body_tab_names','body_tab_names.id','=','body_tab_details.body_tab_name_id')
+                ->where('body_tab_names.id',$id)
+                ->select('body_tab_names.display_name','body_tab_details.description')->get()->toArray();
+        }catch(\Exception $exception){
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => ' ',
+                'exception' => $exception->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+        $response = [
+            "message" => $message,
+            "data" => ($data)
+        ];
+        return response()->json($response,$status);
     }
 }
