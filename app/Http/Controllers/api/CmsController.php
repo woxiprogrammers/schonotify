@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\BodyAboutUs;
+use App\BodyContactUsUserForm;
 use App\BodyDetails;
 use App\BodySliderImages;
+use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\BodyTestimonial;
 use App\Event;
@@ -17,14 +19,17 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use phpDocumentor\Reflection\Types\Null_;
+use Illuminate\Support\Facades\Mail;
+
 
 class CmsController extends Controller
 {
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user',['except'=>['masterDetails']]);
+        $this->middleware('authenticate.user',['except'=>['masterDetails','eventDetails','aboutUsDetails','subPagesView','contactUsView','galleryDetails','contactUsForm','contactUsFormCreate','subPagesDetails']]);
     }
     public function masterDetails(Request $request,$body_id){
         try{
@@ -32,8 +37,34 @@ class CmsController extends Controller
             $message = "Successfully Listed";
             $data = array();
             $data['headerData'] = array();
-            $data['menuData'] = array();
-            $data['menuData'] = BodyTabNames::where('body_id',$body_id)->where('is_active',1)->where('body_tab_name_id','=',Null)->select('id','display_name','slug','priority','link')->get()->toArray();
+            $menuData = array();
+            $menus = BodyTabNames::where('body_id',$body_id)->where('is_active',1)->where('body_tab_name_id','=',null)
+                    ->orderByRaw('priority asc')
+                    ->select('id','display_name','slug','priority','link','body_tab_name_id')
+                    ->get()->toArray();
+            $count = 0;
+            foreach ($menus as $menu){
+                $menuData[$count]['display_name'] = $menu['display_name'];
+                $menuData[$count]['slug'] = $menu['slug'];
+                $menuData[$count]['priority'] = $menu['priority'];
+                $menuData[$count]['link'] = $menu['link'];
+                $checkSubMenus = BodyTabNames::where('body_tab_name_id',$menu['id'])->get()->toArray();
+                if(count($checkSubMenus) > 0){
+                    $innerCount = 0;
+                    foreach ($checkSubMenus as $checkSubMenu){
+                        $menuData[$count]['sub_menu'][$innerCount]['name'] = $checkSubMenu['display_name'];
+                        $menuData[$count]['sub_menu'][$innerCount]['slug'] = $checkSubMenu['slug'];
+                        $menuData[$count]['sub_menu'][$innerCount]['priority'] = $checkSubMenu['priority'];
+                        $menuData[$count]['sub_menu'][$innerCount]['link'] = $checkSubMenu['link'];
+                        $menuData[$count]['sub_menu'][$innerCount]['body_tab_name_id'] = $checkSubMenu['id'];
+                        $innerCount++;
+                    }
+                } else {
+                    $menuData[$count]['sub_menu'] = null;
+                }
+                $count++;
+            }
+            $data['menuData'] = $menuData;
             $bodyDetails = BodyDetails::where('body_id',$body_id)->first();
             $data['headerData']['logo'] = env('BASE_URL').env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$bodyDetails['logo_name'];
             $data['headerData']['message'] = $bodyDetails['header_message'];
@@ -61,19 +92,14 @@ class CmsController extends Controller
             $aboutUs =  BodyAboutUs::where('body_id',$body_id)->first();
             $data['aboutUs']['details'] = $aboutUs['description'];
             $data['aboutUs']['image'] = env('BASE_URL').env('ABOUT_US_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$aboutUs['image_name'];
-            $galleryImages = Folder::join('gallery_management','gallery_management.folder_id','=','folders.id')
-                                ->where('folders.is_active',1)
-                                ->where('folders.body_id',$body_id)
-                                ->where('gallery_management.type','=','image')
-                                ->select('folders.id','folders.name','gallery_management.name as images')->get()->groupBy('id')->toArray();
-            /*jitrator = 1;
-            foreach ($galleryImages as $key => $galleryImage){
-                $data['gallery']['data']['folderName'] = $galleryImage['name'];
-                foreach ($galleryImage as $keys => $value){
-                     $data['gallery']['data'][$jitrator]['images'] = env('BASE_URL').env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($value['id']).DIRECTORY_SEPARATOR.$value['images'];
-                     $jitrator++;
-                 }
-            }*/
+            $folders = Folder::where('body_id',$body_id)->where('is_active',true)->get()->toArray();
+            foreach ($folders as $key => $folder){
+                $data['gallery'][$key]['folder_name'] =$folder['name'];
+                $galleryImages = GalleryManagement::where('folder_id',$folder['id'])->where('type','=','image')->select('name')->get();
+                foreach ($galleryImages as $key1 => $galleryImage){
+                    $data['gallery'][$key]['images'][$key1]['image'] = env('BASE_URL').DIRECTORY_SEPARATOR.env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($folder['id']).DIRECTORY_SEPARATOR.$galleryImage['name'];
+                }
+            }
             $achievementsId = EventTypes::where('slug','achievement')->pluck('id');
             $announcementId = EventTypes::where('slug','announcement')->pluck('id');
             $eventId = EventTypes::where('slug','event')->pluck('id');
@@ -103,5 +129,99 @@ class CmsController extends Controller
         ];
         return response()->json($response,$status);
 
+    }
+    public function eventDetails(Request $request){
+            $url = "http://www.veza_cms.com/events";
+            return Redirect::to($url);
+
+    }
+    public function aboutUsDetails(Request $request){
+            $url = "http://www.veza_cms.com/aboutUs";
+            return Redirect::to($url);
+
+    }
+    public function subPagesView(Request $request,$id){
+            $url = "http://www.veza_cms.com/subPage";
+            return Redirect::to($url)->with(compact('id'));
+
+    }
+    public function contactUsView(){
+            $url = "http://www.veza_cms.com/contactUs";
+            return Redirect::to($url);
+
+    }
+    public function galleryDetails(){
+        $url = "http://www.veza_cms.com/gallery";
+        return Redirect::to($url);
+    }
+    public function contactUsForm(Request $request,$body_id){
+        try{
+            $message = "success";
+            $status = 200;
+            $data = array();
+            $data['contactForm'] = BodyContactUsUserForm::where('body_id',$body_id)->where('is_active',1)->select('name','slug')->get()->toArray();
+        }catch(\Exception $exception){
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => ' ',
+                'exception' => $exception->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+        $response = [
+            "message" => $message,
+            "data" => ($data)
+        ];
+        return response()->json($response,$status);
+    }
+    public function contactUsFormCreate(Request $request,$body_id){
+        try{
+            $data = $request->all();
+            Mail::send('emails.contactUs', $data, function($message) use ($data)
+                {
+                    $message->from($data['email']);
+                    if(array_key_exists('subject',$data)){
+                     $message->subject($data['subject']);
+                    }
+                    if(array_key_exists('message',$data)){
+                    $message->body($data['message']);
+                    }
+                    $message->to('nishank.rathod2010@gmail.com');
+                });
+          return true;
+        }catch(\Exception $e){
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => 'mail',
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+
+    }
+    public function subPagesDetails($id){
+        try{
+            $message = "success";
+            $status = 200;
+            $data = array();
+            $data['sub_page_detail'] = BodyTabDetails::join('body_tab_names','body_tab_names.id','=','body_tab_details.body_tab_name_id')
+                ->where('body_tab_names.id',$id)
+                ->select('body_tab_names.display_name','body_tab_details.description')->get()->toArray();
+        }catch(\Exception $exception){
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => ' ',
+                'exception' => $exception->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+        $response = [
+            "message" => $message,
+            "data" => ($data)
+        ];
+        return response()->json($response,$status);
     }
 }
