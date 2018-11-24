@@ -886,7 +886,7 @@ $sliderCount = (count($sliderImages));
             <div class="row form-group">
                 <div class="col-md-2">
                     <label class="control-label">
-                        Upload embed code :
+                       Google map Embed code(URL only):
                     </label>
                 </div>
                 <div class="col-md-5">

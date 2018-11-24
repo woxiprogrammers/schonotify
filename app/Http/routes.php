@@ -599,8 +599,14 @@
     /* API CMS Route */
     Route::group(['prefix' => 'api/temp1/user/'], function () {
         Route::get('master-details/{body_id}',array('uses' => 'api\CmsController@masterDetails'));
-        Route::get('gallery-details/{body_id}',array('uses' => 'api\CmsController@galleryDetails'));
-        Route::get('events-details/{body_id}',array('uses' => 'api\CmsController@eventDetails'));
+        Route::get('gallery-details',array('uses' => 'api\CmsController@galleryDetails'));
+        Route::get('events-details',array('uses' => 'api\CmsController@eventDetails'));
+        Route::get('about-us-details',array('uses' => 'api\CmsController@aboutUsDetails'));
+        Route::get('sub-pages-view/{id}',array('uses' => 'api\CmsController@subPagesView'));
+        Route::get('sub-page-detail/{id}',array('uses' => 'api\CmsController@subPagesDetails'));
+        Route::get('contact-us-view',array('uses' => 'api\CmsController@contactUsView'));
+        Route::get('contact-us-form/{body_id}',array('uses' => 'api\CmsController@contactUsForm'));
+        Route::post('contact-us-form-create/{body_id}',array('uses' => 'api\CmsController@contactUsFormCreate'));
     });
     //end api
 
