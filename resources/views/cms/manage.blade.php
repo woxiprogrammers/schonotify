@@ -429,9 +429,9 @@ $sliderCount = (count($sliderImages));
     </div>
     <div class="col-md-2">
         @if($value['is_active'] == 1)
-        <input type="checkbox" checked="checked" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider{{$count}}]">
+        <input type="checkbox" checked="checked" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider]">
         @else
-        <input type="checkbox" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider{{$count}}]">
+        <input type="checkbox" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider]">
         @endif
     </div>
     <input type="hidden" name="sliderImages{{$count}}[id]" value="{{$value['id']}}">
@@ -508,7 +508,7 @@ $sliderCount = (count($sliderImages));
         </label>
     </div>
     <div class="col-md-2">
-        <input type="checkbox" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider{{$count}}]">
+        <input type="checkbox" id="slider1_checked" name="sliderImages{{$count}}[is_checked_slider]">
     </div>
 
 </div>
@@ -560,7 +560,7 @@ $sliderCount = (count($sliderImages));
         </label>
     </div>
     <div class="col-md-2">
-        <input type="checkbox" id="slider1_checked" name="sliderImages1[is_checked_slider1]">
+        <input type="checkbox" id="slider1_checked" name="sliderImages1[is_checked_slider]">
     </div>
 </div>
 <div class="form-group">
@@ -608,7 +608,7 @@ $sliderCount = (count($sliderImages));
         </label>
     </div>
     <div class="col-md-1">
-        <input type="checkbox"  name="sliderImages2[is_checked_slider2]">
+        <input type="checkbox"  name="sliderImages2[is_checked_slider]">
     </div>
 </div>
 <div class="form-group">
@@ -656,7 +656,7 @@ $sliderCount = (count($sliderImages));
         </label>
     </div>
     <div class="col-md-1">
-        <input type="checkbox" name="sliderImages3[is_checked_slider3]">
+        <input type="checkbox" name="sliderImages3[is_checked_slider]">
     </div>
 </div>
 <div class="form-group">
@@ -1293,7 +1293,7 @@ $(document).ready(function (){
                     for (var i = 0; i < countFiles; i++) {
                         var reader = new FileReader()
                         reader.onload = function (e) {
-                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages1[slider_images_1]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages1[slider_images]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
                             image_holder.append(imagePreview);
                         };
                         image_holder.show();
@@ -1323,7 +1323,7 @@ $(document).ready(function (){
                     for (var i = 0; i < countFiles; i++) {
                         var reader = new FileReader()
                         reader.onload = function (e) {
-                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages2[slider_images_2]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages2[slider_images]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
                             image_holder.append(imagePreview);
                         };
                         image_holder.show();
@@ -1353,7 +1353,7 @@ $(document).ready(function (){
                     for (var i = 0; i < countFiles; i++) {
                         var reader = new FileReader()
                         reader.onload = function (e) {
-                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages3[slider_images_3]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages3[slider_images]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
                             image_holder.append(imagePreview);
                         };
                         image_holder.show();
