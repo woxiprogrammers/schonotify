@@ -1277,7 +1277,44 @@ $sliderCount = (count($sliderImages));
         <form action="/cms/marquee" method="post">
             <div class="row form-group">
                 <div class="col-md-12">
-
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="control-label">
+                                marquee right to left:
+                            </label>
+                        </div>
+                        <div class="col-md-9">
+                            @if($marquee != null && $marquee != "")
+                                    <textarea name="marquee[description_1]" cols="50" rows="4" required="required">{{$marquee['marquee_1']}} </textarea>
+                                @else
+                                    <textarea name="marquee[description_1]" cols="50" rows="4" required="required"> </textarea>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="control-label">
+                                marquee down to up:
+                            </label>
+                        </div>
+                        <div class="col-md-9">
+                            @if($marquee != null && $marquee != "")
+                                <textarea name="marquee[description_2]" cols="50" rows="4" required="required">{{$marquee['marquee_2']}} </textarea>
+                            @else
+                                <textarea name="marquee[description_2]" cols="50" rows="4" required="required"> </textarea>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-10">
+                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                            Save <i class="fa fa-arrow-circle-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>

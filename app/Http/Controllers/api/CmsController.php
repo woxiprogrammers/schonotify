@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\BodyAboutUs;
 use App\BodyContactUsUserForm;
 use App\BodyDetails;
+use App\BodyMarqueeDetails;
 use App\BodySliderImages;
 use App\BodyTabDetails;
 use App\BodyTabNames;
@@ -64,6 +65,7 @@ class CmsController extends Controller
                 }
                 $count++;
             }
+            $data['marquee'] = BodyMarqueeDetails::where('body_id',$body_id)->first();
             $data['menuData'] = $menuData;
             $bodyDetails = BodyDetails::where('body_id',$body_id)->first();
             $data['headerData']['logo'] = env('BASE_URL').env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$bodyDetails['logo_name'];

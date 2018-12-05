@@ -689,4 +689,5 @@ Route::group(['prefix' => 'cms'],function (){
     Route::post('sub-pages-edit/{id}',array('uses' => 'Cms\CmsController@editSubPages'));
     Route::post('aboutUs',array('uses' => 'Cms\CmsController@aboutUsForm'));
     Route::post('testimonial',array('uses' => 'Cms\CmsController@testimonialForm'));
+    Route::post('marquee',array('uses' => 'Cms\CmsController@marqueeForm'));
 });
