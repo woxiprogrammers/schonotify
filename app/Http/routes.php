@@ -607,6 +607,7 @@
         Route::get('contact-us-view',array('uses' => 'api\CmsController@contactUsView'));
         Route::get('contact-us-form/{body_id}',array('uses' => 'api\CmsController@contactUsForm'));
         Route::post('contact-us-form-create/{body_id}',array('uses' => 'api\CmsController@contactUsFormCreate'));
+        Route::get('gallery-all-images/{body_id}',array('uses' => 'api\CmsController@allGalleryImages'));
     });
     //end api
 
@@ -688,4 +689,5 @@ Route::group(['prefix' => 'cms'],function (){
     Route::post('sub-pages-edit/{id}',array('uses' => 'Cms\CmsController@editSubPages'));
     Route::post('aboutUs',array('uses' => 'Cms\CmsController@aboutUsForm'));
     Route::post('testimonial',array('uses' => 'Cms\CmsController@testimonialForm'));
+    Route::post('marquee',array('uses' => 'Cms\CmsController@marqueeForm'));
 });
