@@ -607,6 +607,7 @@
         Route::get('contact-us-view',array('uses' => 'api\CmsController@contactUsView'));
         Route::get('contact-us-form/{body_id}',array('uses' => 'api\CmsController@contactUsForm'));
         Route::post('contact-us-form-create/{body_id}',array('uses' => 'api\CmsController@contactUsFormCreate'));
+        Route::get('gallery-all-images/{body_id}',array('uses' => 'api\CmsController@allGalleryImages'));
     });
     //end api
 
