@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\BodyAboutUs;
 use App\BodyContactUsUserForm;
 use App\BodyDetails;
+use App\BodyMarqueeDetails;
 use App\BodySliderImages;
 use App\BodyTabDetails;
 use App\BodyTabNames;
@@ -29,7 +30,7 @@ class CmsController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user',['except'=>['masterDetails','eventDetails','aboutUsDetails','subPagesView','contactUsView','galleryDetails','contactUsForm','contactUsFormCreate','subPagesDetails']]);
+        $this->middleware('authenticate.user',['except'=>['masterDetails','eventDetails','aboutUsDetails','subPagesView','contactUsVie','galleryDetails','contactUsForm','contactUsFormCreate','subPagesDetails','allGalleryImages']]);
     }
     public function masterDetails(Request $request,$body_id){
         try{
@@ -64,6 +65,7 @@ class CmsController extends Controller
                 }
                 $count++;
             }
+            $data['marquee'] = BodyMarqueeDetails::where('body_id',$body_id)->first();
             $data['menuData'] = $menuData;
             $bodyDetails = BodyDetails::where('body_id',$body_id)->first();
             $data['headerData']['logo'] = env('BASE_URL').env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$bodyDetails['logo_name'];
@@ -92,7 +94,7 @@ class CmsController extends Controller
             $aboutUs =  BodyAboutUs::where('body_id',$body_id)->first();
             $data['aboutUs']['details'] = $aboutUs['description'];
             $data['aboutUs']['image'] = env('BASE_URL').env('ABOUT_US_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$aboutUs['image_name'];
-            $folders = Folder::where('body_id',$body_id)->where('is_active',true)->get()->toArray();
+            $folders = Folder::where('body_id',$body_id)->where('is_active',true)->orderBy('created_at','desc')->take(4)->get()->toArray();
             foreach ($folders as $key => $folder){
                 $data['gallery'][$key]['folder_name'] =$folder['name'];
                 $galleryImages = GalleryManagement::where('folder_id',$folder['id'])->where('type','=','image')->select('name')->get();
@@ -209,6 +211,34 @@ class CmsController extends Controller
             $data['sub_page_detail'] = BodyTabDetails::join('body_tab_names','body_tab_names.id','=','body_tab_details.body_tab_name_id')
                 ->where('body_tab_names.id',$id)
                 ->select('body_tab_names.display_name','body_tab_details.description')->get()->toArray();
+        }catch(\Exception $exception){
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => ' ',
+                'exception' => $exception->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+        $response = [
+            "message" => $message,
+            "data" => ($data)
+        ];
+        return response()->json($response,$status);
+    }
+    public function allGalleryImages($body_id){
+        try{
+            $message = "Successful";
+            $status = 200;
+            $data = array();
+            $folders = Folder::where('body_id',$body_id)->where('is_active',true)->orderBy('created_at','desc')->get()->toArray();
+            foreach ($folders as $key => $folder){
+                $data['gallery'][$key]['folder_name'] =$folder['name'];
+                $galleryImages = GalleryManagement::where('folder_id',$folder['id'])->where('type','=','image')->select('name')->get();
+                foreach ($galleryImages as $key1 => $galleryImage){
+                    $data['gallery'][$key]['images'][$key1]['image'] = env('BASE_URL').DIRECTORY_SEPARATOR.env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($folder['id']).DIRECTORY_SEPARATOR.$galleryImage['name'];
+                }
+            }
         }catch(\Exception $exception){
             $message = "Something went wrong.";
             $status = 500;

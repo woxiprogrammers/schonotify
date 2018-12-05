@@ -70,6 +70,9 @@
         <li>
             <a href="#tab_9" data-toggle="tab"> Testimonial </a>
         </li>
+        <li>
+            <a href="#tab_10" data-toggle="tab"> Marquee </a>
+        </li>
     </ul>
 </div>
 <div class="col-md-9">
@@ -282,6 +285,27 @@
         <input type="text" value="" class="form-control" name="is_check_custom_link_3[link]" id="custom_link_3_link" placeholder="enter link">
     </div>
 </div>
+<br>
+<div class="row form-group">
+    <div class="col-md-1">
+        <input type="checkbox" name="is_check_custom_link_4[status]">
+    </div>
+    <div class="col-md-2">
+        <label class="control-label">
+            Custom tab link-4:
+        </label>
+    </div>
+    <div class="col-md-4">
+        <input type="text" value="" class="form-control" name="is_check_custom_link_4[menu_tab]" id="custom_link_4" placeholder="enter custom link name">
+    </div>
+    <div class="col-md-2">
+        <input type="hidden" value="custom-link-4" name="is_check_custom_link_4[slug]">
+        <input type="text" value="" class="form-control" size="5" name="is_check_custom_link_4[priority_menu_tab]" id="priority_custom_link_4" placeholder="enter priority">
+    </div>
+    <div class="col-md-3">
+        <input type="text" value="" class="form-control" name="is_check_custom_link_4[link]" id="custom_link_4_link" placeholder="enter link">
+    </div>
+</div>
 @else
 @foreach( $tabNames as $tabName)
 <div class="row form-group">
@@ -308,9 +332,9 @@
         @endif
     </div>
     <div class="col-md-3">
-        @if($tabName['link'] != null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
+        @if($tabName['link'] != null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3' || $tabName['slug'] == 'custom-link-4'))
         <input type="text" value="{{$tabName['link']}}" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
-        @elseif($tabName['link'] == null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3'))
+        @elseif($tabName['link'] == null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3' || $tabName['slug'] == 'custom-link-4'))
         <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
         @endif
     </div>
@@ -416,7 +440,7 @@
 <form method="post" action="/cms/slider-images">
 <?php
 $count = 1;
-$sliderTotalCount = 3;
+$sliderTotalCount = 4;
 $sliderCount = (count($sliderImages));
 ?>
 @if($sliderImages != null && !empty($sliderImages))
@@ -695,6 +719,54 @@ $sliderCount = (count($sliderImages));
         <input type="text" name="sliderImages3[link]" id="link_title" value="" placeholder="enter hyper Link">
     </div>
 </div>
+        <br>
+        <hr>
+        <div class="row">
+            <div class="col-md-5">
+                <label class="control-label" style="font-size: 100%">
+                    <b><i>Please tick to select the Slider 4</i></b>
+                </label>
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="sliderImages4[is_checked_slider]">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Select Images :</label>
+            <input id="imageUpload4" type="file" class="btn blue"/>
+            <br />
+            <div class="row">
+                <div id="preview-image4" class="row">
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="control-label">
+                    Message 1
+                </label>
+                <input type="text" name="sliderImages4[message_1]" id="message_1" value="" placeholder="enter the message">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">
+                    Message 2
+                </label>
+                <input type="text" name="sliderImages4[message_2]" id="message_2" value="" placeholder="enter the message">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">
+                    Hyper Link title
+                </label>
+                <input type="text" name="sliderImages4[link_title]" id="link_title" value="" placeholder="enter link title">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">
+                    Hyper Link
+                </label>
+                <input type="text" name="sliderImages4[link]" id="link_title" value="" placeholder="enter hyper Link">
+            </div>
+        </div>
 @endif
 <br><br>
 <div class="row">
@@ -909,9 +981,9 @@ $sliderCount = (count($sliderImages));
                 </div>
                 <div class="col-md-5">
                     @if($bodyDetails == null)
-                    <input type="text" name="address" class="form-control" value="" placeholder="please enter address" required>
+                        <textarea name="address" class="form-control"  placeholder="please enter address" required ></textarea>
                     @else
-                    <input type="text" name="address" class="form-control" value="{{$bodyDetails['address']}}" placeholder="please enter address" required>
+                        <textarea name="address" class="form-control"  placeholder="please enter address" required>{{$bodyDetails['address']}}</textarea>
                     @endif
                 </div>
             </div>
@@ -939,7 +1011,7 @@ $sliderCount = (count($sliderImages));
                 </div>
                 <div class="form-group col-md-5">
                     @if($bodyDetails == null)
-                    <input type="email" class="form-control"  name="email_display" value="" maxlength="10" placeholder="please enter email" required>
+                    <input type="email" class="form-control"  name="email_display" value="" placeholder="please enter email" required>
                     @else
                     <input type="email" class="form-control"  name="email_display" value="{{$bodyDetails['email']}}" maxlength="10" placeholder="please enter email" required>
                     @endif
@@ -978,10 +1050,10 @@ $sliderCount = (count($sliderImages));
                 <img src="{{$folderPath.$ds.$folderEncName.$ds.$aboutUsDetails['image_name']}}" style="border: 1px black solid" width="200" height="120"/>
                 @endif
                 <br>
-                <input id="imageUpload4" type="file" class="btn blue"/>
+                <input id="aboutUsImage" type="file" class="btn blue"/>
                 <br />
                 <div class="row">
-                    <div id="preview-image4" class="row">
+                    <div id="preview-about-us" class="row">
 
                     </div>
                 </div>
@@ -1201,6 +1273,52 @@ $sliderCount = (count($sliderImages));
         </div>
     </form>
 </div>
+    <div class="tab-pane" id="tab_10">
+        <form action="/cms/marquee" method="post">
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="control-label">
+                                marquee right to left:
+                            </label>
+                        </div>
+                        <div class="col-md-9">
+                            @if($marquee != null && $marquee != "")
+                                    <textarea name="marquee[description_1]" cols="50" rows="4" required="required">{{$marquee['marquee_1']}} </textarea>
+                                @else
+                                    <textarea name="marquee[description_1]" cols="50" rows="4" required="required"> </textarea>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="control-label">
+                                marquee down to up:
+                            </label>
+                        </div>
+                        <div class="col-md-9">
+                            @if($marquee != null && $marquee != "")
+                                <textarea name="marquee[description_2]" cols="50" rows="4" required="required">{{$marquee['marquee_2']}} </textarea>
+                            @else
+                                <textarea name="marquee[description_2]" cols="50" rows="4" required="required"> </textarea>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-10">
+                        <button class="btn btn-primary btn-wide pull-right" type="submit">
+                            Save <i class="fa fa-arrow-circle-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 </div>
 </div>
@@ -1370,13 +1488,42 @@ $(document).ready(function (){
             alert("please select image less than 2 mb");
         }
     });
-    //about Us Images
     $("#imageUpload4").on('change', function () {
         var imgPath = $(this)[0].value;
         var countFiles = $(this)[0].files.length;
         var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
         var size = this.files[0].size/1024/1024;
         var image_holder = $("#preview-image4");
+        if(size <= 2){
+            if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+                if (typeof (FileReader) != "undefined") {
+                    for (var i = 0; i < countFiles; i++) {
+                        var reader = new FileReader()
+                        reader.onload = function (e) {
+                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages4[slider_images]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                            image_holder.append(imagePreview);
+                        };
+                        image_holder.show();
+                        reader.readAsDataURL($(this)[0].files[i]);
+                    }
+                }else{
+                    alert("It doesn't supports");
+                }
+            } else {
+                alert("Select Only images");
+                $('#submit').hide();
+            }
+        }else{
+            alert("please select image less than 2 mb");
+        }
+    });
+    //about Us Images
+    $("#aboutUsImage").on('change', function () {
+        var imgPath = $(this)[0].value;
+        var countFiles = $(this)[0].files.length;
+        var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+        var size = this.files[0].size/1024/1024;
+        var image_holder = $("#preview-about-us");
         if(size <= 1){
             if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
                 if (typeof (FileReader) != "undefined") {

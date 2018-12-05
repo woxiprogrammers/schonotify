@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cms;
 use App\BodyAboutUs;
 use App\BodyContactUsUserForm;
 use App\BodyDetails;
+use App\BodyMarqueeDetails;
 use App\BodySliderImages;
 use App\BodySocialDetails;
 use App\BodyTabDetails;
@@ -39,7 +40,8 @@ class CmsController extends Controller
            $sliderImages = BodySliderImages::where('body_id',$user['body_id'])->get()->toArray();
            $contactUsForm = BodyContactUsUserForm::get()->toArray();
            $testimonialData = BodyTestimonial::where('body_id',$user['body_id'])->get()->toArray();
-           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages','contactUsForm','testimonialData'));
+           $marquee = BodyMarqueeDetails::where('body_id',$user['body_id'])->first();
+           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages','contactUsForm','testimonialData','marquee'));
        }catch(\Exception $e){
            $data=[
                'action' => 'Get Manage Admin cms view',
@@ -581,5 +583,35 @@ class CmsController extends Controller
             ];
             Log::critical(json_encode($data));
         }
+    }
+    public function marqueeForm(Request $request){
+       try{
+           $user = Auth::user();
+            $marquee = $request->all();
+            $alreadyPresent = BodyMarqueeDetails::where('body_id',$user->body_id)->first();
+            foreach ($marquee as $key => $value){
+                $data['body_id'] = $user->body_id;
+                $data['marquee_1'] = $value['description_1'];
+                $data['marquee_2'] = $value['description_2'];
+                if($alreadyPresent == null){
+                    $query = BodyMarqueeDetails::create($data);
+                }else{
+                    $query = BodyMarqueeDetails::where('id',$alreadyPresent['id'])->update($data);
+                }
+            }
+            if($query){
+                Session::flash('message-success','Successfully Created');
+                return back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
+       }catch(\Exception $e){
+           $data = [
+               'status' => 500,
+               'message' => "edit sub-pages",
+               'exception' => $e->getMessage()
+           ];
+           Log::critical(json_encode($data));
+       }
     }
 }
