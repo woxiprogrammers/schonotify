@@ -10,6 +10,7 @@ use App\BodySliderImages;
 use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\BodyTestimonial;
+use App\BodyVisitorCounts;
 use App\Event;
 use App\EventTypes;
 use App\Folder;
@@ -116,6 +117,17 @@ class CmsController extends Controller
                 $data['testimonial'][$testimonialCOunt]['slug'] = "testimonial".$testimonialCOunt;
                 $testimonialCOunt++;
             }
+
+            $visitorCount = 0;
+            $alreadyPresent = BodyVisitorCounts::where('body_id',$body_id)->first();
+            if (count($alreadyPresent) > 0){
+                $vcData['counter'] = $visitorCount = ($alreadyPresent['counter']+1);
+                BodyVisitorCounts::where('id',$alreadyPresent['id'])->update($vcData);
+            } else {
+                $vcData['body_id'] = $body_id;
+                BodyVisitorCounts::create($vcData);
+            }
+            $data['visitor_count'] = $visitorCount;
         }catch(\Exception $e){
             $message = "Something went wrong.";
             $status = 500;
@@ -251,6 +263,34 @@ class CmsController extends Controller
         $response = [
             "message" => $message,
             "data" => ($data)
+        ];
+        return response()->json($response,$status);
+    }
+
+    public function visitorsCount($body_id){
+        try{
+            $alreadyPresent = BodyVisitorCounts::where('body_id',$body_id)->first();
+            if (count($alreadyPresent) > 0){
+                $data['counter'] = $alreadyPresent['counter']+1;
+                $query = BodyVisitorCounts::where('id',$alreadyPresent['id'])->update($data);
+            } else {
+                $data['body_id'] = $body_id;
+                $query = BodyVisitorCounts::create($data);
+            }
+            $message = "Counter Updated";
+            $status = 200;
+        }catch(\Exception $e){
+            $message = "Coounter Updated";
+            $data = [
+                'status' => 500,
+                'message' => "edit sub-pages",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+        $response = [
+            "message" => $message,
+            "data" => $data
         ];
         return response()->json($response,$status);
     }
