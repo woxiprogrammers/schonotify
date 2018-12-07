@@ -238,20 +238,21 @@ class CmsController extends Controller
         ];
         return response()->json($response,$status);
     }
-    public function allGalleryImages($body_id){
-        try{
+    public function allGalleryImages($body_id)
+    {
+        try {
             $message = "Successful";
             $status = 200;
             $data = array();
-            $folders = Folder::where('body_id',$body_id)->where('is_active',true)->orderBy('created_at','desc')->get()->toArray();
-            foreach ($folders as $key => $folder){
-                $data['gallery'][$key]['folder_name'] =$folder['name'];
-                $galleryImages = GalleryManagement::where('folder_id',$folder['id'])->where('type','=','image')->select('name')->get();
-                foreach ($galleryImages as $key1 => $galleryImage){
-                    $data['gallery'][$key]['images'][$key1]['image'] = env('BASE_URL').DIRECTORY_SEPARATOR.env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($folder['id']).DIRECTORY_SEPARATOR.$galleryImage['name'];
+            $folders = Folder::where('body_id', $body_id)->where('is_active', true)->orderBy('created_at', 'desc')->get()->toArray();
+            foreach ($folders as $key => $folder) {
+                $data['gallery'][$key]['folder_name'] = $folder['name'];
+                $galleryImages = GalleryManagement::where('folder_id', $folder['id'])->where('type', '=', 'image')->select('name')->get();
+                foreach ($galleryImages as $key1 => $galleryImage) {
+                    $data['gallery'][$key]['images'][$key1]['image'] = env('BASE_URL') . DIRECTORY_SEPARATOR . env('GALLERY_FOLDER_FILE_UPLOAD') . DIRECTORY_SEPARATOR . sha1($folder['id']) . DIRECTORY_SEPARATOR . $galleryImage['name'];
                 }
             }
-        }catch(\Exception $exception){
+        } catch (\Exception $exception) {
             $message = "Something went wrong.";
             $status = 500;
             $data = [
@@ -264,34 +265,6 @@ class CmsController extends Controller
             "message" => $message,
             "data" => ($data)
         ];
-        return response()->json($response,$status);
-    }
-
-    public function visitorsCount($body_id){
-        try{
-            $alreadyPresent = BodyVisitorCounts::where('body_id',$body_id)->first();
-            if (count($alreadyPresent) > 0){
-                $data['counter'] = $alreadyPresent['counter']+1;
-                $query = BodyVisitorCounts::where('id',$alreadyPresent['id'])->update($data);
-            } else {
-                $data['body_id'] = $body_id;
-                $query = BodyVisitorCounts::create($data);
-            }
-            $message = "Counter Updated";
-            $status = 200;
-        }catch(\Exception $e){
-            $message = "Coounter Updated";
-            $data = [
-                'status' => 500,
-                'message' => "edit sub-pages",
-                'exception' => $e->getMessage()
-            ];
-            Log::critical(json_encode($data));
-        }
-        $response = [
-            "message" => $message,
-            "data" => $data
-        ];
-        return response()->json($response,$status);
+        return response()->json($response, $status);
     }
 }
