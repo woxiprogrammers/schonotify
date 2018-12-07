@@ -10,6 +10,7 @@ use App\BodySliderImages;
 use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\BodyTestimonial;
+use App\BodyVisitorCounts;
 use App\Event;
 use App\EventTypes;
 use App\Folder;
@@ -116,6 +117,17 @@ class CmsController extends Controller
                 $data['testimonial'][$testimonialCOunt]['slug'] = "testimonial".$testimonialCOunt;
                 $testimonialCOunt++;
             }
+
+            $visitorCount = 0;
+            $alreadyPresent = BodyVisitorCounts::where('body_id',$body_id)->first();
+            if (count($alreadyPresent) > 0){
+                $vcData['counter'] = $visitorCount = ($alreadyPresent['counter']+1);
+                BodyVisitorCounts::where('id',$alreadyPresent['id'])->update($vcData);
+            } else {
+                $vcData['body_id'] = $body_id;
+                BodyVisitorCounts::create($vcData);
+            }
+            $data['visitor_count'] = $visitorCount;
         }catch(\Exception $e){
             $message = "Something went wrong.";
             $status = 500;
@@ -226,20 +238,21 @@ class CmsController extends Controller
         ];
         return response()->json($response,$status);
     }
-    public function allGalleryImages($body_id){
-        try{
+    public function allGalleryImages($body_id)
+    {
+        try {
             $message = "Successful";
             $status = 200;
             $data = array();
-            $folders = Folder::where('body_id',$body_id)->where('is_active',true)->orderBy('created_at','desc')->get()->toArray();
-            foreach ($folders as $key => $folder){
-                $data['gallery'][$key]['folder_name'] =$folder['name'];
-                $galleryImages = GalleryManagement::where('folder_id',$folder['id'])->where('type','=','image')->select('name')->get();
-                foreach ($galleryImages as $key1 => $galleryImage){
-                    $data['gallery'][$key]['images'][$key1]['image'] = env('BASE_URL').DIRECTORY_SEPARATOR.env('GALLERY_FOLDER_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($folder['id']).DIRECTORY_SEPARATOR.$galleryImage['name'];
+            $folders = Folder::where('body_id', $body_id)->where('is_active', true)->orderBy('created_at', 'desc')->get()->toArray();
+            foreach ($folders as $key => $folder) {
+                $data['gallery'][$key]['folder_name'] = $folder['name'];
+                $galleryImages = GalleryManagement::where('folder_id', $folder['id'])->where('type', '=', 'image')->select('name')->get();
+                foreach ($galleryImages as $key1 => $galleryImage) {
+                    $data['gallery'][$key]['images'][$key1]['image'] = env('BASE_URL') . DIRECTORY_SEPARATOR . env('GALLERY_FOLDER_FILE_UPLOAD') . DIRECTORY_SEPARATOR . sha1($folder['id']) . DIRECTORY_SEPARATOR . $galleryImage['name'];
                 }
             }
-        }catch(\Exception $exception){
+        } catch (\Exception $exception) {
             $message = "Something went wrong.";
             $status = 500;
             $data = [
@@ -252,6 +265,6 @@ class CmsController extends Controller
             "message" => $message,
             "data" => ($data)
         ];
-        return response()->json($response,$status);
+        return response()->json($response, $status);
     }
 }
