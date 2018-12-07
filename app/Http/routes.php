@@ -608,6 +608,7 @@
         Route::get('contact-us-form/{body_id}',array('uses' => 'api\CmsController@contactUsForm'));
         Route::post('contact-us-form-create/{body_id}',array('uses' => 'api\CmsController@contactUsFormCreate'));
         Route::get('gallery-all-images/{body_id}',array('uses' => 'api\CmsController@allGalleryImages'));
+        Route::get('gallery-all-images-yearwise/{body_id}',array('uses' => 'api\CmsController@allGalleryImagesYearWise'));
     });
     //end api
 

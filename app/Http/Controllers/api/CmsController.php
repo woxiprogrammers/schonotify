@@ -16,6 +16,7 @@ use App\EventTypes;
 use App\Folder;
 use App\GalleryManagement;
 use App\SocialPlatform;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -31,7 +32,7 @@ class CmsController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('db');
-        $this->middleware('authenticate.user',['except'=>['masterDetails','eventDetails','aboutUsDetails','subPagesView','contactUsVie','galleryDetails','contactUsForm','contactUsFormCreate','subPagesDetails','allGalleryImages']]);
+        $this->middleware('authenticate.user',['except'=>['masterDetails','eventDetails','aboutUsDetails','subPagesView','contactUsVie','galleryDetails','contactUsForm','contactUsFormCreate','subPagesDetails','allGalleryImages','allGalleryImagesYearWise']]);
     }
     public function masterDetails(Request $request,$body_id){
         try{
@@ -257,6 +258,47 @@ class CmsController extends Controller
             $status = 500;
             $data = [
                 'action' => ' ',
+                'exception' => $exception->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+        $response = [
+            "message" => $message,
+            "data" => ($data)
+        ];
+        return response()->json($response, $status);
+    }
+
+    public function allGalleryImagesYearWise($body_id)
+    {
+        try {
+            $message = "Successful";
+            $status = 200;
+            $data = array();
+            $result= GalleryManagement::where('type','=','image')->get()
+                ->groupBy(function($val) {
+                    return Carbon::parse($val->created_at)->format('Y');
+                })->toArray();
+            $imageData = array();
+            $imageYear = array();
+            foreach ($result as $key => $value) {
+                $counter = 0;
+                $imageYear[] = $key;
+                foreach ($value as $val){
+                    $imageData[$key][] = array(
+                        'image' => env('BASE_URL') . DIRECTORY_SEPARATOR . env('GALLERY_FOLDER_FILE_UPLOAD') . DIRECTORY_SEPARATOR . sha1($val['folder_id']) . DIRECTORY_SEPARATOR . $val['name']
+                    );
+                    $counter++;
+                }
+
+            }
+            $data['year'] = $imageYear;
+            $data['images-list'] = $imageData;
+        } catch (\Exception $exception) {
+            $message = "Something went wrong.";
+            $status = 500;
+            $data = [
+                'action' => '',
                 'exception' => $exception->getMessage()
             ];
             Log::critical(json_encode($data));
