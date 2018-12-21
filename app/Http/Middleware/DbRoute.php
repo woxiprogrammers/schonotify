@@ -21,6 +21,7 @@ class DbRoute
     {
             $url = parse_url(URL::to(''));
             $host = explode('.',$url['host']);
+//            $hostDb = ucwords(str_replace('-','_',$host[0]));
             $checkIfDomainExists = Body::where('db_name',$host[0])->get();
             if($checkIfDomainExists->count()==1){ //organization Found'
                 $data = $checkIfDomainExists->first();

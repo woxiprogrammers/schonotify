@@ -691,4 +691,8 @@ Route::group(['prefix' => 'cms'],function (){
     Route::post('aboutUs',array('uses' => 'Cms\CmsController@aboutUsForm'));
     Route::post('testimonial',array('uses' => 'Cms\CmsController@testimonialForm'));
     Route::post('marquee',array('uses' => 'Cms\CmsController@marqueeForm'));
+    Route::get('image-uploader',array('uses' => 'Cms\CmsController@imageUploader'));
+    Route::post('upload-image',array('uses' => 'Cms\CmsController@uploadImage'));
+    Route::get('images-listing',array('uses' => 'Cms\CmsController@imagesListing'));
+    Route::get('remove-image/{id}',array('uses' => 'Cms\CmsController@removeImage'));
 });
