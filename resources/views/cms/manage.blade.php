@@ -844,7 +844,7 @@ $sliderCount = (count($sliderImages));
                     <div id="tabsListing">
                     </div>
                 </fieldset>
-            </div>tabNames
+            </div>
         </div>
     </div>
 </div>
@@ -1364,6 +1364,20 @@ $sliderCount = (count($sliderImages));
 <script src="/assets/js/table-data.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script>
+    function deletePage(id){
+        var remove = confirm('Are you sure you want to remove this page');
+        if(remove == true){
+            $.ajax({
+                url: "/cms/pageRemove/"+id,
+                success: function(response)
+                {
+                    location.reload();
+                }
+            })
+        }else{
+            location.reload();
+        }
+    }
 $(document).ready(function (){
     $("textarea").ckeditor();
     Main.init();
