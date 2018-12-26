@@ -360,7 +360,7 @@ class CmsController extends Controller
                 $str.="<td>"."$menuName"."</td>";
                 $str.="<td>".$details['display_name']."</td>";
                 $str.="<td>".$details['created_at']."</td>";
-                $str.="<td>"."<a href='/cms/pagesEdit/".$details['id']."' >edit</a>" ." / ". "<a href='/cms/pageRemove/".$details['id']."'>remove</a>"."</td>";
+                $str.="<td>"."<a href='/cms/pagesEdit/".$details['id']."' >edit</a>" ." / ". "<a href='javascript:void(0);' onclick='deletePage(".$details['id'].")'>remove</a>"."</td>";
                 $str.="</tr>";
             }
             $str.="</tbody></table>";
