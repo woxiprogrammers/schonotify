@@ -11,6 +11,7 @@ use App\BodySocialDetails;
 use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\BodyTestimonial;
+use App\ImageUploder;
 use App\SocialPlatform;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -18,6 +19,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class CmsController extends Controller
@@ -358,7 +360,7 @@ class CmsController extends Controller
                 $str.="<td>"."$menuName"."</td>";
                 $str.="<td>".$details['display_name']."</td>";
                 $str.="<td>".$details['created_at']."</td>";
-                $str.="<td>"."<a href='/cms/pagesEdit/".$details['id']."' >edit</a>" ." / ". "<a href='/cms/pageRemove/".$details['id']."'>remove</a>"."</td>";
+                $str.="<td>"."<a href='/cms/pagesEdit/".$details['id']."' >edit</a>" ." / ". "<a href='javascript:void(0);' onclick='deletePage(".$details['id'].")'>remove</a>"."</td>";
                 $str.="</tr>";
             }
             $str.="</tbody></table>";
@@ -613,5 +615,101 @@ class CmsController extends Controller
            ];
            Log::critical(json_encode($data));
        }
+    }
+    public function imageUploader(Request $request){
+        try{
+                return view('cms/imageUploaderManage');
+        }catch(\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "image uploader",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function uploadImage(Request $request){
+        try{
+            $user = Auth::user();
+            $data['body_id'] = $user->body_id;
+            $query = ImageUploder::create($data);
+            $folderEncName = sha1($query['id']);
+            $folderPath = public_path().env('IMAGE_UPLOADER').DIRECTORY_SEPARATOR.$folderEncName;
+            if (! file_exists($folderPath)) {
+                File::makeDirectory($folderPath , 0777 ,true,true);
+            }
+            $imageArray = explode(';',$request->image);
+            $image = explode(',',$imageArray[1])[1];
+            $pos  = strpos($request->image, ';');
+            $type = explode(':', substr($request->image, 0, $pos))[1];
+            $extension = explode('/',$type)[1];
+            $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+            $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+            file_put_contents($fileFullPath,base64_decode($image));
+            $imageData ['image_name'] = $filename;
+            $imageName = ImageUploder::where('id',$query['id'])->update($imageData);
+            if($imageName){
+                Session::flash('message-success','Successfully Created');
+                return back();
+            }else{
+                Session::flash('message-error','Something went wrong');
+            }
+        }catch(\Exception $e){
+            $data = [
+                'status' => 500,
+                'message' => "image uploader",
+                'exception' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function imagesListing(Request $request){
+        try{
+            $user = Auth::user();
+            $imageData = ImageUploder::where('body_id',$user->body_id)->get()->toArray();
+            $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+            $str.="<thead><tr>";
+            $str.="<th></th>";
+            $str.="<th>Image Name</th>";
+            $str.="<th style='text-align: center'>Url</th>";
+            $str.="</tr></thead><tbody>";
+            foreach ($imageData as $data){
+                $str.="<tr>";
+                $str.="<td><input type='checkbox' onchange='return removeImage(this.checked,$data[id])' id='status$data[id]' value='$data[id]'></td>";
+                $str.="<td><img width='100' height='80' src=".env('IMAGE_UPLOADER').DIRECTORY_SEPARATOR.sha1($data['id']).DIRECTORY_SEPARATOR.$data['image_name']."></td>";
+                $str.="<td><input type='text' style='width: 750px' value=".env('BASE_URL').env('IMAGE_UPLOADER').DIRECTORY_SEPARATOR.sha1($data['id']).DIRECTORY_SEPARATOR.$data['image_name']."></td>";
+                $str.="</tr>";
+            }
+            $str.="</tbody></table>";
+            return $str;
+        }catch(\Exception $e){
+            $data = [
+                'action'=>'images listed successfully',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+    public function removeImage(Request $request,$id){
+        try{
+            $images = ImageUploder::where('id',$id)->first();
+            $imageFolder = sha1($images['id']);
+            $file_to_be_deleted = public_path().env('IMAGE_UPLOADER').DIRECTORY_SEPARATOR.$imageFolder.DIRECTORY_SEPARATOR.$images['image_name'];
+            if (!file_exists($file_to_be_deleted)) {
+                Session::flash('message-error','Image does not exists');
+                return Redirect::back();
+            } else {
+                unlink($file_to_be_deleted);
+                ImageUploder::where('id',$id)->delete();
+                Session::flash('message-success','Image has been deleted');
+                return Redirect::back();
+            }
+        }catch(\Exception $e){
+            $data = [
+                'action'=>'images removed successfully',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
     }
 }

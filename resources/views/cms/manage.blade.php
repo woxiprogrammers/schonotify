@@ -318,7 +318,7 @@
     </div>
     <div class="col-md-6">
         @if($tabName['display_name'] != null)
-        <input type="text" value="{{$tabName['display_name']}}" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="{{$tabName['slug']}} tab">
+        <input type="text" value="{{$tabName['display_name']}}" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="{{$tabName['slug']}}">
         @else
         <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[menu_tab]" id="custom_link_3" placeholder="{{$tabName['slug']}} tab">
         @endif
@@ -363,7 +363,7 @@
         </div>
         <div class="row">
             <div class="col-md-2">
-                <label class="control-label">Select Images :</label>
+                <label class="control-label">Select Images : <b>size(121*108 pixels)</b></label>
                 <input id="imageupload" type="file" class="btn blue"/>
                 <br />
                 <div class="row">
@@ -468,7 +468,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images  :</label>
+    <label class="control-label">Select Images  : <b>size(1920*500 pixels)</b></label>
     <input id="imageUpload{{$count}}" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -537,7 +537,7 @@ $sliderCount = (count($sliderImages));
 
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images  :</label>
+    <label class="control-label">Select Images  :  <b>size(1920*500 pixels)</b></label>
     <input id="imageUpload{{$count}}" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -588,7 +588,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images  :</label>
+    <label class="control-label">Select Images  : <b>size(1920*500 pixels)</b></label>
     <input id="imageUpload1" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -636,7 +636,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images :</label>
+    <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
     <input id="imageUpload2" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -684,7 +684,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images :</label>
+    <label class="control-label">Select Images : <b>size(1920*500  pixels)</b></label>
     <input id="imageUpload3" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -732,7 +732,7 @@ $sliderCount = (count($sliderImages));
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label">Select Images :</label>
+            <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
             <input id="imageUpload4" type="file" class="btn blue"/>
             <br />
             <div class="row">
@@ -844,7 +844,7 @@ $sliderCount = (count($sliderImages));
                     <div id="tabsListing">
                     </div>
                 </fieldset>
-            </div>tabNames
+            </div>
         </div>
     </div>
 </div>
@@ -1013,7 +1013,7 @@ $sliderCount = (count($sliderImages));
                     @if($bodyDetails == null)
                     <input type="email" class="form-control"  name="email_display" value="" placeholder="please enter email" required>
                     @else
-                    <input type="email" class="form-control"  name="email_display" value="{{$bodyDetails['email']}}" maxlength="10" placeholder="please enter email" required>
+                    <input type="email" class="form-control"  name="email_display" value="{{$bodyDetails['email']}}" placeholder="please enter email" required>
                     @endif
                 </div>
             </div>
@@ -1050,6 +1050,7 @@ $sliderCount = (count($sliderImages));
                 <img src="{{$folderPath.$ds.$folderEncName.$ds.$aboutUsDetails['image_name']}}" style="border: 1px black solid" width="200" height="120"/>
                 @endif
                 <br>
+                <label class="control-label">upload Image :  <b>size(235*291 pixels)</b></label>
                 <input id="aboutUsImage" type="file" class="btn blue"/>
                 <br />
                 <div class="row">
@@ -1097,6 +1098,7 @@ $sliderCount = (count($sliderImages));
                     <textarea id="" name="description{{$count}}[testimonial]" cols="50" rows="4">{{$testimoData['description']}} </textarea>
                 </div>
                 <div class="col-md-4">
+                    <label class="control-label">Uploade Images  <b>size(123*123 pixels)</b></label>
                     <input id="TestimonialImageUpload_{{$count}}" type="file" class="btn blue"/>
                     <br />
                     <div class="row">
@@ -1129,6 +1131,7 @@ $sliderCount = (count($sliderImages));
                     <textarea id="" name="description{{$count}}[testimonial]" cols="50" rows="4"> </textarea>
                 </div>
                 <div class="col-md-4">
+                    <label class="control-label">Uploade Images  <b>size(123*123 pixels)</b></label>
                     <input id="TestimonialImageUpload_{{$count}}" type="file" class="btn blue"/>
                     <br />
                     <div class="row">
@@ -1156,6 +1159,7 @@ $sliderCount = (count($sliderImages));
                     <textarea id="" name="description1[testimonial]" cols="50" rows="4"> </textarea>
                 </div>
                 <div class="col-md-4">
+                    <label class="control-label">Uploade Images  <b>size(123*123 pixels)</b></label>
                     <input id="TestimonialImageUpload_1" type="file" class="btn blue"/>
                     <br />
                     <div class="row">
@@ -1180,6 +1184,7 @@ $sliderCount = (count($sliderImages));
                     <textarea id="" name="description2[testimonial]" cols="50" rows="4"> </textarea>
                 </div>
                 <div class="col-md-4">
+                    <label class="control-label">Uploade Images  <b>size(123*123 pixels)</b></label>
                     <input id="TestimonialImageUpload_2" type="file" class="btn blue"/>
                     <br />
                     <div class="row">
@@ -1204,6 +1209,7 @@ $sliderCount = (count($sliderImages));
                     <textarea id="" name="description3[testimonial]" cols="50" rows="4"> </textarea>
                 </div>
                 <div class="col-md-4">
+                    <label class="control-label">Uploade Images  <b>size(123*123 pixels)</b></label>
                     <input id="TestimonialImageUpload_3" type="file" class="btn blue"/>
                     <br />
                     <div class="row">
@@ -1228,6 +1234,7 @@ $sliderCount = (count($sliderImages));
                     <textarea id="" name="description4[testimonial]" cols="50" rows="4"> </textarea>
                 </div>
                 <div class="col-md-4">
+                    <label class="control-label">Uploade Images  <b>size(123*123 pixels)</b></label>
                     <input id="TestimonialImageUpload_4" type="file" class="btn blue"/>
                     <br />
                     <div class="row">
@@ -1252,6 +1259,7 @@ $sliderCount = (count($sliderImages));
                     <textarea id="" name="description5[testimonial]" cols="50" rows="4"> </textarea>
                 </div>
                 <div class="col-md-4">
+                    <label class="control-label">Uploade Images  <b>size(123*123 pixels)</b></label>
                     <input id="TestimonialImageUpload_5" type="file" class="btn blue"/>
                     <br />
                     <div class="row">
@@ -1364,6 +1372,20 @@ $sliderCount = (count($sliderImages));
 <script src="/assets/js/table-data.js"></script>
 <script src="/assets/js/form-validation.js"></script>
 <script>
+    function deletePage(id){
+        var remove = confirm('Are you sure you want to remove this page');
+        if(remove == true){
+            $.ajax({
+                url: "/cms/pageRemove/"+id,
+                success: function(response)
+                {
+                    location.reload();
+                }
+            })
+        }else{
+            location.reload();
+        }
+    }
 $(document).ready(function (){
     $("textarea").ckeditor();
     Main.init();
