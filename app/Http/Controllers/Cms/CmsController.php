@@ -469,7 +469,7 @@ class CmsController extends Controller
             $pagesDetail = BodyTabNames::join('body_tab_details','body_tab_details.body_tab_name_id','=','body_tab_names.id')
                                         ->where('body_tab_names.id',$id)->select('body_tab_names.id','body_tab_names.display_name','body_tab_names.slug','body_tab_details.description','body_tab_names.page_icon')
                                         ->first();
-            $sliderImages = PageSliderImages::where('body_tab_name_id',$id)->get()->toArray();
+            $sliderImages = PageSliderImages::where('body_tab_name_id',$id)->orderBy('id','ASC')->get()->toArray();
             return view('cms.pagesEdit')->with(compact('pagesDetail','tabNames','sliderImages'));
         }catch(\Exception $e){
             $data = [

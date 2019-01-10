@@ -272,7 +272,7 @@
                                 </label>
                             </div>
                             @if(count($sliderImages) > 2)
-                                <input type="hidden" name="sliderImages[sliderImages2][update_image]" value="{{$sliderImages[2]['id']}}">
+                                <input type="hidden" name="sliderImages[sliderImages3][update_image]" value="{{$sliderImages[2]['id']}}">
                                 @if($sliderImages[2]['is_active'] == true)
                                     <div class="col-md-1">
                                         <input type="checkbox" name="sliderImages[sliderImages3][is_checked_slider]" checked>
