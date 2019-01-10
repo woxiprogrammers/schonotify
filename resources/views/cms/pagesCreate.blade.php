@@ -21,7 +21,8 @@
                     padding:10px;
                     background:#c2c2c5;
                 }
-            </style>            <div class="main-content" >
+            </style>
+            <div class="main-content" >
                 <div class="wrap-content container" id="container">
                     @include('alerts.errors')
                     <div id="message-error-div"></div>

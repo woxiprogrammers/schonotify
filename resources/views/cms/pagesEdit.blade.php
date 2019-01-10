@@ -13,6 +13,15 @@
     @include('sidebar')
     <div class="app-content">
         @include('header')
+        <style>
+            img {
+                max-width: 180px;
+            }
+            input[type=file]{
+                padding:10px;
+                background:#c2c2c5;
+            }
+        </style>
         <div class="main-content" >
             <div class="wrap-content container" id="container">
                 @include('alerts.errors')
