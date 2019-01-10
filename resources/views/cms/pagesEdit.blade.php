@@ -61,9 +61,11 @@
                         <div class="row">
                             <label class="control-label col-md-2">Select Page Icon: <b>size(16*16 pixels)</b></label>
                             <input id="imageupload" type="file" class="btn blue col-md-3"/>
+                            @if($pagesDetail['page_icon'] != null)
+                                <img src="{{env('PAGE_ICON_UPLOAD').DIRECTORY_SEPARATOR.sha1($pagesDetail['id']).DIRECTORY_SEPARATOR.$pagesDetail['page_icon']}}" style="height: 50px; width: 50px" />
+                            @endif
                             <div class="col-md-3" >
-                                <div id="preview-image" class="row">
-                                </div>
+                                <div id="preview-image" class="row"></div>
                             </div>
                         </div>
                         <br>
@@ -76,27 +78,40 @@
                             </div>
                         </div>
                         <br><br>
+                        <?php
+                        if(count($sliderImages) > 0){
+                            $sliderImagesPath = env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($pagesDetail['id']);
+                        }
+                        ?>
                         <div class="row">
                             <div class="col-md-5">
                                 <label class="control-label" style="font-size: 100%">
                                     <b><i>Please tick to select the Slider 1</i></b>
                                 </label>
                             </div>
-                            <div class="col-md-2">
-                                <input type="checkbox" id="slider1_checked" name="sliderImages[sliderImages1][is_checked_slider]">
-                            </div>
+                            @if(count($sliderImages) > 0)
+                                <input type="hidden" name="sliderImages[sliderImages1][update_image]" value="{{$sliderImages[0]['id']}}">
+                                @if($sliderImages[0]['is_active'] == true)
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages1][is_checked_slider]" checked>
+                                    </div>
+                                @else
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages1][is_checked_slider]">
+                                    </div>
+                                @endif
+                                <div class="col-md-5">
+                                    <img src="{{$sliderImagesPath.'/'.$sliderImages[0]['name']}}" style="height: 120px; width: 120px" />
+                                </div>
+                            @else
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="sliderImages[sliderImages1][is_checked_slider]">
+                                </div>
+                            @endif
                         </div>
-                        <?php
-                            if(count($sliderImages) > 0){
-                                $sliderImagesPath = env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($pagesDetail['id']);
-                            }
-                        ?>
                         <div class="form-group">
                             <label class="control-label">Select Images  : <b>size(1920*500 pixels)</b></label>
                             <input id="imageUpload1" type="file" class="btn blue"/>
-                            @if(count($sliderImages) > 0)
-                                <img src="{{$sliderImagesPath.'/'.$sliderImages[0]['name']}}" style="height: 150px; width: 150px" />
-                            @endif
                             <br />
                             <div class="row">
                                 <div id="preview-image1" class="row">
@@ -105,30 +120,57 @@
                             </div>
                         </div>
                         <div class="row">
+                            @if(count($sliderImages) > 0)
                             <div class="col-md-3">
                                 <label class="control-label">
                                     Message 1
                                 </label>
-                                <input type="text" name="sliderImages[sliderImages1][message_1]" id="message_1" value="" placeholder="enter the message">
+                                <input type="text" name="sliderImages[sliderImages1][message_1]" id="message_1" value="{{$sliderImages[0]['message_1']}}" placeholder="enter the message">
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">
                                     Message 2
                                 </label>
-                                <input type="text" name="sliderImages[sliderImages1][message_2]" id="message_2" value="" placeholder="enter the message">
+                                <input type="text" name="sliderImages[sliderImages1][message_2]" id="message_2" value="{{$sliderImages[0]['message_2']}}" placeholder="enter the message">
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">
                                     Hyper Link title
                                 </label>
-                                <input type="text" name="sliderImages[sliderImages1][link_title]" id="link_title" value="" placeholder="enter link title">
+                                <input type="text" name="sliderImages[sliderImages1][link_title]" id="link_title" value="{{$sliderImages[0]['hyper_name']}}" placeholder="enter link title">
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">
                                     Hyper Link
                                 </label>
-                                <input type="text" name="sliderImages[sliderImages1][link]" id="link_title" value="" placeholder="enter hyper Link">
+                                <input type="text" name="sliderImages[sliderImages1][link]" id="link_title" value="{{$sliderImages[0]['hyper_link']}}" placeholder="enter hyper Link">
                             </div>
+                            @else
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 1
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages1][message_1]" id="message_1" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 2
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages1][message_2]" id="message_2" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link title
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages1][link_title]" id="link_title" value="" placeholder="enter link title">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages1][link]" id="link_title" value="" placeholder="enter hyper Link">
+                                </div>
+                            @endif
                         </div>
                         <br>
                         <hr>
@@ -138,16 +180,29 @@
                                     <b><i>Please tick to select the Slider 2</i></b>
                                 </label>
                             </div>
-                            <div class="col-md-1">
-                                <input type="checkbox"  name="sliderImages[sliderImages2][is_checked_slider]">
-                            </div>
+                            @if(count($sliderImages) > 1)
+                                <input type="hidden" name="sliderImages[sliderImages2][update_image]" value="{{$sliderImages[1]['id']}}">
+                                @if($sliderImages[1]['is_active'] == true)
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages2][is_checked_slider]" checked>
+                                    </div>
+                                @else
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages2][is_checked_slider]">
+                                    </div>
+                                @endif
+                                <div class="col-md-5">
+                                    <img src="{{$sliderImagesPath.'/'.$sliderImages[1]['name']}}" style="height: 120px; width: 120px" />
+                                </div>
+                            @else
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="sliderImages[sliderImages2][is_checked_slider]">
+                                </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
                             <input id="imageUpload2" type="file" class="btn blue"/>
-                            @if(count($sliderImages) > 1)
-                                <img src="{{$sliderImagesPath.'/'.$sliderImages[1]['name']}}" style="height: 150px; width: 150px" />
-                            @endif
                             <br />
                             <div class="row">
                                 <div id="preview-image2" class="row">
@@ -156,30 +211,57 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Message 1
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages2][message_1]" id="message_1" value="" placeholder="enter the message">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Message 2
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages2][message_2]" id="message_2" value="" placeholder="enter the message">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Hyper Link title
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages2][link_title]" id="link_title" value="" placeholder="enter link title">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Hyper Link
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages2][link]" id="link_title" value="" placeholder="enter hyper Link">
-                            </div>
+                            @if(count($sliderImages) > 1)
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 1
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][message_1]" id="message_1" value="{{$sliderImages[1]['message_1']}}" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 2
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][message_2]" id="message_2" value="{{$sliderImages[1]['message_2']}}" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link title
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][link_title]" id="link_title" value="{{$sliderImages[1]['hyper_name']}}" placeholder="enter link title">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][link]" id="link_title" value="{{$sliderImages[1]['hyper_link']}}" placeholder="enter hyper Link">
+                                </div>
+                            @else
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 1
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][message_1]" id="message_1" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 2
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][message_2]" id="message_2" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link title
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][link_title]" id="link_title" value="" placeholder="enter link title">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages2][link]" id="link_title" value="" placeholder="enter hyper Link">
+                                </div>
+                            @endif
                         </div>
                         <br>
                         <hr>
@@ -189,16 +271,29 @@
                                     <b><i>Please tick to select the Slider 3</i></b>
                                 </label>
                             </div>
-                            <div class="col-md-1">
-                                <input type="checkbox" name="sliderImages[sliderImages3][is_checked_slider]">
-                            </div>
+                            @if(count($sliderImages) > 2)
+                                <input type="hidden" name="sliderImages[sliderImages2][update_image]" value="{{$sliderImages[2]['id']}}">
+                                @if($sliderImages[2]['is_active'] == true)
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages3][is_checked_slider]" checked>
+                                    </div>
+                                @else
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages3][is_checked_slider]">
+                                    </div>
+                                @endif
+                                <div class="col-md-5">
+                                    <img src="{{$sliderImagesPath.'/'.$sliderImages[2]['name']}}" style="height: 120px; width: 120px" />
+                                </div>
+                            @else
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="sliderImages[sliderImages3][is_checked_slider]">
+                                </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label class="control-label">Select Images : <b>size(1920*500  pixels)</b></label>
                             <input id="imageUpload3" type="file" class="btn blue"/>
-                            @if(count($sliderImages) > 2)
-                                <img src="{{$sliderImagesPath.'/'.$sliderImages[2]['name']}}" style="height: 150px; width: 150px" />
-                            @endif
                             <br />
                             <div class="row">
                                 <div id="preview-image3" class="row">
@@ -207,30 +302,57 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Message 1
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages3][message_1]" id="message_1" value="" placeholder="enter the message">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Message 2
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages3][message_2]" id="message_2" value="" placeholder="enter the message">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Hyper Link title
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages3][link_title]" id="link_title" value="" placeholder="enter link title">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Hyper Link
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages3][link]" id="link_title" value="" placeholder="enter hyper Link">
-                            </div>
+                            @if(count($sliderImages) > 2)
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 1
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][message_1]" id="message_1" value="{{$sliderImages[2]['message_1']}}" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 2
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][message_2]" id="message_2" value="{{$sliderImages[2]['message_2']}}" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link title
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][link_title]" id="link_title" value="{{$sliderImages[2]['hyper_name']}}" placeholder="enter link title">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][link]" id="link_title" value="{{$sliderImages[2]['hyper_link']}}" placeholder="enter hyper Link">
+                                </div>
+                            @else
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 1
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][message_1]" id="message_1" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 2
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][message_2]" id="message_2" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link title
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][link_title]" id="link_title" value="" placeholder="enter link title">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages3][link]" id="link_title" value="" placeholder="enter hyper Link">
+                                </div>
+                            @endif
                         </div>
                         <br>
                         <hr>
@@ -240,9 +362,25 @@
                                     <b><i>Please tick to select the Slider 4</i></b>
                                 </label>
                             </div>
+                            @if(count($sliderImages) > 3)
+                                <input type="hidden" name="sliderImages[sliderImages4][update_image]" value="{{$sliderImages[3]['id']}}">
+                                @if($sliderImages[3]['is_active'] == true)
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages4][is_checked_slider]" checked>
+                                    </div>
+                                @else
+                                    <div class="col-md-1">
+                                        <input type="checkbox" name="sliderImages[sliderImages4][is_checked_slider]">
+                                    </div>
+                                @endif
+                                    <div class="col-md-5">
+                                        <img src="{{$sliderImagesPath.'/'.$sliderImages[3]['name']}}" style="height: 120px; width: 120px" />
+                                    </div>
+                            @else
                             <div class="col-md-1">
                                 <input type="checkbox" name="sliderImages[sliderImages4][is_checked_slider]">
                             </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
@@ -255,30 +393,57 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Message 1
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages4][message_1]" id="message_1" value="" placeholder="enter the message">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Message 2
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages4][message_2]" id="message_2" value="" placeholder="enter the message">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Hyper Link title
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages4][link_title]" id="link_title" value="" placeholder="enter link title">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    Hyper Link
-                                </label>
-                                <input type="text" name="sliderImages[sliderImages4][link]" id="link_title" value="" placeholder="enter hyper Link">
-                            </div>
+                            @if(count($sliderImages) > 3)
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 1
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][message_1]" id="message_1" value="{{$sliderImages[3]['message_1']}}" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 2
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][message_2]" id="message_2" value="{{$sliderImages[3]['message_2']}}" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link title
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][link_title]" id="link_title" value="{{$sliderImages[3]['hyper_name']}}" placeholder="enter link title">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][link]" id="link_title" value="{{$sliderImages[3]['hyper_link']}}" placeholder="enter hyper Link">
+                                </div>
+                            @else
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 1
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][message_1]" id="message_1" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Message 2
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][message_2]" id="message_2" value="" placeholder="enter the message">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link title
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][link_title]" id="link_title" value="" placeholder="enter link title">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">
+                                        Hyper Link
+                                    </label>
+                                    <input type="text" name="sliderImages[sliderImages4][link]" id="link_title" value="" placeholder="enter hyper Link">
+                                </div>
+                            @endif
                         </div>
                         <br><br>
                         <div class="row">
