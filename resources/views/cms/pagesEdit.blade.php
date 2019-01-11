@@ -37,6 +37,9 @@
                             <!-- end: MINI STATS WITH SPARKLINE -->
                         </div>
                     </div>
+                    <div class="row pull-right">
+                        <a href="/cms/manage">Back</a>
+                    </div>
                 </section>
                 <div class="container-fluid container-fullw bg-white">
                     <form action="/cms/sub-pages-edit/{{$pagesDetail['id']}}" method="post">
@@ -48,8 +51,8 @@
                                     </label>
                                     <select class="form-control" name="main_pages" style="-webkit-appearance: menulist;">
                                         @foreach($tabNames as $tabname)
-                                            @if($pagesDetail['display_name'] == $tabname['display_name'])
-                                                <option value="{{$pagesDetail['slug']}}" selected>{{$pagesDetail['display_name']}}</option>
+                                            @if($pagesDetail['body_tab_name_id'] == $tabname['id'])
+                                                <option value="{{$tabname['slug']}}" selected>{{$tabname['display_name']}}</option>
                                             @else
                                                 <option value="{{$tabname['slug']}}">{{$tabname['display_name']}}</option>
                                             @endif
