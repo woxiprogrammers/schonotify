@@ -15,6 +15,7 @@ use App\Event;
 use App\EventTypes;
 use App\Folder;
 use App\GalleryManagement;
+use App\PageSliderImages;
 use App\SocialPlatform;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -60,6 +61,11 @@ class CmsController extends Controller
                         $menuData[$count]['sub_menu'][$innerCount]['priority'] = $checkSubMenu['priority'];
                         $menuData[$count]['sub_menu'][$innerCount]['link'] = $checkSubMenu['link'];
                         $menuData[$count]['sub_menu'][$innerCount]['body_tab_name_id'] = $checkSubMenu['id'];
+                        if($checkSubMenu['page_icon'] != null){
+                            $menuData[$count]['sub_menu'][$innerCount]['page_icon'] = env('BASE_URL').env('PAGE_ICON_UPLOAD').DIRECTORY_SEPARATOR.sha1($checkSubMenu['id']).DIRECTORY_SEPARATOR.$checkSubMenu['page_icon'];
+                        } else {
+                            $menuData[$count]['sub_menu'][$innerCount]['page_icon'] = null;
+                        }
                         $innerCount++;
                     }
                 } else {
@@ -223,7 +229,19 @@ class CmsController extends Controller
             $data = array();
             $data['sub_page_detail'] = BodyTabDetails::join('body_tab_names','body_tab_names.id','=','body_tab_details.body_tab_name_id')
                 ->where('body_tab_names.id',$id)
-                ->select('body_tab_names.display_name','body_tab_details.description')->get()->toArray();
+                ->select('body_tab_names.display_name','body_tab_details.description','body_tab_names.page_icon')->get()->toArray();
+            $sliderImages =  PageSliderImages::where('body_tab_name_id',$id)->where('is_active',1)->get()->toArray();
+            $itrator = 1;
+            foreach ($sliderImages as $slider){
+                $data['sliderImages']['slider'][$itrator]['image'] = env('BASE_URL').env('SLIDER_IMAGES_UPLOAD').DIRECTORY_SEPARATOR.sha1($id).DIRECTORY_SEPARATOR.$slider['name'];
+                $data['sliderImages']['slider'][$itrator]['message1'] = $slider['message_1'];
+                $data['sliderImages']['slider'][$itrator]['message2'] = $slider['message_2'];
+                $data['sliderImages']['slider'][$itrator]['hyper_name'] = $slider['hyper_name'];
+                $data['sliderImages']['slider'][$itrator]['hyper_link'] = $slider['hyper_link'];
+                $data['sliderImages']['slider'][$itrator]['slider_number'] = "slider".$itrator;
+                $itrator++;
+            }
+
         }catch(\Exception $exception){
             $message = "Something went wrong.";
             $status = 500;

@@ -12,6 +12,7 @@ use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\BodyTestimonial;
 use App\ImageUploder;
+use App\PageSliderImages;
 use App\SocialPlatform;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -394,9 +395,59 @@ class CmsController extends Controller
             $subPageData['body_id'] = $bodyTabName['body_id'];
             $subPageData['is_active'] = true;
             $query = BodyTabNames::create($subPageData);
+            if($request->has('page_icon')){
+                    $folderEncName = sha1($query->id);
+                    $folderPath = public_path().env('PAGE_ICON_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                    if (! file_exists($folderPath)) {
+                        File::makeDirectory($folderPath , 0777 ,true,true);
+                    }
+                    $imageArray = explode(';',$request->page_icon);
+                    $image = explode(',',$imageArray[1])[1];
+                    $pos  = strpos($request->page_icon, ';');
+                    $type = explode(':', substr($request->page_icon, 0, $pos))[1];
+                    $extension = explode('/',$type)[1];
+                    $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                    $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                    file_put_contents($fileFullPath,base64_decode($image));
+                    $pageIconData['page_icon'] = $filename;
+                    BodyTabNames::where('id',$query->id)->update($pageIconData);
+            }
             $subPageDescription['body_tab_name_id'] = $query->id;
             $subPageDescription['description'] = $request->page_description;
             BodyTabDetails::create($subPageDescription);
+            if($request->has('sliderImages')){
+                foreach ($request->sliderImages as $sliderImage){
+                    if(array_key_exists('slider_image',$sliderImage)) {
+                        $sliderImageData['body_tab_name_id'] =  $query->id;
+                        $sliderImageData['message_1'] =  $sliderImage['message_1'];
+                        $sliderImageData['message_2'] =  $sliderImage['message_2'];
+                        $sliderImageData['hyper_name'] =  $sliderImage['link_title'];
+                        $sliderImageData['hyper_link'] =  $sliderImage['link'];
+                        if (array_key_exists('is_checked_slider',$sliderImage)){
+                            if($sliderImage['is_checked_slider'] == 'on'){
+                                $sliderImageData['is_active'] = true;
+                            }
+                        }
+                        $folderEncName = sha1($query->id);
+                        $folderPath = public_path() . env('SLIDER_IMAGES_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                        if (!file_exists($folderPath)) {
+                            File::makeDirectory($folderPath, 0777, true, true);
+                        }
+                        $imageArray = explode(';', $sliderImage['slider_image']);
+                        $image = explode(',', $imageArray[1])[1];
+                        $pos = strpos($sliderImage['slider_image'], ';');
+                        $type = explode(':', substr($sliderImage['slider_image'], 0, $pos))[1];
+                        $extension = explode('/', $type)[1];
+                        $filename = mt_rand(1, 10000000000) . sha1(time()) . ".{$extension}";
+                        $fileFullPath = DIRECTORY_SEPARATOR . $folderPath . DIRECTORY_SEPARATOR . $filename;
+                        file_put_contents($fileFullPath, base64_decode($image));
+                        $sliderImageData['name'] = $filename;
+
+                        PageSliderImages::create($sliderImageData);
+                    }
+                }
+
+            }
             if($query){
                 Session::flash('message-success','Successfully created');
                 return back();
@@ -416,9 +467,10 @@ class CmsController extends Controller
         try{
             $tabNames = BodyTabNames::where('body_tab_name_id','=',null)->where('is_active',1)->get()->toArray();
             $pagesDetail = BodyTabNames::join('body_tab_details','body_tab_details.body_tab_name_id','=','body_tab_names.id')
-                                        ->where('body_tab_names.id',$id)->select('body_tab_names.id','body_tab_names.display_name','body_tab_names.slug','body_tab_details.description')
+                                        ->where('body_tab_names.id',$id)->select('body_tab_names.id','body_tab_names.display_name','body_tab_names.slug','body_tab_details.description','body_tab_names.page_icon','body_tab_names.body_tab_name_id')
                                         ->first();
-            return view('cms.pagesEdit')->with(compact('pagesDetail','tabNames'));
+            $sliderImages = PageSliderImages::where('body_tab_name_id',$id)->orderBy('id','ASC')->get()->toArray();
+            return view('cms.pagesEdit')->with(compact('pagesDetail','tabNames','sliderImages'));
         }catch(\Exception $e){
             $data = [
                 'status' => 500,
@@ -454,8 +506,92 @@ class CmsController extends Controller
             $subPageData['slug']  = preg_replace('/\s+/', '-',  strtolower($request->sub_tab_name));
             $subPageData['body_tab_name_id'] = $bodyTabName['id'];
             $query = BodyTabNames::where('id',$id)->update($subPageData);
+            if($request->has('page_icon')){
+                $folderEncName = sha1($id);
+                $folderPath = public_path().env('PAGE_ICON_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                if (! file_exists($folderPath)) {
+                    File::makeDirectory($folderPath , 0777 ,true,true);
+                }
+                $imageArray = explode(';',$request->page_icon);
+                $image = explode(',',$imageArray[1])[1];
+                $pos  = strpos($request->page_icon, ';');
+                $type = explode(':', substr($request->page_icon, 0, $pos))[1];
+                $extension = explode('/',$type)[1];
+                $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                file_put_contents($fileFullPath,base64_decode($image));
+                $pageIconData['page_icon'] = $filename;
+                BodyTabNames::where('id',$id)->update($pageIconData);
+            }
             $subPageDescription['description'] = $request->page_description;
             BodyTabDetails::where('body_tab_name_id',$id)->update($subPageDescription);
+
+            if($request->has('sliderImages')){
+                foreach ($request->sliderImages as $sliderImage){
+                    if(array_key_exists('slider_image',$sliderImage) && !array_key_exists('update_image',$sliderImage)) {
+                        $sliderImageData['body_tab_name_id'] =  $id;
+                        $sliderImageData['message_1'] =  $sliderImage['message_1'];
+                        $sliderImageData['message_2'] =  $sliderImage['message_2'];
+                        $sliderImageData['hyper_name'] =  $sliderImage['link_title'];
+                        $sliderImageData['hyper_link'] =  $sliderImage['link'];
+                        if (array_key_exists('is_checked_slider',$sliderImage)){
+                            if($sliderImage['is_checked_slider'] == 'on'){
+                                $sliderImageData['is_active'] = true;
+                            }
+                        }
+                        $folderEncName = sha1($id);
+                        $folderPath = public_path() . env('SLIDER_IMAGES_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                        if (!file_exists($folderPath)) {
+                            File::makeDirectory($folderPath, 0777, true, true);
+                        }
+                        $imageArray = explode(';', $sliderImage['slider_image']);
+                        $image = explode(',', $imageArray[1])[1];
+                        $pos = strpos($sliderImage['slider_image'], ';');
+                        $type = explode(':', substr($sliderImage['slider_image'], 0, $pos))[1];
+                        $extension = explode('/', $type)[1];
+                        $filename = mt_rand(1, 10000000000) . sha1(time()) . ".{$extension}";
+                        $fileFullPath = DIRECTORY_SEPARATOR . $folderPath . DIRECTORY_SEPARATOR . $filename;
+                        file_put_contents($fileFullPath, base64_decode($image));
+                        $sliderImageData['name'] = $filename;
+
+                        PageSliderImages::create($sliderImageData);
+                    }
+                    if(array_key_exists('update_image',$sliderImage)) {
+                        $sliderImageData['body_tab_name_id'] =  $id;
+                        $sliderImageData['message_1'] =  $sliderImage['message_1'];
+                        $sliderImageData['message_2'] =  $sliderImage['message_2'];
+                        $sliderImageData['hyper_name'] =  $sliderImage['link_title'];
+                        $sliderImageData['hyper_link'] =  $sliderImage['link'];
+                        if (array_key_exists('is_checked_slider',$sliderImage)){
+                            if($sliderImage['is_checked_slider'] == 'on'){
+                                $sliderImageData['is_active'] = true;
+                            }
+                        } else {
+                            $sliderImageData['is_active'] = false;
+                        }
+                        if (array_key_exists('slider_image',$sliderImage)) {
+                            $folderEncName = sha1($id);
+                            $folderPath = public_path() . env('SLIDER_IMAGES_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                            if (!file_exists($folderPath)) {
+                                File::makeDirectory($folderPath, 0777, true, true);
+                            }
+                            $imageArray = explode(';', $sliderImage['slider_image']);
+                            $image = explode(',', $imageArray[1])[1];
+                            $pos = strpos($sliderImage['slider_image'], ';');
+                            $type = explode(':', substr($sliderImage['slider_image'], 0, $pos))[1];
+                            $extension = explode('/', $type)[1];
+                            $filename = mt_rand(1, 10000000000) . sha1(time()) . ".{$extension}";
+                            $fileFullPath = DIRECTORY_SEPARATOR . $folderPath . DIRECTORY_SEPARATOR . $filename;
+                            file_put_contents($fileFullPath, base64_decode($image));
+                            $sliderImageData['name'] = $filename;
+                        }
+                        PageSliderImages::where('id',$sliderImage['update_image'])->update($sliderImageData);
+                    }
+
+                }
+
+            }
+
             if($query){
                 Session::flash('message-success','Successfully Edited');
                 return back();
