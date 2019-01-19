@@ -66,7 +66,7 @@
         var par=this.value;
         if(par == 3)
         {
-            $('#tableContent').hide();
+            $('#tableContent').show();
             $('#UserSearch').show(1000);
             $('#Student_without_division').show(1000);
             $('#ClassSearch').show(1000);
