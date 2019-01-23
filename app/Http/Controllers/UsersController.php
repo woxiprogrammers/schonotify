@@ -9,6 +9,7 @@ use App\ClassData;
 use App\Classes;
 use App\ConcessionTypes;
 use App\Division;
+use App\ExtraConcession;
 use App\fee_installments;
 use App\fee_particulars;
 use App\FeeClass;
@@ -16,7 +17,10 @@ use App\FeeConcessionAmount;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\FullPaymentConcession;
+use App\FullPaymentType;
 use App\HomeworkTeacher;
+use App\Installments;
 use App\Leave;
 use App\Module;
 use App\ModuleAcl;
@@ -927,6 +931,7 @@ class UsersController extends Controller
                        $installment_data[] = $installment_info;
                    }
                     $concession_types=ConcessionTypes::select('id','name')->get()->toarray();
+                    $full_pay_concession=FullPaymentType::select('id','name','slug')->get()->toarray();
                     $userData=User::where('id',$user['parent_id'])->first();
                     $user['parentUserId']=$user['parent_id'];
                     $user['parentUserName']=$userData->username;
@@ -1078,7 +1083,14 @@ class UsersController extends Controller
                                               ->where('student_id',$id)
                                               ->select('fees.id as id','fee_name as fee_name')->distinct('id')->get()->toArray();
                 $studentinstallmentIds = FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id','fee_id')->distinct('installment_id')->get()->groupBy('fee_id')->toArray();
-                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student','student_date_of_admission'));
+                $studentFeeStructures = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
+                    ->where('student_id',$id)
+                    ->select('student_fee.id as student_fee_id','student_fee.fee_id as fee_id','fees.fee_name as fee_name')
+                    ->orderBy('fee_id','desc')
+                    ->get()
+                    ->groupBy('fee_id')
+                    ->toArray();
+                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student','student_date_of_admission','studentFeeStructures','full_pay_concession'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -1199,6 +1211,28 @@ class UsersController extends Controller
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
         $dataStudent = $request->all();
+        if($request->has('addField') && $request->has('student_fee_id')){
+            $addConcession = $request->addField;
+            $installmentIds = Installments::select('installment_number')->get()->toArray();
+            $feeId = StudentFee::where('id',$request->student_fee_id)->value('fee_id');
+            foreach ($installmentIds as $installmentId) {
+                if (array_key_exists($installmentId['installment_number'], $addConcession)) {
+                    if(array_key_exists('label',$addConcession[$installmentId['installment_number']])){
+                        $labels = $addConcession[$installmentId['installment_number']]['label'];
+                        $amounts = $addConcession[$installmentId['installment_number']]['amount'];
+                        for($count = 0; $count < count($labels) ; $count++){
+                            $extraConcessionData['fee_id'] = $feeId;
+                            $extraConcessionData['student_id'] = $id;
+                            $extraConcessionData['installment_id'] = $installmentId['installment_number'];
+                            $extraConcessionData['label'] = $labels[$count];
+                            $extraConcessionData['amount'] = $amounts[$count];
+                            ExtraConcession::create($extraConcessionData);
+                        }
+                    }
+                }
+            }
+
+        }
         $presentAdmissionDate = User::where('id',$id)->select('date_of_admission')->first();
         if($presentAdmissionDate == null){
             $dateOfAdmission['date_of_admission'] = $request->date_of_admission;
@@ -1268,14 +1302,31 @@ class UsersController extends Controller
                 foreach ($dataStudent['student_fee'] as $key => $value){
                     $concessions = array();
                     foreach ($value['concession'] as $item1){
-                        $studentFeeConcessionCount = StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->where('fee_concession_type',$item)->first();
-                        $concessions['fee_concession_type'] = $item1;
-                        if($studentFeeConcessionCount == null){
-                            $concessions['student_id'] = $id;
-                            $concessions['fee_id'] = $key;
-                            StudentFeeConcessions::create($concessions);
-                        }else{
-                            StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->update($concessions);
+                        if($item1 == 'full-payment'){
+                            $check = FullPaymentConcession:: where('student_id',$id)->exists();
+                            $concessionType = FullPaymentType::where('slug',$item1)->value('id');
+                            $studentFullPayConcessionCount = FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->where('concession_type', $concessionType)->first();
+                            $fullPayConcessions['concession_type'] = $concessionType;
+                            if ($studentFullPayConcessionCount == null) {
+                                $concessionValues = FullPaymentConcession::where('fee_id', $key)->where('concession_type', $concessionType)->first();
+                                $fullPayConcessions['student_id'] = $id;
+                                $fullPayConcessions['fee_id'] = $key;
+                                $fullPayConcessions['label'] = $concessionValues['label'];
+                                $fullPayConcessions['amount'] = $concessionValues['amount'];
+                                FullPaymentConcession::create($fullPayConcessions);
+                            } else {
+                                FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->update($fullPayConcessions);
+                            }
+                        } else {
+                            $studentFeeConcessionCount = StudentFeeConcessions::where('student_id', $id)->where('fee_id', $key)->where('fee_concession_type', $item1)->first();
+                            $concessions['fee_concession_type'] = $item1;
+                            if ($studentFeeConcessionCount == null) {
+                                $concessions['student_id'] = $id;
+                                $concessions['fee_id'] = $key;
+                                StudentFeeConcessions::create($concessions);
+                            } else {
+                                StudentFeeConcessions::where('student_id', $id)->where('fee_id', $key)->update($concessions);
+                            }
                         }
                     }
                 }
@@ -1285,7 +1336,24 @@ class UsersController extends Controller
                     $concessions['fee_id'] = $key;
                     $concessions['student_id'] = $id;
                     foreach ($value['concession'] as $item) {
-                        $concessions['fee_concession_type'] = $item;
+                        if($item == 'full-payment'){
+                            $check = FullPaymentConcession:: where('student_id',$id)->exists();
+                            $concessionType = FullPaymentType::where('slug',$item)->value('id');
+                            $studentFullPayConcessionCount = FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->where('concession_type', $concessionType)->first();
+                            $fullPayConcessions['concession_type'] = $concessionType;
+                            if ($studentFullPayConcessionCount == null) {
+                                $concessionValues = FullPaymentConcession::where('fee_id', $key)->where('concession_type', $concessionType)->first();
+                                $fullPayConcessions['student_id'] = $id;
+                                $fullPayConcessions['fee_id'] = $key;
+                                $fullPayConcessions['label'] = $concessionValues['label'];
+                                $fullPayConcessions['amount'] = $concessionValues['amount'];
+                                FullPaymentConcession::create($fullPayConcessions);
+                            } else {
+                                FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->update($fullPayConcessions);
+                            }
+                        } else {
+                            $concessions['fee_concession_type'] = $item;
+                        }
                     }
                     $b = StudentFeeConcessions::create($concessions);
                 }
