@@ -404,7 +404,7 @@ class FeeController extends Controller
                 $installments[$installmentId]['fee_concession_amount'] = ($installment_percent_amount[$installmentId]/100) * $totalFeeConcessionAmount;
                 $installments[$installmentId]['final_total'] = $installments[$installmentId]['subTotal'] - $installments[$installmentId]['caste_concession_amount'] - $installments[$installmentId]['fee_concession_amount'];
             }
-            $fullPayConc = FullPaymentConcession::where('fee_id',$student_fee['fee_id'])->where('student_id',$student_fee['student_id'])->where('concession_type',1)->first();
+            $fullPayConc = FullPaymentConcession::where('fee_id',$student_fee['fee_id'])->where('concession_type',1)->first();
             return view('fee.new-installment-section')->with(compact('student','parent','installments','slug','isPreviousStructureCleared','add_field','fullPayConc','studentFeeId'));
         }catch(\Exception $e){
             $data = [

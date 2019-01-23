@@ -872,7 +872,7 @@ class UsersController extends Controller
                 if($caste_concession_type != "" && $caste_concession_type != null){
                     foreach ($caste_concession_type as $key => $casteConcession){
                         foreach ($casteConcession as $key_1=> $caste_amount){
-                            $caste_concn_amnt[$key][$key_1]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->pluck('concession_amount');
+                            $caste_concn_amnt[$key][$key_1] = CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id', $key)->pluck('concession_amount');
                         }
                     }
                 }
@@ -899,9 +899,11 @@ class UsersController extends Controller
                     }
                 }
                 $concession_amount_array = array();
-                   foreach($installment_percent_amount as $key => $percent_discout_collection){
-                       foreach ($percent_discout_collection as $key2=> $discount){
-                           $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
+                   foreach($installment_percent_amount as $key => $percent_discout_collection) {
+                       if(array_key_exists($key,$amountArray)) {
+                           foreach ($percent_discout_collection as $key2 => $discount) {
+                               $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
+                           }
                        }
                    }
                 $final_discounted_amounts = array();
@@ -990,9 +992,15 @@ class UsersController extends Controller
                                         $difference = date_diff( $storedDate,$currentDate);
                                         $dateDifference = $difference->format("%a");
                                         $calculate = floor($dateDifference/($discount['number_of_days'] + 1)) * $discount['late_fee_amount'];
-                                        $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ( $discount['discount']+ $calculate );
+                                        if(array_key_exists('discount',$discount)) {
+                                            $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ($discount['discount'] + $calculate);
+                                        } else {
+                                            $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $calculate;
+                                        }
                                     }else{
-                                        $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                                        if(array_key_exists('discount',$discount)) {
+                                            $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                                        }
                                     }
                                 }
                               }
@@ -1302,22 +1310,6 @@ class UsersController extends Controller
                 foreach ($dataStudent['student_fee'] as $key => $value){
                     $concessions = array();
                     foreach ($value['concession'] as $item1){
-                        if($item1 == 'full-payment'){
-                            $check = FullPaymentConcession:: where('student_id',$id)->exists();
-                            $concessionType = FullPaymentType::where('slug',$item1)->value('id');
-                            $studentFullPayConcessionCount = FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->where('concession_type', $concessionType)->first();
-                            $fullPayConcessions['concession_type'] = $concessionType;
-                            if ($studentFullPayConcessionCount == null) {
-                                $concessionValues = FullPaymentConcession::where('fee_id', $key)->where('concession_type', $concessionType)->first();
-                                $fullPayConcessions['student_id'] = $id;
-                                $fullPayConcessions['fee_id'] = $key;
-                                $fullPayConcessions['label'] = $concessionValues['label'];
-                                $fullPayConcessions['amount'] = $concessionValues['amount'];
-                                FullPaymentConcession::create($fullPayConcessions);
-                            } else {
-                                FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->update($fullPayConcessions);
-                            }
-                        } else {
                             $studentFeeConcessionCount = StudentFeeConcessions::where('student_id', $id)->where('fee_id', $key)->where('fee_concession_type', $item1)->first();
                             $concessions['fee_concession_type'] = $item1;
                             if ($studentFeeConcessionCount == null) {
@@ -1327,7 +1319,6 @@ class UsersController extends Controller
                             } else {
                                 StudentFeeConcessions::where('student_id', $id)->where('fee_id', $key)->update($concessions);
                             }
-                        }
                     }
                 }
             }else{
@@ -1336,24 +1327,7 @@ class UsersController extends Controller
                     $concessions['fee_id'] = $key;
                     $concessions['student_id'] = $id;
                     foreach ($value['concession'] as $item) {
-                        if($item == 'full-payment'){
-                            $check = FullPaymentConcession:: where('student_id',$id)->exists();
-                            $concessionType = FullPaymentType::where('slug',$item)->value('id');
-                            $studentFullPayConcessionCount = FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->where('concession_type', $concessionType)->first();
-                            $fullPayConcessions['concession_type'] = $concessionType;
-                            if ($studentFullPayConcessionCount == null) {
-                                $concessionValues = FullPaymentConcession::where('fee_id', $key)->where('concession_type', $concessionType)->first();
-                                $fullPayConcessions['student_id'] = $id;
-                                $fullPayConcessions['fee_id'] = $key;
-                                $fullPayConcessions['label'] = $concessionValues['label'];
-                                $fullPayConcessions['amount'] = $concessionValues['amount'];
-                                FullPaymentConcession::create($fullPayConcessions);
-                            } else {
-                                FullPaymentConcession::where('student_id', $id)->where('fee_id', $key)->update($fullPayConcessions);
-                            }
-                        } else {
                             $concessions['fee_concession_type'] = $item;
-                        }
                     }
                     $b = StudentFeeConcessions::create($concessions);
                 }

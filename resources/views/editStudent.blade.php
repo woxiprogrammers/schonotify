@@ -1270,14 +1270,6 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="concession_check">
-                    @foreach($full_pay_concession as $concessions)
-                        <div class="checkbox-inline caste-checkbox">
-                            <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['slug'] }}" checked>
-                            <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
-                        </div>
-                    @endforeach
-                </div>
             </div>
         </div>
         <div class="col-md-6">
