@@ -495,6 +495,28 @@
                                             </div>
                                         </div>
                                     </fieldset>
+                                    <fieldset>
+                                        <legend> Fee Structures: </legend>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <input type="hidden" id="slug" value="gis">
+                                                    <input type="hidden" id="grn" value="{{$grn}}">
+                                                    <label class="control-label">
+                                                        Fee Structure: <span class="symbol required"></span>
+                                                    </label>
+                                                    <select id="fee_structure_select" class="form-control">
+                                                        @foreach($studentFeeStructures as $studentFeeStructure)
+                                                            <option value="{{$studentFeeStructure[0]['student_fee_id']}}"> {{$studentFeeStructure[0]['fee_name']}} </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div id="installment_section">
+
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                         </div>
@@ -1248,6 +1270,14 @@
                         </div>
                     @endforeach
                 </div>
+                <div class="concession_check">
+                    @foreach($full_pay_concession as $concessions)
+                        <div class="checkbox-inline caste-checkbox">
+                            <input type="checkbox"  id="{{ $concessions['id'] }}_concession_chk" class="concession_class_{{ $concessions['id'] }}" name="concessions[]" value="{{ $concessions['slug'] }}" checked>
+                            <label for="{{ $concessions['id'] }}_concession_chk">{{ $concessions['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
         <div class="col-md-6">
@@ -1341,6 +1371,48 @@
                 $("#clonedDiv_"+id).html(newClone);
             });
         });
+        /*$("#multiple-concession").click(function() {
+            $('.checked_fee:checkbox:checked').each(function(){
+                var studentFeeId = $(this).val();
+                $.ajax({
+                    url: '/fees/get-structure-installments/'+studentFeeId,
+                    type: 'POST',
+                    data:{
+                        slug: $("#slug").val(),
+                        grn: $("#grn").val(),
+                        add_field: true
+                    },
+                    success: function(data, textStatus, xhr){
+                        $("#installment_section").html(data);
+                    },
+                    error: function(errorData){
+                        alert('Something went wrong !');
+                    }
+                });
+            });
+        });*/
+
+        $("#fee_structure_select").on('change', function(){
+            var studentFeeId = $(this).val();
+            $.ajax({
+                url: '/fees/get-structure-installments/'+studentFeeId,
+                type: 'POST',
+                data:{
+                    slug: $("#slug").val(),
+                    grn: $("#grn").val(),
+                    add_field: true
+                },
+                success: function(data, textStatus, xhr){
+                    $("#installment_section").html(data);
+                },
+                error: function(errorData){
+                    alert('Something went wrong !');
+                }
+            });
+        });
+
+        $("#fee_structure_select").trigger('change');
+
         Main.init();
         FormValidator.init();
         FormElements.init();
