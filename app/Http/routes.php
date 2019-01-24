@@ -183,6 +183,8 @@
 
     Route::put('edit-student/{id}','UsersController@updateStudent');
 
+    Route::get('delete-extra-concession/{id}','UsersController@deleteExtraConcession');
+
     Route::get('edit-student/{id}','UsersController@updateStudent')->name('student-edit');
 
     Route::put('edit-parent/{id}','UsersController@updateParent');

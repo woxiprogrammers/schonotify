@@ -7,6 +7,7 @@
 $fullPayment = array();
 $extraConInFullPay = array();
 $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
+$isInstallmentPaid = false;
 ?>
 
 <fieldset>
@@ -18,12 +19,11 @@ $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
                 $casteConcessionAmount += $installment['caste_concession_amount'];
                 $feeConcessionAmount +=$installment['fee_concession_amount'];
                 $lateFee += $installment['late_fee'];
-                $isInstallmentPaid = false;
                 if($installment['is_paid'] == true){
                     $isInstallmentPaid = true;
                 }
                 $stdFeeIds = \App\StudentFee::where('id',$studentFeeId)->select('fee_id','student_id')->first();
-                $extraConcession = \App\ExtraConcession::where('fee_id',$stdFeeIds['fee_id'])->where('student_id',$stdFeeIds['student_id'])->where('installment_id',$id)->select('label','amount')->get()->toArray();
+                $extraConcession = \App\ExtraConcession::where('fee_id',$stdFeeIds['fee_id'])->where('student_id',$stdFeeIds['student_id'])->where('installment_id',$id)->select('id','label','amount')->get()->toArray();
                 if($extraConcession != null){
                     foreach ($extraConcession as $extraCon){
                         $extraConInFullPay[] = array(
@@ -78,12 +78,17 @@ $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
                 </tr>
                 @if($extraConcession != null)
                     @foreach($extraConcession as $extra)
-                        <tr style="width: 95%;">
-                            <td style="width: 95%;font-weight: bold">
+                        <tr style="width: 100%;">
+                            <td style="width: 90%;font-weight: bold">
                                 {{$extra['label']}}
                             </td>
                             <td>
                                 {{$extra['amount']}}
+                            </td>
+                            <td class="pull-right" style="width: 2%">
+                                <button type="button" class="close" aria-label="Close" onclick="removeField({{$extra['id']}})">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -106,7 +111,7 @@ $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
                 </tr>
             </table>
                     <div id="add{{$id}}"></div>
-                @if($installment['is_paid'] == false && $isPreviousStructureCleared == true)
+                @if($installment['is_paid'] == false)
                     <form id="billGeneratorForm_{{$id}}">
                         <input type="hidden" name="slug" value="{{$slug}}">
                         <input type="hidden" value="{{$student['grn']}}" name="student_grn">
@@ -245,7 +250,7 @@ $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
                                     <input type="hidden" value="{{$parent['email']}}" name="email">
                                     <input type="hidden" value="{{$parent['mobile']}}" name="contact">
                                     <input type="hidden" value="{{round($total,2)}}" name="amount">
-                                    @if($add_field == false && $isPreviousStructureCleared == true)
+                                    @if($add_field == false)
                                         <button class="btn btn-primary btn-wide" type="button" onclick="submitForm({{$id}})" style="margin-left: 20%; margin-top: 10px">
                                             Make Payment
                                         </button>
@@ -290,11 +295,18 @@ $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
 <script>
     function addField(id,stdfee) {
         $("#add"+id).append('<tr>'+'<td>'+
-            '<input type="text" style="width: 90px; font-size: 12px; font: bold" name="addField['+id+'][label][]" placeholder="Enter Label">'+'</td>'+
-            '<td>'+'<input type="number" style="width: 90px; font-size: 12px; font: bold" name="addField['+id+'][amount][]" placeholder="Amount">'+'</td>'+
+            '<input type="text" style="width: 90px; font-size: 12px; font: bold" name="addField['+id+'][label][]" placeholder="Enter Label" required>'+'</td>'+
+            '<td>'+'<input type="number" style="width: 90px; font-size: 12px; font: bold" name="addField['+id+'][amount][]" placeholder="Amount" required>'+'</td>'+
         '</tr>'+'<br>'+'<input type="hidden" value="'+stdfee+'" name="student_fee_id">')
     }
-
+    function removeField(id) {
+            if (confirm("Delete Concession! are you sure ?")) {
+                var route = '/delete-extra-concession/' + id;
+                $.get(route, function () {
+                    window.location.replace(route);
+                });
+            }
+    }
     function submitForm(id){
 
         var formData = $("#billGeneratorForm_"+id).serializeArray();
