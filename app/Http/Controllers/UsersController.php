@@ -1229,12 +1229,14 @@ class UsersController extends Controller
                         $labels = $addConcession[$installmentId['installment_number']]['label'];
                         $amounts = $addConcession[$installmentId['installment_number']]['amount'];
                         for($count = 0; $count < count($labels) ; $count++){
-                            $extraConcessionData['fee_id'] = $feeId;
-                            $extraConcessionData['student_id'] = $id;
-                            $extraConcessionData['installment_id'] = $installmentId['installment_number'];
-                            $extraConcessionData['label'] = $labels[$count];
-                            $extraConcessionData['amount'] = $amounts[$count];
-                            ExtraConcession::create($extraConcessionData);
+                            if($labels[$count] != '' && $amounts[$count] != ''){
+                                $extraConcessionData['fee_id'] = $feeId;
+                                $extraConcessionData['student_id'] = $id;
+                                $extraConcessionData['installment_id'] = $installmentId['installment_number'];
+                                $extraConcessionData['label'] = $labels[$count];
+                                $extraConcessionData['amount'] = $amounts[$count];
+                                ExtraConcession::create($extraConcessionData);
+                            }
                         }
                     }
                 }
@@ -2035,6 +2037,20 @@ class UsersController extends Controller
                 Session::flash('message-error, Something went wrong');
                 return Redirect::back();
             }
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function deleteExtraConcession(Request $request,$id){
+        try{
+            ExtraConcession::where('id',$id)->delete();
+            return Redirect::back();
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage(),
