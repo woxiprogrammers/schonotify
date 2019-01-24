@@ -7,6 +7,7 @@
 $fullPayment = array();
 $extraConInFullPay = array();
 $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
+$isInstallmentPaid = false;
 ?>
 
 <fieldset>
@@ -18,7 +19,6 @@ $casteConcessionAmount = $feeConcessionAmount = $lateFee = $extraConAmount = 0;
                 $casteConcessionAmount += $installment['caste_concession_amount'];
                 $feeConcessionAmount +=$installment['fee_concession_amount'];
                 $lateFee += $installment['late_fee'];
-                $isInstallmentPaid = false;
                 if($installment['is_paid'] == true){
                     $isInstallmentPaid = true;
                 }
