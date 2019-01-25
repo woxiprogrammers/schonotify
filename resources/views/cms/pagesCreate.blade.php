@@ -68,7 +68,7 @@
                             </div>
                             <br>
                             <div class="row">
-                                <label class="control-label col-md-2">Select Page Icon: <b>size(16*16 pixels)</b></label>
+                                <label class="control-label col-md-2">Select Page Icon: <b>size(50*50 pixels)</b></label>
                                 <input id="imageupload" type="file" class="btn blue col-md-3"/>
                                 <div class="col-md-3" >
                                     <div id="preview-image" class="row">
@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Select Images  : <b>size(1920*500 pixels)</b></label>
+                                <label class="control-label">Select Images  : <b>size(1200*400 pixels)</b></label>
                                 <input id="imageUpload1" type="file" class="btn blue"/>
                                 <br />
                                 <div class="row">
@@ -144,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
+                                <label class="control-label">Select Images : <b>size(1200*400 pixels)</b></label>
                                 <input id="imageUpload2" type="file" class="btn blue"/>
                                 <br />
                                 <div class="row">
@@ -192,7 +192,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Select Images : <b>size(1920*500  pixels)</b></label>
+                                <label class="control-label">Select Images : <b>size(1200*400  pixels)</b></label>
                                 <input id="imageUpload3" type="file" class="btn blue"/>
                                 <br />
                                 <div class="row">
@@ -240,7 +240,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
+                                <label class="control-label">Select Images : <b>size(1200*400 pixels)</b></label>
                                 <input id="imageUpload4" type="file" class="btn blue"/>
                                 <br />
                                 <div class="row">
