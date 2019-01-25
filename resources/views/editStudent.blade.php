@@ -959,9 +959,20 @@
                                                <li>
                                                        <div class="values">
                                                          @foreach($total_due_fees_for_current_year as $name => $value)
+                                                             <?php
+                                                               $feeid = \App\Fees::where('fee_name',$name)->value('id');
+                                                               $installmentIdArray = \App\FeeInstallments::where('fee_id',$feeid)->select('installment_id')->distinct('installment_id')->get()->toArray();
+                                                               $extraConcessionAmount = 0;
+                                                               foreach ($installmentIdArray as $instId){
+                                                                    $extraConc = \App\ExtraConcession::where('fee_id',$feeid)->where('student_id',$user->id)->where('installment_id',$instId['installment_id'])->select('amount')->get()->toArray();
+                                                                    foreach ($extraConc as $extra){
+                                                                        $extraConcessionAmount += $extra['amount'];
+                                                                    }
+                                                               }
+                                                               ?>
                                                                <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
                                                                <h4>{{$name}}</h4>
-                                                               Total due fee for current year : {{$value}}
+                                                               Total due fee for current year : {{$value + $extraConcessionAmount}}
                                                            </div>
                                                          @endforeach
                                                        </div>

@@ -8,6 +8,7 @@ use App\category_types;
 use App\Classes;
 use App\ConcessionTypes;
 use App\Division;
+use App\ExtraConcession;
 use App\fee_installments;
 use App\fee_particulars;
 use App\FeeClass;
@@ -653,6 +654,8 @@ class LeaveController extends Controller
                                 $calculate = floor($dateDifference/($discount['number_of_days'] + 1)) * $discount['late_fee_amount'];
                                 if(array_key_exists('discount',$discount)) {
                                     $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ($discount['discount'] + $calculate);
+                                } else {
+                                    $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] +=$calculate;
                                 }
                             }else{
                                 if(array_key_exists('discount',$discount)) {
@@ -705,9 +708,18 @@ class LeaveController extends Controller
             $iterator=0;
             $responseData['transaction'] = $transactions->toArray();
             foreach ($total_fees_for_current_year as $key => $total_fee){
+                    $feeid = Fees::where('fee_name',$key)->value('id');
+                    $installmentIdArray = FeeInstallments::where('fee_id',$feeid)->select('installment_id')->distinct('installment_id')->get()->toArray();
+                    $extraConcessionAmount = 0;
+                    foreach ($installmentIdArray as $instId){
+                        $extraConc = ExtraConcession::where('fee_id',$feeid)->where('student_id',$id)->where('installment_id',$instId['installment_id'])->select('amount')->get()->toArray();
+                        foreach ($extraConc as $extra){
+                            $extraConcessionAmount += $extra['amount'];
+                        }
+                    }
                     $responseData['structures'][$iterator]['structure_name'] = $key;
                     $responseData['structures'][$iterator]['discount'] = $total_fee['discount'];
-                    $responseData['structures'][$iterator]['pending_fee'] = $total_fee['pending'];
+                    $responseData['structures'][$iterator]['pending_fee'] = $total_fee['pending'] + $extraConcessionAmount;
                     $iterator++;
             }
         } catch (\Exception $e){
