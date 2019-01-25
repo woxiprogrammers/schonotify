@@ -7,6 +7,9 @@ use App\Batch;
 use App\ClassData;
 use App\Classes;
 use App\Division;
+use App\ExtraConcession;
+use App\FullPaymentConcession;
+use App\FullPaymentType;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\Message;
 use App\Module;
@@ -415,22 +418,86 @@ class UserController extends Controller
     public function studentInstallmentview(Request $request,$id,$student_id){
       try{
            $installment_data = array();
+          $installment_info = array();
+          $sum = 0;
            $student_fee=StudentFee::where('student_id',$student_id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toArray();
-           foreach($student_fee as $key => $a){
-               $installment_info=FeeInstallments::where('fee_id',$a['fee_id'])->where('installment_id',$id)->select('particulars_id','amount')->get()->toarray();
-           }
-           $fee_pert=fee_particulars::select('particular_name')->get()->toArray();
-            if(!empty($installment_info)){
-                 $iterator = 0;
-                 foreach($installment_info as $i){
-                   $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id',$i['particulars_id'])->pluck('particular_name');
-                   $iterator++;
+           if($id == 'full') {
+               foreach ($student_fee as $key => $a) {
+                   $installmentIds = FeeInstallments::where('fee_id', $a['fee_id'])->select('installment_id')->distinct('installment_id')->get()->toArray();
+                   foreach ($installmentIds as $installment) {
+                       if ($installment['installment_id'] == 1) {
+                           $installment_info = FeeInstallments::where('fee_id', $a['fee_id'])->where('installment_id', $installment['installment_id'])->select('particulars_id', 'amount')->get()->toArray();
+                           if(!empty($installment_info)) {
+                               $iterator = 0;
+                               foreach ($installment_info as $i) {
+                                   $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id', $i['particulars_id'])->pluck('particular_name');
+                                   $iterator++;
+                               }
+                           }
+                       } else {
+                           $newInstallmentInfo = FeeInstallments::where('fee_id', $a['fee_id'])->where('installment_id', $installment['installment_id'])->select('particulars_id', 'amount')->get()->toArray();
+                           $iterator = 0;
+                           foreach ($newInstallmentInfo as $InstallmentInfo){
+                               if($installment_info[$iterator]['particulars_id'] == $InstallmentInfo['particulars_id']){
+                                   $installment_info[$iterator]['amount'] += $InstallmentInfo['amount'];
+                               }
+                               $iterator++;
+                           }
+                       }
+                       $extraConcessionData = ExtraConcession::where('fee_id',$a['fee_id'])->where('student_id',$student_id)->where('installment_id',$installment['installment_id'])->select('label','amount')->get()->toArray();
+                       $i = count($installment_info);
+                       if(count($extraConcessionData) > 0){
+                           foreach ($extraConcessionData as $extraConcession){
+                               $installment_info[$i]['particulars_id'] = $i + 1;
+                               $installment_info[$i]['amount'] =$extraConcession['amount'];
+                               $installment_info[$i]['particulars_name'] = $extraConcession['label'];
+                               $i++;
+                           }
+                       }
+                   }
+                   if(!empty($installment_info)){
+                       $fullPayType = FullPaymentType::where('slug','full-payment')->value('id');
+                       $fullPayConcessionData = FullPaymentConcession::where('fee_id',$a['fee_id'])->where('concession_type',$fullPayType)->first();
+                       $i = count($installment_info);
+                       if($fullPayConcessionData != null){
+                           $installment_info[$i]['particulars_id'] = $i + 1;
+                           $installment_info[$i]['amount'] =$fullPayConcessionData['amount'];
+                           $installment_info[$i]['particulars_name'] = FullPaymentType::where('slug','full-payment')->value('name');
+                       }
+                   }
                }
-
-               $sum=array_sum(array_column($installment_info,'amount'));
+           } else {
+               foreach ($student_fee as $key => $a) {
+                   $installment_info = FeeInstallments::where('fee_id', $a['fee_id'])->where('installment_id', $id)->select('particulars_id', 'amount')->get()->toarray();
+               }
+               $fee_pert = fee_particulars::select('particular_name')->get()->toArray();
+               if (!empty($installment_info)) {
+                   $iterator = 0;
+                   foreach ($installment_info as $i) {
+                       $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id', $i['particulars_id'])->pluck('particular_name');
+                       $iterator++;
+                   }
+                   $extraConcessionData = ExtraConcession::where('fee_id',$a['fee_id'])->where('student_id', $student_id)->where('installment_id', $id)->select('label', 'amount')->get()->toArray();
+                   $i = count($installment_info);
+                   if (count($extraConcessionData) > 0) {
+                       foreach ($extraConcessionData as $extraConcession) {
+                           $installment_info[$i]['particulars_id'] = $i + 1;
+                           $installment_info[$i]['amount'] = $extraConcession['amount'];
+                           $installment_info[$i]['particulars_name'] = $extraConcession['label'];
+                           $i++;
+                       }
+                   }
+               }
+           }
+                foreach ($installment_info as $installmentData){
+                    if($installmentData['particulars_name'] == FullPaymentType::where('slug','full-payment')->value('name')){
+                        $sum -= 2 * $installmentData['amount'];
+                    } else {
+                        $sum=array_sum(array_column($installment_info,'amount'));
+                    }
+                }
                $installment_data= $installment_info;
                $installment_data['total']=$sum;
-              }
                $message = "suceess";
                $status=200;
            }catch (\Exception $e){

@@ -15,6 +15,8 @@ use App\FeeConcessionAmount;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\FullPaymentConcession;
+use App\FullPaymentType;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
 use App\PushToken;
 use App\LeaveRequest;
@@ -327,6 +329,7 @@ class LeaveController extends Controller
             $iterator = 0;
             foreach($student_fee as $key => $studentData)
             {
+                $fullPayTotal = $fullPayLateFee = 0;
                 foreach ($studentData as $a){
                     $response['data'][$iterator] = Fees::where('id',$a['fee_id'])->select('id as fee_id','fee_name as fee_name','year')->first()->toArray();
                     $previousFeeStructures = StudentFee::where('student_id',$id)
@@ -370,6 +373,9 @@ class LeaveController extends Controller
                                         ->pluck('late_fee_amount');
                                 }else{
                                     $response['data'][$iterator]['installments'][$installment['installment_id']]['late_fee'] = StudentLateFee::where('fee_id', $a['fee_id'])
+                                        ->where('installment_id', $installment['installment_id'])
+                                        ->pluck('late_fee_amount');
+                                    $fullPayLateFee += StudentLateFee::where('fee_id', $a['fee_id'])
                                         ->where('installment_id', $installment['installment_id'])
                                         ->pluck('late_fee_amount');
                                 }
@@ -448,10 +454,18 @@ class LeaveController extends Controller
                            foreach ($installments as $key_2 => $discounted){
                                 $final_discounted_amount[$key_2] = $discounted['subTotal']-$final_amount[$key_2];
                                $response['data'][$iterator]['installments'][$key_2]['total'] = $final_discounted_amount[$key_2];
+                               $fullPayTotal += $final_discounted_amount[$key_2];
                            }
                         }
                     }
                 }
+
+                $response['data'][$iterator]['installments'][] = array(
+                        'installment_id' => 'full',
+                        'due_date' => 'Full Payment',
+                        'late_fee' => $fullPayLateFee,
+                        'total' => $fullPayTotal,
+                );
                 $response['data'][$iterator]['installments'] = array_values($response['data'][$iterator]['installments']);
                 $iterator++;
             }
