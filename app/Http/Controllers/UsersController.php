@@ -877,7 +877,20 @@ class UsersController extends Controller
                     }
                 }
                 $amountArray = array(); // key is fee id
-                if(count($caste_concn_amnt) > count($concession_For_structure)){
+                foreach ($caste_concn_amnt as $key =>  $value) {
+                    $amountArray[$key]['amount'] = $value[0];
+                }
+
+                foreach ($concession_For_structure as $key1 => $value1) {
+                    if(array_key_exists($key1, $amountArray)) {
+                        if($value1[0] != null ){
+                            $amountArray[$key1]['amount'] = $amountArray[$key1]['amount'] + $value1[0];
+                        }
+                    } else {
+                        $amountArray[$key1]['amount'] = $value1[0];
+                    }
+                }
+                /*if(count($caste_concn_amnt) > count($concession_For_structure)){
                     foreach($caste_concn_amnt as $feeId => $casteConcnAmount){
                         if(!array_key_exists($feeId, $amountArray)){
                             $amountArray[$feeId]['amount'] = 0;
@@ -888,7 +901,7 @@ class UsersController extends Controller
                         }
                     }
                 }else{
-                    foreach($concession_For_structure as $feeId => $concessionStructure){
+                        foreach($concession_For_structure as $feeId => $concessionStructure){
                         if(!array_key_exists($feeId, $amountArray)){
                             $amountArray[$feeId]['amount'] = 0;
                         }
@@ -897,7 +910,7 @@ class UsersController extends Controller
                             $amountArray[$feeId]['amount'] += array_sum($caste_concn_amnt[$feeId]);
                         }
                     }
-                }
+                }*/
                 $concession_amount_array = array();
                    foreach($installment_percent_amount as $key => $percent_discout_collection) {
                        if(array_key_exists($key,$amountArray)) {
