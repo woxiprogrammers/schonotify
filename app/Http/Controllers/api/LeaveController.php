@@ -564,25 +564,17 @@ class LeaveController extends Controller
                 }
             }
             $amountArray = array(); // key is fee id
-            if(count($caste_concn_amnt) > count($concession_For_structure)){
-                foreach($caste_concn_amnt as $feeId => $casteConcnAmount){
-                    if(!array_key_exists($feeId, $amountArray)){
-                        $amountArray[$feeId]['amount'] = 0;
+            foreach ($caste_concn_amnt as $key =>  $value) {
+                $amountArray[$key]['amount'] = $value[0];
+            }
+
+            foreach ($concession_For_structure as $key1 => $value1) {
+                if(array_key_exists($key1, $amountArray)) {
+                    if($value1[0] != null ){
+                        $amountArray[$key1]['amount'] = $amountArray[$key1]['amount'] + $value1[0];
                     }
-                    $amountArray[$feeId]['amount'] += array_sum($casteConcnAmount);
-                    if(array_key_exists($feeId,$concession_For_structure)){
-                        $amountArray[$feeId]['amount'] += array_sum($concession_For_structure[$feeId]);
-                    }
-                }
-            }else{
-                foreach($concession_For_structure as $feeId => $concessionStructure){
-                    if(!array_key_exists($feeId, $amountArray)){
-                        $amountArray[$feeId]['amount'] = 0;
-                    }
-                    $amountArray[$feeId]['amount'] += array_sum($concessionStructure);
-                    if(array_key_exists($feeId,$caste_concn_amnt)){
-                        $amountArray[$feeId]['amount'] += array_sum($caste_concn_amnt[$feeId]);
-                    }
+                } else {
+                    $amountArray[$key1]['amount'] = $value1[0];
                 }
             }
             $concession_amount_array = array();
