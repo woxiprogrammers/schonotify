@@ -319,6 +319,7 @@ class LeaveController extends Controller
     public function getFees($id){
         try{
             $status = 200;
+            //$response = array();
             $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->distinct('fee_id')->get();
             $student_fee = ($student_fee->groupBy('fee_id')->toArray());
             $response = [
@@ -480,6 +481,7 @@ class LeaveController extends Controller
         try{
             $message = "Successfully Listed";
             $status = 200;
+            $responseData = array();
             $student_fee=StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
             foreach($student_fee as $key => $a)
             {
@@ -585,9 +587,11 @@ class LeaveController extends Controller
             }
             $concession_amount_array = array();
             foreach($installment_percent_amount as $key => $percent_discout_collection){
-                foreach ($percent_discout_collection as $key2=> $discount){
-                    $discounted_amount_for_installment = (($discount / 100) * ($amountArray[$key]['amount']));
-                    $concession_amount_array[$key][$key2] = $discounted_amount_for_installment;
+                if(array_key_exists($key,$amountArray)) {
+                    foreach ($percent_discout_collection as $key2 => $discount) {
+                        $discounted_amount_for_installment = (($discount / 100) * ($amountArray[$key]['amount']));
+                        $concession_amount_array[$key][$key2] = $discounted_amount_for_installment;
+                    }
                 }
             }
             $final_discounted_amounts = array();
@@ -648,9 +652,13 @@ class LeaveController extends Controller
                                 $difference = date_diff( $storedDate,$currentDate);
                                 $dateDifference = $difference->format("%a");
                                 $calculate = floor($dateDifference/($discount['number_of_days'] + 1)) * $discount['late_fee_amount'];
-                                $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ( $discount['discount']+ $calculate );
+                                if(array_key_exists('discount',$discount)) {
+                                    $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ($discount['discount'] + $calculate);
+                                }
                             }else{
-                                $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                                if(array_key_exists('discount',$discount)) {
+                                    $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                                }
                             }
                         }
                     }
@@ -695,7 +703,6 @@ class LeaveController extends Controller
                             ->where('transaction_details.student_id',$id)
                             ->select('fees.fee_name as structure_name','transaction_details.id as id','transaction_details.transaction_type as transaction_type','transaction_details.transaction_detail as transaction_detail','transaction_details.transaction_amount as transaction_amount','transaction_details.date as date' )
                             ->get();
-            $responseData=array();
             $iterator=0;
             $responseData['transaction'] = $transactions->toArray();
             foreach ($total_fees_for_current_year as $key => $total_fee){
