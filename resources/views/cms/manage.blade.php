@@ -468,7 +468,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images  : <b>size(1920*500 pixels)</b></label>
+    <label class="control-label">Select Images  : <b>size(1200*400 pixels)</b></label>
     <input id="imageUpload{{$count}}" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -537,7 +537,7 @@ $sliderCount = (count($sliderImages));
 
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images  :  <b>size(1920*500 pixels)</b></label>
+    <label class="control-label">Select Images  :  <b>size(1200*400 pixels)</b></label>
     <input id="imageUpload{{$count}}" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -588,7 +588,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images  : <b>size(1920*500 pixels)</b></label>
+    <label class="control-label">Select Images  : <b>size(1200*400 pixels)</b></label>
     <input id="imageUpload1" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -636,7 +636,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
+    <label class="control-label">Select Images : <b>size(1200*400 pixels)</b></label>
     <input id="imageUpload2" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -684,7 +684,7 @@ $sliderCount = (count($sliderImages));
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label">Select Images : <b>size(1920*500  pixels)</b></label>
+    <label class="control-label">Select Images : <b>size(1200*400  pixels)</b></label>
     <input id="imageUpload3" type="file" class="btn blue"/>
     <br />
     <div class="row">
@@ -732,7 +732,7 @@ $sliderCount = (count($sliderImages));
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label">Select Images : <b>size(1920*500 pixels)</b></label>
+            <label class="control-label">Select Images : <b>size(1200*400 pixels)</b></label>
             <input id="imageUpload4" type="file" class="btn blue"/>
             <br />
             <div class="row">
