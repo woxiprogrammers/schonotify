@@ -319,7 +319,6 @@ class LeaveController extends Controller
     public function getFees($id){
         try{
             $status = 200;
-            //$response = array();
             $student_fee = StudentFee::where('student_id',$id)->select('fee_id','year','fee_concession_type','caste_concession')->distinct('fee_id')->get();
             $student_fee = ($student_fee->groupBy('fee_id')->toArray());
             $response = [
