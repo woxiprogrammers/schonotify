@@ -168,7 +168,9 @@ $isInstallmentPaid = false;
                 $stdFeeIds = \App\StudentFee::where('id',$studentFeeId)->select('fee_id','student_id')->first();
                 $extraConcession = \App\ExtraConcession::where('fee_id',$stdFeeIds['fee_id'])->where('student_id',$stdFeeIds['student_id'])->where('installment_id',$id)->select('id','label','amount')->get()->toArray();
                 if($extraConcession != null){
+                    foreach ($extraConcession as $extraCon){
                         $extraConForInstallment += $extraCon['amount'];
+                    }
                 }
             ?>
             @if($installment['is_paid'] == true)
