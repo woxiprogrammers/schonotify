@@ -1055,6 +1055,7 @@
                                                                     @foreach($installmentIds as $id)
                                                                         <option value="{{$id['installment_id']}}"> {{$id['installment_id']}} </option>
                                                                     @endforeach
+                                                                        <option value="full-payment"> Full Payment </option>
                                                                 </select>
                                                             </div>
                                                         </div>

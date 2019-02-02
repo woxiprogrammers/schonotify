@@ -1102,7 +1102,7 @@ class UsersController extends Controller
                 $installmentIds =FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id')->distinct()->get()->toarray();
                 $assigned_fee_student = Fees::join('student_fee','student_fee.fee_id','=','fees.id')
                                               ->where('student_id',$id)
-                                              ->select('fees.id as id','fee_name as fee_name')->distinct('id')->get()->toArray();
+                                              ->select('fees.id as id','fee_name as fee_name')->distinct('id')->orderBy('id','DESC')->get()->toArray();
                 $studentinstallmentIds = FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id','fee_id')->distinct('installment_id')->get()->groupBy('fee_id')->toArray();
                 $studentFeeStructures = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
                     ->where('student_id',$id)
