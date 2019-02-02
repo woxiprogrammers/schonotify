@@ -9,6 +9,7 @@ use App\ClassData;
 use App\Classes;
 use App\ConcessionTypes;
 use App\Division;
+use App\ExtraConcession;
 use App\fee_installments;
 use App\fee_particulars;
 use App\FeeClass;
@@ -16,7 +17,10 @@ use App\FeeConcessionAmount;
 use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
+use App\FullPaymentConcession;
+use App\FullPaymentType;
 use App\HomeworkTeacher;
+use App\Installments;
 use App\Leave;
 use App\Module;
 use App\ModuleAcl;
@@ -868,12 +872,25 @@ class UsersController extends Controller
                 if($caste_concession_type != "" && $caste_concession_type != null){
                     foreach ($caste_concession_type as $key => $casteConcession){
                         foreach ($casteConcession as $key_1=> $caste_amount){
-                            $caste_concn_amnt[$key][$key_1]= CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id',$key)->pluck('concession_amount');
+                            $caste_concn_amnt[$key][$key_1] = CASTECONCESSION::where('caste_id', $caste_amount['caste_concession'])->where('fee_id', $key)->pluck('concession_amount');
                         }
                     }
                 }
                 $amountArray = array(); // key is fee id
-                if(count($caste_concn_amnt) > count($concession_For_structure)){
+                foreach ($caste_concn_amnt as $key =>  $value) {
+                    $amountArray[$key]['amount'] = $value[0];
+                }
+
+                foreach ($concession_For_structure as $key1 => $value1) {
+                    if(array_key_exists($key1, $amountArray)) {
+                        if($value1[0] != null ){
+                            $amountArray[$key1]['amount'] = $amountArray[$key1]['amount'] + $value1[0];
+                        }
+                    } else {
+                        $amountArray[$key1]['amount'] = $value1[0];
+                    }
+                }
+                /*if(count($caste_concn_amnt) > count($concession_For_structure)){
                     foreach($caste_concn_amnt as $feeId => $casteConcnAmount){
                         if(!array_key_exists($feeId, $amountArray)){
                             $amountArray[$feeId]['amount'] = 0;
@@ -884,7 +901,7 @@ class UsersController extends Controller
                         }
                     }
                 }else{
-                    foreach($concession_For_structure as $feeId => $concessionStructure){
+                        foreach($concession_For_structure as $feeId => $concessionStructure){
                         if(!array_key_exists($feeId, $amountArray)){
                             $amountArray[$feeId]['amount'] = 0;
                         }
@@ -893,11 +910,13 @@ class UsersController extends Controller
                             $amountArray[$feeId]['amount'] += array_sum($caste_concn_amnt[$feeId]);
                         }
                     }
-                }
+                }*/
                 $concession_amount_array = array();
-                   foreach($installment_percent_amount as $key => $percent_discout_collection){
-                       foreach ($percent_discout_collection as $key2=> $discount){
-                           $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
+                   foreach($installment_percent_amount as $key => $percent_discout_collection) {
+                       if(array_key_exists($key,$amountArray)) {
+                           foreach ($percent_discout_collection as $key2 => $discount) {
+                               $concession_amount_array[$key][$key2] = (($discount / 100) * ($amountArray[$key]['amount']));
+                           }
                        }
                    }
                 $final_discounted_amounts = array();
@@ -927,6 +946,7 @@ class UsersController extends Controller
                        $installment_data[] = $installment_info;
                    }
                     $concession_types=ConcessionTypes::select('id','name')->get()->toarray();
+                    $full_pay_concession=FullPaymentType::select('id','name','slug')->get()->toarray();
                     $userData=User::where('id',$user['parent_id'])->first();
                     $user['parentUserId']=$user['parent_id'];
                     $user['parentUserName']=$userData->username;
@@ -985,9 +1005,15 @@ class UsersController extends Controller
                                         $difference = date_diff( $storedDate,$currentDate);
                                         $dateDifference = $difference->format("%a");
                                         $calculate = floor($dateDifference/($discount['number_of_days'] + 1)) * $discount['late_fee_amount'];
-                                        $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ( $discount['discount']+ $calculate );
+                                        if(array_key_exists('discount',$discount)) {
+                                            $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += ($discount['discount'] + $calculate);
+                                        } else {
+                                            $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $calculate;
+                                        }
                                     }else{
-                                        $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                                        if(array_key_exists('discount',$discount)) {
+                                            $total_fee_for_current_year[$new[0]['fee_name']][$new[0]['installment_id']]['discount'] += $discount['discount'];
+                                        }
                                     }
                                 }
                               }
@@ -1076,9 +1102,16 @@ class UsersController extends Controller
                 $installmentIds =FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id')->distinct()->get()->toarray();
                 $assigned_fee_student = Fees::join('student_fee','student_fee.fee_id','=','fees.id')
                                               ->where('student_id',$id)
-                                              ->select('fees.id as id','fee_name as fee_name')->distinct('id')->get()->toArray();
+                                              ->select('fees.id as id','fee_name as fee_name')->distinct('id')->orderBy('id','DESC')->get()->toArray();
                 $studentinstallmentIds = FeeInstallments::whereIn('fee_id',$assigned_fee)->select('installment_id','fee_id')->distinct('installment_id')->get()->groupBy('fee_id')->toArray();
-                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student','student_date_of_admission'));
+                $studentFeeStructures = StudentFee::join('fees','fees.id','=','student_fee.fee_id')
+                    ->where('student_id',$id)
+                    ->select('student_fee.id as student_fee_id','student_fee.fee_id as fee_id','fees.fee_name as fee_name')
+                    ->orderBy('fee_id','desc')
+                    ->get()
+                    ->groupBy('fee_id')
+                    ->toArray();
+                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student','student_date_of_admission','studentFeeStructures','full_pay_concession'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
@@ -1199,6 +1232,30 @@ class UsersController extends Controller
     public function updateStudent(Requests\WebRequests\EditStudentRequest $request,$id)
     {
         $dataStudent = $request->all();
+        if($request->has('addField') && $request->has('student_fee_id')){
+            $addConcession = $request->addField;
+            $installmentIds = Installments::select('installment_number')->get()->toArray();
+            $feeId = StudentFee::where('id',$request->student_fee_id)->value('fee_id');
+            foreach ($installmentIds as $installmentId) {
+                if (array_key_exists($installmentId['installment_number'], $addConcession)) {
+                    if(array_key_exists('label',$addConcession[$installmentId['installment_number']])){
+                        $labels = $addConcession[$installmentId['installment_number']]['label'];
+                        $amounts = $addConcession[$installmentId['installment_number']]['amount'];
+                        for($count = 0; $count < count($labels) ; $count++){
+                            if($labels[$count] != '' && $amounts[$count] != ''){
+                                $extraConcessionData['fee_id'] = $feeId;
+                                $extraConcessionData['student_id'] = $id;
+                                $extraConcessionData['installment_id'] = $installmentId['installment_number'];
+                                $extraConcessionData['label'] = $labels[$count];
+                                $extraConcessionData['amount'] = $amounts[$count];
+                                ExtraConcession::create($extraConcessionData);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
         $presentAdmissionDate = User::where('id',$id)->select('date_of_admission')->first();
         if($presentAdmissionDate == null){
             $dateOfAdmission['date_of_admission'] = $request->date_of_admission;
@@ -1268,15 +1325,15 @@ class UsersController extends Controller
                 foreach ($dataStudent['student_fee'] as $key => $value){
                     $concessions = array();
                     foreach ($value['concession'] as $item1){
-                        $studentFeeConcessionCount = StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->where('fee_concession_type',$item)->first();
-                        $concessions['fee_concession_type'] = $item1;
-                        if($studentFeeConcessionCount == null){
-                            $concessions['student_id'] = $id;
-                            $concessions['fee_id'] = $key;
-                            StudentFeeConcessions::create($concessions);
-                        }else{
-                            StudentFeeConcessions::where('student_id',$id)->where('fee_id',$key)->update($concessions);
-                        }
+                            $studentFeeConcessionCount = StudentFeeConcessions::where('student_id', $id)->where('fee_id', $key)->where('fee_concession_type', $item1)->first();
+                            $concessions['fee_concession_type'] = $item1;
+                            if ($studentFeeConcessionCount == null) {
+                                $concessions['student_id'] = $id;
+                                $concessions['fee_id'] = $key;
+                                StudentFeeConcessions::create($concessions);
+                            } else {
+                                StudentFeeConcessions::where('student_id', $id)->where('fee_id', $key)->update($concessions);
+                            }
                     }
                 }
             }else{
@@ -1285,7 +1342,7 @@ class UsersController extends Controller
                     $concessions['fee_id'] = $key;
                     $concessions['student_id'] = $id;
                     foreach ($value['concession'] as $item) {
-                        $concessions['fee_concession_type'] = $item;
+                            $concessions['fee_concession_type'] = $item;
                     }
                     $b = StudentFeeConcessions::create($concessions);
                 }
@@ -1993,6 +2050,20 @@ class UsersController extends Controller
                 Session::flash('message-error, Something went wrong');
                 return Redirect::back();
             }
+        }catch(\Exception $e){
+            $data = [
+                'exception' => $e->getMessage(),
+                'status' => 500
+            ];
+            Log::critical(json_encode($data));
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function deleteExtraConcession(Request $request,$id){
+        try{
+            ExtraConcession::where('id',$id)->delete();
+            return Redirect::back();
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage(),

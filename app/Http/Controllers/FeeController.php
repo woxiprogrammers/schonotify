@@ -17,6 +17,8 @@ use App\FeeDueDate;
 use App\FeeInstallments;
 use App\Fees;
 use App\FormFee;
+use App\FullPaymentConcession;
+use App\FullPaymentType;
 use App\StudentFee;
 use App\StudentFeeConcessions;
 use App\StudentLateFee;
@@ -63,7 +65,8 @@ class FeeController extends Controller
             $concession_types = ConcessionTypes::select('id as concession.id','name as concession.name')->get();
             $caste_types = category_types::select('id as caste_id','caste_category')->get();
             $installment_number =Installments::select('id as installment_id','installment_number')->get();
-            return view('fee.create')->with(compact('classes','batches','concession_types','caste_types','installment_number'));
+            $fullPayConcession = FullPaymentType::select('id as concession.id','name as concession.name')->get();
+            return view('fee.create')->with(compact('classes','batches','concession_types','caste_types','installment_number','fullPayConcession'));
         }catch(\Exception $e){
             $data = [
                 'exception' => $e->getMessage()
@@ -143,6 +146,20 @@ class FeeController extends Controller
                 $sportDetails['amount']=$request->sport;
                 $sport=FeeConcessionAmount::insert($sportDetails);
             }
+            if($request->full_payment)
+            {
+                $paymentData = $request->full_payment;
+                $fullPaymentData['fee_id']=$query;
+                $fullPaymentData['concession_type']=1;
+                if(array_key_exists('label',$paymentData)){
+                    $fullPaymentData['label']=$paymentData['label'];
+                }
+                if(array_key_exists('amount',$paymentData)){
+                    $fullPaymentData['amount']=$paymentData['amount'];
+                }
+                $fullPay = FullPaymentConcession::insert($fullPaymentData);
+            }
+
           foreach($request->class as $class)
             {
                 $class_details['fee_id']=$query;
@@ -222,23 +239,77 @@ class FeeController extends Controller
     public function createTransactions(Request $request)
     {
          $transaction_details=array();
-         $transaction_details['fee_id']=$request->Structure_type;
-         $transaction_details['student_id']=$request->student_id;
-         $transaction_details['transaction_type']=$request->transaction_type;
-         $transaction_details['transaction_detail']=$request->transaction_detail;
-         $transaction_details['transaction_amount']=$request->transaction_amount;
-         $transaction_details['date']=$request->date;
-         $transaction_details['installment_id']=$request->installment_id;
-         $query=TransactionDetails::create($transaction_details);
-         if($query){
-             Session::flash('message-success','Fee transaction created successfully');
-             $title="Fee payment";
-             $message="Payment of Rs ".$request->transaction_amount." received by school.";
-             $allUser=0;
-             $users_push = User::where('id',$request->student_id)->pluck('parent_id');
-             $push_users = PushToken::where('user_id',$users_push)->lists('push_token')->toArray();
-             $this->CreatePushNotification($title,$message,$allUser,$push_users);
+         if($request->installment_id == 'full-payment'){
+             if($request->Structure_type != null && $request->student_id != null){
+                 $studentFeeIds = FeeInstallments::where('fee_id',$request->Structure_type)->select('installment_id')->distinct('installment_id')->get()->toArray();
+                 if(count($studentFeeIds) > 0){
+                     $isAnyInstallmentPaid = false;
+                     $totalAmount = 0;
+                     foreach ($studentFeeIds as $installment){
+                         $isInstallmentPaid = TransactionDetails::where('fee_id',$request->Structure_type)->where('student_id',$request->student_id)->where('installment_id',$installment['installment_id'])->first();
+                         $totalAmount += FeeInstallments::where('fee_id',$request->Structure_type)->where('installment_id',$installment['installment_id'])->sum('amount');
+                         if($isInstallmentPaid != null){
+                             $isAnyInstallmentPaid = true;
+                         }
+                     }
+                     if($isAnyInstallmentPaid == false) {
+                         foreach ($studentFeeIds as $installment){
+                             $amount = FeeInstallments::where('fee_id',$request->Structure_type)->where('installment_id',$installment['installment_id'])->sum('amount');
+                             $percentageOfConcession = ($amount/$totalAmount)*100;
+                             $amountForThisInstallment = ($request->transaction_amount * $percentageOfConcession)/100;
+                             $transaction_details['fee_id'] = $request->Structure_type;
+                             $transaction_details['student_id'] = $request->student_id;
+                             $transaction_details['transaction_type'] = $request->transaction_type;
+                             $transaction_details['transaction_detail'] = $request->transaction_detail;
+                             $transaction_details['transaction_amount'] = $amountForThisInstallment;
+                             $transaction_details['date'] = $request->date;
+                             $transaction_details['installment_id'] = $installment['installment_id'];
+                             $query = TransactionDetails::create($transaction_details);
+                         }
+                         if($query){
+                             Session::flash('message-success','Fee transaction created successfully');
+                             $title="Fee payment";
+                             $message="Payment of Rs ".$request->transaction_amount." received by school.";
+                             $allUser=0;
+                             $users_push = User::where('id',$request->student_id)->pluck('parent_id');
+                             $push_users = PushToken::where('user_id',$users_push)->lists('push_token')->toArray();
+                             $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                         }
+                     } else {
+                         Session::flash('message-error','Any one of installment has paid for this fee structure, hence can not make full payment');
+                         return Redirect::back();
+                     }
+                 }
+
+             }
+         } else {
+             if($request->Structure_type != null && $request->student_id != null) {
+                 $isInstallmentPaid = TransactionDetails::where('fee_id',$request->Structure_type)->where('student_id',$request->student_id)->where('installment_id',$request->installment_id)->first();
+                 if($isInstallmentPaid == null) {
+                     $transaction_details['fee_id'] = $request->Structure_type;
+                     $transaction_details['student_id'] = $request->student_id;
+                     $transaction_details['transaction_type'] = $request->transaction_type;
+                     $transaction_details['transaction_detail'] = $request->transaction_detail;
+                     $transaction_details['transaction_amount'] = $request->transaction_amount;
+                     $transaction_details['date'] = $request->date;
+                     $transaction_details['installment_id'] = $request->installment_id;
+                     $query = TransactionDetails::create($transaction_details);
+                     if($query){
+                         Session::flash('message-success','Fee transaction created successfully');
+                         $title="Fee payment";
+                         $message="Payment of Rs ".$request->transaction_amount." received by school.";
+                         $allUser=0;
+                         $users_push = User::where('id',$request->student_id)->pluck('parent_id');
+                         $push_users = PushToken::where('user_id',$users_push)->lists('push_token')->toArray();
+                         $this->CreatePushNotification($title,$message,$allUser,$push_users);
+                     }
+                 } else {
+                     Session::flash('message-error','this installment has already paid');
+                     return Redirect::back();
+                 }
+             }
          }
+
         return redirect('/edit-user/'.$request->student_id);
     }
     /**
@@ -286,6 +357,11 @@ class FeeController extends Controller
     public function getFeeStructureInstallments(Request $request, $studentFeeId){
         try{
             $slug = $request->slug;
+            if($request->has('add_field')){
+                $add_field = true;
+            }else{
+                $add_field = false;
+            }
             $student_fee = StudentFee::findOrFail($studentFeeId)->toArray();
             $student_fee_detail = StudentFee::where('student_id',$student_fee['student_id'])->where('fee_id',$student_fee['fee_id'])->select('fee_concession_type','caste_concession')->get()->toArray();
             $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
@@ -382,7 +458,9 @@ class FeeController extends Controller
                 $installments[$installmentId]['fee_concession_amount'] = ($installment_percent_amount[$installmentId]/100) * $totalFeeConcessionAmount;
                 $installments[$installmentId]['final_total'] = $installments[$installmentId]['subTotal'] - $installments[$installmentId]['caste_concession_amount'] - $installments[$installmentId]['fee_concession_amount'];
             }
-            return view('fee.new-installment-section')->with(compact('student','parent','installments','slug','isPreviousStructureCleared'));
+            $fullPayConc = FullPaymentConcession::where('fee_id',$student_fee['fee_id'])->where('concession_type',1)->first();
+            $isUserAdmin = Auth::User()->role_id;
+            return view('fee.new-installment-section')->with(compact('student','parent','installments','slug','isPreviousStructureCleared','add_field','fullPayConc','studentFeeId','isUserAdmin'));
         }catch(\Exception $e){
             $data = [
                 'action' => 'Get Fee structurewise installment details',
@@ -500,7 +578,8 @@ class FeeController extends Controller
             $grn = User::join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
                 ->where('students_extra_info.student_id', $id)
                 ->select('students_extra_info.grn as grn')->first();
-            $studentData = User::where('body_id', $user['body_id'])->where('id', $id)->select('parent_id')->first();
+            $studentData = User::where('body_id', $user['body_id'])->where('id', $id)->select('parent_id','first_name','last_name')->first();
+            $student_name = $studentData['first_name'] .' '.$studentData['last_name'];
             $parent_name = User::where('body_id', $user['body_id'])->where('id', $studentData['parent_id'])->select('first_name', 'last_name')->first();
             $transaction_details = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->where('id',$amount_id)->get()->first();
             $studentFee = StudentFee::where('student_id', $id)->where('fee_id', $fee_id)->select('fee_id', 'year', 'fee_concession_type', 'caste_concession')->get()->toarray();
@@ -603,7 +682,7 @@ class FeeController extends Controller
             }
             $balance =array_sum($finalBalance);
             TCPdf::AddPage();
-            TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user', 'balance', 'grn', 'transaction_details', 'parent_name','division','class'))->render());
+            TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user', 'balance', 'grn', 'transaction_details', 'parent_name','student_name','division','class'))->render());
             TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
         } catch (\Exception $e) {
             $data = [

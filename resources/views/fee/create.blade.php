@@ -67,7 +67,6 @@
                                     @if($i%2==0)
                                 </td>
                                 @else
-                                </td>
                             </tr>
                             @endif
                             @endif
@@ -86,27 +85,50 @@
                 </label>
                 <div>
                     @foreach($concession_types as $concessions)
-                    <div class="checkbox clip-check check-primary checkbox-inline" id="check">
-                        <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="{{ $concessions['concession.id'] }}" name="concessions[]">
-                        <label for="{{ $concessions['concession.id'] }}_concession_chk">{{ $concessions['concession.name'] }}</label>
-                    </div>
+                        <div class="checkbox clip-check check-primary checkbox-inline" id="check">
+                            <input type="checkbox"  id="{{ $concessions['concession.id'] }}_concession_chk" value="{{ $concessions['concession.id'] }}" name="concessions[]">
+                            <label for="{{ $concessions['concession.id'] }}_concession_chk">{{ $concessions['concession.name'] }}</label>
+                        </div>
                     @endforeach
+                        @foreach($fullPayConcession as $concession)
+                            <div class="checkbox clip-check check-primary checkbox-inline" id="check">
+                                <input type="checkbox"  id="{{$concession['concession.id']}}_concession_chk1" value="{{ $concession['concession.id'] }}" name="concessions[]">
+                                <label for="{{$concession['concession.id']}}_concession_chk1">{{ $concession['concession.name'] }}</label>
+                            </div>
+                        @endforeach
+
                 </div>
                 <div class="form-group">
 
-                 </div>
+                </div>
             </div>
             <div class="rte" style="display: none;border: 2px">
+                <label>RTE Concession :</label>
                 <input type="text" placeholder="Enter RTE concession amount" class="form-control" name="rte">
             </div>
                 <br>
             <div class="special" style="display: none;border: 2px">
+                <label>Teaching Staff Concession :</label>
                 <input type="text" placeholder="Enter Teaching Staff concession amount" class="form-control" name="special">
             </div>
                 <br>
             <div class="sport" style="display: none;border: 2px ">
+                <label>Non-Teaching Staff/Admin Concession :</label>
                 <input type="text" placeholder="Enter Non-Teaching Staff/Admin concession amount" class="form-control" name="sport">
             </div>
+                <br>
+                <div class="full-payment" style="display: none;border: 2px ">
+                    <div><label>Full Payment Concession :</label></div>
+                    <div>
+                        <div class="col-md-3">
+                            <input type="text" placeholder="Enter Lable for Full Payment" class="form-control" name="full_payment[label]">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" placeholder="Enter Full Payment Concession Amount" class="form-control" name="full_payment[amount]">
+                        </div>
+                    </div>
+                </div>
+                <br>
                 <br>
             <div class="castes" style="display: none">
                 <label class="control-label">
@@ -132,6 +154,7 @@
                  </div>
                </div>
             </div>
+                <br>
             <div class="container-fluid container-fullw">
                 <div class="form-group">
                     <label class="control-label">
@@ -246,6 +269,16 @@ $("#4_concession_chk").click(function(){
     else
     {
         $('.sport').hide(1000);
+    }
+})
+$("#1_concession_chk1").click(function(){
+    if(this.checked)
+    {
+        $('.full-payment').show(1000);
+    }
+    else
+    {
+        $('.full-payment').hide(1000);
     }
 })
 </script>
