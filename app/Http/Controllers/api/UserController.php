@@ -4,10 +4,13 @@ namespace App\Http\Controllers\api;
 
 use App\AclMaster;
 use App\Batch;
+use App\CASTECONCESSION;
 use App\ClassData;
 use App\Classes;
+use App\ConcessionTypes;
 use App\Division;
 use App\ExtraConcession;
+use App\FeeConcessionAmount;
 use App\FullPaymentConcession;
 use App\FullPaymentType;
 use App\Http\Controllers\CustomTraits\PushNotificationTrait;
@@ -420,6 +423,7 @@ class UserController extends Controller
            $installment_data = array();
           $installment_info = array();
           $sum = 0;
+          $concessionAmount = 0;
            $student_fee=StudentFee::where('student_id',$student_id)->select('fee_id','year','fee_concession_type','caste_concession')->get()->toArray();
            if($id == 'full') {
                foreach ($student_fee as $key => $a) {
@@ -465,16 +469,59 @@ class UserController extends Controller
                            $installment_info[$i]['particulars_name'] = FullPaymentType::where('slug','full-payment')->value('name');
                        }
                    }
+                   $concessions = StudentFee::where('student_id',$student_id)->where('fee_id',$a['fee_id'])->select('fee_concession_type','caste_concession')->get()->toArray();
+                   if(!empty($concessions)){
+                       $i = count($installment_info);
+                       foreach ($concessions as $concession){
+                           if($concession['fee_concession_type'] == 2 || $concession['fee_concession_type'] == null){
+                               $installment_info[$i]['particulars_id'] = $i + 1;
+                               $installment_info[$i]['amount'] = CASTECONCESSION::where('fee_id',$a['fee_id'])->where('caste_id',$concession['caste_concession'])->value('concession_amount');
+                               $installment_info[$i]['particulars_name'] = ConcessionTypes::where('id',$concession['fee_concession_type'])->value('name');
+                           } else {
+                               $installment_info[$i]['particulars_id'] = $i + 1;
+                               $installment_info[$i]['amount'] = FeeConcessionAmount::where('fee_id',$a['fee_id'])->where('concession_type',$concession['fee_concession_type'])->value('amount');
+                               $installment_info[$i]['particulars_name'] = ConcessionTypes::where('id',$concession['fee_concession_type'])->value('name');
+                           }
+                       }
+                   }
                }
+
            } else {
                foreach ($student_fee as $key => $a) {
                    $installment_info = FeeInstallments::where('fee_id', $a['fee_id'])->where('installment_id', $id)->select('particulars_id', 'amount')->get()->toarray();
+                   $amount = FeeInstallments::where('fee_id', $a['fee_id'])->where('installment_id', $id)->sum('amount');
+                   $studentFeeIds = FeeInstallments::where('fee_id',$a['fee_id'])->select('installment_id')->distinct('installment_id')->get()->toArray();
+                   if(count($studentFeeIds) > 0) {
+                       $totalAmount = 0;
+                       foreach ($studentFeeIds as $installment) {
+                           $totalAmount += FeeInstallments::where('fee_id', $a['fee_id'])->where('installment_id', $installment['installment_id'])->sum('amount');
+                       }
+                   }
+                   $percenrageOfAmount = ($amount/$totalAmount)*100;
+                   $concessions = StudentFee::where('student_id',$student_id)->where('fee_id',$a['fee_id'])->select('fee_concession_type','caste_concession')->get()->toArray();
+                   if(!empty($concessions)){
+                       $i = count($installment_info);
+                       foreach ($concessions as $concession){
+                           if($concession['fee_concession_type'] == 2 || $concession['fee_concession_type'] == null){
+                               $installment_info[$i]['particulars_id'] = $i + 1;
+                               $installment_info[$i]['amount'] =round((CASTECONCESSION::where('fee_id',$a['fee_id'])->where('caste_id',$concession['caste_concession'])->value('concession_amount') * $percenrageOfAmount) / 100,2);
+                               $installment_info[$i]['particulars_name'] = ConcessionTypes::where('id',2)->value('name');
+                           } else {
+                               $installment_info[$i]['particulars_id'] = $i + 1;
+                               $installment_info[$i]['amount'] = round((FeeConcessionAmount::where('fee_id',$a['fee_id'])->where('concession_type',$concession['fee_concession_type'])->value('amount') * $percenrageOfAmount) / 100,2);
+                               $installment_info[$i]['particulars_name'] = ConcessionTypes::where('id',$concession['fee_concession_type'])->value('name');
+                           }
+                       }
+                   }
                }
                $fee_pert = fee_particulars::select('particular_name')->get()->toArray();
                if (!empty($installment_info)) {
                    $iterator = 0;
                    foreach ($installment_info as $i) {
                        $installment_info[$iterator]['particulars_name'] = fee_particulars::where('id', $i['particulars_id'])->pluck('particular_name');
+                       if($iterator >= 11){
+                           break;
+                       }
                        $iterator++;
                    }
                    $extraConcessionData = ExtraConcession::where('fee_id',$a['fee_id'])->where('student_id', $student_id)->where('installment_id', $id)->select('label', 'amount')->get()->toArray();
@@ -492,12 +539,14 @@ class UserController extends Controller
                 foreach ($installment_info as $installmentData){
                     if($installmentData['particulars_name'] == FullPaymentType::where('slug','full-payment')->value('name')){
                         $sum -= 2 * $installmentData['amount'];
+                    }else if($installmentData['particulars_name'] == 'RTE' || $installmentData['particulars_name'] == 'Caste' || $installmentData['particulars_name'] == 'Teaching Staff' || $installmentData['particulars_name'] == 'Non-Teaching Staff / Admin') {
+                        $sum -= 2 * $installmentData['amount'];
                     } else {
                         $sum=array_sum(array_column($installment_info,'amount'));
                     }
                 }
                $installment_data= $installment_info;
-               $installment_data['total']=$sum;
+               $installment_data['total']=round($sum,2);
                $message = "suceess";
                $status=200;
            }catch (\Exception $e){

@@ -6,7 +6,7 @@
         <td><img src="<?php echo url()?>/assets/images/bodyLogo/sspss.jpg" style="width:60px;"></td>
     </tr>
 </table>
-<table style="text-align:center; width:500px">
+<table style="text-align:center; width:500px;">
     <tr>
         <td style="text-align:center;"><b>S.S.P.Shikshan Sanstha</b></td>
     </tr>
@@ -38,10 +38,14 @@
     </tr>
 </table>
 <br><br>
-<table style="padding-bottom: 10px;padding-top: 2px;" border="1px">
+<table style="padding-bottom: 10px;padding-top: 2px; height: 100px!important;" border="1px">
     <tr>
         <td><span>Received with Thanks from Mr./Mrs./Miss</span></td>
         <td>{{$parent_name['first_name']." ".$parent_name['last_name']}}</td>
+    </tr>
+    <tr>
+        <td><span>Student Name</span></td>
+        <td>{{$student_name}}</td>
     </tr>
     <tr>
         <td><span>STD</span></td>
@@ -64,7 +68,7 @@
         <td>{{$transaction_details['transaction_detail']}}</td>
     </tr><tr>
         <td>Dated</td>
-        <td>{{$transaction_details['date']}}</td>
+        <td>{{date('d-m-y',strtotime($transaction_details['date']))}}</td>
     </tr>
     <tr>
         <td>Bank</td>
