@@ -29,11 +29,13 @@ use App\SubjectClassDivision;
 use App\TransactionDetails;
 use App\TransactionTypes;
 use Carbon\Carbon;
+use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Leave;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -695,7 +697,7 @@ class LeaveController extends Controller
             }
             $transactions = TransactionDetails::join('fees','fees.id','=','transaction_details.fee_id')
                             ->where('transaction_details.student_id',$id)
-                            ->select('fees.fee_name as structure_name','transaction_details.id as id','transaction_details.transaction_type as transaction_type','transaction_details.transaction_detail as transaction_detail','transaction_details.transaction_amount as transaction_amount','transaction_details.date as date' )
+                            ->select('fees.id as fee_id','fees.fee_name as structure_name','transaction_details.id as id','transaction_details.transaction_type as transaction_type','transaction_details.transaction_detail as transaction_detail','transaction_details.transaction_amount as transaction_amount','transaction_details.date as date' )
                             ->get();
             $iterator=0;
             $responseData['transaction'] = $transactions->toArray();
@@ -1005,5 +1007,129 @@ class LeaveController extends Controller
         $responseData['pending_fees']=$student_pending_fee;
         $responseData['fees']=$total_student_fee_for_current_year;
         return response ($responseData);
+    }
+
+    public function createPDF(Request $request,$id,$fee_id,$amount_id)
+    {
+        try {
+            $user = User::where('id',$id)->first();
+            $grn = User::join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                ->where('students_extra_info.student_id', $id)
+                ->select('students_extra_info.grn as grn')->first();
+            $studentData = User::where('body_id', $user['body_id'])->where('id', $id)->select('parent_id','first_name','last_name')->first();
+            $student_name = $studentData['first_name'] .' '.$studentData['last_name'];
+            $parent_name = User::where('body_id', $user['body_id'])->where('id', $studentData['parent_id'])->select('first_name', 'last_name')->first();
+            $transaction_details = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->where('id',$amount_id)->get()->first();
+            $studentFee = StudentFee::where('student_id', $id)->where('fee_id', $fee_id)->select('fee_id', 'year', 'fee_concession_type', 'caste_concession')->get()->toarray();
+            $division = User::join('divisions','divisions.id','=','users.division_id')
+                ->where('users.id',$id)
+                ->select('divisions.id as id','divisions.division_name as division_name')
+                ->get()->first();
+            $class = Classes::join('divisions','divisions.class_id','=','classes.id')
+                ->where('divisions.id',$division['id'])
+                ->select('classes.class_name as class_name')
+                ->get()->first();
+            foreach ($studentFee as $key => $a) {
+                $installment_info = FeeInstallments::where('fee_id', $fee_id)->select('installment_id', 'particulars_id', 'amount')->get()->toarray();
+                $installments = array();
+                if (!empty($installment_info)) {
+                    foreach ($installment_info as $installment) {
+                        if (!array_key_exists($installment['installment_id'], $installments)) {
+                            $installments[$installment['installment_id']] = array();
+                            $installments[$installment['installment_id']]['subTotal'] = 0;
+                        }
+                        $installments[$installment['installment_id']]['subTotal'] += $installment['amount'];
+                    }
+                    $total_fee_amount['total'] = array_sum(array_column( $installments,'subTotal'));
+                    $installment_percent_amount=array();
+                    foreach($installments as $key => $installment_amounts)
+                    {
+                        $installment_amounts=($installment_amounts['subTotal']/$total_fee_amount['total'])*100;
+                        $installment_percent_amount[$key]=$installment_amounts;
+                    }
+                    $concession_For_structure = array();
+                    $fee_assign_student = StudentFee::where('student_id',$id)
+                        ->where('fee_id',$fee_id)
+                        ->get()->toArray();
+                    foreach ($fee_assign_student as $fees_name => $student_fees) {
+                        if ($student_fees['fee_concession_type'] != 2) {
+                            $concession_For_structure[$fees_name] = FeeConcessionAmount::where('fee_id', $student_fees['fee_id'])->where('concession_type', $student_fees['fee_concession_type'])->pluck('amount');
+                        }
+                    }
+                    $caste_concn_amnt = array();
+                    $caste_concession_type = StudentFee::where('student_id',$id)
+                        ->where('fee_id',$fee_id)
+                        ->get()->toArray();
+                    foreach ($caste_concession_type as $key => $casteConcession){
+                        if($casteConcession['caste_concession'] != "" && $casteConcession['caste_concession'] != null){
+                            $caste_concn_amnt[$key]= CASTECONCESSION::where('fee_id',$casteConcession['fee_id'])->where('caste_id', $casteConcession['caste_concession'])->pluck('concession_amount');
+                        }
+                    }
+                    $amountArray['amount'] = 0; // key is fee id
+                    foreach($caste_concn_amnt as $feeId => $casteConcnAmount){
+                        $amountArray['amount'] += ($casteConcnAmount);
+                        foreach($concession_For_structure as $concession){
+                            $amountArray['amount'] += ($concession);
+                        }
+                    }
+                    $concession_amount_array = array();
+                    foreach($installment_percent_amount as $key => $percent_discout_collection){
+                        $concession_amount_array[$key] = (($percent_discout_collection / 100) * ($amountArray['amount']));
+                    }
+                    $response = array();
+                    if(count($concession_amount_array) == count($installments)){
+                        foreach($concession_amount_array as $key => $value){
+                            $response[$key] = $installments[$key]['subTotal'] - $value;
+                        }
+                    }
+                }
+            }
+            $installmentIDS = FeeInstallments::where('fee_id',$fee_id)->distinct()->lists('installment_id')->toArray();
+            $new_array = array();
+            foreach ($installmentIDS as $instaId){
+                $lateFee = StudentLateFee::where('student_id',$id)->where('fee_id',$fee_id)->where('installment_id',$instaId)->first();
+                if($lateFee == null && $lateFee==""){
+                    $studentLateFee[$instaId] = FeeDueDate::where('fee_id',$fee_id)->where('installment_id',$instaId)->select('due_date','late_fee_amount','number_of_days')->get();
+                }else{
+                    $studentLateFee[$instaId] = StudentLateFee::join('fee_due_date','fee_due_date.fee_id','=','student_late_fee.fee_id')
+                        ->where('student_late_fee.fee_id',$fee_id)
+                        ->where('fee_due_date.fee_id',$fee_id)
+                        ->where('student_late_fee.installment_id',$instaId)
+                        ->where('fee_due_date.installment_id',$instaId)
+                        ->select('fee_due_date.due_date','fee_due_date.number_of_days','student_late_fee.late_fee_amount')
+                        ->get();
+                }
+                $total_paid_fees = TransactionDetails::where('student_id', $id)->where('fee_id', $fee_id)->where('installment_id',$instaId)->select('transaction_amount')->get()->toArray();
+                $new_array[$instaId] = array_sum(array_column($total_paid_fees,'transaction_amount'));
+            }
+            $date=date('Y-m-d');
+            $currentDate= date_create($date);
+            foreach ($studentLateFee as $key => $data){
+                $storedDate = date_create($data[0]['due_date']);
+                if($currentDate > $storedDate){
+                    $difference = date_diff( $storedDate,$currentDate);
+                    $dateDifference = $difference->format("%a");
+                    $calculate = floor($dateDifference/($data[0]['number_of_days'] + 1)) * $data[0]['late_fee_amount'];
+                    $finalamount[$key] = $response[$key] + $calculate;
+                }else{
+                    $finalamount[$key] = $response[$key];
+                }
+            }
+            foreach($finalamount as $item=> $amount){
+                $finalBalance[$item] = $amount - $new_array[$item];
+            }
+            $balance =array_sum($finalBalance);
+            TCPDF::AddPage();
+            TCPdf::writeHTML(view('/fee/feeTransaction-pdf')->with(compact('user', 'balance', 'grn', 'transaction_details', 'parent_name','student_name','division','class'))->render());
+            TCPdf::Output("Receipt Form" . date('Y-m-d_H-i-s') . ".pdf", 'D');
+        } catch (\Exception $e) {
+            $data = [
+                'action' => "PDF generated",
+                'params' => $request->all(),
+                'exception' => $e->getMessage(),
+            ];
+            Log::critical(json_encode($data));
+            return response()->json([], 500);
+        }
     }
 }

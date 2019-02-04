@@ -587,6 +587,7 @@
         Route::get('get-fee_details/{id}','api\LeaveController@getStudentFeesDetails');
         //Fees
         Route::get('student-fee-installment/{id}/{student_id}','api\UserController@studentInstallmentview');
+        Route::get('download-pdf/{id}/{fee_id}/{amount_id}','api\LeaveController@createPDF');
         //Push
         Route::post('save-push','api\UserController@savePushToken');
         //Result
