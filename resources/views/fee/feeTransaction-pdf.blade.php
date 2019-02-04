@@ -16,7 +16,7 @@
     </tr>
     @else
     <tr>
-        <td style="font-size:1200%"><b>Ganesh English Medium School</b></td>
+        <td style="font-size:120%"><b>Ganesh English Medium School</b></td>
     </tr>
     @endif
     <tr>
