@@ -15,6 +15,7 @@ use App\Event;
 use App\EventTypes;
 use App\Folder;
 use App\GalleryManagement;
+use App\HeaderImage;
 use App\PageSliderImages;
 use App\SocialPlatform;
 use Carbon\Carbon;
@@ -77,6 +78,16 @@ class CmsController extends Controller
             $data['menuData'] = $menuData;
             $bodyDetails = BodyDetails::where('body_id',$body_id)->first();
             $data['headerData']['logo'] = env('BASE_URL').env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$bodyDetails['logo_name'];
+            $headerImage = HeaderImage::where('body_id',$body_id)->first();
+            if($headerImage != null){
+                if ($headerImage['image_name'] != null && $headerImage['is_active'] == true) {
+                    $data['headerData']['headerImage'] = env('BASE_URL').env('HEADER_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.sha1($body_id).DIRECTORY_SEPARATOR.$headerImage['image_name'];
+                } else {
+                    $data['headerData']['headerImage'] = null;
+                }
+            } else {
+                $data['headerData']['headerImage'] = null;
+            }
             $data['headerData']['message'] = $bodyDetails['header_message'];
             $socialDetails = SocialPlatform::join('body_social_details','body_social_details.social_platform_id','=','social_platform.id')
                                             ->where('body_social_details.body_id',$body_id)
