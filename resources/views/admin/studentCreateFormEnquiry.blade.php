@@ -37,7 +37,7 @@
 
 
 @if(Session::has('enquiryId'))
-  <?php $enquiryInfo = Session::get('enquiryId'); ?>
+  <?php $enquiryInfo = \Illuminate\Support\Facades\Session::get('enquiryId'); ?>
 @endif
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
@@ -759,7 +759,7 @@
                 <p class="text-small">
                     User will get the mail confirmation about his/her account. This mail includes link for login and his/her login credentials.
                 </p>
-                <a class="btn btn-primary btn-o" href="studentCreate">
+                <a class="btn btn-primary btn-o" href="manage">
                     Back to first step
                 </a>
             </div>

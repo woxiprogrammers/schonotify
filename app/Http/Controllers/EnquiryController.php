@@ -79,11 +79,6 @@ class EnquiryController extends Controller
             $data['updated_at'] = $currentTime;
             $data['body_id'] = $user->body_id;
             $newEnquiry = EnquiryForm::create($data);
-            if(Session::has('enquiryId')){
-                Session::put('enquiryId', $newEnquiry);
-            }else{
-                Session::set('enquiryId', $newEnquiry);
-            }
             $now = Carbon::now();
 	        $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
             $bodyEnquiryCount = EnquiryForm::where('body_id',$enquiry->body_id)->count();
@@ -214,7 +209,12 @@ class EnquiryController extends Controller
             $enquiryData['interview_scheduled_on'] = Carbon::parse($enquiryData['interview_scheduled_on'])->format('Y-m-d G:i:s');
             $enquiryData['dob'] = Carbon::parse($enquiryData['dob'])->format('Y-m-d');
             $enquiryInfo = $enquiry->update($enquiryData);
-
+            $newEnquiry = EnquiryForm::where('id',$enquiryId)->first();
+            if(Session::has('enquiryId')){
+                Session::put('enquiryId', $newEnquiry);
+            }else{
+                Session::set('enquiryId', $newEnquiry);
+            }
             $message = 'Enquiry Updated successfully';
             $request->session()->flash('message-success', $message);
             return redirect('/manage');
