@@ -9,6 +9,7 @@ use App\ClassData;
 use App\Classes;
 use App\ConcessionTypes;
 use App\Division;
+use App\EnquiryForm;
 use App\ExtraConcession;
 use App\fee_installments;
 use App\fee_particulars;
@@ -300,11 +301,11 @@ class UsersController extends Controller
     }
     public function studentCreateFormEnquiry(Requests\WebRequests\UserRequest $request)
     {
-        $roles=UserRoles::all();
-        if($request->authorize()===true){
-            return view('admin.studentCreateFormEnquiry')->with('userRoles',$roles);
+        $userRoles = $roles = UserRoles::all();
+        if($request->authorize()===true && (Session::has('enquiryId'))){
+            return view('admin.studentCreateFormEnquiry')->with(compact('userRoles','roles'));
         }else{
-            return Redirect::to('/');
+            return Redirect::to('/manage');
         }
 
     }
