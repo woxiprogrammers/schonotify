@@ -165,7 +165,7 @@
 
     Route::get('studentCreate','UsersController@studentCreateForm');
 
-    Route::get('studentCreateEnquiry','UsersController@studentCreateFormEnquiry');
+    Route::get('studentCreateEnquiry/{enq_id}','UsersController@studentCreateFormEnquiry');
 
     Route::get('parentCreate','UsersController@parentCreateForm');
 

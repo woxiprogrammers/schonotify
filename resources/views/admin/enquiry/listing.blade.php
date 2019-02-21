@@ -58,7 +58,7 @@
 <div class="container-fluid container-fullw bg-white">
 <div class="row">
 <div class="col-md-12">
-    <h5 class="over-title margin-bottom-15"><h2>Enquiry Listing</h2> <h4 class="pull-right"><a href="/studentCreateEnquiry">create</a></h4></h5>
+    <h5 class="over-title margin-bottom-15"><h2>Enquiry Listing</h2></h5>
     @include('alerts.errors')
 <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
 <thead>
