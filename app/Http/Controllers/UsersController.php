@@ -299,9 +299,15 @@ class UsersController extends Controller
         }
 
     }
-    public function studentCreateFormEnquiry(Requests\WebRequests\UserRequest $request)
+    public function studentCreateFormEnquiry(Requests\WebRequests\UserRequest $request, $enq_id)
     {
         $userRoles = $roles = UserRoles::all();
+        $newEnquiry = EnquiryForm::where('id',$enq_id)->first();
+        if(Session::has('enquiryId')){
+            Session::put('enquiryId', $newEnquiry);
+        }else{
+            Session::set('enquiryId', $newEnquiry);
+        }
         if($request->authorize()===true && (Session::has('enquiryId'))){
             return view('admin.studentCreateFormEnquiry')->with(compact('userRoles','roles'));
         }else{
