@@ -123,4 +123,45 @@
             });
         })
 </script>
+<script>
+    function changeStatus(status,id)
+    {
+        if(status==false)
+        {
+            var route='change-fee-status/'+id;
+            $.get(route,function(res){
+                if(res['status']==403)
+                {
+                    var route= "/fees/feelisting";
+                    window.location.replace(route);
+                }else{
+                    swal({
+                        title: "Deactivated!",
+                        text: "User has been deactivated!",
+                        type: "error",
+                        confirmButtonColor: "#DD6B55",
+                        closeOnCancel: false
+                    });
+                }
+            });
+        }else
+
+        {
+            var route='change-fee-status/'+id;
+            $.get(route,function(res){
+                if(res['status']==403)
+                {
+                    var route= "/fees/feelisting";
+                    window.location.replace(route);
+                } else if(res['status'] == 401) {
+                    var route= "/searchUsers";
+
+                    window.location.replace(route);
+                }else{
+                    swal("Activated!", "User has been activated.", "success");
+                }
+            });
+        }
+    }
+</script>
 @stop

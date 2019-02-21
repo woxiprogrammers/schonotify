@@ -357,6 +357,7 @@ class FeeController extends Controller
     public function getFeeStructureInstallments(Request $request, $studentFeeId){
         try{
             $slug = $request->slug;
+            $concessionName = '';
             if($request->has('add_field')){
                 $add_field = true;
             }else{
@@ -364,6 +365,11 @@ class FeeController extends Controller
             }
             $student_fee = StudentFee::findOrFail($studentFeeId)->toArray();
             $student_fee_detail = StudentFee::where('student_id',$student_fee['student_id'])->where('fee_id',$student_fee['fee_id'])->select('fee_concession_type','caste_concession')->get()->toArray();
+            foreach ($student_fee_detail as $feeConc){
+               if($feeConc['fee_concession_type'] != 2){
+                  $concessionName .= ' '.ConcessionTypes::where('id',$feeConc['fee_concession_type'])->value('slug');
+               }
+            }
             $student = User::join('students_extra_info','students_extra_info.student_id','=','users.id')
                 ->where('users.id',$student_fee['student_id'])
                 ->select('users.id','users.first_name','users.last_name','users.division_id','users.parent_id','users.body_id')
@@ -460,7 +466,7 @@ class FeeController extends Controller
             }
             $fullPayConc = FullPaymentConcession::where('fee_id',$student_fee['fee_id'])->where('concession_type',1)->first();
             $isUserAdmin = Auth::User()->role_id;
-            return view('fee.new-installment-section')->with(compact('student','parent','installments','slug','isPreviousStructureCleared','add_field','fullPayConc','studentFeeId','isUserAdmin'));
+            return view('fee.new-installment-section')->with(compact('student','parent','installments','slug','isPreviousStructureCleared','add_field','fullPayConc','studentFeeId','isUserAdmin','concessionName'));
         }catch(\Exception $e){
             $data = [
                 'action' => 'Get Fee structurewise installment details',
@@ -498,7 +504,7 @@ class FeeController extends Controller
                 ->join('fees','fees.id','=','transaction_details.fee_id')
                 ->whereIn('users.id', $studentsAssignFeeStructure)
                 ->where('users.is_active',1)
-                ->select('transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id','transaction_details.installment_id as Installment','transaction_details.id as amount_id')
+                ->select('transaction_details.id as transaction_id','transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id','transaction_details.installment_id as Installment','transaction_details.id as amount_id')
                 ->get()->toArray();
             $jIterator = 0;
             foreach ($students as $studentId){
@@ -544,17 +550,19 @@ class FeeController extends Controller
             $str.="<th>Student Name</th>";
             $str.="<th>Amount</th>";
             $str.="<th>Paid Amount</th>";
+            $str.="<th>Receipt Number</th>";
             $str.="<th>GRN No.</th>";
             $str.="<th>Action</th>";
             $str.="</tr></thead><tbody>";
             foreach ($students as $student){
                 $str.="<tr>";
-                $str.="<td>".$student['date']."</td>";
+                $str.="<td>".date('d/m/y',strtotime($student['date']))."</td>";
                 $str.="<td>".$student['name']."</td>";
                 $str.="<td>".$student['Installment']."</td>";
                 $str.="<td>".$student['first_name']." ".$student['last_name']."</td>";
                 $str.="<td>".$student['total']."</td>";
                 $str.="<td>".$student['transaction_amount']."</td>";
+                $str.="<td>".$student['transaction_id']."</td>";
                 $str.="<td>".$student['grn']."</td>";
                 $str.="<td>"."<a href='/fees/download-pdf/".$student['id']."/".$student['fee_id']."/".$student['amount_id']."/".$student['Installment']."'>download </a>"."</td>";
                 $str.="</tr>";
@@ -1057,5 +1065,13 @@ class FeeController extends Controller
             Log::critical(json_encode($data));
         }
 
+    }
+
+    public function chaneFeeStructureStatus(Request $request,$id)
+    {
+            $user=Fees::find($id);
+            $user->is_active=0;
+            $user->save();
+            return response()->json(['status'=>'record has been deactivated.']);
     }
 }

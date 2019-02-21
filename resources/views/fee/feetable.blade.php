@@ -5,6 +5,7 @@
         <th width="20%"> Fee Name </th>
         <th width="10%"> Total Amount </th>
         <th width="10%">  Year </th>
+        <th width="10%">  Status </th>
         <th width="10%"> Late Fee</th>
     </tr>
     </thead>
@@ -15,6 +16,11 @@
             <td>{!! $fee['fee_name'] !!}</td>
             <td>{!! $fee['total_amount'] !!}</td>
             <td>{!! $fee['year'] !!}</td>
+            @if($fee['is_active'] == 1)
+                <td><input type='checkbox' class='js-switch' onchange='return changeStatus(this.status,{!! $fee['id'] !!})' checked/></td>
+                @else
+                <td><input type='checkbox' class='js-switch' onchange='return changeStatus(this.status,{!! $fee['id'] !!})' /></td>
+            @endif
             <td>{!! $fee['late_fee_per_day'] !!}</td>
         </tr>
     @endforeach

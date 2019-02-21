@@ -97,6 +97,7 @@
         Route::get('downlod-form-fee/{id}',array('uses' => 'FeeController@formFeePDF'));
         Route::post('late-fee',array('uses' => 'FeeController@lateFeeForm'));
         Route::get('get-installments/{id}/{student_id}',array('uses' => 'FeeController@getInstallmentsForStudents'));
+        Route::get('change-fee-status/{id}',array('uses' => 'FeeController@chaneFeeStructureStatus'));
 
     });
 
