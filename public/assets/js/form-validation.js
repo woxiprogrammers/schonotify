@@ -1323,7 +1323,7 @@ var FormValidator = function () {
                     required:"Please enter transaction detail !"
                 },
                 transaction_amount:{
-                    required:"Please enter transaction amount !"
+                    required:"Please Enter transaction amount !"
                 },
                 date:{
                     required:"Please enter date !"
