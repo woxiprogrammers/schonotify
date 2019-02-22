@@ -150,7 +150,8 @@ class EnquiryController extends Controller
     public function viewEnquiryList(){
         try{
             $user = Auth::User();
-            $enquiryData = EnquiryForm::orderBy('id','DESC')->where('body_id',$user->body_id)->get()->toArray();
+            $userIds = User::where('body_id',$user->body_id)->whereNotNull('enquiry_id')->lists('enquiry_id');
+            $enquiryData = EnquiryForm::orderBy('id','DESC')->whereNotIn('id',$userIds)->where('body_id',$user->body_id)->get()->toArray();
             $masterEnquiry = array();
             foreach($enquiryData as $enquiry){
                 $now = Carbon::now();
@@ -158,7 +159,12 @@ class EnquiryController extends Controller
                 $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
                 $enquiryDetailCreateView = "/studentCreateEnquiry/".$enquiry['id'];
                 $enquiry['form_no'] = $enquiry['enquiry_number'];
-                $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>"." / "."<a href ='$enquiryDetailCreateView'>Create</a>";
+                $student = User::where('enquiry_id',$enquiry['id'])->first();
+                if($student == null && $enquiry['final_status'] == 'pass') {
+                    $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>" . " / " . "<a href ='$enquiryDetailCreateView'>Create</a>";
+                } else {
+                    $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
+                }
                 $enquiry['result']= $enquiry['final_status'];
                 $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];
                 array_push($masterEnquiry,$enquiry);
