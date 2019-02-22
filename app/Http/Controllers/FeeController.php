@@ -260,7 +260,9 @@ class FeeController extends Controller
                              $transaction_details['fee_id'] = $request->Structure_type;
                              $transaction_details['student_id'] = $request->student_id;
                              $transaction_details['transaction_type'] = $request->transaction_type;
-                             $transaction_details['transaction_detail'] = $request->transaction_detail;
+                             if($request->has('transaction_detail') && $request->transaction_detail != null) {
+                                 $transaction_details['transaction_detail'] = $request->transaction_detail;
+                             }
                              $transaction_details['transaction_amount'] = $amountForThisInstallment;
                              $transaction_details['date'] = $request->date;
                              $transaction_details['installment_id'] = $installment['installment_id'];
@@ -289,7 +291,9 @@ class FeeController extends Controller
                      $transaction_details['fee_id'] = $request->Structure_type;
                      $transaction_details['student_id'] = $request->student_id;
                      $transaction_details['transaction_type'] = $request->transaction_type;
-                     $transaction_details['transaction_detail'] = $request->transaction_detail;
+                     if($request->has('transaction_detail') && $request->transaction_detail != null) {
+                         $transaction_details['transaction_detail'] = $request->transaction_detail;
+                     }
                      $transaction_details['transaction_amount'] = $request->transaction_amount;
                      $transaction_details['date'] = $request->date;
                      $transaction_details['installment_id'] = $request->installment_id;
@@ -1069,9 +1073,15 @@ class FeeController extends Controller
 
     public function chaneFeeStructureStatus(Request $request,$id)
     {
-            $user=Fees::find($id);
-            $user->is_active=0;
-            $user->save();
-            return response()->json(['status'=>'record has been deactivated.']);
+            $user=Fees::where('id',$id)->first();
+            if($user['is_active'] == true){
+                $user->is_active=false;
+                $user->save();
+            } else {
+                $user->is_active=true;
+                $user->save();
+            }
+
+            return response()->json(['status'=>'status has been changed.']);
     }
 }

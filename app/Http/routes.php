@@ -322,6 +322,10 @@
 
     Route::get('mark-attendance','AttendanceController@markAttendance');
 
+    Route::get('get-fee-installments/{feeId}/{stdId}','UsersController@getFeeInstallments');
+
+    Route::get('pull-installment/{feeId}/{instId}/{stdId}','UsersController@pullInstallment');
+
     Route::get('get-all-classes/{id}','AttendanceController@getAllClasses');
 
     Route::get('get-attendance-classes/{id}','AttendanceController@getAttendanceClasses');
