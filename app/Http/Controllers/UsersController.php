@@ -2111,34 +2111,61 @@ class UsersController extends Controller
         $feeConcessionAmount = 0;
         $castConcessionAmount = 0;
         $extraConcessionAmount = 0;
+        $fullPayAmount = 0;
         $finalTotal = 0;
-        $feeStructureAmount = FeeInstallments::where('fee_id',$feeId)->select('amount')->get()->toArray();
-        $feeTotalAmount = array_sum(array_column($feeStructureAmount,'amount'));
-        $installmentAmnt = FeeInstallments::where('fee_id',$feeId)->where('installment_id',$instId)->select('amount')->get()->toArray();
-        $installmentTotal = array_sum(array_column($installmentAmnt,'amount'));
-        $percentageOfFee = ($installmentTotal/$feeTotalAmount)*100;
-        $feeConcession = StudentFee::where('student_id',$stdId)->where('fee_id',$feeId)->where('fee_concession_type','!=',2)->whereNotNull('fee_concession_type')->select('fee_concession_type')->get()->toArray();
-        if($feeConcession != null){
-            foreach ($feeConcession as $feeConc){
-                $amount = FeeConcessionAmount::where('fee_id',$feeId)->where('concession_type',$feeConc['fee_concession_type'])->value('amount');
-                $feeConcessionAmount += ($percentageOfFee * $amount)/100;
+        if($instId == 'full-payment'){
+            $feeStructureAmount = FeeInstallments::where('fee_id', $feeId)->select('amount')->get()->toArray();
+            $feeTotalAmount = array_sum(array_column($feeStructureAmount, 'amount'));
+            $feeConcession = StudentFee::where('student_id', $stdId)->where('fee_id', $feeId)->where('fee_concession_type', '!=', 2)->whereNotNull('fee_concession_type')->select('fee_concession_type')->get()->toArray();
+            if ($feeConcession != null) {
+                foreach ($feeConcession as $feeConc) {
+                    $feeConcessionAmount += FeeConcessionAmount::where('fee_id', $feeId)->where('concession_type', $feeConc['fee_concession_type'])->value('amount');
+                }
             }
+            $castConcession = StudentFee::where('student_id', $stdId)->where('fee_id', $feeId)->Where('fee_concession_type', '=', 2)->value('caste_concession');
+            if ($castConcession != null) {
+                $castConcessionAmount += CASTECONCESSION::where('fee_id', $feeId)->where('caste_id', $castConcession)->value('concession_amount');
+            }
+            $casteConcession = StudentFee::where('student_id', $stdId)->where('fee_id', $feeId)->whereNull('fee_concession_type')->select('caste_concession')->get()->toArray();
+            if ($casteConcession != null) {
+                $castConcessionAmount += CASTECONCESSION::where('fee_id', $feeId)->where('caste_id', $casteConcession)->value('concession_amount');
+            }
+            $extraConcs = ExtraConcession::where('fee_id', $feeId)->where('student_id', $stdId)->where('installment_id', $instId)->select('amount')->get()->toArray();
+            if ($extraConcs != null) {
+                $extraConcessionAmount = array_sum(array_column($extraConcs, 'amount'));
+            }
+            $fullPayAmount = FullPaymentConcession::where('fee_id')->value('amount');
+            $finalTotal = $feeTotalAmount + $extraConcessionAmount - $castConcessionAmount - $feeConcessionAmount - $fullPayAmount;
+
+        } else {
+            $feeStructureAmount = FeeInstallments::where('fee_id', $feeId)->select('amount')->get()->toArray();
+            $feeTotalAmount = array_sum(array_column($feeStructureAmount, 'amount'));
+            $installmentAmnt = FeeInstallments::where('fee_id', $feeId)->where('installment_id', $instId)->select('amount')->get()->toArray();
+            $installmentTotal = array_sum(array_column($installmentAmnt, 'amount'));
+            $percentageOfFee = ($installmentTotal / $feeTotalAmount) * 100;
+            $feeConcession = StudentFee::where('student_id', $stdId)->where('fee_id', $feeId)->where('fee_concession_type', '!=', 2)->whereNotNull('fee_concession_type')->select('fee_concession_type')->get()->toArray();
+            if ($feeConcession != null) {
+                foreach ($feeConcession as $feeConc) {
+                    $amount = FeeConcessionAmount::where('fee_id', $feeId)->where('concession_type', $feeConc['fee_concession_type'])->value('amount');
+                    $feeConcessionAmount += ($percentageOfFee * $amount) / 100;
+                }
+            }
+            $castConcession = StudentFee::where('student_id', $stdId)->where('fee_id', $feeId)->Where('fee_concession_type', '=', 2)->value('caste_concession');
+            if ($castConcession != null) {
+                $casteAmount = CASTECONCESSION::where('fee_id', $feeId)->where('caste_id', $castConcession)->value('concession_amount');
+                $castConcessionAmount += ($percentageOfFee * $casteAmount) / 100;
+            }
+            $casteConcession = StudentFee::where('student_id', $stdId)->where('fee_id', $feeId)->whereNull('fee_concession_type')->select('caste_concession')->get()->toArray();
+            if ($casteConcession != null) {
+                $casteAmount = CASTECONCESSION::where('fee_id', $feeId)->where('caste_id', $casteConcession)->value('concession_amount');
+                $castConcessionAmount += ($percentageOfFee * $casteAmount) / 100;
+            }
+            $extraConcs = ExtraConcession::where('fee_id', $feeId)->where('student_id', $stdId)->where('installment_id', $instId)->select('amount')->get()->toArray();
+            if ($extraConcs != null) {
+                $extraConcessionAmount = array_sum(array_column($extraConcs, 'amount'));
+            }
+            $finalTotal = $installmentTotal + $extraConcessionAmount - $castConcessionAmount - $feeConcessionAmount;
         }
-        $castConcession = StudentFee::where('student_id',$stdId)->where('fee_id',$feeId)->Where('fee_concession_type','=',2)->value('caste_concession');
-        if($castConcession != null){
-            $casteAmount = CASTECONCESSION::where('fee_id',$feeId)->where('caste_id',$castConcession)->value('concession_amount');
-            $castConcessionAmount += ($percentageOfFee * $casteAmount)/100;
-        }
-        $casteConcession = StudentFee::where('student_id',$stdId)->where('fee_id',$feeId)->whereNull('fee_concession_type')->select('caste_concession')->get()->toArray();
-        if($casteConcession != null){
-            $casteAmount = CASTECONCESSION::where('fee_id',$feeId)->where('caste_id',$casteConcession)->value('concession_amount');
-            $castConcessionAmount += ($percentageOfFee * $casteAmount)/100;
-        }
-        $extraConcs = ExtraConcession::where('fee_id',$feeId)->where('student_id',$stdId)->where('installment_id',$instId)->select('amount')->get()->toArray();
-        if($extraConcs != null){
-            $extraConcessionAmount = array_sum(array_column($extraConcs,'amount'));
-        }
-        $finalTotal = $installmentTotal + $extraConcessionAmount - $castConcessionAmount - $feeConcessionAmount;
         return $finalTotal;
     }
 }
