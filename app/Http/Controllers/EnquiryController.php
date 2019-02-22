@@ -79,11 +79,6 @@ class EnquiryController extends Controller
             $data['updated_at'] = $currentTime;
             $data['body_id'] = $user->body_id;
             $newEnquiry = EnquiryForm::create($data);
-            if(Session::has('enquiryId')){
-                Session::put('enquiryId', $newEnquiry);
-            }else{
-                Session::set('enquiryId', $newEnquiry);
-            }
             $now = Carbon::now();
 	        $enquiry = EnquiryForm::findOrFail($newEnquiry->id);
             $bodyEnquiryCount = EnquiryForm::where('body_id',$enquiry->body_id)->count();
@@ -161,8 +156,9 @@ class EnquiryController extends Controller
                 $now = Carbon::now();
                 $enquiryId = $now->year."-".str_pad($enquiry['id'],4,"0",STR_PAD_LEFT);
                 $enquiryDetailView = "/edit-enquiry/".$enquiry['id'];
+                $enquiryDetailCreateView = "/studentCreateEnquiry/".$enquiry['id'];
                 $enquiry['form_no'] = $enquiry['enquiry_number'];
-                $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>";
+                $enquiry['action'] = "<a href ='$enquiryDetailView'>View</a>"." / "."<a href ='$enquiryDetailCreateView'>Create</a>";
                 $enquiry['result']= $enquiry['final_status'];
                 $enquiry['name'] = $enquiry['student_first_name'].' '.$enquiry['student_last_name'];
                 array_push($masterEnquiry,$enquiry);
@@ -214,7 +210,12 @@ class EnquiryController extends Controller
             $enquiryData['interview_scheduled_on'] = Carbon::parse($enquiryData['interview_scheduled_on'])->format('Y-m-d G:i:s');
             $enquiryData['dob'] = Carbon::parse($enquiryData['dob'])->format('Y-m-d');
             $enquiryInfo = $enquiry->update($enquiryData);
-
+            $newEnquiry = EnquiryForm::where('id',$enquiryId)->first();
+            if(Session::has('enquiryId')){
+                Session::put('enquiryId', $newEnquiry);
+            }else{
+                Session::set('enquiryId', $newEnquiry);
+            }
             $message = 'Enquiry Updated successfully';
             $request->session()->flash('message-success', $message);
             return redirect('/manage');

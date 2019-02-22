@@ -597,7 +597,6 @@ var FormWizard = function () {
         });
         $(".finish-step").unbind("click").click(function (e) {
             e.preventDefault();
-
             onFinish(obj, context);
         });
     };
@@ -606,14 +605,13 @@ var FormWizard = function () {
         // return false to stay on step and true to continue navigation
     };
     var onFinish = function (obj, context) {
-
         if (validateAllSteps()) {
             $('div#loadmoreajaxloader').show();
             $('.anchor').children("li").last().children("a").removeClass('wait').removeClass('selected').addClass('done').children('.stepNumber').addClass('animated tada');
             //var form=$('#registrationForm').serialize();
             var form = new FormData($("form")[0]);
             $.ajax({
-                url:'save-user',
+                url:'/save-user',
                 data: form,
                 processData: false,
                 contentType: false,

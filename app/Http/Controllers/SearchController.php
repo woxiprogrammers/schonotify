@@ -35,7 +35,6 @@ class SearchController extends Controller
     {
         $role_id = 3;
         $user = Auth::user();
-        if($request->has('EnableDisable')) {
             if ($request->EnableDisable == "enable") {
                 if ($user->role_id == 1) {
                     if ($role_id == 3) {
@@ -178,25 +177,24 @@ class SearchController extends Controller
                             ->get();
                     }
                 }
-            }
-        } else {
-            if ($user->role_id == 1) {
-                if ($role_id == 3) {
-                    if ($request->Division == "-1") {
-                        $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-                            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-                            ->whereNull('users.division_id')
-                            ->where('users.body_id', '=', $user->body_id)
-                            ->where('users.role_id', '!=', 1)
-                            ->where('users.role_id', '=', $role_id)
-                            ->where('users.id', '!=', $user->id)
-                            ->where('users.is_displayed', '=', '1')
-                            ->select('users.id', 'users.roll_number as roll_number', 'users.first_name as firstname', 'users.last_name as lastname', 'users.gender as gender', 'students_extra_info.category as category', 'user_roles.slug as user_role', 'students_extra_info.grn as rollno', 'users.parent_id as parent_id', 'users.is_active', 'users.hide_result')
-                            ->get();
+            } else {
+                if ($user->role_id == 1) {
+                    if ($role_id == 3) {
+                        if ($request->Division == "-1") {
+                            $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                                ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                                ->whereNull('users.division_id')
+                                ->where('users.body_id', '=', $user->body_id)
+                                ->where('users.role_id', '!=', 1)
+                                ->where('users.role_id', '=', $role_id)
+                                ->where('users.id', '!=', $user->id)
+                                ->where('users.is_displayed', '=', '1')
+                                ->select('users.id', 'users.roll_number as roll_number', 'users.first_name as firstname', 'users.last_name as lastname', 'users.gender as gender', 'students_extra_info.category as category', 'user_roles.slug as user_role', 'students_extra_info.grn as rollno', 'users.parent_id as parent_id', 'users.is_active', 'users.hide_result')
+                                ->get();
+                        }
                     }
                 }
             }
-        }
         $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
         $str .= "<thead><tr>";
         if ($role_id == 3) {
