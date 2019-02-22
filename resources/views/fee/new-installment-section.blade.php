@@ -93,7 +93,7 @@ $isInstallmentPaid = false;
                     <tr style="width: 95%;">
                         <td style="width: 95%;font-weight: bold">
                             Fees Concession
-                            @if($concessionName != '')g
+                            @if($concessionName != '')
                                 ({{$concessionName}})
                             @endif
                         </td>
