@@ -2130,7 +2130,7 @@ class UsersController extends Controller
             if ($casteConcession != null) {
                 $castConcessionAmount += CASTECONCESSION::where('fee_id', $feeId)->where('caste_id', $casteConcession)->value('concession_amount');
             }
-            $extraConcs = ExtraConcession::where('fee_id', $feeId)->where('student_id', $stdId)->where('installment_id', $instId)->select('amount')->get()->toArray();
+            $extraConcs = ExtraConcession::where('fee_id', $feeId)->where('student_id', $stdId)->select('amount')->get()->toArray();
             if ($extraConcs != null) {
                 $extraConcessionAmount = array_sum(array_column($extraConcs, 'amount'));
             }
