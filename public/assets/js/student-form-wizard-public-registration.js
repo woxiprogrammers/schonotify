@@ -757,7 +757,7 @@ var onFinish = function (obj, context) {
         //var form=$('#registrationForm').serialize();
         var form = new FormData($("form")[0]);
         $.ajax({
-            url:'register-student',
+            url:'/register-student',
             data: form,
             processData: false,
             contentType: false,

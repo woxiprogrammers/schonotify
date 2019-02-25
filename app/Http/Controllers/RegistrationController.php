@@ -30,9 +30,10 @@ class RegistrationController extends Controller
     {
         $this->middleware('db');
     }
-    public function getStudentRegistrationView(Request $request){
+    public function getStudentRegistrationView(Request $request,$id){
         try{
-            return view('registration.student-registration');
+            $enquiryInfo = EnquiryForm::where('enquiry_number',$id)->first();
+            return view('registration.student-registration')->with(compact('enquiryInfo'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
