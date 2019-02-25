@@ -76,9 +76,9 @@
             </label>
             <select class="form-control" name="body" style="-webkit-appearance: menulist;" id="body">
                 <option value=''>Please Select School</option>
-                @foreach($bodies as $body)
+                {{--@foreach($bodies as $body)
                     <option value='{{$body['id']}}'>{{$body['name']}}</option>
-                @endforeach
+                @endforeach--}}
             </select>
         </div>
     </div>
@@ -723,13 +723,13 @@
     <legend>
         DOCUMENTS SUBMITTED
     </legend>
-    <!--<INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
+    <INPUT type="button" value="Add Row" onclick="addRowUploadDoc('upload_doc')" />
     <TABLE id="upload_doc"  border="1">
         <TR>
             <TD> <INPUT type="file" name="upload_doc[]"/> </TD>
         </TR>
-    </TABLE>-->
-    @foreach($documents as $document)
+    </TABLE>
+    {{--@foreach($documents as $document)
     <div class="row">
         <div class="col-md-6">
             <input type="checkbox" value="{{$document['id']}}" name="documents[]">
@@ -745,7 +745,7 @@
             </div>
         </div>
     </div>
-    @endforeach
+    @endforeach--}}
 </fieldset>
 <fieldset>
     <legend>
@@ -808,33 +808,33 @@
 </div>
 
 <!-- start: MAIN JAVASCRIPTS -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
-<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="vendor/switchery/switchery.min.js"></script>
-<script src="vendor/selectFx/classie.js"></script>
-<script src="vendor/selectFx/selectFx.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/modernizr/modernizr.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/vendor/switchery/switchery.min.js"></script>
+<script src="/vendor/selectFx/classie.js"></script>
+<script src="/vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
-<script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
+<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
+<script type="/text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
 
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/student-form-wizard-public-registration.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/student-form-wizard-public-registration.js"></script>
+<script src="/assets/js/main.js"></script>
 
 
 
-<script src="assets/js/custom-project.js"></script>
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/adapters/jquery.js"></script>
-<script src="assets/js/form-validation.js"></script>
+<script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/assets/js/form-validation.js"></script>
 
 <script>
     jQuery(document).ready(function() {
