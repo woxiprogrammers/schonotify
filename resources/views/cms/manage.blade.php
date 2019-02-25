@@ -355,30 +355,66 @@
 <div class="tab-pane" id="tab_2">
     <form method="post" action="/cms/header-setting">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-8">
                 <label class="control-label">
-                    Upload Logo
+                    Upload logo
                 </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2">
+                <br>
                 <label class="control-label">Select Images : <b>size(121*108 pixels)</b></label>
                 <input id="imageupload" type="file" class="btn blue"/>
                 <br />
-                <div class="row">
-                    <div id="preview-image" class="row">
-
-                    </div>
-                </div>
-                <div>
+            </div>
+            <div class="col-md-3">
                     @if($bodyDetails['logo_name'] != null)
                     <?php $ds=DIRECTORY_SEPARATOR;
                     $folderEncName = sha1($bodyDetails['body_id']);
                     $folderPath = env('LOGO_FILE_UPLOAD').$ds.$folderEncName;?>
                     <img src="{{$folderPath.$ds.$bodyDetails['logo_name']}}" style="height: 150px; width: 150px">
                     @endif
-                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="preview-image" class="row">
+
+            </div>
+        </div>
+        <br><br>
+        <div class="row">
+            <div class="col-md-5">
+                <label class="control-label">
+                    Upload Image
+                </label>
+                <br>
+                <label class="control-label">Select Images : <b>size(1920*120 pixels)</b></label>
+                <input id="uploadImage" type="file" class="btn blue"/>
+                <br />
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">
+                    Tick to Select Image
+                </label>
+                @if($headerImage != null)
+                    @if($headerImage['is_active'] == true)
+                        <input type="checkbox" name="is_checked" checked>
+                    @else
+                        <input type="checkbox" name="is_checked">
+                    @endif
+                    @else
+                    <input type="checkbox" name="is_checked">
+                @endif
+            </div>
+            <div class="col-md-3">
+                    @if($headerImage['image_name'] != null)
+                        <?php $ds=DIRECTORY_SEPARATOR;
+                        $folderEncName = sha1($headerImage['body_id']);
+                        $folderPath = env('HEADER_IMAGE_UPLOAD').$ds.$folderEncName;?>
+                        <img src="{{$folderPath.$ds.$headerImage['image_name']}}" style="height: 150px; width: 150px">
+                    @endif
+            </div>
+        </div>
+        <div class="row">
+            <div id="preview-uploadImage" class="row">
+
             </div>
         </div>
         <br><br>
@@ -1404,6 +1440,36 @@ $(document).ready(function (){
                         var reader = new FileReader()
                         reader.onload = function (e) {
                             var imagePreview = '<div class="col-md-2"><input type="hidden" name="gallery_images" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
+                            image_holder.append(imagePreview);
+                        };
+                        image_holder.show();
+                        reader.readAsDataURL($(this)[0].files[i]);
+                    }
+                }else{
+                    alert("It doesn't supports");
+                }
+            } else {
+                alert("Select Only images");
+                $('#submit').hide();
+            }
+        }else{
+            alert("please select image less than 1 mb");
+        }
+    });
+
+    $("#uploadImage").on('change', function () {
+        var imgPath = $(this)[0].value;
+        var countFiles = $(this)[0].files.length;
+        var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+        var size = this.files[0].size/1024/1024;
+        var image_holder = $("#preview-uploadImage");
+        if(size <= 1){
+            if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+                if (typeof (FileReader) != "undefined") {
+                    for (var i = 0; i < countFiles; i++) {
+                        var reader = new FileReader()
+                        reader.onload = function (e) {
+                            var imagePreview = '<div class="col-md-2"><input type="hidden" name="header_image" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
                             image_holder.append(imagePreview);
                         };
                         image_holder.show();

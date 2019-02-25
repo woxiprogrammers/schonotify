@@ -123,4 +123,23 @@
             });
         })
 </script>
+<script>
+    function changeStatus(id) {
+        var route = 'change-fee-status/' + id;
+        $.get(route, function (res) {
+            if (res['status'] == 403) {
+                var route = "/fees/feelisting";
+                window.location.replace(route);
+            } else {
+                swal({
+                    title: "Change status!",
+                    text: "Fee status has been changed!",
+                    type: "error",
+                    confirmButtonColor: "#DD6B55",
+                    closeOnCancel: false
+                });
+            }
+        });
+    }
+</script>
 @stop

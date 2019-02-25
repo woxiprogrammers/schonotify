@@ -11,6 +11,7 @@ use App\BodySocialDetails;
 use App\BodyTabDetails;
 use App\BodyTabNames;
 use App\BodyTestimonial;
+use App\HeaderImage;
 use App\ImageUploder;
 use App\PageSliderImages;
 use App\SocialPlatform;
@@ -44,7 +45,8 @@ class CmsController extends Controller
            $contactUsForm = BodyContactUsUserForm::get()->toArray();
            $testimonialData = BodyTestimonial::where('body_id',$user['body_id'])->get()->toArray();
            $marquee = BodyMarqueeDetails::where('body_id',$user['body_id'])->first();
-           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages','contactUsForm','testimonialData','marquee'));
+           $headerImage = HeaderImage::where('body_id',$user['body_id'])->first();
+           return view('cms.manage')->with(compact('tabNames','bodyDetails','socialPlatformNames','socialMediaDetails','aboutUsDetails','sliderImages','contactUsForm','testimonialData','marquee','headerImage'));
        }catch(\Exception $e){
            $data=[
                'action' => 'Get Manage Admin cms view',
@@ -111,6 +113,7 @@ class CmsController extends Controller
             $user = Auth::User();
             $data = array();
             $headerDataPresent = BodyDetails::where('body_id',$user['body_id'])->first();
+            $headerImagePresent = HeaderImage::where('body_id',$user['body_id'])->first();
             if($request->has('gallery_images')){
                 $folderEncName = sha1($user->body_id);
                 $folderPath = public_path().env('LOGO_FILE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
@@ -137,6 +140,43 @@ class CmsController extends Controller
             }else{
                 $data['header_message'] = $headerData['description'];
                 $query = BodyDetails::where('body_id',$headerDataPresent['body_id'])->update($data);
+            }
+
+            if($request->has('header_image')){
+                $folderEncName = sha1($user->body_id);
+                $folderPath = public_path().env('HEADER_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
+                if($headerImagePresent['image_name'] != null){
+                    unlink($folderPath.DIRECTORY_SEPARATOR.$headerImagePresent['image_name']);
+                }
+                if (! file_exists($folderPath)) {
+                    File::makeDirectory($folderPath , 0777 ,true,true);
+                }
+                $imageArray = explode(';',$request->header_image);
+                $image = explode(',',$imageArray[1])[1];
+                $pos  = strpos($request->header_image, ';');
+                $type = explode(':', substr($request->header_image, 0, $pos))[1];
+                $extension = explode('/',$type)[1];
+                $filename = mt_rand(1,10000000000).sha1(time()).".{$extension}";
+                $fileFullPath = DIRECTORY_SEPARATOR.$folderPath.DIRECTORY_SEPARATOR.$filename;
+                file_put_contents($fileFullPath,base64_decode($image));
+                $imageData['image_name'] = $filename;
+            }
+            if($headerImagePresent == null){
+                if($request->has('is_checked')){
+                    $imageData['is_active'] = true;
+                } else {
+                    $imageData['is_active'] = false;
+                }
+                $imageData['body_id'] = $user['body_id'];
+                $query = HeaderImage::create($imageData);
+            }else{
+                if($request->has('is_checked')){
+                    $imageData['is_active'] = true;
+                } else {
+                    $imageData['is_active'] = false;
+                }
+                $data['header_message'] = $headerData['description'];
+                $query = HeaderImage::where('body_id',$headerDataPresent['body_id'])->update($imageData);
             }
             if($query){
                 Session::flash('message-success','Successfully created');

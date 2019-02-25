@@ -93,6 +93,9 @@ $isInstallmentPaid = false;
                     <tr style="width: 95%;">
                         <td style="width: 95%;font-weight: bold">
                             Fees Concession
+                            @if($concessionName != '')
+                                ({{$concessionName}})
+                            @endif
                         </td>
                         <td>
                             {{round($feeConcessionAmount,2)}}
@@ -204,6 +207,9 @@ $isInstallmentPaid = false;
                 <tr style="width: 95%;">
                     <td style="width: 95%;font-weight: bold">
                         Fees Concession
+                        @if($concessionName != '')
+                            ({{$concessionName}})
+                        @endif
                     </td>
                     <td>
                         {{round($installment['fee_concession_amount'],2)}}

@@ -506,9 +506,11 @@
                                                         Fee Structure: <span class="symbol required"></span>
                                                     </label>
                                                     <select id="fee_structure_select" class="form-control">
-                                                        @foreach($studentFeeStructures as $studentFeeStructure)
-                                                            <option value="{{$studentFeeStructure[0]['student_fee_id']}}"> {{$studentFeeStructure[0]['fee_name']}} </option>
-                                                        @endforeach
+                                                        @if($studentFeeStructures != null)
+                                                            @foreach($studentFeeStructures as $studentFeeStructure)
+                                                                <option value="{{$studentFeeStructure[0]['student_fee_id']}}"> {{$studentFeeStructure[0]['fee_name']}} </option>
+                                                            @endforeach
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
@@ -941,22 +943,44 @@
                         <div class="tab-pane fade" id="fee_transaction">
                             <div class="panel-body">
                                     <fieldset>
+                                        <div class="col-lg-6">
                                                <ul class="mini-stats pull-left">
                                                    <li>
                                                        <div class="values">
                                                            @foreach($total_fees_for_current_year as $key => $year)
-                                                               <div>
-                                                                   <h4>{{$key}}</h4>
-                                                                   <span>Total fee for current year :- {{$year}}</span>
-                                                                   <br><br>
-                                                               </div>
-                                                               @endforeach
+                                                               <?php
+                                                                   $dueAmount = 0;
+                                                                   $flag = true;
+                                                               foreach($total_due_fees_for_current_year as $name => $value){
+                                                                    if($key == $name){
+                                                                        $feeid = \App\Fees::where('fee_name',$name)->value('id');
+                                                                        $installmentIdArray = \App\FeeInstallments::where('fee_id',$feeid)->select('installment_id')->distinct('installment_id')->get()->toArray();
+                                                                        $extraConcessionAmount = 0;
+                                                                        foreach ($installmentIdArray as $instId){
+                                                                            $extraConc = \App\ExtraConcession::where('fee_id',$feeid)->where('student_id',$user->id)->where('installment_id',$instId['installment_id'])->select('amount')->get()->toArray();
+                                                                            foreach ($extraConc as $extra){
+                                                                                $extraConcessionAmount += $extra['amount'];
+                                                                            }
+                                                                        }
+                                                                        $dueAmount = $value + $extraConcessionAmount;
+                                                                        $flag = false;
+                                                                    }
+                                                               }
+                                                               ?>
+                                                               @if($dueAmount != 0 && $flag == false)
+                                                                    <div>
+                                                                        <h4>{{$key}}</h4>
+                                                                        <span>Total fee for current year :- {{$year}}</span>
+                                                                        <br><br>
+                                                                    </div>
+                                                               @endif
+                                                           @endforeach
                                                        </div>
                                                    </li>
                                                </ul>
-                                        <br><br>
-                                               <ul class="mini-stats pull-right">
-                                               <li>
+                                        </div>
+                                            <div class="col-lg-6">
+                                                    <ul class="mini-stats pull-right">
                                                        <div class="values">
                                                          @foreach($total_due_fees_for_current_year as $name => $value)
                                                              <?php
@@ -970,14 +994,18 @@
                                                                     }
                                                                }
                                                                ?>
-                                                               <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
-                                                               <h4>{{$name}}</h4>
-                                                               Total due fee for current year : {{$value + $extraConcessionAmount}}
-                                                           </div>
+                                                                @if(($value + $extraConcessionAmount) != 0)
+                                                                    <li>
+                                                                        <div type="button" class="btn btn-wide btn-sm  btn-primary btn-squared">
+                                                                        <h4>{{$name}}</h4>
+                                                                        Total due fee for current year : {{$value + $extraConcessionAmount}}
+                                                                        </div>
+                                                                    </li>
+                                                                 @endif
                                                          @endforeach
                                                        </div>
-                                                   </li>
-                                               </ul>
+                                                    </ul>
+                                            </div>
                                     </fieldset>
                                     <fieldset>
                                         <span class="mainDescription"><h3>Add Fee Transaction </h3></span>
@@ -993,10 +1021,33 @@
                                                                 Select Fee Structure :<span class="symbol required"></span>
                                                             </label>
                                                             <div>
-                                                                <select name="Structure_type">
+                                                                <select name="Structure_type" id="Structure_type">
+                                                                    <option>Please select fee structure</option>
                                                                     @foreach($assigned_fee_student as $fee)
-                                                                        <option value="{{$fee['id']}}">{{$fee['fee_name']}}</option>
+                                                                        <?php
+                                                                        $dueAmount = 0;
+                                                                        $flag = true;
+                                                                        foreach($total_due_fees_for_current_year as $name => $value){
+                                                                            if($fee['fee_name'] == $name){
+                                                                                $feeid = \App\Fees::where('fee_name',$name)->value('id');
+                                                                                $installmentIdArray = \App\FeeInstallments::where('fee_id',$feeid)->select('installment_id')->distinct('installment_id')->get()->toArray();
+                                                                                $extraConcessionAmount = 0;
+                                                                                foreach ($installmentIdArray as $instId){
+                                                                                    $extraConc = \App\ExtraConcession::where('fee_id',$feeid)->where('student_id',$user->id)->where('installment_id',$instId['installment_id'])->select('amount')->get()->toArray();
+                                                                                    foreach ($extraConc as $extra){
+                                                                                        $extraConcessionAmount += $extra['amount'];
+                                                                                    }
+                                                                                }
+                                                                                $dueAmount = $value + $extraConcessionAmount;
+                                                                                $flag = false;
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                            @if($dueAmount != 0 && $flag == false)
+                                                                                <option value="{{$fee['id']}}">{{$fee['fee_name']}}</option>
+                                                                            @endif
                                                                     @endforeach
+                                                                    <input type="hidden" id="hidden_fee_id" name="hidden_fee_id"/>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -1007,7 +1058,7 @@
                                                             Select Transaction Type :<span class="symbol required"></span>
                                                         </label>
                                                         <div>
-                                                            <select name="transaction_type">
+                                                            <select name="transaction_type" id="select_transaction_type">
                                                                 @foreach($transaction_types as $transaction_type)
                                                                 <option value="{{$transaction_type['transaction_type']}}">{{$transaction_type['transaction_type']}}</option>
                                                                 @endforeach
@@ -1015,48 +1066,49 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6" id="transaction_detail_div">
                                                     <div class="form-group">
                                                         <label class="control-label">
                                                             Voucher No / NEFT  no /Transaction Id::<span class="symbol required"></span>
                                                         </label>
                                                         <div>
-                                                            <input type="text" name="transaction_detail">
+                                                            <input type="text" name="transaction_detail" id="transaction_detail">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Paid Amount:<span class="symbol required"></span>
-                                                        </label>
-                                                        <div>
-                                                            <input type="number" name="transaction_amount">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Transaction Date:<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <input type="date" name="date" value="<?php echo date("Y-m-d");?>">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Transaction Date:<span class="symbol required"></span>
-                                                        </label>
-                                                        <div>
-                                                            <input type="date" name="date">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="control-label">
                                                                 Installment Id:<span class="symbol required"></span>
                                                             </label>
                                                             <div>
-                                                                <select name="installment_id" id="installment_id" style="width: 20%">
-                                                                    @foreach($installmentIds as $id)
+                                                                <select name="installment_id" id="installment_id">
+                                                                    {{--@foreach($installmentIds as $id)
                                                                         <option value="{{$id['installment_id']}}"> {{$id['installment_id']}} </option>
                                                                     @endforeach
-                                                                        <option value="full-payment"> Full Payment </option>
+                                                                    <option value="full-payment"> Full Payment </option>--}}
                                                                 </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Paid Amount:<span class="symbol required"></span>
+                                                            </label>
+                                                            <div>
+                                                                <input type="number" name="transaction_amount" id="transaction_amount">
+                                                                <input type="hidden" id="max_amount" name="max_amount"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1398,21 +1450,23 @@
 
         $("#fee_structure_select").on('change', function(){
             var studentFeeId = $(this).val();
-            $.ajax({
-                url: '/fees/get-structure-installments/'+studentFeeId,
-                type: 'POST',
-                data:{
-                    slug: $("#slug").val(),
-                    grn: $("#grn").val(),
-                    add_field: true
-                },
-                success: function(data, textStatus, xhr){
-                    $("#installment_section").html(data);
-                },
-                error: function(errorData){
-                    alert('Something went wrong !');
-                }
-            });
+            if(studentFeeId != null) {
+                $.ajax({
+                    url: '/fees/get-structure-installments/' + studentFeeId,
+                    type: 'POST',
+                    data: {
+                        slug: $("#slug").val(),
+                        grn: $("#grn").val(),
+                        add_field: true
+                    },
+                    success: function (data, textStatus, xhr) {
+                        $("#installment_section").html(data);
+                    },
+                    error: function (errorData) {
+                        alert('Something went wrong !');
+                    }
+                });
+            }
         });
 
         $("#fee_structure_select").trigger('change');
@@ -1644,6 +1698,50 @@
     $('#final_shuffle').on('click',function(){
         $('#shuffle_student').submit();
     })
+    $('#select_transaction_type').change(function () {
+       if(this.value == 'Cash'){
+           $('#transaction_detail').removeAttrs('name');
+           $('#transaction_detail').attr('disable',true);
+           $('#transaction_detail_div').hide();
+       } else {
+           $('#transaction_detail_div').show();
+           $('#transaction_detail').attr('name','transaction_detail');
+           $('#transaction_detail').attr('disable',false);
+       }
+    });
+
+    $('#Structure_type').change(function () {
+        var id=this.value;
+        var user = $('#userId').val();
+        var route='/get-fee-installments/'+id+'/'+user;
+        var feeId=this.value;
+        $("input[type=hidden][name=hidden_fee_id]").val(feeId);
+        $.get(route,function(res){
+            if (res.length == 0)
+            {
+            } else {
+                var str='<option value="">Please select installment</option>';
+                for(var i=0; i<res.length; i++)
+                {
+                    str+='<option value="'+res[i]['inst_id']+'">'+res[i]['inst_name']+'</option>';
+                }
+                $('#installment_id').html(str);
+            }
+        });
+    });
+
+    $('#installment_id').change(function () {
+        var instId=this.value;
+        var user = $('#userId').val();
+        var feeId = $('#hidden_fee_id').val();
+        var route='/pull-installment/'+feeId+'/'+instId+'/'+user;
+        $.get(route,function(res){
+            {
+                $("#transaction_amount").val(res);
+                $("input[type=hidden][name=max_amount]").val(res);
+            }
+        });
+    });
 </script>
 <script src="/assets/js/student-edit.js" ></script>
 @stop

@@ -37,8 +37,9 @@
 
 
 @if(Session::has('enquiryId'))
-  <?php $enquiryInfo = Session::get('enquiryId'); ?>
+  <?php $enquiryInfo = \Illuminate\Support\Facades\Session::get('enquiryId'); ?>
 @endif
+    <input type="hidden" name="student_enq_id" value="{{$enquiryInfo->id}}">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
@@ -739,7 +740,7 @@
                 <button class="btn btn-primary btn-o back-step btn-wide pull-left">
                     <i class="fa fa-circle-arrow-left"></i> Back
                 </button>
-                <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
+                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
                 <button class="btn btn-primary btn-o finish-step btn-wide pull-right" id="submitStep" onclick="this.disabled = true">
                     Next <i class="fa fa-arrow-circle-right"></i>
                 </button>
@@ -759,7 +760,7 @@
                 <p class="text-small">
                     User will get the mail confirmation about his/her account. This mail includes link for login and his/her login credentials.
                 </p>
-                <a class="btn btn-primary btn-o" href="studentCreate">
+                <a class="btn btn-primary btn-o" href="manage">
                     Back to first step
                 </a>
             </div>
@@ -782,32 +783,32 @@
 </div>
 
 <!-- start: MAIN JAVASCRIPTS -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendor/modernizr/modernizr.js"></script>
-<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
-<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="vendor/switchery/switchery.min.js"></script>
-<script src="vendor/selectFx/classie.js"></script>
-<script src="vendor/selectFx/selectFx.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/modernizr/modernizr.js"></script>
+<script src="/vendor/jquery-cookie/jquery.cookie.js"></script>
+<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/vendor/switchery/switchery.min.js"></script>
+<script src="/vendor/selectFx/classie.js"></script>
+<script src="/vendor/selectFx/selectFx.js"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 
 <script src="/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
-<script type="text/javascript" src="assets/js/jquery.autocomplete.min.js"></script>
+<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.autocomplete.min.js"></script>
 
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <!-- start: CLIP-TWO JAVASCRIPTS -->
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 
-<script src="assets/js/student-form-wizard.js"></script>
+<script src="/assets/js/student-form-wizard.js"></script>
 
-<script src="assets/js/custom-project.js"></script>
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/adapters/jquery.js"></script>
-<script src="assets/js/form-validation.js"></script>
+<script src="/assets/js/custom-project.js"></script>
+<script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="/vendor/ckeditor/adapters/jquery.js"></script>
+<script src="/assets/js/form-validation.js"></script>
 
 <script>
     jQuery(document).ready(function() {
@@ -836,7 +837,7 @@ function userAclModule()
     $('div#loadmoreajaxloader').show();
 
     var disableModules = ['create_timetable','update_timetable','delete_timetable','publish_timetable','create_user','view_user','update_user','delete_user','publish_user','delete_homework','publish_homework','update_homework','create_homework','delete_user','update_message','delete_message','publish_message','delete_leave','update_leave','publish_leave','publish_attendance','update_attendance','delete_attendance','create_attendance','update_announcement','delete_announcement','publish_announcement','create_announcement','delete_achievement','create_achievement','publish_achievement','update_achievement','create_subject','view_subject','update_subject','publish_subject','delete_subject','create_class','publish_class','view_class','delete_class','update_class','create_event','update_event','publish_event','delete_event'];
-    var route='user-module-acl';
+    var route='/user-module-acl';
     $.get(route,function(res){
 
         var str;
@@ -994,7 +995,7 @@ function userAclModule()
     });
     function getbatches()
     {
-        var route='get-batches';
+        var route='/get-batches';
         $.get(route,function(res){
             var str = "<option value=''>Please Select Batch</option>";
             for(var i=0; i<res.length; i++){
@@ -1006,7 +1007,7 @@ function userAclModule()
 
     $("#batch").change(function() {
         var id = this.value;
-        var route='get-classes/'+id;
+        var route='/get-classes/'+id;
         $.get(route,function(res){
             var str = "<option value=''>Please Select Class</option>";
             for(var i=0; i<res.length; i++){
@@ -1018,7 +1019,7 @@ function userAclModule()
 
     $("#class").change(function() {
         var id = this.value;
-        var route='get-divisions/'+id;
+        var route='/get-divisions/'+id;
         $.get(route,function(res){
             var str = "<option value=''>Please Select Division</option>";
             for(var i=0; i<res.length; i++){
