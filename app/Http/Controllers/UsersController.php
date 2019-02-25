@@ -466,6 +466,9 @@ class UsersController extends Controller
                 $userData->birth_date = date('Y-m-d', strtotime($date));
                 $userData->middle_name = $data['middleName'];
                 $userData->roll_number = $data['roll_number'];
+                if(isset($data['student_enq_id'])){
+                    $userData->enquiry_id = $data['student_enq_id'];
+                }
                 if(isset($data['division'])){
 
                     $userData = array_add($userData, 'division_id', $data['division']);
