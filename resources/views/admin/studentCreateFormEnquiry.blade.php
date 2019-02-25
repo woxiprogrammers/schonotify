@@ -39,6 +39,7 @@
 @if(Session::has('enquiryId'))
   <?php $enquiryInfo = \Illuminate\Support\Facades\Session::get('enquiryId'); ?>
 @endif
+    <input type="hidden" name="student_enq_id" value="{{$enquiryInfo->id}}">
 <div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>

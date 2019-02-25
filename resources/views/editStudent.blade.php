@@ -506,9 +506,11 @@
                                                         Fee Structure: <span class="symbol required"></span>
                                                     </label>
                                                     <select id="fee_structure_select" class="form-control">
-                                                        @foreach($studentFeeStructures as $studentFeeStructure)
-                                                            <option value="{{$studentFeeStructure[0]['student_fee_id']}}"> {{$studentFeeStructure[0]['fee_name']}} </option>
-                                                        @endforeach
+                                                        @if($studentFeeStructures != null)
+                                                            @foreach($studentFeeStructures as $studentFeeStructure)
+                                                                <option value="{{$studentFeeStructure[0]['student_fee_id']}}"> {{$studentFeeStructure[0]['fee_name']}} </option>
+                                                            @endforeach
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
@@ -1448,21 +1450,23 @@
 
         $("#fee_structure_select").on('change', function(){
             var studentFeeId = $(this).val();
-            $.ajax({
-                url: '/fees/get-structure-installments/'+studentFeeId,
-                type: 'POST',
-                data:{
-                    slug: $("#slug").val(),
-                    grn: $("#grn").val(),
-                    add_field: true
-                },
-                success: function(data, textStatus, xhr){
-                    $("#installment_section").html(data);
-                },
-                error: function(errorData){
-                    alert('Something went wrong !');
-                }
-            });
+            if(studentFeeId != null) {
+                $.ajax({
+                    url: '/fees/get-structure-installments/' + studentFeeId,
+                    type: 'POST',
+                    data: {
+                        slug: $("#slug").val(),
+                        grn: $("#grn").val(),
+                        add_field: true
+                    },
+                    success: function (data, textStatus, xhr) {
+                        $("#installment_section").html(data);
+                    },
+                    error: function (errorData) {
+                        alert('Something went wrong !');
+                    }
+                });
+            }
         });
 
         $("#fee_structure_select").trigger('change');
