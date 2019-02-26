@@ -1174,6 +1174,45 @@
                                                </table>
                                            </div>
                                        </div>
+                                       <br><br><br>
+                                       <span class="mainDescription"><h3>Previous Assigned Fee Structures</h3></span>
+                                       <hr>
+                                       <div class="col-lg-6">
+                                           <ul class="mini-stats pull-left">
+                                               <li>
+                                                   <div class="values">
+                                                       @foreach($total_fees_for_current_year as $key => $year)
+                                                           <?php
+                                                           $dueAmount = 0;
+                                                           $flag = true;
+                                                           foreach($total_due_fees_for_current_year as $name => $value){
+                                                               if($key == $name){
+                                                                   $feeid = \App\Fees::where('fee_name',$name)->value('id');
+                                                                   $installmentIdArray = \App\FeeInstallments::where('fee_id',$feeid)->select('installment_id')->distinct('installment_id')->get()->toArray();
+                                                                   $extraConcessionAmount = 0;
+                                                                   foreach ($installmentIdArray as $instId){
+                                                                       $extraConc = \App\ExtraConcession::where('fee_id',$feeid)->where('student_id',$user->id)->where('installment_id',$instId['installment_id'])->select('amount')->get()->toArray();
+                                                                       foreach ($extraConc as $extra){
+                                                                           $extraConcessionAmount += $extra['amount'];
+                                                                       }
+                                                                   }
+                                                                   $dueAmount = $value + $extraConcessionAmount;
+                                                                   $flag = false;
+                                                               }
+                                                           }
+                                                           ?>
+                                                           @if($dueAmount == 0 && $flag == false)
+                                                               <div>
+                                                                   <h4>{{$key}}</h4>
+                                                                   <span>Total fee for current year :- {{$year}}</span>
+                                                                   <br><br>
+                                                               </div>
+                                                           @endif
+                                                       @endforeach
+                                                   </div>
+                                               </li>
+                                           </ul>
+                                       </div>
                                    </fieldset>
                               </div>
                               </div>

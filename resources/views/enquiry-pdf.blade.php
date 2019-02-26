@@ -61,7 +61,7 @@
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
     <tr>
-        <td width="100%"><span style="font-weight: bold"> &nbsp;&nbsp;&nbsp;&nbsp;Email:&nbsp;&nbsp;</span>{{ucwords($newEnquiry->email)}}</td>
+        <td width="100%"><span style="font-weight: bold"> &nbsp;&nbsp;&nbsp;&nbsp;Email:&nbsp;&nbsp;</span>{{$newEnquiry->email}}</td>
     </tr>
 </table>
 <table style="padding-top:10px;padding-bottom:10px;">
