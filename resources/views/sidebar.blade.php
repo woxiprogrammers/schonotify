@@ -395,6 +395,34 @@
             @endif
         </ul>
     </li>
+    <li>
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="fa fa-edit"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title">Exam Evaluation</span><i class="icon-arrow"></i>
+                </div>
+            </div>
+        </a>
+            <ul class="sub-menu">
+                <li>
+                    <a href="/exam-evaluation/create">
+                        <div class="item-inner">
+                            <span class="title"> Create Question Paper</span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exam-evaluation/enter-marks">
+                        <div class="item-inner">
+                            <span class="title"> Enter Marks</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+    </li>
     @if(Auth::User()->role_id == 1)
     <li>
         <a href="javascript:void(0)">

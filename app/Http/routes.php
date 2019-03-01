@@ -128,6 +128,11 @@
         });
     });
 
+Route::group(['prefix' => 'exam-evaluation'], function () {
+    Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createFeeStructureView'));
+    Route::get('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
+});
+
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
 
     Route::post('check-aadhar',array('uses' => 'RegistrationController@checkAadharNumber'));
