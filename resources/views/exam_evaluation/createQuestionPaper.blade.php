@@ -20,6 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
+                        <fieldset>
                         <div class="row">
                             <div class="col-md-3 ">
                                 <label class="control-label">
@@ -44,38 +45,52 @@
                                     Select Exam <span class="symbol required"></span>
                                 </label>
                                 <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
-                                    <option>Please select exam</option>
-                                    <option>First Term Exam 2018-19</option>
-                                    <option>Second Term Exam 2018-19</option>
+                                    <option>Please Select Exam</option>
+                                    <option value="First Term Exam 2018-19">First Term Exam 2018-19</option>
+                                    <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
                                 </select>
                             </div>
-                            <div class="col-md-3" id="set-select-div" >
+                            <div class="col-md-3" id="subject-select-div" >
+                                <label class="control-label">
+                                    Select Subject<span class="symbol required"></span>
+                                </label>
+                                <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
+                                    <option>Select Paper Set</option>
+                                    <option value="Math">Math</option>
+                                    <option value="English">English</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                </select>
+                            </div>
+                        </div>
+                        </fieldset>
+                        <br>
+                        <fieldset>
+                        <div class="row">
+                            <div class="col-md-2" id="set-select-div" >
                                 <label class="control-label">
                                     Select Paper Set<span class="symbol required"></span>
                                 </label>
                                 <select class="form-control" id="set-select" name="set-select" style="-webkit-appearance: menulist;">
-                                    <option>select paper set</option>
-                                    <option>A</option>
-                                    <option>B</option>
-                                    <option>C</option>
-                                    <option>D</option>
+                                    <option>Select Paper Set</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
                                 </select>
                             </div>
-                        </div>
-                        <br><br><br>
-                        <div class="row">
-                            <div class="col-md-5" id="question-paper-name" >
+                            <div class="col-md-4" id="question-paper-name" >
                                 <label class="control-label">
                                     Enter Question Paper Name <span class="symbol required"></span>
                                 </label>
                                 <input type="text" class="form-control" id="paper_name" name="paper_name" placeholder="Question paper name">
                                 </input>
                             </div>
-                            <div class="col-md-3" id="total-marks-div" >
+                            <div class="col-md-2" id="total-marks-div" >
                                 <label class="control-label">
-                                    Enter Total marks <span class="symbol required"></span>
+                                    Enter Total Marks <span class="symbol required"></span>
                                 </label>
-                                <input type="text" class="form-control" id="paper_name" name="paper_name" placeholder="marks">
+                                <input type="text" class="form-control" id="total_marks" name="total_marks" placeholder="marks">
                                 </input>
                             </div>
                             <div class="col-md-3" id="question-select-div" >
@@ -100,7 +115,12 @@
                                 </select>
                             </div>
                         </div>
-                        <br><br><br><br>
+                        </fieldset>
+                        <br><br>
+                        <div id="paper-preview" style="">
+
+                        </div>
+                        <br><br><br>
                         <div id="question-structure">
 
                         </div>
@@ -154,7 +174,7 @@
                     $('#class-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
-                    var str='<option value="">Please select class</option>';
+                    var str='<option value="">Please Select Class</option>';
                     for(var i=0; i<res.length; i++)
                     {
                         str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
@@ -219,6 +239,35 @@
                     '<br><br>';
                 $('#question-structure').html(str);
             }
+
+            var exm= $('#exam-select').val();
+            var qSet = $('#set-select').val();
+            var clss = $('#class-select').val();
+            var paperName = $('#paper_name').val();
+            var mark = $('#total_marks').val();
+            var sub = $('#subject-select').val();
+            var str1 = '';
+            if(exm != null && qSet != null && clss != null && paperName != null && mark != null && sub != null){
+                str1 = '<div class="row" style="text-align: center">'+
+                            '<h4>'+exm+'</h4>'+
+                        '</div>'+
+                        '<div class="row" style="text-align: center">'+
+                            '<h4>'+paperName+'</h4>'+
+                        '</div>'+
+                        '<div class="row" style="text-align: center">'+
+                            '<h4>'+sub+' - '+qSet+'</h4>'+
+                        '</div>'+
+                        '<div class="row">'+
+                            '<div class="col-sm-6" style="text-align: start">'+
+                                '<h4>Class : '+clss+'</h4>'+
+                            '</div>'+
+                            '<div class="col-sm-6" style="text-align: end">'+
+                                '<h4>Marks : '+mark+'</h4>'+
+                            '</div>'+
+                        '</div>';
+                $('#paper-preview').html(str1);
+            }
+
         });
 
         function add(divId) {

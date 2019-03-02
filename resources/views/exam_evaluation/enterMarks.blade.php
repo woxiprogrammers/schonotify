@@ -21,12 +21,25 @@
                     </section>
                     <div class="container-fluid container-fullw">
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-6">
+                                <h4>Student GRN :- PPSB11</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <h4>Exam :- First Term Exam 2018-19</h4>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-4">
                                 <div class="panel panel-white" id="panel1">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title text-primary">Assign marks</h4>
+                                        <h4 class="panel-title text-primary">Assign marks (50/100)</h4>
+                                        <div class="panel-tools">
+                                            <i class="fa fa-book fa-fw collapse-off" id="hide-question-paper"></i>
+                                        </div>
                                     </div>
                                     <div class="panel-body" style="display: block;">
+
                                         @for ($i = 1; $i < 11; $i++)
                                             <div class="row" id="">
                                                 <div class="col-sm-4">
@@ -47,6 +60,8 @@
                                                 <div class="row" style="text-align: center">
                                                         <span style="color: blue"> OR </span>
                                                 </div>
+                                                @else
+                                                <hr style="border-color: black">
                                             @endif
                                             <br>
                                         @endfor
@@ -57,16 +72,13 @@
                                 <div class="panel panel-white" id="panel2">
                                     <div class="panel-heading">
                                         <h4 class="panel-title text-primary">Question Paper</h4>
-                                        <div class="panel-tools">
-                                            <i class="ti-minus collapse-off" id="hide-question-paper"></i>
-                                        </div>
                                     </div>
                                     <div class="panel-body" id="hide-paper">
-                                        <embed src="{{$file}}" height="500px" width="100%">
+                                        <embed src="{{$file}}" height="600px" width="100%">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-5" id="answer-sheet-pdf">
+                            <div class="col-sm-4" id="answer-sheet-pdf">
                                 <div class="panel panel-white" id="panel3">
                                     <div class="panel-heading">
                                         <h4 class="panel-title text-primary">Answer Sheet PDF</h4>
@@ -106,18 +118,18 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            $('#question-paper-pdf').hide();
+            $('#answer-sheet-pdf').attr("class", "col-sm-8");
          });
         </script>
     <script>
         $('#hide-question-paper').click(function(){
-            if($('#question-paper-pdf').attr("class") == 'col-sm-4') {
-                $('#question-paper-pdf').attr("class", "col-sm-2");
-                $('#answer-sheet-pdf').attr("class", "col-sm-7");
-                $('#hide-paper').hide();
+            if($('#answer-sheet-pdf').attr("class") == 'col-sm-4') {
+                $('#answer-sheet-pdf').attr("class", "col-sm-8");
+                $('#question-paper-pdf').hide();
             } else {
-                $('#question-paper-pdf').attr("class", "col-sm-4");
-                $('#answer-sheet-pdf').attr("class", "col-sm-5");
-                $('#hide-paper').show();
+                $('#answer-sheet-pdf').attr("class", "col-sm-4");
+                $('#question-paper-pdf').show();
             }
         });
 
