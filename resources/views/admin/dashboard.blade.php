@@ -56,7 +56,8 @@
                             </div>
 						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
-								<div class="col-md-6">
+
+							<!--	<div class="col-md-6">
 									<p style="text-align: right">
 										<i>Last 15 Records</i>
 									</p>
@@ -146,8 +147,8 @@
 									</div>
 								</div>
 
-								{{-- Start  Commenting Modules for Exam Evaluation Demo --}}
-								{{--<div class="col-md-6 bg-white" >
+
+								<div class="col-md-6 bg-white" >
 									<div class="row">
 										<div class="col-md-6">
 											<p style="color: #333333;font-size: 26px;">
@@ -187,10 +188,7 @@
 										</div>
 									</div>
 
-								</div>--}}
-
-								{{-- End of Commenting Modules for Exam Evaluation Demo --}}
-
+								</div>-->
 							</div>
 						</div>
 						@endif
