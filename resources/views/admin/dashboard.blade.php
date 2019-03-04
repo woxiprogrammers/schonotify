@@ -145,7 +145,9 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-6 bg-white" >
+
+								{{-- Start  Commenting Modules for Exam Evaluation Demo --}}
+								{{--<div class="col-md-6 bg-white" >
 									<div class="row">
 										<div class="col-md-6">
 											<p style="color: #333333;font-size: 26px;">
@@ -185,7 +187,10 @@
 										</div>
 									</div>
 
-								</div>
+								</div>--}}
+
+								{{-- End of Commenting Modules for Exam Evaluation Demo --}}
+
 							</div>
 						</div>
 						@endif
@@ -207,7 +212,10 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-4">
+
+								{{-- Start  Commenting Modules for Exam Evaluation Demo --}}
+
+								{{--<div class="col-sm-4">
 									<div class="panel panel-white no-radius text-center">
 										<div class="panel-body">
 											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-clock-o fa-stack-1x fa-inverse"></i> </span>
@@ -238,7 +246,10 @@
 											</p>
 										</div>
 									</div>
-								</div>
+								</div>--}}
+
+								{{-- End of Commenting Modules for Exam Evaluation Demo --}}
+
 							</div>
 						</div>
 						<!-- end: FEATURED BOX LINKS -->
