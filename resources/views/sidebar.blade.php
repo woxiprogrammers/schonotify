@@ -119,7 +119,9 @@
         </li>
     </ul>
 </li>
-<li>
+
+    {{-- Start  Commenting Modules for Exam Evaluation Demo --}}
+{{--<li>
     <a href="/timetable">
         <div class="item-content">
             <div class="item-media">
@@ -200,7 +202,10 @@
         </div>
     </a>
 </li>
-@endif
+@endif--}}
+
+{{-- End of Commenting Modules for Exam Evaluation Demo --}}
+
 <!--<li>
     <a href="/results">
         <div class="item-content">
@@ -244,7 +249,11 @@
         </li>
     </ul>
 </li>-->
-@if(Auth::User()->role_id == 1)
+
+
+    {{-- Start  Commenting Modules for Exam Evaluation Demo --}}
+
+{{--@if(Auth::User()->role_id == 1)
 <li>
     <a href="javascript:void(0)">
         <div class="item-content">
@@ -329,7 +338,10 @@
             </a>
         </li>
     </ul>
-</li>
+</li>--}}
+
+    {{-- End of Commenting Modules for Exam Evaluation Demo --}}
+
     <li>
         <a href="javascript:void(0)">
             <div class="item-content">
@@ -423,7 +435,11 @@
                 </li>
             </ul>
     </li>
-    @if(Auth::User()->role_id == 1)
+
+
+    {{-- Start  Commenting Modules for Exam Evaluation Demo --}}
+
+   {{-- @if(Auth::User()->role_id == 1)
     <li>
         <a href="javascript:void(0)">
             <div class="item-content">
@@ -536,7 +552,9 @@
                 </li>
             </ul>
         </li>
-    @endif
+    @endif--}}
+
+    {{-- End of Commenting Modules for Exam Evaluation Demo --}}
 </ul>
 </nav>
 </div>
