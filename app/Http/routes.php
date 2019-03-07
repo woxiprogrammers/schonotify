@@ -46,6 +46,21 @@
 
     Route::get('/','FrontController@index');
 
+Route::group(['prefix' => 'exam-evaluation'], function () {
+    Route::get('create-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@createExamView'));
+    Route::post('create-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@createExam'));
+    Route::get('get-subject/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getClassSubject'));
+    Route::get('assign-subject',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignSubjectView'));
+    Route::post('assign-subject',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignSubject'));
+    Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createFeeStructureView'));
+    Route::get('upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheetView'));
+    Route::get('assign',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudentView'));
+    Route::post('assign-students',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudents'));
+    Route::get('student-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListingView'));
+    Route::get('searchStudent',array('uses' => 'ExamEvaluation\ExamEvaluationController@filterStudent'));
+    Route::get('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
+});
+
     //enquiry form
     Route::get('/new-student-enquiry/{slug}','EnquiryController@viewEnquiryFormWithoutLogin');
     Route::post('/store-student-enquiry-without-login','EnquiryController@storeEnquiryFormWithoutLogin');
@@ -127,11 +142,6 @@
             Route::get('download/{id}',array('uses' => 'Certificate\LivingCertificateController@livingCretificateDownload'));
         });
     });
-
-Route::group(['prefix' => 'exam-evaluation'], function () {
-    Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createFeeStructureView'));
-    Route::get('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
-});
 
     Route::get('student-fee-installment',array('uses' => 'UsersController@studentInstallmentview'));
 
