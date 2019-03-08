@@ -58,6 +58,7 @@ Route::group(['prefix' => 'exam-evaluation'], function () {
     Route::post('assign-students',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudents'));
     Route::get('student-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListingView'));
     Route::get('searchStudent',array('uses' => 'ExamEvaluation\ExamEvaluationController@filterStudent'));
+    Route::get('student-upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentUploadAnswerSheet'));
     Route::get('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
 });
 

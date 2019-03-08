@@ -22,7 +22,7 @@
                     <div class="container-fluid container-fullw">
                         <fieldset>
                             <div class="row">
-                                <div class="col-md-3 ">
+                                <div class="col-md-4">
                                     <label class="control-label">
                                         Batch <span class="symbol required"></span>
                                     </label>
@@ -33,14 +33,28 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3" id="class-select-div" >
+                                <div class="col-md-4" id="class-select-div" >
                                     <label class="control-label">
                                         Select Class <span class="symbol required"></span>
                                     </label>
                                     <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
                                     </select>
                                 </div>
-                                <div class="col-md-3" id="exam-select-div" >
+                                <div class="col-md-4" id="DivSearch">
+                                    <div class="form-group" id="DivisionBlock">
+                                        <label class="control-label">
+                                            Division
+                                        </label>
+                                        <select class="form-control" id="div-select" name="div-select" style="-webkit-appearance: menulist;">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-4" id="exam-select-div" >
                                     <label class="control-label">
                                         Select Exam <span class="symbol required"></span>
                                     </label>
@@ -50,7 +64,7 @@
                                         <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3" id="subject-select-div" >
+                                <div class="col-md-4" id="subject-select-div" >
                                     <label class="control-label">
                                         Select Subject<span class="symbol required"></span>
                                     </label>
@@ -64,60 +78,9 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <div class="row" id="table-div">
-                            <table class="table table-striped table-bordered table-hover table-full-width dataTable no-footer" id="sample_2" role="grid" aria-describedby="sample_2_info">
-                                <thead>
-                                <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Result: activate to sort column descending" style="width: 40px;">Check</th>
-                                    <th class="sorting" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-label="GRN No.: activate to sort column ascending" style="width: 29px;">GRN No.</th>
-                                    <th class="sorting" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 68px;">Name</th>
-                                    <th class="sorting" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-label="Roll No: activate to sort column ascending" style="width: 33px;">Roll No</th>
-                                    <th class="sorting" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 41px;">Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>007</td>
-                                    <td>Aaditya Margaj</td>
-                                    <td>0</td>
-                                    <td><input type="file" id="imageUpload4"></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>009</td>
-                                    <td>Aaradhya Nagraj</td>
-                                    <td>1</td>
-                                    <td><input type="file"></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>074</td>
-                                    <td>Vaidehi Gupta</td>
-                                    <td>2</td>
-                                    <td><input type="file"></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>023</td>
-                                    <td>Shubhangi Gaikwad</td>
-                                    <td>3</td>
-                                    <td><input type="file"></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>014</td>
-                                    <td>Zade Anshul</td>
-                                    <td>4</td>
-                                    <td><input type="file"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                         <div class="container-fluid container-fullw bg-white">
                             <div class="row">
-                                {{--<div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>--}}
+                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
                                 <div class="col-md-12" id="tableContent">
                                 </div>
                             </div>
@@ -159,18 +122,15 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            $('#table-div').hide();
         });
 
         $('#batchDrpdn').change(function(){
             var id=this.value;
             var route='/get-all-classes/'+id;
-            $('#loadmoreajaxloaderClass').show();
             $.get(route,function(res){
                 if (res.length == 0)
                 {
                     $('#class-select').html("no record found");
-                    $('#loadmoreajaxloaderClass').hide();
                 } else {
                     var str='<option value="">Please Select Class</option>';
                     for(var i=0; i<res.length; i++)
@@ -178,14 +138,43 @@
                         str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
                     }
                     $('#class-select').html(str);
-                    $('#loadmoreajaxloaderClass').hide();
                 }
             });
         });
 
-        $('#subject-select').change(function () {
-            $('#table-div').show();
-        })
+        $('#class-select').change(function(){
+            var id=this.value;
+            var route='/get-all-division/'+id;
+            $.get(route,function(res){
+                if (res.length == 0)
+                {
+                    $('#div-select').html("no record found");
+                } else {
+                    var str='<option value="">Please select division</option>';
+                    for(var i=0; i<res.length; i++)
+                    {
+                        str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
+                    }
+                    $('#div-select').html(str);
+                }
+            });
+        });
+
+        $('#div-select').change(function(){
+            $('div#loadmoreajaxloader').show();
+            var division= this.value;
+            var route='student-upload';
+            $.ajax({
+                method: "get",
+                url: route,
+                data: { division }
+            })
+                .done(function(res){
+                    $('div#loadmoreajaxloader').hide();
+                    $("#tableContent").html(res);
+                    TableData.init();
+                })
+        });
 
         $("#imageUpload4").on('change', function () {
             var imgPath = $(this)[0].value;
