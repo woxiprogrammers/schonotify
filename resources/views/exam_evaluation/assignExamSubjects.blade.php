@@ -45,17 +45,18 @@
                                         <label class="control-label">
                                             Select Exam <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;">
                                             <option>Please Select Exam</option>
-                                            <option value="First Term Exam 2018-19">First Term Exam 2018-19</option>
-                                            <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
+                                            @foreach($exams as $exam)
+                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-3" id="subject-select-div" >
                                         <label class="control-label">
                                             Select Subject<span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="subject-select" name="subject-select[]" style="-webkit-appearance: menulist;" multiple>
+                                        <select class="form-control" id="subject-select" name="subject_select[]" style="-webkit-appearance: menulist;" multiple>
                                         </select>
                                     </div>
                                 </div>

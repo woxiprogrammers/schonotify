@@ -15,19 +15,20 @@
                         <div class="row">
                             <div class="col-sm-7">
                                 <h1 class="mainTitle">Exam</h1>
-                                <span class="mainDescription">Create New Exam</span>
+                                <span class="mainDescription">Edit Exam</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam-evaluation/create-exam" role="form" id="examCreateForm" novalidate="novalidate">
+                        <form method="post" action="/exam-evaluation/edit-exam" role="form" id="examEditForm" novalidate="novalidate">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Exam <span class="symbol required" aria-required="true"></span>
                                         </label>
-                                        <input type="text" class="form-control" placeholder="Enter Exam Name" name="exam_name" required>
+                                        <input type="hidden" name="exam_id" value="{{$exam['id']}}">
+                                        <input type="text" class="form-control" value="{{$exam['exam_name']}}" name="exam_name" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -35,36 +36,12 @@
                                     </label>
                                     <div class="form-group">
                                         <button class="btn btn-primary btn-wide" type="submit">
-                                            Create <i class="fa fa-arrow-circle-right"></i>
+                                            Edit <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="over-title margin-bottom-15"><h2>Exam Listing</h2></h5>
-                                <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
-                                    <thead>
-                                    <tr>
-                                        <th width="10%"> Exam No </th>
-                                        <th width="20%"> Name </th>
-                                        <th width="10%"> Action </th>
-
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($exams as $exam)
-                                    <tr>
-                                        <td>{{$exam['id']}}</td>
-                                        <td>{{$exam['exam_name']}}</td>
-                                        <td><a href="edit-exam/{{$exam['id']}}">Edit </a></td>
-                                    </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                     @include('rightSidebar')
                 </div>

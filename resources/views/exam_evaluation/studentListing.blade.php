@@ -20,10 +20,9 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-
                         <fieldset>
                             <div class="row">
-                                <div class="col-md-3 ">
+                                <div class="col-md-4">
                                     <label class="control-label">
                                         Batch <span class="symbol required"></span>
                                     </label>
@@ -34,24 +33,39 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3" id="class-select-div" >
+                                <div class="col-md-4" id="class-select-div" >
                                     <label class="control-label">
                                         Select Class <span class="symbol required"></span>
                                     </label>
                                     <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
                                     </select>
                                 </div>
-                                <div class="col-md-3" id="exam-select-div" >
+                                <div class="col-md-4" id="DivSearch">
+                                    <div class="form-group" id="DivisionBlock">
+                                        <label class="control-label">
+                                            Division
+                                        </label>
+                                        <select class="form-control" id="div-select" name="div-select" style="-webkit-appearance: menulist;">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-4" id="exam-select-div" >
                                     <label class="control-label">
                                         Select Exam <span class="symbol required"></span>
                                     </label>
                                     <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
                                         <option>Please Select Exam</option>
-                                        <option value="First Term Exam 2018-19">First Term Exam 2018-19</option>
-                                        <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
+                                        @foreach($exams as $exam)
+                                            <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
+                                        @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3" id="subject-select-div" >
+                                <div class="col-md-4" id="subject-select-div" >
                                     <label class="control-label">
                                         Select Subject<span class="symbol required"></span>
                                     </label>
@@ -63,25 +77,26 @@
                                         <option value="Chemistry">Chemistry</option>
                                     </select>
                                 </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-md-4" id="teacher-select-div" >
+                                <div class="col-md-4" id="role-select-div" >
                                     <label class="control-label">
-                                        Select Teacher<span class="symbol required"></span>
+                                        Select Role<span class="symbol required"></span>
                                     </label>
-                                    <select class="form-control" id="teacher-select" name="teacher-select" style="-webkit-appearance: menulist;">
-                                        <option>Select Teacher</option>
-                                        <option value="Prof. A.V">Prof. A.V</option>
-                                        <option value="Prof. A.G">Prof. A.G</option>
-                                        <option value="Prof. D.k">Prof. D.k</option>
-                                        <option value="Prof. G.P">Prof. G.P</option>
+                                    <select class="form-control" id="role-select" name="role-select" style="-webkit-appearance: menulist;">
+                                        <option>Select Role</option>
+                                        <option value="Prof. A.V">Teacher</option>
+                                        <option value="Prof. A.G">Moderator</option>
                                     </select>
                                 </div>
                             </div>
                         </fieldset>
-                        <div class="row" id="table-div">
+                        <div class="container-fluid container-fullw bg-white">
+                            <div class="row">
+                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
+                                <div class="col-md-12" id="tableContent">
+                                </div>
+                            </div>
+                        </div>
+                        {{--<div class="row" id="table-div">
                             <table class="table table-striped table-bordered table-hover table-full-width dataTable no-footer" id="sample_2" role="grid" aria-describedby="sample_2_info">
                                 <thead>
                                 <tr role="row">
@@ -124,7 +139,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div>--}}
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -145,6 +160,8 @@
     <script src="/vendor/ckeditor/adapters/jquery.js"></script>
     <!-- end: MAIN JAVASCRIPTS -->
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+    <script src="/assets/js/table-data.js"></script>
     {{--<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>--}}
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
@@ -154,7 +171,6 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            $('#table-div').hide();
         });
 
         $('#batchDrpdn').change(function(){
@@ -178,8 +194,38 @@
             });
         });
 
-        $('#teacher-select').change(function () {
-            $('#table-div').show();
-        })
+        $('#class-select').change(function(){
+            var id=this.value;
+            var route='/get-all-division/'+id;
+            $.get(route,function(res){
+                if (res.length == 0)
+                {
+                    $('#div-select').html("no record found");
+                } else {
+                    var str='<option value="">Please select division</option>';
+                    for(var i=0; i<res.length; i++)
+                    {
+                        str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
+                    }
+                    $('#div-select').html(str);
+                }
+            });
+        });
+
+        $('#div-select').change(function(){
+            $('div#loadmoreajaxloader').show();
+            var division= this.value;
+            var route='studentListing';
+            $.ajax({
+                method: "get",
+                url: route,
+                data: { division }
+            })
+                .done(function(res){
+                    $('div#loadmoreajaxloader').hide();
+                    $("#tableContent").html(res);
+                    TableData.init();
+                })
+        });
     </script>
 @stop

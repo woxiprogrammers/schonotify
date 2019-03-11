@@ -10,6 +10,8 @@
 namespace App\Http\Controllers\ExamEvaluation;
 
 use App\Batch;
+use App\ExamClassSubject;
+use App\ExamEvaluation;
 use App\Http\Controllers\Controller;
 use App\Subject;
 use App\SubjectClass;
@@ -29,7 +31,8 @@ class ExamEvaluationController extends Controller
     public function createExamView(){
         try{
             $user = Auth::user();
-            return view('exam_evaluation.createExam')->with(compact('user'));
+            $exams = ExamEvaluation::all();
+            return view('exam_evaluation.createExam')->with(compact('user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -39,8 +42,33 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             if($request->exam_name != null){
+                $examData['exam_name'] = $request->exam_name;
+                ExamEvaluation::create($examData);
             }
             return back();
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function editExamView(Request $request,$examId){
+        try{
+            $user = Auth::user();
+            $exam = ExamEvaluation::where('id',$examId)->first();
+            return view('exam_evaluation.editExam')->with(compact('user','exam'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function editExam(Request $request){
+        try{
+            $user = Auth::user();
+            if($request->exam_name != null){
+                $examData['exam_name'] = $request->exam_name;
+                ExamEvaluation::where('id',$request->exam_id)->update($examData);
+            }
+            return redirect('exam-evaluation/create-exam');
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -50,7 +78,19 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.createQuestionPaper')->with(compact('batches','user'));
+            $exams = ExamEvaluation::all();
+            return view('exam_evaluation.createQuestionPaper')->with(compact('batches','user','exams'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function questionPaperListingView(){
+        try{
+            $user = Auth::user();
+            $batches = Batch::where('body_id',$user->body_id)->get();
+            $exams = ExamEvaluation::all();
+            return view('exam_evaluation.questionPaperListing')->with(compact('batches','user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -60,7 +100,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.uploadAnswerSheet')->with(compact('batches','user'));
+            $exams = ExamEvaluation::all();
+            return view('exam_evaluation.uploadAnswerSheet')->with(compact('batches','user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -70,7 +111,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.assignStudentsToTeacher')->with(compact('batches','user'));
+            $exams = ExamEvaluation::all();
+            return view('exam_evaluation.assignStudentsToTeacher')->with(compact('batches','user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -79,6 +121,11 @@ class ExamEvaluationController extends Controller
     public function assignStudents(Request $request){
         try{
             $user = Auth::user();
+            if($request->has('assign_student')){
+                $students = $request->assign_student;
+                foreach ($students as $student){
+                }
+            }
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -89,7 +136,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.assignExamSubjects')->with(compact('batches','user'));
+            $exams = ExamEvaluation::all();
+            return view('exam_evaluation.assignExamSubjects')->with(compact('batches','user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -97,7 +145,18 @@ class ExamEvaluationController extends Controller
 
     public function assignSubject(Request $request){
         try{
-            $user = Auth::user();
+            $examSubjectData['class_id'] = $request->class_select;
+            $examSubjectData['exam_id'] = $request->exam_select;
+            if($request->has('subject_select')){
+                $subjects = $request->subject_select;
+                foreach ($subjects as $subject){
+                    $examSubject = ExamClassSubject::where('class_id',$request->class_select)->where('exam_id',$request->exam_select)->where('subject_id',$subject)->first();
+                    if ($examSubject == null) {
+                        $examSubjectData['subject_id'] = $subject;
+                        ExamClassSubject::create($examSubjectData);
+                    }
+                }
+            }
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -108,7 +167,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.studentListing')->with(compact('batches','user'));
+            $exams = ExamEvaluation::all();
+            return view('exam_evaluation.studentListing')->with(compact('batches','user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -128,6 +188,19 @@ class ExamEvaluationController extends Controller
     public function getClassSubject($id){
         $data=array();
         $subjectIds = SubjectClass::where('class_id',$id)->lists('subject_id');
+        $subjects = Subject::whereIn('id',$subjectIds)->get()->toArray();
+        $i=0;
+        foreach ($subjects as $row) {
+            $data[$i]['subject_id'] = $row['id'] ;
+            $data[$i]['subject_name']= $row['subject_name'] ;
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getExamClassSubject($examId,$classId){
+        $data=array();
+        $subjectIds = ExamClassSubject::where('class_id',$classId)->where('exam_id',$examId)->lists('subject_id');
         $subjects = Subject::whereIn('id',$subjectIds)->get()->toArray();
         $i=0;
         foreach ($subjects as $row) {
@@ -198,7 +271,7 @@ class ExamEvaluationController extends Controller
             foreach ($result as $row) {
                 if ($row->user_role == 'student') {
                     if ($row->is_lc_generated == 0) {
-                        $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[$row->id]' class='assign-student' value='" . $row->id . "'>" . "</td>";
+                        $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[]' class='assign-student' value='" . $row->id . "'>" . "</td>";
                     } else {
                         $str .= "<tr><td></td>";
                         $str .= "<td></td>";
@@ -295,7 +368,7 @@ class ExamEvaluationController extends Controller
                 $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>";
-                $str .= "<input type='file' name='answer_sheet[$row->id]'>";
+                $str .= "<input type='file' class='answer-sheet' name='answer_sheet[$row->id]'>";
                 $str .= "</td>";
             }
         } else {
@@ -324,7 +397,7 @@ class ExamEvaluationController extends Controller
                     ->where('users.role_id', '=', $role_id)
                     ->where('users.id', '!=', $user->id)
                     ->where('users.is_displayed', '=', '1')
-                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role',  'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
+                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
                     ->get();
             } else {
                 $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -332,7 +405,7 @@ class ExamEvaluationController extends Controller
                     ->where('users.role_id', '=', $role_id)
                     ->where('users.is_displayed', '=', '1')
                     ->where('users.id', '!=', $user->id)
-                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role',  'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
+                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
                     ->get();
             }
         } else {
@@ -345,7 +418,7 @@ class ExamEvaluationController extends Controller
                     ->where('users.role_id', '=', $role_id)
                     ->where('users.id', '!=', $user->id)
                     ->where('users.is_displayed', '=', '1')
-                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role', 'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
+                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
                     ->get();
             } else {
                 $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
@@ -354,7 +427,7 @@ class ExamEvaluationController extends Controller
                     ->where('users.role_id', '=', $role_id)
                     ->where('users.id', '!=', $user->id)
                     ->where('users.is_displayed', '=', '1')
-                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role', 'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
+                    ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
                     ->get();
             }
         }
@@ -364,7 +437,7 @@ class ExamEvaluationController extends Controller
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded  "."<input type='checkbox' id='check_all' onclick='checkAll()'/>"."</th>";
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
         }
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";
         if (sizeof($result->toArray()) != 0) {
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Action: activate to sort column ascending' style='width: 29px;'>Action</th>";
             $str .= "</tr></thead><tbody>";
@@ -380,10 +453,9 @@ class ExamEvaluationController extends Controller
                 } else {
                     $str .= "<tr>";
                 }
-                $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>";
-                $str .= "<input type='file' name='answer_sheet[$row->id]'>";
+                $str .= "<a href='enter-marks'><button>Fill Marks</button></a>";
                 $str .= "</td>";
             }
         } else {

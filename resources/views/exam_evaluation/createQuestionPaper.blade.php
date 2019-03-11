@@ -46,8 +46,9 @@
                                 </label>
                                 <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
                                     <option>Please Select Exam</option>
-                                    <option value="First Term Exam 2018-19">First Term Exam 2018-19</option>
-                                    <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
+                                    @foreach($exams as $exam)
+                                        <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-3" id="subject-select-div" >
@@ -55,11 +56,6 @@
                                     Select Subject<span class="symbol required"></span>
                                 </label>
                                 <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
-                                    <option>Select Paper Set</option>
-                                    <option value="Math">Math</option>
-                                    <option value="English">English</option>
-                                    <option value="Biology">Biology</option>
-                                    <option value="Chemistry">Chemistry</option>
                                 </select>
                             </div>
                         </div>
@@ -67,17 +63,11 @@
                         <br>
                         <fieldset>
                         <div class="row">
-                            <div class="col-md-2" id="set-select-div" >
+                            <div class="col-md-3" id="set-select-div" >
                                 <label class="control-label">
-                                    Select Paper Set<span class="symbol required"></span>
+                                    Enter Paper Set<span class="symbol required"></span>
                                 </label>
-                                <select class="form-control" id="set-select" name="set-select" style="-webkit-appearance: menulist;">
-                                    <option>Select Paper Set</option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
-                                </select>
+                               <input type="text" name="set-select" id="set-select" placeholder="Enter set">
                             </div>
                             <div class="col-md-4" id="question-paper-name" >
                                 <label class="control-label">
@@ -95,24 +85,9 @@
                             </div>
                             <div class="col-md-3" id="question-select-div" >
                                 <label class="control-label">
-                                    Select Number of Questions <span class="symbol required"></span>
+                                    Enter Number of Questions <span class="symbol required"></span>
                                 </label>
-                                <select class="form-control" id="questions-select" name="questions-select" style="-webkit-appearance: menulist;">
-                                    <option>Please select number of questions</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                </select>
+                                <input type="number" class="form-control" id="questions-select" name="questions-select" placeholder="No. of Questions">
                             </div>
                         </div>
                         </fieldset>
@@ -184,6 +159,26 @@
                 }
             });
         });
+
+        $('#exam-select').change(function(){
+            var id=this.value;
+            var classId = $('#class-select').val();
+            if(classId != null) {
+                var route = 'get-exam-subject/' + id + '/' + classId;
+                $.get(route, function (res) {
+                    if (res.length == 0) {
+                        $('#subject-select').html("no record found");
+                    } else {
+                        var str = '<option value="">Please Select Subject</option>';
+                        for (var i = 0; i < res.length; i++) {
+                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        }
+                        $('#subject-select').html(str);
+                    }
+                });
+            }
+        });
+
         $('#questions-select').change(function(){
             var questions=this.value;
             var str = '';
@@ -200,9 +195,9 @@
                             '</div>'+
                             '<div class="col-md-5" id="question-name-div">'+
                                 '<label class="control-label">'+
-                                    'Enter Question Name' +'<span class="symbol required"></span>'+
+                                    'Enter Question' +'<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-name" name="question-name" placeholder="Question Name">'+
+                                '<input type="text" class="form-control" id="question-name" name="question-name" placeholder="Enter Question">'+
                                 '</input>'+
                             '</div>'+
                             '<div class="col-md-1" id="question-marks-div">'+
@@ -282,9 +277,9 @@
                 '</div>' +
                 '<div class="col-md-5" id="question-name-div">' +
                 '<label class="control-label">' +
-                'Enter Question Name' + '<span class="symbol required"></span>' +
+                'Enter Question' + '<span class="symbol required"></span>' +
                 '</label>' +
-                '<input type="text" class="form-control" id="question-name" name="question-name" placeholder="Question Name">' +
+                '<input type="text" class="form-control" id="question-name" name="question-name" placeholder="Enter Question">' +
                 '</input>' +
                 '</div>' +
                 '<div class="col-md-2" id="question-marks-div">' +

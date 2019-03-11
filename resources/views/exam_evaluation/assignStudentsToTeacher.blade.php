@@ -60,8 +60,9 @@
                                     </label>
                                     <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
                                         <option>Please Select Exam</option>
-                                        <option value="First Term Exam 2018-19">First Term Exam 2018-19</option>
-                                        <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
+                                        @foreach($exams as $exam)
+                                            <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-4" id="subject-select-div" >
@@ -69,11 +70,6 @@
                                         Select Subject<span class="symbol required"></span>
                                     </label>
                                     <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
-                                        <option>Select Subject</option>
-                                        <option value="Math">Math</option>
-                                        <option value="English">English</option>
-                                        <option value="Biology">Biology</option>
-                                        <option value="Chemistry">Chemistry</option>
                                     </select>
                                 </div>
                                 <div class="row">
@@ -81,12 +77,10 @@
                                         <label class="control-label">
                                             Select Teacher<span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="teacher-select" name="teacher-select" style="-webkit-appearance: menulist;">
                                             <option>Select Teacher</option>
-                                            <option value="Prof. A.V">Prof. A.V</option>
-                                            <option value="Prof. A.G">Prof. A.G</option>
-                                            <option value="Prof. D.k">Prof. D.k</option>
-                                            <option value="Prof. G.P">Prof. G.P</option>
+                                            <option value="3745">Prof. A.V</option>
+                                            <option value="2590">Prof. A.G</option>
                                         </select>
                                     </div>
                                 </div>
@@ -191,6 +185,25 @@
                     $("#tableContent").html(res);
                     TableData.init();
                 })
+        });
+
+        $('#exam-select').change(function(){
+            var id=this.value;
+            var classId = $('#class-select').val();
+            if(classId != null) {
+                var route = 'get-exam-subject/' + id + '/' + classId;
+                $.get(route, function (res) {
+                    if (res.length == 0) {
+                        $('#subject-select').html("no record found");
+                    } else {
+                        var str = '<option value="">Please Select Subject</option>';
+                        for (var i = 0; i < res.length; i++) {
+                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        }
+                        $('#subject-select').html(str);
+                    }
+                });
+            }
         });
 
         function checkAll() {
