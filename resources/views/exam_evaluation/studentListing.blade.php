@@ -69,12 +69,7 @@
                                     <label class="control-label">
                                         Select Subject<span class="symbol required"></span>
                                     </label>
-                                    <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
-                                        <option>Select Subject</option>
-                                        <option value="Math">Math</option>
-                                        <option value="English">English</option>
-                                        <option value="Biology">Biology</option>
-                                        <option value="Chemistry">Chemistry</option>
+                                    <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;">
                                     </select>
                                 </div>
                                 <div class="col-md-4" id="role-select-div" >
@@ -83,8 +78,9 @@
                                     </label>
                                     <select class="form-control" id="role-select" name="role-select" style="-webkit-appearance: menulist;">
                                         <option>Select Role</option>
-                                        <option value="Prof. A.V">Teacher</option>
-                                        <option value="Prof. A.G">Moderator</option>
+                                        @foreach($paperCheckerRoles as $paperCheckerRole)
+                                            <option value="{!! $paperCheckerRole['id'] !!}">{!! $paperCheckerRole['name'] !!}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -96,50 +92,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{--<div class="row" id="table-div">
-                            <table class="table table-striped table-bordered table-hover table-full-width dataTable no-footer" id="sample_2" role="grid" aria-describedby="sample_2_info">
-                                <thead>
-                                <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Result: activate to sort column descending" style="width: 40px;">Check</th>
-                                    <th class="sorting" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-label="GRN No.: activate to sort column ascending" style="width: 29px;">GRN No.</th>
-                                    <th class="sorting" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-label="Roll No: activate to sort column ascending" style="width: 33px;">Roll No</th>
-                                    <th class="sorting" tabindex="0" aria-controls="sample_2" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 41px;">Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>007</td>
-                                    <td>0</td>
-                                    <td><a href="enter-marks"><button>Fill Marks</button></a></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>009</td>
-                                    <td>1</td>
-                                    <td><a href="enter-marks"><button>Fill Marks</button></a></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>074</td>
-                                    <td>2</td>
-                                    <td><a href="enter-marks"><button>Fill Marks</button></a></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>023</td>
-                                    <td>3</td>
-                                    <td><a href="enter-marks"><button>Fill Marks</button></a></td>
-                                </tr>
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1"><input type="checkbox" class="result_status" onchange="return result(this)" value="775"></td>
-                                    <td>014</td>
-                                    <td>4</td>
-                                    <td><a href="enter-marks"><button>Fill Marks</button></a></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>--}}
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -161,6 +113,7 @@
     <!-- end: MAIN JAVASCRIPTS -->
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/select2/select2.min.js"></script>
     <script src="/assets/js/table-data.js"></script>
     {{--<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>--}}
@@ -226,6 +179,25 @@
                     $("#tableContent").html(res);
                     TableData.init();
                 })
+        });
+
+        $('#exam-select').change(function(){
+            var id=this.value;
+            var classId = $('#class-select').val();
+            if(classId != null) {
+                var route = 'get-exam-subject/' + id + '/' + classId;
+                $.get(route, function (res) {
+                    if (res.length == 0) {
+                        $('#subject-select').html("no record found");
+                    } else {
+                        var str = '<option value="">Please Select Subject</option>';
+                        for (var i = 0; i < res.length; i++) {
+                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        }
+                        $('#subject-select').html(str);
+                    }
+                });
+            }
         });
     </script>
 @stop

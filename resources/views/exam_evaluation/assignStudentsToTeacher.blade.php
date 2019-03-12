@@ -20,14 +20,14 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam-evaluation/assign-students" role="form" id="examCreateForm" novalidate="novalidate">
+                        <form method="post" action="/exam-evaluation/assign-students" role="form" id="examCreateForm">
                             <fieldset>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;" required>
                                             <option>Select Batch</option>
                                             @foreach($batches as $batch)
                                                 <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
@@ -38,7 +38,7 @@
                                         <label class="control-label">
                                             Select Class <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
                                     <div class="col-md-4" id="DivSearch">
@@ -46,7 +46,7 @@
                                             <label class="control-label">
                                                 Division
                                             </label>
-                                            <select class="form-control" id="div-select" name="div-select" style="-webkit-appearance: menulist;">
+                                            <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;" required>
 
                                             </select>
                                         </div>
@@ -54,38 +54,48 @@
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <div class="col-md-4" id="exam-select-div" >
-                                    <label class="control-label">
-                                        Select Exam <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
-                                        <option>Please Select Exam</option>
-                                        @foreach($exams as $exam)
-                                            <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4" id="subject-select-div" >
-                                    <label class="control-label">
-                                        Select Subject<span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
-                                    </select>
-                                </div>
                                 <div class="row">
-                                    <div class="col-md-4" id="teacher-select-div" >
+                                    <div class="col-md-3" id="exam-select-div" >
+                                        <label class="control-label">
+                                            Select Exam <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
+                                            <option>Please Select Exam</option>
+                                            @foreach($exams as $exam)
+                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" id="subject-select-div" >
+                                        <label class="control-label">
+                                            Select Subject<span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" id="teacher-select-div" >
                                         <label class="control-label">
                                             Select Teacher<span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="teacher-select" name="teacher-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="teacher-select" name="teacher_select" style="-webkit-appearance: menulist;" required>
                                             <option>Select Teacher</option>
                                             <option value="3745">Prof. A.V</option>
                                             <option value="2590">Prof. A.G</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-3" id="role-select-div" >
+                                        <label class="control-label">
+                                            Select Role<span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="role-select" name="role_select" style="-webkit-appearance: menulist;" required>
+                                            <option>Select Role</option>
+                                            @foreach($paperCheckerRoles as $paperCheckerRole)
+                                                <option value="{!! $paperCheckerRole['id'] !!}">{!! $paperCheckerRole['name'] !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </fieldset>
-
                             <div class="container-fluid container-fullw bg-white">
                                 <div class="row">
                                     <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
@@ -95,7 +105,7 @@
                             </div>
                             <div class="row pull-right">
                                 <div class="form-group">
-                                    <button class="btn btn-primary btn-wide" type="submit">
+                                    <button class="btn btn-primary btn-wide" id="submit-button" type="submit">
                                         Submit
                                     </button>
                                 </div>
@@ -133,6 +143,7 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            $('#submit-button').hide();
         });
 
         $('#batchDrpdn').change(function(){
@@ -171,20 +182,27 @@
             });
         });
 
-        $('#div-select').change(function(){
-            $('div#loadmoreajaxloader').show();
-            var division= this.value;
-            var route='searchStudent';
-            $.ajax({
-                method: "get",
-                url: route,
-                data: { division }
-            })
-                .done(function(res){
-                    $('div#loadmoreajaxloader').hide();
-                    $("#tableContent").html(res);
-                    TableData.init();
+        $('#role-select').change(function(){
+            var division= $('#div-select').val();
+            var subject= $('#subject-select').val();
+            var teacher= $('#teacher-select').val();
+            var exam= $('#exam-select').val();
+            var role= this.value;
+            if(subject != null && teacher != null && exam != null && division != null) {
+                $('div#loadmoreajaxloader').show();
+                var route = 'searchStudent';
+                $.ajax({
+                    method: "get",
+                    url: route,
+                    data: {division, subject, teacher, exam, role}
                 })
+                    .done(function (res) {
+                        $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").html(res);
+                        TableData.init();
+                        $('#submit-button').show();
+                    })
+            }
         });
 
         $('#exam-select').change(function(){

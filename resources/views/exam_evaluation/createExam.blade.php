@@ -20,7 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam-evaluation/create-exam" role="form" id="examCreateForm" novalidate="novalidate">
+                        <form method="post" action="/exam-evaluation/create-exam" role="form" id="examCreateForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -43,7 +43,7 @@
                         </form>
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="over-title margin-bottom-15"><h2>Exam Listing</h2></h5>
+                                <h5 class="over-title margin-bottom-15"><h3>Exam Listing</h3></h5>
                                 <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
                                     <thead>
                                     <tr>

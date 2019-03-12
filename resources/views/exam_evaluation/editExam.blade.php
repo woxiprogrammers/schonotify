@@ -20,7 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam-evaluation/edit-exam" role="form" id="examEditForm" novalidate="novalidate">
+                        <form method="post" action="/exam-evaluation/edit-exam" role="form" id="examEditForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">

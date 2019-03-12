@@ -110,6 +110,7 @@
     <!-- end: MAIN JAVASCRIPTS -->
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/select2/select2.min.js"></script>
     <script src="/assets/js/table-data.js"></script>
     {{--<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>--}}
