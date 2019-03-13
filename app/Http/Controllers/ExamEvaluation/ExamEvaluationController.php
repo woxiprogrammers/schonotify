@@ -15,11 +15,15 @@ use App\ExamClassSubject;
 use App\ExamEvaluation;
 use App\Http\Controllers\Controller;
 use App\PaperCheckerMaster;
+use App\StudentAnswerSheet;
+use Illuminate\Support\Facades\File;
 use App\Subject;
 use App\SubjectClass;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 
 class ExamEvaluationController extends Controller
@@ -104,6 +108,39 @@ class ExamEvaluationController extends Controller
             $batches = Batch::where('body_id',$user->body_id)->get();
             $exams = ExamEvaluation::all();
             return view('exam_evaluation.uploadAnswerSheet')->with(compact('batches','user','exams'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function uploadAnswerSheet(Request $request){
+        try{
+            $answerSheetData['exam_id'] = $request->exam_select;
+            $answerSheetData['subject_id'] = $request->subject_select;
+            $answerSheets = $request->answer_sheet;
+            foreach ($answerSheets as $stdId => $answerSheetPdf){
+                if($answerSheetPdf != null) {
+                    $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->where('subject_id', $request->subject_select)->where('student_id', $stdId)->first();
+                    $folderEncName = sha1($request->exam_select);
+                    $folderPath = public_path() . env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                    if ($answerSheetPresent['pdf_name'] != null) {
+                        unlink($folderPath . DIRECTORY_SEPARATOR . $answerSheetPresent['pdf_name']);
+                    }
+                    if (!file_exists($folderPath)) {
+                        File::makeDirectory($folderPath, 0777, true, true);
+                    }
+                    $filename = mt_rand(1,10000000000).sha1(time()).".pdf";
+                    $answerSheetPdf->move($folderPath , $filename);
+                    $answerSheetData['pdf_name'] = $filename;
+                    if ($answerSheetPresent['pdf_name'] != null) {
+                        StudentAnswerSheet::where('id',$answerSheetPresent['id'])->update($answerSheetData);
+                    } else {
+                        $answerSheetData['student_id'] = $stdId;
+                        StudentAnswerSheet::create($answerSheetData);
+                    }
+                    }
+                }
+            return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -316,7 +353,12 @@ class ExamEvaluationController extends Controller
             foreach ($result as $row) {
                 if ($row->user_role == 'student') {
                     if ($row->is_lc_generated == 0) {
-                        $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[$row->id]' class='assign-student' value='" . $row->id . "'>" . "</td>";
+                        $isAnswerSheetUploaded = StudentAnswerSheet::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('student_id',$row->id)->value('pdf_name');
+                        if($isAnswerSheetUploaded != null) {
+                            $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[$row->id]' class='assign-student' value='" . $row->id . "' checked>" . "</td>";
+                        } else {
+                            $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[$row->id]' class='assign-student' value='" . $row->id . "'>" . "</td>";
+                        }
                     } else {
                         $str .= "<tr><td></td>";
                         $str .= "<td></td>";
@@ -328,7 +370,7 @@ class ExamEvaluationController extends Controller
                 $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>";
-                $str .= "<input type='file' class='answer-sheet' name='answer_sheet[$row->id]'>";
+                $str .= "<input type='file' onchange='extentionValidation()' accept='application/pdf' class='answer-sheet' name='answer_sheet[$row->id]'>";
                 $str .= "</td>";
             }
         } else {

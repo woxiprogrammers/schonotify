@@ -60,6 +60,7 @@ Route::group(['prefix' => 'exam-evaluation'], function () {
     Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createFeeStructureView'));
     Route::get('paper-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@questionPaperListingView'));
     Route::get('upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheetView'));
+    Route::post('upload-answerSheet',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheet'));
     Route::get('assign',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudentView'));
     Route::post('assign-students',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudents'));
     Route::get('student-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListingView'));
