@@ -57,7 +57,8 @@ Route::group(['prefix' => 'exam-evaluation'], function () {
     Route::get('subject-listing/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@subjectListing'));
     Route::post('assign-subject',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignSubject'));
     Route::get('remove-subject/{subId}/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@removeSubject'));
-    Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createFeeStructureView'));
+    Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaperView'));
+    Route::post('create-questionPaper',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaper'));
     Route::get('paper-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@questionPaperListingView'));
     Route::get('upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheetView'));
     Route::post('upload-answerSheet',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheet'));
@@ -67,7 +68,7 @@ Route::group(['prefix' => 'exam-evaluation'], function () {
     Route::get('studentListing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListing'));
     Route::get('searchStudent',array('uses' => 'ExamEvaluation\ExamEvaluationController@filterStudent'));
     Route::get('student-upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentUploadAnswerSheet'));
-    Route::get('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
+    Route::get('enter-marks/{examId}/{subId}/{stdId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
 });
 
     //enquiry form

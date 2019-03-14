@@ -22,10 +22,10 @@
                     <div class="container-fluid container-fullw">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h4>Student GRN :- PPSB11</h4>
+                                <h4>Student GRN :- {{$stdGrn}}</h4>
                             </div>
                             <div class="col-sm-6">
-                                <h4>Exam :- First Term Exam 2018-19</h4>
+                                <h4>Exam :- {{$examName}}</h4>
                             </div>
                         </div>
                         <hr>
@@ -74,7 +74,7 @@
                                         <h4 class="panel-title text-primary">Question Paper</h4>
                                     </div>
                                     <div class="panel-body" id="hide-paper">
-                                        <embed src="{{$file}}" height="600px" width="100%">
+                                        <embed src="{{$answerSheetPdf}}" height="600px" width="100%">
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                                         <h4 class="panel-title text-primary">Answer Sheet PDF</h4>
                                     </div>
                                     <div class="panel-body" style="display: block;">
-                                        <embed src="{{$file}}" height="600px" width="100%">
+                                        <embed src="{{$answerSheetPdf}}" height="600px" width="100%">
                                     </div>
                                 </div>
                             </div>

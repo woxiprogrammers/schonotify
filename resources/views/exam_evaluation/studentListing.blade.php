@@ -165,20 +165,25 @@
             });
         });
 
-        $('#div-select').change(function(){
-            $('div#loadmoreajaxloader').show();
-            var division= this.value;
-            var route='studentListing';
-            $.ajax({
-                method: "get",
-                url: route,
-                data: { division }
-            })
-                .done(function(res){
-                    $('div#loadmoreajaxloader').hide();
-                    $("#tableContent").html(res);
-                    TableData.init();
+        $('#role-select').change(function(){
+            var division= $('#div-select').val();
+            var subject= $('#subject-select').val();
+            var exam= $('#exam-select').val();
+            var role= this.value;
+            if(division != null && subject != null && exam != null) {
+                $('div#loadmoreajaxloader').show();
+                var route = 'studentListing';
+                $.ajax({
+                    method: "get",
+                    url: route,
+                    data: {division, subject, exam, role}
                 })
+                    .done(function (res) {
+                        $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").html(res);
+                        TableData.init();
+                    })
+            }
         });
 
         $('#exam-select').change(function(){

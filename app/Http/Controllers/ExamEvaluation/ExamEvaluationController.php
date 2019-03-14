@@ -16,6 +16,7 @@ use App\ExamEvaluation;
 use App\Http\Controllers\Controller;
 use App\PaperCheckerMaster;
 use App\StudentAnswerSheet;
+use App\StudentExtraInfo;
 use Illuminate\Support\Facades\File;
 use App\Subject;
 use App\SubjectClass;
@@ -80,12 +81,21 @@ class ExamEvaluationController extends Controller
         }
     }
 
-    public function createFeeStructureView(){
+    public function createQuestionPaperView(){
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
             $exams = ExamEvaluation::all();
             return view('exam_evaluation.createQuestionPaper')->with(compact('batches','user','exams'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function createQuestionPaper(Request $request){
+        try{
+            $user = Auth::user();
+            return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -233,12 +243,18 @@ class ExamEvaluationController extends Controller
         }
     }
 
-    public function getEnterMarksView(){
+    public function getEnterMarksView(Request $request,$examId,$subId,$stdId){
         try{
             $user = Auth::user();
-            $file = env('ABOUT_US_IMAGE_UPLOAD').'/'.'sample.pdf';
+            $answerSheetPdf = null;
+            $examName = ExamEvaluation::where('id',$examId)->value('exam_name');
+            $stdGrn = StudentExtraInfo::where('student_id',$stdId)->value('grn');
+            $answerSheetData = StudentAnswerSheet::where('exam_id',$examId)->where('subject_id',$subId)->where('student_id',$stdId)->value('pdf_name');
+            if($answerSheetData != null) {
+                $answerSheetPdf = env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . sha1($examId) . DIRECTORY_SEPARATOR . $answerSheetData;
+            }
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.enterMarks')->with(compact('batches','file','user'));
+            return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','examName','stdGrn'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -355,9 +371,9 @@ class ExamEvaluationController extends Controller
                     if ($row->is_lc_generated == 0) {
                         $isAnswerSheetUploaded = StudentAnswerSheet::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('student_id',$row->id)->value('pdf_name');
                         if($isAnswerSheetUploaded != null) {
-                            $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[$row->id]' class='assign-student' value='" . $row->id . "' checked>" . "</td>";
+                            $str .= "<tr><td>" . "<input type='checkbox' id='answersheet_student' name = 'answersheet_student[$row->id]' class='assign-student' value='" . $row->id . "' checked>" . "</td>";
                         } else {
-                            $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[$row->id]' class='assign-student' value='" . $row->id . "'>" . "</td>";
+                            $str .= "<tr><td>" . "<input type='checkbox' id='answersheet_student' name = 'answersheet_student[$row->id]' class='assign-student' value='" . $row->id . "'>" . "</td>";
                         }
                     } else {
                         $str .= "<tr><td></td>";
@@ -370,7 +386,7 @@ class ExamEvaluationController extends Controller
                 $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>";
-                $str .= "<input type='file' onchange='extentionValidation()' accept='application/pdf' class='answer-sheet' name='answer_sheet[$row->id]'>";
+                $str .= "<input type='file' onchange='extentionValidation()' id='answer-sheet' accept='application/pdf' class='answer-sheet' name='answer_sheet[$row->id]'>";
                 $str .= "</td>";
             }
         } else {
@@ -389,6 +405,7 @@ class ExamEvaluationController extends Controller
     {
         $role_id = 3;
         $user = Auth::user();
+        $studentIds = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('teacher_id',3745)->where('role_id',$request->role)->lists('student_id');
         $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
             ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
             ->where('division_id', $request->division)
@@ -396,6 +413,7 @@ class ExamEvaluationController extends Controller
             ->where('users.role_id', '!=', 1)
             ->where('users.role_id', '=', $role_id)
             ->where('users.id', '!=', $user->id)
+            ->whereIn('users.id',$studentIds)
             ->where('users.is_displayed', '=', '1')
             ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role',  'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
             ->get();
@@ -422,7 +440,7 @@ class ExamEvaluationController extends Controller
                 }
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>";
-                $str .= "<a href='enter-marks'><button>Fill Marks</button></a>";
+                $str .= "<a href='enter-marks/$request->exam/$request->subject/$row->id'><button>Fill Marks</button></a>";
                 $str .= "</td>";
             }
         } else {
