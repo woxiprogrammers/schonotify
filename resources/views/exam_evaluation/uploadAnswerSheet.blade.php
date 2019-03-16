@@ -20,79 +20,77 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label class="control-label">
-                                        Batch <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
-                                        <option>Select Batch</option>
-                                        @foreach($batches as $batch)
-                                            <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4" id="class-select-div" >
-                                    <label class="control-label">
-                                        Select Class <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
-                                    </select>
-                                </div>
-                                <div class="col-md-4" id="DivSearch">
-                                    <div class="form-group" id="DivisionBlock">
+                        <form method="post" action="/exam-evaluation/upload-answerSheet" role="form" id="uploadAnswerSheetForm" enctype="multipart/form-data">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <label class="control-label">
-                                            Division
+                                            Batch <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="div-select" name="div-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;" required>
+                                            <option>Select Batch</option>
+                                            @foreach($batches as $batch)
+                                                <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" id="class-select-div" >
+                                        <label class="control-label">
+                                            Select Class <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" id="DivSearch">
+                                        <div class="form-group" id="DivisionBlock">
+                                            <label class="control-label">
+                                                Division
+                                            </label>
+                                            <select class="form-control" id="div-select" name="div_select" style="-webkit-appearance: menulist;" required>
 
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-4" id="exam-select-div" >
+                                        <label class="control-label">
+                                            Select Exam <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
+                                            <option>Please Select Exam</option>
+                                            @foreach($exams as $exam)
+                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" id="subject-select-div" >
+                                        <label class="control-label">
+                                            Select Subject<span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-md-4" id="exam-select-div" >
-                                    <label class="control-label">
-                                        Select Exam <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
-                                        <option>Please Select Exam</option>
-                                        <option value="First Term Exam 2018-19">First Term Exam 2018-19</option>
-                                        <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4" id="subject-select-div" >
-                                    <label class="control-label">
-                                        Select Subject<span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
-                                        <option>Select Paper Set</option>
-                                        <option value="Math">Math</option>
-                                        <option value="English">English</option>
-                                        <option value="Biology">Biology</option>
-                                        <option value="Chemistry">Chemistry</option>
-                                    </select>
+                            </fieldset>
+                            <div class="container-fluid container-fullw bg-white">
+                                <div class="row">
+                                    <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
+                                    <div class="col-md-12" id="tableContent">
+                                    </div>
                                 </div>
                             </div>
-                        </fieldset>
-                        <div class="container-fluid container-fullw bg-white">
-                            <div class="row">
-                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
-                                <div class="col-md-12" id="tableContent">
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row pull-right">
-                            <div class="form-group">
-                                <button class="btn btn-primary btn-wide" type="submit">
-                                    Submit
-                                </button>
+                            <div class="row pull-right">
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-wide" type="submit">
+                                        Submit
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -113,6 +111,9 @@
     <script src="/vendor/ckeditor/adapters/jquery.js"></script>
     <!-- end: MAIN JAVASCRIPTS -->
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/select2/select2.min.js"></script>
+    <script src="/assets/js/table-data.js"></script>
     {{--<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>--}}
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
@@ -160,26 +161,50 @@
             });
         });
 
-        $('#div-select').change(function(){
-            $('div#loadmoreajaxloader').show();
-            var division= this.value;
-            var route='student-upload';
-            $.ajax({
-                method: "get",
-                url: route,
-                data: { division }
-            })
-                .done(function(res){
-                    $('div#loadmoreajaxloader').hide();
-                    $("#tableContent").html(res);
-                    TableData.init();
-                })
+        $('#exam-select').change(function(){
+            var id=this.value;
+            var classId = $('#class-select').val();
+            if(classId != null) {
+                var route = 'get-exam-subject/' + id + '/' + classId;
+                $.get(route, function (res) {
+                    if (res.length == 0) {
+                        $('#subject-select').html("no record found");
+                    } else {
+                        var str = '<option value="">Please Select Subject</option>';
+                        for (var i = 0; i < res.length; i++) {
+                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        }
+                        $('#subject-select').html(str);
+                    }
+                });
+            }
         });
 
-        $("#imageUpload4").on('change', function () {
-            var imgPath = $(this)[0].value;
+        $('#subject-select').change(function(){
+            var division = $('#div-select').val();
+            var exam = $('#exam-select').val();
+            var clss = $('#class-select').val();
+            var subject= this.value;
+            if(division != null && exam != null && clss != null && subject != null) {
+                $('div#loadmoreajaxloader').show();
+                var route = 'student-upload';
+                $.ajax({
+                    method: "get",
+                    url: route,
+                    data: {division, exam, subject}
+                })
+                    .done(function (res) {
+                        $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").html(res);
+                        TableData.init();
+                    })
+            }
+        });
+
+        function extentionValidation() {
+            var pdfPath = $(this)[0].value;
             var countFiles = $(this)[0].files.length;
-            var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+            var extn = pdfPath.substring(pdfPath.lastIndexOf('.') + 1).toLowerCase();
             var size = this.files[0].size/1024/1024;
             // var image_holder = $("#preview-image4");
             if(size <= 2){
@@ -204,6 +229,6 @@
             }else{
                 alert("please select pdf less than 2 mb");
             }
-        });
+        }
     </script>
 @stop

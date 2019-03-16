@@ -14,8 +14,8 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Student Listing</h1>
-                                <span class="mainDescription">Student listing</span>
+                                <h1 class="mainTitle">Question Papers</h1>
+                                <span class="mainDescription">Question paper listing</span>
                             </div>
                         </div>
                     </section>
@@ -40,20 +40,6 @@
                                     <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
                                     </select>
                                 </div>
-                                <div class="col-md-4" id="DivSearch">
-                                    <div class="form-group" id="DivisionBlock">
-                                        <label class="control-label">
-                                            Division
-                                        </label>
-                                        <select class="form-control" id="div-select" name="div-select" style="-webkit-appearance: menulist;">
-
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div class="row">
                                 <div class="col-md-4" id="exam-select-div" >
                                     <label class="control-label">
                                         Select Exam <span class="symbol required"></span>
@@ -62,24 +48,6 @@
                                         <option>Please Select Exam</option>
                                         @foreach($exams as $exam)
                                             <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4" id="subject-select-div" >
-                                    <label class="control-label">
-                                        Select Subject<span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;">
-                                    </select>
-                                </div>
-                                <div class="col-md-4" id="role-select-div" >
-                                    <label class="control-label">
-                                        Select Role<span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="role-select" name="role-select" style="-webkit-appearance: menulist;">
-                                        <option>Select Role</option>
-                                        @foreach($paperCheckerRoles as $paperCheckerRole)
-                                            <option value="{!! $paperCheckerRole['id'] !!}">{!! $paperCheckerRole['name'] !!}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -146,62 +114,21 @@
                 }
             });
         });
-
-        $('#class-select').change(function(){
-            var id=this.value;
-            var route='/get-all-division/'+id;
-            $.get(route,function(res){
-                if (res.length == 0)
-                {
-                    $('#div-select').html("no record found");
-                } else {
-                    var str='<option value="">Please select division</option>';
-                    for(var i=0; i<res.length; i++)
-                    {
-                        str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
-                    }
-                    $('#div-select').html(str);
-                }
-            });
-        });
-
-        $('#role-select').change(function(){
-            var division= $('#div-select').val();
-            var subject= $('#subject-select').val();
-            var exam= $('#exam-select').val();
-            var role= this.value;
-            if(division != null && subject != null && exam != null) {
-                $('div#loadmoreajaxloader').show();
-                var route = 'studentListing';
+        $('#exam-select').change(function(){
+            $('div#loadmoreajaxloader').show();
+            var examId = this.value;
+            var classId = $('#class-select').val();
+            if(classId != null) {
+                var route = 'paper-listing' + '/' + classId + '/' + examId;
                 $.ajax({
                     method: "get",
-                    url: route,
-                    data: {division, subject, exam, role}
+                    url: route
                 })
                     .done(function (res) {
                         $('div#loadmoreajaxloader').hide();
                         $("#tableContent").html(res);
                         TableData.init();
                     })
-            }
-        });
-
-        $('#exam-select').change(function(){
-            var id=this.value;
-            var classId = $('#class-select').val();
-            if(classId != null) {
-                var route = 'get-exam-subject/' + id + '/' + classId;
-                $.get(route, function (res) {
-                    if (res.length == 0) {
-                        $('#subject-select').html("no record found");
-                    } else {
-                        var str = '<option value="">Please Select Subject</option>';
-                        for (var i = 0; i < res.length; i++) {
-                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
-                        }
-                        $('#subject-select').html(str);
-                    }
-                });
             }
         });
     </script>

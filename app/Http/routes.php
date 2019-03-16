@@ -49,17 +49,30 @@
 Route::group(['prefix' => 'exam-evaluation'], function () {
     Route::get('create-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@createExamView'));
     Route::post('create-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@createExam'));
+    Route::get('edit-exam/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@editExamView'));
+    Route::post('edit-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@editExam'));
     Route::get('get-subject/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getClassSubject'));
+    Route::get('get-exam-subject/{examId}/{classId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamClassSubject'));
     Route::get('assign-subject',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignSubjectView'));
+    Route::get('subject-listing/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@subjectListing'));
     Route::post('assign-subject',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignSubject'));
-    Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createFeeStructureView'));
+    Route::get('remove-subject/{subId}/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@removeSubject'));
+    Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaperView'));
+    Route::post('create-questionPaper',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaper'));
+    Route::get('paper-listing/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@questionPaperListing'));
+    Route::get('edit-paper/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@editPaperView'));
+    Route::post('edit-paper/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@editPaper'));
+    Route::get('paper-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@questionPaperListingView'));
     Route::get('upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheetView'));
+    Route::post('upload-answerSheet',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheet'));
     Route::get('assign',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudentView'));
     Route::post('assign-students',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudents'));
+    Route::get('get-teachers/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getTeachers'));
     Route::get('student-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListingView'));
+    Route::get('studentListing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListing'));
     Route::get('searchStudent',array('uses' => 'ExamEvaluation\ExamEvaluationController@filterStudent'));
     Route::get('student-upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentUploadAnswerSheet'));
-    Route::get('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
+    Route::get('enter-marks/{examId}/{subId}/{stdId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
 });
 
     //enquiry form

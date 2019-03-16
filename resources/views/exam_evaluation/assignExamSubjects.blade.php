@@ -20,14 +20,14 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam-evaluation/assign-subject" role="form" id="assignSubjectForm" novalidate="novalidate">
+                        <form method="post" action="/exam-evaluation/assign-subject" role="form" id="assignSubjectForm">
                             <fieldset>
                                 <div class="row">
                                     <div class="col-md-3 ">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;" required>
                                             <option>Select Batch</option>
                                             @foreach($batches as $batch)
                                                 <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
@@ -38,36 +38,44 @@
                                         <label class="control-label">
                                             Select Class <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
                                     <div class="col-md-3" id="exam-select-div" >
                                         <label class="control-label">
                                             Select Exam <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
                                             <option>Please Select Exam</option>
-                                            <option value="First Term Exam 2018-19">First Term Exam 2018-19</option>
-                                            <option value="Second Term Exam 2018-19">Second Term Exam 2018-19</option>
+                                            @foreach($exams as $exam)
+                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-3" id="subject-select-div" >
                                         <label class="control-label">
                                             Select Subject<span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="subject-select" name="subject-select[]" style="-webkit-appearance: menulist;" multiple>
+                                        <select class="form-control" id="subject-select" name="subject_select[]" multiple required>
                                         </select>
                                     </div>
                                 </div>
                             </fieldset>
                             <div class="row">
-                                <div class="form-group">
+                                <div class="form-group pull-right">
                                     <button class="btn btn-primary btn-wide" type="submit">
                                         Submit
                                     </button>
                                 </div>
                             </div>
                         </form>
+                        <div class="container-fluid container-fullw bg-white">
+                            <div class="row">
+                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
+                                <div class="col-md-12" id="tableContent">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -88,6 +96,8 @@
     <script src="/vendor/ckeditor/adapters/jquery.js"></script>
     <!-- end: MAIN JAVASCRIPTS -->
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+    <script src="/assets/js/table-data.js"></script>
     {{--<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>--}}
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
@@ -118,7 +128,6 @@
         });
         $('#class-select').change(function(){
             var id=this.value;
-            console.log(id);
             var route='get-subject/'+id;
             $.get(route,function(res){
                 if (res.length == 0)
@@ -134,5 +143,32 @@
                 }
             });
         });
+
+        $('#exam-select').change(function(){
+            $('div#loadmoreajaxloader').show();
+            var examId = this.value;
+            var classId = $('#class-select').val();
+            if(classId != null) {
+                var route = 'subject-listing' + '/' + classId + '/' + examId;
+                $.ajax({
+                    method: "get",
+                    url: route
+                })
+                    .done(function (res) {
+                        $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").html(res);
+                        TableData.init();
+                    })
+            }
+        });
+
+        function removeSubject(subId,classId,examId) {
+            if (confirm("Remove assigned subject! are you sure ?")) {
+                var route = 'remove-subject/'+subId+'/'+classId+'/'+examId;
+                $.get(route, function () {
+                    window.location.replace(route);
+                });
+            }
+        }
     </script>
 @stop
