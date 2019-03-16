@@ -53,29 +53,11 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="over-title margin-bottom-15"><h2>Question paper listing</h2></h5>
-                                <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
-                                    <thead>
-                                    <tr>
-                                        <th width="10%"> Sr.No. </th>
-                                        <th width="20%"> Paper Name </th>
-                                        <th width="10%"> Paper Set </th>
-                                        <th width="10%"> Subject </th>
-                                        <th width="10%"> Action </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Prelim Paper</td>
-                                        <td>A</td>
-                                        <td>Math</td>
-                                        <td>View</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <div class="container-fluid container-fullw bg-white">
+                            <div class="row">
+                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
+                                <div class="col-md-12" id="tableContent">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -98,6 +80,9 @@
     <script src="/vendor/ckeditor/adapters/jquery.js"></script>
     <!-- end: MAIN JAVASCRIPTS -->
     <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+    <script src="/vendor/DataTables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/select2/select2.min.js"></script>
+    <script src="/assets/js/table-data.js"></script>
     {{--<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="/vendor/jquery-smart-wizard/jquery.smartWizard.js"></script>--}}
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
@@ -128,6 +113,23 @@
                     $('#loadmoreajaxloaderClass').hide();
                 }
             });
+        });
+        $('#exam-select').change(function(){
+            $('div#loadmoreajaxloader').show();
+            var examId = this.value;
+            var classId = $('#class-select').val();
+            if(classId != null) {
+                var route = 'paper-listing' + '/' + classId + '/' + examId;
+                $.ajax({
+                    method: "get",
+                    url: route
+                })
+                    .done(function (res) {
+                        $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").html(res);
+                        TableData.init();
+                    })
+            }
         });
     </script>
 @stop

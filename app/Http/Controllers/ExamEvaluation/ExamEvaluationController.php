@@ -11,8 +11,10 @@ namespace App\Http\Controllers\ExamEvaluation;
 
 use App\AssignStudentsToTeacher;
 use App\Batch;
+use App\Division;
 use App\ExamClassSubject;
 use App\ExamEvaluation;
+use App\ExamQuestionPaper;
 use App\Http\Controllers\Controller;
 use App\PaperCheckerMaster;
 use App\StudentAnswerSheet;
@@ -95,7 +97,45 @@ class ExamEvaluationController extends Controller
     public function createQuestionPaper(Request $request){
         try{
             $user = Auth::user();
+            $data = $request->all();
+            $paperData['question_paper_name'] = $data['paper_name'];
+            $paperData['no_of_question'] = $data['paper_questions'];
+            $paperData['marks'] = $data['paper_marks'];
+            $paperData['set_name'] = $data['paper_set'];
+            $paperData['exam_id'] = $data['exam_select'];
+            $paperData['subject_id'] = $data['subject_select'];
+            $paperData['class_id'] = $data['class_select'];
+            ExamQuestionPaper::create($paperData);
             return back();
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function editPaperView(Request $request,$id){
+        try{
+            $user = Auth::user();
+            $paperData = ExamQuestionPaper::where('id',$id)->first();
+            return view('exam_evaluation.editQuestionPaper')->with(compact('user','paperData'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function editPaper(Request $request,$id){
+        try{
+            $user = Auth::user();
+            if($request->has('paper_set')) {
+                $paperData['set_name'] = $request->paper_set;
+            }
+            if($request->has('paper_name')) {
+                $paperData['question_paper_name'] = $request->paper_name;
+            }
+            if($request->has('paper_marks')) {
+                $paperData['marks'] = $request->paper_marks;
+            }
+            ExamQuestionPaper::where('id',$id)->update($paperData);
+            return redirect('exam-evaluation/paper-listing');
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -273,6 +313,19 @@ class ExamEvaluationController extends Controller
         return $data;
     }
 
+    public function getTeachers($id){
+        $data=array();
+        $teacherIds = Division::where('class_id',$id)->whereNotNull('class_teacher_id')->where('class_teacher_id','!=',0)->lists('class_teacher_id');
+        $teachers = User::whereIn('id',$teacherIds)->get()->toArray();
+        $i=0;
+        foreach ($teachers as $row) {
+            $data[$i]['teacher_id'] = $row['id'] ;
+            $data[$i]['name']= $row['first_name'] .' '.$row['last_name'];
+            $i++;
+        }
+        return $data;
+    }
+
     public function getExamClassSubject($examId,$classId){
         $data=array();
         $subjectIds = ExamClassSubject::where('class_id',$classId)->where('exam_id',$examId)->lists('subject_id');
@@ -359,7 +412,7 @@ class ExamEvaluationController extends Controller
         $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
         $str .= "<thead><tr>";
         if ($role_id == 3) {
-            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded  "."<input type='checkbox' id='check_all' onclick='checkAll()'/>"."</th>";
+            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded  "."<input type='checkbox' checked>"."</th>";
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
         }
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";
@@ -405,7 +458,7 @@ class ExamEvaluationController extends Controller
     {
         $role_id = 3;
         $user = Auth::user();
-        $studentIds = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('teacher_id',3745)->where('role_id',$request->role)->lists('student_id');
+        //$studentIds = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('teacher_id',3745)->where('role_id',$request->role)->lists('student_id');
         $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
             ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
             ->where('division_id', $request->division)
@@ -413,7 +466,7 @@ class ExamEvaluationController extends Controller
             ->where('users.role_id', '!=', 1)
             ->where('users.role_id', '=', $role_id)
             ->where('users.id', '!=', $user->id)
-            ->whereIn('users.id',$studentIds)
+            //->whereIn('users.id',$studentIds)
             ->where('users.is_displayed', '=', '1')
             ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role',  'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
             ->get();
@@ -473,6 +526,45 @@ class ExamEvaluationController extends Controller
                 $str .= "<td>" . $row->subject_name . " " . $row->lastname . "</td>";
                 $str .= "<td>";
                 $str .= "<button type='submit' onclick='removeSubject($row->id,$classId,$examId)'>".'Remove'."</button>";
+                $str .= "</td>";
+                $str .= "</tr>";
+                $srNo++;
+            }
+        } else {
+            $str1 = "<h5 class='center'>No records found !</h5>";
+        }
+        $str .= "</tr></tbody>";
+        $str .= "</table>";
+        if (sizeof($result->toArray()) != 0) {
+            return $str;
+        } else {
+            return $str1;
+        }
+    }
+
+    public function questionPaperListing(Request $request,$classId,$examId){
+        $result = ExamQuestionPaper::Where('class_id',$classId)->where('exam_id',$examId)->get();
+        $str = "<h5 class='over-title margin-bottom-15'><h3>Question Paper</h3></h5>";
+        $str .= "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
+        $str .= "<thead><tr>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Sr.No.: activate to sort column ascending' style='width: 29px;'>Sr.No.</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Subject: activate to sort column ascending' style='width: 29px;'>Subject</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Set: activate to sort column ascending' style='width: 29px;'>Set</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Marks: activate to sort column ascending' style='width: 29px;'>Marks</th>";
+        if (sizeof($result->toArray()) != 0) {
+            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Action: activate to sort column ascending' style='width: 29px;'>Action</th>";
+            $str .= "</tr></thead><tbody>";
+            $srNo = 1;
+            foreach ($result as $row) {
+                $str .="<tr>";
+                $str .= "<td>" . $srNo . "</td>";
+                $str .= "<td>" . Subject::where('id',$row->subject_id)->value('subject_name') . "</td>";
+                $str .= "<td>" . $row->set_name . "</td>";
+                $str .= "<td>" . $row->question_paper_name ."</td>";
+                $str .= "<td>" . $row->marks ."</td>";
+                $str .= "<td>";
+                $str .= "<a href='edit-paper/$row->id'>Edit </a>";
                 $str .= "</td>";
                 $str .= "</tr>";
                 $srNo++;

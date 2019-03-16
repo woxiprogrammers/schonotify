@@ -78,9 +78,6 @@
                                             Select Teacher<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="teacher-select" name="teacher_select" style="-webkit-appearance: menulist;" required>
-                                            <option>Select Teacher</option>
-                                            <option value="3745">Prof. A.V</option>
-                                            <option value="2590">Prof. A.G</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3" id="role-select-div" >
@@ -178,6 +175,24 @@
                         str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
                     }
                     $('#div-select').html(str);
+                }
+            });
+        });
+
+        $('#div-select').change(function(){
+            var id=$('#class-select').val();
+            var route='get-teachers/'+id;
+            $.get(route,function(res){
+                if (res.length == 0)
+                {
+                    $('#div-select').html("no record found");
+                } else {
+                    var str='<option value="">Please select teacher</option>';
+                    for(var i=0; i<res.length; i++)
+                    {
+                        str+='<option value="'+res[i]['teacher_id']+'">'+res[i]['name']+'</option>';
+                    }
+                    $('#teacher-select').html(str);
                 }
             });
         });

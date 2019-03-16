@@ -27,7 +27,7 @@
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;" required>
                                             <option>Select Batch</option>
                                             @foreach($batches as $batch)
                                                 <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
@@ -38,14 +38,14 @@
                                         <label class="control-label">
                                             Select Class <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
                                     <div class="col-md-3" id="exam-select-div" >
                                         <label class="control-label">
                                             Select Exam <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
                                             <option>Please Select Exam</option>
                                             @foreach($exams as $exam)
                                                 <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
@@ -56,7 +56,7 @@
                                         <label class="control-label">
                                             Select Subject<span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="subject-select" name="subject-select" style="-webkit-appearance: menulist;">
+                                        <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
                                 </div>
@@ -68,27 +68,27 @@
                                         <label class="control-label">
                                             Enter Paper Set<span class="symbol required"></span>
                                         </label>
-                                        <input type="text" name="set-select" id="set-select" placeholder="Enter set">
+                                        <input type="text" name="paper_set" id="paper_set" placeholder="Enter set" required>
                                     </div>
                                     <div class="col-md-4" id="question-paper-name" >
                                         <label class="control-label">
                                             Enter Question Paper Name <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" id="paper_name" name="paper_name" placeholder="Question paper name">
+                                        <input type="text" class="form-control" id="paper_name" name="paper_name" placeholder="Question paper name" required>
                                         </input>
                                     </div>
                                     <div class="col-md-2" id="total-marks-div" >
                                         <label class="control-label">
                                             Enter Total Marks <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" id="total_marks" name="total_marks" placeholder="marks">
+                                        <input type="text" class="form-control" id="paper_marks" name="paper_marks" placeholder="marks" required>
                                         </input>
                                     </div>
                                     <div class="col-md-3" id="question-select-div" >
                                         <label class="control-label">
                                             Enter Number of Questions <span class="symbol required"></span>
                                         </label>
-                                        <input type="number" class="form-control" id="questions-select" name="questions-select" placeholder="No. of Questions">
+                                        <input type="number" class="form-control" id="paper_questions" name="paper_questions" placeholder="No. of Questions">
                                     </div>
                                 </div>
                             </fieldset>
@@ -188,12 +188,11 @@
             }
         });
 
-        $('#questions-select').change(function(){
+        $('#paper_questions').change(function(){
             var questions=this.value;
             var str = '';
             for(var i=0; i<questions; i++)
             {   var divId = i;
-                ++divId;
                 str += '<div class="row">'+
                             '<div class="col-md-1" id="question-id-div">'+
                                 '<label class="control-label">'+
