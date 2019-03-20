@@ -102,7 +102,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group pull-right">
-                                    <button class="btn btn-primary btn-wide" type="submit">
+                                    <button class="btn btn-primary btn-wide" id="submit-button" type="submit">
                                         Submit
                                     </button>
                                 </div>
@@ -140,13 +140,14 @@
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/form-wizard.js"></script>
-    <script src="/assets/js/form-validation.js"></script>
+    {{--<script src="/assets/js/form-wizard.js"></script>
+    <script src="/assets/js/form-validation.js"></script>--}}
     <script src="/assets/js/form-elements.js"></script>
     <script src="/assets/js/custom-project.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            $('#submit-button').hide();
         });
         $('#batchDrpdn').change(function(){
             var id=this.value;
@@ -158,7 +159,7 @@
                     $('#class-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
-                    var str='<option value="">Please Select Class</option>';
+                    var str='<option>Please Select Class</option>';
                     for(var i=0; i<res.length; i++)
                     {
                         str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
@@ -167,6 +168,12 @@
                     $('#loadmoreajaxloaderClass').hide();
                 }
             });
+        });
+
+        $('#class-select').change(function(){
+            $('#submit-button').hide();
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
         });
 
         $('#exam-select').change(function(){
@@ -188,9 +195,11 @@
             }
         });
 
-        $('#paper_questions').change(function(){
+        $('#paper_questions').keyup(function(){
+            $('#submit-button').show();
             var questions=this.value;
             var str = '';
+            console.log(questions);
             for(var i=0; i<questions; i++)
             {   var divId = i;
                 str += '<div class="row">'+
@@ -198,41 +207,46 @@
                                 '<label class="control-label">'+
                                     'Id'+'<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-id" name="question-id[]" placeholder="Id">'+
+                                '<input type="text" class="form-control" id="question-id" name="question-id[]" placeholder="Id" required>'+
                             '</div>'+
                             '<div class="col-md-5" id="question-name-div">'+
                                 '<label class="control-label">'+
                                     'Enter Question' +'<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-name" name="question-name[]" placeholder="Enter Question">'+
+                                '<input type="text" class="form-control" id="question-name" name="question-name[]" placeholder="Enter Question" required>'+
                             '</div>'+
                             '<div class="col-md-1" id="question-marks-div">'+
                                 '<label class="control-label">'+
                                     'Marks<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-marks" name="question-marks[]" placeholder="marks">'+
+                                '<input type="text" class="form-control" id="question-marks" name="question-marks[]" placeholder="marks" required>'+
                             '</div>'+
                             '<div class="col-md-2" id="or-question-div" >'+
                                 '<label class="control-label">'+
                                     'Or<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<select class="form-control" id="or-question" name="or-question[]" style="-webkit-appearance: menulist;">'+
-                                    '<option>Select or</option>'+
-                                    '<option value="2">2</option>' +
-                                    '<option value="3">3</option>' +
-                                    '<option value="4">4</option>' +
-                                    '<option value="5">5</option>' +
-                                    '<option value="6">6</option>' +
-                                    '<option value="7">7</option>' +
-                                    '<option value="8">8</option>' +
-                                    '<option value="9">9</option>' +
-                                    '<option value="10">10</option>' +
+
+                                '<select class="form-control" id="or-question" name="or-question['+divId+'][]" multiple>'+
+                                    '<option>Select or</option>';
+                                    for(var j=0; j<questions; j++) {
+                                        if (i != j) {
+                                            var k = j+1;
+                                            str += '<option value="'+j+'">' + k + '</option>';
+                                        }
+                                    }
+                                    str +=
                                 '</select>'+
                             '</div>'+
-                            '<div class="col-md-2">'+
+                                    '<div class="col-md-2" id="sub-question-select-div" >'+
+                                        '<label class="control-label">'+
+                                            'Add Sub Questions <span class="symbol required"></span>'+
+                                        '</label>'+
+                                        '<input type="number" class="form-control" id="'+divId+'sub-questions" name="sub_questions" onchange="add('+divId+')" placeholder="No. of Questions">'+
+                                    '</div>'+
+                            /*'<div class="col-md-2">'+
                                 '<a class="btn" onclick="add('+divId+')">'+
                                 'Add Sub Question </a>'+
-                            '</div>'+
+                            '</div>'+*/
                         '</div>'+
                             '<div id="'+divId+'subQuestion-div">'+
 
@@ -270,40 +284,47 @@
             }
 
         });
-
         function add(divId) {
-            str = '<br><br>'+'<div class="row">' +
-                '<div class="col-md-1"></div>' +
-                '<div class="col-md-1" id="question-id-div">' +
-                '<label class="control-label">' +
-                "Id" + '<span class="symbol required"></span>' +
-                '</label>' +
-                '<input type="text" class="form-control" id="question-id" name="sub-question-id['+divId+'][]" placeholder="Id">' +
-                '</div>' +
-                '<div class="col-md-5" id="question-name-div">' +
-                '<label class="control-label">' +
-                'Enter Question' + '<span class="symbol required"></span>' +
-                '</label>' +
-                '<input type="text" class="form-control" id="question-name" name="sub-question-name['+divId+'][]" placeholder="Enter Question">' +
-                '</div>' +
-                '<div class="col-md-2" id="question-marks-div">' +
-                '<label class="control-label">' +
-                'Marks<span class="symbol required"></span>' +
-                '</label>' +
-                '<input type="text" class="form-control" id="question-marks" name="sub-question-marks['+divId+'][]" placeholder="marks">' +
-                '</div>' +
-                '<div class="col-md-2" id="or-question-div" >' +
-                '<label class="control-label">' +
-                'Or<span class="symbol required"></span>' +
-                '</label>' +
-                '<select class="form-control" id="or-question" name="sub-or-question['+divId+'][]" style="-webkit-appearance: menulist;">' +
-                '<option>Select or</option>' +
-                '<option value="2">2</option>' +
-                '<option value="3">3</option>' +
-                '</select>' +
-                '</div>' +
-                '</div>';
-            $('#'+divId+'subQuestion-div').append(str);
+            var elementId = divId+'sub-questions';
+            var subQuestionCount = $('#'+elementId+'').val();
+            for(var i=0 ; i<subQuestionCount ; i++) {
+                str = '<br><br>' + '<div class="row">' +
+                    '<div class="col-md-1"></div>' +
+                    '<div class="col-md-1" id="question-id-div">' +
+                    '<label class="control-label">' +
+                    "Id" + '<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<input type="text" class="form-control" id="question-id" name="sub-question-id[' + divId + '][]" placeholder="Id" required>' +
+                    '</div>' +
+                    '<div class="col-md-5" id="question-name-div">' +
+                    '<label class="control-label">' +
+                    'Enter Question' + '<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<input type="text" class="form-control" id="question-name" name="sub-question-name[' + divId + '][]" placeholder="Enter Question" required>' +
+                    '</div>' +
+                    '<div class="col-md-2" id="question-marks-div">' +
+                    '<label class="control-label">' +
+                    'Marks<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<input type="text" class="form-control" id="question-marks" name="sub-question-marks[' + divId + '][]" placeholder="marks" required>' +
+                    '</div>' +
+                    '<div class="col-md-2" id="or-question-div" >' +
+                    '<label class="control-label">' +
+                    'Or<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<select class="form-control" id="or-question" name="sub-or-question[' + divId + ']['+i+'][]" multiple>' +
+                    '<option>Select or</option>';
+                    for(var j=0 ; j<subQuestionCount ; j++) {
+                        if(i != j) {
+                            var k = j+1;
+                            str += '<option value="'+j+'">' + k + '</option>';
+                        }
+                    }
+                    str += '</select>' +
+                    '</div>' +
+                    '</div>';
+                $('#' + divId + 'subQuestion-div').append(str);
+            }
         }
     </script>
 @stop

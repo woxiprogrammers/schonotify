@@ -73,6 +73,8 @@ Route::group(['prefix' => 'exam-evaluation'], function () {
     Route::get('searchStudent',array('uses' => 'ExamEvaluation\ExamEvaluationController@filterStudent'));
     Route::get('student-upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentUploadAnswerSheet'));
     Route::get('enter-marks/{examId}/{subId}/{stdId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
+    Route::post('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarks'));
+    Route::get('get-orQuestions/{queId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getOrQuestions'));
 });
 
     //enquiry form

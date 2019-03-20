@@ -54,7 +54,7 @@
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <div class="row">
+                                <div class="row" id="exam-sub-div">
                                     <div class="col-md-4" id="exam-select-div" >
                                         <label class="control-label">
                                             Select Exam <span class="symbol required"></span>
@@ -85,7 +85,7 @@
 
                             <div class="row pull-right">
                                 <div class="form-group">
-                                    <button class="btn btn-primary btn-wide" type="submit">
+                                    <button class="btn btn-primary btn-wide" id="submit-button" type="submit">
                                         Submit
                                     </button>
                                 </div>
@@ -123,6 +123,8 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            $('#exam-sub-div').hide();
+            $('#submit-button').hide();
         });
 
         $('#batchDrpdn').change(function(){
@@ -145,6 +147,9 @@
 
         $('#class-select').change(function(){
             var id=this.value;
+            $('#exam-sub-div').hide();
+            $('#tableContent').hide();
+            $('#submit-button').hide();
             var route='/get-all-division/'+id;
             $.get(route,function(res){
                 if (res.length == 0)
@@ -161,8 +166,19 @@
             });
         });
 
+        $('#div-select').change(function(){
+            var id=$('#class-select').val();
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
+            $('#exam-sub-div').show();
+            $("#tableContent").hide();
+            $('#submit-button').hide();
+        });
+
         $('#exam-select').change(function(){
             var id=this.value;
+            $('#tableContent').hide();
+            $('#submit-button').hide();
             var classId = $('#class-select').val();
             if(classId != null) {
                 var route = 'get-exam-subject/' + id + '/' + classId;
@@ -195,7 +211,9 @@
                 })
                     .done(function (res) {
                         $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").show();
                         $("#tableContent").html(res);
+                        $('#submit-button').show();
                         TableData.init();
                     })
             }

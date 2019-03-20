@@ -16,7 +16,9 @@ use App\ExamClassSubject;
 use App\ExamEvaluation;
 use App\ExamQuestionPaper;
 use App\Http\Controllers\Controller;
+use App\OrQuestions;
 use App\PaperCheckerMaster;
+use App\QuestionPaperStructure;
 use App\StudentAnswerSheet;
 use App\StudentExtraInfo;
 use Illuminate\Support\Facades\File;
@@ -105,7 +107,54 @@ class ExamEvaluationController extends Controller
             $paperData['exam_id'] = $data['exam_select'];
             $paperData['subject_id'] = $data['subject_select'];
             $paperData['class_id'] = $data['class_select'];
-            ExamQuestionPaper::create($paperData);
+            $createQuestionPaper = ExamQuestionPaper::create($paperData);
+            if($request->has('question-id')){
+                $questionData['question_paper_id'] = $createQuestionPaper->id;
+                foreach ($data['question-id'] as $key=>$value) {
+                    $questionData['question_id'] = $value;
+                    $questionData['question'] = $data['question-name'][$key];
+                    $questionData['marks'] = $data['question-marks'][$key];
+                    $createQuestion = QuestionPaperStructure::create($questionData);
+                    $questions[$key] = $createQuestion->id;
+                }
+                $orQuestions = $data['or-question'];
+                foreach ($questions as $key=>$value){
+                    $orQuestionData['question_id'] =  $questions[$key];
+                    if(array_key_exists($key,$orQuestions)){
+                       foreach ($orQuestions[$key] as $key1=>$value1){
+                           $orQuestionData['or_question_id'] =  $questions[$value1];
+                           OrQuestions::create($orQuestionData);
+                       }
+                    }
+                }
+            }
+            if ($request->has('sub-question-id')){
+                $subQuestionData['question_paper_id'] = $createQuestionPaper->id;
+                foreach ($questions as $key=>$value){
+                    $subQuestionData['parent_question_id'] = $value;
+                    if(array_key_exists($key,$data['sub-question-id'])){
+                        foreach ($data['sub-question-id'][$key] as $key1=>$value1){
+                            $subQuestionData['question_id'] = $value1;
+                            $subQuestionData['question'] = $data['sub-question-name'][$key][$key1];
+                            $subQuestionData['marks'] = $data['sub-question-marks'][$key][$key1];
+                            $createSubQuestions = QuestionPaperStructure::create($subQuestionData);
+                            $subQuestions[$key][$key1] = $createSubQuestions->id;
+                        }
+                    }
+                }
+            }
+            foreach ($subQuestions as $key=>$value){
+                if(array_key_exists($key,$data['sub-or-question'])){
+                    foreach ($data['sub-or-question'][$key] as $key1=>$value1){
+                        $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
+                        foreach ($value1 as $key2=>$value2){
+                            $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
+                            OrQuestions::create($orSubQuestion);
+                        }
+                    }
+                }
+            }
+
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -289,15 +338,40 @@ class ExamEvaluationController extends Controller
             $answerSheetPdf = null;
             $examName = ExamEvaluation::where('id',$examId)->value('exam_name');
             $stdGrn = StudentExtraInfo::where('student_id',$stdId)->value('grn');
+            $divisionId = User::where('id',$stdId)->value('division_id');
+            $classId = Division::where('id',$divisionId)->value('class_id');
+            $paperId = ExamQuestionPaper::where('exam_id',$examId)->where('subject_id',$subId)->where('class_id',$classId)->value('id');
+            $questions = QuestionPaperStructure::where('question_paper_id',$paperId)->whereNull('parent_question_id')->get()->toArray();
             $answerSheetData = StudentAnswerSheet::where('exam_id',$examId)->where('subject_id',$subId)->where('student_id',$stdId)->value('pdf_name');
             if($answerSheetData != null) {
                 $answerSheetPdf = env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . sha1($examId) . DIRECTORY_SEPARATOR . $answerSheetData;
             }
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','examName','stdGrn'));
+            return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','examName','stdGrn','questions'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
+    }
+
+    public function getEnterMarks(Request $request){
+        try{
+            $user = Auth::user();
+            return back();
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function getOrQuestions(Request $request, $queId){
+        $data=array();
+        $orQuestion = OrQuestions::where('question_id',$queId)->lists('or_question_id');
+        $orQuestions = OrQuestions::where('question_id',$queId)->orWhereIn('question_id',$orQuestion)->where('or_question_id','!=',$queId)->get()->toArray();
+        $i=0;
+        foreach ($orQuestions as $row) {
+            $data[$i]['or_que_id'] = $row['or_question_id'] ;
+            $i++;
+        }
+        return $data;
     }
 
     public function getClassSubject($id){

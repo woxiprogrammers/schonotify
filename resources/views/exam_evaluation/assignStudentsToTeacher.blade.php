@@ -54,7 +54,7 @@
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <div class="row">
+                                <div class="row" id="exam-teacher-div">
                                     <div class="col-md-3" id="exam-select-div" >
                                         <label class="control-label">
                                             Select Exam <span class="symbol required"></span>
@@ -141,6 +141,7 @@
         jQuery(document).ready(function() {
             Main.init();
             $('#submit-button').hide();
+            $('#exam-teacher-div').hide();
         });
 
         $('#batchDrpdn').change(function(){
@@ -163,6 +164,9 @@
 
         $('#class-select').change(function(){
             var id=this.value;
+            $('#submit-button').hide();
+            $('#exam-teacher-div').hide();
+            $('#tableContent').hide();
             var route='/get-all-division/'+id;
             $.get(route,function(res){
                 if (res.length == 0)
@@ -181,6 +185,12 @@
 
         $('#div-select').change(function(){
             var id=$('#class-select').val();
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#teacher-select').prop('selectedIndex',0);
+            $('#exam-teacher-div').show();
+            $("#tableContent").hide();
             var route='get-teachers/'+id;
             $.get(route,function(res){
                 if (res.length == 0)
@@ -213,6 +223,7 @@
                 })
                     .done(function (res) {
                         $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").show();
                         $("#tableContent").html(res);
                         TableData.init();
                         $('#submit-button').show();
@@ -222,6 +233,10 @@
 
         $('#exam-select').change(function(){
             var id=this.value;
+            $('#subject-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#teacher-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
             var classId = $('#class-select').val();
             if(classId != null) {
                 var route = 'get-exam-subject/' + id + '/' + classId;
@@ -237,6 +252,17 @@
                     }
                 });
             }
+        });
+
+        $('#subject-select').change(function(){
+            $('#role-select').prop('selectedIndex',0);
+            $('#teacher-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
+        });
+
+        $('#teacher-select').change(function(){
+            $('#role-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
         });
 
         function checkAll() {
