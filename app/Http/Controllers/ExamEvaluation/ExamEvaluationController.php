@@ -15,6 +15,10 @@ use App\Division;
 use App\ExamClassSubject;
 use App\ExamEvaluation;
 use App\ExamQuestionPaper;
+use App\ExamSubjectStructure;
+use App\ExamSubSubjectStructure;
+use App\ExamTermDetails;
+use App\ExamYear;
 use App\Http\Controllers\Controller;
 use App\OrQuestions;
 use App\PaperCheckerMaster;
@@ -89,7 +93,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            $exams = ExamEvaluation::all();
+            //$exams = ExamEvaluation::all();
+            $exams = ExamTermDetails::all();
             return view('exam_evaluation.createQuestionPaper')->with(compact('batches','user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -378,6 +383,33 @@ class ExamEvaluationController extends Controller
         $data=array();
         $subjectIds = SubjectClass::where('class_id',$id)->lists('subject_id');
         $subjects = Subject::whereIn('id',$subjectIds)->get()->toArray();
+        $i=0;
+        foreach ($subjects as $row) {
+            $data[$i]['subject_id'] = $row['id'] ;
+            $data[$i]['subject_name']= $row['subject_name'] ;
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getExamSubjects($year){
+        $data=array();
+        $academicYear = explode('-',$year);
+        $structureId = ExamYear::where('start_year',$academicYear[0])->where('end_year',$academicYear[1])->lists('exam_structure_id');
+        $subjectIds = ExamSubSubjectStructure::whereIn('id',$structureId)->distinct('subject_id')->lists('subject_id');
+        $subjects = ExamSubjectStructure::whereIn('id',$subjectIds)->get()->toArray();
+        $i=0;
+        foreach ($subjects as $row) {
+            $data[$i]['subject_id'] = $row['id'] ;
+            $data[$i]['subject_name']= $row['subject_name'] ;
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getExams($termId){
+        $data=array();
+        $subjects = ExamSubjectStructure::whereIn('id')->get()->toArray();
         $i=0;
         foreach ($subjects as $row) {
             $data[$i]['subject_id'] = $row['id'] ;

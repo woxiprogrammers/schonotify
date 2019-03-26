@@ -23,7 +23,7 @@
                         <form method="post" action="/exam-evaluation/create-questionPaper" role="form" id="questionPaperCreateForm">
                             <fieldset>
                                 <div class="row">
-                                    <div class="col-md-3 ">
+                                    <div class="col-md-4">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
                                         </label>
@@ -34,34 +34,67 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-3" id="class-select-div" >
+                                    <div class="col-md-4" id="class-select-div">
                                         <label class="control-label">
                                             Select Class <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" id="exam-select-div" >
-                                        <label class="control-label">
-                                            Select Exam <span class="symbol required"></span>
-                                        </label>
-                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
-                                            <option>Please Select Exam</option>
-                                            @foreach($exams as $exam)
-                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="col-md-4">
+                                            <label class="control-label">
+                                                Academic Year <span class="symbol required"></span>
+                                            </label>
+                                            <select class="form-control" id="academic-year" name="startYear" style="-webkit-appearance: menulist;" required="required">
+                                                <option value="">select academic year</option>
+                                                <option value="2017-2018">2017-2018</option>
+                                                <option value="2018-2019">2018-2019</option>
+                                                <option value="2019-2020">2019-2020</option>
+                                                <option value="2020-2021">2020-2021</option>
+                                                <option value="2021-2022">2021-2022</option>
+                                                <option value="2022-2023">2022-2023</option>
+                                                <option value="2023-2024">2023-2024</option>
+                                                <option value="2024-2025">2024-2025</option>
+                                                <option value="2025-2026">2025-2026</option>
+                                            </select>
                                     </div>
-                                    <div class="col-md-3" id="subject-select-div" >
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-4" id="subject-select-div" >
                                         <label class="control-label">
                                             Select Subject<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
+                                    <div class="col-md-4">
+                                            <label class="control-label">
+                                                Select Term<span class="symbol required"></span>
+                                            </label>
+                                            <select class="form-control" id="term-select" name="Term_number" style="-webkit-appearance: menulist;" required>
+                                                <option value="" selected="">select term</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                    </div>
+                                    <div class="col-md-4" id="exam-select-div" >
+                                        <label class="control-label">
+                                            Select Exam <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
+                                            <option>Please Select Exam</option>
+                                            @foreach($exams as $exam)
+                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_type'] !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </fieldset>
-                            <br>
                             <fieldset>
                                 <div class="row">
                                     <div class="col-md-3" id="set-select-div" >
@@ -115,7 +148,6 @@
         </div>
     </div>
     @include('footer')
-    </div>
     <!-- start: MAIN JAVASCRIPTS -->
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -174,6 +206,39 @@
             $('#submit-button').hide();
             $('#exam-select').prop('selectedIndex',0);
             $('#subject-select').prop('selectedIndex',0);
+        });
+
+        $('#academic-year').change(function(){
+            var academicYear=this.value;
+                var route = 'get-subjects/' + academicYear;
+                $.get(route, function (res) {
+                    console.log(res);
+                    if (res.length == 0) {
+                        $('#subject-select').html("no record found");
+                    } else {
+                        var str = '<option value="">Please Select Subject</option>';
+                        for (var i = 0; i < res.length; i++) {
+                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        }
+                        $('#subject-select').html(str);
+                    }
+                });
+        });
+
+        $('#term-select').change(function(){
+            var termId=this.value;
+            var route = 'get-exams/' + termId;
+            $.get(route, function (res) {
+                if (res.length == 0) {
+                    $('#subject-select').html("no record found");
+                } else {
+                    var str = '<option value="">Please Select Subject</option>';
+                    for (var i = 0; i < res.length; i++) {
+                        str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                    }
+                    $('#subject-select').html(str);
+                }
+            });
         });
 
         $('#exam-select').change(function(){
