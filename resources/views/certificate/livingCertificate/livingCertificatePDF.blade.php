@@ -15,11 +15,7 @@
     </tr>
 </table>
 <div style="margin-left: 38%">S.S.P Shikshan Sanstha's</div>
-@if($studentData['body_id'] == 1)
-    <div style="margin-left: 32%;font-size: 120%"><span><b>Ganesh International School</b></span></div>
-@else
-    <div style="margin-left: 32%;font-size: 120%"><span><b>Ganesh English Medium School</b></span></div>
-@endif
+    <div style="margin-left: 22%;font-size: 120%"><span><b>{{ucwords($studentData['name'])}}</b></span></div>
 @if($studentData['body_id'] == 1)
     <div style="margin-left: 15%;"><span ><b>Gat No. 1158, Newale Wasti, Chikhali, Pune-411062. Tel.No.:020-65290055</b></span></div>
 @else

@@ -38,11 +38,7 @@
             <table style="font-size: 15px">
             <tr style="height: 80px;">
                 <td colspan="2" style="font-size: 18px;">
-                    @if($data['body_id'] == 1)
-                        <b>Name of School : GANESH INTERNATIONAL SCHOOL,CHIKHALI</b>
-                    @else
-                        <b>Name of School : GANESH ENGLISH MEDIUM SCHOOL,DAPODI</b>
-                    @endif
+                        <b>Name of School : {{ucwords($data['name'])}}</b>
                 </td>
             </tr>
             <tr style="height: 80px;">
