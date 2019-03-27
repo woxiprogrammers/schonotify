@@ -46,16 +46,6 @@
                                                 Academic Year <span class="symbol required"></span>
                                             </label>
                                             <select class="form-control" id="academic-year" name="startYear" style="-webkit-appearance: menulist;" required="required">
-                                                <option value="">select academic year</option>
-                                                <option value="2017-2018">2017-2018</option>
-                                                <option value="2018-2019">2018-2019</option>
-                                                <option value="2019-2020">2019-2020</option>
-                                                <option value="2020-2021">2020-2021</option>
-                                                <option value="2021-2022">2021-2022</option>
-                                                <option value="2022-2023">2022-2023</option>
-                                                <option value="2023-2024">2023-2024</option>
-                                                <option value="2024-2025">2024-2025</option>
-                                                <option value="2025-2026">2025-2026</option>
                                             </select>
                                     </div>
                                 </div>
@@ -74,12 +64,6 @@
                                                 Select Term<span class="symbol required"></span>
                                             </label>
                                             <select class="form-control" id="term-select" name="Term_number" style="-webkit-appearance: menulist;" required>
-                                                <option value="" selected="">select term</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
                                             </select>
                                     </div>
                                     <div class="col-md-4" id="exam-select-div" >
@@ -87,10 +71,6 @@
                                             Select Exam <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
-                                            <option>Please Select Exam</option>
-                                            @foreach($exams as $exam)
-                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_type'] !!}</option>
-                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -203,6 +183,19 @@
         });
 
         $('#class-select').change(function(){
+            var classId=this.value;
+            var route = 'get-academicYear/' + classId;
+            $.get(route, function (res) {
+                if (res.length == 0) {
+                    $('#exam-select').html("no record found");
+                } else {
+                    var str = '<option value="">Please Select Academic Year</option>';
+                    for (var i = 0; i < res.length; i++) {
+                        str += '<option value="' + res[i]['year'] + '">' + res[i]['year'] + '</option>';
+                    }
+                    $('#academic-year').html(str);
+                }
+            });
             $('#submit-button').hide();
             $('#exam-select').prop('selectedIndex',0);
             $('#subject-select').prop('selectedIndex',0);
@@ -212,15 +205,24 @@
             var academicYear=this.value;
                 var route = 'get-subjects/' + academicYear;
                 $.get(route, function (res) {
-                    console.log(res);
-                    if (res.length == 0) {
+                    console.log(res['subject'].length);
+                    if (res['subject'].length == 0) {
                         $('#subject-select').html("no record found");
                     } else {
                         var str = '<option value="">Please Select Subject</option>';
-                        for (var i = 0; i < res.length; i++) {
-                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        for (var i = 0; i < res['subject'].length; i++) {
+                            str += '<option value="' + res['subject'][i]['subject_id'] + '">' + res['subject'][i]['subject_name'] + '</option>';
                         }
                         $('#subject-select').html(str);
+                    }
+                    if (res['term'].length == 0) {
+                        $('#term-select').html("no record found");
+                    } else {
+                        var str1 = '<option value="">Please Select Subject</option>';
+                        for (var i = 0; i < res['term'].length; i++) {
+                            str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
+                        }
+                        $('#term-select').html(str1);
                     }
                 });
         });
@@ -230,18 +232,18 @@
             var route = 'get-exams/' + termId;
             $.get(route, function (res) {
                 if (res.length == 0) {
-                    $('#subject-select').html("no record found");
+                    $('#exam-select').html("no record found");
                 } else {
                     var str = '<option value="">Please Select Subject</option>';
                     for (var i = 0; i < res.length; i++) {
-                        str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
                     }
-                    $('#subject-select').html(str);
+                    $('#exam-select').html(str);
                 }
             });
         });
 
-        $('#exam-select').change(function(){
+        /*$('#exam-select').change(function(){
             var id=this.value;
             var classId = $('#class-select').val();
             if(classId != null) {
@@ -258,7 +260,7 @@
                     }
                 });
             }
-        });
+        });*/
 
         $('#paper_questions').keyup(function(){
             $('#submit-button').show();

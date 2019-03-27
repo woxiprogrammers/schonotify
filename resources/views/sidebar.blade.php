@@ -420,7 +420,7 @@
                         </div>
                     </a>
                     <ul class="sub-menu">
-                        <li>
+                        {{--<li>
                             <a href="/exam-evaluation/create-exam">
                                 <div class="item-inner">
                                     <span class="title"> Create Exam</span>
@@ -433,7 +433,7 @@
                                     <span class="title"> Assign Subject to Exam</span>
                                 </div>
                             </a>
-                        </li>
+                        </li>--}}
                         <li>
                             <a href="/exam-evaluation/create">
                                 <div class="item-inner">

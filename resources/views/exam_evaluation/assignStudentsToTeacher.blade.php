@@ -54,33 +54,47 @@
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <div class="row" id="exam-teacher-div">
-                                    <div class="col-md-3" id="exam-select-div" >
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <label class="control-label">
-                                            Select Exam <span class="symbol required"></span>
+                                            Academic Year <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
-                                            <option>Please Select Exam</option>
-                                            @foreach($exams as $exam)
-                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
-                                            @endforeach
+                                        <select class="form-control" id="academic-year" name="academic_year" style="-webkit-appearance: menulist;" required="required">
                                         </select>
                                     </div>
-                                    <div class="col-md-3" id="subject-select-div" >
+                                    <div class="col-md-4" id="subject-select-div" >
                                         <label class="control-label">
                                             Select Subject<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" id="teacher-select-div" >
+                                    <div class="col-md-4">
+                                        <label class="control-label">
+                                            Select Term<span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="term-select" name="Term_number" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row" id="exam-teacher-div">
+                                    <div class="col-md-4" id="exam-select-div" >
+                                        <label class="control-label">
+                                            Select Exam <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" id="teacher-select-div" >
                                         <label class="control-label">
                                             Select Teacher<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="teacher-select" name="teacher_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" id="role-select-div" >
+                                    <div class="col-md-4" id="role-select-div" >
                                         <label class="control-label">
                                             Select Role<span class="symbol required"></span>
                                         </label>
@@ -164,6 +178,12 @@
 
         $('#class-select').change(function(){
             var id=this.value;
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#teacher-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+            $('#academic-year').prop('selectedIndex',0);
             $('#submit-button').hide();
             $('#exam-teacher-div').hide();
             $('#tableContent').hide();
@@ -179,6 +199,70 @@
                         str+='<option value="'+res[i]['division_id']+'">'+res[i]['division_name']+'</option>';
                     }
                     $('#div-select').html(str);
+                }
+            });
+
+            var classId=this.value;
+            var route1 = 'get-academicYear/' + classId;
+            $.get(route1, function (res) {
+                if (res.length == 0) {
+                    $('#exam-select').html("no record found");
+                } else {
+                    var str = '<option value="">Please Select Academic Year</option>';
+                    for (var i = 0; i < res.length; i++) {
+                        str += '<option value="' + res[i]['year'] + '">' + res[i]['year'] + '</option>';
+                    }
+                    $('#academic-year').html(str);
+                }
+            });
+        });
+
+        $('#academic-year').change(function(){
+            var academicYear=this.value;
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#teacher-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+            var route = 'get-subjects/' + academicYear;
+            $.get(route, function (res) {
+                console.log(res['subject'].length);
+                if (res['subject'].length == 0) {
+                    $('#subject-select').html("no record found");
+                } else {
+                    var str = '<option value="">Please Select Subject</option>';
+                    for (var i = 0; i < res['subject'].length; i++) {
+                        str += '<option value="' + res['subject'][i]['subject_id'] + '">' + res['subject'][i]['subject_name'] + '</option>';
+                    }
+                    $('#subject-select').html(str);
+                }
+                if (res['term'].length == 0) {
+                    $('#term-select').html("no record found");
+                } else {
+                    var str1 = '<option value="">Please Select Subject</option>';
+                    for (var i = 0; i < res['term'].length; i++) {
+                        str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
+                    }
+                    $('#term-select').html(str1);
+                }
+            });
+        });
+
+        $('#term-select').change(function(){
+            var termId=this.value;
+            $('#exam-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#teacher-select').prop('selectedIndex',0);
+            var route = 'get-exams/' + termId;
+            $.get(route, function (res) {
+                if (res.length == 0) {
+                    $('#exam-select').html("no record found");
+                } else {
+                    var str = '<option value="">Please Select Subject</option>';
+                    for (var i = 0; i < res.length; i++) {
+                        str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
+                    }
+                    $('#exam-select').html(str);
                 }
             });
         });
@@ -231,7 +315,7 @@
             }
         });
 
-        $('#exam-select').change(function(){
+        /*$('#exam-select').change(function(){
             var id=this.value;
             $('#subject-select').prop('selectedIndex',0);
             $('#role-select').prop('selectedIndex',0);
@@ -252,7 +336,7 @@
                     }
                 });
             }
-        });
+        });*/
 
         $('#subject-select').change(function(){
             $('#role-select').prop('selectedIndex',0);

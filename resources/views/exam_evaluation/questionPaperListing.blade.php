@@ -46,9 +46,9 @@
                                     </label>
                                     <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
                                         <option>Please Select Exam</option>
-                                        @foreach($exams as $exam)
+                                        {{--@foreach($exams as $exam)
                                             <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
-                                        @endforeach
+                                        @endforeach--}}
                                     </select>
                                 </div>
                             </div>
