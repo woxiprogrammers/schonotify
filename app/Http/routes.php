@@ -47,19 +47,10 @@
     Route::get('/','FrontController@index');
 
 Route::group(['prefix' => 'exam-evaluation'], function () {
-    Route::get('create-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@createExamView'));
-    Route::post('create-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@createExam'));
-    Route::get('edit-exam/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@editExamView'));
-    Route::post('edit-exam',array('uses' => 'ExamEvaluation\ExamEvaluationController@editExam'));
     Route::get('get-subject/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getClassSubject'));
-    Route::get('get-exam-subject/{examId}/{classId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamClassSubject'));
     Route::get('get-subjects/{year}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamSubjects'));
     Route::get('get-exams/{termId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExams'));
     Route::get('get-academicYear/{classId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getAcademicYear'));
-    Route::get('assign-subject',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignSubjectView'));
-    Route::get('subject-listing/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@subjectListing'));
-    Route::post('assign-subject',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignSubject'));
-    Route::get('remove-subject/{subId}/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@removeSubject'));
     Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaperView'));
     Route::post('create-questionPaper',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaper'));
     Route::get('paper-listing/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@questionPaperListing'));

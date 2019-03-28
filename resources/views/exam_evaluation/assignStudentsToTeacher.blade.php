@@ -315,28 +315,6 @@
             }
         });
 
-        /*$('#exam-select').change(function(){
-            var id=this.value;
-            $('#subject-select').prop('selectedIndex',0);
-            $('#role-select').prop('selectedIndex',0);
-            $('#teacher-select').prop('selectedIndex',0);
-            $("#tableContent").hide();
-            var classId = $('#class-select').val();
-            if(classId != null) {
-                var route = 'get-exam-subject/' + id + '/' + classId;
-                $.get(route, function (res) {
-                    if (res.length == 0) {
-                        $('#subject-select').html("no record found");
-                    } else {
-                        var str = '<option value="">Please Select Subject</option>';
-                        for (var i = 0; i < res.length; i++) {
-                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
-                        }
-                        $('#subject-select').html(str);
-                    }
-                });
-            }
-        });*/
 
         $('#subject-select').change(function(){
             $('#role-select').prop('selectedIndex',0);

@@ -23,10 +23,15 @@
                         <form method="post" action="/exam-evaluation/enter-marks" role="form" id="questionPaperCreateForm">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h4>Student GRN :- </h4>
+                                <h4>Student GRN :- {{$stdGrn}}</h4>
+                                <input type="hidden" name="student_id" value="{{$stdId}}">
+                                <input type="hidden" name="exam_structure_id" value="{{$examDetails['exam_structure_id']}}">
+                                <input type="hidden" name="term_id" value="{{$examDetails['term_id']}}">
+                                <input type="hidden" name="exam_term_details_id" value="{{$examId}}">
+                                <input type="hidden" name="marks" value="50">
                             </div>
                             <div class="col-sm-6">
-                                <h4>Exam :- {{$examName}}</h4>
+                                <h4>Exam :- {{$examDetails['exam_type']}}</h4>
                             </div>
                         </div>
                         <hr>
@@ -98,7 +103,7 @@
                                         <h4 class="panel-title text-primary">Question Paper</h4>
                                     </div>
                                     <div class="panel-body" id="hide-paper">
-                                        <embed src="{{1}}" height="600px" width="100%">
+                                        <embed src="{{$answerSheetPdf}}" height="600px" width="100%">
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +113,7 @@
                                         <h4 class="panel-title text-primary">Answer Sheet PDF</h4>
                                     </div>
                                     <div class="panel-body" style="display: block;">
-                                        <embed src="{{1}}" height="600px" width="100%">
+                                        <embed src="{{$answerSheetPdf}}" height="600px" width="100%">
                                     </div>
                                 </div>
                             </div>
@@ -201,51 +206,5 @@
                 }
             });
         });
-        /*$('.is-checked').click(function () {
-           var isChecked = this.value;
-           if(isChecked%2==1){
-               var nextQuestion = isChecked;
-               ++nextQuestion;
-               if($('#'+nextQuestion+'is-checked').prop("disabled") == true){
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", false);
-               } else {
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", true);
-               }
-           } else {
-               var nextQuestion=isChecked-1;
-               if($('#'+nextQuestion+'is-checked').prop("disabled") == true){
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", false);
-               } else {
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", true);
-               }
-           }
-           var str = '';
-           for(var i=0; i<2 ; i++){
-               var qNo =i+1;
-               str += '<div class="row sub-que" id="">'+
-                        '<div class="col-sm-1">'+
-                        '</div>'+
-                        '<div class="col-sm-3">'+
-                            '<span>'+ 'Q.'+qNo+'</span>'+
-                        '</div>'+
-                        '<div class="col-sm-3">'+
-                            '<span> marks</span>'+
-                            '<select>'+
-                                '<option>1</option>'+
-                                '<option>2</option>'+
-                                '<option>3</option>'+
-                                '<option>4</option>'+
-                                '<option>5</option>'+
-                            '</select>'+
-                        '</div>'+
-                        '<div class="col-sm-3">'+
-                            '<label> Check'+
-                                '<input type="checkbox"  id="is-checked" value="">'+
-                            '</label>'+
-                        '</div>'+
-                    '</div>'+'<br>';
-               $('#'+isChecked+'').html(str);
-           }
-        });*/
     </script>
 @stop

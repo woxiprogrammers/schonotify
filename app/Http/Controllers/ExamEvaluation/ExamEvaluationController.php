@@ -26,6 +26,8 @@ use App\OrQuestions;
 use App\PaperCheckerMaster;
 use App\QuestionPaperStructure;
 use App\StudentAnswerSheet;
+use App\StudentExamDetails;
+use App\StudentExamMarks;
 use App\StudentExtraInfo;
 use Illuminate\Support\Facades\File;
 use App\Subject;
@@ -44,52 +46,6 @@ class ExamEvaluationController extends Controller
         $this->middleware('db');
         $this->middleware('auth');
     }
-
-    /*public function createExamView(){
-        try{
-            $user = Auth::user();
-            $exams = ExamEvaluation::all();
-            return view('exam_evaluation.createExam')->with(compact('user','exams'));
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function createExam(Request $request){
-        try{
-            $user = Auth::user();
-            if($request->exam_name != null){
-                $examData['exam_name'] = $request->exam_name;
-                ExamEvaluation::create($examData);
-            }
-            return back();
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function editExamView(Request $request,$examId){
-        try{
-            $user = Auth::user();
-            $exam = ExamEvaluation::where('id',$examId)->first();
-            return view('exam_evaluation.editExam')->with(compact('user','exam'));
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function editExam(Request $request){
-        try{
-            $user = Auth::user();
-            if($request->exam_name != null){
-                $examData['exam_name'] = $request->exam_name;
-                ExamEvaluation::where('id',$request->exam_id)->update($examData);
-            }
-            return redirect('exam-evaluation/create-exam');
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }*/
 
     public function createQuestionPaperView(){
         try{
@@ -287,51 +243,10 @@ class ExamEvaluationController extends Controller
         }
     }
 
-    public function assignSubjectView(){
-        try{
-            $user = Auth::user();
-            $batches = Batch::where('body_id',$user->body_id)->get();
-            //$exams = ExamEvaluation::all();
-            return view('exam_evaluation.assignExamSubjects')->with(compact('batches','user'));
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function assignSubject(Request $request){
-        try{
-            $examSubjectData['class_id'] = $request->class_select;
-            $examSubjectData['exam_id'] = $request->exam_select;
-            if($request->has('subject_select')){
-                $subjects = $request->subject_select;
-                foreach ($subjects as $subject){
-                    $examSubject = ExamClassSubject::where('class_id',$request->class_select)->where('exam_id',$request->exam_select)->where('subject_id',$subject)->first();
-                    if ($examSubject == null) {
-                        $examSubjectData['subject_id'] = $subject;
-                        ExamClassSubject::create($examSubjectData);
-                    }
-                }
-            }
-            return back();
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function removeSubject(Request $request,$subId,$classId,$examId){
-        try{
-            ExamClassSubject::where('class_id',$classId)->where('exam_id',$examId)->where('subject_id',$subId)->delete();
-            return back();
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
     public function studentListingView(){
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            //$exams = ExamEvaluation::all();
             $paperCheckerRoles = PaperCheckerMaster::all();
             return view('exam_evaluation.studentListing')->with(compact('batches','user','paperCheckerRoles'));
         }catch (\Exception $e){
@@ -343,6 +258,7 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $answerSheetPdf = null;
+            $examDetails = ExamTermDetails::where('id',$examId)->first();
             $stdGrn = StudentExtraInfo::where('student_id',$stdId)->value('grn');
             $divisionId = User::where('id',$stdId)->value('division_id');
             $classId = Division::where('id',$divisionId)->value('class_id');
@@ -353,7 +269,7 @@ class ExamEvaluationController extends Controller
                 $answerSheetPdf = env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . sha1($examId) . DIRECTORY_SEPARATOR . $answerSheetData;
             }
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','stdGrn','questions'));
+            return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','stdGrn','questions','examDetails','stdId','examId'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -362,6 +278,17 @@ class ExamEvaluationController extends Controller
     public function getEnterMarks(Request $request){
         try{
             $user = Auth::user();
+            $data = $request->all();
+            $examDetailsData['student_id'] = $data['student_id'];
+            $examDetailsData['term_id'] = $data['term_id'];
+            $examDetailsData['exam_structure_id'] = $data['exam_structure_id'];
+            $examDetails = StudentExamDetails::create($examDetailsData);
+            $examMarksData['student_exam_details_id'] = $examDetails['id'];
+            $examMarksData['term_id'] = $data['term_id'];
+            $examMarksData['exam_structure_id'] = $data['exam_structure_id'];
+            $examMarksData['marks_obtained'] = $data['marks'];
+            $examMarksData['exam_term_details_id'] = $data['exam_term_details_id'];
+            StudentExamMarks::create($examMarksData);
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -456,18 +383,6 @@ class ExamEvaluationController extends Controller
         return $data;
     }
 
-    public function getExamClassSubject($examId,$classId){
-        $data=array();
-        $subjectIds = ExamClassSubject::where('class_id',$classId)->where('exam_id',$examId)->lists('subject_id');
-        $subjects = Subject::whereIn('id',$subjectIds)->get()->toArray();
-        $i=0;
-        foreach ($subjects as $row) {
-            $data[$i]['subject_id'] = $row['id'] ;
-            $data[$i]['subject_name']= $row['subject_name'] ;
-            $i++;
-        }
-        return $data;
-    }
 
     public function filterStudent(Request $request)
     {
@@ -625,40 +540,6 @@ class ExamEvaluationController extends Controller
                 $str .= "<td>";
                 $str .= "<a href='enter-marks/$request->exam/$row->id'><button>Fill Marks</button></a>";
                 $str .= "</td>";
-            }
-        } else {
-            $str1 = "<h5 class='center'>No records found !</h5>";
-        }
-        $str .= "</tr></tbody>";
-        $str .= "</table>";
-        if (sizeof($result->toArray()) != 0) {
-            return $str;
-        } else {
-            return $str1;
-        }
-    }
-
-    public function subjectListing(Request $request,$classId,$examId){
-        $subjectIds = ExamClassSubject::Where('class_id',$classId)->where('exam_id',$examId)->lists('subject_id');
-        $result = Subject::whereIn('id',$subjectIds)->get();
-        $str = "<h5 class='over-title margin-bottom-15'><h3>Assigned Subjects</h3></h5>";
-        $str .= "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
-        $str .= "<thead><tr>";
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Sr.No.: activate to sort column ascending' style='width: 29px;'>Sr.No.</th>";
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Subject: activate to sort column ascending' style='width: 29px;'>Subject</th>";
-        if (sizeof($result->toArray()) != 0) {
-            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Action: activate to sort column ascending' style='width: 29px;'>Action</th>";
-            $str .= "</tr></thead><tbody>";
-            $srNo = 1;
-            foreach ($result as $row) {
-                $str .="<tr>";
-                $str .= "<td>" . $srNo . "</td>";
-                $str .= "<td>" . $row->subject_name . " " . $row->lastname . "</td>";
-                $str .= "<td>";
-                $str .= "<button type='submit' onclick='removeSubject($row->id,$classId,$examId)'>".'Remove'."</button>";
-                $str .= "</td>";
-                $str .= "</tr>";
-                $srNo++;
             }
         } else {
             $str1 = "<h5 class='center'>No records found !</h5>";
