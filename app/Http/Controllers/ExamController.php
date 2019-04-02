@@ -100,6 +100,11 @@ class ExamController extends Controller
             foreach($request->exam_types as $examInfo){
                 $examTermInfoData['exam_type'] = $examInfo['head'];
                 $examTermInfoData['out_of_marks'] = $examInfo['out_of_marks'][$key];
+                if($examInfo['is_exam_eval'][$key] == "true") {
+                    $examTermInfoData['is_exam_evaluation'] = true;
+                } else {
+                    $examTermInfoData['is_exam_evaluation'] = false;
+                }
                 ExamTermDetails::create($examTermInfoData);
             }
         }

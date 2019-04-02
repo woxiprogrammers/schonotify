@@ -85,9 +85,6 @@
                                             Select Exam <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
-                                            {{--@foreach($exams as $exam)
-                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
-                                            @endforeach--}}
                                         </select>
                                     </div>
                                 </div>
@@ -140,7 +137,6 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            $('#exam-sub-div').hide();
             $('#submit-button').hide();
         });
 
@@ -164,9 +160,11 @@
 
         $('#class-select').change(function(){
             var id=this.value;
-            $('#exam-sub-div').hide();
             $('#tableContent').hide();
             $('#submit-button').hide();
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
             var route='/get-all-division/'+id;
             $.get(route,function(res){
                 if (res.length == 0)
@@ -201,9 +199,8 @@
             var academicYear=this.value;
             $('#exam-select').prop('selectedIndex',0);
             $('#subject-select').prop('selectedIndex',0);
-            $('#role-select').prop('selectedIndex',0);
-            $('#teacher-select').prop('selectedIndex',0);
             $('#term-select').prop('selectedIndex',0);
+            $('#tableContent').hide();
             var route = 'get-subjects/' + academicYear;
             $.get(route, function (res) {
                 console.log(res['subject'].length);
@@ -216,23 +213,32 @@
                     }
                     $('#subject-select').html(str);
                 }
+            });
+        });
+
+        $('#subject-select').change(function(){
+            var subId=this.value;
+            var academicYear=$('#academic-year').val();
+            var route = 'get-term/' + academicYear + '/' +subId;
+            $.get(route, function (res) {
                 if (res['term'].length == 0) {
                     $('#term-select').html("no record found");
                 } else {
-                    var str1 = '<option value="">Please Select Subject</option>';
+                    var str1 = '<option value="">Please Select Term</option>';
                     for (var i = 0; i < res['term'].length; i++) {
                         str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
                     }
                     $('#term-select').html(str1);
                 }
             });
+            $('#exam-select').prop('selectedIndex',0);
+            $('#tableContent').hide();
         });
 
         $('#term-select').change(function(){
             var termId=this.value;
             $('#exam-select').prop('selectedIndex',0);
-            $('#role-select').prop('selectedIndex',0);
-            $('#teacher-select').prop('selectedIndex',0);
+            $('#tableContent').hide();
             var route = 'get-exams/' + termId;
             $.get(route, function (res) {
                 if (res.length == 0) {
@@ -251,7 +257,6 @@
             var id=$('#class-select').val();
             $('#exam-select').prop('selectedIndex',0);
             $('#subject-select').prop('selectedIndex',0);
-            $('#exam-sub-div').show();
             $("#tableContent").hide();
             $('#submit-button').hide();
         });

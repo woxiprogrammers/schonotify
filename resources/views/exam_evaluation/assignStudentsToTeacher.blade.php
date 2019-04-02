@@ -224,9 +224,9 @@
             $('#role-select').prop('selectedIndex',0);
             $('#teacher-select').prop('selectedIndex',0);
             $('#term-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
             var route = 'get-subjects/' + academicYear;
             $.get(route, function (res) {
-                console.log(res['subject'].length);
                 if (res['subject'].length == 0) {
                     $('#subject-select').html("no record found");
                 } else {
@@ -236,16 +236,28 @@
                     }
                     $('#subject-select').html(str);
                 }
+            });
+        });
+
+        $('#subject-select').change(function(){
+            var subId=this.value;
+            var academicYear=$('#academic-year').val();
+            var route = 'get-term/' + academicYear + '/' +subId;
+            $.get(route, function (res) {
                 if (res['term'].length == 0) {
                     $('#term-select').html("no record found");
                 } else {
-                    var str1 = '<option value="">Please Select Subject</option>';
+                    var str1 = '<option value="">Please Select Term</option>';
                     for (var i = 0; i < res['term'].length; i++) {
                         str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
                     }
                     $('#term-select').html(str1);
                 }
             });
+            $('#exam-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#teacher-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
         });
 
         $('#term-select').change(function(){
@@ -253,6 +265,7 @@
             $('#exam-select').prop('selectedIndex',0);
             $('#role-select').prop('selectedIndex',0);
             $('#teacher-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
             var route = 'get-exams/' + termId;
             $.get(route, function (res) {
                 if (res.length == 0) {

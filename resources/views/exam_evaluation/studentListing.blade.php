@@ -191,6 +191,12 @@
                     $('#academic-year').html(str);
                 }
             });
+
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
         });
 
         $('#academic-year').change(function(){
@@ -199,6 +205,7 @@
             $('#subject-select').prop('selectedIndex',0);
             $('#role-select').prop('selectedIndex',0);
             $('#term-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
             var route = 'get-subjects/' + academicYear;
             $.get(route, function (res) {
                 console.log(res['subject'].length);
@@ -211,22 +218,35 @@
                     }
                     $('#subject-select').html(str);
                 }
+            });
+        });
+
+        $('#subject-select').change(function(){
+            var subId=this.value;
+            var academicYear=$('#academic-year').val();
+            var route = 'get-term/' + academicYear + '/' +subId;
+            $.get(route, function (res) {
                 if (res['term'].length == 0) {
                     $('#term-select').html("no record found");
                 } else {
-                    var str1 = '<option value="">Please Select Subject</option>';
+                    var str1 = '<option value="">Please Select Term</option>';
                     for (var i = 0; i < res['term'].length; i++) {
                         str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
                     }
                     $('#term-select').html(str1);
                 }
             });
+            $('#exam-select').prop('selectedIndex',0);
+            $('#role-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
         });
 
         $('#term-select').change(function(){
             var termId=this.value;
             $('#exam-select').prop('selectedIndex',0);
             $('#role-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
             var route = 'get-exams/' + termId;
             $.get(route, function (res) {
                 if (res.length == 0) {
@@ -255,6 +275,7 @@
                     data: {division, subject, exam, role}
                 })
                     .done(function (res) {
+                        $("#tableContent").show();
                         $('div#loadmoreajaxloader').hide();
                         $("#tableContent").html(res);
                         TableData.init();
@@ -263,22 +284,8 @@
         });
 
         $('#exam-select').change(function(){
-            var id=this.value;
-            var classId = $('#class-select').val();
-            if(classId != null) {
-                var route = 'get-exam-subject/' + id + '/' + classId;
-                $.get(route, function (res) {
-                    if (res.length == 0) {
-                        $('#subject-select').html("no record found");
-                    } else {
-                        var str = '<option value="">Please Select Subject</option>';
-                        for (var i = 0; i < res.length; i++) {
-                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
-                        }
-                        $('#subject-select').html(str);
-                    }
-                });
-            }
+            $('#role-select').prop('selectedIndex',0);
+            $("#tableContent").hide();
         });
     </script>
 @stop

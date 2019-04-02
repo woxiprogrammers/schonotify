@@ -199,13 +199,14 @@
             $('#submit-button').hide();
             $('#exam-select').prop('selectedIndex',0);
             $('#subject-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+            //$('#paper_marks').prop('value',0);
         });
 
         $('#academic-year').change(function(){
             var academicYear=this.value;
                 var route = 'get-subjects/' + academicYear;
                 $.get(route, function (res) {
-                    console.log(res['subject'].length);
                     if (res['subject'].length == 0) {
                         $('#subject-select').html("no record found");
                     } else {
@@ -215,16 +216,28 @@
                         }
                         $('#subject-select').html(str);
                     }
-                    if (res['term'].length == 0) {
-                        $('#term-select').html("no record found");
-                    } else {
-                        var str1 = '<option value="">Please Select Subject</option>';
-                        for (var i = 0; i < res['term'].length; i++) {
-                            str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
-                        }
-                        $('#term-select').html(str1);
-                    }
                 });
+
+            $('#exam-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+        });
+
+        $('#subject-select').change(function(){
+            var subId=this.value;
+            var academicYear=$('#academic-year').val();
+            var route = 'get-term/' + academicYear + '/' +subId;
+            $.get(route, function (res) {
+                if (res['term'].length == 0) {
+                    $('#term-select').html("no record found");
+                } else {
+                    var str1 = '<option value="">Please Select Term</option>';
+                    for (var i = 0; i < res['term'].length; i++) {
+                        str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
+                    }
+                    $('#term-select').html(str1);
+                }
+            });
+            $('#exam-select').prop('selectedIndex',0);
         });
 
         $('#term-select').change(function(){
@@ -239,6 +252,16 @@
                         str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
                     }
                     $('#exam-select').html(str);
+                }
+            });
+        });
+
+        $('#exam-select').change(function(){
+            var examId=this.value;
+            var route = 'get-exam-marks/' + examId;
+            $.get(route, function (res) {
+                if (res > 0) {
+                    $('#paper_marks').val(res);
                 }
             });
         });
@@ -292,10 +315,6 @@
                                         '</label>'+
                                         '<input type="number" class="form-control" id="'+divId+'sub-questions" name="sub_questions" onchange="add('+divId+')" placeholder="No. of Questions">'+
                                     '</div>'+
-                            /*'<div class="col-md-2">'+
-                                '<a class="btn" onclick="add('+divId+')">'+
-                                'Add Sub Question </a>'+
-                            '</div>'+*/
                         '</div>'+
                             '<div id="'+divId+'subQuestion-div">'+
 

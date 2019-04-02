@@ -53,7 +53,7 @@
                                                 <div class="col-sm-4">
                                                     <span> Q.{{$question['question_id']}}</span>
                                                 </div>
-                                                @if(empty($subQuestions))
+                                                @if(!empty($subQuestions))
                                                 <div class="col-sm-4">
                                                     <span> marks {{$question['marks']}}</span>
                                                 </div>
@@ -103,7 +103,7 @@
                                         <h4 class="panel-title text-primary">Question Paper</h4>
                                     </div>
                                     <div class="panel-body" id="hide-paper">
-                                        <embed src="{{$answerSheetPdf}}" height="600px" width="100%">
+                                        <embed src="{{$questionPaperPdf}}" height="600px" width="100%">
                                     </div>
                                 </div>
                             </div>
@@ -197,7 +197,6 @@
 
         $('.enter-mark').keyup(function () {
             var marks = this.value;
-            alert(marks);
             //var route='/exam-evaluation/get-orQuestions/'+isCheckedQuestion;
             $.get(route,function(res){
                 if (res.length > 0)

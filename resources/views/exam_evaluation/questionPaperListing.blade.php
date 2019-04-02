@@ -20,75 +20,76 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label class="control-label">
-                                        Batch <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
-                                        <option>Select Batch</option>
-                                        @foreach($batches as $batch)
-                                            <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
-                                        @endforeach
-                                    </select>
+                        <form method="post" action="/exam-evaluation/upload-paper" role="form" id="uploadForm" enctype="multipart/form-data">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="control-label">
+                                            Batch <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
+                                            <option>Select Batch</option>
+                                            @foreach($batches as $batch)
+                                                <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" id="class-select-div" >
+                                        <label class="control-label">
+                                            Select Class <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label">
+                                            Academic Year <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="academic-year" name="startYear" style="-webkit-appearance: menulist;" required="required">
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-4" id="class-select-div" >
-                                    <label class="control-label">
-                                        Select Class <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
-                                    </select>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-4" id="subject-select-div" >
+                                        <label class="control-label">
+                                            Select Subject<span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label">
+                                            Select Term<span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="term-select" name="Term_number" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" id="exam-select-div" >
+                                        <label class="control-label">
+                                            Select Exam <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="control-label">
-                                        Academic Year <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="academic-year" name="startYear" style="-webkit-appearance: menulist;" required="required">
-                                    </select>
-                                </div>
-                               {{-- <div class="col-md-4" id="exam-select-div" >
-                                    <label class="control-label">
-                                        Select Exam <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="exam-select" name="exam-select" style="-webkit-appearance: menulist;">
-                                        <option>Please Select Exam</option>
-                                    </select>
-                                </div>--}}
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-md-4" id="subject-select-div" >
-                                    <label class="control-label">
-                                        Select Subject<span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="control-label">
-                                        Select Term<span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="term-select" name="Term_number" style="-webkit-appearance: menulist;" required>
-                                    </select>
-                                </div>
-                                <div class="col-md-4" id="exam-select-div" >
-                                    <label class="control-label">
-                                        Select Exam <span class="symbol required"></span>
-                                    </label>
-                                    <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <div class="container-fluid container-fullw bg-white">
-                            <div class="row">
-                                <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
-                                <div class="col-md-12" id="tableContent">
+                            </fieldset>
+                            <div class="container-fluid container-fullw bg-white">
+                                <div class="row">
+                                    <div id="loadmoreajaxloader" style="display:none;"><center><img src="/assets/images/loader1.gif" /></center></div>
+                                    <div class="col-md-12" id="tableContent">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row pull-right">
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-wide" id="submit-button" type="submit">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     @include('rightSidebar')
                 </div>
@@ -121,6 +122,7 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            $('#submit-button').hide();
         });
 
         $('#batchDrpdn').change(function(){
@@ -140,6 +142,8 @@
                     }
                     $('#class-select').html(str);
                     $('#loadmoreajaxloaderClass').hide();
+                    $('#submit-button').hide();
+
                 }
             });
         });
@@ -160,6 +164,7 @@
             });
             $('#submit-button').hide();
             $('#exam-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
             $('#subject-select').prop('selectedIndex',0);
         });
 
@@ -167,7 +172,6 @@
             var academicYear=this.value;
             var route = 'get-subjects/' + academicYear;
             $.get(route, function (res) {
-                console.log(res['subject'].length);
                 if (res['subject'].length == 0) {
                     $('#subject-select').html("no record found");
                 } else {
@@ -177,16 +181,30 @@
                     }
                     $('#subject-select').html(str);
                 }
+            });
+            $('#exam-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+            $('#submit-button').hide();
+
+        });
+
+        $('#subject-select').change(function(){
+            var subId=this.value;
+            var academicYear=$('#academic-year').val();
+            var route = 'get-term/' + academicYear + '/' +subId;
+            $.get(route, function (res) {
                 if (res['term'].length == 0) {
                     $('#term-select').html("no record found");
                 } else {
-                    var str1 = '<option value="">Please Select Subject</option>';
+                    var str1 = '<option value="">Please Select Term</option>';
                     for (var i = 0; i < res['term'].length; i++) {
                         str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
                     }
                     $('#term-select').html(str1);
                 }
             });
+            $('#exam-select').prop('selectedIndex',0);
+            $('#submit-button').hide();
         });
 
         $('#term-select').change(function(){
@@ -203,6 +221,7 @@
                     $('#exam-select').html(str);
                 }
             });
+            $('#submit-button').hide();
         });
 
         $('#exam-select').change(function(){
@@ -219,6 +238,7 @@
                         $('div#loadmoreajaxloader').hide();
                         $("#tableContent").html(res);
                         TableData.init();
+                        $('#submit-button').show();
                     })
             }
         });
