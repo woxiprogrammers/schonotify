@@ -20,12 +20,18 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
+                        <form method="post" action="/exam-evaluation/enter-marks" role="form" id="questionPaperCreateForm">
                         <div class="row">
                             <div class="col-sm-6">
                                 <h4>Student GRN :- {{$stdGrn}}</h4>
+                                <input type="hidden" name="student_id" value="{{$stdId}}">
+                                <input type="hidden" name="exam_structure_id" value="{{$examDetails['exam_structure_id']}}">
+                                <input type="hidden" name="term_id" value="{{$examDetails['term_id']}}">
+                                <input type="hidden" name="exam_term_details_id" value="{{$examId}}">
+                                <input type="hidden" name="marks" value="50">
                             </div>
                             <div class="col-sm-6">
-                                <h4>Exam :- {{$examName}}</h4>
+                                <h4>Exam :- {{$examDetails['exam_type']}}</h4>
                             </div>
                         </div>
                         <hr>
@@ -39,32 +45,55 @@
                                         </div>
                                     </div>
                                     <div class="panel-body" style="display: block;">
-
-                                        @for ($i = 1; $i < 11; $i++)
+                                        @foreach($questions as $question)
+                                            <?php
+                                            $subQuestions = \App\QuestionPaperStructure::where('parent_question_id',$question['id'])->get()->toArray();
+                                            ?>
                                             <div class="row" id="">
                                                 <div class="col-sm-4">
-                                                    <span> Q.{{$i}}</span>
+                                                    <span> Q.{{$question['question_id']}}</span>
                                                 </div>
+                                                @if(!empty($subQuestions))
                                                 <div class="col-sm-4">
-                                                    <span> marks 10</span>
+                                                    <span> marks {{$question['marks']}}</span>
                                                 </div>
+                                                    @else
+                                                    <div class="col-sm-4">
+                                                        <span>marks</span>
+                                                        <input type="number" class="enter-mark" name="marks[]" placeholder="{{$question['marks']}}">
+                                                    </div>
+                                                @endif
                                                 <div class="col-sm-4">
                                                     <label> Check
-                                                        <input type="checkbox" class="is-checked" id="{{$i}}is-checked" value="{{$i}}">
+                                                        <input type="checkbox" class="is-checked" id="{{$question['id']}}is-checked" value="{{$question['id']}}">
                                                     </label>
                                                 </div>
                                             </div>
-                                                <div id="{{$i}}">
-                                                </div>
-                                            @if($i%2 ==1)
-                                                <div class="row" style="text-align: center">
-                                                        <span style="color: blue"> OR </span>
-                                                </div>
+                                            @if(!empty($subQuestions))
+                                                @foreach($subQuestions as $subQuestion)
+                                                    <div class="row sub-que {{$question['id']}}sub-questions" id="{{$question['id']}}sub-questions">
+                                                        <div class="col-sm-1">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <span>Q.{{$subQuestion['question_id']}}</span>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <span> marks</span>
+                                                            <input type="number" class="enter-mark" name="marks[{{$question['id']}}][]" placeholder="{{$subQuestion['marks']}}">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label> Check
+                                                                <input type="checkbox" class="is-checked" id="{{$subQuestion['id']}}is-checked" value="{{$subQuestion['id']}}">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                                 @else
-                                                <hr style="border-color: black">
                                             @endif
-                                            <br>
-                                        @endfor
+                                                @if($question != end($questions))
+                                                <hr style="border-color: black">
+                                                @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +103,7 @@
                                         <h4 class="panel-title text-primary">Question Paper</h4>
                                     </div>
                                     <div class="panel-body" id="hide-paper">
-                                        <embed src="{{$answerSheetPdf}}" height="600px" width="100%">
+                                        <embed src="{{$questionPaperPdf}}" height="600px" width="100%">
                                     </div>
                                 </div>
                             </div>
@@ -89,6 +118,14 @@
                                 </div>
                             </div>
                         </div>
+                            <div class="row pull-right">
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-wide" id="submit-button" type="submit">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 @include('rightSidebar')
             </div>
@@ -120,6 +157,7 @@
             Main.init();
             $('#question-paper-pdf').hide();
             $('#answer-sheet-pdf').attr("class", "col-sm-8");
+            $('.sub-que').hide();
          });
         </script>
     <script>
@@ -134,50 +172,38 @@
         });
 
         $('.is-checked').click(function () {
-           var isChecked = this.value;
-           if(isChecked%2==1){
-               var nextQuestion = isChecked;
-               ++nextQuestion;
-               if($('#'+nextQuestion+'is-checked').prop("disabled") == true){
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", false);
-               } else {
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", true);
-               }
-           } else {
-               var nextQuestion=isChecked-1;
-               if($('#'+nextQuestion+'is-checked').prop("disabled") == true){
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", false);
-               } else {
-                   $('#' + nextQuestion + 'is-checked').prop("disabled", true);
-               }
-           }
-           var str = '';
-           for(var i=0; i<2 ; i++){
-               var qNo =i+1;
-               str += '<div class="row sub-que" id="">'+
-                        '<div class="col-sm-1">'+
-                        '</div>'+
-                        '<div class="col-sm-3">'+
-                            '<span>'+ 'Q.'+qNo+'</span>'+
-                        '</div>'+
-                        '<div class="col-sm-3">'+
-                            '<span> marks</span>'+
-                            '<select>'+
-                                '<option>1</option>'+
-                                '<option>2</option>'+
-                                '<option>3</option>'+
-                                '<option>4</option>'+
-                                '<option>5</option>'+
-                            '</select>'+
-                        '</div>'+
-                        '<div class="col-sm-3">'+
-                            '<label> Check'+
-                                '<input type="checkbox"  id="is-checked" value="">'+
-                            '</label>'+
-                        '</div>'+
-                    '</div>'+'<br>';
-               $('#'+isChecked+'').html(str);
-           }
+            var isCheckedQuestion = this.value;
+            $('#'+isCheckedQuestion+'').show();
+            var route='/exam-evaluation/get-orQuestions/'+isCheckedQuestion;
+            $.get(route,function(res){
+                if (res.length > 0)
+                {
+                    if($('#'+isCheckedQuestion+'is-checked').prop('checked') == true){
+                        $('.'+isCheckedQuestion+'sub-questions').show();
+                        for(var i=0; i<res.length; i++)
+                        {
+                            $('#' +res[i]['or_que_id']+ 'is-checked').prop("disabled", true);
+                        }
+                    }else {
+                        $('.'+isCheckedQuestion+'sub-questions').hide();
+                        for(var i=0; i<res.length; i++)
+                        {
+                            $('#' +res[i]['or_que_id']+ 'is-checked').prop("disabled", false);
+                        }
+                    }
+                }
+            });
+        });
+
+        $('.enter-mark').keyup(function () {
+            var marks = this.value;
+            //var route='/exam-evaluation/get-orQuestions/'+isCheckedQuestion;
+            $.get(route,function(res){
+                if (res.length > 0)
+                {
+
+                }
+            });
         });
     </script>
 @stop
