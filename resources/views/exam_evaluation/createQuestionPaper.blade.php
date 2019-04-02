@@ -23,7 +23,7 @@
                         <form method="post" action="/exam-evaluation/create-questionPaper" role="form" id="questionPaperCreateForm">
                             <fieldset>
                                 <div class="row">
-                                    <div class="col-md-3 ">
+                                    <div class="col-md-4">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
                                         </label>
@@ -34,34 +34,47 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-3" id="class-select-div" >
+                                    <div class="col-md-4" id="class-select-div">
                                         <label class="control-label">
                                             Select Class <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" id="exam-select-div" >
-                                        <label class="control-label">
-                                            Select Exam <span class="symbol required"></span>
-                                        </label>
-                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
-                                            <option>Please Select Exam</option>
-                                            @foreach($exams as $exam)
-                                                <option value="{!! $exam['id'] !!}">{!! $exam['exam_name'] !!}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="col-md-4">
+                                            <label class="control-label">
+                                                Academic Year <span class="symbol required"></span>
+                                            </label>
+                                            <select class="form-control" id="academic-year" name="startYear" style="-webkit-appearance: menulist;" required="required">
+                                            </select>
                                     </div>
-                                    <div class="col-md-3" id="subject-select-div" >
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-4" id="subject-select-div" >
                                         <label class="control-label">
                                             Select Subject<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="subject-select" name="subject_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
+                                    <div class="col-md-4">
+                                            <label class="control-label">
+                                                Select Term<span class="symbol required"></span>
+                                            </label>
+                                            <select class="form-control" id="term-select" name="Term_number" style="-webkit-appearance: menulist;" required>
+                                            </select>
+                                    </div>
+                                    <div class="col-md-4" id="exam-select-div" >
+                                        <label class="control-label">
+                                            Select Exam <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
                                 </div>
                             </fieldset>
-                            <br>
                             <fieldset>
                                 <div class="row">
                                     <div class="col-md-3" id="set-select-div" >
@@ -102,7 +115,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group pull-right">
-                                    <button class="btn btn-primary btn-wide" type="submit">
+                                    <button class="btn btn-primary btn-wide" id="submit-button" type="submit">
                                         Submit
                                     </button>
                                 </div>
@@ -115,7 +128,6 @@
         </div>
     </div>
     @include('footer')
-    </div>
     <!-- start: MAIN JAVASCRIPTS -->
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -140,13 +152,14 @@
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <!-- start: CLIP-TWO JAVASCRIPTS -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/form-wizard.js"></script>
-    <script src="/assets/js/form-validation.js"></script>
+    {{--<script src="/assets/js/form-wizard.js"></script>
+    <script src="/assets/js/form-validation.js"></script>--}}
     <script src="/assets/js/form-elements.js"></script>
     <script src="/assets/js/custom-project.js"></script>
     <script>
         jQuery(document).ready(function() {
             Main.init();
+            $('#submit-button').hide();
         });
         $('#batchDrpdn').change(function(){
             var id=this.value;
@@ -158,7 +171,7 @@
                     $('#class-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
-                    var str='<option value="">Please Select Class</option>';
+                    var str='<option>Please Select Class</option>';
                     for(var i=0; i<res.length; i++)
                     {
                         str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';
@@ -169,28 +182,96 @@
             });
         });
 
-        $('#exam-select').change(function(){
-            var id=this.value;
-            var classId = $('#class-select').val();
-            if(classId != null) {
-                var route = 'get-exam-subject/' + id + '/' + classId;
+        $('#class-select').change(function(){
+            var classId=this.value;
+            var route = 'get-academicYear/' + classId;
+            $.get(route, function (res) {
+                if (res.length == 0) {
+                    $('#exam-select').html("no record found");
+                } else {
+                    var str = '<option value="">Please Select Academic Year</option>';
+                    for (var i = 0; i < res.length; i++) {
+                        str += '<option value="' + res[i]['year'] + '">' + res[i]['year'] + '</option>';
+                    }
+                    $('#academic-year').html(str);
+                }
+            });
+            $('#submit-button').hide();
+            $('#exam-select').prop('selectedIndex',0);
+            $('#subject-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
+            //$('#paper_marks').prop('value',0);
+        });
+
+        $('#academic-year').change(function(){
+            var academicYear=this.value;
+                var route = 'get-subjects/' + academicYear;
                 $.get(route, function (res) {
-                    if (res.length == 0) {
+                    if (res['subject'].length == 0) {
                         $('#subject-select').html("no record found");
                     } else {
                         var str = '<option value="">Please Select Subject</option>';
-                        for (var i = 0; i < res.length; i++) {
-                            str += '<option value="' + res[i]['subject_id'] + '">' + res[i]['subject_name'] + '</option>';
+                        for (var i = 0; i < res['subject'].length; i++) {
+                            str += '<option value="' + res['subject'][i]['subject_id'] + '">' + res['subject'][i]['subject_name'] + '</option>';
                         }
                         $('#subject-select').html(str);
                     }
                 });
-            }
+
+            $('#exam-select').prop('selectedIndex',0);
+            $('#term-select').prop('selectedIndex',0);
         });
 
-        $('#paper_questions').change(function(){
+        $('#subject-select').change(function(){
+            var subId=this.value;
+            var academicYear=$('#academic-year').val();
+            var route = 'get-term/' + academicYear + '/' +subId;
+            $.get(route, function (res) {
+                if (res['term'].length == 0) {
+                    $('#term-select').html("no record found");
+                } else {
+                    var str1 = '<option value="">Please Select Term</option>';
+                    for (var i = 0; i < res['term'].length; i++) {
+                        str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
+                    }
+                    $('#term-select').html(str1);
+                }
+            });
+            $('#exam-select').prop('selectedIndex',0);
+        });
+
+        $('#term-select').change(function(){
+            var termId=this.value;
+            var route = 'get-exams/' + termId;
+            $.get(route, function (res) {
+                if (res.length == 0) {
+                    $('#exam-select').html("no record found");
+                } else {
+                    var str = '<option value="">Please Select Subject</option>';
+                    for (var i = 0; i < res.length; i++) {
+                        str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
+                    }
+                    $('#exam-select').html(str);
+                }
+            });
+        });
+
+        $('#exam-select').change(function(){
+            var examId=this.value;
+            var route = 'get-exam-marks/' + examId;
+            $.get(route, function (res) {
+                if (res > 0) {
+                    $('#paper_marks').val(res);
+                }
+            });
+        });
+
+
+        $('#paper_questions').keyup(function(){
+            $('#submit-button').show();
             var questions=this.value;
             var str = '';
+            console.log(questions);
             for(var i=0; i<questions; i++)
             {   var divId = i;
                 str += '<div class="row">'+
@@ -198,41 +279,42 @@
                                 '<label class="control-label">'+
                                     'Id'+'<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-id" name="question-id[]" placeholder="Id">'+
+                                '<input type="text" class="form-control" id="question-id" name="question-id[]" placeholder="Id" required>'+
                             '</div>'+
                             '<div class="col-md-5" id="question-name-div">'+
                                 '<label class="control-label">'+
                                     'Enter Question' +'<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-name" name="question-name[]" placeholder="Enter Question">'+
+                                '<input type="text" class="form-control" id="question-name" name="question-name[]" placeholder="Enter Question" required>'+
                             '</div>'+
                             '<div class="col-md-1" id="question-marks-div">'+
                                 '<label class="control-label">'+
                                     'Marks<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-marks" name="question-marks[]" placeholder="marks">'+
+                                '<input type="text" class="form-control" id="question-marks" name="question-marks[]" placeholder="marks" required>'+
                             '</div>'+
                             '<div class="col-md-2" id="or-question-div" >'+
                                 '<label class="control-label">'+
                                     'Or<span class="symbol required"></span>'+
                                 '</label>'+
-                                '<select class="form-control" id="or-question" name="or-question[]" style="-webkit-appearance: menulist;">'+
-                                    '<option>Select or</option>'+
-                                    '<option value="2">2</option>' +
-                                    '<option value="3">3</option>' +
-                                    '<option value="4">4</option>' +
-                                    '<option value="5">5</option>' +
-                                    '<option value="6">6</option>' +
-                                    '<option value="7">7</option>' +
-                                    '<option value="8">8</option>' +
-                                    '<option value="9">9</option>' +
-                                    '<option value="10">10</option>' +
+
+                                '<select class="form-control" id="or-question" name="or-question['+divId+'][]" multiple>'+
+                                    '<option>Select or</option>';
+                                    for(var j=0; j<questions; j++) {
+                                        if (i != j) {
+                                            var k = j+1;
+                                            str += '<option value="'+j+'">' + k + '</option>';
+                                        }
+                                    }
+                                    str +=
                                 '</select>'+
                             '</div>'+
-                            '<div class="col-md-2">'+
-                                '<a class="btn" onclick="add('+divId+')">'+
-                                'Add Sub Question </a>'+
-                            '</div>'+
+                                    '<div class="col-md-2" id="sub-question-select-div" >'+
+                                        '<label class="control-label">'+
+                                            'Add Sub Questions <span class="symbol required"></span>'+
+                                        '</label>'+
+                                        '<input type="number" class="form-control" id="'+divId+'sub-questions" name="sub_questions" onchange="add('+divId+')" placeholder="No. of Questions">'+
+                                    '</div>'+
                         '</div>'+
                             '<div id="'+divId+'subQuestion-div">'+
 
@@ -270,40 +352,47 @@
             }
 
         });
-
         function add(divId) {
-            str = '<br><br>'+'<div class="row">' +
-                '<div class="col-md-1"></div>' +
-                '<div class="col-md-1" id="question-id-div">' +
-                '<label class="control-label">' +
-                "Id" + '<span class="symbol required"></span>' +
-                '</label>' +
-                '<input type="text" class="form-control" id="question-id" name="sub-question-id['+divId+'][]" placeholder="Id">' +
-                '</div>' +
-                '<div class="col-md-5" id="question-name-div">' +
-                '<label class="control-label">' +
-                'Enter Question' + '<span class="symbol required"></span>' +
-                '</label>' +
-                '<input type="text" class="form-control" id="question-name" name="sub-question-name['+divId+'][]" placeholder="Enter Question">' +
-                '</div>' +
-                '<div class="col-md-2" id="question-marks-div">' +
-                '<label class="control-label">' +
-                'Marks<span class="symbol required"></span>' +
-                '</label>' +
-                '<input type="text" class="form-control" id="question-marks" name="sub-question-marks['+divId+'][]" placeholder="marks">' +
-                '</div>' +
-                '<div class="col-md-2" id="or-question-div" >' +
-                '<label class="control-label">' +
-                'Or<span class="symbol required"></span>' +
-                '</label>' +
-                '<select class="form-control" id="or-question" name="sub-or-question['+divId+'][]" style="-webkit-appearance: menulist;">' +
-                '<option>Select or</option>' +
-                '<option value="2">2</option>' +
-                '<option value="3">3</option>' +
-                '</select>' +
-                '</div>' +
-                '</div>';
-            $('#'+divId+'subQuestion-div').append(str);
+            var elementId = divId+'sub-questions';
+            var subQuestionCount = $('#'+elementId+'').val();
+            for(var i=0 ; i<subQuestionCount ; i++) {
+                str = '<br><br>' + '<div class="row">' +
+                    '<div class="col-md-1"></div>' +
+                    '<div class="col-md-1" id="question-id-div">' +
+                    '<label class="control-label">' +
+                    "Id" + '<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<input type="text" class="form-control" id="question-id" name="sub-question-id[' + divId + '][]" placeholder="Id" required>' +
+                    '</div>' +
+                    '<div class="col-md-5" id="question-name-div">' +
+                    '<label class="control-label">' +
+                    'Enter Question' + '<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<input type="text" class="form-control" id="question-name" name="sub-question-name[' + divId + '][]" placeholder="Enter Question" required>' +
+                    '</div>' +
+                    '<div class="col-md-2" id="question-marks-div">' +
+                    '<label class="control-label">' +
+                    'Marks<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<input type="text" class="form-control" id="question-marks" name="sub-question-marks[' + divId + '][]" placeholder="marks" required>' +
+                    '</div>' +
+                    '<div class="col-md-2" id="or-question-div" >' +
+                    '<label class="control-label">' +
+                    'Or<span class="symbol required"></span>' +
+                    '</label>' +
+                    '<select class="form-control" id="or-question" name="sub-or-question[' + divId + ']['+i+'][]" multiple>' +
+                    '<option>Select or</option>';
+                    for(var j=0 ; j<subQuestionCount ; j++) {
+                        if(i != j) {
+                            var k = j+1;
+                            str += '<option value="'+j+'">' + k + '</option>';
+                        }
+                    }
+                    str += '</select>' +
+                    '</div>' +
+                    '</div>';
+                $('#' + divId + 'subQuestion-div').append(str);
+            }
         }
     </script>
 @stop

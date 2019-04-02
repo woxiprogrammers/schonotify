@@ -8,5 +8,5 @@ class StudentAnswerSheet extends Model
 {
     protected $table = 'student_answer_sheets';
 
-    protected $fillable = ['exam_id','subject_id','student_id','pdf_name'];
+    protected $fillable = ['exam_id','student_id','pdf_name'];
 }

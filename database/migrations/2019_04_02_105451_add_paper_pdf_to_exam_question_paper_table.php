@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddClassIdToExamQuestionPaperTable extends Migration
+class AddPaperPdfToExamQuestionPaperTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class AddClassIdToExamQuestionPaperTable extends Migration
     public function up()
     {
         Schema::table('exam_question_paper', function (Blueprint $table) {
-            $table->unsignedInteger('class_id')->nullable();
-            $table->foreign('class_id')->references('id')->on('classes')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('paper_pdf',255)->nullable();
         });
     }
 
@@ -26,7 +25,7 @@ class AddClassIdToExamQuestionPaperTable extends Migration
     public function down()
     {
         Schema::table('exam_question_paper', function (Blueprint $table) {
-            $table->dropColumn('class_id');
+            $table->dropColumn('paper_pdf');
         });
     }
 }

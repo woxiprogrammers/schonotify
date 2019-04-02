@@ -19,9 +19,9 @@ class CreateExamQuestionPaperTable extends Migration
             $table->unsignedInteger('marks')->nullable();
             $table->string('set_name',255)->nullable();
             $table->unsignedInteger('exam_id')->nullable();
-            $table->foreign('exam_id')->references('id')->on('exam_evaluation')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedInteger('subject_id')->nullable();
-            $table->foreign('subject_id')->references('id')->on('subjects')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('exam_id')->references('id')->on('exam_term_details')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedInteger('class_id')->nullable();
+            $table->foreign('class_id')->references('id')->on('classes')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

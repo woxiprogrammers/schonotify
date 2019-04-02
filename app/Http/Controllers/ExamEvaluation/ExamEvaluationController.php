@@ -12,12 +12,20 @@ namespace App\Http\Controllers\ExamEvaluation;
 use App\AssignStudentsToTeacher;
 use App\Batch;
 use App\Division;
-use App\ExamClassSubject;
-use App\ExamEvaluation;
+use App\ExamClassStructureRelation;
 use App\ExamQuestionPaper;
+use App\ExamSubjectStructure;
+use App\ExamSubSubjectStructure;
+use App\ExamTermDetails;
+use App\ExamTerms;
+use App\ExamYear;
 use App\Http\Controllers\Controller;
+use App\OrQuestions;
 use App\PaperCheckerMaster;
+use App\QuestionPaperStructure;
 use App\StudentAnswerSheet;
+use App\StudentExamDetails;
+use App\StudentExamMarks;
 use App\StudentExtraInfo;
 use Illuminate\Support\Facades\File;
 use App\Subject;
@@ -37,57 +45,11 @@ class ExamEvaluationController extends Controller
         $this->middleware('auth');
     }
 
-    public function createExamView(){
-        try{
-            $user = Auth::user();
-            $exams = ExamEvaluation::all();
-            return view('exam_evaluation.createExam')->with(compact('user','exams'));
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function createExam(Request $request){
-        try{
-            $user = Auth::user();
-            if($request->exam_name != null){
-                $examData['exam_name'] = $request->exam_name;
-                ExamEvaluation::create($examData);
-            }
-            return back();
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function editExamView(Request $request,$examId){
-        try{
-            $user = Auth::user();
-            $exam = ExamEvaluation::where('id',$examId)->first();
-            return view('exam_evaluation.editExam')->with(compact('user','exam'));
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function editExam(Request $request){
-        try{
-            $user = Auth::user();
-            if($request->exam_name != null){
-                $examData['exam_name'] = $request->exam_name;
-                ExamEvaluation::where('id',$request->exam_id)->update($examData);
-            }
-            return redirect('exam-evaluation/create-exam');
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
     public function createQuestionPaperView(){
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            $exams = ExamEvaluation::all();
+            $exams = ExamTermDetails::all();
             return view('exam_evaluation.createQuestionPaper')->with(compact('batches','user','exams'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -103,9 +65,55 @@ class ExamEvaluationController extends Controller
             $paperData['marks'] = $data['paper_marks'];
             $paperData['set_name'] = $data['paper_set'];
             $paperData['exam_id'] = $data['exam_select'];
-            $paperData['subject_id'] = $data['subject_select'];
             $paperData['class_id'] = $data['class_select'];
-            ExamQuestionPaper::create($paperData);
+            $createQuestionPaper = ExamQuestionPaper::create($paperData);
+            if($request->has('question-id')){
+                $questionData['question_paper_id'] = $createQuestionPaper->id;
+                foreach ($data['question-id'] as $key=>$value) {
+                    $questionData['question_id'] = $value;
+                    $questionData['question'] = $data['question-name'][$key];
+                    $questionData['marks'] = $data['question-marks'][$key];
+                    $createQuestion = QuestionPaperStructure::create($questionData);
+                    $questions[$key] = $createQuestion->id;
+                }
+                $orQuestions = $data['or-question'];
+                foreach ($questions as $key=>$value){
+                    $orQuestionData['question_id'] =  $questions[$key];
+                    if(array_key_exists($key,$orQuestions)){
+                       foreach ($orQuestions[$key] as $key1=>$value1){
+                           $orQuestionData['or_question_id'] =  $questions[$value1];
+                           OrQuestions::create($orQuestionData);
+                       }
+                    }
+                }
+            }
+            if ($request->has('sub-question-id')){
+                $subQuestionData['question_paper_id'] = $createQuestionPaper->id;
+                foreach ($questions as $key=>$value){
+                    $subQuestionData['parent_question_id'] = $value;
+                    if(array_key_exists($key,$data['sub-question-id'])){
+                        foreach ($data['sub-question-id'][$key] as $key1=>$value1){
+                            $subQuestionData['question_id'] = $value1;
+                            $subQuestionData['question'] = $data['sub-question-name'][$key][$key1];
+                            $subQuestionData['marks'] = $data['sub-question-marks'][$key][$key1];
+                            $createSubQuestions = QuestionPaperStructure::create($subQuestionData);
+                            $subQuestions[$key][$key1] = $createSubQuestions->id;
+                        }
+                    }
+                }
+            }
+            foreach ($subQuestions as $key=>$value){
+                if(array_key_exists($key,$data['sub-or-question'])){
+                    foreach ($data['sub-or-question'][$key] as $key1=>$value1){
+                        $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
+                        foreach ($value1 as $key2=>$value2){
+                            $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
+                            OrQuestions::create($orSubQuestion);
+                        }
+                    }
+                }
+            }
+
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -145,8 +153,33 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            $exams = ExamEvaluation::all();
-            return view('exam_evaluation.questionPaperListing')->with(compact('batches','user','exams'));
+            return view('exam_evaluation.questionPaperListing')->with(compact('batches','user'));
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function uploadQuestionPaper(Request $request){
+        try{
+            $questionPapers = $request->question_paper;
+            foreach ($questionPapers as $paperId => $paperPdf){
+                if($paperPdf != null) {
+                    $paperPresent = ExamQuestionPaper::where('id', $paperId)->first();
+                    $folderEncName = sha1($paperId);
+                    $folderPath = public_path() . env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                    if ($paperPresent['paper_pdf'] != null) {
+                        unlink($folderPath . DIRECTORY_SEPARATOR . $paperPresent['paper_pdf']);
+                    }
+                    if (!file_exists($folderPath)) {
+                        File::makeDirectory($folderPath, 0777, true, true);
+                    }
+                    $filename = mt_rand(1,10000000000).sha1(time()).".pdf";
+                    $paperPdf->move($folderPath , $filename);
+                    $paperData['paper_pdf'] = $filename;
+                    ExamQuestionPaper::where('id',$paperId)->update($paperData);
+                }
+            }
+            return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -156,8 +189,7 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            $exams = ExamEvaluation::all();
-            return view('exam_evaluation.uploadAnswerSheet')->with(compact('batches','user','exams'));
+            return view('exam_evaluation.uploadAnswerSheet')->with(compact('batches','user'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -166,11 +198,10 @@ class ExamEvaluationController extends Controller
     public function uploadAnswerSheet(Request $request){
         try{
             $answerSheetData['exam_id'] = $request->exam_select;
-            $answerSheetData['subject_id'] = $request->subject_select;
             $answerSheets = $request->answer_sheet;
             foreach ($answerSheets as $stdId => $answerSheetPdf){
                 if($answerSheetPdf != null) {
-                    $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->where('subject_id', $request->subject_select)->where('student_id', $stdId)->first();
+                    $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->/*where('subject_id', $request->subject_select)->*/where('student_id', $stdId)->first();
                     $folderEncName = sha1($request->exam_select);
                     $folderPath = public_path() . env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
                     if ($answerSheetPresent['pdf_name'] != null) {
@@ -200,9 +231,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            $exams = ExamEvaluation::all();
             $paperCheckerRoles = PaperCheckerMaster::all();
-            return view('exam_evaluation.assignStudentsToTeacher')->with(compact('batches','user','exams','paperCheckerRoles'));
+            return view('exam_evaluation.assignStudentsToTeacher')->with(compact('batches','user','paperCheckerRoles'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -212,13 +242,12 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $assignStudentData['exam_id'] = $request->exam_select;
-            $assignStudentData['subject_id'] = $request->subject_select;
             $assignStudentData['teacher_id'] = $request->teacher_select;
             $assignStudentData['role_id'] = $request->role_select;
             if($request->has('assign_student')){
                 $students = $request->assign_student;
                 foreach ($students as $student){
-                    $assignedStudents = AssignStudentsToTeacher::where('exam_id',$request->exam_select)->where('subject_id',$request->subject_select)->where('teacher_id',$request->teacher_select)->where('student_id',$student)->where('role_id',$request->role_select)->first();
+                    $assignedStudents = AssignStudentsToTeacher::where('exam_id',$request->exam_select)->where('teacher_id',$request->teacher_select)->where('student_id',$student)->where('role_id',$request->role_select)->first();
                     if($assignedStudents == null) {
                         $assignStudentData['student_id'] = $student;
                         AssignStudentsToTeacher::create($assignStudentData);
@@ -231,73 +260,73 @@ class ExamEvaluationController extends Controller
         }
     }
 
-    public function assignSubjectView(){
-        try{
-            $user = Auth::user();
-            $batches = Batch::where('body_id',$user->body_id)->get();
-            $exams = ExamEvaluation::all();
-            return view('exam_evaluation.assignExamSubjects')->with(compact('batches','user','exams'));
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function assignSubject(Request $request){
-        try{
-            $examSubjectData['class_id'] = $request->class_select;
-            $examSubjectData['exam_id'] = $request->exam_select;
-            if($request->has('subject_select')){
-                $subjects = $request->subject_select;
-                foreach ($subjects as $subject){
-                    $examSubject = ExamClassSubject::where('class_id',$request->class_select)->where('exam_id',$request->exam_select)->where('subject_id',$subject)->first();
-                    if ($examSubject == null) {
-                        $examSubjectData['subject_id'] = $subject;
-                        ExamClassSubject::create($examSubjectData);
-                    }
-                }
-            }
-            return back();
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
-    public function removeSubject(Request $request,$subId,$classId,$examId){
-        try{
-            ExamClassSubject::where('class_id',$classId)->where('exam_id',$examId)->where('subject_id',$subId)->delete();
-            return back();
-        }catch (\Exception $e){
-            abort(500,$e->getMessage());
-        }
-    }
-
     public function studentListingView(){
         try{
             $user = Auth::user();
             $batches = Batch::where('body_id',$user->body_id)->get();
-            $exams = ExamEvaluation::all();
             $paperCheckerRoles = PaperCheckerMaster::all();
-            return view('exam_evaluation.studentListing')->with(compact('batches','user','exams','paperCheckerRoles'));
+            return view('exam_evaluation.studentListing')->with(compact('batches','user','paperCheckerRoles'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
     }
 
-    public function getEnterMarksView(Request $request,$examId,$subId,$stdId){
+    public function getEnterMarksView(Request $request,$examId,$stdId){
         try{
             $user = Auth::user();
             $answerSheetPdf = null;
-            $examName = ExamEvaluation::where('id',$examId)->value('exam_name');
+            $questionPaperPdf = null;
+            $examDetails = ExamTermDetails::where('id',$examId)->first();
             $stdGrn = StudentExtraInfo::where('student_id',$stdId)->value('grn');
-            $answerSheetData = StudentAnswerSheet::where('exam_id',$examId)->where('subject_id',$subId)->where('student_id',$stdId)->value('pdf_name');
+            $divisionId = User::where('id',$stdId)->value('division_id');
+            $classId = Division::where('id',$divisionId)->value('class_id');
+            $paperId = ExamQuestionPaper::where('exam_id',$examId)->where('class_id',$classId)->value('id');
+            $questions = QuestionPaperStructure::where('question_paper_id',$paperId)->whereNull('parent_question_id')->get()->toArray();
+            $answerSheetData = StudentAnswerSheet::where('exam_id',$examId)->where('student_id',$stdId)->value('pdf_name');
             if($answerSheetData != null) {
                 $answerSheetPdf = env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . sha1($examId) . DIRECTORY_SEPARATOR . $answerSheetData;
             }
+            $questionPaper = ExamQuestionPaper::where('exam_id',$examId)->first();
+            if($questionPaper['paper_pdf'] != null) {
+                $questionPaperPdf = env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . sha1($questionPaper['id']) . DIRECTORY_SEPARATOR . $questionPaper['paper_pdf'];
+            }
             $batches = Batch::where('body_id',$user->body_id)->get();
-            return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','examName','stdGrn'));
+            return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','stdGrn','questions','examDetails','stdId','examId','questionPaperPdf'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
+    }
+
+    public function EnterMarks(Request $request){
+        try{
+            $user = Auth::user();
+            $data = $request->all();
+            $examDetailsData['student_id'] = $data['student_id'];
+            $examDetailsData['term_id'] = $data['term_id'];
+            $examDetailsData['exam_structure_id'] = $data['exam_structure_id'];
+            $examDetails = StudentExamDetails::create($examDetailsData);
+            $examMarksData['student_exam_details_id'] = $examDetails['id'];
+            $examMarksData['term_id'] = $data['term_id'];
+            $examMarksData['exam_structure_id'] = $data['exam_structure_id'];
+            $examMarksData['marks_obtained'] = 50/*$data['marks']*/;
+            $examMarksData['exam_term_details_id'] = $data['exam_term_details_id'];
+            StudentExamMarks::create($examMarksData);
+            return back();
+        }catch (\Exception $e){
+            abort(500,$e->getMessage());
+        }
+    }
+
+    public function getOrQuestions(Request $request, $queId){
+        $data=array();
+        $orQuestion = OrQuestions::where('question_id',$queId)->lists('or_question_id');
+        $orQuestions = OrQuestions::where('question_id',$queId)->orWhereIn('question_id',$orQuestion)->where('or_question_id','!=',$queId)->get()->toArray();
+        $i=0;
+        foreach ($orQuestions as $row) {
+            $data[$i]['or_que_id'] = $row['or_question_id'] ;
+            $i++;
+        }
+        return $data;
     }
 
     public function getClassSubject($id){
@@ -308,6 +337,69 @@ class ExamEvaluationController extends Controller
         foreach ($subjects as $row) {
             $data[$i]['subject_id'] = $row['id'] ;
             $data[$i]['subject_name']= $row['subject_name'] ;
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getExamSubjects($year){
+        $data=array();
+        $academicYear = explode('-',$year);
+        $structureId = ExamYear::where('start_year',$academicYear[0])->where('end_year',$academicYear[1])->lists('exam_structure_id');
+        $subjectIds = ExamSubSubjectStructure::whereIn('id',$structureId)->distinct('subject_id')->lists('subject_id');
+        $subjects = ExamSubjectStructure::whereIn('id',$subjectIds)->get()->toArray();
+        $i=0;
+        foreach ($subjects as $row) {
+            $data['subject'][$i]['subject_id'] = $row['id'] ;
+            $data['subject'][$i]['subject_name']= $row['subject_name'] ;
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getExamTerms($year,$subId){
+        $data=array();
+        $academicYear = explode('-',$year);
+        $structureId = ExamYear::where('start_year',$academicYear[0])->where('end_year',$academicYear[1])->lists('exam_structure_id');
+        $structureIds = ExamSubSubjectStructure::whereIn('id',$structureId)->where('subject_id',$subId)->distinct('subject_id')->lists('id');
+        $terms = ExamTerms::whereIn('exam_structure_id',$structureIds)->get()->toArray();
+        $j=0;
+        foreach ($terms as $row) {
+            $data['term'][$j]['term_id'] = $row['id'] ;
+            $data['term'][$j]['term_name']= $row['term_name'] ;
+            $j++;
+        }
+        return $data;
+    }
+
+    public function getExams($termId){
+        $data=array();
+        $exams = ExamTermDetails::where('term_id',$termId)->where('is_exam_evaluation',true)->get()->toArray();
+        $i=0;
+        foreach ($exams as $row) {
+            $data[$i]['exam_id'] = $row['id'] ;
+            $data[$i]['exam_name']= $row['exam_type'] ;
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getExamMarks($examId){
+        $examsMarks = ExamTermDetails::where('id',$examId)->value('out_of_marks');
+        return $examsMarks;
+    }
+
+    public function getAcademicYear($classId){
+        $data=array();
+        $structureId = ExamClassStructureRelation::where('class_id',$classId)->distinct('exam_subject_id')->lists('exam_subject_id');
+        $years = ExamYear::whereIn('id',$structureId)->get()->toArray();
+        foreach ($years as $row) {
+            $arr[] = $row['start_year'] .'-'. $row['end_year'];
+        }
+        $year = array_unique($arr);
+        $i=0;
+        foreach ($year as $row){
+            $data[$i]['year'] = $row;
             $i++;
         }
         return $data;
@@ -326,18 +418,6 @@ class ExamEvaluationController extends Controller
         return $data;
     }
 
-    public function getExamClassSubject($examId,$classId){
-        $data=array();
-        $subjectIds = ExamClassSubject::where('class_id',$classId)->where('exam_id',$examId)->lists('subject_id');
-        $subjects = Subject::whereIn('id',$subjectIds)->get()->toArray();
-        $i=0;
-        foreach ($subjects as $row) {
-            $data[$i]['subject_id'] = $row['id'] ;
-            $data[$i]['subject_name']= $row['subject_name'] ;
-            $i++;
-        }
-        return $data;
-    }
 
     public function filterStudent(Request $request)
     {
@@ -366,7 +446,7 @@ class ExamEvaluationController extends Controller
             foreach ($result as $row) {
                 if ($row->user_role == 'student') {
                     if ($row->is_lc_generated == 0) {
-                        $studentAssigned = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('teacher_id',$request->teacher)->where('role_id',$request->role)->where('student_id',$row->id)->first();
+                        $studentAssigned = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('teacher_id',$request->teacher)->where('role_id',$request->role)->where('student_id',$row->id)->first();
                         if($studentAssigned == null) {
                             $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[]' class='assign-student' value='" . $row->id . "'>" . "</td>";
                         } else {
@@ -422,7 +502,7 @@ class ExamEvaluationController extends Controller
             foreach ($result as $row) {
                 if ($row->user_role == 'student') {
                     if ($row->is_lc_generated == 0) {
-                        $isAnswerSheetUploaded = StudentAnswerSheet::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('student_id',$row->id)->value('pdf_name');
+                        $isAnswerSheetUploaded = StudentAnswerSheet::where('exam_id',$request->exam)/*->where('subject_id',$request->subject)*/->where('student_id',$row->id)->value('pdf_name');
                         if($isAnswerSheetUploaded != null) {
                             $str .= "<tr><td>" . "<input type='checkbox' id='answersheet_student' name = 'answersheet_student[$row->id]' class='assign-student' value='" . $row->id . "' checked>" . "</td>";
                         } else {
@@ -493,42 +573,8 @@ class ExamEvaluationController extends Controller
                 }
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>";
-                $str .= "<a href='enter-marks/$request->exam/$request->subject/$row->id'><button>Fill Marks</button></a>";
+                $str .= "<a href='enter-marks/$request->exam/$row->id'><button>Fill Marks</button></a>";
                 $str .= "</td>";
-            }
-        } else {
-            $str1 = "<h5 class='center'>No records found !</h5>";
-        }
-        $str .= "</tr></tbody>";
-        $str .= "</table>";
-        if (sizeof($result->toArray()) != 0) {
-            return $str;
-        } else {
-            return $str1;
-        }
-    }
-
-    public function subjectListing(Request $request,$classId,$examId){
-        $subjectIds = ExamClassSubject::Where('class_id',$classId)->where('exam_id',$examId)->lists('subject_id');
-        $result = Subject::whereIn('id',$subjectIds)->get();
-        $str = "<h5 class='over-title margin-bottom-15'><h3>Assigned Subjects</h3></h5>";
-        $str .= "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
-        $str .= "<thead><tr>";
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Sr.No.: activate to sort column ascending' style='width: 29px;'>Sr.No.</th>";
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Subject: activate to sort column ascending' style='width: 29px;'>Subject</th>";
-        if (sizeof($result->toArray()) != 0) {
-            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Action: activate to sort column ascending' style='width: 29px;'>Action</th>";
-            $str .= "</tr></thead><tbody>";
-            $srNo = 1;
-            foreach ($result as $row) {
-                $str .="<tr>";
-                $str .= "<td>" . $srNo . "</td>";
-                $str .= "<td>" . $row->subject_name . " " . $row->lastname . "</td>";
-                $str .= "<td>";
-                $str .= "<button type='submit' onclick='removeSubject($row->id,$classId,$examId)'>".'Remove'."</button>";
-                $str .= "</td>";
-                $str .= "</tr>";
-                $srNo++;
             }
         } else {
             $str1 = "<h5 class='center'>No records found !</h5>";
@@ -548,23 +594,31 @@ class ExamEvaluationController extends Controller
         $str .= "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
         $str .= "<thead><tr>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Sr.No.: activate to sort column ascending' style='width: 29px;'>Sr.No.</th>";
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Subject: activate to sort column ascending' style='width: 29px;'>Subject</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Set: activate to sort column ascending' style='width: 29px;'>Set</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Marks: activate to sort column ascending' style='width: 29px;'>Marks</th>";
         if (sizeof($result->toArray()) != 0) {
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Action: activate to sort column ascending' style='width: 29px;'>Action</th>";
+            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Upload: activate to sort column ascending' style='width: 29px;'>Upload</th>";
             $str .= "</tr></thead><tbody>";
             $srNo = 1;
             foreach ($result as $row) {
                 $str .="<tr>";
                 $str .= "<td>" . $srNo . "</td>";
-                $str .= "<td>" . Subject::where('id',$row->subject_id)->value('subject_name') . "</td>";
+                if($row['paper_pdf'] != null) {
+                    $str .= "<td>" . "<input type='checkbox' checked>" . "</td>";
+                } else {
+                    $str .= "<td>" . "<input type='checkbox'>" . "</td>";
+                }
                 $str .= "<td>" . $row->set_name . "</td>";
                 $str .= "<td>" . $row->question_paper_name ."</td>";
                 $str .= "<td>" . $row->marks ."</td>";
                 $str .= "<td>";
                 $str .= "<a href='edit-paper/$row->id'>Edit </a>";
+                $str .= "</td>";
+                $str .= "<td>";
+                $str .= "<input type='file' accept='application/pdf' class='question-paper' name='question_paper[$row->id]'>";
                 $str .= "</td>";
                 $str .= "</tr>";
                 $srNo++;
