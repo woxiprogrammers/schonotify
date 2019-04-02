@@ -420,20 +420,6 @@
                         </div>
                     </a>
                     <ul class="sub-menu">
-                        {{--<li>
-                            <a href="/exam-evaluation/create-exam">
-                                <div class="item-inner">
-                                    <span class="title"> Create Exam</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/exam-evaluation/assign-subject">
-                                <div class="item-inner">
-                                    <span class="title"> Assign Subject to Exam</span>
-                                </div>
-                            </a>
-                        </li>--}}
                         <li>
                             <a href="/exam-evaluation/create">
                                 <div class="item-inner">
@@ -469,13 +455,6 @@
                                 </div>
                             </a>
                         </li>
-                        {{--<li>
-                            <a href="/exam-evaluation/enter-marks">
-                                <div class="item-inner">
-                                    <span class="title"> Enter Marks</span>
-                                </div>
-                            </a>
-                        </li>--}}
                     </ul>
                 </li>
 
