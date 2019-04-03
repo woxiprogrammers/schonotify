@@ -271,7 +271,6 @@
             $('#submit-button').show();
             var questions=this.value;
             var str = '';
-            console.log(questions);
             for(var i=0; i<questions; i++)
             {   var divId = i;
                 str += '<div class="row">'+

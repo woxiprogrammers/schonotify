@@ -87,6 +87,13 @@
                                         <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
+                                    <div class="col-md-4" id="set-select-div" >
+                                        <label class="control-label">
+                                            Question Paper Set <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="set-select" name="set_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
                                 </div>
                             </fieldset>
                             <div class="container-fluid container-fullw bg-white">
@@ -203,7 +210,6 @@
             $('#tableContent').hide();
             var route = 'get-subjects/' + academicYear;
             $.get(route, function (res) {
-                console.log(res['subject'].length);
                 if (res['subject'].length == 0) {
                     $('#subject-select').html("no record found");
                 } else {
@@ -268,6 +274,27 @@
             var clss = $('#class-select').val();
             var subject= $('#subject-select').val();
             if(division != null && exam != null && clss != null && subject != null) {
+                var route = 'get-paper-set/' + exam;
+                $.get(route, function (res) {
+                    if (res.length == 0) {
+                        $('#set-select').html("no record found");
+                    } else {
+                        var strSet = '<option value="">Please Select Paper Set</option>';
+                        for (var i = 0; i < res.length; i++) {
+                            strSet += '<option value="' + res[i]['set_id'] + '">' + res[i]['set_name'] + '</option>';
+                        }
+                        $('#set-select').html(strSet);
+                    }
+                });
+            }
+        });
+
+        $('#set-select').change(function(){
+            var division = $('#div-select').val();
+            var exam = $('#exam-select').val();
+            var clss = $('#class-select').val();
+            var subject= $('#subject-select').val();
+            if(division != null && exam != null && clss != null && subject != null) {
                 $('div#loadmoreajaxloader').show();
                 var route = 'student-upload';
                 $.ajax({
@@ -281,7 +308,7 @@
                         $("#tableContent").html(res);
                         $('#submit-button').show();
                         TableData.init();
-                    })
+                    });
             }
         });
 

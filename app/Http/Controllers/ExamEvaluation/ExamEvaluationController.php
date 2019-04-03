@@ -198,10 +198,11 @@ class ExamEvaluationController extends Controller
     public function uploadAnswerSheet(Request $request){
         try{
             $answerSheetData['exam_id'] = $request->exam_select;
+            $answerSheetData['question_paper_id'] = $request->set_select;
             $answerSheets = $request->answer_sheet;
             foreach ($answerSheets as $stdId => $answerSheetPdf){
                 if($answerSheetPdf != null) {
-                    $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->/*where('subject_id', $request->subject_select)->*/where('student_id', $stdId)->first();
+                    $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->where('student_id', $stdId)->first();
                     $folderEncName = sha1($request->exam_select);
                     $folderPath = public_path() . env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
                     if ($answerSheetPresent['pdf_name'] != null) {
@@ -282,13 +283,15 @@ class ExamEvaluationController extends Controller
             $classId = Division::where('id',$divisionId)->value('class_id');
             $paperId = ExamQuestionPaper::where('exam_id',$examId)->where('class_id',$classId)->value('id');
             $questions = QuestionPaperStructure::where('question_paper_id',$paperId)->whereNull('parent_question_id')->get()->toArray();
-            $answerSheetData = StudentAnswerSheet::where('exam_id',$examId)->where('student_id',$stdId)->value('pdf_name');
-            if($answerSheetData != null) {
-                $answerSheetPdf = env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . sha1($examId) . DIRECTORY_SEPARATOR . $answerSheetData;
+            $answerSheetData = StudentAnswerSheet::where('exam_id',$examId)->where('student_id',$stdId)->first();
+            if($answerSheetData['pdf_name'] != null) {
+                $answerSheetPdf = env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . sha1($examId) . DIRECTORY_SEPARATOR . $answerSheetData['pdf_name'];
             }
-            $questionPaper = ExamQuestionPaper::where('exam_id',$examId)->first();
-            if($questionPaper['paper_pdf'] != null) {
-                $questionPaperPdf = env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . sha1($questionPaper['id']) . DIRECTORY_SEPARATOR . $questionPaper['paper_pdf'];
+            if($answerSheetData['question_paper_id'] != null) {
+                $questionPaper = ExamQuestionPaper::where('id', $answerSheetData['question_paper_id'])->first();
+                if ($questionPaper['paper_pdf'] != null) {
+                    $questionPaperPdf = env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . sha1($questionPaper['id']) . DIRECTORY_SEPARATOR . $questionPaper['paper_pdf'];
+                }
             }
             $batches = Batch::where('body_id',$user->body_id)->get();
             return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','stdGrn','questions','examDetails','stdId','examId','questionPaperPdf'));
@@ -301,16 +304,28 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $data = $request->all();
-            $examDetailsData['student_id'] = $data['student_id'];
-            $examDetailsData['term_id'] = $data['term_id'];
-            $examDetailsData['exam_structure_id'] = $data['exam_structure_id'];
-            $examDetails = StudentExamDetails::create($examDetailsData);
-            $examMarksData['student_exam_details_id'] = $examDetails['id'];
-            $examMarksData['term_id'] = $data['term_id'];
-            $examMarksData['exam_structure_id'] = $data['exam_structure_id'];
-            $examMarksData['marks_obtained'] = 50/*$data['marks']*/;
-            $examMarksData['exam_term_details_id'] = $data['exam_term_details_id'];
-            StudentExamMarks::create($examMarksData);
+            $markObtain = 0;
+            if($request->has('marks')) {
+                foreach ($data['marks'] as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $key1 => $value1) {
+                            $markObtain += $value1;
+                        }
+                    } else {
+                        $markObtain += $value;
+                    }
+                }
+                $examDetailsData['student_id'] = $data['student_id'];
+                $examDetailsData['term_id'] = $data['term_id'];
+                $examDetailsData['exam_structure_id'] = $data['exam_structure_id'];
+                $examDetails = StudentExamDetails::create($examDetailsData);
+                $examMarksData['student_exam_details_id'] = $examDetails['id'];
+                $examMarksData['term_id'] = $data['term_id'];
+                $examMarksData['exam_structure_id'] = $data['exam_structure_id'];
+                $examMarksData['marks_obtained'] = $markObtain;
+                $examMarksData['exam_term_details_id'] = $data['exam_term_details_id'];
+                StudentExamMarks::create($examMarksData);
+            }
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -379,6 +394,18 @@ class ExamEvaluationController extends Controller
         foreach ($exams as $row) {
             $data[$i]['exam_id'] = $row['id'] ;
             $data[$i]['exam_name']= $row['exam_type'] ;
+            $i++;
+        }
+        return $data;
+    }
+
+    public function getPaperSets($examId){
+        $data=array();
+        $paperSets = ExamQuestionPaper::where('exam_id',$examId)->get()->toArray();
+        $i=0;
+        foreach ($paperSets as $row) {
+            $data[$i]['set_id'] = $row['id'] ;
+            $data[$i]['set_name']= $row['set_name'] ;
             $i++;
         }
         return $data;
