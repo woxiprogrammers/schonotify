@@ -214,11 +214,18 @@
             var enteredMarks = this.value;
             var id = $(this).attr('id');
             marks = $('#'+id+'marks').val();
-          /*  if(((parseInt(enteredMarks)*2) %1) != 1){
+            if(((enteredMarks*2) %1) != 0){
                 alert('Please enter valid marks');
-            }*/
+                $('#'+id+'').val('');
+            } else {
+                if(enteredMarks > marks){
+                    alert('Entered marks exceeds question marks');
+                    $('#'+id+'').val('');
+                }
+            }
            if(parseInt(enteredMarks) > parseInt(marks)){
                alert('Entered marks exceeds question marks');
+               $('#'+id+'').val('');
            }
         });
     </script>

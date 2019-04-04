@@ -208,7 +208,6 @@
             $("#tableContent").hide();
             var route = 'get-subjects/' + academicYear;
             $.get(route, function (res) {
-                console.log(res['subject'].length);
                 if (res['subject'].length == 0) {
                     $('#subject-select').html("no record found");
                 } else {
@@ -265,14 +264,15 @@
             var division= $('#div-select').val();
             var subject= $('#subject-select').val();
             var exam= $('#exam-select').val();
+            var term= $('#term-select').val();
             var role= this.value;
-            if(division != null && subject != null && exam != null) {
+            if(division != null && subject != null && term != null && exam != null) {
                 $('div#loadmoreajaxloader').show();
                 var route = 'studentListing';
                 $.ajax({
                     method: "get",
                     url: route,
-                    data: {division, subject, exam, role}
+                    data: {division, subject, exam, role, term}
                 })
                     .done(function (res) {
                         $("#tableContent").show();

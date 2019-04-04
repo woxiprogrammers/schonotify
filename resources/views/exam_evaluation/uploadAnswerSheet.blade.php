@@ -312,34 +312,5 @@
             }
         });
 
-        function extentionValidation() {
-            var pdfPath = $(this)[0].value;
-            var countFiles = $(this)[0].files.length;
-            var extn = pdfPath.substring(pdfPath.lastIndexOf('.') + 1).toLowerCase();
-            var size = this.files[0].size/1024/1024;
-            // var image_holder = $("#preview-image4");
-            if(size <= 2){
-                if (extn == "pdf") {
-                    if (typeof (FileReader) != "undefined") {
-                        for (var i = 0; i < countFiles; i++) {
-                            var reader = new FileReader()
-                            /*reader.onload = function (e) {
-                             var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages[sliderImages4][slider_image]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
-                             image_holder.append(imagePreview);
-                             };
-                             image_holder.show();
-                             reader.readAsDataURL($(this)[0].files[i]);*/
-                        }
-                    }else{
-                        alert("It doesn't supports");
-                    }
-                } else {
-                    alert("Select Only pdf");
-                    $('#submit').hide();
-                }
-            }else{
-                alert("please select pdf less than 2 mb");
-            }
-        }
     </script>
 @stop

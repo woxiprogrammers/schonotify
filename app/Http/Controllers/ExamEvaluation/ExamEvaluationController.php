@@ -34,6 +34,8 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -164,19 +166,26 @@ class ExamEvaluationController extends Controller
             $questionPapers = $request->question_paper;
             foreach ($questionPapers as $paperId => $paperPdf){
                 if($paperPdf != null) {
-                    $paperPresent = ExamQuestionPaper::where('id', $paperId)->first();
-                    $folderEncName = sha1($paperId);
-                    $folderPath = public_path() . env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
-                    if ($paperPresent['paper_pdf'] != null) {
-                        unlink($folderPath . DIRECTORY_SEPARATOR . $paperPresent['paper_pdf']);
+                    $name = $paperPdf->getClientOriginalName();
+                    $ext = explode('.',$name);
+                    if($ext[1] == 'pdf') {
+                        $paperPresent = ExamQuestionPaper::where('id', $paperId)->first();
+                        $folderEncName = sha1($paperId);
+                        $folderPath = public_path() . env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                        if ($paperPresent['paper_pdf'] != null) {
+                            unlink($folderPath . DIRECTORY_SEPARATOR . $paperPresent['paper_pdf']);
+                        }
+                        if (!file_exists($folderPath)) {
+                            File::makeDirectory($folderPath, 0777, true, true);
+                        }
+                        $filename = mt_rand(1, 10000000000) . sha1(time()) . ".pdf";
+                        $paperPdf->move($folderPath, $filename);
+                        $paperData['paper_pdf'] = $filename;
+                        ExamQuestionPaper::where('id', $paperId)->update($paperData);
+                    } else {
+                        Session::flash('message-error','Please select only pdf files');
+                        return Redirect::back();
                     }
-                    if (!file_exists($folderPath)) {
-                        File::makeDirectory($folderPath, 0777, true, true);
-                    }
-                    $filename = mt_rand(1,10000000000).sha1(time()).".pdf";
-                    $paperPdf->move($folderPath , $filename);
-                    $paperData['paper_pdf'] = $filename;
-                    ExamQuestionPaper::where('id',$paperId)->update($paperData);
                 }
             }
             return back();
@@ -202,23 +211,30 @@ class ExamEvaluationController extends Controller
             $answerSheets = $request->answer_sheet;
             foreach ($answerSheets as $stdId => $answerSheetPdf){
                 if($answerSheetPdf != null) {
-                    $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->where('student_id', $stdId)->first();
-                    $folderEncName = sha1($request->exam_select);
-                    $folderPath = public_path() . env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
-                    if ($answerSheetPresent['pdf_name'] != null) {
-                        unlink($folderPath . DIRECTORY_SEPARATOR . $answerSheetPresent['pdf_name']);
-                    }
-                    if (!file_exists($folderPath)) {
-                        File::makeDirectory($folderPath, 0777, true, true);
-                    }
-                    $filename = mt_rand(1,10000000000).sha1(time()).".pdf";
-                    $answerSheetPdf->move($folderPath , $filename);
-                    $answerSheetData['pdf_name'] = $filename;
-                    if ($answerSheetPresent['pdf_name'] != null) {
-                        StudentAnswerSheet::where('id',$answerSheetPresent['id'])->update($answerSheetData);
+                    $name = $answerSheetPdf->getClientOriginalName();
+                    $ext = explode('.',$name);
+                    if($ext[1] == 'pdf') {
+                        $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->where('student_id', $stdId)->first();
+                        $folderEncName = sha1($request->exam_select);
+                        $folderPath = public_path() . env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                        if ($answerSheetPresent['pdf_name'] != null) {
+                            unlink($folderPath . DIRECTORY_SEPARATOR . $answerSheetPresent['pdf_name']);
+                        }
+                        if (!file_exists($folderPath)) {
+                            File::makeDirectory($folderPath, 0777, true, true);
+                        }
+                        $filename = mt_rand(1, 10000000000) . sha1(time()) . ".pdf";
+                        $answerSheetPdf->move($folderPath, $filename);
+                        $answerSheetData['pdf_name'] = $filename;
+                        if ($answerSheetPresent['pdf_name'] != null) {
+                            StudentAnswerSheet::where('id', $answerSheetPresent['id'])->update($answerSheetData);
+                        } else {
+                            $answerSheetData['student_id'] = $stdId;
+                            StudentAnswerSheet::create($answerSheetData);
+                        }
                     } else {
-                        $answerSheetData['student_id'] = $stdId;
-                        StudentAnswerSheet::create($answerSheetData);
+                        Session::flash('message-error','Please select only pdf files');
+                        return Redirect::back();
                     }
                     }
                 }
@@ -315,16 +331,23 @@ class ExamEvaluationController extends Controller
                         $markObtain += $value;
                     }
                 }
-                $examDetailsData['student_id'] = $data['student_id'];
-                $examDetailsData['term_id'] = $data['term_id'];
-                $examDetailsData['exam_structure_id'] = $data['exam_structure_id'];
-                $examDetails = StudentExamDetails::create($examDetailsData);
-                $examMarksData['student_exam_details_id'] = $examDetails['id'];
-                $examMarksData['term_id'] = $data['term_id'];
-                $examMarksData['exam_structure_id'] = $data['exam_structure_id'];
-                $examMarksData['marks_obtained'] = $markObtain;
-                $examMarksData['exam_term_details_id'] = $data['exam_term_details_id'];
-                StudentExamMarks::create($examMarksData);
+                $stdTermStructureIds = StudentExamDetails::where('student_id',$data['student_id'])->where('term_id',$data['term_id'])->where('exam_structure_id',$data['exam_structure_id'])->lists('id');
+                $isMarksFilled = StudentExamMarks::whereIn('student_exam_details_id',$stdTermStructureIds)->where('term_id',$data['term_id'])->where('exam_structure_id',$data['exam_structure_id'])->where('exam_term_details_id',$data['exam_term_details_id'])->value('id');
+                if($isMarksFilled == null) {
+                    $examDetailsData['student_id'] = $data['student_id'];
+                    $examDetailsData['term_id'] = $data['term_id'];
+                    $examDetailsData['exam_structure_id'] = $data['exam_structure_id'];
+                    $examDetails = StudentExamDetails::create($examDetailsData);
+                    $examMarksData['student_exam_details_id'] = $examDetails['id'];
+                    $examMarksData['term_id'] = $data['term_id'];
+                    $examMarksData['exam_structure_id'] = $data['exam_structure_id'];
+                    $examMarksData['marks_obtained'] = $markObtain;
+                    $examMarksData['exam_term_details_id'] = $data['exam_term_details_id'];
+                    StudentExamMarks::create($examMarksData);
+                } else {
+                    $examMarksData['marks_obtained'] = $markObtain;
+                    StudentExamMarks::where('id',$isMarksFilled)->update($examMarksData);
+                }
             }
             return back();
         }catch (\Exception $e){
@@ -546,7 +569,7 @@ class ExamEvaluationController extends Controller
                 $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>";
-                $str .= "<input type='file' onchange='extentionValidation()' id='answer-sheet' accept='application/pdf' class='answer-sheet' name='answer_sheet[$row->id]'>";
+                $str .= "<input type='file' id='answer-sheet' accept='application/pdf' class='answer-sheet' name='answer_sheet[$row->id]'>";
                 $str .= "</td>";
             }
         } else {
@@ -565,7 +588,7 @@ class ExamEvaluationController extends Controller
     {
         $role_id = 3;
         $user = Auth::user();
-        //$studentIds = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('teacher_id',3745)->where('role_id',$request->role)->lists('student_id');
+       // $studentIds = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('teacher_id',3745)->where('role_id',$request->role)->lists('student_id');
         $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
             ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
             ->where('division_id', $request->division)
@@ -580,7 +603,7 @@ class ExamEvaluationController extends Controller
         $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
         $str .= "<thead><tr>";
         if ($role_id == 3) {
-            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded  "."<input type='checkbox' id='check_all' onclick='checkAll()'/>"."</th>";
+            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Checked: activate to sort column ascending' style='width: 29px;'>Checked  "."</th>";
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
         }
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";
@@ -590,7 +613,14 @@ class ExamEvaluationController extends Controller
             foreach ($result as $row) {
                 if ($row->user_role == 'student') {
                     if ($row->is_lc_generated == 0) {
-                        $str .= "<tr><td>" . "<input type='checkbox' id='assign_student' name = 'assign_student[]' class='assign-student' value='" . $row->id . "'>" . "</td>";
+                        $structureId = ExamTermDetails::where('id',$request->exam)->value('exam_structure_id');
+                        $stdExamDeatailId = StudentExamDetails::where('student_id',$row->id)->where('term_id',$request->term)->where('exam_structure_id',$structureId)->value('id');
+                        $isMarksFilled = StudentExamMarks::where('student_exam_details_id',$stdExamDeatailId)->where('term_id',$request->term)->where('exam_structure_id',$structureId)->where('exam_term_details_id',$request->exam)->value('id');
+                        if($isMarksFilled != null) {
+                            $str .= "<tr><td>" . "<input type='checkbox' id='checked_student' name = 'checked_student[]' class='checked-student' value='" . $row->id . "' checked>" . "</td>";
+                        } else {
+                            $str .= "<tr><td>" . "<input type='checkbox' id='checked_student' name = 'checked_student[]' class='checked-student' value='" . $row->id . "'>" . "</td>";
+                        }
                     } else {
                         $str .= "<tr><td></td>";
                     }
