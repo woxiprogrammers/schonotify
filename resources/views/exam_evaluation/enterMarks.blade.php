@@ -38,7 +38,7 @@
                             <div class="col-sm-4">
                                 <div class="panel panel-white" id="panel1">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title text-primary">Assign marks (50/100)</h4>
+                                        <h4 class="panel-title text-primary">Assign marks ({{$examDetails['out_of_marks']}})</h4>
                                         <div class="panel-tools">
                                             <i class="fa fa-book fa-fw collapse-off" id="hide-question-paper"></i>
                                         </div>
@@ -175,7 +175,7 @@
 
         $('.is-checked').click(function () {
             var isCheckedQuestion = this.value;
-           // $('#'+isCheckedQuestion+'').show();
+            $('#'+isCheckedQuestion+'').show();
             var route='/exam-evaluation/get-orQuestions/'+isCheckedQuestion;
             $.get(route,function(res){
                 if (res.length > 0)
@@ -192,6 +192,7 @@
                         $('.'+isCheckedQuestion+'sub-questions-marks').val('');
                         $('.'+isCheckedQuestion+'sub-questions-check').prop("checked", false);
                         $('.'+isCheckedQuestion+'sub-questions-check').prop("disabled", false);
+                        $('.'+isCheckedQuestion+'sub-questions-marks').prop("disabled", true);
                         $('#'+isCheckedQuestion).prop("disabled",true);
                         $('#'+isCheckedQuestion+'').val('');
                         for(var i=0; i<res.length; i++)
@@ -201,8 +202,13 @@
                     }
                 } else {
                     if($('#'+isCheckedQuestion+'is-checked').prop('checked') == true){
+                        $('.'+isCheckedQuestion+'sub-questions').show();
                         $('#'+isCheckedQuestion).prop("disabled",false);
                     }else {
+                        $('.'+isCheckedQuestion+'sub-questions-marks').val('');
+                        $('.'+isCheckedQuestion+'sub-questions-check').prop("checked", false);
+                        $('.'+isCheckedQuestion+'sub-questions-check').prop("disabled", false);
+                        $('.'+isCheckedQuestion+'sub-questions').hide();
                         $('#'+isCheckedQuestion).prop("disabled",true);
                         $('#'+isCheckedQuestion).val('');
                     }
@@ -218,7 +224,7 @@
                 alert('Please enter valid marks');
                 $('#'+id+'').val('');
             } else {
-                if(enteredMarks > marks){
+                if(enteredMarks*2 > marks*2){
                     alert('Entered marks exceeds question marks');
                     $('#'+id+'').val('');
                 }

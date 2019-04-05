@@ -290,11 +290,12 @@
         });
 
         $('#set-select').change(function(){
+            var setId = this.value;
             var division = $('#div-select').val();
             var exam = $('#exam-select').val();
             var clss = $('#class-select').val();
             var subject= $('#subject-select').val();
-            if(division != null && exam != null && clss != null && subject != null) {
+            if(division != null && exam != null && clss != null && subject != null && setId != null) {
                 $('div#loadmoreajaxloader').show();
                 var route = 'student-upload';
                 $.ajax({
@@ -309,6 +310,8 @@
                         $('#submit-button').show();
                         TableData.init();
                     });
+            } else {
+                $("#tableContent").hide();
             }
         });
 

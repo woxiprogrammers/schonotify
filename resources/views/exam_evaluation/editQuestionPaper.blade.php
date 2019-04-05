@@ -40,7 +40,7 @@
                                         <label class="control-label">
                                             Enter Total Marks <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" id="paper_marks" name="paper_marks" value="{{$paperData['marks']}}" placeholder="marks" required>
+                                        <input type="text" class="form-control" id="paper_marks" name="paper_marks" value="{{$paperData['marks']}}" placeholder="marks" disabled="disabled">
                                         </input>
                                     </div>
                                 </div>

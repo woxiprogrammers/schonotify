@@ -27,6 +27,7 @@ use App\StudentAnswerSheet;
 use App\StudentExamDetails;
 use App\StudentExamMarks;
 use App\StudentExtraInfo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use App\Subject;
 use App\SubjectClass;
@@ -62,9 +63,11 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $data = $request->all();
+            $marks = ExamTermDetails::where('id',$data['exam_select'])->value('out_of_marks');
+            $subQuestions = array();
             $paperData['question_paper_name'] = $data['paper_name'];
             $paperData['no_of_question'] = $data['paper_questions'];
-            $paperData['marks'] = $data['paper_marks'];
+            $paperData['marks'] = $marks;
             $paperData['set_name'] = $data['paper_set'];
             $paperData['exam_id'] = $data['exam_select'];
             $paperData['class_id'] = $data['class_select'];
@@ -78,44 +81,52 @@ class ExamEvaluationController extends Controller
                     $createQuestion = QuestionPaperStructure::create($questionData);
                     $questions[$key] = $createQuestion->id;
                 }
-                $orQuestions = $data['or-question'];
-                foreach ($questions as $key=>$value){
-                    $orQuestionData['question_id'] =  $questions[$key];
-                    if(array_key_exists($key,$orQuestions)){
-                       foreach ($orQuestions[$key] as $key1=>$value1){
-                           $orQuestionData['or_question_id'] =  $questions[$value1];
-                           OrQuestions::create($orQuestionData);
-                       }
-                    }
-                }
-            }
-            if ($request->has('sub-question-id')){
-                $subQuestionData['question_paper_id'] = $createQuestionPaper->id;
-                foreach ($questions as $key=>$value){
-                    $subQuestionData['parent_question_id'] = $value;
-                    if(array_key_exists($key,$data['sub-question-id'])){
-                        foreach ($data['sub-question-id'][$key] as $key1=>$value1){
-                            $subQuestionData['question_id'] = $value1;
-                            $subQuestionData['question'] = $data['sub-question-name'][$key][$key1];
-                            $subQuestionData['marks'] = $data['sub-question-marks'][$key][$key1];
-                            $createSubQuestions = QuestionPaperStructure::create($subQuestionData);
-                            $subQuestions[$key][$key1] = $createSubQuestions->id;
+                if($request->has('or-question')){
+                    $orQuestions = $data['or-question'];
+                    foreach ($questions as $key=>$value){
+                        $orQuestionData['question_id'] =  $questions[$key];
+                        if(array_key_exists($key,$orQuestions)){
+                            foreach ($orQuestions[$key] as $key1=>$value1){
+                                $orQuestionData['or_question_id'] =  $questions[$value1];
+                                OrQuestions::create($orQuestionData);
+                            }
                         }
                     }
                 }
-            }
-            foreach ($subQuestions as $key=>$value){
-                if(array_key_exists($key,$data['sub-or-question'])){
-                    foreach ($data['sub-or-question'][$key] as $key1=>$value1){
-                        $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
-                        foreach ($value1 as $key2=>$value2){
-                            $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
-                            OrQuestions::create($orSubQuestion);
-                        }
-                    }
-                }
-            }
 
+                if ($request->has('sub-question-id')){
+                    $subQuestionData['question_paper_id'] = $createQuestionPaper->id;
+                    foreach ($questions as $key=>$value){
+                        $subQuestionData['parent_question_id'] = $value;
+                        if(array_key_exists($key,$data['sub-question-id'])){
+                            foreach ($data['sub-question-id'][$key] as $key1=>$value1){
+                                $subQuestionData['question_id'] = $value1;
+                                $subQuestionData['question'] = $data['sub-question-name'][$key][$key1];
+                                $subQuestionData['marks'] = $data['sub-question-marks'][$key][$key1];
+                                $createSubQuestions = QuestionPaperStructure::create($subQuestionData);
+                                $subQuestions[$key][$key1] = $createSubQuestions->id;
+                            }
+                        }
+                    }
+
+                    if($subQuestions != null){
+                        foreach ($subQuestions as $key=>$value){
+                            if($request->has('sub-or-question')) {
+                                if (array_key_exists($key, $data['sub-or-question'])) {
+                                    foreach ($data['sub-or-question'][$key] as $key1 => $value1) {
+                                        $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
+                                        foreach ($value1 as $key2 => $value2) {
+                                            $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
+                                            OrQuestions::create($orSubQuestion);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Session::flash('message-success','Question paper structure created successfully');
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -188,6 +199,7 @@ class ExamEvaluationController extends Controller
                     }
                 }
             }
+            Session::flash('message-success','Question paper pdf uploaded successfully');
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -207,7 +219,6 @@ class ExamEvaluationController extends Controller
     public function uploadAnswerSheet(Request $request){
         try{
             $answerSheetData['exam_id'] = $request->exam_select;
-            $answerSheetData['question_paper_id'] = $request->set_select;
             $answerSheets = $request->answer_sheet;
             foreach ($answerSheets as $stdId => $answerSheetPdf){
                 if($answerSheetPdf != null) {
@@ -227,10 +238,14 @@ class ExamEvaluationController extends Controller
                         $answerSheetPdf->move($folderPath, $filename);
                         $answerSheetData['pdf_name'] = $filename;
                         if ($answerSheetPresent['pdf_name'] != null) {
+                            $answerSheetData['question_paper_id'] = $request->set_select;
                             StudentAnswerSheet::where('id', $answerSheetPresent['id'])->update($answerSheetData);
                         } else {
+                            $answerSheetData['question_paper_id'] = $request->set_select;
                             $answerSheetData['student_id'] = $stdId;
-                            StudentAnswerSheet::create($answerSheetData);
+                            $answerSheetData['created_at'] = Carbon::now();
+                            $answerSheetData['updated_at'] = Carbon::now();
+                            StudentAnswerSheet::insert($answerSheetData);
                         }
                     } else {
                         Session::flash('message-error','Please select only pdf files');
@@ -238,6 +253,7 @@ class ExamEvaluationController extends Controller
                     }
                     }
                 }
+            Session::flash('message-success','Student answer sheets uploaded successfully');
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -271,6 +287,7 @@ class ExamEvaluationController extends Controller
                     }
                 }
             }
+            Session::flash('message-success','Students assigned to teacher successfully');
             return back();
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -293,12 +310,9 @@ class ExamEvaluationController extends Controller
             $user = Auth::user();
             $answerSheetPdf = null;
             $questionPaperPdf = null;
+            $questions = array();
             $examDetails = ExamTermDetails::where('id',$examId)->first();
             $stdGrn = StudentExtraInfo::where('student_id',$stdId)->value('grn');
-            $divisionId = User::where('id',$stdId)->value('division_id');
-            $classId = Division::where('id',$divisionId)->value('class_id');
-            $paperId = ExamQuestionPaper::where('exam_id',$examId)->where('class_id',$classId)->value('id');
-            $questions = QuestionPaperStructure::where('question_paper_id',$paperId)->whereNull('parent_question_id')->get()->toArray();
             $answerSheetData = StudentAnswerSheet::where('exam_id',$examId)->where('student_id',$stdId)->first();
             if($answerSheetData['pdf_name'] != null) {
                 $answerSheetPdf = env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . sha1($examId) . DIRECTORY_SEPARATOR . $answerSheetData['pdf_name'];
@@ -308,6 +322,10 @@ class ExamEvaluationController extends Controller
                 if ($questionPaper['paper_pdf'] != null) {
                     $questionPaperPdf = env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . sha1($questionPaper['id']) . DIRECTORY_SEPARATOR . $questionPaper['paper_pdf'];
                 }
+            }
+            if($answerSheetData['question_paper_id'] != null) {
+
+                $questions = QuestionPaperStructure::where('question_paper_id',$answerSheetData['question_paper_id'])->whereNull('parent_question_id')->get()->toArray();
             }
             $batches = Batch::where('body_id',$user->body_id)->get();
             return view('exam_evaluation.enterMarks')->with(compact('batches','answerSheetPdf','user','stdGrn','questions','examDetails','stdId','examId','questionPaperPdf'));
@@ -344,9 +362,11 @@ class ExamEvaluationController extends Controller
                     $examMarksData['marks_obtained'] = $markObtain;
                     $examMarksData['exam_term_details_id'] = $data['exam_term_details_id'];
                     StudentExamMarks::create($examMarksData);
+                    Session::flash('message-success','Student marks stored successfully');
                 } else {
                     $examMarksData['marks_obtained'] = $markObtain;
                     StudentExamMarks::where('id',$isMarksFilled)->update($examMarksData);
+                    Session::flash('message-success','Student marks updated successfully');
                 }
             }
             return back();

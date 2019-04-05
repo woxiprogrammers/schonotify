@@ -94,7 +94,7 @@
                                         <label class="control-label">
                                             Enter Total Marks <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" id="paper_marks" name="paper_marks" placeholder="marks" required>
+                                        <input type="text" class="form-control" id="paper_marks" name="paper_marks" placeholder="marks" required disabled>
                                         </input>
                                     </div>
                                     <div class="col-md-3" id="question-select-div" >
