@@ -87,6 +87,13 @@
                                         <select class="form-control" id="exam-select" name="exam_select" style="-webkit-appearance: menulist;" required>
                                         </select>
                                     </div>
+                                    <div class="col-md-4" id="set-select-div" >
+                                        <label class="control-label">
+                                            Question Paper Set <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="set-select" name="set_select" style="-webkit-appearance: menulist;" required>
+                                        </select>
+                                    </div>
                                 </div>
                             </fieldset>
                             <div class="container-fluid container-fullw bg-white">
@@ -203,7 +210,6 @@
             $('#tableContent').hide();
             var route = 'get-subjects/' + academicYear;
             $.get(route, function (res) {
-                console.log(res['subject'].length);
                 if (res['subject'].length == 0) {
                     $('#subject-select').html("no record found");
                 } else {
@@ -268,6 +274,28 @@
             var clss = $('#class-select').val();
             var subject= $('#subject-select').val();
             if(division != null && exam != null && clss != null && subject != null) {
+                var route = 'get-paper-set/' + exam;
+                $.get(route, function (res) {
+                    if (res.length == 0) {
+                        $('#set-select').html("no record found");
+                    } else {
+                        var strSet = '<option value="">Please Select Paper Set</option>';
+                        for (var i = 0; i < res.length; i++) {
+                            strSet += '<option value="' + res[i]['set_id'] + '">' + res[i]['set_name'] + '</option>';
+                        }
+                        $('#set-select').html(strSet);
+                    }
+                });
+            }
+        });
+
+        $('#set-select').change(function(){
+            var setId = this.value;
+            var division = $('#div-select').val();
+            var exam = $('#exam-select').val();
+            var clss = $('#class-select').val();
+            var subject= $('#subject-select').val();
+            if(division != null && exam != null && clss != null && subject != null && setId != null) {
                 $('div#loadmoreajaxloader').show();
                 var route = 'student-upload';
                 $.ajax({
@@ -281,38 +309,11 @@
                         $("#tableContent").html(res);
                         $('#submit-button').show();
                         TableData.init();
-                    })
+                    });
+            } else {
+                $("#tableContent").hide();
             }
         });
 
-        function extentionValidation() {
-            var pdfPath = $(this)[0].value;
-            var countFiles = $(this)[0].files.length;
-            var extn = pdfPath.substring(pdfPath.lastIndexOf('.') + 1).toLowerCase();
-            var size = this.files[0].size/1024/1024;
-            // var image_holder = $("#preview-image4");
-            if(size <= 2){
-                if (extn == "pdf") {
-                    if (typeof (FileReader) != "undefined") {
-                        for (var i = 0; i < countFiles; i++) {
-                            var reader = new FileReader()
-                            /*reader.onload = function (e) {
-                             var imagePreview = '<div class="col-md-2"><input type="hidden" name="sliderImages[sliderImages4][slider_image]" value="'+e.target.result+'"><img src="'+e.target.result+'" class="thumbimage" /></div>';
-                             image_holder.append(imagePreview);
-                             };
-                             image_holder.show();
-                             reader.readAsDataURL($(this)[0].files[i]);*/
-                        }
-                    }else{
-                        alert("It doesn't supports");
-                    }
-                } else {
-                    alert("Select Only pdf");
-                    $('#submit').hide();
-                }
-            }else{
-                alert("please select pdf less than 2 mb");
-            }
-        }
     </script>
 @stop

@@ -94,7 +94,7 @@
                                         <label class="control-label">
                                             Enter Total Marks <span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" id="paper_marks" name="paper_marks" placeholder="marks" required>
+                                        <input type="text" class="form-control" id="paper_marks" name="paper_marks" placeholder="marks" required disabled>
                                         </input>
                                     </div>
                                     <div class="col-md-3" id="question-select-div" >
@@ -271,7 +271,6 @@
             $('#submit-button').show();
             var questions=this.value;
             var str = '';
-            console.log(questions);
             for(var i=0; i<questions; i++)
             {   var divId = i;
                 str += '<div class="row">'+
@@ -295,7 +294,7 @@
                             '</div>'+
                             '<div class="col-md-2" id="or-question-div" >'+
                                 '<label class="control-label">'+
-                                    'Or<span class="symbol required"></span>'+
+                                    'Or'+
                                 '</label>'+
 
                                 '<select class="form-control" id="or-question" name="or-question['+divId+'][]" multiple>'+
@@ -311,7 +310,7 @@
                             '</div>'+
                                     '<div class="col-md-2" id="sub-question-select-div" >'+
                                         '<label class="control-label">'+
-                                            'Add Sub Questions <span class="symbol required"></span>'+
+                                            'Add Sub Questions'+
                                         '</label>'+
                                         '<input type="number" class="form-control" id="'+divId+'sub-questions" name="sub_questions" onchange="add('+divId+')" placeholder="No. of Questions">'+
                                     '</div>'+
@@ -323,17 +322,14 @@
                 $('#question-structure').html(str);
             }
 
-            var exm= $('#exam-select').val();
-            var qSet = $('#set-select').val();
-            var clss = $('#class-select').val();
+            var qSet = $('#paper_set').val();
+            var clss = $('#class-select').attr('data-fullText');
             var paperName = $('#paper_name').val();
-            var mark = $('#total_marks').val();
             var sub = $('#subject-select').val();
+            var mark = $('#paper_marks').val();
             var str1 = '';
-            if(exm != null && qSet != null && clss != null && paperName != null && mark != null && sub != null){
-                str1 = '<div class="row" style="text-align: center">'+
-                            '<h4>'+exm+'</h4>'+
-                        '</div>'+
+            if(qSet != null && clss != null && paperName != null && sub != null){
+                str1 =
                         '<div class="row" style="text-align: center">'+
                             '<h4>'+paperName+'</h4>'+
                         '</div>'+
@@ -378,7 +374,7 @@
                     '</div>' +
                     '<div class="col-md-2" id="or-question-div" >' +
                     '<label class="control-label">' +
-                    'Or<span class="symbol required"></span>' +
+                    'Or' +
                     '</label>' +
                     '<select class="form-control" id="or-question" name="sub-or-question[' + divId + ']['+i+'][]" multiple>' +
                     '<option>Select or</option>';

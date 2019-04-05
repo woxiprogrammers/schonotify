@@ -28,7 +28,6 @@
                                 <input type="hidden" name="exam_structure_id" value="{{$examDetails['exam_structure_id']}}">
                                 <input type="hidden" name="term_id" value="{{$examDetails['term_id']}}">
                                 <input type="hidden" name="exam_term_details_id" value="{{$examId}}">
-                                <input type="hidden" name="marks" value="50">
                             </div>
                             <div class="col-sm-6">
                                 <h4>Exam :- {{$examDetails['exam_type']}}</h4>
@@ -39,7 +38,7 @@
                             <div class="col-sm-4">
                                 <div class="panel panel-white" id="panel1">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title text-primary">Assign marks (50/100)</h4>
+                                        <h4 class="panel-title text-primary">Assign marks ({{$examDetails['out_of_marks']}})</h4>
                                         <div class="panel-tools">
                                             <i class="fa fa-book fa-fw collapse-off" id="hide-question-paper"></i>
                                         </div>
@@ -60,7 +59,8 @@
                                                     @else
                                                     <div class="col-sm-4">
                                                         <span>marks</span>
-                                                        <input type="number" class="enter-mark" name="marks[]" placeholder="{{$question['marks']}}">
+                                                        <input type="number" class="enter-mark" id="{{$question['id']}}" step="any" min="0" max="{{$question['marks']}}" name="marks[{{$question['id']}}]" placeholder="{{$question['marks']}}" style="width: 80%">
+                                                        <input type="hidden" id="{{$question['id']}}marks" value="{{$question['marks']}}">
                                                     </div>
                                                 @endif
                                                 <div class="col-sm-4">
@@ -79,11 +79,12 @@
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <span> marks</span>
-                                                            <input type="number" class="enter-mark" name="marks[{{$question['id']}}][]" placeholder="{{$subQuestion['marks']}}">
+                                                            <input type="number" class="enter-mark {{$question['id']}}sub-questions-marks" id="{{$subQuestion['id']}}" step="any" min="0" max="{{$subQuestion['marks']}}" name="marks[{{$question['id']}}][]" placeholder="{{$subQuestion['marks']}}" style="width: 95%">
+                                                            <input type="hidden" id="{{$subQuestion['id']}}marks" value="{{$subQuestion['marks']}}">
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <label> Check
-                                                                <input type="checkbox" class="is-checked" id="{{$subQuestion['id']}}is-checked" value="{{$subQuestion['id']}}">
+                                                                <input type="checkbox" class="is-checked {{$question['id']}}sub-questions-check" id="{{$subQuestion['id']}}is-checked" value="{{$subQuestion['id']}}">
                                                             </label>
                                                         </div>
                                                     </div>
@@ -158,6 +159,7 @@
             $('#question-paper-pdf').hide();
             $('#answer-sheet-pdf').attr("class", "col-sm-8");
             $('.sub-que').hide();
+            $('.enter-mark').prop("disabled",true);
          });
         </script>
     <script>
@@ -180,30 +182,57 @@
                 {
                     if($('#'+isCheckedQuestion+'is-checked').prop('checked') == true){
                         $('.'+isCheckedQuestion+'sub-questions').show();
+                        $('#'+isCheckedQuestion).prop("disabled",false);
                         for(var i=0; i<res.length; i++)
                         {
                             $('#' +res[i]['or_que_id']+ 'is-checked').prop("disabled", true);
                         }
                     }else {
                         $('.'+isCheckedQuestion+'sub-questions').hide();
+                        $('.'+isCheckedQuestion+'sub-questions-marks').val('');
+                        $('.'+isCheckedQuestion+'sub-questions-check').prop("checked", false);
+                        $('.'+isCheckedQuestion+'sub-questions-check').prop("disabled", false);
+                        $('.'+isCheckedQuestion+'sub-questions-marks').prop("disabled", true);
+                        $('#'+isCheckedQuestion).prop("disabled",true);
+                        $('#'+isCheckedQuestion+'').val('');
                         for(var i=0; i<res.length; i++)
                         {
                             $('#' +res[i]['or_que_id']+ 'is-checked').prop("disabled", false);
                         }
+                    }
+                } else {
+                    if($('#'+isCheckedQuestion+'is-checked').prop('checked') == true){
+                        $('.'+isCheckedQuestion+'sub-questions').show();
+                        $('#'+isCheckedQuestion).prop("disabled",false);
+                    }else {
+                        $('.'+isCheckedQuestion+'sub-questions-marks').val('');
+                        $('.'+isCheckedQuestion+'sub-questions-check').prop("checked", false);
+                        $('.'+isCheckedQuestion+'sub-questions-check').prop("disabled", false);
+                        $('.'+isCheckedQuestion+'sub-questions').hide();
+                        $('#'+isCheckedQuestion).prop("disabled",true);
+                        $('#'+isCheckedQuestion).val('');
                     }
                 }
             });
         });
 
         $('.enter-mark').keyup(function () {
-            var marks = this.value;
-            //var route='/exam-evaluation/get-orQuestions/'+isCheckedQuestion;
-            $.get(route,function(res){
-                if (res.length > 0)
-                {
-
+            var enteredMarks = this.value;
+            var id = $(this).attr('id');
+            marks = $('#'+id+'marks').val();
+            if(((enteredMarks*2) %1) != 0){
+                alert('Please enter valid marks');
+                $('#'+id+'').val('');
+            } else {
+                if(enteredMarks*2 > marks*2){
+                    alert('Entered marks exceeds question marks');
+                    $('#'+id+'').val('');
                 }
-            });
+            }
+           if(parseInt(enteredMarks) > parseInt(marks)){
+               alert('Entered marks exceeds question marks');
+               $('#'+id+'').val('');
+           }
         });
     </script>
 @stop

@@ -47,12 +47,7 @@
     Route::get('/','FrontController@index');
 
 Route::group(['prefix' => 'exam-evaluation'], function () {
-    Route::get('get-subject/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getClassSubject'));
-    Route::get('get-subjects/{year}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamSubjects'));
-    Route::get('get-term/{year}/{subId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamTerms'));
-    Route::get('get-exams/{termId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExams'));
-    Route::get('get-exam-marks/{examId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamMarks'));
-    Route::get('get-academicYear/{classId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getAcademicYear'));
+    //Question paper: create , edit , listing
     Route::get('create',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaperView'));
     Route::post('create-questionPaper',array('uses' => 'ExamEvaluation\ExamEvaluationController@createQuestionPaper'));
     Route::get('paper-listing/{classId}/{examId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@questionPaperListing'));
@@ -60,18 +55,32 @@ Route::group(['prefix' => 'exam-evaluation'], function () {
     Route::post('edit-paper/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@editPaper'));
     Route::get('paper-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@questionPaperListingView'));
     Route::post('upload-paper',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadQuestionPaper'));
-    Route::get('upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheetView'));
-    Route::post('upload-answerSheet',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheet'));
+    Route::get('get-exam-marks/{examId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamMarks'));
+
+    //Assign students to teacher
     Route::get('assign',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudentView'));
     Route::post('assign-students',array('uses' => 'ExamEvaluation\ExamEvaluationController@assignStudents'));
-    Route::get('get-teachers/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getTeachers'));
-    Route::get('student-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListingView'));
-    Route::get('studentListing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListing'));
     Route::get('searchStudent',array('uses' => 'ExamEvaluation\ExamEvaluationController@filterStudent'));
+    Route::get('get-teachers/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getTeachers'));
+
+    //Upload answer sheet
+    Route::get('upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheetView'));
+    Route::post('upload-answerSheet',array('uses' => 'ExamEvaluation\ExamEvaluationController@uploadAnswerSheet'));
     Route::get('student-upload',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentUploadAnswerSheet'));
+    Route::get('get-paper-set/{examId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getPaperSets'));
+
+    //Enter Marks
     Route::get('enter-marks/{examId}/{stdId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getEnterMarksView'));
     Route::post('enter-marks',array('uses' => 'ExamEvaluation\ExamEvaluationController@EnterMarks'));
     Route::get('get-orQuestions/{queId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getOrQuestions'));
+    Route::get('student-listing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListingView'));
+    Route::get('studentListing',array('uses' => 'ExamEvaluation\ExamEvaluationController@studentListing'));
+
+    Route::get('get-subject/{id}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getClassSubject'));
+    Route::get('get-subjects/{year}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamSubjects'));
+    Route::get('get-term/{year}/{subId}',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExamTerms'));
+    Route::get('get-exams/{termId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getExams'));
+    Route::get('get-academicYear/{classId}/',array('uses' => 'ExamEvaluation\ExamEvaluationController@getAcademicYear'));
 });
 
     //enquiry form
