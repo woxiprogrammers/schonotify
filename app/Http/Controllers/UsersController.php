@@ -1121,7 +1121,8 @@ class UsersController extends Controller
                     ->get()
                     ->groupBy('fee_id')
                     ->toArray();
-                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student','student_date_of_admission','studentFeeStructures','full_pay_concession'));
+                $userRoleId = Auth::User()->role_id;
+                return  view('editStudent')->with(compact('installmentIds','divisionStudent','batches','religion','grn','query1','assigned_fee','caste','caste_concession_type_edit','division_status','division_for_updation','user','fees','concession_types','student_fee','installment_data','fee_due_date','total_installment_amount','transaction_types','transactions','total_fees_for_current_year','total_due_fees_for_current_year','queryn','querym','chkstatus','student_info','school','aptitude','hobbies','documents','doc','family_info','parent_email','paymentLink','studentinstallmentIds','assigned_fee_student','student_date_of_admission','studentFeeStructures','full_pay_concession','userRoleId'));
             }elseif($userRole->slug == 'parent')
             {
                 $students=User::where('parent_id',$user->id)->get();
