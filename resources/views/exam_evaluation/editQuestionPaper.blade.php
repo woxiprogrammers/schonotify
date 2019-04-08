@@ -45,6 +45,48 @@
                                     </div>
                                 </div>
                             </fieldset>
+                            {{--@foreach($questions as $question)
+                                <?php
+                                $subQuestions = \App\QuestionPaperStructure::where('parent_question_id',$question['id'])->get()->toArray();
+                                ?>
+                                <div class="row">
+                                    <div class="col-md-1" id="question-id-div">
+                                        <label class="control-label">
+                                            Id<span class="symbol required"></span>
+                                            </label>
+                                        <input type="text" class="form-control" id="question-id" name="question_id" placeholder="{{$question['question_id']}}" required>
+                                    </div>
+                                    <div class="col-md-5" id="question-id-div">
+                                        <label class="control-label">
+                                            Enter Question<span class="symbol required"></span>
+                                        </label>
+                                        <input type="text" class="form-control" id="question-id" name="question_name" placeholder="{{$question['question']}}" required>
+                                    </div>
+                                    <div class="col-md-1" id="question-id-div">
+                                        <label class="control-label">
+                                            Marks<span class="symbol required"></span>
+                                        </label>
+                                        <input type="text" class="form-control" id="question-id" name="question_mark" placeholder="{{$question['marks']}}" required>
+                                    </div>
+                                    <div class="col-md-2" id="question-id-div">
+                                        <label class="control-label">
+                                            Or<span class="symbol required"></span>
+                                        </label>
+                                        <input type="text" class="form-control" id="question-id" name="question_id" placeholder="{{$question['question_id']}}" required>
+                                    </div>
+                                    <div class="col-md-2" id="question-id-div">
+                                        <label class="control-label">
+                                            <span class="symbol required"></span>
+                                        </label>
+                                        <input type="text" class="form-control" id="question-id" name="question_id" placeholder="{{$question['question_id']}}" required>
+                                    </div>
+                                </div>
+                                @if(!empty($subQuestions))
+                                    @foreach($subQuestions as $subQuestion)
+
+                                    @endforeach
+                                @endif
+                            @endforeach--}}
                             <div class="row">
                                 <div class="form-group pull-right">
                                     <button class="btn btn-primary btn-wide" type="submit">

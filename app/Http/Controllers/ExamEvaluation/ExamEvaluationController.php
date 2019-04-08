@@ -137,7 +137,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $paperData = ExamQuestionPaper::where('id',$id)->first();
-            return view('exam_evaluation.editQuestionPaper')->with(compact('user','paperData'));
+            $questions = QuestionPaperStructure::where('question_paper_id',$id)->whereNull('parent_question_id')->get()->toArray();
+            return view('exam_evaluation.editQuestionPaper')->with(compact('user','paperData','questions'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
