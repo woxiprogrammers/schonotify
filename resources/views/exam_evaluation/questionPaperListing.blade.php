@@ -127,7 +127,6 @@
             var classId = $('#class-select').val();
             if(classId == null && examId == null) {
                 var route = 'paper-listing' + '/' + classId + '/' + examId;
-                console.log(route);
                 $.ajax({
                     method: "get",
                     url: route

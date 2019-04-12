@@ -152,7 +152,6 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $data = $request->all();
-            //dd($data);
             $previousQuestions = QuestionPaperStructure::where('question_paper_id',$id)->lists('id');
             if($request->has('question_id')){
                 $questionData['question_paper_id'] = $id;
