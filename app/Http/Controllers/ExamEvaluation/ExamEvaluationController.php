@@ -87,8 +87,10 @@ class ExamEvaluationController extends Controller
                         $orQuestionData['question_id'] =  $questions[$key];
                         if(array_key_exists($key,$orQuestions)){
                             foreach ($orQuestions[$key] as $key1=>$value1){
-                                $orQuestionData['or_question_id'] =  $questions[$value1];
-                                OrQuestions::create($orQuestionData);
+                                if(array_key_exists($value1,$questions)) {
+                                    $orQuestionData['or_question_id'] = $questions[$value1];
+                                    OrQuestions::create($orQuestionData);
+                                }
                             }
                         }
                     }
@@ -116,8 +118,10 @@ class ExamEvaluationController extends Controller
                                     foreach ($data['sub-or-question'][$key] as $key1 => $value1) {
                                         $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
                                         foreach ($value1 as $key2 => $value2) {
-                                            $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
-                                            OrQuestions::create($orSubQuestion);
+                                            if(array_key_exists($value2,$subQuestions[$key])) {
+                                                $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
+                                                OrQuestions::create($orSubQuestion);
+                                            }
                                         }
                                     }
                                 }
@@ -147,6 +151,68 @@ class ExamEvaluationController extends Controller
     public function editPaper(Request $request,$id){
         try{
             $user = Auth::user();
+            $data = $request->all();
+            //dd($data);
+            $previousQuestions = QuestionPaperStructure::where('question_paper_id',$id)->lists('id');
+            if($request->has('question_id')){
+                $questionData['question_paper_id'] = $id;
+                foreach ($data['question_id'] as $key=>$value) {
+                    $questionData['question_id'] = $value;
+                    $questionData['question'] = $data['question_name'][$key];
+                    $questionData['marks'] = $data['question_mark'][$key];
+                    $createQuestion = QuestionPaperStructure::create($questionData);
+                    $questions[$key] = $createQuestion->id;
+                }
+                if($request->has('or_question')){
+                    $orQuestions = $data['or_question'];
+                    foreach ($questions as $key=>$value){
+                        $orQuestionData['question_id'] =  $questions[$key];
+                        if(array_key_exists($key,$orQuestions)){
+                            foreach ($orQuestions[$key] as $key1=>$value1){
+                                if(array_key_exists($value1,$questions)) {
+                                    $orQuestionData['or_question_id'] = $questions[$value1];
+                                }
+                                OrQuestions::create($orQuestionData);
+                            }
+                        }
+                    }
+                }
+
+                if ($request->has('sub_question_id')){
+                    $subQuestionData['question_paper_id'] = $id;
+                    foreach ($questions as $key=>$value){
+                        $subQuestionData['parent_question_id'] = $value;
+                        if(array_key_exists($key,$data['sub_question_id'])){
+                            foreach ($data['sub_question_id'][$key] as $key1=>$value1){
+                                $subQuestionData['question_id'] = $value1;
+                                $subQuestionData['question'] = $data['sub_question_name'][$key][$key1];
+                                $subQuestionData['marks'] = $data['sub_question_mark'][$key][$key1];
+                                $createSubQuestions = QuestionPaperStructure::create($subQuestionData);
+                                $subQuestions[$key][$key1] = $createSubQuestions->id;
+                            }
+                        }
+                    }
+                    if($subQuestions != null){
+                        foreach ($subQuestions as $key=>$value){
+                            if($request->has('sub_or_question')) {
+                                if (array_key_exists($key, $data['sub_or_question'])) {
+                                    foreach ($data['sub_or_question'][$key] as $key1 => $value1) {
+                                        if(array_key_exists($key1,$subQuestions[$key])){
+                                            $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
+                                            foreach ($value1 as $key2 => $value2) {
+                                                if(array_key_exists($value2,$subQuestions[$key])) {
+                                                    $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
+                                                    OrQuestions::create($orSubQuestion);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             if($request->has('paper_set')) {
                 $paperData['set_name'] = $request->paper_set;
             }
@@ -157,6 +223,7 @@ class ExamEvaluationController extends Controller
                 $paperData['marks'] = $request->paper_marks;
             }
             ExamQuestionPaper::where('id',$id)->update($paperData);
+            QuestionPaperStructure::whereIn('id',$previousQuestions)->delete();
             return redirect('exam-evaluation/paper-listing');
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -667,12 +734,18 @@ class ExamEvaluationController extends Controller
     }
 
     public function questionPaperListing(Request $request,$classId,$examId){
-        $result = ExamQuestionPaper::Where('class_id',$classId)->where('exam_id',$examId)->get();
+        if($classId == 'null' && $examId == 'null') {
+            $result = ExamQuestionPaper::all();
+        } else {
+            $result = ExamQuestionPaper::where('class_id', $classId)->where('exam_id', $examId)->get();
+        }
         $str = "<h5 class='over-title margin-bottom-15'><h3>Question Paper</h3></h5>";
         $str .= "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
         $str .= "<thead><tr>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Sr.No.: activate to sort column ascending' style='width: 29px;'>Sr.No.</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Term: activate to sort column ascending' style='width: 29px;'>Term</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Exam: activate to sort column ascending' style='width: 29px;'>Exam</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Set: activate to sort column ascending' style='width: 29px;'>Set</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Marks: activate to sort column ascending' style='width: 29px;'>Marks</th>";
@@ -689,6 +762,10 @@ class ExamEvaluationController extends Controller
                 } else {
                     $str .= "<td>" . "<input type='checkbox'>" . "</td>";
                 }
+                $examName = ExamTermDetails::where('id',$row->exam_id)->select('term_id','exam_type')->first();
+                $termName = ExamTerms::where('id',$examName['term_id'])->value('term_name');
+                $str .= "<td>" . $termName . "</td>";
+                $str .= "<td>" . $examName['exam_type'] . "</td>";
                 $str .= "<td>" . $row->set_name . "</td>";
                 $str .= "<td>" . $row->question_paper_name ."</td>";
                 $str .= "<td>" . $row->marks ."</td>";

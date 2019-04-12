@@ -45,48 +45,123 @@
                                     </div>
                                 </div>
                             </fieldset>
-                            {{--@foreach($questions as $question)
+                            <?php
+                                $counter = 0;
+                            ?>
+                            @foreach($questions as $question)
                                 <?php
                                 $subQuestions = \App\QuestionPaperStructure::where('parent_question_id',$question['id'])->get()->toArray();
+                                $orQuestions = \App\OrQuestions::where('question_id',$question['id'])->lists('or_question_id')->toArray();
+                                $counter++;
+                                $count = $counter-1;
+                                $counter1 = 0;
+                                $orCounter = 0;
                                 ?>
-                                <div class="row">
+                                <div class="row " id="{{$question['id']}}div">
                                     <div class="col-md-1" id="question-id-div">
                                         <label class="control-label">
                                             Id<span class="symbol required"></span>
                                             </label>
-                                        <input type="text" class="form-control" id="question-id" name="question_id" placeholder="{{$question['question_id']}}" required>
+                                        <input type="text" class="form-control {{$question['id']}}question_data" id="question-id" name="question_id[{{$count}}]" value="{{$question['question_id']}}" placeholder="{{$question['question_id']}}" required>
                                     </div>
                                     <div class="col-md-5" id="question-id-div">
                                         <label class="control-label">
                                             Enter Question<span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" id="question-id" name="question_name" placeholder="{{$question['question']}}" required>
+                                        <input type="text" class="form-control {{$question['id']}}question_data" id="question-id" name="question_name[{{$count}}]" value="{{$question['question']}}" placeholder="{{$question['question']}}" required>
                                     </div>
                                     <div class="col-md-1" id="question-id-div">
                                         <label class="control-label">
                                             Marks<span class="symbol required"></span>
                                         </label>
-                                        <input type="text" class="form-control" id="question-id" name="question_mark" placeholder="{{$question['marks']}}" required>
+                                        <input type="text" class="form-control {{$question['id']}}question_data" id="question-id" name="question_mark[{{$count}}]" value="{{$question['marks']}}" placeholder="{{$question['marks']}}" required>
                                     </div>
                                     <div class="col-md-2" id="question-id-div">
                                         <label class="control-label">
-                                            Or<span class="symbol required"></span>
+                                            Or</span>
                                         </label>
-                                        <input type="text" class="form-control" id="question-id" name="question_id" placeholder="{{$question['question_id']}}" required>
+                                           <select class="form-control {{$question['id']}}question_data" id="or-question" name="or_question[{{$count}}][]" multiple>
+                                            <option>Select or</option>
+                                            @foreach($questions as $orQuestion)
+                                                <?php
+                                                   $orCounter++;
+                                                   $orCount = $orCounter - 1;
+                                                   ?>
+                                                @if($orQuestion['id'] != $question['id'])
+                                                    @if(in_array($orQuestion['id'],$orQuestions))
+                                                        <option value="{{$orCount}}" selected>{{$orCount+1}}</option>
+                                                    @else
+                                                        <option value="{{$orCount}}">{{$orCount+1}}</option>
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    <div class="col-md-2" id="question-id-div">
-                                        <label class="control-label">
-                                            <span class="symbol required"></span>
-                                        </label>
-                                        <input type="text" class="form-control" id="question-id" name="question_id" placeholder="{{$question['question_id']}}" required>
+                                    <div class="col-md-1" id="question-id-div">
+                                        <button type="button" class="close" aria-label="Close" value="{{$question['id']}}">
+                                            <span aria-hidden="true" style="color: red">&times;</span>
+                                        </button>
                                     </div>
                                 </div>
                                 @if(!empty($subQuestions))
                                     @foreach($subQuestions as $subQuestion)
-
+                                            <?php
+                                                $orQuestions = \App\OrQuestions::where('question_id',$subQuestion['id'])->lists('or_question_id')->toArray();
+                                                $counter1++;
+                                                $count1 = $counter1 -1;
+                                                $subOrCounter = 0;
+                                                ?>
+                                            <div class="row {{$question['id']}}div" id="{{$subQuestion['id']}}div">
+                                                <div class="col-md-1" id="question-id-div">
+                                                </div>
+                                                <div class="col-md-1" id="question-id-div">
+                                                    <label class="control-label">
+                                                        Id<span class="symbol required"></span>
+                                                    </label>
+                                                    <input type="text" class="form-control {{$question['id']}}sub_question_data" id="{{$subQuestion['id']}}sub_question_id" name="sub_question_id[{{$count}}][]" value="{{$subQuestion['question_id']}}" placeholder="{{$subQuestion['question_id']}}" required>
+                                                </div>
+                                                <div class="col-md-5" id="question-id-div">
+                                                    <label class="control-label">
+                                                        Enter Question<span class="symbol required"></span>
+                                                    </label>
+                                                    <input type="text" class="form-control {{$question['id']}}sub_question_data" id="{{$subQuestion['id']}}sub_question_name" name="sub_question_name[{{$count}}][]" value="{{$subQuestion['question']}}" placeholder="{{$subQuestion['question']}}" required>
+                                                </div>
+                                                <div class="col-md-1" id="question-id-div">
+                                                    <label class="control-label">
+                                                        Marks<span class="symbol required"></span>
+                                                    </label>
+                                                    <input type="text" class="form-control {{$question['id']}}sub_question_data" id="{{$subQuestion['id']}}sub_question_mark" name="sub_question_mark[{{$count}}][]" value="{{$subQuestion['marks']}}" placeholder="{{$subQuestion['marks']}}" required>
+                                                </div>
+                                                <div class="col-md-2" id="question-id-div">
+                                                    <label class="control-label">
+                                                        Or</span>
+                                                    </label>
+                                                    <select class="form-control {{$question['id']}}sub_question_data" id="{{$subQuestion['id']}}sub_or_question" name="sub_or_question[{{$count}}][{{$count1}}][]" multiple>
+                                                        <option>Select or</option>
+                                                        @foreach($subQuestions as $orQuestion)
+                                                            <?php
+                                                            $subOrCounter++;
+                                                            $subOrCount = $subOrCounter - 1;
+                                                            ?>
+                                                            @if($orQuestion['id'] != $subQuestion['id'])
+                                                                @if(in_array($orQuestion['id'],$orQuestions))
+                                                                <option value="{{$subOrCount}}" selected>{{$subOrCount+1}}</option>
+                                                                @else
+                                                                <option value="{{$subOrCount}}">{{$subOrCount+1}}</option>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-1" id="question-id-div">
+                                                    <button type="button" class="close" aria-label="Close" value="{{$subQuestion['id']}}">
+                                                        <span aria-hidden="true" style="color: red">&times;</span>
+                                                    </button>
+                                                </div>
+                                            </div>
                                     @endforeach
                                 @endif
-                            @endforeach--}}
+                            @endforeach
                             <div class="row">
                                 <div class="form-group pull-right">
                                     <button class="btn btn-primary btn-wide" type="submit">
@@ -125,5 +200,18 @@
         jQuery(document).ready(function() {
             Main.init();
         });
+
+        $('.close').click(function () {
+            var qId = this.value;
+            $('#'+qId+'sub_question_id').prop('disabled',true);
+            $('#'+qId+'sub_question_name').prop('disabled',true);
+            $('#'+qId+'sub_question_mark').prop('disabled',true);
+            $('#'+qId+'sub_or_question').prop('disabled',true);
+            $('#'+qId+'div').hide();
+            $('.'+qId+'div').hide();
+            $('.'+qId+'question_data').prop('disabled',true);
+            $('.'+qId+'sub_question_data').prop('disabled',true);
+        });
+
     </script>
 @stop
