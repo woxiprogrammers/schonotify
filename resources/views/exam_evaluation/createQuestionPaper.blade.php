@@ -20,7 +20,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/exam-evaluation/create-questionPaper" role="form" id="questionPaperCreateForm">
+                        <form method="post" action="/exam-evaluation/create-questionPaper" role="form" id="questionPaperCreateForm" enctype="multipart/form-data">
                             <fieldset>
                                 <div class="row">
                                     <div class="col-md-4">
@@ -113,8 +113,16 @@
                             <div id="question-structure">
 
                             </div>
-                            <div class="row">
-                                <div class="form-group pull-right">
+                            <div class="row" id="submit-button-div">
+                                <div class="col-md-4">
+                                    <label class="control-label">
+                                        Select Question Paper PDF
+                                    </label>
+                                    <input type="file" class="form-control" id="question-paper-pdf" accept="application/pdf" name="question_paper_pdf">
+                                </div>
+                                <div class="form-group col-md-4">
+                                </div>
+                                <div class="form-group col-md-2">
                                     <button class="btn btn-primary btn-wide" id="submit-button" type="submit">
                                         Submit
                                     </button>
@@ -159,7 +167,7 @@
     <script>
         jQuery(document).ready(function() {
             Main.init();
-            $('#submit-button').hide();
+            $('#submit-button-div').hide();
         });
         $('#batchDrpdn').change(function(){
             var id=this.value;
@@ -196,7 +204,7 @@
                     $('#academic-year').html(str);
                 }
             });
-            $('#submit-button').hide();
+            $('#submit-button-div').hide();
             $('#exam-select').prop('selectedIndex',0);
             $('#subject-select').prop('selectedIndex',0);
             $('#term-select').prop('selectedIndex',0);
@@ -268,7 +276,7 @@
 
 
         $('#paper_questions').keyup(function(){
-            $('#submit-button').show();
+            $('#submit-button-div').show();
             var questions=this.value;
             var str = '';
             for(var i=0; i<questions; i++)
@@ -282,9 +290,9 @@
                             '</div>'+
                             '<div class="col-md-5" id="question-name-div">'+
                                 '<label class="control-label">'+
-                                    'Enter Question' +'<span class="symbol required"></span>'+
+                                    'Enter Question' +
                                 '</label>'+
-                                '<input type="text" class="form-control" id="question-name" name="question-name[]" placeholder="Enter Question" required>'+
+                                '<input type="text" class="form-control" id="question-name" name="question-name[]" placeholder="Enter Question">'+
                             '</div>'+
                             '<div class="col-md-1" id="question-marks-div">'+
                                 '<label class="control-label">'+
@@ -297,7 +305,7 @@
                                     'Or'+
                                 '</label>'+
 
-                                '<select class="form-control" id="or-question" name="or-question['+divId+'][]" multiple>'+
+                                '<select class="form-control or-question" id="or-question" name="or-question['+divId+'][]" multiple>'+
                                     '<option>Select or</option>';
                                     for(var j=0; j<questions; j++) {
                                         if (i != j) {
@@ -318,7 +326,7 @@
                             '<div id="'+divId+'subQuestion-div">'+
 
                             '</div>'+
-                    '<br><br>';
+                    '<br><br>'+'<hr style="border-color: black">';
                 $('#question-structure').html(str);
             }
 
@@ -362,9 +370,9 @@
                     '</div>' +
                     '<div class="col-md-5" id="question-name-div">' +
                     '<label class="control-label">' +
-                    'Enter Question' + '<span class="symbol required"></span>' +
+                    'Enter Question' +
                     '</label>' +
-                    '<input type="text" class="form-control" id="question-name" name="sub-question-name[' + divId + '][]" placeholder="Enter Question" required>' +
+                    '<input type="text" class="form-control" id="question-name" name="sub-question-name[' + divId + '][]" placeholder="Enter Question">' +
                     '</div>' +
                     '<div class="col-md-2" id="question-marks-div">' +
                     '<label class="control-label">' +
@@ -387,8 +395,33 @@
                     str += '</select>' +
                     '</div>' +
                     '</div>';
+                    if((i+1) < subQuestionCount) {
+                        str +='<hr style="border-color: blue">';
+                    }
                 $('#' + divId + 'subQuestion-div').append(str);
             }
         }
+
+        $("#question-paper-pdf").on('change', function () {
+            $('#submit-button').show();
+            var pdfPath = $(this)[0].value;
+            var extn = pdfPath.substring(pdfPath.lastIndexOf('.') + 1).toLowerCase();
+            var size = this.files[0].size/1024/1024;
+            if(size <= 2){
+                if (extn == "pdf" || extn == "PDF") {
+                    if (typeof (FileReader) == "undefined") {
+                        alert("It doesn't supports");
+                        $("#question-paper-pdf").val('');
+                    }
+                } else {
+                    alert("Select Only pdf File");
+                    $("#question-paper-pdf").val('');
+                }
+            }else{
+                alert("please select pdf less than 2 mb");
+                $("#question-paper-pdf").val('');
+            }
+        });
+
     </script>
 @stop

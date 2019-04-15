@@ -66,9 +66,9 @@
                                     </div>
                                     <div class="col-md-5" id="question-id-div">
                                         <label class="control-label">
-                                            Enter Question<span class="symbol required"></span>
+                                            Enter Question
                                         </label>
-                                        <input type="text" class="form-control {{$question['id']}}question_data" id="question-id" name="question_name[{{$count}}]" value="{{$question['question']}}" placeholder="{{$question['question']}}" required>
+                                        <input type="text" class="form-control {{$question['id']}}question_data" id="question-id" name="question_name[{{$count}}]" value="{{$question['question']}}" placeholder="{{$question['question']}}">
                                     </div>
                                     <div class="col-md-1" id="question-id-div">
                                         <label class="control-label">
@@ -122,9 +122,9 @@
                                                 </div>
                                                 <div class="col-md-5" id="question-id-div">
                                                     <label class="control-label">
-                                                        Enter Question<span class="symbol required"></span>
+                                                        Enter Question
                                                     </label>
-                                                    <input type="text" class="form-control {{$question['id']}}sub_question_data" id="{{$subQuestion['id']}}sub_question_name" name="sub_question_name[{{$count}}][]" value="{{$subQuestion['question']}}" placeholder="{{$subQuestion['question']}}" required>
+                                                    <input type="text" class="form-control {{$question['id']}}sub_question_data" id="{{$subQuestion['id']}}sub_question_name" name="sub_question_name[{{$count}}][]" value="{{$subQuestion['question']}}" placeholder="{{$subQuestion['question']}}">
                                                 </div>
                                                 <div class="col-md-1" id="question-id-div">
                                                     <label class="control-label">
