@@ -72,6 +72,25 @@ class ExamEvaluationController extends Controller
             $paperData['exam_id'] = $data['exam_select'];
             $paperData['class_id'] = $data['class_select'];
             $createQuestionPaper = ExamQuestionPaper::create($paperData);
+            if(array_key_exists('question_paper_pdf',$data)){
+                $name = $request->question_paper_pdf->getClientOriginalName();
+                $ext = explode('.',$name);
+                if($ext[1] == 'pdf') {
+                    $paperPresent = ExamQuestionPaper::where('id', $createQuestionPaper->id)->first();
+                    $folderEncName = sha1($createQuestionPaper->id);
+                    $folderPath = public_path() . env('QUESTION_PAPER_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                    if ($paperPresent['paper_pdf'] != null) {
+                        unlink($folderPath . DIRECTORY_SEPARATOR . $paperPresent['paper_pdf']);
+                    }
+                    if (!file_exists($folderPath)) {
+                        File::makeDirectory($folderPath, 0777, true, true);
+                    }
+                    $filename = mt_rand(1, 10000000000) . sha1(time()) . ".pdf";
+                    $request->question_paper_pdf->move($folderPath, $filename);
+                    $paperData['paper_pdf'] = $filename;
+                    ExamQuestionPaper::where('id', $createQuestionPaper->id)->update($paperData);
+                }
+            }
             if($request->has('question-id')){
                 $questionData['question_paper_id'] = $createQuestionPaper->id;
                 foreach ($data['question-id'] as $key=>$value) {
@@ -87,8 +106,10 @@ class ExamEvaluationController extends Controller
                         $orQuestionData['question_id'] =  $questions[$key];
                         if(array_key_exists($key,$orQuestions)){
                             foreach ($orQuestions[$key] as $key1=>$value1){
-                                $orQuestionData['or_question_id'] =  $questions[$value1];
-                                OrQuestions::create($orQuestionData);
+                                if(array_key_exists($value1,$questions)) {
+                                    $orQuestionData['or_question_id'] = $questions[$value1];
+                                    OrQuestions::create($orQuestionData);
+                                }
                             }
                         }
                     }
@@ -116,8 +137,10 @@ class ExamEvaluationController extends Controller
                                     foreach ($data['sub-or-question'][$key] as $key1 => $value1) {
                                         $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
                                         foreach ($value1 as $key2 => $value2) {
-                                            $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
-                                            OrQuestions::create($orSubQuestion);
+                                            if(array_key_exists($value2,$subQuestions[$key])) {
+                                                $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
+                                                OrQuestions::create($orSubQuestion);
+                                            }
                                         }
                                     }
                                 }
@@ -127,7 +150,7 @@ class ExamEvaluationController extends Controller
                 }
             }
             Session::flash('message-success','Question paper structure created successfully');
-            return back();
+            return redirect('exam-evaluation/paper-listing');
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -137,7 +160,8 @@ class ExamEvaluationController extends Controller
         try{
             $user = Auth::user();
             $paperData = ExamQuestionPaper::where('id',$id)->first();
-            return view('exam_evaluation.editQuestionPaper')->with(compact('user','paperData'));
+            $questions = QuestionPaperStructure::where('question_paper_id',$id)->whereNull('parent_question_id')->get()->toArray();
+            return view('exam_evaluation.editQuestionPaper')->with(compact('user','paperData','questions'));
         }catch (\Exception $e){
             abort(500,$e->getMessage());
         }
@@ -146,6 +170,67 @@ class ExamEvaluationController extends Controller
     public function editPaper(Request $request,$id){
         try{
             $user = Auth::user();
+            $data = $request->all();
+            $previousQuestions = QuestionPaperStructure::where('question_paper_id',$id)->lists('id');
+            if($request->has('question_id')){
+                $questionData['question_paper_id'] = $id;
+                foreach ($data['question_id'] as $key=>$value) {
+                    $questionData['question_id'] = $value;
+                    $questionData['question'] = $data['question_name'][$key];
+                    $questionData['marks'] = $data['question_mark'][$key];
+                    $createQuestion = QuestionPaperStructure::create($questionData);
+                    $questions[$key] = $createQuestion->id;
+                }
+                if($request->has('or_question')){
+                    $orQuestions = $data['or_question'];
+                    foreach ($questions as $key=>$value){
+                        $orQuestionData['question_id'] =  $questions[$key];
+                        if(array_key_exists($key,$orQuestions)){
+                            foreach ($orQuestions[$key] as $key1=>$value1){
+                                if(array_key_exists($value1,$questions)) {
+                                    $orQuestionData['or_question_id'] = $questions[$value1];
+                                }
+                                OrQuestions::create($orQuestionData);
+                            }
+                        }
+                    }
+                }
+
+                if ($request->has('sub_question_id')){
+                    $subQuestionData['question_paper_id'] = $id;
+                    foreach ($questions as $key=>$value){
+                        $subQuestionData['parent_question_id'] = $value;
+                        if(array_key_exists($key,$data['sub_question_id'])){
+                            foreach ($data['sub_question_id'][$key] as $key1=>$value1){
+                                $subQuestionData['question_id'] = $value1;
+                                $subQuestionData['question'] = $data['sub_question_name'][$key][$key1];
+                                $subQuestionData['marks'] = $data['sub_question_mark'][$key][$key1];
+                                $createSubQuestions = QuestionPaperStructure::create($subQuestionData);
+                                $subQuestions[$key][$key1] = $createSubQuestions->id;
+                            }
+                        }
+                    }
+                    if($subQuestions != null){
+                        foreach ($subQuestions as $key=>$value){
+                            if($request->has('sub_or_question')) {
+                                if (array_key_exists($key, $data['sub_or_question'])) {
+                                    foreach ($data['sub_or_question'][$key] as $key1 => $value1) {
+                                        if(array_key_exists($key1,$subQuestions[$key])){
+                                            $orSubQuestion['question_id'] = $subQuestions[$key][$key1];
+                                            foreach ($value1 as $key2 => $value2) {
+                                                if(array_key_exists($value2,$subQuestions[$key])) {
+                                                    $orSubQuestion['or_question_id'] = $subQuestions[$key][$value2];
+                                                    OrQuestions::create($orSubQuestion);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             if($request->has('paper_set')) {
                 $paperData['set_name'] = $request->paper_set;
             }
@@ -156,6 +241,7 @@ class ExamEvaluationController extends Controller
                 $paperData['marks'] = $request->paper_marks;
             }
             ExamQuestionPaper::where('id',$id)->update($paperData);
+            QuestionPaperStructure::whereIn('id',$previousQuestions)->delete();
             return redirect('exam-evaluation/paper-listing');
         }catch (\Exception $e){
             abort(500,$e->getMessage());
@@ -175,6 +261,26 @@ class ExamEvaluationController extends Controller
     public function uploadQuestionPaper(Request $request){
         try{
             $questionPapers = $request->question_paper;
+            $size = 0;
+            foreach ($questionPapers as $paperId => $paperPdf){
+                if($paperPdf != null) {
+                    if ($paperPdf->getSize() != false){
+                        if ($paperPdf->getSize() / 1024 > 2048) {
+                            Session::flash('message-error', 'Uploaded file exceeds max size upload limit');
+                            return Redirect::back();
+                        } else {
+                            $size += $paperPdf->getSize() / 1024;
+                            if ($size > 30720) {
+                                Session::flash('message-error', 'Upload files size limit exceed');
+                                return Redirect::back();
+                            }
+                        }
+                    }  else {
+                        Session::flash('message-error', 'Upload file size limit exceed');
+                        return Redirect::back();
+                    }
+                }
+            }
             foreach ($questionPapers as $paperId => $paperPdf){
                 if($paperPdf != null) {
                     $name = $paperPdf->getClientOriginalName();
@@ -220,39 +326,63 @@ class ExamEvaluationController extends Controller
         try{
             $answerSheetData['exam_id'] = $request->exam_select;
             $answerSheets = $request->answer_sheet;
-            foreach ($answerSheets as $stdId => $answerSheetPdf){
-                if($answerSheetPdf != null) {
-                    $name = $answerSheetPdf->getClientOriginalName();
-                    $ext = explode('.',$name);
-                    if($ext[1] == 'pdf') {
-                        $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->where('student_id', $stdId)->first();
-                        $folderEncName = sha1($request->exam_select);
-                        $folderPath = public_path() . env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
-                        if ($answerSheetPresent['pdf_name'] != null) {
-                            unlink($folderPath . DIRECTORY_SEPARATOR . $answerSheetPresent['pdf_name']);
-                        }
-                        if (!file_exists($folderPath)) {
-                            File::makeDirectory($folderPath, 0777, true, true);
-                        }
-                        $filename = mt_rand(1, 10000000000) . sha1(time()) . ".pdf";
-                        $answerSheetPdf->move($folderPath, $filename);
-                        $answerSheetData['pdf_name'] = $filename;
-                        if ($answerSheetPresent['pdf_name'] != null) {
-                            $answerSheetData['question_paper_id'] = $request->set_select;
-                            StudentAnswerSheet::where('id', $answerSheetPresent['id'])->update($answerSheetData);
+            $size = 0;
+            if($answerSheets != null) {
+                foreach ($answerSheets as $stdId => $answerSheetPdf) {
+                    if ($answerSheetPdf != null) {
+                        if ($answerSheetPdf->getSize() != false) {
+                            if ($answerSheetPdf->getSize() / 1024 > 2048) {
+                                Session::flash('message-error', 'Uploaded file exceeds max size upload limit');
+                                return Redirect::back();
+                            } else {
+                                $size += $answerSheetPdf->getSize() / 1024;
+                                if ($size > 30720) {
+                                    Session::flash('message-error', 'Upload files size limit exceed');
+                                    return Redirect::back();
+                                }
+                            }
                         } else {
-                            $answerSheetData['question_paper_id'] = $request->set_select;
-                            $answerSheetData['student_id'] = $stdId;
-                            $answerSheetData['created_at'] = Carbon::now();
-                            $answerSheetData['updated_at'] = Carbon::now();
-                            StudentAnswerSheet::insert($answerSheetData);
+                            Session::flash('message-error', 'Upload file size limit exceed');
+                            return Redirect::back();
                         }
-                    } else {
-                        Session::flash('message-error','Please select only pdf files');
-                        return Redirect::back();
-                    }
                     }
                 }
+            }
+            if($answerSheets != null) {
+                foreach ($answerSheets as $stdId => $answerSheetPdf) {
+                    if ($answerSheetPdf != null) {
+                        $name = $answerSheetPdf->getClientOriginalName();
+                        $ext = explode('.', $name);
+                        if ($ext[1] == 'pdf' || $ext[1] == 'PDF') {
+                            $answerSheetPresent = StudentAnswerSheet::where('exam_id', $request->exam_select)->where('student_id', $stdId)->first();
+                            $folderEncName = sha1($request->exam_select);
+                            $folderPath = public_path() . env('ANSWER_SHEET_UPLOAD') . DIRECTORY_SEPARATOR . $folderEncName;
+                            if ($answerSheetPresent['pdf_name'] != null) {
+                                unlink($folderPath . DIRECTORY_SEPARATOR . $answerSheetPresent['pdf_name']);
+                            }
+                            if (!file_exists($folderPath)) {
+                                File::makeDirectory($folderPath, 0777, true, true);
+                            }
+                            $filename = mt_rand(1, 10000000000) . sha1(time()) . ".pdf";
+                            $answerSheetPdf->move($folderPath, $filename);
+                            $answerSheetData['pdf_name'] = $filename;
+                            if ($answerSheetPresent['pdf_name'] != null) {
+                                $answerSheetData['question_paper_id'] = $request->set_select;
+                                StudentAnswerSheet::where('id', $answerSheetPresent['id'])->update($answerSheetData);
+                            } else {
+                                $answerSheetData['question_paper_id'] = $request->set_select;
+                                $answerSheetData['student_id'] = $stdId;
+                                $answerSheetData['created_at'] = Carbon::now();
+                                $answerSheetData['updated_at'] = Carbon::now();
+                                StudentAnswerSheet::insert($answerSheetData);
+                            }
+                        } else {
+                            Session::flash('message-error', 'Please select only pdf files');
+                            return Redirect::back();
+                        }
+                    }
+                }
+            }
             Session::flash('message-success','Student answer sheets uploaded successfully');
             return back();
         }catch (\Exception $e){
@@ -343,10 +473,14 @@ class ExamEvaluationController extends Controller
                 foreach ($data['marks'] as $key => $value) {
                     if (is_array($value)) {
                         foreach ($value as $key1 => $value1) {
-                            $markObtain += $value1;
+                            if($value1 != null){
+                                $markObtain += $value1;
+                            }
                         }
                     } else {
-                        $markObtain += $value;
+                        if($value != null){
+                            $markObtain += $value;
+                        }
                     }
                 }
                 $stdTermStructureIds = StudentExamDetails::where('student_id',$data['student_id'])->where('term_id',$data['term_id'])->where('exam_structure_id',$data['exam_structure_id'])->lists('id');
@@ -666,12 +800,18 @@ class ExamEvaluationController extends Controller
     }
 
     public function questionPaperListing(Request $request,$classId,$examId){
-        $result = ExamQuestionPaper::Where('class_id',$classId)->where('exam_id',$examId)->get();
+        if($classId == 'null' && $examId == 'null') {
+            $result = ExamQuestionPaper::all();
+        } else {
+            $result = ExamQuestionPaper::where('class_id', $classId)->where('exam_id', $examId)->get();
+        }
         $str = "<h5 class='over-title margin-bottom-15'><h3>Question Paper</h3></h5>";
         $str .= "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
         $str .= "<thead><tr>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Sr.No.: activate to sort column ascending' style='width: 29px;'>Sr.No.</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Term: activate to sort column ascending' style='width: 29px;'>Term</th>";
+        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Exam: activate to sort column ascending' style='width: 29px;'>Exam</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Set: activate to sort column ascending' style='width: 29px;'>Set</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th>";
         $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Marks: activate to sort column ascending' style='width: 29px;'>Marks</th>";
@@ -688,6 +828,10 @@ class ExamEvaluationController extends Controller
                 } else {
                     $str .= "<td>" . "<input type='checkbox'>" . "</td>";
                 }
+                $examName = ExamTermDetails::where('id',$row->exam_id)->select('term_id','exam_type')->first();
+                $termName = ExamTerms::where('id',$examName['term_id'])->value('term_name');
+                $str .= "<td>" . $termName . "</td>";
+                $str .= "<td>" . $examName['exam_type'] . "</td>";
                 $str .= "<td>" . $row->set_name . "</td>";
                 $str .= "<td>" . $row->question_paper_name ."</td>";
                 $str .= "<td>" . $row->marks ."</td>";

@@ -123,6 +123,21 @@
         jQuery(document).ready(function() {
             Main.init();
             $('#submit-button').hide();
+            var examId = $('#exam-select').val();
+            var classId = $('#class-select').val();
+            if(classId == null && examId == null) {
+                var route = 'paper-listing' + '/' + classId + '/' + examId;
+                $.ajax({
+                    method: "get",
+                    url: route
+                })
+                    .done(function (res) {
+                        $('div#loadmoreajaxloader').hide();
+                        $("#tableContent").html(res);
+                        TableData.init();
+                        $('#submit-button').show();
+                    })
+            }
         });
 
         $('#batchDrpdn').change(function(){
