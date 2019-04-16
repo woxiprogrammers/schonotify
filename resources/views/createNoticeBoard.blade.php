@@ -538,7 +538,10 @@
                         $('#save').prop('disabled',true);
                         $('#btnSubmit').prop('disabled',true);
                     } else {
-                        var str = "";
+                        var str = '<div class="checkbox clip-check check-primary">' +
+                            '<input type="checkbox" id="checkAll" class="checkAll">'+
+                            '<label for="checkAll">Select All Classes</label>'+
+                            '</div>';
                              for(var i=0; i<res.length; i++)
                              {
                                str +='<div class="checkbox clip-check check-primary">' +
@@ -585,6 +588,16 @@
                                 this.checked = false;
                             }
                         });
+                    }
+                });
+                $('.checkAll').change(function(){
+                    if($(this).prop('checked') == true)
+                    {
+                        $('.classFirst').prop('checked',true);
+                        $('.FirstDiv').prop('checked',true);
+                    }else{
+                        $('.classFirst').prop('checked',false);
+                        $('.FirstDiv').prop('checked',false);
                     }
                 });
                 }
