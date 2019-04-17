@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\certificate;
 
+use App\Body;
 use App\BonafideCertificateTable;
 use App\Helper\NumberHelper;
 use App\LivingCertificate;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -84,6 +86,7 @@ class BonafideCertificateController extends Controller
 
     public function downloadBonafide(Request $request,$grn){
         try{
+            $user = Auth::user();
             $data = array();
             $data = StudentExtraInfo::join('bonafide_certificate_table','bonafide_certificate_table.grn','=','students_extra_info.grn')
                 ->join('users','users.id','=','students_extra_info.student_id')
@@ -95,6 +98,7 @@ class BonafideCertificateController extends Controller
                 ->join('classes','classes.id','=','divisions.class_id')
                 ->where('users.id',$data['id'])
                 ->select('divisions.division_name','classes.class_name')->first();
+            $data['name'] = Body::where('id',$user['body_id'])->pluck('name');
             $birthday = explode('-', $data['birth_date']);
             $birthYear = NumberHelper::convertInWords($birthday[0]);
             $birthDay = NumberHelper::convertInWords($birthday[2]);
@@ -134,6 +138,7 @@ class BonafideCertificateController extends Controller
     }
     public function bonafideView(Request $request,$grn){
         $data = array();
+        $user = Auth::user();
         $data = StudentExtraInfo::join('bonafide_certificate_table','bonafide_certificate_table.grn','=','students_extra_info.grn')
                                   ->join('users','users.id','=','students_extra_info.student_id')
                                   ->where('bonafide_certificate_table.grn',$grn)
@@ -144,6 +149,7 @@ class BonafideCertificateController extends Controller
                                ->join('classes','classes.id','=','divisions.class_id')
                                 ->where('users.id',$data['id'])
                                 ->select('divisions.division_name','classes.class_name')->first();
+        $data['name'] = Body::where('id',$user['body_id'])->pluck('name');
          $birthday = explode('-', $data['birth_date']);
          $birthYear = NumberHelper::convertInWords($birthday[0]);
          $birthDay = NumberHelper::convertInWords($birthday[2]);

@@ -224,12 +224,14 @@ $isInstallmentPaid = false;
                             <td>
                                 {{$extra['amount']}}
                             </td>
+                            @if($isUserAdmin != null)
                             @if($isUserAdmin == 1 && $installment['is_paid'] == false)
                                 <td class="pull-right" style="width: 2%">
                                     <button type="button" class="close" aria-label="Close" onclick="removeField({{$extra['id']}})">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </td>
+                            @endif
                             @endif
                         </tr>
                     @endforeach

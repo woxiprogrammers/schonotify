@@ -38,11 +38,7 @@
             <table style="font-size: 15px">
             <tr style="height: 80px;">
                 <td colspan="2" style="font-size: 18px;">
-                    @if($data['body_id'] == 1)
-                        <b>Name of School : GANESH INTERNATIONAL SCHOOL,CHIKHALI</b>
-                    @else
-                        <b>Name of School : GANESH ENGLISH MEDIUM SCHOOL,DAPODI</b>
-                    @endif
+                        <b>Name of School : {{ucwords($data['name'])}}</b>
                 </td>
             </tr>
             <tr style="height: 80px;">
@@ -69,12 +65,12 @@
                     <div style="font-size: 15px; width: 680px !important;line-height: 30px;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        This is to certify that Master / Miss &nbsp;<b><i> {{$data['first_name']}} {{$data['last_name']}} </i></b>&nbsp; is / was a bonafide student of this School studying in Std. &nbsp;<b><i> {{$data['class']['class_name']}} </i></b>&nbsp; Div. &nbsp;<b><i> {{$data['class']['division_name']}} </i></b>
-                        &nbsp;during the year &nbsp;<b><i>{{date('Y',strtotime($data['from_date']))}} - {{date('Y',strtotime($data['to_date']))}}</i></b>&nbsp;. Mother's name is &nbsp;<b><i> {{$data['parent']['mother_first_name']}} {{$data['parent']['mother_middle_name']}} {{$data['parent']['mother_last_name']}}</i></b>.
-                        &nbsp;He / She is <b><i> {{$data['caste']}} </i></b>&nbsp; by caste.
+                        This is to certify that Master / Miss &nbsp;<b><i> {{ucwords($data['first_name'])}} {{ucwords($data['last_name'])}} </i></b>&nbsp; is / was a bonafide student of this School studying in Std. &nbsp;<b><i> {{$data['class']['class_name']}} </i></b>&nbsp; Div. &nbsp;<b><i> {{$data['class']['division_name']}} </i></b>
+                        &nbsp;during the year &nbsp;<b><i>{{date('Y',strtotime($data['from_date']))}} - {{date('Y',strtotime($data['to_date']))}}</i></b>&nbsp;. Mother's name is &nbsp;<b><i> {{ucwords($data['parent']['mother_first_name'])}} {{ucwords($data['parent']['mother_middle_name'])}} {{ucwords($data['parent']['mother_last_name'])}}</i></b>.
+                        &nbsp;He / She is <b><i> {{ucwords($data['caste'])}} </i></b>&nbsp; by caste.
                         &nbsp;His / Her date of Birth according to our Register is &nbsp;<b><i>{{date('d/m/Y',strtotime($data['birth_date'])) }}</i></b>&nbsp;
-                        (In words &nbsp;<b><i>{{$data['words']}}</i></b>)&nbsp;
-                        His / Her place of Birth is &nbsp;<b><i>{{$data['birth_place']}}</i></b>&nbsp; Tal. <b><i>&nbsp; {{$data['taluka']}} </i></b>&nbsp; Dist. &nbsp;<b><i> {{$data['district']}}</i></b>
+                        (In words &nbsp;<b><i>{{ucwords($data['words'])}}</i></b>)&nbsp;
+                        His / Her place of Birth is &nbsp;<b><i>{{ucwords($data['birth_place'])}}</i></b>&nbsp; Tal. <b><i>&nbsp; {{ucwords($data['taluka'])}} </i></b>&nbsp; Dist. &nbsp;<b><i> {{ucwords($data['district'])}}</i></b>
                         He / She bears a good moral character.
                     </div>
                 </td>

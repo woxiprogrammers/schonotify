@@ -502,6 +502,7 @@
                                                 <div class="form-group">
                                                     <input type="hidden" id="slug" value="gis">
                                                     <input type="hidden" id="grn" value="{{$grn}}">
+                                                    <input type="hidden" id="user_role" name="user_role" value="{{$userRoleId}}">
                                                     <label class="control-label">
                                                         Fee Structure: <span class="symbol required"></span>
                                                     </label>
@@ -1489,6 +1490,7 @@
 
         $("#fee_structure_select").on('change', function(){
             var studentFeeId = $(this).val();
+            var userRole = $('#user_role').val();
             if(studentFeeId != null) {
                 $.ajax({
                     url: '/fees/get-structure-installments/' + studentFeeId,
@@ -1496,7 +1498,8 @@
                     data: {
                         slug: $("#slug").val(),
                         grn: $("#grn").val(),
-                        add_field: true
+                        add_field: true,
+                        user_role: userRole
                     },
                     success: function (data, textStatus, xhr) {
                         $("#installment_section").html(data);
