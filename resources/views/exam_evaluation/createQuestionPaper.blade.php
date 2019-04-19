@@ -178,7 +178,13 @@
                 $('#loadmoreajaxloaderClass').show();
                 $.get(route, function (res) {
                     if (res.length == 0) {
+                        alert(1212);
                         $('#class-select').html("no record found");
+                        $('#class-select').find('option').remove();
+                        $('#academic-year').find('option').remove();
+                        $('#subject-select').find('option').remove();
+                        $('#term-select').find('option').remove();
+                        $('#exam-select').find('option').remove();
                         $('#loadmoreajaxloaderClass').hide();
                     } else {
                         var str = '<option>Please Select Class</option>';
@@ -196,7 +202,8 @@
                                     $('#academic-year').find('option').remove();
                                     $('#subject-select').find('option').remove();
                                     $('#term-select').find('option').remove();
-                                    $('#exam-select').html("no record found");
+                                    $('#exam-select').find('option').remove();
+                                    $('#academic-year').html("no record found");
                                 } else {
                                     var str = '<option value="">Please Select Academic Year</option>';
                                     for (var i = 0; i < res.length; i++) {
@@ -211,6 +218,7 @@
                                             if (res['subject'].length == 0) {
                                                 $('#subject-select').find('option').remove();
                                                 $('#term-select').find('option').remove();
+                                                $('#exam-select').find('option').remove();
                                                 $('#subject-select').html("no record found");
                                             } else {
                                                 var str = '<option value="">Please Select Subject</option>';
@@ -226,6 +234,8 @@
                                                     var route = 'get-term/' + academicYear + '/' + subId;
                                                     $.get(route, function (res) {
                                                         if (res['term'].length == 0) {
+                                                            $('#term-select').find('option').remove();
+                                                            $('#exam-select').find('option').remove();
                                                             $('#term-select').html("no record found");
                                                         } else {
                                                             var str1 = '<option value="">Please Select Term</option>';
@@ -259,9 +269,9 @@
                             });
                         }
                         $('#submit-button-div').hide();
-                        $('#exam-select').prop('selectedIndex',0);
+                        /*$('#exam-select').prop('selectedIndex',0);
                         $('#subject-select').prop('selectedIndex',0);
-                        $('#term-select').prop('selectedIndex',0);
+                        $('#term-select').prop('selectedIndex',0);*/
                     }
                 });
             }
@@ -273,6 +283,11 @@
             $.get(route,function(res){
                 if (res.length == 0)
                 {
+                    $('#class-select').find('option').remove();
+                    $('#academic-year').find('option').remove();
+                    $('#subject-select').find('option').remove();
+                    $('#term-select').find('option').remove();
+                    $('#exam-select').find('option').remove();
                     $('#class-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
@@ -283,6 +298,82 @@
                     }
                     $('#class-select').html(str);
                     $('#loadmoreajaxloaderClass').hide();
+                    $('#class-select').prop('selectedIndex', 1);
+                    var classId=$('#class-select').val();
+                    if(classId != null) {
+                        var route = 'get-academicYear/' + classId;
+                        $.get(route, function (res) {
+                            if (res.length == 0) {
+                                $('#academic-year').find('option').remove();
+                                $('#subject-select').find('option').remove();
+                                $('#term-select').find('option').remove();
+                                $('#exam-select').find('option').remove();
+                                $('#academic-year').html("no record found");
+                            } else {
+                                var str = '<option value="">Please Select Academic Year</option>';
+                                for (var i = 0; i < res.length; i++) {
+                                    str += '<option value="' + res[i]['year'] + '">' + res[i]['year'] + '</option>';
+                                }
+                                $('#academic-year').html(str);
+                                $('#academic-year').prop('selectedIndex', res.length);
+                                academicYear = $('#academic-year').val();
+                                if (academicYear != null) {
+                                    var route = 'get-subjects/' + academicYear;
+                                    $.get(route, function (res) {
+                                        if (res['subject'].length == 0) {
+                                            $('#subject-select').find('option').remove();
+                                            $('#term-select').find('option').remove();
+                                            $('#exam-select').find('option').remove();
+                                            $('#subject-select').html("no record found");
+                                        } else {
+                                            var str = '<option value="">Please Select Subject</option>';
+                                            for (var i = 0; i < res['subject'].length; i++) {
+                                                str += '<option value="' + res['subject'][i]['subject_id'] + '">' + res['subject'][i]['subject_name'] + '</option>';
+                                            }
+                                            $('#subject-select').html(str);
+                                            $('#subject-select').prop('selectedIndex', 1);
+
+                                            var subId = $('#subject-select').val();
+                                            var academicYear = $('#academic-year').val();
+                                            if (subId != null && academicYear != null) {
+                                                var route = 'get-term/' + academicYear + '/' + subId;
+                                                $.get(route, function (res) {
+                                                    if (res['term'].length == 0) {
+                                                        $('#term-select').find('option').remove();
+                                                        $('#exam-select').find('option').remove();
+                                                        $('#term-select').html("no record found");
+                                                    } else {
+                                                        var str1 = '<option value="">Please Select Term</option>';
+                                                        for (var i = 0; i < res['term'].length; i++) {
+                                                            str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
+                                                        }
+                                                        $('#term-select').html(str1);
+                                                        $('#term-select').prop('selectedIndex',1);
+                                                        var termId=$('#term-select').val();
+                                                        if(termId != null) {
+                                                            var route = 'get-exams/' + termId;
+                                                            $.get(route, function (res) {
+                                                                if (res.length == 0) {
+                                                                    $('#exam-select').find('option').remove();
+                                                                    $('#exam-select').html("no record found");
+                                                                } else {
+                                                                    var str = '<option value="">Please Select Subject</option>';
+                                                                    for (var i = 0; i < res.length; i++) {
+                                                                        str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
+                                                                    }
+                                                                    $('#exam-select').html(str);
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
                 }
             });
         });
@@ -295,7 +386,8 @@
                     $('#academic-year').find('option').remove();
                     $('#subject-select').find('option').remove();
                     $('#term-select').find('option').remove();
-                    $('#exam-select').html("no record found");
+                    $('#exam-select').find('option').remove();
+                    $('#academic-year').html("no record found");
                 } else {
                     var str = '<option value="">Please Select Academic Year</option>';
                     for (var i = 0; i < res.length; i++) {
@@ -310,6 +402,7 @@
                             if (res['subject'].length == 0) {
                                 $('#subject-select').find('option').remove();
                                 $('#term-select').find('option').remove();
+                                $('#exam-select').find('option').remove();
                                 $('#subject-select').html("no record found");
                             } else {
                                 var str = '<option value="">Please Select Subject</option>';
@@ -325,6 +418,8 @@
                                     var route = 'get-term/' + academicYear + '/' + subId;
                                     $.get(route, function (res) {
                                         if (res['term'].length == 0) {
+                                            $('#term-select').find('option').remove();
+                                            $('#exam-select').find('option').remove();
                                             $('#term-select').html("no record found");
                                         } else {
                                             var str1 = '<option value="">Please Select Term</option>';
@@ -332,10 +427,25 @@
                                                 str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
                                             }
                                             $('#term-select').html(str1);
+                                            $('#term-select').prop('selectedIndex',1);
+                                            var termId=$('#term-select').val();
+                                            if(termId != null) {
+                                                var route = 'get-exams/' + termId;
+                                                $.get(route, function (res) {
+                                                    if (res.length == 0) {
+                                                        $('#exam-select').find('option').remove();
+                                                        $('#exam-select').html("no record found");
+                                                    } else {
+                                                        var str = '<option value="">Please Select Subject</option>';
+                                                        for (var i = 0; i < res.length; i++) {
+                                                            str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
+                                                        }
+                                                        $('#exam-select').html(str);
+                                                    }
+                                                });
+                                            }
                                         }
                                     });
-                                } else {
-                                    $('#term-select').find('option').remove();
                                 }
                             }
                         });
@@ -343,9 +453,6 @@
                 }
             });
             $('#submit-button-div').hide();
-            $('#exam-select').prop('selectedIndex',0);
-            $('#subject-select').prop('selectedIndex',0);
-            $('#term-select').prop('selectedIndex',0);
             //$('#paper_marks').prop('value',0);
         });
 
@@ -354,6 +461,9 @@
                 var route = 'get-subjects/' + academicYear;
                 $.get(route, function (res) {
                     if (res['subject'].length == 0) {
+                        $('#subject-select').find('option').remove();
+                        $('#term-select').find('option').remove();
+                        $('#exam-select').find('option').remove();
                         $('#subject-select').html("no record found");
                     } else {
                         var str = '<option value="">Please Select Subject</option>';
@@ -361,11 +471,44 @@
                             str += '<option value="' + res['subject'][i]['subject_id'] + '">' + res['subject'][i]['subject_name'] + '</option>';
                         }
                         $('#subject-select').html(str);
+                        $('#subject-select').prop('selectedIndex',1);
+
+                        var subId=$('#subject-select').val();
+                        if(subId != null && academicYear !=null) {
+                            var route = 'get-term/' + academicYear + '/' + subId;
+                            $.get(route, function (res) {
+                                if (res['term'].length == 0) {
+                                    $('#term-select').find('option').remove();
+                                    $('#exam-select').find('option').remove();
+                                    $('#term-select').html("no record found");
+                                } else {
+                                    var str1 = '<option value="">Please Select Term</option>';
+                                    for (var i = 0; i < res['term'].length; i++) {
+                                        str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
+                                    }
+                                    $('#term-select').html(str1);
+                                    $('#term-select').prop('selectedIndex',1);
+                                    var termId=$('#term-select').val();
+                                    if(termId != null) {
+                                        var route = 'get-exams/' + termId;
+                                        $.get(route, function (res) {
+                                            if (res.length == 0) {
+                                                $('#exam-select').find('option').remove();
+                                                $('#exam-select').html("no record found");
+                                            } else {
+                                                var str = '<option value="">Please Select Subject</option>';
+                                                for (var i = 0; i < res.length; i++) {
+                                                    str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
+                                                }
+                                                $('#exam-select').html(str);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
-
-            $('#exam-select').prop('selectedIndex',0);
-            $('#term-select').prop('selectedIndex',0);
         });
 
         $('#subject-select').change(function(){
@@ -374,6 +517,8 @@
             var route = 'get-term/' + academicYear + '/' +subId;
             $.get(route, function (res) {
                 if (res['term'].length == 0) {
+                    $('#term-select').find('option').remove();
+                    $('#exam-select').find('option').remove();
                     $('#term-select').html("no record found");
                 } else {
                     var str1 = '<option value="">Please Select Term</option>';
@@ -381,9 +526,25 @@
                         str1 += '<option value="' + res['term'][i]['term_id'] + '">' + res['term'][i]['term_name'] + '</option>';
                     }
                     $('#term-select').html(str1);
+                    $('#term-select').prop('selectedIndex',1);
+                    var termId=$('#term-select').val();
+                    if(termId != null) {
+                        var route = 'get-exams/' + termId;
+                        $.get(route, function (res) {
+                            if (res.length == 0) {
+                                $('#exam-select').find('option').remove();
+                                $('#exam-select').html("no record found");
+                            } else {
+                                var str = '<option value="">Please Select Subject</option>';
+                                for (var i = 0; i < res.length; i++) {
+                                    str += '<option value="' + res[i]['exam_id'] + '">' + res[i]['exam_name'] + '</option>';
+                                }
+                                $('#exam-select').html(str);
+                            }
+                        });
+                    }
                 }
             });
-            $('#exam-select').prop('selectedIndex',0);
         });
 
         $('#term-select').change(function(){
