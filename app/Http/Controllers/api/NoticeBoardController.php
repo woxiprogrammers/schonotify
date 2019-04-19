@@ -94,7 +94,8 @@ class NoticeBoardController extends Controller
             $status = 200;
             $message = "success";
             $body_id = $request->body_id;
-            $parentAchievementPublished = Event::where('event_type_id','=',2)
+            $eventType = $request->event_type;
+            $parentAchievementPublished = Event::where('event_type_id','=',$eventType)
                 ->where('status',2)
                 ->select('events.created_at','events.updated_at','events.id','title','detail','event_type_id','status','published_by','created_by','priority')
                 ->where('body_id',$body_id)
