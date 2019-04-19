@@ -367,6 +367,11 @@ class FeeController extends Controller
             }else{
                 $add_field = false;
             }
+            if($request->has('user_role')){
+                $isUserAdmin = $request->user_role;
+            }else {
+                $isUserAdmin = null;
+            }
             $student_fee = StudentFee::findOrFail($studentFeeId)->toArray();
             $student_fee_detail = StudentFee::where('student_id',$student_fee['student_id'])->where('fee_id',$student_fee['fee_id'])->select('fee_concession_type','caste_concession')->get()->toArray();
             foreach ($student_fee_detail as $feeConc){
@@ -469,7 +474,6 @@ class FeeController extends Controller
                 $installments[$installmentId]['final_total'] = $installments[$installmentId]['subTotal'] - $installments[$installmentId]['caste_concession_amount'] - $installments[$installmentId]['fee_concession_amount'];
             }
             $fullPayConc = FullPaymentConcession::where('fee_id',$student_fee['fee_id'])->where('concession_type',1)->first();
-            $isUserAdmin = Auth::User()->role_id;
             return view('fee.new-installment-section')->with(compact('student','parent','installments','slug','isPreviousStructureCleared','add_field','fullPayConc','studentFeeId','isUserAdmin','concessionName'));
         }catch(\Exception $e){
             $data = [

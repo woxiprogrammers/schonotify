@@ -304,8 +304,8 @@ class CmsController extends Controller
             $message = "Successful";
             $status = 200;
             $data = array();
-            $folders = Folder::where('body_id', $body_id)->where('is_active', true)->orderBy('created_at', 'desc')->get()->toArray();
-            $result= GalleryManagement::where('type','=','image')->get()
+            $foldersIds = Folder::where('body_id', $body_id)->where('is_active', true)->orderBy('created_at', 'desc')->lists('id');
+            $result= GalleryManagement::where('type','=','image')->whereIn('folder_id',$foldersIds)->get()
                 ->groupBy(function($val) {
                     return Carbon::parse($val->created_at)->format('Y');
                 })->toArray();
