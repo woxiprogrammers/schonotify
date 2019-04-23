@@ -597,14 +597,16 @@ class ExamEvaluationController extends Controller
         $data=array();
         $structureId = ExamClassStructureRelation::where('class_id',$classId)->distinct('exam_subject_id')->lists('exam_subject_id');
         $years = ExamYear::whereIn('id',$structureId)->get()->toArray();
-        foreach ($years as $row) {
-            $arr[] = $row['start_year'] .'-'. $row['end_year'];
-        }
-        $year = array_unique($arr);
-        $i=0;
-        foreach ($year as $row){
-            $data[$i]['year'] = $row;
-            $i++;
+        if(!empty($years)){
+            foreach ($years as $row) {
+                $arr[] = $row['start_year'] .'-'. $row['end_year'];
+            }
+            $year = array_unique($arr);
+            $i=0;
+            foreach ($year as $row){
+                $data[$i]['year'] = $row;
+                $i++;
+            }
         }
         return $data;
     }

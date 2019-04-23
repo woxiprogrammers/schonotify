@@ -1,50 +1,53 @@
 <?php
-
-namespace App\Http\Middleware;
-
-use App\TeacherView;
+namespace App\Http\Controllers\api;
+use App\Attendance;
+use App\AttendanceStatus;
+use App\Batch;
+use App\Classes;
+use App\Division;
+use App\Leave;
+use App\LeaveRequest;
+use App\SubjectClassDivision;
 use App\User;
-use Closure;
-class AuthenticateUser
+use App\UserRoles;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\CustomTraits\PushNotificationTrait;
+use App\PushToken;
+class AttendanceController extends Controller
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
+    use PushNotificationTrait;
+    public function __construct(Request $request)
     {
-	    if($request->has('token')){
-	          $teacher = User::where('remember_token',$request->token)->first();
-            if (!empty($teacher)){
-                if($teacher->role_id == 2){
-                    $teacherView = TeacherView::where('user_id',$teacher->id)->select('mobile_view')->first();
-                    if($teacherView['mobile_view'] == 1){
-                        $request->merge(compact('teacher'));
-                        return $next($request);
-                    }else{
-                        $response = array();
-                        $response['status'] = 401;
-                        $response['message'] = "Don't Have mobile view permission";
-                        return $response;
-                    }
-                }else{
-                    $request->merge(compact('teacher'));
-                    return $next($request);
-                }
-            } else {
-                $response = array();
-                $response['status'] = 500;
-                $response['message'] = "Token Mismatch";
-                return $response;
-            }
-        }else{
-            $response = array();
-            $response['status'] = 401;
-            $response['message'] = "Unauthorised User";
-            return $response;
-        }
+        $this->middleware('db');
+        $this->middleware('authenticate.user');
+    }
+    /*
+   * Function Name: getAttendanceBatches
+   * Param : Request $requests
+   * Return :Return the data of batches as JSON array
+   * Desc : Display list of batches to the teacher to mark attendance
+   * Developed By : shubham chaudhari
+   * Date : 6/2/2016
+   */
+   public function getAttendanceBatches(Request $request){
+     $data=$request->all();
+     $batches = Batch::where('body_id',$data['teacher']['body_id'])->get()->toArray();
+     return response($batches);
+   }
+    public function getAttendanceClasses(Request $request,$batchId){
+     $data=$request->all();
+     $classes = Classes::where('batch_id',$batchId)->get()->toArray();
+     return response($classes);
+    }
+    public function getAttendanceDivisions(Request $request,$classId){
+     $data=$request->all();
+     $Division = Division::where('class_id',$classId)->get()->toArray();
+     return response($Division);
     }
 }
+    /*
+    public function g
