@@ -470,7 +470,7 @@ class AttendanceController extends Controller
                                 $finalList['studentList'][$i]['id'] = $students['id'];
                                 $finalList['studentList'][$i]['name'] = $students['first_name']." ".$students['last_name'];
                                 $finalList['studentList'][$i]['roll_number'] = $students['roll_number'];
-                                $finalList['studentList'][$i]['absent_status'] = 1;
+                                $finalList['studentList'][$i]['absent_status'] = 0;
                                 $finalList['studentList'][$i]['leave_status'] = $leaveStatus;
                                 $flag = 1;
                                 $i++;
@@ -480,7 +480,7 @@ class AttendanceController extends Controller
                             $finalList['studentList'][$i]['id'] = $students['id'];
                             $finalList['studentList'][$i]['name'] = $students['first_name']." ".$students['last_name'];
                             $finalList['studentList'][$i]['roll_number'] = $students['roll_number'];
-                            $finalList['studentList'][$i]['absent_status'] = 0;
+                            $finalList['studentList'][$i]['absent_status'] = 1;
                             $finalList['studentList'][$i]['leave_status'] = $leaveStatus;
                             $i++;
                         }
