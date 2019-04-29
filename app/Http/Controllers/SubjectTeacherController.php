@@ -41,7 +41,7 @@
                     ->where('users.is_active',1)
                     ->select('subjects.subject_name as subject','batches.name as batch','classes.class_name as class','divisions.division_name as division','users.first_name as teacherFirstName','users.last_name as teacherLastName','users.username as teacherUsername','division_subjects.id as id')
                     ->get();
-                return view('subjectTeacher')->with(compact('subjects','associations'));
+                return view('subjectTeacher')->with(compact('subjects','associations','user'));
             }else{
                 return Redirect::to('/');
             }
@@ -132,20 +132,15 @@
                 return Redirect::to('/');
             }
         }
-        public function deleteRelation(Requests\WebRequests\AssignSubjectRequest $request,$id)
+        public function deleteRelation(Request $request,$id)
         {
-            if($request->authorize()===true)
+            $query=SubjectClassDivision::where('id',$id)->delete();
+            if($query)
             {
-                $query=SubjectClassDivision::where('id',$id)->delete();
-                if($query)
-                {
-                    Session::flash('message-success','Association deleted successfully !');
-                    return Redirect::back();
-                }else{
-                    Session::flash('message-error','Something went wrong !');
-                    return Redirect::back();
-                }
+                Session::flash('message-success','Association deleted successfully !');
+                return Redirect::back();
             }else{
+                Session::flash('message-error','Something went wrong !');
                 return Redirect::back();
             }
         }

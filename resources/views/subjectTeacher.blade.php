@@ -112,7 +112,9 @@
                                     <th>Division</th>
                                     <th>Subject</th>
                                     <th>Teacher Name (Username)</th>
-
+                                    @if($user->id == 1)
+                                    <th>Action</th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -123,6 +125,9 @@
                                         <td>{!! $association->division !!}</td>
                                         <td>{!! $association->subject !!}</td>
                                         <td>{!! $association->teacherFirstName !!} {!! $association->teacherLastName !!} ({!! $association->teacherUsername !!})</td>
+                                        @if($user->id == 1)
+                                            <td><button onclick="deleteConfirm({!!  $association->id !!})">delete</button></td>
+                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>
