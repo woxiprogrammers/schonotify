@@ -632,7 +632,6 @@ class HomeworkController extends Controller
             }
             $i=0;
             foreach ($homeworkListingSubjectTeacher as $value) {
-                Log::info($value->homework_id);
                 $finalHomeworkListingSubjectTeacher[$i]['homework_id'] = $value->homework_id;
                 $finalHomeworkListingSubjectTeacher[$i]['homeworkTitle'] = $value->homeworkTitle;
                 $finalHomeworkListingSubjectTeacher[$i]['description'] = $value->description;
