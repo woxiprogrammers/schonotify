@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeworkController extends Controller
 {
@@ -602,10 +603,10 @@ class HomeworkController extends Controller
                 $divisionSubjects = SubjectClassDivision::where('teacher_id',$data['teacher']['id'])
                     ->join('subjects','division_subjects.subject_id','=','subjects.id')
                     ->select('subjects.id as subject_id','division_id')
-                    ->get();
+                    ->get()->toArray();
                 if ($divisionSubjects != null) {
                     foreach ($divisionSubjects as $value) {
-                        $homeworkListingSubjectTeacher = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
+                        $homeworkListingSubjectTeacher1 = HomeworkTeacher::join('homeworks', 'homework_teacher.homework_id', '=', 'homeworks.id')
                             ->Join('divisions', 'homework_teacher.division_id', '=', 'divisions.id')
                             ->Join('classes', 'divisions.class_id', '=', 'classes.id')
                             ->Join('batches', 'classes.batch_id', '=', 'batches.id')
@@ -613,6 +614,7 @@ class HomeworkController extends Controller
                             ->Join('subjects', 'homeworks.subject_id', '=', 'subjects.id')
                             ->Join('users', 'homework_teacher.student_id', '=', 'users.id')
                             ->Join('users as teacher' ,'homework_teacher.teacher_id', '=', 'teacher.id')
+//                            ->where('teacher.id','=',$data['teacher']['id'])
                             ->where('homeworks.subject_id','=',$value['subject_id'])
                             ->where('homework_teacher.division_id','=',$value['division_id'])
 //                            ->where('homeworks.status',[1,2])//2 is for published homework
@@ -620,6 +622,9 @@ class HomeworkController extends Controller
                             ->groupBy('homework_teacher.homework_id')
                             ->select('homework_teacher.homework_id as homework_id','homeworks.title as homeworkTitle','homeworks.description','due_date','attachment_file','teacher_id','homework_types.slug as homeworkType','homework_types.id as id ','users.first_name as first_name','users.last_name as last_name','users.id as userId','subjects.slug as subjectName','subjects.id as subject_id','homeworks.status','divisions.division_name','divisions.id as division_id','classes.class_name','classes.id as class_id','homeworks.created_at','batches.name as batch_name','batches.id as batch_id','teacher.first_name as teacher_name')
                             ->get();
+                            foreach($homeworkListingSubjectTeacher1 as $item){
+                                $homeworkListingSubjectTeacher[] = $item;
+                            }
                     }
                 } else {
                     $homeworkListingSubjectTeacher=[];
