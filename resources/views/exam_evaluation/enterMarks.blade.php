@@ -167,8 +167,11 @@
             if($('#answer-sheet-pdf').attr("class") == 'col-sm-4') {
                 $('#answer-sheet-pdf').attr("class", "col-sm-8");
                 $('#question-paper-pdf').hide();
+                $('#answer-sheet-pdf').show();
             } else {
                 $('#answer-sheet-pdf').attr("class", "col-sm-4");
+                $('#question-paper-pdf').attr("class", "col-sm-8");
+                $('#answer-sheet-pdf').hide();
                 $('#question-paper-pdf').show();
             }
         });

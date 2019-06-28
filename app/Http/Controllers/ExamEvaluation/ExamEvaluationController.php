@@ -744,18 +744,31 @@ class ExamEvaluationController extends Controller
     {
         $role_id = 3;
         $user = Auth::user();
-       // $studentIds = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('subject_id',$request->subject)->where('teacher_id',3745)->where('role_id',$request->role)->lists('student_id');
-        $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
-            ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
-            ->where('division_id', $request->division)
-            ->where('users.body_id', '=', $user->body_id)
-            ->where('users.role_id', '!=', 1)
-            ->where('users.role_id', '=', $role_id)
-            ->where('users.id', '!=', $user->id)
-            //->whereIn('users.id',$studentIds)
-            ->where('users.is_displayed', '=', '1')
-            ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role',  'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
-            ->get();
+        if($user->role_id == 2){
+            $studentIds = AssignStudentsToTeacher::where('exam_id',$request->exam)->where('teacher_id',$user->id)->where('role_id',$request->role)->lists('student_id');
+            $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                ->where('division_id', $request->division)
+                ->where('users.body_id', '=', $user->body_id)
+                ->where('users.role_id', '!=', 1)
+                ->where('users.role_id', '=', $role_id)
+                ->where('users.id', '!=', $user->id)
+                ->whereIn('users.id',$studentIds)
+                ->where('users.is_displayed', '=', '1')
+                ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role',  'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
+                ->get();
+        } else {
+            $result = User::Join('user_roles', 'users.role_id', '=', 'user_roles.id')
+                ->join('students_extra_info', 'users.id', '=', 'students_extra_info.student_id')
+                ->where('division_id', $request->division)
+                ->where('users.body_id', '=', $user->body_id)
+                ->where('users.role_id', '!=', 1)
+                ->where('users.role_id', '=', $role_id)
+                ->where('users.id', '!=', $user->id)
+                ->where('users.is_displayed', '=', '1')
+                ->select('users.id', 'users.roll_number as roll_number','user_roles.slug as user_role',  'users.first_name as firstname', 'users.last_name as lastname', 'students_extra_info.grn as rollno', 'users.is_lc_generated', 'users.is_displayed')
+                ->get();
+        }
         $str = "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
         $str .= "<thead><tr>";
         if ($role_id == 3) {

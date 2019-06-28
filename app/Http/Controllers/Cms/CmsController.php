@@ -61,7 +61,7 @@ class CmsController extends Controller
             $requestedData = $request->all();
             $menuTabs = array();
             foreach ($requestedData as $key => $value){
-                $tabNamePresent = BodyTabNames::where('slug',$value['slug'])->first();
+                $tabNamePresent = BodyTabNames::where('body_id',$user['body_id'])->where('slug',$value['slug'])->first();
                 if($tabNamePresent == null){
                     $menuTabs['body_id'] = $user['body_id'];
                     $menuTabs['display_name'] = $value['menu_tab'];
@@ -89,7 +89,7 @@ class CmsController extends Controller
                     if(array_key_exists('link',$value)){
                         $menuTabs['link'] = $value['link'];
                     }
-                    $query = BodyTabNames::where('id',$tabNamePresent['id'])->where('slug',$tabNamePresent['slug'])->update($menuTabs);
+                    $query = BodyTabNames::where('body_id',$user['body_id'])->where('id',$tabNamePresent['id'])->where('slug',$tabNamePresent['slug'])->update($menuTabs);
                 }
             }
             if($query){
@@ -296,7 +296,7 @@ class CmsController extends Controller
         try{
             $user = Auth::User();
             $socialMediaData =array();
-            $ifDataPresent = BodySocialDetails::get()->first();
+            $ifDataPresent = BodySocialDetails::where('body_id',$user['body_id'])->get()->first();
             foreach ($request->all() as $data){
                 $socialMediaData['name'] = $data['link'];
                 $socialMediaData['social_platform_id'] = $data['social_platform_id'];
@@ -329,7 +329,8 @@ class CmsController extends Controller
     }
     public function contactUsDetail(Request $request){
         try{
-            $bodyDetails = BodyDetails::first();
+            $user = Auth::User();
+            $bodyDetails = BodyDetails::where('body_id',$user['body_id'])->get()->first();
             $contactDetails['address'] = $request->address;
             $contactDetails['contact_number'] = $request->contact_display;
             $contactDetails['email'] = $request->email_display;
@@ -387,7 +388,8 @@ class CmsController extends Controller
     }
     public function tabsSubTabsListing(){
         try{
-            $subPagesNameDetail = BodyTabNames::whereNotNull('body_tab_name_id')->where('is_active',1)->get()->toArray();
+            $user = Auth::User();
+            $subPagesNameDetail = BodyTabNames::whereNotNull('body_tab_name_id')->where('body_id',$user['body_id'])->where('is_active',1)->get()->toArray();
             $str="<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";
             $str.="<thead><tr>";
             $str.="<th>Parent Page</th>";
@@ -416,7 +418,10 @@ class CmsController extends Controller
     }
     public function createPages(){
         try{
-            $tabNames = BodyTabNames::whereIn('slug',['custom-1','custom-2','custom-3'])->where('is_active',1)->get()->toArray();
+            $user = Auth::User();
+            $tabNames = BodyTabNames::whereIn('slug',['custom-1','custom-2','custom-3'])
+                ->where('body_id',$user['body_id'])->where('is_active',1)
+                ->get()->toArray();
             return view('cms.pagesCreate')->with(compact('tabNames'));
         }catch(\Exception $e){
             $data = [
@@ -428,7 +433,8 @@ class CmsController extends Controller
     }
     public function createSubPages(Request $request){
         try{
-            $bodyTabName = BodyTabNames::where('slug',$request->main_pages)->first();
+            $user = Auth::User();
+            $bodyTabName = BodyTabNames::where('body_id',$user['body_id'])->where('slug',$request->main_pages)->first();
             $subPageData['display_name'] = $request->sub_tab_name;
             $subPageData['slug']  = preg_replace('/\s+/', '-',  strtolower($request->sub_tab_name));
             $subPageData['body_tab_name_id'] = $bodyTabName['id'];
@@ -505,9 +511,11 @@ class CmsController extends Controller
     }
     public function editPages(Request $request,$id){
         try{
-            $tabNames = BodyTabNames::where('body_tab_name_id','=',null)->where('is_active',1)->get()->toArray();
+            $user = Auth::User();
+            $tabNames = BodyTabNames::where('body_id',$user['body_id'])->where('body_tab_name_id','=',null)->where('is_active',1)->get()->toArray();
             $pagesDetail = BodyTabNames::join('body_tab_details','body_tab_details.body_tab_name_id','=','body_tab_names.id')
                                         ->where('body_tab_names.id',$id)->select('body_tab_names.id','body_tab_names.display_name','body_tab_names.slug','body_tab_details.description','body_tab_names.page_icon','body_tab_names.body_tab_name_id')
+                                        ->where('body_tab_names.body_id',$user['body_id'])
                                         ->first();
             $sliderImages = PageSliderImages::where('body_tab_name_id',$id)->orderBy('id','ASC')->get()->toArray();
             return view('cms.pagesEdit')->with(compact('pagesDetail','tabNames','sliderImages'));
@@ -541,7 +549,8 @@ class CmsController extends Controller
     }
     public function editSubPages(Request $request,$id){
         try{
-            $bodyTabName = BodyTabNames::where('slug',$request->main_pages)->first();
+            $user = Auth::User();
+            $bodyTabName = BodyTabNames::where('body_id',$user['body_id'])->where('slug',$request->main_pages)->first();
             $subPageData['display_name'] = $request->sub_tab_name;
             $subPageData['slug']  = preg_replace('/\s+/', '-',  strtolower($request->sub_tab_name));
             $subPageData['body_tab_name_id'] = $bodyTabName['id'];
@@ -649,8 +658,8 @@ class CmsController extends Controller
     }
     public function aboutUsForm(Request $request){
         try{
-            $presentData = BodyAboutUs::first();
             $user = Auth::User();
+            $presentData = BodyAboutUs::where('body_id',$user['body_id'])->first();
             $aboutUsData ['body_id'] = $user->body_id;
             $aboutUsData ['description'] = $request->about_us;
             if($request->has('about_us_image')){
@@ -695,6 +704,9 @@ class CmsController extends Controller
     public function testimonialForm(Request $request){
         try{
             $user = Auth::user();
+            $testimonialData = array();
+            $query = false;
+            $isActive = false;
             foreach($request->all() as $data){
                 if(array_key_exists('is_check',$data)){
                     $testimonialData['body_id'] = $user->body_id;
@@ -725,7 +737,7 @@ class CmsController extends Controller
                         $folderEncName = sha1($data['id']);
                         $folderPath = public_path().env('TESTIMONIAL_IMAGE_UPLOAD').DIRECTORY_SEPARATOR.$folderEncName;
                         if ( file_exists($folderPath)) {
-                            unlink($folderPath.DIRECTORY_SEPARATOR.$data['image_name']);
+                            //unlink($folderPath.DIRECTORY_SEPARATOR.$data['image_name']);
                         }
                         if (! file_exists($folderPath)) {
                             File::makeDirectory($folderPath , 0777 ,true,true);

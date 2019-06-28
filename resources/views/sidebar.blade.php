@@ -122,7 +122,7 @@
 
                 {{--start commenting code for Exam Eval--}}
 
-                {{--<li>
+                <li>
                     <a href="/timetable">
                         <div class="item-content">
                             <div class="item-media">
@@ -203,7 +203,7 @@
                             </div>
                         </a>
                     </li>
-                @endif--}}
+                @endif
 
                 {{--end commenting code for Exam Eval--}}
 
@@ -460,7 +460,7 @@
 
                 {{--start commenting code for Exam Eval--}}
 
-                {{--@if(Auth::User()->role_id == 1)
+                @if(Auth::User()->role_id == 1)
                     <li>
                         <a href="javascript:void(0)">
                             <div class="item-content">
@@ -573,7 +573,7 @@
                             </li>
                         </ul>
                     </li>
-                @endif--}}
+                @endif
 
                 {{--end commenting code for Exam Eval--}}
 
