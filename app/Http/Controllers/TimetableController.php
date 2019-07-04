@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 class TimetableController extends Controller
@@ -74,10 +75,12 @@ class TimetableController extends Controller
                         ->select('users.first_name as teacher','users.last_name as teacher_last_name','subjects.subject_name','users.is_active')
                         ->where('division_subjects.id',$row['division_subject_id'])
                         ->get()->toArray();
-                   $row['teacher'] = $subject[0]['teacher'];
-                   $row['teacher_last_name'] = $subject[0]['teacher_last_name'];
-                    $row['teacher_is_active'] = $subject[0]['is_active'];
-                    $row['subject'] = $subject[0]['subject_name'];
+                    if(!empty($subject)){
+                        $row['teacher'] = $subject[0]['teacher'];
+                        $row['teacher_last_name'] = $subject[0]['teacher_last_name'];
+                        $row['teacher_is_active'] = $subject[0]['is_active'];
+                        $row['subject'] = $subject[0]['subject_name'];
+                    }
                 } else {
                     $row['teacher'] = "";
                     $row['subject'] = "";
