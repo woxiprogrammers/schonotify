@@ -70,9 +70,12 @@ class ExamController extends Controller
                                      where('exam_term_details.term_id',$id)->
                                      where('student_exam_marks.term_id',$id)->
                                      where('student_exam_marks.student_exam_details_id',$student_exam_details_id)->
+                                     where('exam_term_details.out_of_marks','>',0)->
                                      select('exam_term_details.exam_type','exam_term_details.out_of_marks','student_exam_marks.marks_obtained')->
                                      get();
-             $obtained_marks = StudentExamMarks::where('student_exam_details_id',$student_exam_details_id)->where('term_id',$id)->lists('marks_obtained')->toArray();
+             $obtained_marks = StudentExamMarks::join('exam_term_details','exam_term_details.id','=','student_exam_marks.exam_term_details_id')
+                                            ->where('exam_term_details.out_of_marks','>',0)
+                                            ->where('student_exam_marks.student_exam_details_id',$student_exam_details_id)->where('student_exam_marks.term_id',$id)->lists('student_exam_marks.marks_obtained')->toArray();
              $subSubject_id = StudentExamMarks::where('term_id',$id)->pluck('exam_structure_id');
              $class_id = ExamClassStructureRelation::where('exam_subject_id',$subSubject_id)->pluck('class_id');
              $totalMarks_obtained = array_sum($obtained_marks);
