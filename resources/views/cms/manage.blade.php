@@ -332,9 +332,9 @@
         @endif
     </div>
     <div class="col-md-3">
-        @if($tabName['link'] != null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3' || $tabName['slug'] == 'custom-link-4'))
+        @if($tabName['link'] != null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3' || $tabName['slug'] == 'custom-link-4' || $tabName['slug'] == 'custom-link-5' || $tabName['slug'] == 'custom-link-6' || $tabName['slug'] == 'custom-link-7'))
         <input type="text" value="{{$tabName['link']}}" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
-        @elseif($tabName['link'] == null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3' || $tabName['slug'] == 'custom-link-4'))
+        @elseif($tabName['link'] == null && ($tabName['slug'] == 'custom-link-1' || $tabName['slug'] == 'custom-link-2' || $tabName['slug'] == 'custom-link-3' || $tabName['slug'] == 'custom-link-4' || $tabName['slug'] == 'custom-link-5' || $tabName['slug'] == 'custom-link-6' || $tabName['slug'] == 'custom-link-7'))
         <input type="text" value="" class="form-control" name="is_check_{{$tabName['slug']}}[link]" id="custom_link_3_link" placeholder="enter link">
         @endif
     </div>
