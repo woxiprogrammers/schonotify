@@ -39,9 +39,9 @@ class EventController extends Controller
                 ->where('events.status','=',2)
                 ->where('events.body_id','=',$user['teacher']['body_id'])
                 ->where('events.event_type_id' , '=' , $eventTypesId)
-                ->orderBy('start_date', 'desc')
+                ->orderBy('start_date', 'asc')
                 ->get()
-                ->take(5)->toArray();
+                ->take(30)->toArray();
              $counter = 0;
             foreach ($recentFiveEvents as $event) {
                 $finalFiveEvents[$counter]['id'] =  $event['id'];
