@@ -163,27 +163,27 @@ class CmsController extends Controller
 
     }
     public function eventDetails(Request $request){
-            $url = "http://www.veza_cms.com/events";
+            $url = env('BASE_URL').DIRECTORY_SEPARATOR."events";
             return Redirect::to($url);
 
     }
     public function aboutUsDetails(Request $request){
-            $url = "http://www.veza_cms.com/aboutUs";
+            $url = env('BASE_URL').DIRECTORY_SEPARATOR."aboutUs";
             return Redirect::to($url);
 
     }
     public function subPagesView(Request $request,$id){
-            $url = "http://www.veza_cms.com/subPage";
+            $url = env('BASE_URL').DIRECTORY_SEPARATOR."subPage";
             return Redirect::to($url)->with(compact('id'));
 
     }
     public function contactUsView(){
-            $url = "http://www.veza_cms.com/contactUs";
-            return Redirect::to($url);
+        $url = env('BASE_URL').DIRECTORY_SEPARATOR."contactUs";
+        return Redirect::to($url);
 
     }
     public function galleryDetails(){
-        $url = "http://www.veza_cms.com/gallery";
+        $url = env('BASE_URL').DIRECTORY_SEPARATOR."gallery";
         return Redirect::to($url);
     }
     public function contactUsForm(Request $request,$body_id){
@@ -304,9 +304,9 @@ class CmsController extends Controller
             $message = "Successful";
             $status = 200;
             $data = array();
-            $foldersIds = Folder::where('body_id', $body_id)->where('is_active', true)->orderBy('created_at', 'desc')->lists('id');
-            $result= GalleryManagement::where('type','=','image')->whereIn('folder_id',$foldersIds)->get()
-                ->groupBy(function($val) {
+            $folders = Folder::where('body_id', $body_id)->where('is_active', true)->orderBy('created_at', 'desc')->select('id')->get()->toArray();
+            $result= GalleryManagement::where('type','=','image')->whereIn('folder_id',$folders)->get()
+                                ->groupBy(function($val) {
                     return Carbon::parse($val->created_at)->format('Y');
                 })->toArray();
             $imageData = array();
