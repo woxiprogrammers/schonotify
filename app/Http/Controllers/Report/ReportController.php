@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Phpoffice\phpspreadsheet\Writer\Xlsx;
@@ -464,6 +465,167 @@ class ReportController extends Controller
         }
 
 
+    }
+
+    public function allStudentsReport(Request $request){
+        try{
+            $date = date("F j, Y");
+            $reportTitle = "All Student Report ";
+            $name = "all students $date.xlsx";
+            $attendanceData = array();
+            $attendanceData['date'] = $request->date;
+            $attendanceData['day'] = date('l',strtotime($request->date));
+            $student[] = array();
+            $data[] = array();
+            $attendanceData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                ->where('classes.body_id',$request->body_id)
+                ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
+                ->get()->toArray();
+            $iterator = $final['grand_total_present_boys'] = $final['grand_total_present_girls'] = $final['grand_total_present_total'] = 0;
+            $final['grand_total_absent_boys'] = $final['grand_total_absent_girls'] = $final['grand_total_absent_total'] = 0;
+            $final['grand_total_boys'] = $final['grand_total_girls'] = $final['grand_total'] = 0;
+            foreach ($attendanceData['class_division'] as $value){
+                $student[$iterator]['students'] = User::join('parent_extra_info','users.parent_id','=','parent_extra_info.parent_id')
+                                                ->join('students_extra_info','users.id','=','students_extra_info.student_id')
+                                                ->where('users.role_id','=',3)
+                                                ->where('users.division_id','=',$value['id'])
+                                                ->select('users.parent_id','students_extra_info.grn',DB::raw("CONCAT(users.first_name,' ',users.last_name) as student_name"),'users.gender','users.roll_number',DB::raw("CONCAT(parent_extra_info.father_first_name,' ',parent_extra_info.father_last_name) as father_name"),DB::raw("CONCAT(parent_extra_info.mother_first_name,' ',parent_extra_info.mother_last_name) as mother_name"),'users.birth_date','parent_extra_info.parent_email','students_extra_info.religion','students_extra_info.caste','students_extra_info.category','users.mobile','users.alternate_number','users.address','students_extra_info.aadhar_number','students_extra_info.blood_group')
+                                                ->get()->toArray();
+                $i = 0;
+                foreach ($student[$iterator]['students'] as $studentInfo){
+                    $student[$iterator]['students'][$i]['parent_email'] = User::where('id',$studentInfo['parent_id'])->value('email');
+                    $student[$iterator]['students'][$i]['alternate_number'] = User::where('id',$studentInfo['parent_id'])->value('alternate_number');
+                    $student[$iterator]['students'][$i] = array_except($student[$iterator]['students'][$i],'parent_id');
+                    $i++;
+                }
+
+                /*$totalPresent = Attendance::where('date',$request->date)->where('division_id',$value['id'])->lists('student_id');
+                $data[$iterator]['sr_number'] = $iterator + 1;
+                $data[$iterator]['class'] = $value['class_name'];
+                $data[$iterator]['division'] = $value['division_name'];
+                $data[$iterator]['present_boys'] = User::whereIn('id',$totalPresent)->where('is_active',1)->where('gender','M')->count();
+                $data[$iterator]['present_girls'] = User::whereIn('id',$totalPresent)->where('is_active',1)->where('gender','F')->count();
+                $data[$iterator]['present_total'] = $data[$iterator]['present_boys'] + $data[$iterator]['present_girls'];
+                $data[$iterator]['absent_boys'] = User::where('division_id',$value['id'])->whereNotIn('id',$totalPresent)->where('is_active',1)->where('gender','M')->count();
+                $data[$iterator]['absent_girls'] = User::where('division_id',$value['id'])->whereNotIn('id',$totalPresent)->where('is_active',1)->where('gender','F')->count();
+                $data[$iterator]['absent_total'] = $data[$iterator]['absent_boys'] + $data[$iterator]['absent_girls'];
+                $data[$iterator]['total_boys'] = User::where('division_id',$value['id'])->where('is_active',1)->where('gender','M')->count();
+                $data[$iterator]['total_girls'] = User::where('division_id',$value['id'])->where('is_active',1)->where('gender','F')->count();
+                $data[$iterator]['total_of_total'] = $data[$iterator]['total_boys'] + $data[$iterator]['total_girls'];
+                $data[$iterator]['teacher_sign'] = "";
+                $final['grand_total_present_boys'] += $data[$iterator]['present_boys'];
+                $final['grand_total_present_girls'] += $data[$iterator]['present_girls'];
+                $final['grand_total_present_total'] += $data[$iterator]['present_total'];
+                $final['grand_total_absent_boys'] += $data[$iterator]['absent_boys'];
+                $final['grand_total_absent_girls'] += $data[$iterator]['absent_girls'];
+                $final['grand_total_absent_total'] += $data[$iterator]['absent_total'];
+                $final['grand_total_boys'] += $data[$iterator]['total_boys'];
+                $final['grand_total_girls'] += $data[$iterator]['total_girls'];
+                $final['grand_total'] += $data[$iterator]['total_of_total'];*/
+                $iterator++;
+            }
+
+            $rows[0] = array("GRN No.","Student Name","Gender","Roll No.","Father's Name","Mother's Name","Date of Birth","Email","Religion","Caste","Category","Contact No.","Alternative No.","Address","Aadhar Card","Blood Group");
+            $objPHPExcel = new \PHPExcel();
+            $objWorkSheet = $objPHPExcel->createSheet();
+            $objPHPExcel->getSheet(0)->setTitle($reportTitle);
+            $objPHPExcel->setActiveSheetIndex(0);
+            $column = 'A';
+            $rowNumber = 3;
+            $rowIndex = 4;
+            // Merging Cells
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:P1");
+            //Setting Values for the new merged cells
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue('A1', 'Daily Attendance of Pupils');
+            $boldText = array(
+                'font' => array(
+                    'bold' => true,
+                    'size'  => 20,
+                    'name'  => 'oblique'
+                )
+            );
+            $styleArray = array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN
+                    ),
+                )
+            );
+            $objPHPExcel->getActiveSheet()
+                ->getStyle('A1:P1')->applyFromArray($styleArray,$boldText);
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A3:P3")->applyFromArray($styleArray,$boldText);
+            foreach ($rows as $row) {
+                $objPHPExcel->getActiveSheet()->getRowDimension($rowNumber)->setRowHeight(-1);
+                foreach ($row as $singleRow) {
+                    /* Align Center */
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                        ->getAlignment()
+                        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                        ->setWrapText(true);
+                    /* Set Cell Width */
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth(11);
+                    $objPHPExcel->getActiveSheet()->setCellValue($column . $rowNumber, $singleRow);
+                    $column++;
+                }
+                $column = "A";
+                $rowNumber++;
+            }
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("15");
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth("15");
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth("15");
+            $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth("20");
+            $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth("15");
+            foreach($data as $key => $datavalues) {
+                $columnForData = 0;
+                foreach($datavalues as $datavalue => $value){
+
+                    /* Align Center */
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                        ->getAlignment()
+                        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                        ->setWrapText(true);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnForData,$rowIndex,$value);
+                    $columnForData++;
+                }
+                $rowIndex++;
+            }
+
+            $rowIndex = $rowIndex +1;
+
+            $columnForData = 3;
+            foreach ($final as $key => $values){
+                $objPHPExcel->getActiveSheet()
+                    ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                    ->getAlignment()
+                    ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                    ->setWrapText(true);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnForData,$rowIndex,$values);
+                $columnForData++;
+            }
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+            $fileName = $name;
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=\"".$fileName."\"");
+            if (ob_get_length() > 0) {
+                ob_end_clean();
+            }
+            $objWriter->save("php://output");
+            exit();
+
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Excel Sheet Generated',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
     }
 
 }
