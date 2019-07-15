@@ -6,6 +6,7 @@ use App\Attendance;
 use App\Batch;
 use App\Classes;
 use App\Division;
+use App\Homework;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -466,7 +467,7 @@ class ReportController extends Controller
 
     }
 
-    public function allStudentReport(Request $request){
+    public function allStudentReportView(Request $request){
         try{
             return view('report.allStudentReport');
         }catch (\Exception $e){
@@ -478,7 +479,7 @@ class ReportController extends Controller
         }
     }
 
-    public function allStudentsReport(Request $request){
+    public function allStudentReport(Request $request){
         try{
             $date = date("F j, Y");
             $reportTitle = "All Student Report ";
@@ -494,8 +495,6 @@ class ReportController extends Controller
             $attendanceData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
                 ->where('classes.body_id',$request->body_id)
                 ->lists('divisions.id');
-            $iterator = 0;
-            //foreach ($attendanceData['class_division'] as $value){
             $data = User::join('parent_extra_info','users.parent_id','=','parent_extra_info.parent_id')
                 ->join('students_extra_info','users.id','=','students_extra_info.student_id')
                 ->where('users.role_id','=',3)
@@ -510,7 +509,6 @@ class ReportController extends Controller
                 $data[$i] = array_except($data[$i],'parent_id');
                 $i++;
             }
-            //}
 
             $rows[0] = array("GRN No.","Student Name","Gender","Roll No.","Father's Name","Mother's Name","Date of Birth","Email","Religion","Caste","Category","Contact No.","Alternative No.","Address","Aadhar Card","Blood Group");
             $objPHPExcel = new \PHPExcel();
@@ -585,9 +583,146 @@ class ReportController extends Controller
                 $rowIndex++;
             }
 
-            $rowIndex = $rowIndex +1;
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+            $fileName = $name;
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=\"".$fileName."\"");
+            if (ob_get_length() > 0) {
+                ob_end_clean();
+            }
+            $objWriter->save("php://output");
+            exit();
 
-            $columnForData = 3;
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Excel Sheet Generated',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+
+    public function classWiseHomeworkView(Request $request){
+        try{
+            return view('report.classWisePerDayHomework');
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Daily Attendance Report',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+
+    public function classWiseHomework(Request $request){
+        try{
+            $date = date("F j, Y");
+            $reportTitle = "Class Wise Per Day Homework";
+            $name = "class wise home work $date.xlsx";
+            $classDivData = array();
+            $data[] = array();
+            $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                ->where('classes.body_id',$request->body_id)
+                ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
+                ->get()->toArray();
+            $iterator = 0;
+            foreach ($classDivData['class_division'] as $value){
+                $data[$iterator]['div'] = Homework::join('homework_teacher','homework_teacher.homework_id','=','homeworks.id')
+                                ->join('users','users.id','=','homework_teacher.teacher_id')
+                                ->join('subjects','subjects.id','=','homework_teacher.student_id')
+                                ->whereDate('homeworks.created_at','=',$request->date)
+                                ->where('homework_teacher.division_id',$value['id'])
+                                ->select('subjects.subject_name',DB::raw("CONCAT(users.first_name,' ',users.last_name) as teacher_name"),'homeworks.title','homeworks.description','homeworks.due_date')
+                                ->get()->toArray();
+                $iterator++;
+            }
+            $objPHPExcel = new \PHPExcel();
+            $objWorkSheet = $objPHPExcel->createSheet();
+            $objPHPExcel->getSheet(0)->setTitle($reportTitle);
+            $objPHPExcel->setActiveSheetIndex(0);
+            $boldText = array(
+                'font' => array(
+                    'bold' => true,
+                    'size'  => 20,
+                    'name'  => 'oblique'
+                )
+            );
+            $styleArray = array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN
+                    ),
+                )
+            );
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:E1");
+            //Setting Values for the new merged cells
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A1",$request->date);
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A1:E1")->applyFromArray($styleArray,$boldText);
+
+            $iteratorK = 1;
+            $index = 0;
+            foreach ($data as $divData){
+                if(!empty($divData['div'])){
+                    $iteratorK = $iteratorK + 1;
+                    $column = 'A';
+                    $rowNumber = $iteratorK+1;
+                    $rowIndex =$iteratorK + 2;
+                    $rows[$rowNumber] = array("Subject","Teacher Name","Title","Description","Due Date");
+                    // Merging Cells
+                    $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A$iteratorK:E$iteratorK");
+                    //Setting Values for the new merged cells
+                    $objPHPExcel->getActiveSheet()
+                        ->setCellValue("A$iteratorK", $classDivData['class_division'][$index]['class_name'].' - '.$classDivData['class_division'][$index]['division_name']);
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle("A$iteratorK:E$iteratorK")->applyFromArray($styleArray,$boldText);
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle("A$rowNumber:E$rowNumber")->applyFromArray($styleArray,$boldText);
+                    foreach ($rows as $row) {
+                        $objPHPExcel->getActiveSheet()->getRowDimension($rowNumber)->setRowHeight(-1);
+                        foreach ($row as $singleRow) {
+                            /* Align Center */
+                            $objPHPExcel->getActiveSheet()
+                                ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                ->getAlignment()
+                                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                ->setWrapText(true);
+                            /* Set Cell Width */
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth(11);
+                            $objPHPExcel->getActiveSheet()->setCellValue($column . $rowNumber, $singleRow);
+                            $column++;
+                        }
+                        $column = "A";
+                        $rowNumber++;
+                    }
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth("25");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("30");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth("70");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth("90");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth("20");
+                    $rowData = $divData['div'];
+                    $iteratorK = $iteratorK+2;
+                    foreach($rowData as $key => $datavalues) {
+                        $columnForData = 0;
+                        foreach($datavalues as $datavalue => $value){
+                            /* Align Center */
+                            $objPHPExcel->getActiveSheet()
+                                ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                ->getAlignment()
+                                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                ->setWrapText(true);
+                            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnForData,$rowIndex,$value);
+                            $columnForData++;
+                        }
+                        $rowIndex++;
+                        $iteratorK++;
+                    }
+                }
+                $index++;
+            }
 
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
             $fileName = $name;

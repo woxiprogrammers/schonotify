@@ -81,6 +81,7 @@ class FrontController extends Controller
             foreach ($fees as $fee){
                 $feeData[$i]['paidFee'] = 0;
                 $feeData[$i]['total'] = 0;
+                $discountedFee = 0;
                 $feeData[$i]['name'] = $fee['fee_name'];
                 $userIds = User::join('divisions','divisions.id','=','users.division_id')
                                 ->join('classes','classes.id','=','divisions.class_id')
@@ -89,12 +90,12 @@ class FrontController extends Controller
                                 ->where('users.is_active','=',true)
                                 ->lists('users.id');
                 $feeData[$i]['total'] = $fee['total_amount'] * count($userIds);
-                $studentsAssignFeeStructure = StudentFee::whereIn('student_id',$userIds)->lists('student_id');
+                $studentsAssignFeeStructure = StudentFee::whereIn('student_id',$userIds)->distinct('student_id')->lists('student_id');
                 $students = User::join('students_extra_info', 'users.id','=','students_extra_info.student_id')
                     ->join('transaction_details','transaction_details.student_id','=','users.id')
                     ->join('fees','fees.id','=','transaction_details.fee_id')
                     ->whereIn('users.id', $studentsAssignFeeStructure)
-                    ->where('users.is_active',1)
+                    ->where('users.is_active','=',true)
                     ->select('transaction_details.id as transaction_id','transaction_details.student_id as id','transaction_details.date as date','fees.fee_name as name','users.first_name as first_name','users.last_name as last_name','transaction_details.transaction_amount','students_extra_info.grn as grn','fees.id as fee_id','transaction_details.installment_id as Installment','transaction_details.id as amount_id')
                     ->get()->toArray();
                 $jIterator = 0;
@@ -127,13 +128,15 @@ class FrontController extends Controller
                                     $feeConcessionTypeAmount = FeeConcessionAmount::where('fee_id',$fee_id['fee_id'])->where('concession_type',$fee_id['fee_concession_type'])->pluck('amount');
                                     $discount += ($feeConcessionTypeAmount/100) * $percentage;
                                 }
+                                $discountedFee += $discount;
                                 $students[$jIterator]['total'] += $installments[$installmentId]['subTotal'] - $discount;
                             }
                         }
                         $iterator++;
-                    }*/
-                    $jIterator++;
+                    }
+                    $jIterator++;*/
                 }
+                $feeData[$i]['total'] = $feeData[$i]['total'] - $discountedFee;
                 $feeData[$i]['balance'] = $feeData[$i]['total'] - $feeData[$i]['paidFee'];
                 $i++;
             }

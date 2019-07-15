@@ -671,8 +671,10 @@ Route::group(['prefix' => 'reports'],function (){
     Route::get('get-all-students/{division_id}/{class_id}/{batch_id}',array('uses' => 'Report\ReportController@getAllStudents'));
     Route::post('attendance-date-select',array('uses' => 'Report\ReportController@dailyReportDateData'));
     Route::post('monthly-attendance-report',array('uses' => 'Report\ReportController@generateMonthlyReport'));
-    Route::get('student-report-view',array('uses' => 'Report\ReportController@allStudentReport'));
-    Route::post('all-student-report',array('uses' => 'Report\ReportController@allStudentsReport'));
+    Route::get('student-report-view',array('uses' => 'Report\ReportController@allStudentReportView'));
+    Route::post('all-student-report',array('uses' => 'Report\ReportController@allStudentReport'));
+    Route::get('class-wise-per-day-homework',array('uses' => 'Report\ReportController@classWiseHomeworkView'));
+    Route::post('class-wise-per-day-homework',array('uses' => 'Report\ReportController@classWiseHomework'));
 
 });
 Route::group(['prefix' => 'enableDisableFunctionality'],function(){
