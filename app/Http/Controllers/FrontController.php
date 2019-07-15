@@ -101,7 +101,7 @@ class FrontController extends Controller
                 $jIterator = 0;
                 foreach ($students as $studentId){
                     $feeData[$i]['paidFee'] += $studentId['transaction_amount'];
-                    /*$studentFee = StudentFee::where('student_id',$studentId['id'])->where('fee_id',$studentId['fee_id'])->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
+                    $studentFee = StudentFee::where('student_id',$studentId['id'])->where('fee_id',$studentId['fee_id'])->select('fee_id','year','fee_concession_type','caste_concession')->get()->toarray();
                     $iterator = 0;
                     $students[$jIterator]['total'] = 0;
                     foreach ($studentFee as $key => $fee_id){
@@ -134,7 +134,7 @@ class FrontController extends Controller
                         }
                         $iterator++;
                     }
-                    $jIterator++;*/
+                    $jIterator++;
                 }
                 $feeData[$i]['total'] = $feeData[$i]['total'] - $discountedFee;
                 $feeData[$i]['balance'] = $feeData[$i]['total'] - $feeData[$i]['paidFee'];
