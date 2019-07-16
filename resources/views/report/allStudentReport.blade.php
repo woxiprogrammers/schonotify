@@ -90,7 +90,6 @@
         jQuery(document).ready(function() {
             Main.init();
             FormValidator.init();
-            $('#generate-student-report-button').hide()
         });
     </script>
     <script>

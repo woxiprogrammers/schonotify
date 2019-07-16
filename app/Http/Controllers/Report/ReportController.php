@@ -494,16 +494,26 @@ class ReportController extends Controller
                 ->where('classes.body_id',$request->body_id)
                 ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
                 ->get()->toArray();*/
-            $classDiv = Classes::join('divisions','divisions.class_id','=','classes.id')
-                ->where('classes.body_id',$request->body_id)
-                ->where('classes.id',$request->Classdropdown)
-                ->where('divisions.id',$request->Divisiondropdown)
-                ->select('classes.class_name','divisions.division_name')->get();
-            $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
-                ->where('classes.body_id',$request->body_id)
-                ->where('classes.id',$request->Classdropdown)
-                ->where('divisions.id',$request->Divisiondropdown)
-                ->lists('divisions.id');
+            if(empty($request->Divisiondropdown)){
+                $classDiv = Classes::where('id',$request->Classdropdown)
+                    ->select('class_name')->get();
+                $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                    ->where('classes.body_id',$request->body_id)
+                    ->where('classes.id',$request->Classdropdown)
+                    ->lists('divisions.id');
+            }else{
+                $classDiv = Classes::join('divisions','divisions.class_id','=','classes.id')
+                    ->where('classes.body_id',$request->body_id)
+                    ->where('classes.id',$request->Classdropdown)
+                    ->where('divisions.id',$request->Divisiondropdown)
+                    ->select('classes.class_name','divisions.division_name')->get();
+                $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                    ->where('classes.body_id',$request->body_id)
+                    ->where('classes.id',$request->Classdropdown)
+                    ->where('divisions.id',$request->Divisiondropdown)
+                    ->lists('divisions.id');
+            }
+
             $data = User::join('parent_extra_info','users.parent_id','=','parent_extra_info.parent_id')
                 ->join('students_extra_info','users.id','=','students_extra_info.student_id')
                 ->where('users.role_id','=',3)
@@ -530,9 +540,14 @@ class ReportController extends Controller
             // Merging Cells
             $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:P1");
             //Setting Values for the new merged cells
-            $objPHPExcel->getActiveSheet()
-                ->setCellValue('A1', 'All Student Report : '.$classDiv[0]['class_name'].'-'.$classDiv[0]['division_name']);
-            $boldText = array(
+            if(empty($request->Divisiondropdown)){
+                $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A1', 'All Student Report : '.$classDiv[0]['class_name']);
+            }else{
+                $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A1', 'All Student Report : '.$classDiv[0]['class_name'].'-'.$classDiv[0]['division_name']);
+            }
+             $boldText = array(
                 'font' => array(
                     'bold' => true,
                     'size'  => 20,
