@@ -15,6 +15,7 @@
     $(document).ready(function(){
          $('#Divisiondropdown').change(function(){
             $('div#loadmoreajaxloader').show();
+             $('#generate-student-report-button').show()
             var route='/get-enable-disable-students';
             $.ajax({
                 method: "get",

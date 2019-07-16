@@ -469,7 +469,9 @@ class ReportController extends Controller
 
     public function allStudentReportView(Request $request){
         try{
-            return view('report.allStudentReport');
+            $user = Auth::user();
+            $batches = Batch::where('body_id',$user->body_id)->select('id','name')->get()->toArray();
+            return view('report.allStudentReport')->with(compact('batches'));
         }catch (\Exception $e){
             $data=[
                 'action' => 'Daily Attendance Report',
@@ -484,21 +486,28 @@ class ReportController extends Controller
             $date = date("F j, Y");
             $reportTitle = "All Student Report ";
             $name = "all students $date.xlsx";
-            $attendanceData = array();
-            $attendanceData['date'] = $request->date;
-            $attendanceData['day'] = date('l',strtotime($request->date));
+            $classDivData = array();
+            $classDivData['date'] = $request->date;
+            $classDivData['day'] = date('l',strtotime($request->date));
             $data[] = array();
-            /*$attendanceData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+            /*$classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
                 ->where('classes.body_id',$request->body_id)
                 ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
                 ->get()->toArray();*/
-            $attendanceData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+            $classDiv = Classes::join('divisions','divisions.class_id','=','classes.id')
                 ->where('classes.body_id',$request->body_id)
+                ->where('classes.id',$request->Classdropdown)
+                ->where('divisions.id',$request->Divisiondropdown)
+                ->select('classes.class_name','divisions.division_name')->get();
+            $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                ->where('classes.body_id',$request->body_id)
+                ->where('classes.id',$request->Classdropdown)
+                ->where('divisions.id',$request->Divisiondropdown)
                 ->lists('divisions.id');
             $data = User::join('parent_extra_info','users.parent_id','=','parent_extra_info.parent_id')
                 ->join('students_extra_info','users.id','=','students_extra_info.student_id')
                 ->where('users.role_id','=',3)
-                ->whereIn('users.division_id',$attendanceData['class_division'])
+                ->whereIn('users.division_id',$classDivData['class_division'])
                 ->select('users.parent_id','students_extra_info.grn',DB::raw("CONCAT(users.first_name,' ',users.last_name) as student_name"),'users.gender','users.roll_number',DB::raw("CONCAT(parent_extra_info.father_first_name,' ',parent_extra_info.father_last_name) as father_name"),DB::raw("CONCAT(parent_extra_info.mother_first_name,' ',parent_extra_info.mother_last_name) as mother_name"),'users.birth_date','parent_extra_info.parent_email','students_extra_info.religion','students_extra_info.caste','students_extra_info.category','users.mobile','users.alternate_number','users.address','students_extra_info.aadhar_number','students_extra_info.blood_group')
                 ->get()->toArray();
 
@@ -522,7 +531,7 @@ class ReportController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:P1");
             //Setting Values for the new merged cells
             $objPHPExcel->getActiveSheet()
-                ->setCellValue('A1', 'All Student Report');
+                ->setCellValue('A1', 'All Student Report : '.$classDiv[0]['class_name'].'-'.$classDiv[0]['division_name']);
             $boldText = array(
                 'font' => array(
                     'bold' => true,

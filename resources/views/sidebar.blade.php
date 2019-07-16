@@ -480,6 +480,20 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="/reports/student-report-view">
+                        <div class="item-inner">
+                            <span class="title"> All Student Report </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reports/class-wise-per-day-homework">
+                        <div class="item-inner">
+                            <span class="title"> Class Wise Per Day Homework </span>
+                        </div>
+                    </a>
+                </li>
             </ul>
         </li>
         <li>

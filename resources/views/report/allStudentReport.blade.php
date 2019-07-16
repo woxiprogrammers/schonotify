@@ -31,11 +31,28 @@
                         <form method="post" action="/reports/all-student-report" role="form" id="dailyAttendanceReport">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3" id="UserSearch" style="">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Batch
+                                        </label>
+                                        <select class="form-control" id="Batchdropdown" name="Batchdropdown" style="-webkit-appearance: menulist;">
+                                            <option value="">Select Batch</option>
+                                            @foreach($batches as $batch)
+                                                <option value="{{$batch['id']}}">{{$batch['name']}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" id="ClassSearch" style="">
+                                </div>
+                                <div class="col-md-3" id="DivSearch">
+                                </div>
+                                <div class="col-md-3">
                                     <label class="control-label">&nbsp;
                                     </label>
                                     <div class="form-group">
-                                        <button class="btn btn-primary btn-wide" type="submit">
+                                        <button class="btn btn-primary btn-wide" id="generate-student-report-button" type="submit">
                                             Generate <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
@@ -73,7 +90,26 @@
         jQuery(document).ready(function() {
             Main.init();
             FormValidator.init();
+            $('#generate-student-report-button').hide()
         });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#Batchdropdown').change(function(){
+                $('div#loadmoreajaxloader').show();
+                var batch=this.value;
+                var route='/get-classes-search';
+                $.ajax({
+                    method: "get",
+                    url: route,
+                    data: { batch }
+                })
+                    .done(function(res){
+                        $('#ClassSearch').html(res);
+                        $('div#loadmoreajaxloader').hide();
+                    })
+            })
+        })
     </script>
 @stop
 
