@@ -187,6 +187,39 @@
 
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-12 bg-white" >
+									<div class="row">
+										<div class="col-md-6">
+											<p style="color: #333333;font-size: 26px;">
+												Fee Year 2019-2020
+											</p>
+										</div>
+									</div>
+									<div class="portlet-body">
+										<table class="table table-striped table-bordered table-hover table-checkable" id="sales_agent_list">
+											<thead>
+											<tr role="row" class="heading">
+												<th width="30%"> Section </th>
+												<th width="20%"> Total </th>
+												<th width="20%"> Paid </th>
+												<th width="20%"> Balance </th>
+											</tr>
+											</thead>
+											<tbody>
+											@foreach($feeData as $fee)
+													<tr role="row">
+														<td class="sorting_1">{{$fee['name']}}</td>
+														<td class="sorting_1">{{$fee['total']}}</td>
+														<td class="sorting_1">{{$fee['paidFee']}}</td>
+														<td class="sorting_1">{{$fee['balance']}}</td>
+													</tr>
+											@endforeach
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
 						</div>
 						@endif
 						<div class="container-fluid container-fullw bg-white">
