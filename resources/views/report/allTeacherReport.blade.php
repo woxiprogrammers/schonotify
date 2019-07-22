@@ -22,23 +22,15 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Daily Homework</h1>
-                                <span class="mainDescription">Class Wise Per Day Homework</span>
+                                <h1 class="mainTitle">Teachers</h1>
+                                <span class="mainDescription">All Teachers</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/reports/class-wise-per-day-homework" role="form" id="">
+                        <form method="post" action="/reports/all-teacher-report" role="form" id="">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Date <span class="symbol required"></span>
-                                        </label>
-                                        <input type="date" class="form-control" placeholder="" name="date" id="attendance_date">
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <label class="control-label">&nbsp;
                                     </label>

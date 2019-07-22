@@ -22,24 +22,45 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Daily Homework</h1>
-                                <span class="mainDescription">Class Wise Per Day Homework</span>
+                                <h1 class="mainTitle">Homework</h1>
+                                <span class="mainDescription">Teacher Wise Homework</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/reports/class-wise-per-day-homework" role="form" id="">
+                        <form method="post" action="/reports/teacher-wise-homework-report" role="form" id="">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Teacher <span class="symbol required"></span>
+                                        </label>
+                                        <select class="form-control" id="teacher" name="teacher">
+                                            <option value="">Select Batch</option>
+                                                @foreach($teachersData as $teacher)
+                                                    <option value="{!! $teacher['id'] !!}">{!! $teacher['first_name'] !!} {!! $teacher['last_name'] !!}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Date <span class="symbol required"></span>
                                         </label>
-                                        <input type="date" class="form-control" placeholder="" name="date" id="attendance_date">
+                                        <input type="date" class="form-control" placeholder="" name="from_date" id="">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Date <span class="symbol required"></span>
+                                        </label>
+                                        <input type="date" class="form-control" placeholder="" name="to_date" id="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <label class="control-label">&nbsp;
                                     </label>
                                     <div class="form-group">
