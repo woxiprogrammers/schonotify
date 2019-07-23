@@ -934,16 +934,32 @@ class ReportController extends Controller
 
     public function teacherWiseHomeworkReport(Request $request){
         try{
+            //dd($request->all());
             $date = date("F j, Y");
             $reportTitle = "Teacher Wise Homework";
             $name = "teacher wise homework $date.xlsx";
             $data[] = array();
-            $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
+            if($request->has('from_date') && $request->from_date != ""){
+                if($request->has('to_date') && $request->to_date != ""){
+                    $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
                         ->where('homework_teacher.teacher_id','=',$request->teacher)
                         ->whereDate('homeworks.created_at','>=',$request->from_date)
                         ->whereDate('homeworks.created_at','<=',$request->to_date)
                         ->distinct('homeworks.created_at')
                         ->lists('homeworks.created_at');
+                }else{
+                    $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
+                        ->where('homework_teacher.teacher_id','=',$request->teacher)
+                        ->whereDate('homeworks.created_at','>=',$request->from_date)
+                        ->distinct('homeworks.created_at')
+                        ->lists('homeworks.created_at');
+                }
+            }else{
+                $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
+                    ->where('homework_teacher.teacher_id','=',$request->teacher)
+                    ->distinct('homeworks.created_at')
+                    ->lists('homeworks.created_at');
+            }
             foreach($dateData as $datum){
                $homeworksDates[] = explode(' ',$datum)[0];
             }

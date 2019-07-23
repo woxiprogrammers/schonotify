@@ -47,7 +47,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Date <span class="symbol required"></span>
+                                            From Date
                                         </label>
                                         <input type="date" class="form-control" placeholder="" name="from_date" id="">
                                     </div>
@@ -55,7 +55,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Date <span class="symbol required"></span>
+                                            To Date
                                         </label>
                                         <input type="date" class="form-control" placeholder="" name="to_date" id="">
                                     </div>
