@@ -187,7 +187,7 @@
 
 								</div>
 							</div>
-							<div class="row">
+							{{--<div class="row">
 								<div class="col-md-12 bg-white" >
 									<div class="row">
 										<div class="col-md-6">
@@ -219,7 +219,7 @@
 										</table>
 									</div>
 								</div>
-							</div>
+							</div>--}}
 						</div>
 						@endif
 						<div class="container-fluid container-fullw bg-white">
