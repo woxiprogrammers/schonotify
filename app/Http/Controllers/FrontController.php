@@ -70,7 +70,7 @@ class FrontController extends Controller
             $unreadMsgCount = Message::where('to_id',$userId->id)->where('read_status',0)->count();
             Session::put('functionArr',$resultArr);
 
-            $fees = Fees::join('fee_classes','fee_classes.fee_id','=','fees.id')
+            /*$fees = Fees::join('fee_classes','fee_classes.fee_id','=','fees.id')
                          ->join('classes','classes.id','=','fee_classes.class_id')
                          ->where('classes.body_id','=',$userId->body_id)
                          ->where('fees.year','=','2019-2020')
@@ -139,8 +139,8 @@ class FrontController extends Controller
                 $feeData[$i]['total'] = $feeData[$i]['total'] - $discountedFee;
                 $feeData[$i]['balance'] = $feeData[$i]['total'] - $feeData[$i]['paidFee'];
                 $i++;
-            }
-            return view('admin.dashboard', compact('unreadMsgCount','homeworkData','achievementsData','announcementData','eventData','feeData'));
+            }*/
+            return view('admin.dashboard', compact('unreadMsgCount','homeworkData','achievementsData','announcementData','eventData'));
 
         }else{
 
