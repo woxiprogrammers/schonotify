@@ -48,6 +48,24 @@
                                 </div>
                                 <div class="col-md-3" id="DivSearch">
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            From Date
+                                        </label>
+                                        <input type="date" class="form-control" placeholder="" name="from_date" id="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            To Date
+                                        </label>
+                                        <input type="date" class="form-control" placeholder="" name="to_date" id="">
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <label class="control-label">&nbsp;
                                     </label>

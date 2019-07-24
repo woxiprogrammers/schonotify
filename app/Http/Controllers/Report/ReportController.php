@@ -581,7 +581,6 @@ class ReportController extends Controller
                     $column++;
                 }
                 $column = "A";
-                $rowNumber++;
             }
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("35");
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth("35");
@@ -653,9 +652,10 @@ class ReportController extends Controller
             foreach ($classDivData['class_division'] as $value){
                 $data[$iterator]['div'] = Homework::join('homework_teacher','homework_teacher.homework_id','=','homeworks.id')
                                 ->join('users','users.id','=','homework_teacher.teacher_id')
-                                ->join('subjects','subjects.id','=','homework_teacher.student_id')
+                                ->join('subjects','subjects.id','=','homeworks.subject_id')
                                 ->whereDate('homeworks.created_at','=',$request->date)
                                 ->where('homework_teacher.division_id',$value['id'])
+                                ->distinct('homeworks.id')
                                 ->select('subjects.subject_name',DB::raw("CONCAT(users.first_name,' ',users.last_name) as teacher_name"),'homeworks.title','homeworks.description','homeworks.due_date')
                                 ->get()->toArray();
                 $iterator++;
@@ -719,12 +719,11 @@ class ReportController extends Controller
                             $column++;
                         }
                         $column = "A";
-                        $rowNumber++;
                     }
-                    $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth("25");
-                    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("30");
-                    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth("70");
-                    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth("90");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth("20");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("25");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth("30");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth("70");
                     $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth("20");
                     $rowData = $divData['div'];
                     $iteratorK = $iteratorK+2;
@@ -861,7 +860,6 @@ class ReportController extends Controller
                             $column++;
                         }
                         $column = "A";
-                        //$rowNumber++;
                     }
                     $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth("15");
                     $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("20");
@@ -1038,7 +1036,6 @@ class ReportController extends Controller
                             $column++;
                         }
                         $column = "A";
-                        //$rowNumber++;
                     }
                     $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth("15");
                     $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth("20");
@@ -1099,12 +1096,13 @@ class ReportController extends Controller
 
     public function classWiseHomeworkReport(Request $request){
         try{
-           // dd($request->all());
             $date = date("F j, Y");
             $reportTitle = "Class Wise Homework";
             $name = "class wise homework $date.xlsx";
             $data[] = array();
-            //$homeworksDates = array();
+            $homeworksDates = array();
+            $class = Classes::where('id',$request->Classdropdown)->value('class_name');
+            $div = Division::where('id',$request->Divisiondropdown)->value('division_name');
             if($request->has('from_date') && $request->from_date != ""){
                 if($request->has('to_date') && $request->to_date != ""){
                     $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
@@ -1140,9 +1138,9 @@ class ReportController extends Controller
                     ->distinct('homeworks.id')
                     ->select('subjects.subject_name',DB::raw("CONCAT(users.first_name,' ',users.last_name) as teacher_name"),'homeworks.title','homeworks.description','homeworks.due_date')
                     ->get()->toArray();
+                $displayDate[$iterator] = $homeworkDate;
                 $iterator++;
             }
-            //dd($data);
             $objPHPExcel = new \PHPExcel();
             $objWorkSheet = $objPHPExcel->createSheet();
             $objPHPExcel->getSheet(0)->setTitle($reportTitle);
@@ -1164,7 +1162,7 @@ class ReportController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:F1");
             //Setting Values for the new merged cells
             $objPHPExcel->getActiveSheet()
-                ->setCellValue("A1",$request->date);
+                ->setCellValue("A1",$class.'-'.$div);
             $objPHPExcel->getActiveSheet()
                 ->getStyle("A1:F1")->applyFromArray($styleArray,$boldText);
 
@@ -1181,7 +1179,7 @@ class ReportController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A$iteratorK:F$iteratorK");
                     //Setting Values for the new merged cells
                     $objPHPExcel->getActiveSheet()
-                        ->setCellValue("A$iteratorK",'val');
+                        ->setCellValue("A$iteratorK",$displayDate[$index]);
                     $objPHPExcel->getActiveSheet()
                         ->getStyle("A$iteratorK:F$iteratorK")->applyFromArray($styleArray,$boldText);
                     $iteratorK++;
@@ -1203,7 +1201,6 @@ class ReportController extends Controller
                             $column++;
                         }
                         $column = "A";
-                        //$rowNumber++;
                     }
                     $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth("15");
                     $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("20");
