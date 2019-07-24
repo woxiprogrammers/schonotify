@@ -36,8 +36,8 @@
                                         <label class="control-label">
                                             Teacher <span class="symbol required"></span>
                                         </label>
-                                        <select class="form-control" id="teacher" name="teacher">
-                                            <option value="">Select Batch</option>
+                                        <select class="form-control" id="teacher" name="teacher" required>
+                                            <option value="">Select Teacher</option>
                                                 @foreach($teachersData as $teacher)
                                                     <option value="{!! $teacher['id'] !!}">{!! $teacher['first_name'] !!} {!! $teacher['last_name'] !!}</option>
                                                 @endforeach

@@ -508,6 +508,13 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="/reports/class-wise-homework-view">
+                        <div class="item-inner">
+                            <span class="title"> Class Wise Homework </span>
+                        </div>
+                    </a>
+                </li>
             </ul>
         </li>
         <li>
