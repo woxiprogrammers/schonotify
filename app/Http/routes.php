@@ -681,6 +681,9 @@ Route::group(['prefix' => 'reports'],function (){
     Route::post('teacher-wise-homework-report',array('uses' => 'Report\ReportController@teacherWiseHomeworkReport'));
     Route::get('class-wise-homework-view',array('uses' => 'Report\ReportController@classWiseHomeworkView'));
     Route::post('class-wise-homework-report',array('uses' => 'Report\ReportController@classWiseHomeworkReport'));
+    Route::get('get-class-subjects',array('uses' => 'Report\ReportController@getClassSubjects'));
+    Route::get('subject-wise-class-wise-homework-view',array('uses' => 'Report\ReportController@subjectClassWiseHomeworkView'));
+    Route::post('subject-wise-class-wise-homework-report',array('uses' => 'Report\ReportController@subjectClassWiseHomeworkReport'));
 });
 Route::group(['prefix' => 'enableDisableFunctionality'],function(){
     Route::get('enable/{id}',array('uses' =>'UsersController@enableStudents'));

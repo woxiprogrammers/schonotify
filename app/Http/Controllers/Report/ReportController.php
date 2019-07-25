@@ -6,6 +6,8 @@ use App\Batch;
 use App\Classes;
 use App\Division;
 use App\Homework;
+use App\Http\Controllers\SubjectController;
+use App\Subject;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -933,7 +935,6 @@ class ReportController extends Controller
 
     public function teacherWiseHomeworkReport(Request $request){
         try{
-          //  dd($request->all());
             $date = date("F j, Y");
             $reportTitle = "Teacher Wise Homework";
             $name = "teacher wise homework $date.xlsx";
@@ -963,6 +964,7 @@ class ReportController extends Controller
             foreach($dateData as $datum){
                $homeworksDates[] = explode(' ',$datum)[0];
             }
+            $homeworksDates = array_unique($homeworksDates);
             $iterator = 0;
             foreach ($homeworksDates as $homeworkDate){
                 $data[$iterator]['homework_date'] = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
@@ -974,6 +976,7 @@ class ReportController extends Controller
                     ->distinct('homeworks.id')
                     ->select('classes.class_name','divisions.division_name','subjects.subject_name','homeworks.title','homeworks.description','homeworks.due_date')
                     ->get()->toArray();
+                $displayDate[$iterator] = $homeworkDate;
                 $iterator++;
             }
             $objPHPExcel = new \PHPExcel();
@@ -1014,7 +1017,7 @@ class ReportController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A$iteratorK:F$iteratorK");
                     //Setting Values for the new merged cells
                     $objPHPExcel->getActiveSheet()
-                        ->setCellValue("A$iteratorK", $homeworksDates[$index]);
+                        ->setCellValue("A$iteratorK", $displayDate[$index]);
                     $objPHPExcel->getActiveSheet()
                         ->getStyle("A$iteratorK:F$iteratorK")->applyFromArray($styleArray,$boldText);
                     $iteratorK++;
@@ -1207,6 +1210,207 @@ class ReportController extends Controller
                     $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth("25");
                     $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth("50");
                     $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth("20");
+                    $rowData = $teacherHomeworkData['homework_date'];
+                    $iteratorK++;
+                    foreach($rowData as $key => $datavalues) {
+                        $columnForData = 0;
+                        foreach($datavalues as $datavalue => $value){
+                            /* Align Center */
+                            $objPHPExcel->getActiveSheet()
+                                ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                ->getAlignment()
+                                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                ->setWrapText(true);
+                            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnForData,$rowIndex,$value);
+                            $columnForData++;
+                        }
+                        $rowIndex++;
+                        $iteratorK++;
+                    }
+                }
+                $index++;
+            }
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+            $fileName = $name;
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=\"".$fileName."\"");
+            if (ob_get_length() > 0) {
+                ob_end_clean();
+            }
+            $objWriter->save("php://output");
+            exit();
+
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Excel Sheet Generated',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+
+    public function getClassSubjects(Request $request){
+        $user = Auth::User();
+        $subjectData = Subject::join('subject_classes','subjects.id','=','subject_classes.subject_id')
+            ->where('subjects.body_id',$user->body_id)
+            ->where('subject_classes.class_id', $request->classs)->select('subjects.id','subjects.subject_name')->get();
+        return view('classSubjects')->with(compact('subjectData'));
+    }
+
+    public function subjectClassWiseHomeworkView(Request $request){
+        try{
+            $user = Auth::User();
+            $teachersData =  User::where('is_active',true)
+                ->where('body_id',$user->body_id)
+                ->where('role_id',2)
+                ->select('id','first_name','last_name')
+                ->get()->toArray();
+            $batches = Batch::where('body_id',Auth::user()->body_id)->get();
+            return view('report.subjectWiseClassWiseHomework')->with(compact('batches','teachersData'));
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Daily Attendance Report',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+
+    public function subjectClassWiseHomeworkReport(Request $request){
+        try{
+            $date = date("F j, Y");
+            $reportTitle = "Subject Class Wise Homework";
+            $name = "subject class wise homework $date.xlsx";
+            $data[] = array();
+            $homeworksDates = array();
+            $class = Classes::where('id',$request->Classdropdown)->value('class_name');
+            $div = Division::where('id',$request->Divisiondropdown)->value('division_name');
+            $teacher = User::where('id',$request->teacher)->first();
+            $subject = Subject::where('id',$request->classSubjectdropdown)->value('subject_name');
+            if($request->has('from_date') && $request->from_date != ""){
+                if($request->has('to_date') && $request->to_date != ""){
+                    $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
+                        ->where('homework_teacher.division_id','=',$request->Divisiondropdown)
+                        ->where('homework_teacher.teacher_id','=',$request->teacher)
+                        ->where('homeworks.subject_id','=',$request->classSubjectdropdown)
+                        ->whereDate('homeworks.created_at','>=',$request->from_date)
+                        ->whereDate('homeworks.created_at','<=',$request->to_date)
+                        ->distinct('homeworks.created_at')
+                        ->lists('homeworks.created_at');
+                }else{
+                    $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
+                        ->where('homework_teacher.division_id','=',$request->Divisiondropdown)
+                        ->where('homework_teacher.teacher_id','=',$request->teacher)
+                        ->where('homeworks.subject_id','=',$request->classSubjectdropdown)
+                        ->whereDate('homeworks.created_at','>=',$request->from_date)
+                        ->distinct('homeworks.created_at')
+                        ->lists('homeworks.created_at');
+                }
+            }else{
+                $dateData = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
+                    ->where('homework_teacher.division_id','=',$request->Divisiondropdown)
+                    ->where('homework_teacher.teacher_id','=',$request->teacher)
+                    ->where('homeworks.subject_id','=',$request->classSubjectdropdown)
+                    ->distinct('homeworks.created_at')
+                    ->lists('homeworks.created_at');
+            }
+            foreach($dateData as $datum){
+                $homeworksDates[] = explode(' ',$datum)[0];
+            }
+            $homeworksDates = array_unique($homeworksDates);
+            $iterator = 0;
+            foreach ($homeworksDates as $homeworkDate){
+                $data[$iterator]['homework_date'] = Homework::join('homework_teacher','homeworks.id','=','homework_teacher.homework_id')
+                    ->join('users','users.id','=','homework_teacher.teacher_id')
+                    ->join('subjects','homeworks.subject_id','=','subjects.id')
+                    ->where('homework_teacher.division_id','=',$request->Divisiondropdown)
+                    ->whereDate('homeworks.created_at','=',$homeworkDate)
+                    ->where('homework_teacher.teacher_id','=',$request->teacher)
+                    ->where('homeworks.subject_id','=',$request->classSubjectdropdown)
+                    ->distinct('homeworks.id')
+                    ->select('homeworks.title','homeworks.description','homeworks.due_date')
+                    ->get()->toArray();
+                $displayDate[$iterator] = $homeworkDate;
+                $iterator++;
+            }
+            $objPHPExcel = new \PHPExcel();
+            $objWorkSheet = $objPHPExcel->createSheet();
+            $objPHPExcel->getSheet(0)->setTitle($reportTitle);
+            $objPHPExcel->setActiveSheetIndex(0);
+            $boldText = array(
+                'font' => array(
+                    'bold' => true,
+                    'size'  => 20,
+                    'name'  => 'oblique'
+                )
+            );
+            $styleArray = array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN
+                    ),
+                )
+            );
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:C1");
+            //Setting Values for the new merged cells
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A1",'Class : '.$class.'-'.$div);
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A1:C1")->applyFromArray($styleArray,$boldText);
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A2:C2");
+            //Setting Values for the new merged cells
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A2",'Teacher Name : '.$teacher['first_name'].'-'.$teacher['last_name']);
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A2:C2")->applyFromArray($styleArray,$boldText);
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A3:C3");
+            //Setting Values for the new merged cells
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A3",'Subject Name : '.$subject);
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A3:C3")->applyFromArray($styleArray,$boldText);
+
+            $iteratorK = 4;
+            $index = 0;
+            foreach ($data as $teacherHomeworkData){
+                if(!empty($teacherHomeworkData['homework_date'])){
+                    $column = 'A';
+                    $iteratorK++;
+                    $rowNumber = $iteratorK+1;
+                    $rowIndex =$iteratorK + 2;
+                    $rows[$rowNumber] = array("Title","Description","Due Date");
+                    // Merging Cells
+                    $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A$iteratorK:C$iteratorK");
+                    //Setting Values for the new merged cells
+                    $objPHPExcel->getActiveSheet()
+                        ->setCellValue("A$iteratorK",$displayDate[$index]);
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle("A$iteratorK:C$iteratorK")->applyFromArray($styleArray,$boldText);
+                    $iteratorK++;
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle("A$rowNumber:C$rowNumber")->applyFromArray($styleArray,$boldText);
+                    foreach ($rows as $row) {
+                        $objPHPExcel->getActiveSheet()->getRowDimension($rowNumber)->setRowHeight(-1);
+                        foreach ($row as $singleRow) {
+                            /* Align Center */
+                            $objPHPExcel->getActiveSheet()
+                                ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                ->getAlignment()
+                                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                ->setWrapText(true);
+                            /* Set Cell Width */
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth(11);
+                            $objPHPExcel->getActiveSheet()->setCellValue($column . $rowNumber, $singleRow);
+                            $column++;
+                        }
+                        $column = "A";
+                    }
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth("20");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("80");
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth("25");
                     $rowData = $teacherHomeworkData['homework_date'];
                     $iteratorK++;
                     foreach($rowData as $key => $datavalues) {

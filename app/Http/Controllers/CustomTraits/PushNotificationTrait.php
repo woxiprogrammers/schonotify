@@ -16,7 +16,7 @@ trait PushNotificationTrait{
             if($allUser == 1){
                 $device_token = PushToken::lists('push_token')->toArray();
             }else{
-                $device_token = $push_users->toArray();
+                $device_token = $push_users;
             }
             $optionBuilder = new OptionsBuilder();
             $optionBuilder->setTimeToLive(60*20);
