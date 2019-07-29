@@ -522,6 +522,13 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="/reports/student-class-wise-view">
+                        <div class="item-inner">
+                            <span class="title"> Student Class Wise Report</span>
+                        </div>
+                    </a>
+                </li>
             </ul>
         </li>
         <li>
