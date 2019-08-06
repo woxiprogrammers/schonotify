@@ -25,10 +25,10 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Batch <span class="symbol required"></span>
+                                            Program <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;">
-                                            <option>Select Batch</option>
+                                            <option>Select Program</option>
                                             @foreach($batches as $batch)
                                                 <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
                                             @endforeach
@@ -38,7 +38,7 @@
                                 <div class="col-md-6" id="class-select-div" >
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Select Class<span class="symbol required"></span>
+                                            Select Department<span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;">
                                         </select>
@@ -127,7 +127,7 @@
                     $('#class-select').html("no record found");
                     $('#loadmoreajaxloaderClass').hide();
                 } else {
-                    var str='<option value="">Please select class</option>';
+                    var str='<option value="">Please select Department</option>';
                     for(var i=0; i<res.length; i++)
                     {
                         str+='<option value="'+res[i]['class_id']+'">'+res[i]['class_name']+'</option>';

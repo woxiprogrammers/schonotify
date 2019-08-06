@@ -1,9 +1,9 @@
 <div class="form-group">
     <label class="control-label">
-        Batch
+        Program
     </label>
     <select class="form-control" id="Batchdropdown" name="Batchdropdown" style="-webkit-appearance: menulist;">
-        <option value="">Select Batch</option>
+        <option value="">Select Program</option>
         @if(!empty($batches))
         @foreach($batches as $batch)
             <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>

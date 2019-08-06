@@ -25,10 +25,10 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="control-label">
-                                            Batch <span class="symbol required"></span>
+                                            Program <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" name="batch" id="batchDrpdn" style="-webkit-appearance: menulist;" required>
-                                            <option>Select Batch</option>
+                                            <option>Select Program</option>
                                             @foreach($batches as $batch)
                                                 @if($batch == $batches->first())
                                                     <option value="{!! $batch['id'] !!}" selected>{!! $batch['name'] !!}</option>
@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="col-md-4" id="class-select-div">
                                         <label class="control-label">
-                                            Select Class <span class="symbol required"></span>
+                                            Select Department <span class="symbol required"></span>
                                         </label>
                                         <select class="form-control" id="class-select" name="class_select" style="-webkit-appearance: menulist;" required>
                                         </select>

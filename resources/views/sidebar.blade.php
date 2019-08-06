@@ -70,7 +70,7 @@
                                 <i class="fa fa-pencil-square-o"></i>
                             </div>
                             <div class="item-inner">
-                                <span class="title"> Create Class </span><i class="icon-arrow"></i>
+                                <span class="title"> Create Department </span><i class="icon-arrow"></i>
                             </div>
                         </div>
                     </a>
@@ -78,20 +78,23 @@
                         <li>
                             <a href="/create-class">
                                 <div class="item-inner">
-                                    <span class="title"> Create Class </span>
+                                    <span class="title"> Create Department </span>
                                 </div>
                             </a>
                         </li>
                         <li>
                             <a href="/create-division">
                                 <div class="item-inner">
-                                    <span class="title"> Create Division </span>
+                                    <span class="title"> Create Semester </span>
                                 </div>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li>
+
+            {{--start commenting code for Exam Eval--}}
+
+                {{--<li>
                     <a href="javascript:void(0)">
                         <div class="item-content">
                             <div class="item-media">
@@ -120,9 +123,7 @@
                     </ul>
                 </li>
 
-                {{--start commenting code for Exam Eval--}}
-
-                {{--<li>
+                <li>
                     <a href="/timetable">
                         <div class="item-content">
                             <div class="item-media">

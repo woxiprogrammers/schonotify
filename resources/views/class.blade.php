@@ -1,10 +1,10 @@
 <div class="form-group">
     <label class="control-label">
-        Class
+        Department
     </label>
 
     <select class="form-control" id="Classdropdown" name="Classdropdown" style="-webkit-appearance: menulist;">
-        <option value="">Select Batch</option>
+        <option value="">Select Department</option>
         @if(!empty($classList))
         @foreach($classList as $class)
         <option value="{!! $class->id !!}">{!! $class->class_name !!}</option>

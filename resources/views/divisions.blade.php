@@ -1,9 +1,9 @@
 <div class="form-group" id="DivisionBlock">
     <label class="control-label">
-        Division
+        Semester
     </label>
     <select class="form-control" id="Divisiondropdown" name="Divisiondropdown" style="-webkit-appearance: menulist;">
-        <option value="">Select Batch</option>
+        <option value="">Select Semester</option>
         @if(!empty($divisionList))
         @foreach($divisionList as $class)
         <option value="{!! $class->id !!}">{!! $class->division_name !!}</option>
