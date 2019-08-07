@@ -200,13 +200,13 @@ class SearchController extends Controller
         if ($role_id == 3) {
             $str .= "<th>Shuffle</th>";
             $str .= "<th>Result</th>";
-            $str .= "<th>GRN No.</th>";
+            $str .= "<th>PRN No.</th>";
         }
-        $str .= "<th>Name</th></th><th>Roll No</th><th>Category</th><th>Gender</th>";
+        /*$str .= "<th>Name</th></th><th>Roll No</th><th>Category</th><th>Gender</th>";
         if ($role_id == 3) {
             $str .= "<th>Parent Name</th>";
             $str .= "<th>Parent Email</th>";
-        }
+        }*/
         if (sizeof($result->toArray()) != 0) {
             if ($user->role_id == 1) {
                 $str .= "<th>Status</th>";
@@ -231,7 +231,7 @@ class SearchController extends Controller
                 } else {
                     $str .= "<tr>";
                 }
-                $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
+                /*$str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
                 $str .= "<td>" . $row->roll_number . "</td>";
                 $str .= "<td>" . $row->category . "</td>";
                 $str .= "<td>" . $row->gender . "</td>";
@@ -245,7 +245,7 @@ class SearchController extends Controller
                             $str .= "<td>" . $row1->email . "</td>";
                         }
                     }
-                }
+                }*/
                 if ($user->role_id == 1) {
                     $str .= "<td>";
                     if ($row->is_active == 1) {
@@ -382,9 +382,9 @@ class SearchController extends Controller
               $str.="<th>GRN No.</th>";
           }
           if($role_id == 2){
-            $str.="<th>Name</th><th>CLass Teacher</th><th>Email</th><th>Gender</th>";
+            $str.="<th>Name</th><!--<th>CLass Teacher</th><th>Email</th><th>Gender</th>-->";
           }else{
-            $str.="<th>Name</th><th>Username</th><th>Email</th><th>Gender</th>";
+            $str.="<th>Name</th><th>Username</th><!--<th>Email</th><th>Gender</th>-->";
           }
           if($role_id == 3)
           {
@@ -416,12 +416,12 @@ class SearchController extends Controller
                   }
                   $str.="<td>".$row['firstname']." ".$row['lastname']."</td>";
                   if($role_id == 2){
-                         $str.="<td>".$row['div']." - ".$row['class']."</td>";
+                         /*$str.="<td>".$row['div']." - ".$row['class']."</td>";*/
                   }else{
                     $str.="<td>".$row['user_name']."</td>";
                   }
-                  $str.="<td>".$row['email']."</td>";
-                  $str.="<td>".$row['gender']."</td>";
+                  /*$str.="<td>".$row['email']."</td>";
+                  $str.="<td>".$row['gender']."</td>";*/
                   if($row['user_role']=='student') {
                       $parent=User::all()->where('id',$row['parent_id']);
                       if($parent->toArray() == null) {

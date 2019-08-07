@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="col-sm-7">
                             <h1 class="mainTitle">Create</h1>
-                            <span class="mainDescription">Division</span>
+                            <span class="mainDescription">Semester</span>
                         </div>
 
                     </div>
@@ -43,10 +43,10 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">
-                                                Batch <span class="symbol required"></span>
+                                                Program <span class="symbol required"></span>
                                             </label>
                                             <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
-                                                <option value="">Select Batch</option>
+                                                <option value="">Select Program</option>
                                                 @foreach($batches as $batch)
                                                 <option value="{!! $batch->id !!}">{!! $batch->name !!}</option>
                                                 @endforeach
@@ -54,16 +54,16 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
-                                                Class <span class="symbol required"></span>
+                                                Department <span class="symbol required"></span>
                                             </label>
                                             <select class="form-control" id="classDropdown" name="classDropdown" style="-webkit-appearance: menulist;">
-                                                <option value="">Select Class</option>
+                                                <option value="">Select Department</option>
                                             </select>
                                             <div id="loadmoreajaxloader" style="display:none;"><center><img src="assets/images/loader1.gif" /></center></div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
-                                                Enter division name <span class="symbol required"></span>
+                                                Enter semester name <span class="symbol required"></span>
                                             </label>
                                             <input type="text" class="form-control" id="division" name="division">
                                         </div>

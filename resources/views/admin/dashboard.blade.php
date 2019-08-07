@@ -15,14 +15,17 @@
 					<div class="wrap-content container" id="container">
 						<!-- start: DASHBOARD TITLE -->
                         @include('alerts.errors')
-						<section id="page-title" class="padding-top-15 padding-bottom-15">
+
+						{{--start commenting code for Exam Eval--}}
+						{{--<section id="page-title" class="padding-top-15 padding-bottom-15">
 							<div class="row">
 								<div class="col-sm-7">
 									<h1 class="mainTitle">Dashboard</h1>
 								</div>
 
 							</div>
-						</section>
+						</section>--}}
+						{{--end commenting code for Exam Eval--}}
                         <div id="message-error-div"></div>
 						<!-- end: DASHBOARD TITLE -->
 						<!-- start: FEATURED BOX LINKS -->
@@ -47,13 +50,15 @@
                         }
                        ?>
 						@if($user->role_id == 1)
-                            <div class="container-fluid container-fullw bg-white">
+							{{--start commenting code for Exam Eval--}}
+                            {{--<div class="container-fluid container-fullw bg-white">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div id="chartContainer" style="height: 370px; width: 100%;"></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
+							{{--end commenting code for Exam Eval--}}
 						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
 

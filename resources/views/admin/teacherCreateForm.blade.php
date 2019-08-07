@@ -33,7 +33,82 @@
 </div>
 
 <form action="#" role="form" class="smart-wizard" id="registrationForm" enctype="multipart/form-data">
-<div id="wizard" class="swMain col-sm-12">
+    {{--new code start--}}
+    <div class="row">
+        <input type="hidden" id="role" name="role" value="2">
+        <input type="hidden" id="role_name" name="role_name" value="admin">
+        <div class="col-md-8 col-md-offset-2">
+            <fieldset>
+                <legend>
+                    Personal Information (teacher)
+                </legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                First Name <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Last Name <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                User Name <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
+                            <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Password <span class="symbol required"></span>
+                            </label>
+                            <input type="password" placeholder="Enter a Password" class="form-control" name="password" id="password"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Repeat Password <span class="symbol required"></span>
+                            </label>
+                            <input type="password" placeholder="Repeat Password" class="form-control" name="password2"/>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser">
+                    create <i class="fa fa-arrow-circle-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {{--new code end--}}
+    {{--start commenting code for Exam Eval--}}
+    {{--<div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
 <ul>
@@ -557,7 +632,8 @@
         </div>
     </div>
 </div>
-</div>
+</div>--}}
+    {{--end commenting code for Exam Eval--}}
 </form>
 
 <!-- end: DYNAMIC TABLE -->
