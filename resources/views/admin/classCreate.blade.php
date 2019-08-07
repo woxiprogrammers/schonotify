@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-sm-7">
                             <h1 class="mainTitle">Create</h1>
-                            <span class="mainDescription">Class</span>
+                            <span class="mainDescription">Program</span>
                         </div>
                     </div>
                 </section>
@@ -35,7 +35,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Batch <span class="symbol required"></span>
+                                                    Program <span class="symbol required"></span>
                                                 </label>
                                                 <select class="form-control" id="dropdown" name="dropdown" style="-webkit-appearance: menulist;">
 
@@ -45,9 +45,9 @@
 
                                             <div class="form-group">
                                                 <label class="control-label">
-                                                    Enter class name <span class="symbol required"></span>
+                                                    Enter Department name <span class="symbol required"></span>
                                                 </label>
-                                                <input type="text" placeholder="Insert new class name" class="form-control" id="class" name="class">
+                                                <input type="text" placeholder="Insert new department name" class="form-control" id="class" name="class">
                                             </div>
                                             <div class="form-group">
                                                 <button class="btn btn-primary btn-wide pull-right" type="submit">
@@ -57,7 +57,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label>Add New Batch</label>
+                                            <label>Add New Program</label>
                                             <button type="button" class="btn btn-wide btn-primary " data-toggle="modal" data-target="#batchModal"><i class="ti-plus"></i></button>
                                         </div>
 
@@ -72,7 +72,7 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="resetBatch">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
-                                        <h4 class="modal-title" id="myModalLabel">Create New Batch</h4>
+                                        <h4 class="modal-title" id="myModalLabel">Create New Program</h4>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
@@ -84,7 +84,7 @@
 
                                                             <div class="col-md-8">
                                                                 <div class="form-group">
-                                                                    <input type="text" placeholder="Insert new batch name" class="form-control" id="batchesDefault" name="batchesDefault">
+                                                                    <input type="text" placeholder="Insert new program name" class="form-control" id="batchesDefault" name="batchesDefault">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4 ">
@@ -199,7 +199,7 @@
         $('div#loadmoreajaxloader').show();
         var route="get-batches";
         $.get(route,function(res){
-            var str="<option value=''>Select Batch</option>";
+            var str="<option value=''>Select Program</option>";
             for(var i=0; i<res.length; i++)
             {
                 str+="<option value='"+res[i]['id']+"'>"+res[i]['name']+"</option>"

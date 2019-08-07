@@ -34,7 +34,69 @@
 </div>
 
 <form action="#" role="form" class="smart-wizard" id="student-registration-form" enctype="multipart/form-data">
-<div id="wizard" class="swMain col-sm-12">
+    {{--new code start--}}
+    <div class="row">
+        <input type="hidden" id="role" name="role" value="2">
+        <input type="hidden" id="role_name" name="role_name" value="admin">
+        <div class="col-md-8 col-md-offset-2">
+            <fieldset>
+                <legend>
+                    Personal Information (student)
+                </legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                PRN <span class="symbol required"></span>
+                            </label>
+                            <input type="text" placeholder="Enter Student PRN" class="form-control" name="firstName"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Select Program
+                            </label>
+                            <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Select Department
+                            </label>
+                            <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Select Semester
+                            </label>
+                            <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser">
+                    create <i class="fa fa-arrow-circle-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {{--new code end--}}
+    {{--start commenting code for Exam Eval--}}
+
+    {{--<div id="wizard" class="swMain col-sm-12">
 <!-- start: WIZARD SEPS -->
 <div id="error-div"></div>
 <ul>
@@ -857,7 +919,7 @@
         </div>
     </div>
 </div>
-</div>
+</div>--}}
 </form>
 
 <!-- end: DYNAMIC TABLE -->
@@ -1019,7 +1081,7 @@ function getbatches()
 {
     var route='get-batches';
     $.get(route,function(res){
-        var str = "<option value=''>Please Select Batch</option>";
+        var str = "<option value=''>Please Select Program</option>";
         for(var i=0; i<res.length; i++){
             str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
         }
@@ -1030,7 +1092,7 @@ $("#batch").change(function() {
     var id = this.value;
     var route='get-classes/'+id;
     $.get(route,function(res){
-        var str = "<option value=''>Please Select Class</option>";
+        var str = "<option value=''>Please Select Department</option>";
         for(var i=0; i<res.length; i++){
             str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
         }
@@ -1041,7 +1103,7 @@ $("#class").change(function() {
     var id = this.value;
     var route='get-divisions/'+id;
     $.get(route,function(res){
-        var str = "<option value=''>Please Select Division</option>";
+        var str = "<option value=''>Please Select Semester</option>";
         for(var i=0; i<res.length; i++){
             str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
         }
