@@ -741,3 +741,7 @@ Route::group(['prefix' => 'cms'],function (){
     Route::get('images-listing',array('uses' => 'Cms\CmsController@imagesListing'));
     Route::get('remove-image/{id}',array('uses' => 'Cms\CmsController@removeImage'));
 });
+
+Route::group(['prefix' =>'mae'],function(){
+    Route::post('create-user',array('uses' => 'Mae\MaeUserController@createUser'));
+});

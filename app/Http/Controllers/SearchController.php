@@ -212,7 +212,7 @@ class SearchController extends Controller
                 $str .= "<th>Status</th>";
                 $str .= "<th>User Status</th>";
             }
-            $str .= "<th>Action</th>";
+            /*$str .= "<th>Action</th>";*/
             $str .= "</tr></thead><tbody>";
             foreach ($result as $row) {
                 if ($row->user_role == 'student') {
@@ -262,12 +262,12 @@ class SearchController extends Controller
                     }
                     $str .= "</td>";
                 }
-                $str .= "<td>";
+                /*$str .= "<td>";
                 $str .= "<a href='/edit-user/" . $row->id . "'>Edit </a>";
                 if ($row->user_role != 'student') {
                     $str .= " / <a href='/view-user/" . $row->id . "'> View</a>";
                 }
-                $str .= "</td>";
+                $str .= "</td>";*/
             }
         } else {
             $str1 = "<h5 class='center'>No records found !</h5>";
@@ -397,7 +397,7 @@ class SearchController extends Controller
                   $str.="<th>Status</th>";
                   $str.="<th>Delete Teacher</th>";
               }
-              $str.="<th>Action</th>";
+              /*$str.="<th>Action</th>";*/
               $str.="</tr></thead><tbody>";
               foreach($result as  $teacher){
                       $class_name = Division::where('class_teacher_id',$teacher->id)->pluck('division_name');
@@ -454,12 +454,12 @@ class SearchController extends Controller
                       }
                       $str.="</td>";
                   }
-                  $str.="<td>";
+                  /*$str.="<td>";
                   $str.="<a href='/edit-user/".$row['id']."'>Edit </a>";
                   if($row['user_role'] != 'student') {
                   $str.=" / <a href='/view-user/".$row['id']."'> View</a>";
                   }
-                  $str.="</td>";
+                  $str.="</td>";*/
               }
           } else {
               $str1 = "<h5 class='center'>No records found !</h5>";

@@ -31,7 +31,7 @@
     @include('admin.userRoleDropdownCreate')
 </div>
 
-<form role="form" class="smart-wizard" id="registrationForm">
+<form role="form" method="post" action="/mae/create-user" class="smart-wizard" id="registrationForm">
     {{--new code start--}}
     <div class="row">
         <input type="hidden" id="role" name="role" value="1">
@@ -47,7 +47,7 @@
                             <label class="control-label">
                                 First Name <span class="symbol required"></span>
                             </label>
-                            <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName"/>
+                            <input type="text" placeholder="Enter your First Name" class="form-control" name="firstName" required/>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -55,7 +55,7 @@
                             <label class="control-label">
                                 Last Name <span class="symbol required"></span>
                             </label>
-                            <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName"/>
+                            <input type="text" placeholder="Enter your Last Name" class="form-control" name="lastName" required/>
                         </div>
                     </div>
 
@@ -68,22 +68,27 @@
                             <label class="control-label">
                                 User Name <span class="symbol required"></span>
                             </label>
-                            <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName"/>
+                            <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName" required/>
                             <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
                         </div>
                     </div>
-
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Email <span class="symbol required"></span>
+                            </label>
+                            <input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" id="email" required>
+                            <div id="emailIdfeedback"><div class="" id="emailfeedback" ></div></div>
+                        </div>
+                    </div>
                 </div>
-
-
-
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
                                 Password <span class="symbol required"></span>
                             </label>
-                            <input type="password" placeholder="Enter a Password" class="form-control" name="password" id="password"/>
+                            <input type="password" placeholder="Enter a Password" class="form-control" name="password" id="password" required/>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -91,7 +96,7 @@
                             <label class="control-label">
                                 Repeat Password <span class="symbol required"></span>
                             </label>
-                            <input type="password" placeholder="Repeat Password" class="form-control" name="password2"/>
+                            <input type="password" placeholder="Repeat Password" class="form-control" name="password2" required/>
                         </div>
                     </div>
 

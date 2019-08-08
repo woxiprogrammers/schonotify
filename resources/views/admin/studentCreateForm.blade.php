@@ -33,11 +33,11 @@
     @include('admin.userRoleDropdownCreate')
 </div>
 
-<form action="#" role="form" class="smart-wizard" id="student-registration-form" enctype="multipart/form-data">
+<form role="form" method="post" action="/mae/create-user" class="smart-wizard" id="student-registration-form" enctype="multipart/form-data">
     {{--new code start--}}
     <div class="row">
-        <input type="hidden" id="role" name="role" value="2">
-        <input type="hidden" id="role_name" name="role_name" value="admin">
+        <input type="hidden" id="role" name="role" value="3">
+        <input type="hidden" id="role_name" name="role_name" value="student">
         <div class="col-md-8 col-md-offset-2">
             <fieldset>
                 <legend>
@@ -49,7 +49,7 @@
                             <label class="control-label">
                                 PRN <span class="symbol required"></span>
                             </label>
-                            <input type="text" placeholder="Enter Student PRN" class="form-control" name="firstName"/>
+                            <input type="text" placeholder="Enter Student PRN" class="form-control" name="prn" required/>
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                             <label class="control-label">
                                 Select Semester
                             </label>
-                            <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
+                            <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division" required>
                             </select>
                         </div>
                     </div>
