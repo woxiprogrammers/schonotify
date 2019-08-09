@@ -676,6 +676,7 @@ Route::group(['prefix' => 'exam'], function () {
     Route::get('get-subject-marks/{term_id}/{div_id}/{class_id}/{sub_subject_id}',array('uses'=>'ExamController@subjectStructure'));
     Route::get('get-students/{id}',array('uses'=>'ExamController@ExamStudent'));
     Route::get('get-subject-structures/{class_id}',array('uses' => 'ExamController@getExamStructures'));
+    Route::get('get-div-subject-structures/{div_id}',array('uses' => 'ExamController@getDivExamStructures'));
     Route::get('subjectMarksView',array('uses' => 'ExamController@studentEntry'));
     Route::post('student-marks-entry',array('uses' => 'ExamController@createSubjectStructureDetails'));
     Route::get('admin-publish-view',array('uses' => 'ExamController@adminPublishView'));

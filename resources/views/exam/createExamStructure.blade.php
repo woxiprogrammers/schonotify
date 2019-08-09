@@ -22,29 +22,33 @@
                     <div class="container-fluid container-fullw">
                         <form method="post" action="structure-create" role="form" id="examStructureForm">
                         <div class="row">
-                             <div class="col-md-6">
-                                  <div class="form-group">
-                                       <label class="control-label">
-                                              Program <span class="symbol required"></span>
-                                       </label>
-                                       <select class="form-control" id="batchDrpdn" style="-webkit-appearance: menulist;">
-                                           <option>Select Program</option>
-                                           @foreach($batches as $batch)
-                                                  <option value="{!! $batch['id'] !!}">{!! $batch['name'] !!}</option>
-                                            @endforeach
-                                       </select>
-                                  </div>
-                             </div>
-                             <div class="col-md-6">
-                                  <div class="form-group">
-                                        <label class="control-label">
-                                            Department <span class="symbol required"></span>
-                                        </label>
-                                        <div id="classesDropdown">
-
-                                        </div>
-                                  </div>
-                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Select Program
+                                    </label>
+                                    <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Select Department
+                                    </label>
+                                    <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Select Semester
+                                    </label>
+                                    <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division" required>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                                 <div class="col-md-6">
@@ -208,22 +212,44 @@
             Main.init();
             FormValidator.init();
             $('#extra').hide();
+            getbatches();
             $('#abc').hide();
-            $('#batchDrpdn').change(function(){
-                var str = this.value;
-                $.ajax({
-                    method: "get",
-                    url: "/exam/get-classes/"+str,
-                    success: function(response)
-                    {
-                        $("#classesDropdown").html(response);
-                    }
-                });
-            });
             $('#columnDrpdn').change(function(){
                 var b=  this.value;
                 var a=$('#termDrpdn').val();
                 generate(a,b);
+            });
+        });
+        function getbatches() {
+            var route='/get-batches';
+            $.get(route,function(res){
+                var str = "<option value=''>Please Select Program</option>";
+                for(var i=0; i<res.length; i++){
+                    str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
+                }
+                $('#batch').html(str);
+            });
+        }
+        $("#batch").change(function() {
+            var id = this.value;
+            var route='/get-classes/'+id;
+            $.get(route,function(res){
+                var str = "<option value=''>Please Select Department</option>";
+                for(var i=0; i<res.length; i++){
+                    str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
+                }
+                $('#class').html(str);
+            });
+        });
+        $("#class").change(function() {
+            var id = this.value;
+            var route='/get-divisions/'+id;
+            $.get(route,function(res){
+                var str = "<option value=''>Please Select Semester</option>";
+                for(var i=0; i<res.length; i++){
+                    str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
+                }
+                $('#division').html(str);
             });
         });
         function generate(a,b) {

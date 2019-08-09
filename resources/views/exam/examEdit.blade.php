@@ -22,7 +22,7 @@
                     <div class="container-fluid container-fullw">
                         <form method="post" action="" role="form" id="examStructureEditForm">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
@@ -39,24 +39,38 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            Class <span class="symbol required"></span>
+                                            Department
                                         </label>
-                                        @foreach($classes as $examclass)
-                                            @if(in_array($examclass['id'],$class))
-                                            <div class="checkbox clip-check check-primary">
-                                                <input type="checkbox" value="{{$examclass['id']}}" id="{{$examclass['id']}}" name="classes[]" checked="checked">
-                                                <label for={{$examclass['id']}} >{{$examclass['class_name']}} </label>
-                                            </div>
-                                            @else
-                                            <div class="checkbox clip-check check-primary">
-                                                <input type="checkbox" value="{{$examclass['id']}}" id="{{$examclass['id']}}" name="classes[]">
-                                                <label for={{$examclass['id']}} >{{$examclass['class_name']}} </label>
-                                            </div>
-                                            @endif
-                                        @endforeach
+                                        <select class="form-control" id="class" name="class" style="-webkit-appearance: menulist;">
+                                            <option value="">Select Department</option>
+                                            @foreach($classes as $examclass)
+                                                @if(in_array($examclass['id'],$class))
+                                                    <option value="{!! $examclass['id'] !!}" selected>{!! $examclass['class_name'] !!}</option>
+                                                @else
+                                                    <option value="{!! $examclass['id'] !!}">{!! $examclass['class_name'] !!}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                           Semester
+                                        </label>
+                                        <select class="form-control" id="division" name="division" style="-webkit-appearance: menulist;">
+                                            <option value="">Select Department</option>
+                                            @foreach($divisions as $examDiv)
+                                                @if(in_array($examDiv['id'],$div))
+                                                    <option value="{!! $examDiv['id'] !!}" selected>{!! $examDiv['division_name'] !!}</option>
+                                                @else
+                                                    <option value="{!! $examDiv['id'] !!}">{!! $examDiv['division_name'] !!}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -315,6 +329,17 @@
             if($('#scholastic').is(':checked')){
                 $('#is_scholastic').val('true');
             }
+        });
+        $("#class").change(function() {
+            var id = this.value;
+            var route='/get-divisions/'+id;
+            $.get(route,function(res){
+                var str = "<option value=''>Please Select Semester</option>";
+                for(var i=0; i<res.length; i++){
+                    str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
+                }
+                $('#division').html(str);
+            });
         });
     </script>
 @stop

@@ -44,11 +44,11 @@
                             </a>
                         </li>
 
-                        <li>
+                        {{--<li>
                             <a href="/searchSubjects">
                                 <span class="title"> Subjects  </span>
                             </a>
-                        </li>
+                        </li>--}}
                     </ul>
                 </li>
                 <li>

@@ -77,16 +77,14 @@ class ExamController extends Controller
         $years ['end_year'] = $request->endYear;
         $years ['created_at'] = Carbon::now();
         $yearsCreated = ExamYear::insertGetId($years);
-        $classes = $request->classes;
+        $classes = $request->class;
         $batches = Batch::where('body_id',Auth::user()->body_id)->get();
         $examSubjects = ExamSubjectStructure::where('body_id',Auth::user()->body_id)->get();
-        foreach ($classes as $class)
-        {
-            $inserData['exam_subject_id'] = $subSubject;
-            $inserData['class_id'] = $class;
-            $inserData['created_at'] = Carbon::now();
-            $query1 = ExamClassStructureRelation::insert($inserData);
-        }
+        $inserData['exam_subject_id'] = $subSubject;
+        $inserData['class_id'] = $request->class;
+        $inserData['division_id'] = $request->division;
+        $inserData['created_at'] = Carbon::now();
+        $query1 = ExamClassStructureRelation::insert($inserData);
         $terms = $request->terms_id;
         foreach ($terms as $key => $term)
         {
@@ -139,6 +137,15 @@ class ExamController extends Controller
             ->get()->toArray();
         return view('/exam/examStructureList')->with(compact('structure_lists'));
     }
+    public function getDivExamStructures(Request $request,$div_id){
+        $structure_lists = ExamSubjectStructure::join('exam_sub_subject_structure','exam_sub_subject_structure.subject_id','=','exam_subject_structure.id')
+            ->join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_sub_subject_structure.id')
+            ->join('exam_year','exam_sub_subject_structure.id','=','exam_year.exam_structure_id')
+            ->where('exam_class_structure_relation.division_id','=',$div_id)
+            ->select('exam_sub_subject_structure.id','exam_subject_structure.subject_name as name','exam_sub_subject_structure.sub_subject_name','exam_year.start_year','exam_year.end_year')
+            ->get()->toArray();
+        return view('/exam/examStructureList')->with(compact('structure_lists'));
+    }
     public function ExamStructureEdit(Request $request,$id){
         $user=Auth::user();
         $batches = Batch::where('body_id',$user->body_id)->get();
@@ -148,6 +155,8 @@ class ExamController extends Controller
         $examSubjects = ExamSubjectStructure::where('body_id',$user->body_id)->get();
         $classes = Classes::where('batch_id',$batchs)->select('batch_id','id','class_name')->get()->toArray();
         $class = ExamClassStructureRelation::where('exam_subject_id',$id)->lists('class_id')->toArray();
+        $divisions = Division::where('class_id',$class)->select('id','division_name')->get()->toArray();
+        $div = ExamClassStructureRelation::where('exam_subject_id',$id)->where('class_id',$class)->lists('division_id')->toArray();
         $examSubSubject = ExamSubSubjectStructure::where('id',$id)->select('id','sub_subject_name','is_co_scholastic')->get()->toArray();
         $examStartYear = ExamYear::where('exam_structure_id',$id)->select('start_year')->get();
         $examEndYear = ExamYear::where('exam_structure_id',$id)->select('end_year')->get();
@@ -160,7 +169,7 @@ class ExamController extends Controller
         foreach ($examTerm as $key => $value) {
             $detail[$value['term_name']] = ExamTermDetails::where('term_id', $value['id'])->select('exam_type', 'out_of_marks')->get()->toArray();
         }
-        return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch'));
+        return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch','divisions','div'));
     }
     public function editStructure(Request $request,$id){
         if($request->is_scholastic == 'true'){
@@ -170,17 +179,15 @@ class ExamController extends Controller
             $subjectDetails['is_co_scholastic'] = false;
         }
         $query = ExamSubSubjectStructure::where('id',$id)->update($subjectDetails);
-        $classData = $request->classes;
-        $deleteOldRecordsClass = ExamClassStructureRelation::where('exam_subject_id',$id)->whereNotIn('class_id',$classData)->delete();
-        foreach ($classData as  $class){
-            $query= ExamClassStructureRelation::where('exam_subject_id',$id)->where('class_id',$class)->first();
-            if($query == null){
-                $inserData['exam_subject_id'] = $id;
-                $inserData['class_id'] = $class;
-                $inserData['created_at'] = Carbon::now();
-                $inserData['updated_at'] = Carbon::now();
-                $query1 = ExamClassStructureRelation::insert($inserData);
-            }
+        ExamClassStructureRelation::where('exam_subject_id',$id)->delete();
+        $query= ExamClassStructureRelation::where('exam_subject_id',$id)->where('class_id',$request->class)->where('division_id',$request->division)->first();
+        if($query == null){
+            $inserData['exam_subject_id'] = $id;
+            $inserData['class_id'] = $request->class;
+            $inserData['division_id'] = $request->division;
+            $inserData['created_at'] = Carbon::now();
+            $inserData['updated_at'] = Carbon::now();
+            $query1 = ExamClassStructureRelation::insert($inserData);
         }
         $year['start_year'] = $request->start_Year;
         $year['end_year'] = $request->end_Year;
