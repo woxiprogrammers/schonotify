@@ -44,6 +44,15 @@
                                             </select>
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Select Semester
+                                        </label>
+                                        <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division" required>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div id="loadmoreajaxloaderClass" style="display:none;"></div>
                             </div>
                                  <div id="structures">
@@ -123,6 +132,24 @@
 
                     $('#loadmoreajaxloaderClass').hide();
                     $('#structures').html(res);
+            });
+
+            var route1='/get-divisions/'+id;
+            $.get(route1,function(res){
+                var str = "<option value=''>Please Select Semester</option>";
+                for(var i=0; i<res.length; i++){
+                    str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
+                }
+                $('#division').html(str);
+            });
+        });
+        $('#division').change(function(){
+            var id=this.value;
+            var route='get-div-subject-structures/'+id;
+            $('#loadmoreajaxloaderClass').show();
+            $.get(route,function(res){
+                $('#loadmoreajaxloaderClass').hide();
+                $('#structures').html(res);
             });
         });
     </script>

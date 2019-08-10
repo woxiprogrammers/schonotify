@@ -10,9 +10,9 @@
                 </label>
                 <select class="form-control" id="type-select" style="-webkit-appearance: menulist;">
                     <option>Select other types</option>
-                    <option value="1">Batch</option>
-                    <option value="2">Class</option>
-                    <option value="3">Division</option>
+                    <option value="1">Program</option>
+                    <option value="2">Department</option>
+                    <option value="3">Semester</option>
                 </select>
             </div>
         </div>

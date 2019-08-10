@@ -646,7 +646,7 @@ class ExamEvaluationController extends Controller
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Assign: activate to sort column ascending' style='width: 29px;'>Assign  "."<input type='checkbox' id='check_all' onclick='checkAll()'/>"."</th>";
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
         }
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";
+        /*$str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";*/
         if (sizeof($result->toArray()) != 0) {
             $str .= "</tr></thead><tbody>";
             foreach ($result as $row) {
@@ -665,8 +665,8 @@ class ExamEvaluationController extends Controller
                 } else {
                     $str .= "<tr>";
                 }
-                $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
-                $str .= "<td>" . $row->roll_number . "</td>";
+                /*$str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
+                $str .= "<td>" . $row->roll_number . "</td>";*/
             }
         } else {
             $str1 = "<h5 class='center'>No records found !</h5>";
@@ -701,7 +701,7 @@ class ExamEvaluationController extends Controller
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded  "."<input type='checkbox' checked>"."</th>";
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
         }
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";
+        /*$str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";*/
         if (sizeof($result->toArray()) != 0) {
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Action: activate to sort column ascending' style='width: 29px;'>Action</th>";
             $str .= "</tr></thead><tbody>";
@@ -722,8 +722,8 @@ class ExamEvaluationController extends Controller
                 } else {
                     $str .= "<tr>";
                 }
-                $str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
-                $str .= "<td>" . $row->roll_number . "</td>";
+                /*$str .= "<td>" . $row->firstname . " " . $row->lastname . "</td>";
+                $str .= "<td>" . $row->roll_number . "</td>";*/
                 $str .= "<td>";
                 $str .= "<input type='file' id='answer-sheet' accept='application/pdf' class='answer-sheet' name='answer_sheet[$row->id]'>";
                 $str .= "</td>";
@@ -762,7 +762,7 @@ class ExamEvaluationController extends Controller
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Checked: activate to sort column ascending' style='width: 29px;'>Checked  "."</th>";
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
         }
-        $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";
+        /*$str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";*/
         if (sizeof($result->toArray()) != 0) {
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Action: activate to sort column ascending' style='width: 29px;'>Action</th>";
             $str .= "</tr></thead><tbody>";
@@ -784,7 +784,7 @@ class ExamEvaluationController extends Controller
                 } else {
                     $str .= "<tr>";
                 }
-                $str .= "<td>" . $row->roll_number . "</td>";
+                /*$str .= "<td>" . $row->roll_number . "</td>";*/
                 $str .= "<td>";
                 $str .= "<a href='enter-marks/$request->exam/$row->id'><button>Fill Marks</button></a>";
                 $str .= "</td>";
