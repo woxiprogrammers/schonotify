@@ -54,6 +54,10 @@ class MaeUserController extends Controller
                     $userData['role_id'] = $request->role;
                     $userData['body_id'] = $user['body_id'];
                     $query = User::create($userData);
+                    if($request->has('checkbox8')){
+                        Division::where('id',$request->division)->
+                        where('class_id',$request->class)->update(['class_teacher_id'=>$query['id']]);
+                    }
                 }
             }else{
                 Session::flash('message-error','password does not match');

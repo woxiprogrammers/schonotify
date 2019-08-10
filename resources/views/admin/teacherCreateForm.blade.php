@@ -99,6 +99,52 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Make Department Teacher
+                            </label>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="checkbox8" value="1" onchange="clsTeacher(this.checked)" name="checkbox8">
+                                <label for="checkbox8">
+                                    Approve
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="clstchr_batch" style="display:none;" >
+                            <label class="control-label">
+                                Select Program
+                            </label>
+
+                            <select class="form-control" name="batch" style="-webkit-appearance: menulist;" id="batch">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="clstchr_class" style="display:none;" >
+                            <label class="control-label">
+                                Select Department
+                            </label>
+                            <select class="form-control" name="class" style="-webkit-appearance: menulist;" id="class">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" id="clstchr_div" style="display:none;">
+                            <label class="control-label">
+                                Select Semester
+                            </label>
+                            <select class="form-control" name="division" style="-webkit-appearance: menulist;" id="division">
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-primary btn-o next-step btn-wide pull-right" id="checkUser">
@@ -1278,7 +1324,7 @@ $("#teacher_communication_address").click(function(){
     {
         var route='get-batches';
         $.get(route,function(res){
-            var str = "<option value=''>Please Select Batch</option>";
+            var str = "<option value=''>Please Select Program</option>";
             for(var i=0; i<res.length; i++){
                 str+='<option value='+res[i]['id']+'>'+res[i]['name']+'</option>';
             }
@@ -1290,7 +1336,7 @@ $("#teacher_communication_address").click(function(){
         var id = this.value;
         var route='get-classes/'+id;
         $.get(route,function(res){
-            var str = "<option value=''>Please Select Class</option>";
+            var str = "<option value=''>Please Select Department</option>";
             for(var i=0; i<res.length; i++){
                 str+='<option value='+res[i]['id']+'>'+res[i]['class_name']+'</option>';
             }
@@ -1302,7 +1348,7 @@ $("#teacher_communication_address").click(function(){
         var id = this.value;
         var route='get-divisions/'+id;
         $.get(route,function(res){
-            var str = "<option value=''>Please Select Division</option>";
+            var str = "<option value=''>Please Select Semester</option>";
             for(var i=0; i<res.length; i++){
                 str+='<option value='+res[i]['id']+'>'+res[i]['division_name']+'</option>';
             }
