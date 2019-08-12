@@ -122,7 +122,7 @@
                             </div>
                         </div>
                     </section>
-                    <section>
+                    {{--<section>
                         <div class="row">
                             <div class="col-md-6" >
                                 <label class="control-label">
@@ -131,7 +131,7 @@
                                 <input type="checkbox" id="scholastic" class="scholastic">
                             </div>
                         </div>
-                    </section>
+                    </section>--}}
                             <br>
                             <div class="row">
                                 <div class="col-md-6">
@@ -265,9 +265,9 @@
             termString += "</tr>";
                 for (var i = 0; i < a; i++) {
                     var termNumber = i + 1;
-                    termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term"+termNumber+"' name='terms_id[]' required>" + "</td><td style='width: 15%'>Is Exam Evaluation</td>";
+                    termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term"+termNumber+"' name='terms_id[]' required>" + "</td>";
                     for (var j = 0; j < b; j++) {
-                        termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly><input type='checkbox' id='"+(i)+(j)+"check' onchange='setValueAttr("+(i)+","+(j)+")' name='exam_types["+(j)+"]["+'is_exam_eval'+"][]'><input type='hidden' id='"+(i)+(j)+"check_hidden' value='false' name='exam_types["+(j)+"]["+'is_exam_eval'+"][]'></td>";
+                        termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly><input type='hidden' id='"+(i)+(j)+"check_hidden' value='false' name='exam_types["+(j)+"]["+'is_exam_eval'+"][]'></td>";
                     }
                     termString += "</tr><tr><td>Marks Out of <span class='symbol required'></td>";
                     for (var j = 0; j < b; j++) {

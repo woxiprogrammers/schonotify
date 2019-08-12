@@ -398,14 +398,14 @@
                                         <span class="title"> Grades View </span>
                                     </div>
                                 </a>
-                            </li>--}}
+                            </li>
                             <li>
                                 <a href="/exam/admin-publish-view">
                                     <div class="item-inner">
                                         <span class="title"> Admin Publish </span>
                                     </div>
                                 </a>
-                            </li>
+                            </li>--}}
                         @endif
                     </ul>
                 </li>

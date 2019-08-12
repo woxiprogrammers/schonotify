@@ -644,7 +644,7 @@ class ExamEvaluationController extends Controller
         $str .= "<thead><tr>";
         if ($role_id == 3) {
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Assign: activate to sort column ascending' style='width: 29px;'>Assign  "."<input type='checkbox' id='check_all' onclick='checkAll()'/>"."</th>";
-            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
+            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='PRN No.: activate to sort column ascending' style='width: 29px;'>PRN No.</th>";
         }
         /*$str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";*/
         if (sizeof($result->toArray()) != 0) {
@@ -699,7 +699,7 @@ class ExamEvaluationController extends Controller
         $str .= "<thead><tr>";
         if ($role_id == 3) {
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Uploaded: activate to sort column ascending' style='width: 29px;'>Uploaded  "."<input type='checkbox' checked>"."</th>";
-            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
+            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='PRN No.: activate to sort column ascending' style='width: 29px;'>PRN No.</th>";
         }
         /*$str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Name: activate to sort column ascending' style='width: 29px;'>Name</th><th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";*/
         if (sizeof($result->toArray()) != 0) {
@@ -760,7 +760,7 @@ class ExamEvaluationController extends Controller
         $str .= "<thead><tr>";
         if ($role_id == 3) {
             $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Checked: activate to sort column ascending' style='width: 29px;'>Checked  "."</th>";
-            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='GRN No.: activate to sort column ascending' style='width: 29px;'>GRN No.</th>";
+            $str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='PRN No.: activate to sort column ascending' style='width: 29px;'>PRN No.</th>";
         }
         /*$str .= "<th class='sorting' tabindex='0' aria-controls='sample_2' rowspan='1' colspan='1' aria-label='Roll No: activate to sort column ascending' style='width: 29px;'>Roll No</th>";*/
         if (sizeof($result->toArray()) != 0) {
@@ -786,7 +786,7 @@ class ExamEvaluationController extends Controller
                 }
                 /*$str .= "<td>" . $row->roll_number . "</td>";*/
                 $str .= "<td>";
-                $str .= "<a href='enter-marks/$request->exam/$row->id'><button>Fill Marks</button></a>";
+                $str .= "<a href='enter-marks/$request->exam/$row->id'><button>Enter Marks</button></a>";
                 $str .= "</td>";
             }
         } else {
@@ -803,9 +803,9 @@ class ExamEvaluationController extends Controller
 
     public function questionPaperListing(Request $request,$classId,$examId){
         if($classId == 'null' && $examId == 'null') {
-            $result = ExamQuestionPaper::all();
+            $result = ExamQuestionPaper::orderBy('id','desc')->get();
         } else {
-            $result = ExamQuestionPaper::where('class_id', $classId)->where('exam_id', $examId)->get();
+            $result = ExamQuestionPaper::where('class_id', $classId)->where('exam_id', $examId)->orderBy('id','desc')->get();
         }
         $str = "<h5 class='over-title margin-bottom-15'><h3>Question Paper</h3></h5>";
         $str .= "<table class='table table-striped table-bordered table-hover table-full-width' id='sample_2'>";

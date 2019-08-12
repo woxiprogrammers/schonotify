@@ -1027,7 +1027,7 @@ var FormValidator = function () {
                         // display OK icon
                         $('#batchesDefault').closest('.form-group').removeClass('has-success').addClass('has-error').find('.symbol').removeClass('ok').addClass('required');
                         // add the Bootstrap error class to the control group
-                        $('#batchesDefault-error').html('Batch Name is already in use !');
+                        $('#batchesDefault-error').html('Program Name is already in use !');
 
                     }
 

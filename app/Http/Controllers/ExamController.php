@@ -62,12 +62,7 @@ class ExamController extends Controller
         return view('/exam/examClasses')->with(compact('classes'));
     }
     public function createStructureTable(Request $request){
-        if($request->is_scholastic == 'true'){
-
-            $subjectDetails['is_co_scholastic'] = true;
-        }else{
-            $subjectDetails['is_co_scholastic'] = false;
-        }
+        $subjectDetails['is_co_scholastic'] = false;
         $subjectDetails ['sub_subject_name'] = $request->sub_subject;
         $subjectDetails ['subject_id'] = $request->select_subject;
         $subjectDetails ['created_at'] = Carbon::now();
@@ -98,19 +93,11 @@ class ExamController extends Controller
             foreach($request->exam_types as $examInfo){
                 $examTermInfoData['exam_type'] = $examInfo['head'];
                 $examTermInfoData['out_of_marks'] = $examInfo['out_of_marks'][$key];
-                if($examInfo['is_exam_eval'][$key] == "true") {
-                    $examTermInfoData['is_exam_evaluation'] = true;
-                } else {
-                    $examTermInfoData['is_exam_evaluation'] = false;
-                }
+                $examTermInfoData['is_exam_evaluation'] = true;
                 ExamTermDetails::create($examTermInfoData);
             }
         }
-        if($request->is_scholastic == 'true'){
-            Session::flash('message-success','Co-Scholastic Subject Structure created successfully .');
-        }else{
-            Session::flash('message-success','Scolastic Subject Structure created successfully .');
-        }
+        Session::flash('message-success','Scolastic Subject Structure created successfully .');
         return view('/exam/createExamStructure')->with(compact('subSubject','yearsCreated','batches','examSubjects','CreatedTerm','CreateTeamDetails'));
     }
     public function ExamStructureListing(Request $request){
@@ -149,11 +136,10 @@ class ExamController extends Controller
     public function ExamStructureEdit(Request $request,$id){
         $user=Auth::user();
         $batches = Batch::where('body_id',$user->body_id)->get();
-        $batchs = Batch::where('body_id',$user->body_id)->pluck('id');
         $selectedClass = ExamClassStructureRelation::where('exam_subject_id',$id)->pluck('class_id');
-        $batch = Classes::where('id',$selectedClass)->pluck('body_id');
+        $batch = Classes::where('id',$selectedClass)->pluck('batch_id');
         $examSubjects = ExamSubjectStructure::where('body_id',$user->body_id)->get();
-        $classes = Classes::where('batch_id',$batchs)->select('batch_id','id','class_name')->get()->toArray();
+        $classes = Classes::where('batch_id',$batch)->select('batch_id','id','class_name')->get()->toArray();
         $class = ExamClassStructureRelation::where('exam_subject_id',$id)->lists('class_id')->toArray();
         $divisions = Division::where('class_id',$class)->select('id','division_name')->get()->toArray();
         $div = ExamClassStructureRelation::where('exam_subject_id',$id)->where('class_id',$class)->lists('division_id')->toArray();
@@ -172,12 +158,7 @@ class ExamController extends Controller
         return view('/exam/examEdit')->with(compact('batches','examSubjects','class','classes','examSubSubject','examStartYear','examEndYear','subjects','examTerm','Term','detail','batch','divisions','div'));
     }
     public function editStructure(Request $request,$id){
-        if($request->is_scholastic == 'true'){
-
-            $subjectDetails['is_co_scholastic'] = true;
-        }else{
-            $subjectDetails['is_co_scholastic'] = false;
-        }
+        $subjectDetails['is_co_scholastic'] = false;
         $query = ExamSubSubjectStructure::where('id',$id)->update($subjectDetails);
         ExamClassStructureRelation::where('exam_subject_id',$id)->delete();
         $query= ExamClassStructureRelation::where('exam_subject_id',$id)->where('class_id',$request->class)->where('division_id',$request->division)->first();

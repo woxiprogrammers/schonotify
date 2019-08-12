@@ -22,8 +22,8 @@
     <!-- start: NAVBAR COLLAPSE -->
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-right">
-
-            <li class="dropdown">
+            {{--COMMENT NOTIFICATION FOR MAE--}}
+            {{--<li class="dropdown">
                 <a href class="dropdown-toggle" data-toggle="dropdown">
                     <span class="badge partition-red">0</span> <i class="ti-bell"></i> <span>Notifications</span>
                 </a>
@@ -38,8 +38,8 @@
                         </div>
                     </li>
                 </ul>
-            </li>
-
+            </li>--}}
+            {{--end COMMENT NOTIFICATION FOR MAE--}}
             @if($user->role_id == 1)
             <li class="dropdown">
             </li>
