@@ -66,9 +66,9 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
-                                User Name <span class="symbol required"></span>
+                                Employee ID <span class="symbol required"></span>
                             </label>
-                            <input type="text" placeholder="Enter a User Name" class="form-control" name="userName" id="userName" required/>
+                            <input type="text" placeholder="Enter a Employee ID" class="form-control" name="userName" id="userName" required/>
                             <div id="userNameFeedback"><div class="" id="feedback" ></div></div>
                         </div>
                     </div>

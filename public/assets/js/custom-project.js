@@ -376,11 +376,11 @@ $('#userName').on('keyup',function(){
         if(res == 0 ) {
             $('#feedback').removeClass("alert alert-danger ");
             $('#feedback').addClass("alert alert-success ");
-            $('#feedback').html("Username Can Be Used");
+            $('#feedback').html("Employee Id Can Be Used");
             $('#checkUser').removeAttr('disabled');
         } else {
             $('#feedback').addClass("alert alert-danger ");
-            $('#feedback').html("Username Already Exists");
+            $('#feedback').html("Employee Id Already Exists");
             $('#checkUser').attr('disabled','disabled');
         }
     });

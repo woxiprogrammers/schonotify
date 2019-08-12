@@ -40,7 +40,7 @@ class ClassController extends Controller
         $class['updated_at'] = Carbon::now();
         $query=Classes::insert($class);
         if($query){
-            Session::flash('message-success','Class created successfully.');
+            Session::flash('message-success','Department created successfully.');
             return Redirect::back();
         }else{
             Session::flash('message-error','Something went wrong!');
@@ -112,7 +112,7 @@ class ClassController extends Controller
 
             if($query)
             {
-                Session::flash('message-success','Division has been created.');
+                Session::flash('message-success','Semester has been created.');
                 return Redirect::back();
             }
         }

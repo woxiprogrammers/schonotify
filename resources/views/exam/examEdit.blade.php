@@ -30,7 +30,7 @@
                                         <select class="form-control" id="batchDrpdn" style="-webkit-appearance: menulist;">
                                             <option></option>
                                             @foreach($batches as $bat)
-                                                @if($bat['body_id'] == $batch)
+                                                @if($bat['id'] == $batch)
                                                     <option value="{!! $bat['id'] !!}" selected>{!! $bat['name'] !!}</option>
                                                 @else
                                                     <option value="{!! $bat['id'] !!}">{!! $bat['name'] !!}</option>
@@ -157,7 +157,7 @@
                                     </div>
                                 </div>
                             </section>
-                            <section>
+                            {{--<section>
                                 <div class="row">
                                     <div class="col-md-6" >
                                         <label class="control-label">
@@ -172,7 +172,7 @@
                                         @endforeach
                                     </div>
                                 </div>
-                            </section>
+                            </section>--}}
                             <br>
                             <div class="row">
                                 <div class="col-md-6">
