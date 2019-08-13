@@ -12,6 +12,7 @@ use App\Batch;
 use App\Classes;
 use App\Division;
 use App\StudentExtraInfo;
+use App\TeacherView;
 use App\User;
 use App\UserRoles;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class MaeUserController extends Controller
                     $userData['first_name'] = $request->firstName;
                     $userData['last_name'] = $request->lastName;
                     $userData['username'] = $request->userName;
+                    $userData['email'] = $request->email;
                     $userData['password'] = bcrypt($request->password);
                     $userData['is_active'] = true;
                     $userData['is_displayed'] = true;
@@ -48,12 +50,14 @@ class MaeUserController extends Controller
                     $userData['first_name'] = $request->firstName;
                     $userData['last_name'] = $request->lastName;
                     $userData['username'] = $request->userName;
+                    $userData['email'] = $request->email;
                     $userData['password'] = bcrypt($request->password);
                     $userData['is_active'] = true;
                     $userData['is_displayed'] = true;
                     $userData['role_id'] = $request->role;
                     $userData['body_id'] = $user['body_id'];
                     $query = User::create($userData);
+                    TeacherView::create(['user_id' =>$query['id'],'mobile_view' => true,'web_view' => true]);
                     if($request->has('checkbox8')){
                         Division::where('id',$request->division)->
                         where('class_id',$request->class)->update(['class_teacher_id'=>$query['id']]);

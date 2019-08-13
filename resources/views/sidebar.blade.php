@@ -40,7 +40,7 @@
 
                         <li>
                             <a href="/searchClasses/2">
-                                <span class="title"> Classes  </span>
+                                <span class="title"> Department  </span>
                             </a>
                         </li>
 
