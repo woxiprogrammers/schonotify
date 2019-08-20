@@ -612,9 +612,10 @@ class ExamEvaluationController extends Controller
     }
 
     public function getTeachers($id){
+        $user = Auth::User();
         $data=array();
-        $teacherIds = Division::where('class_id',$id)->whereNotNull('class_teacher_id')->where('class_teacher_id','!=',0)->lists('class_teacher_id');
-        $teachers = User::whereIn('id',$teacherIds)->get()->toArray();
+        //$teacherIds = Division::where('class_id',$id)->whereNotNull('class_teacher_id')->where('class_teacher_id','!=',0)->lists('class_teacher_id');
+        $teachers = User::where('role_id',2)->where('body_id',$user->body_id)->where('is_active',true)->get()->toArray();
         $i=0;
         foreach ($teachers as $row) {
             $data[$i]['teacher_id'] = $row['id'] ;
