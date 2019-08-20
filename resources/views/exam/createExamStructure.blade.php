@@ -267,7 +267,7 @@
                     var termNumber = i + 1;
                     termString += "<tr><td rowspan='2' style='width: 15%'><input type='text' placeholder='Term"+termNumber+"' name='terms_id[]' required>" + "</td>";
                     for (var j = 0; j < b; j++) {
-                        termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly><input type='hidden' id='"+(i)+(j)+"check_hidden' value='false' name='exam_types["+(j)+"]["+'is_exam_eval'+"][]'></td>";
+                       // termString += "<td><input type='number' style='width: 100%;' name='marks[]' readonly><input type='hidden' id='"+(i)+(j)+"check_hidden' value='false' name='exam_types["+(j)+"]["+'is_exam_eval'+"][]'></td>";
                     }
                     termString += "</tr><tr><td>Marks Out of <span class='symbol required'></td>";
                     for (var j = 0; j < b; j++) {

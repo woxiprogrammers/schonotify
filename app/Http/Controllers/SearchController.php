@@ -199,7 +199,7 @@ class SearchController extends Controller
         $str .= "<thead><tr>";
         if ($role_id == 3) {
             $str .= "<th>Shuffle</th>";
-            $str .= "<th>Result</th>";
+            /*$str .= "<th>Result</th>";*/
             $str .= "<th>PRN No.</th>";
         }
         /*$str .= "<th>Name</th></th><th>Roll No</th><th>Category</th><th>Gender</th>";
@@ -218,11 +218,11 @@ class SearchController extends Controller
                 if ($row->user_role == 'student') {
                     if ($row->is_lc_generated == 0) {
                         $str .= "<tr><td>" . "<input type='checkbox' id='multiple_shuffle' name = 'shuffle_student[$row->id]' class='multiple_shuffle' value='" . $row->id . "'>" . "</td>";
-                        if ($row->hide_result == 1) {
+                        /*if ($row->hide_result == 1) {
                             $str .= "<td>" . "<input type='checkbox' class='result_status' onchange='return result(this)' value='" . $row->id . "'checked>" . "</td>";
                         } else {
                             $str .= "<td>" . "<input type='checkbox' class='result_status' onchange='return result(this)' value='" . $row->id . "'>" . "</td>";
-                        }
+                        }*/
                     } else {
                         $str .= "<tr><td></td>";
                         $str .= "<td></td>";
@@ -382,7 +382,7 @@ class SearchController extends Controller
               $str.="<th>GRN No.</th>";
           }
           if($role_id == 2){
-            $str.="<th>Name</th><!--<th>CLass Teacher</th><th>Email</th><th>Gender</th>-->";
+            $str.="<th>Name</th><th>CLass Teacher</th><th>Email</th><!--<th>Gender</th>-->";
           }else{
             $str.="<th>Name</th><th>Username</th><!--<th>Email</th><th>Gender</th>-->";
           }
@@ -416,7 +416,8 @@ class SearchController extends Controller
                   }
                   $str.="<td>".$row['firstname']." ".$row['lastname']."</td>";
                   if($role_id == 2){
-                         /*$str.="<td>".$row['div']." - ".$row['class']."</td>";*/
+                         $str.="<td>".$row['div']." - ".$row['class']."</td>";
+                         $str.="<td>".$row['email']."</td>";
                   }else{
                     $str.="<td>".$row['user_name']."</td>";
                   }

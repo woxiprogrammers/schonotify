@@ -12,34 +12,34 @@
                         @include('alerts.errors')
                         <div id="message-error-div"></div>
 						<section id="page-title" class="padding-top-15 padding-bottom-15">
-							<div class="row">
-								<div class="col-sm-7">
-									<h1 class="mainTitle">Search</h1>
-									<span class="mainDescription">Users</span>
-								</div>
-								<div class="col-sm-5">
-									<!-- start: MINI STATS WITH SPARKLINE -->
-									<ul class="mini-stats pull-right">
-                    <li>
-											<div class="values">
-                          <a href="/createUsers/1" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
-                                Create New User <i class="fa fa-angle-right"></i>
-                          </a>
-											</div>
-										</li>
-         					</ul>
-									<!-- end: MINI STATS WITH SPARKLINE -->
-								</div>
-							</div>
-						</section>
-						<!-- end: DASHBOARD TITLE -->
-                       @include('admin.userRoleDropdown')
-                        <div class=" col-md-2" id="Student_without_division" style="display: none">
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <h1 class="mainTitle">Search</h1>
+                                    <span class="mainDescription">Users</span>
+                                </div>
+                                <div class="col-sm-5">
+                                <!-- start: MINI STATS WITH SPARKLINE -->
+                                    <ul class="mini-stats pull-right">
+                                        <li>
+                                            <div class="values">
+                                                <a href="/createUsers/1" type="button" class="btn btn-wide btn-lg btn-o btn-primary btn-squared">
+                                                    Create New User <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                <!-- end: MINI STATS WITH SPARKLINE -->
+                                </div>
+                            </div>
+                        </section>
+                    <!-- end: DASHBOARD TITLE -->
+                        @include('admin.userRoleDropdown')
+                        {{--<div class=" col-md-2" id="Student_without_division" style="display: none">
                             <label for="checkbox">Show students without Semester.</label>
                             <input type="checkbox" class="checkbox" id="checkbox">
                             <br>
                             <br><br>
-                        </div>
+                        </div>--}}
                         <div class="col-md-3" id="EnableDisableTeacher">
                         </div>
                         <div class="col-md-2" id="UserSearch">
@@ -317,6 +317,61 @@
             })
             $('#final_shuffle').on('click',function(){
                 $('#shuffle_student').submit();
+            })
+        </script>
+        <script>
+            $(document).ready(function(){
+                var id= 1;
+                $('div#loadmoreajaxloader').show();
+                var EnableDisable = 'enable';
+                var route='/selectUser'+'/'+id;
+                $.ajax({
+                    method: "get",
+                    url: route,
+                    data: { EnableDisable,id}
+                })
+                    .done(function(res){
+                        $('#tableContent').show();
+                        $("#tableContent").html(res);
+                        $('div#loadmoreajaxloader').hide();
+                        var switcheryHandler = function() {
+
+                            var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                            elements.forEach(function(html) {
+                                var switchery = new Switchery(html);
+                            });
+                        };
+                        switcheryHandler();
+                        TableData.init();
+                    })
+                $('#role-select').change(function(){
+                    var id= $(this).val();
+                    $('div#loadmoreajaxloader').show();
+                    var EnableDisable = 'enable';
+                    var route='/selectUser'+'/'+id;
+                    $.ajax({
+                        method: "get",
+                        url: route,
+                        data: { EnableDisable,id}
+                    })
+                        .done(function(res){
+                            $('#tableContent').show();
+                            $("#tableContent").html(res);
+                            $('div#loadmoreajaxloader').hide();
+                            var switcheryHandler = function() {
+
+                                var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+                                elements.forEach(function(html) {
+                                    var switchery = new Switchery(html);
+                                });
+                            };
+                            switcheryHandler();
+                            TableData.init();
+                        })
+                })
+
             })
         </script>
 
