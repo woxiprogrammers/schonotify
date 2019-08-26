@@ -187,6 +187,7 @@
 
 								</div>
 							</div>
+							<div class="row">
 							@if($userId->body_id == 1)
 							<div class="row">
 								<div class="col-md-12 bg-white" >
@@ -220,6 +221,7 @@
 										</table>
 									</div>
 								</div>
+							</div>
 							</div>
 							@endif
 						</div>

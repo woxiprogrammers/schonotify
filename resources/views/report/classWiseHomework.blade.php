@@ -22,13 +22,13 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Students</h1>
-                                <span class="mainDescription">All Students Report</span>
+                                <h1 class="mainTitle">Homework</h1>
+                                <span class="mainDescription">Class Wise Homework</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/reports/all-student-report" role="form" id="">
+                        <form method="post" action="/reports/class-wise-homework-report" role="form" id="">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
                                 <div class="col-md-3" id="UserSearch" style="">
@@ -47,6 +47,24 @@
                                 <div class="col-md-3" id="ClassSearch" style="">
                                 </div>
                                 <div class="col-md-3" id="DivSearch">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            From Date
+                                        </label>
+                                        <input type="date" class="form-control" placeholder="" name="from_date" id="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            To Date
+                                        </label>
+                                        <input type="date" class="form-control" placeholder="" name="to_date" id="">
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="control-label">&nbsp;

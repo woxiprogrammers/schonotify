@@ -22,37 +22,20 @@
                     <section id="page-title" class="padding-top-15 padding-bottom-15">
                         <div class="row">
                             <div class="col-sm-7">
-                                <h1 class="mainTitle">Students</h1>
-                                <span class="mainDescription">All Students Report</span>
+                                <h1 class="mainTitle">Teachers</h1>
+                                <span class="mainDescription">All Teachers</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/reports/all-student-report" role="form" id="">
+                        <form method="post" action="/reports/all-teacher-report" role="form" id="">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
-                                <div class="col-md-3" id="UserSearch" style="">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Batch <span class="symbol required"></span>
-                                        </label>
-                                        <select class="form-control" id="Batchdropdown" name="Batchdropdown" style="-webkit-appearance: menulist;" required>
-                                            <option value="">Select Batch</option>
-                                            @foreach($batches as $batch)
-                                                <option value="{{$batch['id']}}">{{$batch['name']}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3" id="ClassSearch" style="">
-                                </div>
-                                <div class="col-md-3" id="DivSearch">
-                                </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <label class="control-label">&nbsp;
                                     </label>
                                     <div class="form-group">
-                                        <button class="btn btn-primary btn-wide" id="generate-student-report-button" type="submit">
+                                        <button class="btn btn-primary btn-wide" type="submit">
                                             Generate <i class="fa fa-arrow-circle-right"></i>
                                         </button>
                                     </div>
@@ -91,24 +74,6 @@
             Main.init();
             FormValidator.init();
         });
-    </script>
-    <script>
-        $(document).ready(function(){
-            $('#Batchdropdown').change(function(){
-                $('div#loadmoreajaxloader').show();
-                var batch=this.value;
-                var route='/get-classes-search';
-                $.ajax({
-                    method: "get",
-                    url: route,
-                    data: { batch }
-                })
-                    .done(function(res){
-                        $('#ClassSearch').html(res);
-                        $('div#loadmoreajaxloader').hide();
-                    })
-            })
-        })
     </script>
 @stop
 
