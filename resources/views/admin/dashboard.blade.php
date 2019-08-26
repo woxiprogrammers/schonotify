@@ -187,7 +187,9 @@
 
 								</div>
 							</div>
-							{{--<div class="row">
+							<div class="row">
+							@if($userId->body_id == 1)
+							<div class="row">
 								<div class="col-md-12 bg-white" >
 									<div class="row">
 										<div class="col-md-6">
@@ -197,7 +199,7 @@
 										</div>
 									</div>
 									<div class="portlet-body">
-										<table class="table table-striped table-bordered table-hover table-checkable" id="sales_agent_list">
+										<table class="table table-striped table-bordered">
 											<thead>
 											<tr role="row" class="heading">
 												<th width="30%"> Section </th>
@@ -219,7 +221,9 @@
 										</table>
 									</div>
 								</div>
-							</div>--}}
+							</div>
+							</div>
+							@endif
 						</div>
 						@endif
 						<div class="container-fluid container-fullw bg-white">
