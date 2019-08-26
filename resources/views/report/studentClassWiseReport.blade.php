@@ -23,12 +23,12 @@
                         <div class="row">
                             <div class="col-sm-7">
                                 <h1 class="mainTitle">Students</h1>
-                                <span class="mainDescription">All Students Report</span>
+                                <span class="mainDescription">Class Wise Student Report</span>
                             </div>
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/reports/all-student-report" role="form" id="">
+                        <form method="post" action="/reports/student-class-wise-report" role="form" id="">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
                                 <div class="col-md-3" id="UserSearch" style="">
@@ -45,8 +45,6 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3" id="ClassSearch" style="">
-                                </div>
-                                <div class="col-md-3" id="DivSearch">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="control-label">&nbsp;

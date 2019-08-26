@@ -145,7 +145,6 @@ class FrontController extends Controller
                 }
             }
             return view('admin.dashboard', compact('unreadMsgCount','homeworkData','achievementsData','announcementData','eventData','userId','feeData'));
-
         }else{
 
             return view('login_signin');

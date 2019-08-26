@@ -494,6 +494,41 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="/reports/teacher-report-view">
+                        <div class="item-inner">
+                            <span class="title"> All Teacher Report </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reports/teacher-wise-homework-view">
+                        <div class="item-inner">
+                            <span class="title"> Teacher Wise Homework </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reports/class-wise-homework-view">
+                        <div class="item-inner">
+                            <span class="title"> Class Wise Homework </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reports/subject-wise-class-wise-homework-view">
+                        <div class="item-inner">
+                            <span class="title"> Subject Wise Class Wise Homework </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reports/student-class-wise-view">
+                        <div class="item-inner">
+                            <span class="title"> Student Class Wise Report</span>
+                        </div>
+                    </a>
+                </li>
             </ul>
         </li>
         <li>

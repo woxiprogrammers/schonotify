@@ -28,7 +28,7 @@
                         </div>
                     </section>
                     <div class="container-fluid container-fullw">
-                        <form method="post" action="/reports/class-wise-per-day-homework" role="form" id="dailyAttendanceReport">
+                        <form method="post" action="/reports/class-wise-per-day-homework" role="form" id="">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
                                 <div class="col-md-6">

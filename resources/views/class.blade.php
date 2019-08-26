@@ -27,6 +27,16 @@
                     $('#DivSearch').html(res);
                     $('div#loadmoreajaxloader').hide();
                 })
+            var route1='/reports/get-class-subjects';
+            $.ajax({
+                method: "get",
+                url: route1,
+                data: { classs }
+            })
+                .done(function(res){
+                    $('#ClassSubjectSearch').html(res);
+                    $('div#loadmoreajaxloader').hide();
+                })
         })
 
     })

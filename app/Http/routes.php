@@ -673,9 +673,19 @@ Route::group(['prefix' => 'reports'],function (){
     Route::post('monthly-attendance-report',array('uses' => 'Report\ReportController@generateMonthlyReport'));
     Route::get('student-report-view',array('uses' => 'Report\ReportController@allStudentReportView'));
     Route::post('all-student-report',array('uses' => 'Report\ReportController@allStudentReport'));
-    Route::get('class-wise-per-day-homework',array('uses' => 'Report\ReportController@classWiseHomeworkView'));
+    Route::get('class-wise-per-day-homework',array('uses' => 'Report\ReportController@classWisePerDayHomeworkView'));
     Route::post('class-wise-per-day-homework',array('uses' => 'Report\ReportController@classWiseHomework'));
-
+    Route::get('teacher-report-view',array('uses' => 'Report\ReportController@allTeachersReportsView'));
+    Route::post('all-teacher-report',array('uses' => 'Report\ReportController@allTeachersReports'));
+    Route::get('teacher-wise-homework-view',array('uses' => 'Report\ReportController@teacherWiseHomeworkView'));
+    Route::post('teacher-wise-homework-report',array('uses' => 'Report\ReportController@teacherWiseHomeworkReport'));
+    Route::get('class-wise-homework-view',array('uses' => 'Report\ReportController@classWiseHomeworkView'));
+    Route::post('class-wise-homework-report',array('uses' => 'Report\ReportController@classWiseHomeworkReport'));
+    Route::get('get-class-subjects',array('uses' => 'Report\ReportController@getClassSubjects'));
+    Route::get('subject-wise-class-wise-homework-view',array('uses' => 'Report\ReportController@subjectClassWiseHomeworkView'));
+    Route::post('subject-wise-class-wise-homework-report',array('uses' => 'Report\ReportController@subjectClassWiseHomeworkReport'));
+    Route::get('student-class-wise-view',array('uses' => 'Report\ReportController@studentClassWiseReportView'));
+    Route::post('student-class-wise-report',array('uses' => 'Report\ReportController@studentClassWiseReport'));
 });
 Route::group(['prefix' => 'enableDisableFunctionality'],function(){
     Route::get('enable/{id}',array('uses' =>'UsersController@enableStudents'));
