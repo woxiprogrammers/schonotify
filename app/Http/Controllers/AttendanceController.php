@@ -17,6 +17,7 @@
     use Illuminate\Http\Request;
     use App\Http\Controllers\Controller;
     use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Redirect;
     use Illuminate\Support\Facades\Session;
     class AttendanceController extends Controller
@@ -125,10 +126,14 @@
                                     $count++;
                                 }
                                 $count=0;
+                                $dropDownData['is_div_attendance_marked'] = 0;
                                if($studentData->toArray() != null) {
                                 foreach ($studentData as $student) {
                                     $leaveStatus=Leave::where('student_id',$student['id'])->where('from_date',$date)->select('student_id','status')->first();
                                     $attendanceStatus = Attendance::where('student_id',$student['id'])->where('date',$date)->select('student_id','status')->first();
+                                    if($attendanceStatus['status'] == 1){
+                                        $dropDownData['is_div_attendance_marked'] = 1;
+                                    }
                                     if ($leaveStatus != null) {
                                         $dropDownData['student_list'][$count]['student_id'] = $student['id'];
                                         $dropDownData['student_list'][$count]['student_leave_status'] = $leaveStatus['status'];
