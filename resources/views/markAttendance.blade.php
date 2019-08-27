@@ -384,17 +384,24 @@
                                  {
                             str +='<tr>'+
                                     '<td>';
+                                     if(data['is_div_attendance_marked'] == 0) {
+                                         str += '<input type="checkbox"   name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
+                                             '<label for="'+res[i]['student_id']+'">'+
+
+                                             '</label>';
+                                     }else {
                                          if(res[i]['student_attendance_status'] == 1  ){
-                                             str += '<input type="checkbox"   name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'" />'+
-                                                       '<label for="'+res[i]['student_id']+'">'+
+                                             str += '<input type="checkbox"   name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'" checked/>'+
+                                                 '<label for="'+res[i]['student_id']+'">'+
 
-                                                       '</label>';
-                                          }else{
-                                             str += '<input type="checkbox"   name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"  checked/>'+
-                                                    '<label for="'+res[i]['student_id']+'">'+
+                                                 '</label>';
+                                         }else{
+                                             str += '<input type="checkbox"   name="student[]" id="'+res[i]['student_id']+'" value="'+res[i]['student_id']+'"/>'+
+                                                 '<label for="'+res[i]['student_id']+'">'+
 
-                                                    '</label>';
-                                          }
+                                                 '</label>';
+                                         }
+                                     }
                              str += '</td>'+
                                     '<td>'+res[i]['roll_number']+'</td>'+
                                     '<td>'+res[i]['student_name']+" "+" ";
