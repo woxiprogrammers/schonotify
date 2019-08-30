@@ -255,7 +255,7 @@ class AttendanceController extends Controller
             if (!Empty($role)) {
                 $studentData = $data['student_id'];
                 if(!Empty($studentData)){
-                  $markedAttendance = AttendanceStatus::where('date','=',$data['date'])->get()->toArray();
+                  $markedAttendance = AttendanceStatus::where('date','=',$data['date'])->where('division_id',$role['id'])->get()->toArray();
                         if (Empty($markedAttendance)){
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
@@ -283,7 +283,7 @@ class AttendanceController extends Controller
                                 $push_users = PushToken::whereIn('user_id',$user_push)->lists('push_token');
                                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                         }else{
-                            $deleteOldAttendance = Attendance::where('date',$data['date'])->delete();
+                            $deleteOldAttendance = Attendance::where('date',$data['date'])->where('division_id',$role['id'])->delete();
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];
