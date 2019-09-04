@@ -255,14 +255,22 @@ class AttendanceController extends Controller
             if (!Empty($role)) {
                 $studentData = $data['student_id'];
                 if(!Empty($studentData)){
-                  $markedAttendance = AttendanceStatus::where('date','=',$data['date'])->where('division_id',$role['id'])->get()->toArray();
+                    $markedAttendance = AttendanceStatus::where('date','=',$data['date'])->where('division_id',$role['id'])->get()->toArray();
+                    $studentRole = UserRoles::where('slug',['student'])->pluck('id');
+                    $studentData = User::where('role_id','=',$studentRole)
+                        ->where('division_id','=', $role['id'])
+                        ->where('is_active','=',1)
+                        ->whereNotIn('id',$studentData)
+                        ->where('is_lc_generated',0)
+                        ->select('id')
+                        ->get()->toArray();
                         if (Empty($markedAttendance)){
                             foreach($studentData as $value) {
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];
                                 $attendanceData['division_id'] = $role['id'];
-                                $attendanceData['student_id'] = $value;
-                                $parent = User::where('id',$value)->lists('parent_id');
+                                $attendanceData['student_id'] = $value['id'];
+                                $parent = User::where('id',$value['id'])->lists('parent_id');
                                 $attendanceData['status'] = 1;
                                 $attendanceData['created_at'] = Carbon::now();
                                 $attendanceData['updated_at'] = Carbon::now();
@@ -288,8 +296,8 @@ class AttendanceController extends Controller
                                 $attendanceData['teacher_id'] = $data['teacher']['id'];
                                 $attendanceData['date'] = $data['date'];
                                 $attendanceData['division_id'] = $role['id'];
-                                $attendanceData['student_id'] = $value;
-                                $parent = User::where('id',$value)->lists('parent_id');
+                                $attendanceData['student_id'] = $value['id'];
+                                $parent = User::where('id',$value['id'])->lists('parent_id');
                                 $attendanceData['status'] = 1;
                                 $attendanceData['created_at'] = Carbon::now();
                                 $attendanceData['updated_at'] = Carbon::now();
