@@ -195,20 +195,26 @@
             }
             $attendanceCheck = Attendance::where('division_id',$request['division-select'])->where('date',$date)->get()->toArray();
             if (!Empty($attendanceCheck)) {
-                 Attendance::where('division_id',$request['division-select'])->where('date',$date)->delete();
+                $divStudents = User::where('is_active',true)->where('is_lc_generated',false)->whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->lists('id');
+                Attendance::whereIn('student_id',$divStudents)->where('division_id',$request['division-select'])->where('date',$date)->delete();
             }
                         $i=0;
-                       foreach ($userData as $row) {
-                        $saveData['teacher_id'] = $user->id;
-                        $saveData['date'] =date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
-                        $saveData['student_id'] = $row['id'];
-                        $saveData['status'] = 1;
-                        $saveData['division_id'] = $row['division_id'];
-                        $saveData['created_at'] = Carbon::now();
-                        $saveData['updated_at'] = Carbon::now();
-                         $att_id=Attendance::insert($saveData);
-                        $i++;
-                    }
+            foreach ($userData as $row) {
+                $oldAttendance = Attendance::where('division_id',$request['division-select'])->where('date',$date)->where('student_id',$row['id'])->first();
+                if($oldAttendance == null){
+                    $saveData['teacher_id'] = $user->id;
+                    $saveData['date'] =date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
+                    $saveData['student_id'] = $row['id'];
+                    $saveData['status'] = 1;
+                    $saveData['division_id'] = $row['division_id'];
+                    $saveData['created_at'] = Carbon::now();
+                    $saveData['updated_at'] = Carbon::now();
+                    $att_id=Attendance::insert($saveData);
+                }else{
+                    Attendance::where('id','!=',$oldAttendance['id'])->where('division_id',$request['division-select'])->where('date',$date)->where('student_id',$row['id'])->delete();
+                }
+                $i++;
+            }
             $attendanceStatus['date'] = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->datePiker)));
             $attendance = AttendanceStatus::where('date','=',$attendanceStatus['date'])->where('division_id','=',$request['division-select'])->get();
             if(count($attendance) == 0){
