@@ -257,16 +257,23 @@ class AttendanceController extends Controller
                 if(!Empty($studentData)){
                     $markedAttendance = AttendanceStatus::where('date','=',$data['date'])->where('division_id',$role['id'])->get()->toArray();
                         if (Empty($markedAttendance)){
+                            $divStudents = User::where('is_active',true)->where('is_lc_generated',false)->whereNotIn('id',$studentData)->where('division_id',$role['id'])->lists('id');
+                            $deleteOldAttendance = Attendance::whereIn('student_id',$divStudents)->where('date',$data['date'])->where('division_id',$role['id'])->delete();
                             foreach($studentData as $value) {
-                                $attendanceData['teacher_id'] = $data['teacher']['id'];
-                                $attendanceData['date'] = $data['date'];
-                                $attendanceData['division_id'] = $role['id'];
-                                $attendanceData['student_id'] = $value;
-                                $parent = User::where('id',$value)->lists('parent_id');
-                                $attendanceData['status'] = 1;
-                                $attendanceData['created_at'] = Carbon::now();
-                                $attendanceData['updated_at'] = Carbon::now();
-                                Attendance::insert($attendanceData);
+                                $oldAttendance = Attendance::where('date',$data['date'])->where('student_id',$value)->where('division_id',$role['id'])->first();
+                                if($oldAttendance == null) {
+                                    $attendanceData['teacher_id'] = $data['teacher']['id'];
+                                    $attendanceData['date'] = $data['date'];
+                                    $attendanceData['division_id'] = $role['id'];
+                                    $attendanceData['student_id'] = $value;
+                                    $parent = User::where('id', $value)->lists('parent_id');
+                                    $attendanceData['status'] = 1;
+                                    $attendanceData['created_at'] = Carbon::now();
+                                    $attendanceData['updated_at'] = Carbon::now();
+                                    Attendance::insert($attendanceData);
+                                }else{
+                                    Attendance::where('id','!=',$oldAttendance['id'])->where('date',$data['date'])->where('student_id',$value)->where('division_id',$role['id'])->delete();
+                                }
                                 $status=200;
                                 $messag="Attendance marked successfully ";
                             }
@@ -283,17 +290,23 @@ class AttendanceController extends Controller
                                 $push_users = PushToken::whereIn('user_id',$user_push)->lists('push_token');
                                 $this -> CreatePushNotification($title,$message,$allUser,$push_users);
                         }else{
-                            $deleteOldAttendance = Attendance::where('date',$data['date'])->where('division_id',$role['id'])->delete();
+                            $divStudents = User::where('is_active',true)->where('is_lc_generated',false)->whereNotIn('id',$studentData)->where('division_id',$role['id'])->lists('id');
+                            $deleteOldAttendance = Attendance::whereIn('student_id',$divStudents)->where('date',$data['date'])->where('division_id',$role['id'])->delete();
                             foreach($studentData as $value) {
-                                $attendanceData['teacher_id'] = $data['teacher']['id'];
-                                $attendanceData['date'] = $data['date'];
-                                $attendanceData['division_id'] = $role['id'];
-                                $attendanceData['student_id'] = $value;
-                                $parent = User::where('id',$value)->lists('parent_id');
-                                $attendanceData['status'] = 1;
-                                $attendanceData['created_at'] = Carbon::now();
-                                $attendanceData['updated_at'] = Carbon::now();
-                                Attendance::insert($attendanceData);
+                                $oldAttendance = Attendance::where('date',$data['date'])->where('student_id',$value)->where('division_id',$role['id'])->first();
+                                if($oldAttendance == null){
+                                    $attendanceData['teacher_id'] = $data['teacher']['id'];
+                                    $attendanceData['date'] = $data['date'];
+                                    $attendanceData['division_id'] = $role['id'];
+                                    $attendanceData['student_id'] = $value;
+                                    $parent = User::where('id',$value)->lists('parent_id');
+                                    $attendanceData['status'] = 1;
+                                    $attendanceData['created_at'] = Carbon::now();
+                                    $attendanceData['updated_at'] = Carbon::now();
+                                    Attendance::insert($attendanceData);
+                                }else{
+                                    Attendance::where('id','!=',$oldAttendance['id'])->where('date',$data['date'])->where('student_id',$value)->where('division_id',$role['id'])->delete();
+                                }
                                 $status=200;
                                 $messag="Attendance edited successfully !";
                             }
