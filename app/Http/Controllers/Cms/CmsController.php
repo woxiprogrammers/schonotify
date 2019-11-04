@@ -419,7 +419,7 @@ class CmsController extends Controller
     public function createPages(){
         try{
             $user = Auth::User();
-            $tabNames = BodyTabNames::whereIn('slug',['custom-1','custom-2','custom-3'])
+            $tabNames = BodyTabNames::whereIn('slug',['custom-1','custom-2','custom-3','custom-4','custom-5','custom-6','custom-7'])
                                     ->where('body_id',$user['body_id'])->where('is_active',1)
                                 ->get()->toArray();
             return view('cms.pagesCreate')->with(compact('tabNames'));

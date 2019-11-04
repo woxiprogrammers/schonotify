@@ -272,7 +272,7 @@ class AttendanceController extends Controller
                                     $attendanceData['updated_at'] = Carbon::now();
                                     Attendance::insert($attendanceData);
                                 }else{
-                                    Attendance::where('id','!=',$oldAttendance['id'])->where('date',$data['date'])->where('student_id',$value)->where('division_id',$role['id'])->delete();
+                                    Attendance::where('id','!=',$oldAttendance['id'])->where('date',$data['date'])->where('student_id',$value)->delete();
                                 }
                                 $status=200;
                                 $messag="Attendance marked successfully ";
@@ -305,7 +305,7 @@ class AttendanceController extends Controller
                                     $attendanceData['updated_at'] = Carbon::now();
                                     Attendance::insert($attendanceData);
                                 }else{
-                                    Attendance::where('id','!=',$oldAttendance['id'])->where('date',$data['date'])->where('student_id',$value)->where('division_id',$role['id'])->delete();
+                                    Attendance::where('id','!=',$oldAttendance['id'])->where('date',$data['date'])->where('student_id',$value)->delete();
                                 }
                                 $status=200;
                                 $messag="Attendance edited successfully !";
