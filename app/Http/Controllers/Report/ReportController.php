@@ -55,7 +55,10 @@ class ReportController extends Controller
             $final['grand_total'] = $final['grand_total_girls'] = $final['grand_total_boys'] = 0;
             $iterator = 0;
             foreach ($attendanceData['class_division'] as $value){
-                $totalPresent = Attendance::where('date',$request->date)->where('division_id',$value['id'])->lists('student_id');
+                $totalPresent = Attendance::join('users','users.id','=','attendance.student_id')
+                            ->where('attendance.date',$request->date)
+                            ->where('users.division_id',$value['id'])
+                            ->lists('attendance.student_id');
                 $data[$iterator]['sr_number'] = $iterator + 1;
                 $data[$iterator]['class'] = $value['class_name'];
                 $data[$iterator]['division'] = $value['division_name'];
