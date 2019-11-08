@@ -1600,5 +1600,19 @@ class ReportController extends Controller
             Log::critical(json_encode($data));
         }
     }
+
+    public function studentResultReportView(Request $request){
+        try{
+            $user = Auth::user();
+            $batches = Batch::where('body_id',$user->body_id)->select('id','name')->get()->toArray();
+            return view('report.studentResultReport')->with(compact('batches'));
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Daily Attendance Report',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
 }
 
