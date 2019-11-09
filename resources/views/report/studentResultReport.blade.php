@@ -31,7 +31,7 @@
                         <form method="post" action="/reports/student-result-report" role="form" id="">
                             <input type="hidden" name="body_id" value="{!! Auth::User()->body_id !!}">
                             <div class="row">
-                                <div class="col-md-3" id="UserSearch" style="">
+                                <div class="col-md-4" id="UserSearch" style="">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Batch <span class="symbol required"></span>
@@ -44,9 +44,49 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3" id="ClassSearch" style="">
+                                <div class="col-md-4" id="ClassSearch" style="">
                                 </div>
-                                <div class="col-md-3" id="DivSearch">
+                                <div class="col-md-4" id="DivSearch">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Start Year <span class="symbol required" aria-required="true"></span>
+                                        </label>
+                                        <select class="form-control" id="startYear" name="startYear" style="-webkit-appearance: menulist;" required="required" aria-required="true">
+                                            <option value="" selected="">Start Year</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            End Year <span class="symbol required" aria-required="true"></span>
+                                        </label>
+                                        <select class="form-control" id="endYear" name="endYear" style="-webkit-appearance: menulist;" required="required" aria-required="true">
+                                            <option value="" selected="">End Year</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="control-label">&nbsp;

@@ -687,7 +687,7 @@ Route::group(['prefix' => 'reports'],function (){
     Route::get('student-class-wise-view',array('uses' => 'Report\ReportController@studentClassWiseReportView'));
     Route::post('student-class-wise-report',array('uses' => 'Report\ReportController@studentClassWiseReport'));
     Route::get('student-result-report-view',array('uses' => 'Report\ReportController@studentResultReportView'));
-    Route::post('student-result-report',array('uses' => 'Report\ReportController@studentClassWiseReport'));
+    Route::post('student-result-report',array('uses' => 'Report\ReportController@studentResultReport'));
 });
 Route::group(['prefix' => 'enableDisableFunctionality'],function(){
     Route::get('enable/{id}',array('uses' =>'UsersController@enableStudents'));
