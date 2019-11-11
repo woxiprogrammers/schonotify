@@ -35,7 +35,7 @@
                             $presentDate = $date->subDays($count);
                             $studentSlugID= \App\UserRoles::where('slug','student')->pluck('id');
                             $totalStudents = \App\User::where('is_active',1)->where('role_id',$studentSlugID)->where('is_lc_generated',0)->where('body_id',$user->body_id)->whereNotNull('division_id')->lists('id');
-                            $presentStudent = \App\Attendance::whereIn('student_id',$totalStudents)->where('date', '=',date('y/m/d',strtotime($presentDate)))->distinct('student_id')->count();
+                            $presentStudent = \App\Attendance::whereIn('student_id',$totalStudents)->where('date', '=',date('y/m/d',strtotime($presentDate)))->distinct('student_id')->count('student_id');
                             $graphDataPresent[$count] = array(
 							    "label" => date('d M Y, D',strtotime($presentDate)),
 								"y" => $presentStudent,

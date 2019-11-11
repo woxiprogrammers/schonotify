@@ -1627,11 +1627,20 @@ class ReportController extends Controller
             $data[] = array();
             $structureCount = array();
             $examStructuresArray = array();
-            $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
-                ->where('classes.id',$request->Classdropdown)
-                ->where('classes.body_id',$request->body_id)
-                ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
-                ->get()->toArray();
+            if($request->Divisiondropdown != '' || $request->Divisiondropdown != null){
+                $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                    ->where('classes.id',$request->Classdropdown)
+                    ->where('divisions.id',$request->Divisiondropdown)
+                    ->where('classes.body_id',$request->body_id)
+                    ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
+                    ->get()->toArray();
+            }else{
+                $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                    ->where('classes.id',$request->Classdropdown)
+                    ->where('classes.body_id',$request->body_id)
+                    ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
+                    ->get()->toArray();
+            }
             $examStructures = ExamYear::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_year.exam_structure_id')
                                 ->join('exam_sub_subject_structure','exam_sub_subject_structure.id','=','exam_year.exam_structure_id')
                                 ->join('student_exam_marks','student_exam_marks.exam_structure_id','=','exam_sub_subject_structure.id')
@@ -1666,6 +1675,7 @@ class ReportController extends Controller
                     ->where('is_active',true)
                     ->where('is_lc_generated',false)
                     ->select('id','roll_number',DB::raw("CONCAT(first_name,' ',last_name) as student_name"))
+                    ->orderBy('roll_number','ASC')
                     ->get()->toArray();
                 $iterator++;
             }
@@ -1725,7 +1735,7 @@ class ReportController extends Controller
                     foreach ($examTermsArray as $exTerm){
                         $rows[1][] = $exTerm['term_name'];
                     }
-                    $char = chr(64 + count($rows[0]));
+                    $char = chr(65 + count($rows[0]));
                     $lastColumn = $char.$iteratorK;
                     // Merging Cells
                     $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A$iteratorK:$lastColumn");
