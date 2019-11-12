@@ -196,7 +196,7 @@
             $attendanceCheck = Attendance::where('division_id',$request['division-select'])->where('date',$date)->get()->toArray();
             if (!Empty($attendanceCheck)) {
                 $divStudents = User::where('is_active',true)->where('is_lc_generated',false)->whereNotIn('id',$userIds)->where('division_id',$request['division-select'])->lists('id');
-                Attendance::whereIn('student_id',$divStudents)->where('division_id',$request['division-select'])->where('date',$date)->delete();
+                Attendance::whereIn('student_id',$divStudents)->where('date',$date)->delete();
             }
                         $i=0;
             foreach ($userData as $row) {

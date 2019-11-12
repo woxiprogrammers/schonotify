@@ -529,6 +529,13 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="/reports/student-result-report-view">
+                        <div class="item-inner">
+                            <span class="title"> Student Result Report</span>
+                        </div>
+                    </a>
+                </li>
             </ul>
         </li>
         <li>
