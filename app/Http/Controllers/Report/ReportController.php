@@ -5,8 +5,11 @@ use App\Attendance;
 use App\Batch;
 use App\Classes;
 use App\Division;
+use App\ExamTerms;
+use App\ExamYear;
 use App\Homework;
 use App\Http\Controllers\SubjectController;
+use App\StudentExamMarks;
 use App\Subject;
 use App\User;
 use Illuminate\Http\Request;
@@ -1600,5 +1603,241 @@ class ReportController extends Controller
             Log::critical(json_encode($data));
         }
     }
+
+    public function studentResultReportView(Request $request){
+        try{
+            $user = Auth::user();
+            $batches = Batch::where('body_id',$user->body_id)->select('id','name')->get()->toArray();
+            return view('report.studentResultReport')->with(compact('batches'));
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Daily Attendance Report',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+
+    public function studentResultReport(Request $request){
+        try{
+            $date = date("F j, Y");
+            $reportTitle = "Students Class Wise";
+            $name = "students class wise $date.xlsx";
+            $classDivData = array();
+            $data[] = array();
+            $structureCount = array();
+            $examStructuresArray = array();
+            if($request->Divisiondropdown != '' || $request->Divisiondropdown != null){
+                $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                    ->where('classes.id',$request->Classdropdown)
+                    ->where('divisions.id',$request->Divisiondropdown)
+                    ->where('classes.body_id',$request->body_id)
+                    ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
+                    ->get()->toArray();
+            }else{
+                $classDivData['class_division'] = Classes::join('divisions','divisions.class_id','=','classes.id')
+                    ->where('classes.id',$request->Classdropdown)
+                    ->where('classes.body_id',$request->body_id)
+                    ->select('classes.class_name','divisions.division_name','divisions.id','classes.id as class_id')
+                    ->get()->toArray();
+            }
+            $examStructures = ExamYear::join('exam_class_structure_relation','exam_class_structure_relation.exam_subject_id','=','exam_year.exam_structure_id')
+                                ->join('exam_sub_subject_structure','exam_sub_subject_structure.id','=','exam_year.exam_structure_id')
+                                ->join('student_exam_marks','student_exam_marks.exam_structure_id','=','exam_sub_subject_structure.id')
+                                ->where('exam_year.start_year',$request->startYear)
+                                ->where('exam_year.end_year',$request->endYear)
+                                ->where('exam_class_structure_relation.class_id',$request->Classdropdown)
+                                ->distinct('exam_sub_subject_structure.id')
+                                ->select('exam_year.exam_structure_id','exam_sub_subject_structure.sub_subject_name')
+                                ->orderBy('exam_sub_subject_structure.id','ASC')
+                                ->get()->toArray();
+            foreach ($examStructures as $examStructure){
+                   $examTerms[$examStructure['exam_structure_id']] = ExamTerms::join('student_exam_marks','student_exam_marks.term_id','=','exam_terms.id')
+                                        ->where('exam_terms.exam_structure_id',$examStructure['exam_structure_id'])
+                                        ->distinct('exam_terms.id')
+                                        ->select('exam_terms.*')
+                                        ->get()->toArray();
+                $examStructuresArray[] = $examStructure['exam_structure_id'];
+            }
+            $examTermsArray = ExamTerms::join('student_exam_marks','student_exam_marks.term_id','=','exam_terms.id')
+                ->join('exam_sub_subject_structure','exam_sub_subject_structure.id','=','exam_terms.exam_structure_id')
+                ->whereIn('exam_terms.exam_structure_id',$examStructuresArray)
+                ->distinct('exam_terms.id')
+                ->select('exam_terms.*','exam_sub_subject_structure.sub_subject_name')
+                ->get()->toArray();
+            foreach ($examTermsArray as $examinationTerm){
+                $structureCount[] = $examinationTerm['sub_subject_name'];
+            }
+            $iterator = 0;
+            foreach ($classDivData['class_division'] as $value){
+                $studentData[$iterator] = User::where('role_id','=',3)
+                    ->where('division_id',$value['id'])
+                    ->where('is_active',true)
+                    ->where('is_lc_generated',false)
+                    ->select('id','roll_number',DB::raw("CONCAT(first_name,' ',last_name) as student_name"))
+                    ->orderBy('roll_number','ASC')
+                    ->get()->toArray();
+                $iterator++;
+            }
+            foreach ($studentData as $class => $div){
+                foreach ($div as $index => $student){
+                    foreach ($examTermsArray as $exaTerm){
+                        $data[$class][$index]['roll_number'] = $student['roll_number'];
+                        $data[$class][$index]['student_name'] = $student['student_name'];
+                        $data[$class][$index][$exaTerm['id']] = StudentExamMarks::join('student_exam_details','student_exam_details.id','=','student_exam_marks.student_exam_details_id')
+                                                                            ->where('student_exam_details.student_id',$student['id'])
+                                                                            ->where('student_exam_details.term_id',$exaTerm['id'])
+                                                                            ->sum('student_exam_marks.marks_obtained');
+                    }
+                }
+            }
+            $objPHPExcel = new \PHPExcel();
+            $objWorkSheet = $objPHPExcel->createSheet();
+            $objPHPExcel->getSheet(0)->setTitle($reportTitle);
+            $objPHPExcel->setActiveSheetIndex(0);
+            $boldText = array(
+                'font' => array(
+                    'bold' => true,
+                    'size'  => 20,
+                    'name'  => 'oblique'
+                )
+            );
+            $styleArray = array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => \PHPExcel_Style_Border::BORDER_THIN
+                    ),
+                )
+            );
+            $columnChar = chr(66 + count($examTermsArray));
+            $lastCol = $columnChar.'1';
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:$lastCol");
+            //Setting Values for the new merged cells
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A1","Result Report - $date");
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A1:$lastCol")->applyFromArray($styleArray,$boldText);
+
+            $iteratorK = 1;
+            $index = 0;
+            foreach ($data as $divKey => $divData){
+                if(!empty($divData)){
+                    $iteratorK = $iteratorK + 1;
+                    $column = 'A';
+                    $rowNumber = $iteratorK+1;
+                    $rowIndex =$iteratorK + 3;
+                    $rows[0] = array("","");
+                    foreach ($examStructures as $exStruct){
+                        if(array_key_exists($exStruct['exam_structure_id'],$examTerms))
+                            $rows[0][] = $exStruct['sub_subject_name'];
+                    }
+                    $rows[1] = array("Roll No.","Student Name");
+                    foreach ($examTermsArray as $exTerm){
+                        $rows[1][] = $exTerm['term_name'];
+                    }
+                    $char = chr(65 + count($rows[0]));
+                    $lastColumn = $char.$iteratorK;
+                    // Merging Cells
+                    $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A$iteratorK:$lastColumn");
+
+                    //Setting Values for the new merged cells
+                    $objPHPExcel->getActiveSheet()
+                        ->setCellValue("A$iteratorK", $classDivData['class_division'][$index]['class_name'].' - '.$classDivData['class_division'][$index]['division_name']);
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle("A$iteratorK:$lastColumn")->applyFromArray($styleArray,$boldText);
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle("A$rowNumber:$lastColumn")->applyFromArray($styleArray,$boldText);
+                    foreach ($rows as $rowKey => $row) {
+                        $objPHPExcel->getActiveSheet()->getRowDimension($rowNumber)->setRowHeight(-1);
+                        foreach ($row as $singleRow) {
+                            /* Align Center */
+                            if($rowKey == 0 && $singleRow != ''){
+                                $cntAll = array_count_values($structureCount);
+                                if(array_key_exists($singleRow,$cntAll) && $cntAll[$singleRow] > 1){
+                                    $nextColumn = chr(ord($column) + $cntAll[$singleRow]-1);
+                                    $currentRowColumn = $column.$rowNumber;
+                                    $nextRowColumn = $nextColumn.$rowNumber;
+                                    $objPHPExcel->getActiveSheet()->mergeCells("$currentRowColumn:$nextRowColumn");
+                                    $objPHPExcel->getActiveSheet()
+                                        ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                        ->getAlignment()
+                                        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                        ->setWrapText(true);
+                                    /* Set Cell Width */
+                                    $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth(11);
+                                    $objPHPExcel->getActiveSheet()->setCellValue($column . $rowNumber, $singleRow);
+                                    $column = $nextColumn;
+                                    $column++;
+                                }else{
+                                    $objPHPExcel->getActiveSheet()
+                                        ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                        ->getAlignment()
+                                        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                        ->setWrapText(true);
+                                    /* Set Cell Width */
+                                    $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth(11);
+                                    $objPHPExcel->getActiveSheet()->setCellValue($column . $rowNumber, $singleRow);
+                                    $column++;
+                                }
+                            }else{
+                                $objPHPExcel->getActiveSheet()
+                                    ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                    ->getAlignment()
+                                    ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                    ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                    ->setWrapText(true);
+                                /* Set Cell Width */
+                                $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth(11);
+                                $objPHPExcel->getActiveSheet()->setCellValue($column . $rowNumber, $singleRow);
+                                $column++;
+                            }
+                        }
+                        $column = "A";
+                        $rowNumber ++;
+                    }
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth("20");
+                    $rowData = $divData;
+                    $iteratorK = $iteratorK+2;
+                    foreach($rowData as $key => $datavalues) {
+                        $columnForData = 0;
+                        foreach($datavalues as $datavalue => $value){
+                            /* Align Center */
+                            $objPHPExcel->getActiveSheet()
+                                ->getStyle($objPHPExcel->getActiveSheet()->calculateWorksheetDimension())
+                                ->getAlignment()
+                                ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                                ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
+                                ->setWrapText(true);
+                            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnForData,$rowIndex,$value);
+                            $columnForData++;
+                        }
+                        $rowIndex++;
+                        $iteratorK++;
+                    }
+                }
+                $index++;
+            }
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+            $fileName = $name;
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=\"".$fileName."\"");
+            if (ob_get_length() > 0) {
+                ob_end_clean();
+            }
+            $objWriter->save("php://output");
+            exit();
+
+        }catch (\Exception $e){
+            $data=[
+                'action' => 'Excel Sheet Generated',
+                'message' => $e->getMessage()
+            ];
+            Log::critical(json_encode($data));
+        }
+    }
+
 }
 
